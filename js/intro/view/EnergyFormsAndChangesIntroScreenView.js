@@ -1,4 +1,6 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+/*
+ * Copyright 2002-2014, University of Colorado Boulder
+ */
 
 /**
  * View for the 'Intro' screen of the Energy Forms And Changes simulation.
@@ -10,9 +12,16 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var HSlider = require( 'SUN/HSlider' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
+
+  // images
+  var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockupIntro.png' );
+
 
   /**
    * @param {EnergyFormsAndChangesIntroModel} energyFormsAndChangesIntroModel
@@ -21,6 +30,16 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroScreenView( energyFormsAndChangesIntroModel ) {
 
     ScreenView.call( this );
+
+
+    //Show the mock-up and a slider to change its transparency
+    var mockupOpacityProperty = new Property( 0.8 );
+    var image = new Image( mockupImage, {pickable: false} );
+    image.scale( this.layoutBounds.width / image.width );
+    mockupOpacityProperty.linkAttribute( image, 'opacity' );
+    this.addChild( image );
+    this.addChild( new HSlider( mockupOpacityProperty, {min: 0, max: 1}, {top: 10, left: 10} ) );
+
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
