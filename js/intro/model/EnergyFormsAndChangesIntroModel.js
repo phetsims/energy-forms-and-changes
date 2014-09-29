@@ -1,7 +1,9 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
 /**
+ *  Model for the 'Intro' screen of the Energy Forms And Changes simulation.
  *
+ * @author John Blanco
  * @author Martin Veillette (Berea College)
  */
 define( function( require ) {
@@ -12,15 +14,16 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
 
   /**
-   * Main constructor for EnergyFormsAndChangesModel, which contains all of the model logic for the entire sim screen.
+   * Main constructor for EnergyFormsAndChangesIntroModel, which contains all of the model logic for the entire sim screen.
    * @constructor
    */
-  function EnergyFormsAndChangesModel() {
+  function EnergyFormsAndChangesIntroModel() {
 
-    PropertySet.call( this, {} );
+    PropertySet.call( this, {
+    } );
   }
 
-  return inherit( PropertySet, EnergyFormsAndChangesModel, {
+  return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
 
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.
     step: function( dt ) {
