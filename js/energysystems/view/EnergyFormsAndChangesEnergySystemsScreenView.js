@@ -30,6 +30,14 @@ define( function( require ) {
 
     ScreenView.call( this );
 
+    //Show the mock-up and a slider to change its transparency
+    var mockupOpacityProperty = new Property( 0.8 );
+    var image = new Image( mockupImage, {pickable: false} );
+    image.scale( this.layoutBounds.width / image.width );
+    mockupOpacityProperty.linkAttribute( image, 'opacity' );
+    this.addChild( image );
+    this.addChild( new HSlider( mockupOpacityProperty, {min: 0, max: 1}, {top: 10, left: 10} ) );
+
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
       listener: function() {
@@ -40,13 +48,7 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    //Show the mock-up and a slider to change its transparency
-    var mockupOpacityProperty = new Property( 0.8 );
-    var image = new Image( mockupImage, {pickable: false} );
-    image.scale( this.layoutBounds.width / image.width );
-    mockupOpacityProperty.linkAttribute( image, 'opacity' );
-    this.addChild( image );
-    this.addChild( new HSlider( mockupOpacityProperty, {min: 0, max: 1}, {top: 10, left: 10} ) );
+
   }
 
   return inherit( ScreenView, EnergyFormsAndChangesEnergySystemsScreenView, {
