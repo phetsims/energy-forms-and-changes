@@ -20,7 +20,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
 
   // images
-  var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockupIntro.png' );
+  var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
 
 
   /**
