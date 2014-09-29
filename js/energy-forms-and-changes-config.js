@@ -3,7 +3,7 @@
 /**
  * RequireJS configuration file for the sim.
  *
- * @author Martin Y Veillette
+ * @author Martin Veillette
  */
 require.config(
   {
