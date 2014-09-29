@@ -12,11 +12,18 @@ define( function( require ) {
   // modules
   var EnergyFormsAndChangesEnergySystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/model/EnergyFormsAndChangesEnergySystemsModel' );
   var EnergyFormsAndChangesEnergySystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/EnergyFormsAndChangesEnergySystemsScreenView' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
 
   // strings
-  var energyFormsAndChangesSimString = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name' );
+  var energySystemsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySystems' );
+
+
+  // TODO: include icon for screen
+  // images
+//  var energySystemsIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/energy-systems-icon.png' );
+
 
   /**
    * @constructor
@@ -25,9 +32,11 @@ define( function( require ) {
 
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
-    var icon = null;
 
-    Screen.call( this, energyFormsAndChangesSimString, icon,
+    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {fill: 'white'} );
+
+    Screen.call( this, energySystemsString,
+      icon,
       function() { return new EnergyFormsAndChangesEnergySystemsModel(); },
       function( model ) { return new EnergyFormsAndChangesEnergySystemsScreenView( model ); },
       { backgroundColor: 'white' }

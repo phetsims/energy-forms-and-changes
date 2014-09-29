@@ -40,9 +40,10 @@ define( function( require ) {
   }
 
   SimLauncher.launch( function() {
-    var sim = new Sim( simTitle, [new EnergyFormsAndChangesIntroScreen()], simOptions );
+    //  var sim = new Sim( simTitle, [new EnergyFormsAndChangesIntroScreen()], simOptions );
+    //  sim.start();
+
+    var sim = new Sim( simTitle, [ new EnergyFormsAndChangesIntroScreen() , new EnergyFormsAndChangesEnergySystemsScreen() ], simOptions );
     sim.start();
-    //   var sim = new Sim( simTitle, [ new EnergyFormsAndChangesIntroScreen() , new EnergyFormsAndChangesEnergySystemsScreen() ], simOptions );
-    //   sim.start();
   } );
 } );
