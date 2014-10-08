@@ -21,6 +21,7 @@ define( function( require ) {
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
+  var teapotLargeImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_light_blank.png' );
 
 
   /**
@@ -40,6 +41,13 @@ define( function( require ) {
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, {min: 0, max: 1}, {top: 10, left: 10} ) );
 
+    var image2 = new Image( teapotLargeImage, {pickable: false} );
+    this.addChild( image2 );
+
+    // update.
+    energyFormsAndChangesIntroModel.positionYProperty.link( function( position ) {
+      image2.top = position;
+    } );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
@@ -57,8 +65,9 @@ define( function( require ) {
   return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView, {
 
     // Called by the animation loop. Optional, so if your view has no animation, you can omit this.
-    step: function( dt ) {
-      // Handle view animation here.
-    }
+    // step: function( dt ) {
+    //  energyFormsAndChangesIntroModel.positionY=energyFormsAndChangesIntroModel.positionY-1;
+    // Handle view animation here.
+    //  }
   } );
 } );
