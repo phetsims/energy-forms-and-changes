@@ -20,7 +20,9 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroModel() {
 
     PropertySet.call( this, {
+      positionY: 100
     } );
+
   }
 
   return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
@@ -28,6 +30,8 @@ define( function( require ) {
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.
     step: function( dt ) {
       // Handle model animation here.
+      this.positionY = this.positionY - 10 * dt;
+
     }
   } );
 } );
