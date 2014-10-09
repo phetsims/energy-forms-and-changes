@@ -1,10 +1,10 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
-///**
-// * Class that represents a brick in the model.
-// *
-// * @author John Blanco
-// */
+/**
+ * Class that represents a brick in the model.
+ *
+ * @author John Blanco
+ */
 
 
 define( function( require ) {
@@ -18,26 +18,26 @@ define( function( require ) {
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
 
   // constants
 
   var SPECIFIC_HEAT = 840; // In J/kg-K, source = design document.
   var DENSITY = 3300; // In kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable.
 
-
-  // Some constants needed for energy chunk mapping.
-  var ENERGY_AT_ROOM_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE; // In joules.
-  var ENERGY_AT_WATER_FREEZING_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE; // In joules.
-
   /**
    *
    * @param {Vector2} initialPosition
-   * @param {Property-Boolean} energyChunksVisibleProperty
+   * @param {Property} energyChunksVisibleProperty
    * @constructor
    */
+
   function Brick( initialPosition, energyChunksVisibleProperty ) {
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
+
+    //TODO: Need to check if these two next constants need to be placed here
+    // Some constants needed for energy chunk mapping.
+    this.ENERGY_AT_ROOM_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE; // In joules.
+    this.ENERGY_AT_WATER_FREEZING_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE; // In joules.
   }
 
   return inherit( Block, Brick, {
