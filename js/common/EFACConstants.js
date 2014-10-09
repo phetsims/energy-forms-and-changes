@@ -92,7 +92,7 @@ define( function( require ) {
 } );
 
 
-//
+// todo: comment out
 //// Copyright 2002-2012, University of Colorado
 //package edu.colorado.phet.energyformsandchanges.common;
 //
