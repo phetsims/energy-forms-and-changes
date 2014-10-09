@@ -35,7 +35,7 @@ define( function( require ) {
     // Observer that moves this model element if and when the surface that is
     // supporting it moves.
     this.surfaceMotionObserver = function( horizontalSurface ) {
-      this.positionProperty.value = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
+      this.position = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
 
 
@@ -74,7 +74,7 @@ define( function( require ) {
     },
 
     setX: function( x ) {
-      this.positionProperty.set( new Vector2( x, this.position.y ) );
+      this.position = new Vector2( x, this.position.y );
     }
   } );
 } );
