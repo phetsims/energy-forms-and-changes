@@ -12,7 +12,6 @@ define( function( require ) {
 
   // Imports
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
 
@@ -25,11 +24,9 @@ define( function( require ) {
     var self = this;
     ModelElement.call( this );
 
-    PropertySet.call( this, {
-      userControlled: false,
-      position: initialPosition, // Position of the center of the bottom of the block.
-      verticalVelocity: 0 //Velocity in the up/down direction.
-    } );
+    this.addProperty( 'userControlled', false );
+    this.addProperty( 'position', initialPosition );// Position of the center of the bottom of the block.
+    this.addProperty( 'verticalVelocity', 0 ); //Velocity in the up/down direction.
 
 
     // Observer that moves this model element if and when the surface that is
