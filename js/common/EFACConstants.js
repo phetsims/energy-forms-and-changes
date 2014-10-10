@@ -1,6 +1,5 @@
-/*
- * Copyright 2002-2014, University of Colorado Boulder
- */
+// Copyright 2002-2014, University of Colorado Boulder
+
 
 /**
  * Shared constants used in multiple locations within the sim.
@@ -16,7 +15,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var Util = require( 'DOT/Util' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-
+  var Vector2 = require( 'DOT/Vector2' );
 
   return {
     ROOM_TEMPERATURE: 296, // In Kelvin.
@@ -78,9 +77,9 @@ define( function( require ) {
     SECOND_TAB_BACKGROUND_COLOR: FIRST_TAB_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
 
-    // TODO: ASK JB about BasicStroke
-//     CONTROL_PANEL_OUTLINE_STROKE : new BasicStroke( 1.5 ),
-    CONTROL_PANEL_OUTLINE_COLOR: Color.BLACK,
+
+    CONTROL_PANEL_OUTLINE_STROKE: 1.5,
+    CONTROL_PANEL_OUTLINE_COLOR: 'black',
     CLOCK_CONTROL_BACKGROUND_COLOR: new Color( 120, 120, 120 ),
 
     // Model-view transform scale factor for Energy Systems tab.
