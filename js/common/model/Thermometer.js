@@ -34,7 +34,6 @@ define( function( require ) {
 
     UserMovableModelElement.call( this, initialPosition );
 
-    //TODO: Ask JB for alternative solution
     this.model = model;
 
     this.addProperty( 'sensedTemperature', EFACConstants.ROOM_TEMPERATURE );
@@ -42,24 +41,14 @@ define( function( require ) {
 
     // Property that is used primarily to control visibility in the view.
     this.addProperty( 'active', initiallyActive );
-
-
-    // Update the sensed temperature at each clock tick.
-    // TODO ask JB about if this is correct
-//    var temperatureAndColor = model.getTemperatureAndColorAtLocation( position.get() );
-//    sensedTemperatureProperty.set( temperatureAndColor.temperature );
-    //   sensedElementColorProperty.set( temperatureAndColor.color );
-
-
   }
 
-  inherit( UserMovableModelElement, Thermometer, {
+  return inherit( UserMovableModelElement, Thermometer, {
 
     step: function( dt ) {
-      //TODO: make sure to implement getTemperatureAndColorAtLocation in model (both intro and energyssytems
       var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
-      this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
-      this.sensedElementColorProperty.set( temperatureAndColor.color );
+      this.sensedTemperature = temperatureAndColor.temperature;
+      this.sensedElementColor = temperatureAndColor.color;
     },
 
     reset: function() {
