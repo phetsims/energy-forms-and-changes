@@ -30,52 +30,47 @@ define( function( require ) {
    * @param {Property} energyChunksVisibleProperty
    * @constructor
    */
-
   function Brick( initialPosition, energyChunksVisibleProperty ) {
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
 
-    //TODO: Need to check if these two next constants need to be placed here
-    // Some constants needed for energy chunk mapping.
-    this.ENERGY_AT_ROOM_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE; // In joules.
-    this.ENERGY_AT_WATER_FREEZING_TEMPERATURE = Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE; // In joules.
   }
 
   return inherit( Block, Brick, {
 
-    getFrontTextureImage: function() {
-      return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_FRONT;
+      getFrontTextureImage: function() {
+        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_FRONT;
+      },
+
+      getTopTextureImage: function() {
+        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_TOP;
+      },
+
+      getSideTextureImage: function() {
+        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_RIGHT;
+      },
+
+      getColor: function() {
+        return new Color( 200, 22, 11 );
+      },
+
+      getLabel: function() {
+        return EnergyFormsAndChangesResources.Strings.BRICK;
+      },
+
+      getEnergyContainerCategory: function() {
+        return EnergyContainerCategory.BRICK;
+      }
     },
-
-    getTopTextureImage: function() {
-      return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_TOP;
-    },
-
-    getSideTextureImage: function() {
-      return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_RIGHT;
-    },
-
-    getColor: function() {
-      return new Color( 200, 22, 11 );
-    },
-
-    getLabel: function() {
-      return EnergyFormsAndChangesResources.Strings.BRICK;
-    },
-
-    getEnergyContainerCategory: function() {
-      return EnergyContainerCategory.BRICK;
-    }
-
-  } );
-
+    {
+      // Some constants needed for energy chunk mapping.
+      ENERGY_AT_ROOM_TEMPERATURE: Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE,
+      // In joules.
+      ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE // In joules.} );
+    } );
 } );
 
 
-/*
-
- */
-
-
+//TODO: remove comments
 ///**
 // * Created by veillettem on 10/4/2014.
 // */

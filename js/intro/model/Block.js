@@ -16,6 +16,7 @@ define( function( require ) {
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSlice' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
@@ -38,10 +39,12 @@ define( function( require ) {
   function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
     RectangularThermalMovableModelElement.call( this, initialPosition, SURFACE_WIDTH, SURFACE_WIDTH, Math.pow( SURFACE_WIDTH, 3 ) * density, specificHeat, energyChunksVisibleProperty );
 
+    var block = this;
+
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
-      this.updateTopSurfaceProperty();
-      this.updateBottomSurfaceProperty();
+      block.updateTopSurfaceProperty();
+      block.updateBottomSurfaceProperty();
     } );
   }
 
@@ -49,6 +52,7 @@ define( function( require ) {
     // TODO: ask about getcolor and abstract class
     getColor: function() {
       assert && assert( true, 'This function should not be called, getColor() needs to be implemented in a subclass' );
+      return 'pink';
     },
 
     getFrontTextureImage: function() {
@@ -81,12 +85,10 @@ define( function( require ) {
       var i;
       for ( i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
         var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, i * ( -SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
-        //TODO: Ignore the transform for the time being. Ask JB about what to do: I think we can do it with mvt;
 
-        //   var transform = AffineTransform.getTranslateInstance( projectionToFront.getX() + projectionOffsetVector.getX(),
-        //       projectionToFront.getY() + projectionOffsetVector.getY() );
-        //   this.slices.push( new EnergyChunkContainerSlice( transform.createTransformedShape( this.getRect() ), -i * ( SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
-        this.slices.push( new EnergyChunkContainerSlice( this.getRect(), -i * ( SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
+        var transform = new Matrix3.translation( projectionToFront.getX() + projectionOffsetVector.getX(),
+            projectionToFront.getY() + projectionOffsetVector.getY() );
+        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
       }
     },
 
