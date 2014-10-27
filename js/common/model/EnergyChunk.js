@@ -20,7 +20,7 @@ define( function( require ) {
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
-   * @param {Property.Boolean} visibilityControlProperty
+   * @param {Property} visibilityControlProperty
    * @returns {Vector2}
    * @constructor
    */
@@ -39,7 +39,7 @@ define( function( require ) {
 
   return inherit( Object, EnergyChunk, {
     translate: function( movement ) {
-      this.positionProperty.set( this.positionProperty.get().plus( movement ) );
+      this.position = this.position.plus( movement );
     },
     translateBasedOnVelocity: function( time ) {
       this.translate( this.velocity.times( time ) );

@@ -14,10 +14,10 @@ define( function() {
 
 
   var EnergyContainerCategory = Object.freeze( {
-    IRON: 0,
-    BRICK: 1,
-    WATER: 2,
-    AIR: 3
+    IRON: 'iron',
+    BRICK: 'brick',
+    WATER: 'water',
+    AIR: 'air'
   } );
 
   return EnergyContainerCategory;

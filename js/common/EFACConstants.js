@@ -11,11 +11,27 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
+//  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Color = require( 'SCENERY/util/Color' );
   var Util = require( 'DOT/Util' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+
+  var FRAMES_PER_SECOND = 30.0;
+  var SIM_TIME_PER_TICK_NORMAL = 1 / FRAMES_PER_SECOND;
+  var NOMINAL_WATER_OPACITY = 0.75;
+
+  var FIRST_TAB_BACKGROUND_COLOR = new Color( 245, 235, 175 );
+
+  var Z_TO_X_OFFSET_MULTIPLIER = -0.25;
+  var Z_TO_Y_OFFSET_MULTIPLIER = -0.25;
+
+  var LOW_ENERGY_FOR_MAP_FUNCTION = 200;
+  var HIGH_ENERGY_FOR_MAP_FUNCTION = 100;
+  var NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING = 1.25;
+  var NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP = 2.4;
 
   return {
     ROOM_TEMPERATURE: 296, // In Kelvin.
@@ -42,8 +58,13 @@ define( function( require ) {
     // Constant function for energy chunk mapping. The basis for this function
     // is that the brick has 2 energy chunks at room temp, one at the freezing
     // point of water.
-    LOW_ENERGY_FOR_MAP_FUNCTION: Brick.ENERGY_AT_WATER_FREEZING_TEMPERATURE,
-    HIGH_ENERGY_FOR_MAP_FUNCTION: Brick.ENERGY_AT_ROOM_TEMPERATURE,
+
+//TODO uncomment
+    // LOW_ENERGY_FOR_MAP_FUNCTION: Brick.ENERGY_AT_WATER_FREEZING_TEMPERATURE,
+    // HIGH_ENERGY_FOR_MAP_FUNCTION: Brick.ENERGY_AT_ROOM_TEMPERATURE,
+//TODO delete fake constants
+    LOW_ENERGY_FOR_MAP_FUNCTION: 200,
+    HIGH_ENERGY_FOR_MAP_FUNCTION: 100,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING: 1.25,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP: 2.4, // Close to rounding to 3 so that little energy needed to transfer a chunk.
     MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE: new Util.linear( LOW_ENERGY_FOR_MAP_FUNCTION,
@@ -56,11 +77,12 @@ define( function( require ) {
       LOW_ENERGY_FOR_MAP_FUNCTION,
       HIGH_ENERGY_FOR_MAP_FUNCTION ),
 
-    ENERGY_TO_NUM_CHUNKS_MAPPER: function( energy ) {
-      return Math.max( Math.round( MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE( energy ) ), 0 );
-    },
+//TODO: comment out this function
+    //  ENERGY_TO_NUM_CHUNKS_MAPPER: function( energy ) {
+    //    return Math.max( Math.round( MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE( energy ) ), 0 );
+    //  },
 
-    ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE( 1 ),
+    //   ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE( 1 ),
 
     // Threshold for deciding when two temperatures can be considered equal.
     TEMPERATURES_EQUAL_THRESHOLD: 1E-6, // In Kelvin.

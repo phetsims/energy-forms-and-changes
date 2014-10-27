@@ -35,36 +35,36 @@ define( function( require ) {
       this.position = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
 
-
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // The user has grabbed this model element, so it is no
         // longer sitting on any surface.
         if ( self.getSupportingSurfaceProperty() !== null ) {
           self.getSupportingSurfaceProperty().unlink( self.surfaceMotionObserver );
-          self.getSupportingSurfaceProperty().value.clearSurface();
-          self.modelElement.setSupportingSurface( null );
+          //TODO change and reinstate;
+          //    self.getSupportingSurfaceProperty().value.clearSurface();
+          //    self.setSupportingSurfaceProperty( null );
         }
       }
     } );
-
   }
 
   return inherit( ModelElement, UserMovableModelElement, {
 
     reset: function() {
-      if ( this.modelElement.getSupportingSurfaceProperty() !== null ) {
-        this.modelElement.getSupportingSurfaceProperty().unlink( this.surfaceMotionObserver() );
+      if ( this.getSupportingSurfaceProperty() !== null ) {
+        this.getSupportingSurfaceProperty().unlink( this.surfaceMotionObserver() );
       }
       this.userControlledProperty.reset();
       this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
-      this.modelElement.reset();
+      //TODO reached for prototype
+      // this.modelElement.reset();
 
     },
 
     setSupportingSurfaceProperty: function( surfaceProperty ) {
-      this.modelElement.setSupportingSurfaceProperty( surfaceProperty );
+      this.setSupportingSurfaceProperty( surfaceProperty );
       if ( surfaceProperty !== null ) {
         surfaceProperty.link( this.surfaceMotionObserver );
       }

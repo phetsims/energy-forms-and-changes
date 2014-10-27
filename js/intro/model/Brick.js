@@ -27,7 +27,7 @@ define( function( require ) {
   /**
    *
    * @param {Vector2} initialPosition
-   * @param {Property} energyChunksVisibleProperty
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function Brick( initialPosition, energyChunksVisibleProperty ) {

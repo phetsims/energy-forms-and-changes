@@ -16,8 +16,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PropertySet = require( 'AXON/PropertySet' );
-  //var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/common/TemperatureAndColor' );
-  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableElement' );
+  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
 //constants
@@ -46,9 +45,10 @@ define( function( require ) {
   return inherit( UserMovableModelElement, Thermometer, {
 
     step: function( dt ) {
-      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
-      this.sensedTemperature = temperatureAndColor.temperature;
-      this.sensedElementColor = temperatureAndColor.color;
+      //TODO comment back in
+//      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
+//      this.sensedTemperature = temperatureAndColor.temperature;
+//      this.sensedElementColor = temperatureAndColor.color;
     },
 
     reset: function() {

@@ -15,9 +15,9 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
 
   /**
+   *
    * @constructor
    */
-
   function ModelElement() {
     PropertySet.call( this, {
       supportingSurface: null,
@@ -25,7 +25,6 @@ define( function( require ) {
       bottomSurface: null
     } );
   }
-
 
   return inherit( PropertySet, ModelElement, {
 

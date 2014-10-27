@@ -16,7 +16,7 @@ define( function( require ) {
 
   /**
    * @param {Range} xRange
-   * @param {Number} yPos
+   * @param {number} yPos
    * @param {ModelElement} owner
    * @constructor
    */

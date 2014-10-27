@@ -11,8 +11,10 @@ define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
   var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
+  var ThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerNode' );
 
   function SensingThermometerNode( thermometer ) {
+    ThermometerNode.call( this );
     this.thermometer = thermometer;
     var self = this;
 
