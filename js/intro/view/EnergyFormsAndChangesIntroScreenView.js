@@ -28,7 +28,7 @@ define( function( require ) {
   // var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
 //  var HeaterCoolerView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/HeaterCoolerView' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
-  // var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
+  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
 
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
