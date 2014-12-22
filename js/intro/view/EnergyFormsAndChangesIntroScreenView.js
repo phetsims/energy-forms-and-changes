@@ -44,6 +44,7 @@ define( function( require ) {
 
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
 
   // images
@@ -68,7 +69,7 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroScreenView( model ) {
 
 
-    ScreenView.call( this );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
     var thisScreen = this;
     this.model = model;
 

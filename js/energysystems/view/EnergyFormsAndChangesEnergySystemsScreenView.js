@@ -18,6 +18,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_energy_systems.png' );
@@ -28,7 +29,7 @@ define( function( require ) {
    */
   function EnergyFormsAndChangesEnergySystemsScreenView( energyFormsAndChangesEnergySystemsModel ) {
 
-    ScreenView.call( this );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.8 );
