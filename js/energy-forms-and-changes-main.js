@@ -41,7 +41,7 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
 
-    var sim = new Sim( simTitle, [ new EnergyFormsAndChangesIntroScreen() , new EnergyFormsAndChangesEnergySystemsScreen() ], simOptions );
+    var sim = new Sim( simTitle, [ new EnergyFormsAndChangesIntroScreen(), new EnergyFormsAndChangesEnergySystemsScreen() ], simOptions );
     sim.start();
   } );
 } );

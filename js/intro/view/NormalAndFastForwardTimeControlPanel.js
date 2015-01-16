@@ -40,8 +40,7 @@ define( function( require ) {
     this.addChild( new HBox( normalSpeedButton, fastForwardButton, clockControlPanel ) );
   }
 
-  return inherit( Node, NormalAndFastForwardTimeControlPanel, {
-  } );
+  return inherit( Node, NormalAndFastForwardTimeControlPanel, {} );
 } );
 
 

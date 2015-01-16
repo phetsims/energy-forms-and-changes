@@ -87,7 +87,7 @@ define( function( require ) {
 
     function updateSurfaces() {
       self.topSurfaceProperty.set( new HorizontalSurface( new Range( self.getRect().getMinX(), self.getRect().getMaxX() ),
-          self.getRect().getMinY() + MATERIAL_THICKNESS,
+        self.getRect().getMinY() + MATERIAL_THICKNESS,
         self ) );
       self.bottomSurfaceProperty.set( new HorizontalSurface( new Range( self.getRect().getMinX(), self.getRect().getMaxX() ),
         self.getRect().getMinY(),
@@ -193,7 +193,7 @@ define( function( require ) {
 
         var liquidWaterHeight = this.getHeight() * this.fluidLevel;
         return new Rectangle( this.position.x - this.getWidth() / 2,
-            this.position.y + liquidWaterHeight,
+          this.position.y + liquidWaterHeight,
           this.getWidth(),
           this.maxSteamHeight );
       },

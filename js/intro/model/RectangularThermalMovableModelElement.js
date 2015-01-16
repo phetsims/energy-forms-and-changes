@@ -291,9 +291,9 @@ define( function( require ) {
         var length = this.slices.length;
         for ( i = 0; i < length; i++ ) {
 //        this.slices.forEach( function( slice ) {
-          if ( this.slices[i].energyChunkList.length > 0 ) {
+          if ( this.slices[ i ].energyChunkList.length > 0 ) {
 
-            chunkToExtract = this.slices[i].energyChunkList.get( 0 );
+            chunkToExtract = this.slices[ i ].energyChunkList.get( 0 );
             //TODO do we want to break out from the if statement only
             break;
           }

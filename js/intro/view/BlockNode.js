@@ -45,7 +45,7 @@ define( function( require ) {
 
 
   function BlockNode( model, block, mvt ) {
-    Node.call( this, { cursor: 'pointer'  } );
+    Node.call( this, { cursor: 'pointer' } );
     var blockNode = this;
     this.block = block;
     // shape from the position of the block.
@@ -118,7 +118,7 @@ define( function( require ) {
     }
     var labelCenterX = (upperLeftFrontCorner.x + upperRightFrontCorner.x) / 2;
     var labelCenterY = (upperLeftFrontCorner.y - mvt.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2);
-    label.translation = {x: labelCenterX, y: labelCenterY};
+    label.translation = { x: labelCenterX, y: labelCenterY };
     this.addChild( label );
     // this model element and add/remove them as needed.
 
@@ -170,7 +170,7 @@ define( function( require ) {
     createSurface: function( shape, fillColor, textureImage ) {
       var root = new Node();
       // provided, this may end up getting partially or entirely covered up.
-      root.addChild( new Path( shape, {fill: fillColor} ) );
+      root.addChild( new Path( shape, { fill: fillColor } ) );
       if ( textureImage != null ) {
         // Add the clipped texture.
         var clippedTexture = new Node();
@@ -186,7 +186,7 @@ define( function( require ) {
         }
         texture.setScale( textureScale );
         // Add the texture to the clip node in order to clip it.
-        texture.translation = {x: clippedTexture.bounds.minX, y: clippedTexture.bounds.minY };
+        texture.translation = { x: clippedTexture.bounds.minX, y: clippedTexture.bounds.minY };
         clippedTexture.addChild( texture );
         root.addChild( clippedTexture );
       }

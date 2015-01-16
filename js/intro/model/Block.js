@@ -87,7 +87,7 @@ define( function( require ) {
         var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, i * ( -SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
 
         var transform = new Matrix3.translation( projectionToFront.getX() + projectionOffsetVector.getX(),
-            projectionToFront.getY() + projectionOffsetVector.getY() );
+          projectionToFront.getY() + projectionOffsetVector.getY() );
         this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
       }
     },

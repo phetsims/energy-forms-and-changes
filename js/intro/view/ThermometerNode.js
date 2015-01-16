@@ -35,7 +35,7 @@ define( function( require ) {
    * @param mvt
    */
   function ThermometerNode() {
-    Node.call( this, { cursor: 'pointer'  } );
+    Node.call( this, { cursor: 'pointer' } );
     // Root node, all children should be added to this.
     var rootNode = new Node();
     // Create and add nodes that will act as layers.
@@ -79,7 +79,7 @@ define( function( require ) {
       .lineTo( centerX + clipWidth / 2, this.centerOfBulb.y )
       .close();
 
-    this.liquidShaft = new Path( clipShape, {'fill': new Color( 237, 28, 36 )} );
+    this.liquidShaft = new Path( clipShape, { 'fill': new Color( 237, 28, 36 ) } );
     liquidShaftClipNode.addChild( this.liquidShaft );
 
 
@@ -99,7 +99,7 @@ define( function( require ) {
         stroke: 'black',
         lineWidth: TICK_MARK_STROKE_LINEWIDTH
       } );
-      tickMark.translation = {x: tickMarkXOffset, y: tickMarkMinY - i * tickMarkSpacing };
+      tickMark.translation = { x: tickMarkXOffset, y: tickMarkMinY - i * tickMarkSpacing };
 
       frontLayer.addChild( tickMark );
     }
@@ -120,7 +120,8 @@ define( function( require ) {
     this.triangle = new Path( triangleShape, {
       fill: new Color( 0, 0, 0, 0 ),
       lineWidth: '2',
-      stroke: 'black' } );
+      stroke: 'black'
+    } );
     middleLayer.addChild( this.triangle );
 // be at point (0, 0).
 

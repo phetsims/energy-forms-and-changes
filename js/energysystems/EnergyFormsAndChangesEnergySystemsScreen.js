@@ -33,7 +33,7 @@ define( function( require ) {
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
 
-    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {fill: 'white'} );
+    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, { fill: 'white' } );
 
     Screen.call( this, energySystemsString,
       icon,

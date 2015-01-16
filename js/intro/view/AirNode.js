@@ -23,7 +23,7 @@ define( function( require ) {
   function AirNode( air, mvt ) {
     var airNode = this;
     if ( SHOW_BOUNDS ) {
-      this.addChild( new Path( mvt.modelToView( air.getThermalContactArea().bounds ), {fill: 'red', lineWidth: 1} ) );
+      this.addChild( new Path( mvt.modelToView( air.getThermalContactArea().bounds ), { fill: 'red', lineWidth: 1 } ) );
     }
     // Create a layer where energy chunks will be placed.
     var energyChunkLayer = new Node();

@@ -77,7 +77,7 @@ define( function( require ) {
 
       energyChunkContainerSlices.forEach( function( energyChunkContainerSlice ) {
         energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
-          mapEnergyChunkToForceVector.push = {x: energyChunk, y: ZERO_VECTOR};
+          mapEnergyChunkToForceVector.push = { x: energyChunk, y: ZERO_VECTOR };
         } );
       } );
 

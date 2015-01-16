@@ -25,23 +25,23 @@ define( function( require ) {
     this.AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
     this.heatTransferConstantsMap = {};
-    this.heatTransferConstantsMap['iron']['brick'] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['brick']['iron'] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['water']['brick'] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['brick']['water'] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['air']['brick'] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['brick']['air'] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['water']['air'] = WATER_AIR_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['air']['water'] = WATER_AIR_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['water']['iron'] = IRON_WATER_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['iron']['water'] = IRON_WATER_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['iron']['air'] = IRON_AIR_HEAT_TRANSFER_FACTOR;
-    this.heatTransferConstantsMap['air']['iron'] = IRON_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'iron' ][ 'brick' ] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'brick' ][ 'iron' ] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'water' ][ 'brick' ] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'brick' ][ 'water' ] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'air' ][ 'brick' ] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'brick' ][ 'air' ] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'water' ][ 'air' ] = WATER_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'air' ][ 'water' ] = WATER_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'water' ][ 'iron' ] = IRON_WATER_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'iron' ][ 'water' ] = IRON_WATER_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'iron' ][ 'air' ] = IRON_AIR_HEAT_TRANSFER_FACTOR;
+    this.heatTransferConstantsMap[ 'air' ][ 'iron' ] = IRON_AIR_HEAT_TRANSFER_FACTOR;
   }
 
   return inherit( Object, HeatTransferConstants, {
     getHeatTransferFactor: function( element1, element2 ) {
-      return this.heatTransferConstantsMap[element1][element2];
+      return this.heatTransferConstantsMap[ element1 ][ element2 ];
     },
     getAirToSurroundingAirHeatTransferFactor: function() {
       return this.AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
