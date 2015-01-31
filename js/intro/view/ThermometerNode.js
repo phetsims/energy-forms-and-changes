@@ -119,7 +119,7 @@ define( function( require ) {
 
     this.triangle = new Path( triangleShape, {
       fill: new Color( 0, 0, 0, 0 ),
-      lineWidth: '2',
+      lineWidth: 2,
       stroke: 'black'
     } );
     middleLayer.addChild( this.triangle );
