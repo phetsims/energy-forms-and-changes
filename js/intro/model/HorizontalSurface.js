@@ -21,35 +21,59 @@ define( function( require ) {
    * @constructor
    */
   function HorizontalSurface( xRange, yPos, owner ) {
-    this.xRange = xRange;
-    this.yPos = yPos;
-    this.owner = owner;
-    this.elementOnSurface = null;
+    this.xRange = xRange; // {Range}
+    this.yPos = yPos; // {number}
+    this.owner = owner; // @private {ModelElement}
+    this.elementOnSurface = null; // {ModelElement}
   }
 
   inherit( Object, HorizontalSurface, {
 
+    /**
+     * @public
+     * @param {HorizontalSurface} surface
+     * @returns {boolean}
+     */
     overlapsWith: function( surface ) {
       return ( this.xRange.intersectsExclusive( surface.xRange ) );
     },
 
+    /**
+     * @public read-only
+     * @returns {number}
+     */
     getCenterX: function() {
       return this.xRange.getCenter();
     },
 
+    /**
+     * @public read-only
+     * @returns {ModelElement}
+     */
     getOwner: function() {
       return this.owner;
     },
 
+    /**
+     * @public read-only
+     * @returns {ModelElement}
+     */
     getElementOnSurface: function() {
       return this.elementOnSurface;
     },
 
+    /**
+     * @public
+     * @param {ModelElement} modelElement
+     */
     addElementToSurface: function( modelElement ) {
       assert && assert( this.elementOnSurface === null, 'Only one thing on surface allowed at a time' );
       this.elementOnSurface = modelElement;
     },
 
+    /**
+     * @public
+     */
     clearSurface: function() {
       this.elementOnSurface = null;
     }

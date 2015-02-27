@@ -34,14 +34,6 @@ define( function( require ) {
   var countdownTimer = 0;
 
 
-  //-------------------------------------------------------------------------
-  // Constructor(s)
-  //-------------------------------------------------------------------------
-
-  function EnergyChunkWanderController( energyChunk, destination ) {
-    this( energyChunk, destination, null );
-  }
-
   /**
    *
    * @param {EnergyChunk} energyChunk
@@ -59,6 +51,10 @@ define( function( require ) {
 
   return inherit( Object, EnergyChunkWanderController, {
 
+    /**
+     * *
+     * @param dt
+     */
     updatePosition: function( dt ) {
       var distanceToDestination = this.energyChunk.position.distance( this.destination );
       if ( distanceToDestination < velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destination ) ) {
@@ -87,7 +83,9 @@ define( function( require ) {
         this.resetCountdownTimer();
       }
     },
-
+    /**
+     *
+     */
     changeVelocityVector: function() {
       var vectorToDestination = this.destination.minus( this.energyChunk.position );
       var angle = vectorToDestination.getAngle();
@@ -99,14 +97,25 @@ define( function( require ) {
       velocity.setComponents( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
     },
 
+    /**
+     * *
+     */
     resetCountdownTimer: function() {
       this.countdownTimer = MIN_TIME_IN_ONE_DIRECTION + ( MAX_TIME_IN_ONE_DIRECTION - MIN_TIME_IN_ONE_DIRECTION ) * Math.random();
     },
 
+    /**
+     * *
+     * @returns {EnergyChunk|*}
+     */
     getEnergyChunk: function() {
       return this.energyChunk;
     },
 
+    /**
+     * *
+     * @returns {boolean}
+     */
     destinationReached: function() {
       return this.destination.distance( this.energyChunk.position ) < 1E-7;
     }

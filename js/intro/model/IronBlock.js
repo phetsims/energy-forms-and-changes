@@ -33,14 +33,27 @@ define( function( require ) {
   }
 
   return inherit( Block, IronBlock, {
+
+    /**
+     * *
+     * @returns {Color}
+     */
     getColor: function() {
       return new Color( 150, 150, 150 );
     },
 
+    /**
+     * *
+     * @returns {EnergyContainerCategory.IRON|*|exports.IRON}
+     */
     getLabel: function() {
       return EnergyFormsAndChangesResources.Strings.IRON;
     },
 
+    /**
+     * *
+     * @returns {exports.IRON|*}
+     */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.IRON;
     }

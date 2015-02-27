@@ -19,7 +19,12 @@ define( function( require ) {
   // constants
   var SHOW_BOUNDS = false;
 
-
+  /**
+   *
+   * @param air
+   * @param modelViewTransform
+   * @constructor
+   */
   function AirNode( air, modelViewTransform ) {
     var airNode = this;
     if ( SHOW_BOUNDS ) {

@@ -20,45 +20,68 @@ define( function( require ) {
    */
   function ModelElement() {
     PropertySet.call( this, {
-      supportingSurface: null,
-      topSurface: null,
-      bottomSurface: null
+      supportingSurface: null, // {HorizontalSurface}
+      topSurface: null, //  {HorizontalSurface}
+      bottomSurface: null // {HorizontalSurface}
     } );
   }
 
   return inherit( PropertySet, ModelElement, {
 
+    /**
+     * Set the surface upon which this model element is resting.
+     * @public
+     * @param {HorizontalSurface} surfaceProperty
+     */
     setSupportingSurfaceProperty: function( surfaceProperty ) {
       this.supportingSurfaceProperty = surfaceProperty;
     },
 
+    /**
+     * @public read-only
+     * @returns {Property.<HorizontalSurface>}
+     */
     getSupportingSurfaceProperty: function() {
       return this.supportingSurfaceProperty;
     },
 
+    /**
+     * Get the bottom surface of this model element.  Only model elements that
+     * can rest on top of other model elements have bottom surfaces.
+     *
+     * @public read-only
+     * @returns {Property.<HorizontalSurface>} The bottom surface of this model element, null if this element never rests upon other model elements.
+     */
     getBottomSurfaceProperty: function() {
       return this.bottomSurfaceProperty;
     },
 
+    /**
+     * @public read-only
+     * @returns {Property.<HorizontalSurface>} Surface upon which this element is resting, null if there is none.
+     */
     getTopSurfaceProperty: function() {
       return this.topSurfaceProperty;
     },
 
     /**
-     * Get a value that indicates whether this element is stacked upon the
-     * given model element.
-     *
-     * @param element Model element to be checked.
-     * @return true if the given element is stacked anywhere on top of this
-     *         one, which includes cases where one or more elements are in between.
+     * Get a value that indicates whether this element is stacked upon the given model element.
+     * @public
+     * @param {ModelElement} element -  Model element to be checked.
+     * @returns {boolean}  true if the given element is stacked anywhere on top of this one, which includes
+     * cases where one or more elements are in between.
      */
-
     isStackedUpon: function( element ) {
-      return this.getSupportingSurfaceProperty() !== null &&
+      return (this.getSupportingSurfaceProperty() !== null) &&
              ( this.getSupportingSurfaceProperty().value.getOwner() === element ||
                this.getSupportingSurfaceProperty().value.getOwner().isStackedUpon( element ) );
     },
 
+    /**
+     * Reset the model element to its original state.  Subclasses must add
+     * reset functionality for any state that they add.
+     * @public
+     */
     reset: function() {
       if ( this.supportingSurfaceProperty !== null ) {
         // TODO: the next line was in the java code but we dont' think it is needed (JB)
@@ -136,9 +159,6 @@ define( function( require ) {
 //  }
 //
 //  /**
-//   * Get a value that indicates whether this element is stacked upon the
-//   * given model element.
-//   *h
 //   * @param element Model element to be checked.
 //   * @return true if the given element is stacked anywhere on top of this
 //   *         one, which includes cases where one or more elements are in between.

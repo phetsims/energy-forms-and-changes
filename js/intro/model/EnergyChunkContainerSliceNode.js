@@ -23,6 +23,12 @@ define( function( require ) {
   var ALWAYS_SHOW_OUTLINE = false;
 
 
+  /**
+   * *
+   * @param {EnergyChunkContainerSlice} energyChunkContainerSlice
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
   function EnergyChunkContainerSliceNode( energyChunkContainerSlice, modelViewTransform ) {
 
     var self = this;

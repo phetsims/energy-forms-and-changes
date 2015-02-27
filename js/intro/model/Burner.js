@@ -15,6 +15,7 @@ define( function( require ) {
   'use strict';
 
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -23,8 +24,8 @@ define( function( require ) {
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -66,21 +67,20 @@ define( function( require ) {
   // Track build up of energy for transferring chunks to/from the air.
   var energyExchangedWithAirSinceLastChunkTransfer = 0;
 
-
   /**
-   * Constructor.
-   *
-   * @param {Vector2} position - The position in model space where this burner exists. By convention for this simulation,
-   *                            the position is
-   * @param {Property.<boolean>} energyChunksVisibleProperty Property that controls whether the energy
-   *                            chunks are visible.
+   * *
+   * @param {Vector2} position - The position in model space where this burner exists. By convention for this simulation, the position is
+   *  @param {Property.<boolean>} energyChunksVisibleProperty Property that controls whether the energy chunks are visible
+   * @constructor
    */
   function Burner( position, energyChunksVisibleProperty ) {
     this.position = new Vector2( position );
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     // dropping objects on top of burner.
-    var perspectiveCompensation = this.getOutlineRect().getHeight() * EFACIntroCanvas.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( BurnerStandNode.PERSPECTIVE_ANGLE );
-    this.topSurface = new Property( new HorizontalSurface( new Range( this.getOutlineRect().getMinX() - perspectiveCompensation, this.getOutlineRect().getMaxX() + perspectiveCompensation ), this.getOutlineRect().getMaxY(), this ) );
+
+    var rectangle = this.getOutlineRect();
+    var perspectiveCompensation = rectangle.height * EFACIntroCanvas.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( BurnerStandNode.PERSPECTIVE_ANGLE );
+    this.topSurface = new Property( new HorizontalSurface( new Range( rectangle.minX - perspectiveCompensation, rectangle.maxX + perspectiveCompensation ), rectangle.maxY, this ) );
 
     heatCoolLevelProperty.link( function( newValue, oldValue ) {
       if ( newValue == 0 || (Math.signum( oldValue ) != Math.signum( newValue )) ) {
@@ -109,6 +109,11 @@ define( function( require ) {
     getOutlineRect: function() {
       return new Rectangle( position.x - WIDTH / 2, position.y, WIDTH, HEIGHT );
     },
+
+    /**
+     * *
+     * @returns {Property.<HorizontalSurface>}
+     */
     getTopSurfaceProperty: function() {
       return this.topSurface;
     },
@@ -116,13 +121,13 @@ define( function( require ) {
      * Interact with a thermal energy container, adding or removing energy
      * based on the current heat/cool setting.
      *
-     * @param thermalEnergyContainer Model object that will get or give energy.
-     * @param {number} dt                     Amount of time (delta time).
+     * @param [ThermalEnergyContainer} thermalEnergyContainer - Model object that will get or give energy.
+     * @param {number} dt - Amount of time (delta time).
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
       // This shouldn't be used for air - there is a specific method for that.
       assert && assert( !(thermalEnergyContainer instanceof Air) );
-      if ( inContactWith( thermalEnergyContainer ) ) {
+      if ( this.inContactWith( thermalEnergyContainer ) ) {
         var deltaEnergy = 0;
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * heatCoolLevel.get() * dt;
@@ -131,31 +136,51 @@ define( function( require ) {
         energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;
       }
     },
+    /**
+     * *
+     * @param air
+     * @param dt
+     */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * heatCoolLevel.get() * dt;
       air.changeEnergy( deltaEnergy );
       energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
     },
+
+    /**
+     * *
+     * @param thermalEnergyContainer
+     * @returns {boolean}
+     */
     inContactWith: function( thermalEnergyContainer ) {
       var containerThermalArea = thermalEnergyContainer.getThermalContactArea().getBounds();
-      return (containerThermalArea.getCenterX() > getOutlineRect().getMinX() && containerThermalArea.getCenterX() < getOutlineRect().getMaxX() && Math.abs( containerThermalArea.getMinY() - getOutlineRect().getMaxY() ) < CONTACT_DISTANCE);
+      return (containerThermalArea.getCenterX() > this.getOutlineRect().getMinX() && containerThermalArea.getCenterX() < this.getOutlineRect().getMaxX() && Math.abs( containerThermalArea.getMinY() - this.getOutlineRect().getMaxY() ) < CONTACT_DISTANCE);
     },
-    addEnergyChunk: function( ec ) {
-      ec.zPosition.set( 0.0 );
-      energyChunkList.add( ec );
-      energyChunkWanderControllers.add( new EnergyChunkWanderController( ec, new Property( getEnergyChunkStartEndPoint() ) ) );
+
+    /**
+     *
+     * @param {EnergyChunk} energyChunk
+     */
+    addEnergyChunk: function( energyChunk ) {
+      energyChunk.zPosition.set( 0.0 );
+      energyChunkList.add( energyChunk );
+      energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
       energyExchangedWithAirSinceLastChunkTransfer = 0;
       energyExchangedWithObjectSinceLastChunkTransfer = 0;
     },
-//private
+
+    /**
+     * @private
+     * @returns {Vector2}
+     */
     getEnergyChunkStartEndPoint: function() {
-      return new Vector2( getCenterPoint().getX(), getCenterPoint().getY() );
+      return this.getCenterPoint();
     },
     /**
      * Request an energy chunk from the burner.
      *
-     * @param point Point from which to search for closest chunk.
-     * @return Closest energy chunk, null if none are contained.
+     * @param {Vector2} point Point from which to search for closest chunk.
+     * @return {EnergyChunk} Closest energy chunk, null if none are contained.
      */
     extractClosestEnergyChunk: function( point ) {
       var closestEnergyChunk = null;
@@ -186,9 +211,16 @@ define( function( require ) {
       }
       return closestEnergyChunk;
     },
+    /**
+     * *
+     * @returns {Vector2}
+     */
     getCenterPoint: function() {
       return new Vector2( position.x, position.y + HEIGHT / 2 );
     },
+    /**
+     *
+     */
     reset: function() {
       super.reset();
       energyChunkList.clear();
@@ -197,14 +229,24 @@ define( function( require ) {
       energyExchangedWithObjectSinceLastChunkTransfer = 0;
       heatCoolLevel.reset();
     },
+
+    /**
+     * *
+     * @param {ThermalEnergyContainer} thermalEnergyContainers
+     * @returns {boolean}
+     */
     areAnyOnTop: function( thermalEnergyContainers ) {
       for ( var thermalEnergyContainer in thermalEnergyContainers ) {
-        if ( inContactWith( thermalEnergyContainer ) ) {
+        if ( this.inContactWith( thermalEnergyContainer ) ) {
           return true;
         }
       }
       return false;
     },
+    /**
+     * *
+     * @returns {number}
+     */
     getEnergyChunkCountForAir: function() {
       var count = 0;
       // almost to the burner).
@@ -221,7 +263,11 @@ define( function( require ) {
       }
       return count;
     },
-//private
+
+    /**
+     * @private
+     * @param dt
+     */
     stepInTime: function( dt ) {
       // Animate energy chunks.
       for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
@@ -232,11 +278,21 @@ define( function( require ) {
         }
       }
     },
+
+    /**
+     * *
+     * @returns {Rectangle}
+     */
     getFlameIceRect: function() {
       // be coordinated with the view.
-      var outlineRect = getOutlineRect();
-      return new Rectangle.Number( outlineRect.getCenterX() - outlineRect.getWidth() / 4, outlineRect.getCenterY(), outlineRect.getWidth() / 2, outlineRect.getHeight() / 2 );
+      var outlineRect = this.getOutlineRect();
+      return new Rectangle( outlineRect.centerX - outlineRect.width / 4, outlineRect.centerY, outlineRect.width / 2, outlineRect.height / 2 );
     },
+
+    /**
+     * *
+     * @returns {number}
+     */
     getTemperature: function() {
       // low value is limited to the freezing point of water.
       return Math.max( EFACConstants.ROOM_TEMPERATURE + heatCoolLevel.get() * 100, EFACConstants.FREEZING_POINT_TEMPERATURE );
@@ -251,9 +307,17 @@ define( function( require ) {
     getEnergyChunkBalanceWithObjects: function() {
       return (Math.floor( Math.abs( energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.signum( energyExchangedWithObjectSinceLastChunkTransfer ));
     },
+    /**
+     * *
+     * @returns {boolean}
+     */
     canSupplyEnergyChunk: function() {
       return heatCoolLevel.get() > 0;
     },
+    /**
+     * *
+     * @returns {boolean}
+     */
     canAcceptEnergyChunk: function() {
       return heatCoolLevel.get() < 0;
     },
@@ -452,9 +516,9 @@ define( function( require ) {
 //  }
 //
 //  public void addEnergyChunk( EnergyChunk ec ) {
-//    ec.zPosition.set( 0.0 );
-//    energyChunkList.add( ec );
-//    energyChunkWanderControllers.add( new EnergyChunkWanderController( ec, new Property<Vector2D>( getEnergyChunkStartEndPoint() ) ) );
+//    energyChunk.zPosition.set( 0.0 );
+//    energyChunkList.add( energyChunk );
+//    energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, new Property<Vector2D>( getEnergyChunkStartEndPoint() ) ) );
 //    energyExchangedWithAirSinceLastChunkTransfer = 0;
 //    energyExchangedWithObjectSinceLastChunkTransfer = 0;
 //  }

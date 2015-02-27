@@ -15,6 +15,10 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
 
+  /**
+   * *
+   * @constructor
+   */
   function HeatTransferConstants() {
     var BRICK_IRON_HEAT_TRANSFER_FACTOR = 1000.0;
     var BRICK_WATER_HEAT_TRANSFER_FACTOR = 1000.0;
@@ -40,9 +44,20 @@ define( function( require ) {
   }
 
   return inherit( Object, HeatTransferConstants, {
+    /**
+     * *
+     * @param element1
+     * @param element2
+     * @returns {*}
+     */
     getHeatTransferFactor: function( element1, element2 ) {
       return this.heatTransferConstantsMap[ element1 ][ element2 ];
     },
+
+    /**
+     * *
+     * @returns {number}
+     */
     getAirToSurroundingAirHeatTransferFactor: function() {
       return this.AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
     }

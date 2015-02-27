@@ -28,6 +28,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
 
 
@@ -52,7 +53,7 @@ define( function( require ) {
     var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // Create the shape for the front of the block.
     var blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).bounds;
-    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotate( -PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotate( -PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
@@ -106,7 +107,10 @@ define( function( require ) {
     this.addChild( blockTop );
     this.addChild( blockSide );
     if ( SHOW_2D_REPRESENTATION ) {
-      this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), new BasicStroke( 1 ), Color.RED ) );
+      this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), {
+        stroke: Color.RED,
+        lineWidth: 1
+      } ) );
     }
     // Position and add the label.
     var label = new Text( block.getLabel() );

@@ -66,6 +66,10 @@ define( function( require ) {
 
   return inherit( ThermalEnergyContainer, Air, {
 
+    /**
+     * *
+     * @param dt
+     */
     step: function( dt ) {
       // Update the position of any energy chunks.
       this.energyChunkWanderControllers.forEach( function( energyChunkWanderController ) {
@@ -80,6 +84,10 @@ define( function( require ) {
 
     },
 
+    /**
+     * *
+     * @param {number} dt
+     */
     equalizeWithSurroundingAir: function( dt ) {
       if ( Math.abs( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) > EFACConstants.SIGNIFICANT_TEMPERATURE_DIFFERENCE ) {
         var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
@@ -94,20 +102,36 @@ define( function( require ) {
       }
     },
 
+    /**
+     * *
+     * @param {number} deltaEnergy
+     */
     changeEnergy: function( deltaEnergy ) {
       energy += deltaEnergy;
     },
 
+    /**
+     * *
+     * @returns {number}
+     */
     getEnergy: function() {
       return energy;
     },
 
+    /**
+     * *
+     */
     reset: function() {
       energy = INITIAL_ENERGY;
       this.energyChunkList.clear();
       this.energyChunkWanderControllers.clear();
     },
 
+    /**
+     * *
+     * @param energyContainer
+     * @param dt
+     */
     exchangeEnergyWith: function( energyContainer, dt ) {
       var thermalContactLength = this.getThermalContactArea().getThermalContactLength( energyContainer.getThermalContactArea() );
       if ( thermalContactLength > 0 ) {
@@ -134,6 +158,11 @@ define( function( require ) {
       }
     },
 
+    /**
+     * *
+     * @param {EnergyChunk} energyChunk
+     * @param initialWanderConstraint
+     */
     addEnergyChunk: function( energyChunk, initialWanderConstraint ) {
       energyChunk.zPosition = 0.0;
       this.energyChunkList.push( energyChunk );
@@ -142,15 +171,26 @@ define( function( require ) {
         initialWanderConstraint ) );
     },
 
-
+    /**
+     *
+     * @returns {Vector2}
+     */
     getCenterPoint: function() {
       return new Vector2( 0, SIZE.height / 2 );
     },
 
+    /**
+     * *
+     * @returns {ThermalContactArea}
+     */
     getThermalContactArea: function() {
       return THERMAL_CONTACT_AREA;
     },
 
+    /**
+     * *
+     * @returns {number}
+     */
     getTemperature: function() {
       return energy / ( MASS * SPECIFIC_HEAT );
     },
@@ -159,10 +199,18 @@ define( function( require ) {
       return this.energyChunkList;
     },
 
+    /**
+     * *
+     * @returns {EnergyContainerCategory.AIR|*|PropertySet.AIR}
+     */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.AIR;
     },
 
+    /**
+     * *
+     * @returns {number}
+     */
     getEnergyBeyondMaxTemperature: function() {
       // Air temperature is unlimited.
       return 0;

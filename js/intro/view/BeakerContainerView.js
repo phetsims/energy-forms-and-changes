@@ -26,6 +26,7 @@ define( function( require ) {
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
 
 

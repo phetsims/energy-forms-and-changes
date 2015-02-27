@@ -67,18 +67,33 @@ define( function( require ) {
       return null;
     },
 
+    /**
+     * *
+     * @returns {HorizontalSurface}
+     */
     getTopSurfaceProperty: function() {
       return this.topSurfaceProperty;
     },
 
+    /**
+     * *
+     * @returns {HorizontalSurface}
+     */
     getBottomSurfaceProperty: function() {
       return this.bottomSurfaceProperty;
     },
 
+    /**
+     * *
+     * @returns {ThermalContactArea}
+     */
     getThermalContactArea: function() {
       return new ThermalContactArea( this.getRect(), false );
     },
 
+    /**
+     * *
+     */
     addEnergyChunkSlices: function() {
       // The slices for the block are intended to match the projection used in the view.
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, SURFACE_WIDTH / 2 );
@@ -92,6 +107,10 @@ define( function( require ) {
       }
     },
 
+    /**
+     * *
+     * @returns {Rectangle}
+     */
     getRect: function() {
       return new Rectangle( this.position.x - SURFACE_WIDTH / 2,
         this.position.y,
@@ -99,20 +118,34 @@ define( function( require ) {
         SURFACE_WIDTH );
     },
 
+    /**
+     * @private
+     */
     updateTopSurfaceProperty: function() {
       var rectangle = this.getRect();
       this.topSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
     },
 
+    /**
+     * @private
+     */
     updateBottomSurfaceProperty: function() {
       var rectangle = this.getRect();
       this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
     },
 
+    /**
+     * *
+     * @returns {Rectangle}
+     */
     getRawShape: function() {
       return new Rectangle( -SURFACE_WIDTH / 2, 0, SURFACE_WIDTH, SURFACE_WIDTH );
     },
 
+    /**
+     * *
+     * @returns {number}
+     */
     getEnergyBeyondMaxTemperature: function() {
       return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     }

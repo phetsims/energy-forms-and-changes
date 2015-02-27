@@ -64,8 +64,12 @@ define( function( require ) {
   }
 
   return inherit( Node, EnergyChunkNode, {
-// Update the transparency, which is a function of several factors.
-//private
+
+    /**
+     * Update the transparency, which is a function of several factors.*
+     * @private
+     * @param {number} zPosition
+     */
     updateTransparency: function( zPosition ) {
       var zFadeValue = 1;
       if ( zPosition < 0 ) {
@@ -73,6 +77,12 @@ define( function( require ) {
       }
       setTransparency( zFadeValue );
     },
+
+    /**
+     * *
+     * @param energyType
+     * @returns {Image}
+     */
     createEnergyChunkNode: function( energyType ) {
       var background = new Image( mapEnergyTypeToImage.get( energyType ) );
       background.addChild( new Text( EnergyFormsAndChangesResources.Strings.ENERGY_CHUNK_LABEL, new PhetFont( 16, true ) ).withAnonymousClassBody( {

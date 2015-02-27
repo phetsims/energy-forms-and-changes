@@ -52,7 +52,13 @@ define( function( require ) {
     } );
   }
 
-
+  /**
+   *
+   * @param model
+   * @param {Vector2} initialPosition
+   * @param initiallyActive
+   * @constructor
+   */
   function ElementFollowingThermometer( model, initialPosition, initiallyActive ) {
     Thermometer.call( this, model, initialPosition, initiallyActive );
     // anything that it should stick to.

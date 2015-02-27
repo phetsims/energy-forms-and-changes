@@ -34,11 +34,18 @@ define( function( require ) {
   }
 
   return inherit( Block, Brick, {
-
+      /**
+       * @public read-only
+       * @returns {exports.BRICK_TEXTURE_FRONT|*}
+       */
       getFrontTextureImage: function() {
         return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_FRONT;
       },
 
+      /**
+       * @public read-only
+       * @returns {exports.BRICK_TEXTURE_TOP|*}
+       */
       getTopTextureImage: function() {
         return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_TOP;
       },
@@ -47,14 +54,26 @@ define( function( require ) {
         return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_RIGHT;
       },
 
+      /**
+       * @public read-only
+       * @returns {Color}
+       */
       getColor: function() {
         return new Color( 200, 22, 11 );
       },
 
+      /**
+       * @public read-only
+       * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
+       */
       getLabel: function() {
         return EnergyFormsAndChangesResources.Strings.BRICK;
       },
 
+      /**
+       *
+       * @returns {exports.BRICK|*}
+       */
       getEnergyContainerCategory: function() {
         return EnergyContainerCategory.BRICK;
       }
@@ -68,12 +87,6 @@ define( function( require ) {
 } );
 
 
-//TODO: remove comments
-///**
-// * Created by veillettem on 10/4/2014.
-// */
-//
-//
 //// Copyright 2002-2015, University of Colorado
 
 //package edu.colorado.phet.energyformsandchanges.intro.model;

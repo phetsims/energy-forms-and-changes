@@ -12,18 +12,18 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/EFACIntroModel' );
-  var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/RectangularThermalMovableModelElement' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/RectangularThermalMovableModelElement' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
    *
-   * @param model
+   * @param {EnergyFormsAndChangesIntroModel} model
    * @param {RectangularThermalMovableModelElement} modelElement
    * @param {Node} node
-   * @param {ModevlViewTransform} modelViewTransform
+   * @param {ModelViewTransform2} modelViewTransform
    * @param {Vector2} offsetPosToNodeCenter
    * @constructor
    */
@@ -32,14 +32,13 @@ define( function( require ) {
     this.modelElement = modelElement;
     var nodeSize = new Dimension2( node.width, node.height );
     // the nature of the provided node.
-    var boundsMinX = modelViewTransform.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
+    var boundsMinX = modelViewTransform.viewToModelX( nodeSize.width / 2 - offsetPosToNodeCenter.x );
     //TODO fix with appropriate bounds
 //    var boundsMaxX = modelViewTransform.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
 //    var boundsMinY = modelViewTransform.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
-    var boundsMaxX = modelViewTransform.viewToModelX( 1000 - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
-    var boundsMinY = modelViewTransform.viewToModelY( 800 - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
-
-    var boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.getHeight() / 2 );
+    var boundsMaxX = modelViewTransform.viewToModelX( 1000 - nodeSize.width / 2 - offsetPosToNodeCenter.x );
+    var boundsMinY = modelViewTransform.viewToModelY( 800 - offsetPosToNodeCenter.y - nodeSize.height / 2 );
+    var boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.height / 2 );
     this.modelBounds = new Rectangle( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
   }
 
