@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Thermometer node that the user can drag around and that updates its
@@ -9,6 +9,7 @@
 define( function( require ) {
   'use strict';
 
+  //modules
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
 //  var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
@@ -22,33 +23,39 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
 
-  function MovableThermometerNode( thermometer, mvt ) {
+  /**
+   * *
+   * @param thermometer
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
+  function MovableThermometerNode( thermometer, modelViewTransform ) {
     var movableThermometerNode = this;
     SensingThermometerNode.call( this, thermometer );
     // Update the offset if and when the model position changes.
     thermometer.positionProperty.link( function( position ) {
       //TODO check if ok
-      movableThermometerNode.translation = new Vector2( mvt.modelToViewX( position.x ), mvt.modelToViewY( position.y ) - (movableThermometerNode.height / 2 + movableThermometerNode.triangleTipOffset.height) );
-//        movableThermometerNode.translation = new Vector2( mvt.modelToViewX( position.x ), mvt.modelToViewY( position.y ) );
+      movableThermometerNode.translation = new Vector2( modelViewTransform.modelToViewX( position.x ), modelViewTransform.modelToViewY( position.y ) - (movableThermometerNode.height / 2 + movableThermometerNode.triangleTipOffset.height) );
+//        movableThermometerNode.translation = new Vector2( modelViewTransform.modelToViewX( position.x ), modelViewTransform.modelToViewY( position.y ) );
     } );
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( this.centerX - mvt.modelToViewX( thermometer.position.x ), this.centerY - mvt.modelToViewY( thermometer.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler( thermometer, this, mvt, new ThermometerLocationConstraint( mvt, this, offsetPosToCenter ) ) );
+    var offsetPosToCenter = new Vector2( this.centerX - modelViewTransform.modelToViewX( thermometer.position.x ), this.centerY - modelViewTransform.modelToViewY( thermometer.position.y ) );
+    this.addInputListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform, new ThermometerLocationConstraint( modelViewTransform, this, offsetPosToCenter ) ) );
   }
 
   // Class that constrains the valid locations for a thermometer.
-  function ThermometerLocationConstraint( mvt, node, offsetPosToNodeCenter ) {
+  function ThermometerLocationConstraint( modelViewTransform, node, offsetPosToNodeCenter ) {
     var nodeSize = new Dimension2( node.width, node.height );
     // the nature of the provided node.
 
     //TODO get STAGE_SIZE
-    var boundsMinX = mvt.viewToModelX( nodeSize.width / 2 - offsetPosToNodeCenter.x );
-//    var boundsMaxX = mvt.viewToModelX( EFACIntroCanvas.STAGE_SIZE.width - nodeSize.width / 2 - offsetPosToNodeCenter.x );
-//    var boundsMinY = mvt.viewToModelY( EFACIntroCanvas.STAGE_SIZE.height - offsetPosToNodeCenter.y - nodeSize.height / 2 );
-    var boundsMaxX = mvt.viewToModelX( 1000 - nodeSize.width / 2 - offsetPosToNodeCenter.x );
-    var boundsMinY = mvt.viewToModelY( 600 - offsetPosToNodeCenter.y - nodeSize.height / 2 );
+    var boundsMinX = modelViewTransform.viewToModelX( nodeSize.width / 2 - offsetPosToNodeCenter.x );
+//    var boundsMaxX = modelViewTransform.viewToModelX( EFACIntroCanvas.STAGE_SIZE.width - nodeSize.width / 2 - offsetPosToNodeCenter.x );
+//    var boundsMinY = modelViewTransform.viewToModelY( EFACIntroCanvas.STAGE_SIZE.height - offsetPosToNodeCenter.y - nodeSize.height / 2 );
+    var boundsMaxX = modelViewTransform.viewToModelX( 1000 - nodeSize.width / 2 - offsetPosToNodeCenter.x );
+    var boundsMinY = modelViewTransform.viewToModelY( 600 - offsetPosToNodeCenter.y - nodeSize.height / 2 );
 
-    var boundsMaxY = mvt.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.height / 2 );
+    var boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.height / 2 );
     this.modelBounds = new Rectangle( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
   }
 
@@ -63,7 +70,8 @@ define( function( require ) {
 
 //
 //
-//// Copyright 2002-2013, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.geom.Dimension2D;
@@ -87,21 +95,21 @@ define( function( require ) {
 // */
 //public class MovableThermometerNode extends SensingThermometerNode {
 //
-//  public MovableThermometerNode( final Thermometer thermometer, final ModelViewTransform mvt ) {
+//  public MovableThermometerNode( final Thermometer thermometer, final ModelViewTransform modelViewTransform ) {
 //    super( thermometer );
 //
 //    // Update the offset if and when the model position changes.
 //    thermometer.position.addObserver( new VoidFunction1<Vector2D>() {
 //      public void apply( Vector2D position ) {
-//        setOffset( mvt.modelToViewX( position.getX() ),
-//            mvt.modelToViewY( position.getY() ) - ( getFullBoundsReference().height / 2 + triangleTipOffset.getHeight() ) );
+//        setOffset( modelViewTransform.modelToViewX( position.x ),
+//            modelViewTransform.modelToViewY( position.y ) - ( getFullBoundsReference().height / 2 + triangleTipOffset.getHeight() ) );
 //      }
 //    } );
 //
 //    // Add the drag handler.
-//    Vector2D offsetPosToCenter = new Vector2D( getFullBoundsReference().getCenterX() - mvt.modelToViewX( thermometer.position.get().getX() ),
-//        getFullBoundsReference().getCenterY() - mvt.modelToViewY( thermometer.position.get().getY() ) );
-//    addInputEventListener( new ThermalElementDragHandler( thermometer, this, mvt, new ThermometerLocationConstraint( mvt, this, offsetPosToCenter ) ) );
+//    Vector2D offsetPosToCenter = new Vector2D( getFullBoundsReference().getCenterX() - modelViewTransform.modelToViewX( thermometer.position.x ),
+//        getFullBoundsReference().getCenterY() - modelViewTransform.modelToViewY( thermometer.position.y ) );
+//    addInputEventListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform, new ThermometerLocationConstraint( modelViewTransform, this, offsetPosToCenter ) ) );
 //  }
 //
 //  // Class that constrains the valid locations for a thermometer.
@@ -109,16 +117,16 @@ define( function( require ) {
 //
 //    private final Rectangle2D modelBounds;
 //
-//  private ThermometerLocationConstraint( ModelViewTransform mvt, PNode node, Vector2D offsetPosToNodeCenter ) {
+//  private ThermometerLocationConstraint( ModelViewTransform modelViewTransform, PNode node, Vector2D offsetPosToNodeCenter ) {
 //
 //    Dimension2D nodeSize = new PDimension( node.getFullBoundsReference().width, node.getFullBoundsReference().height );
 //
 //    // Calculate the bounds based on the stage size of the canvas and
 //    // the nature of the provided node.
-//    double boundsMinX = mvt.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
-//    double boundsMaxX = mvt.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
-//    double boundsMinY = mvt.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.getY() - nodeSize.getHeight() / 2 );
-//    double boundsMaxY = mvt.viewToModelY( -offsetPosToNodeCenter.getY() + nodeSize.getHeight() / 2 );
+//    double boundsMinX = modelViewTransform.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
+//    double boundsMaxX = modelViewTransform.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
+//    double boundsMinY = modelViewTransform.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.getY() - nodeSize.getHeight() / 2 );
+//    double boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.getY() + nodeSize.getHeight() / 2 );
 //    modelBounds = new Rectangle2D.Double( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
 //  }
 //

@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Base class for model elements that can be moved around by the user.
@@ -10,10 +10,10 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * {Vector2} initialPosition
@@ -77,7 +77,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import edu.colorado.phet.common.phetcommon.math.vector.Vector2D;
@@ -158,6 +159,6 @@ define( function( require ) {
 //  public abstract Property<HorizontalSurface> getBottomSurfaceProperty();
 //
 //  public void setX( final double x ) {
-//    position.set( new Vector2D( x, position.get().getY() ) );
+//    position.set( new Vector2D( x, position.y ) );
 //  }
 //}

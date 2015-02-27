@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Model element that represents a burner in the simulation.  The burner can
@@ -12,7 +12,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-
   'use strict';
 
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
@@ -36,7 +35,6 @@ define( function( require ) {
 
 
   // constants
-
   var WIDTH = 0.075; // In meters.
   var HEIGHT = WIDTH * 1;
   var MAX_ENERGY_GENERATION_RATE = 5000; // joules/sec, empirically chosen.
@@ -55,7 +53,7 @@ define( function( require ) {
   //-------------------------------------------------------------------------
 
 
-  BoundedProperty
+  BoundedProperty;
   heatCoolLevel = new BoundedDoubleProperty( 0.0, -1, 1 );
   Property < HorizontalSurface > topSurface;
 
@@ -72,10 +70,9 @@ define( function( require ) {
   /**
    * Constructor.
    *
-   * @param position            The position in model space where this burner
-   *                            exists. By convention for this simulation,
+   * @param {Vector2} position - The position in model space where this burner exists. By convention for this simulation,
    *                            the position is
-   * @param energyChunksVisible Property that controls whether the energy
+   * @param {Property.<boolean>} energyChunksVisibleProperty Property that controls whether the energy
    *                            chunks are visible.
    */
   function Burner( position, energyChunksVisibleProperty ) {
@@ -105,10 +102,9 @@ define( function( require ) {
 // Methods
 //-------------------------------------------------------------------------
     /**
-     * Get a rectangle that defines the outline of the burner.  In the model,
-     * the burner is essentially a 2D rectangle.
+     * Get a rectangle that defines the outline of the burner.  In the model the burner is essentially a 2D rectangle.
      *
-     * @return Rectangle that defines the outline in model space.
+     * @return {Rectangle} Rectangle that defines the outline in model space.
      */
     getOutlineRect: function() {
       return new Rectangle( position.x - WIDTH / 2, position.y, WIDTH, HEIGHT );
@@ -121,7 +117,7 @@ define( function( require ) {
      * based on the current heat/cool setting.
      *
      * @param thermalEnergyContainer Model object that will get or give energy.
-     * @param dt                     Amount of time (delta time).
+     * @param {number} dt                     Amount of time (delta time).
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
       // This shouldn't be used for air - there is a specific method for that.
@@ -165,7 +161,7 @@ define( function( require ) {
       var closestEnergyChunk = null;
       if ( energyChunkList.size() > 0 ) {
         for ( var energyChunk in energyChunkList ) {
-          if ( energyChunk.position.get().distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE && (closestEnergyChunk == null || energyChunk.position.get().distance( point ) < closestEnergyChunk.position.get().distance( point )) ) {
+          if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE && (closestEnergyChunk == null || energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
           }
@@ -191,7 +187,7 @@ define( function( require ) {
       return closestEnergyChunk;
     },
     getCenterPoint: function() {
-      return new Vector2( position.getX(), position.getY() + HEIGHT / 2 );
+      return new Vector2( position.x, position.y + HEIGHT / 2 );
     },
     reset: function() {
       super.reset();
@@ -214,7 +210,7 @@ define( function( require ) {
       // almost to the burner).
       if ( energyChunkList.size() > 0 && heatCoolLevel.get() >= 0 ) {
         for ( var energyChunk in energyChunkList ) {
-          if ( position.distance( energyChunk.position.get() ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+          if ( position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
         }
@@ -278,10 +274,10 @@ define( function( require ) {
     } );
 } );
 } )
-;
+
 
 /*
- // // Copyright 2002-2012, University of Colorado
+ // // Copyright 2002-2015, University of Colorado
  // package edu.colorado.phet.energyformsandchanges.intro.model;
  //
  // import java.awt.geom.Rectangle2D;
@@ -413,8 +409,8 @@ define( function( require ) {
 //   * @return Rectangle that defines the outline in model space.
 //   */
 //  public Rectangle2D getOutlineRect() {
-//    return new Rectangle2D.Double( position.getX() - WIDTH / 2,
-//      position.getY(),
+//    return new Rectangle2D.Double( position.x - WIDTH / 2,
+//      position.y,
 //      WIDTH,
 //      HEIGHT );
 //  }
@@ -477,8 +473,8 @@ define( function( require ) {
 //    EnergyChunk closestEnergyChunk = null;
 //    if ( energyChunkList.size() > 0 ) {
 //      for ( EnergyChunk energyChunk : energyChunkList ) {
-//        if ( energyChunk.position.get().distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-//             ( closestEnergyChunk == null || energyChunk.position.get().distance( point ) < closestEnergyChunk.position.get().distance( point ) ) ) {
+//        if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+//             ( closestEnergyChunk == null || energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
 //          // Found a closer chunk.
 //          closestEnergyChunk = energyChunk;
 //        }
@@ -508,7 +504,7 @@ define( function( require ) {
 //  }
 //
 //  public Vector2D getCenterPoint() {
-//    return new Vector2D( position.getX(), position.getY() + HEIGHT / 2 );
+//    return new Vector2D( position.x, position.y + HEIGHT / 2 );
 //  }
 //
 //  @Override public void reset() {
@@ -536,7 +532,7 @@ define( function( require ) {
 //    // almost to the burner).
 //    if ( energyChunkList.size() > 0 && heatCoolLevel.get() >= 0 ) {
 //      for ( EnergyChunk energyChunk : energyChunkList ) {
-//        if ( position.distance( energyChunk.position.get() ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+//        if ( position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
 //          count++;
 //        }
 //      }

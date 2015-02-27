@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * A class that contains  methods for redistributing a set of energy
@@ -17,7 +17,7 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -63,17 +63,17 @@ define( function( require ) {
         var maxX = Number.NEGATIVE_INFINITY;
         var maxY = Number.NEGATIVE_INFINITY;
         energyChunkContainerSlices.forEach( function( slice ) {
-          minX = Math.min( slice.getShape().getBounds2D().getMinX(), minX );
-          maxX = Math.max( slice.getShape().getBounds2D().getMaxX(), maxX );
-          minY = Math.min( slice.getShape().getBounds2D().getMinY(), minY );
-          maxY = Math.max( slice.getShape().getBounds2D().getMaxY(), maxY );
+          minX = Math.min( slice.getShape().bounds.minX, minX );
+          maxX = Math.max( slice.getShape().bounds.minY, maxX );
+          minY = Math.min( slice.getShape().bounds.maxX, minY );
+          maxY = Math.max( slice.getShape().bounds.maxY, maxY );
         } );
         boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
       }
 
       // Create a map that tracks the force applied to each energy chunk.
       //TODO ask JB about hashmap
-      var mapEnergyChunkToForceVector = new Object();
+      var mapEnergyChunkToForceVector = {};
 
       energyChunkContainerSlices.forEach( function( energyChunkContainerSlice ) {
         energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
@@ -89,13 +89,13 @@ define( function( require ) {
       // Determine the minimum distance that is allowed to be used in the
       // force calculations.  This prevents hitting infinities that can
       // cause run time issues or unreasonably large forces.
-      var minDistance = Math.min( boundingRect.getWidth(), boundingRect.getHeight() ) / 20; // Divisor empirically determined.
+      var minDistance = Math.min( boundingRect.width, boundingRect.height ) / 20; // Divisor empirically determined.
 
       // The particle repulsion force varies inversely with the density of
       // particles so that we don't end up with hugely repulsive forces that
       // tend to push the particles out of the container.  This formula was
       // made up, and can be adjusted if needed.
-      var forceConstant = ENERGY_CHUNK_MASS * boundingRect.getWidth() * boundingRect.getHeight() * 0.1 / mapEnergyChunkToForceVector.size();
+      var forceConstant = ENERGY_CHUNK_MASS * boundingRect.width * boundingRect.height * 0.1 / mapEnergyChunkToForceVector.size();
 
       // Loop once for each max time step plus any remainder.
       var particlesRedistributed = false;
@@ -112,40 +112,40 @@ define( function( require ) {
             var containerShape = energyChunkContainerSlice.getShape();
 
             // Determine the max possible distance to an edge.
-            var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.getBounds2D().getWidth(), 2 ) +
-                                               Math.pow( containerShape.getBounds2D().getHeight(), 2 ) );
+            var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) +
+                                               Math.pow( containerShape.bounds.height, 2 ) );
 
             // Determine forces on each energy chunk.
             energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
               // Reset accumulated forces.
 //              mapEnergyChunkToForceVector[energyChunk] = ZERO_VECTOR;
 
-              if ( containerShape.contains( energyChunk.position.get().toPoint2D() ) ) {
+              if ( containerShape.contains( energyChunk.position ) ) {
 
                 // Loop on several angles, calculating the forces from the
                 // edges at the given angle.
                 var angle;
                 for ( angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
                   var edgeDetectSteps = 8;
-                  var lengthBounds = new Range( 0, maxDistanceToEdge );
+                  var lengthRange = new Range( 0, maxDistanceToEdge );
                   var edgeDetectStep;
                   for ( edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-                    var vectorToEdge = new Vector2( lengthBounds.getCenter(), 0 ).rotate( angle );
-                    if ( containerShape.contains( energyChunk.position.get().plus( vectorToEdge ).toPoint2D() ) ) {
-                      lengthBounds = new Range( lengthBounds.getCenter(), lengthBounds.getMax() );
+                    var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotate( angle );
+                    if ( containerShape.contains( energyChunk.position.plus( vectorToEdge ) ) ) {
+                      lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
                     }
                     else {
-                      lengthBounds = new Range( lengthBounds.getMin(), lengthBounds.getCenter() );
+                      lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
                     }
                   }
 
                   // Handle case where point is too close to the container's edge.
-                  if ( lengthBounds.getCenter() < minDistance ) {
-                    lengthBounds = new Range( minDistance, minDistance );
+                  if ( lengthRange.getCenter() < minDistance ) {
+                    lengthRange = new Range( minDistance, minDistance );
                   }
 
                   // Apply the force due to this edge.
-                  var edgeForce = new Vector2( forceConstant / Math.pow( lengthBounds.getCenter(), 2 ), 0 ).rotate( angle + Math.PI );
+                  var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotate( angle + Math.PI );
                   mapEnergyChunkToForceVector.put( energyChunk, mapEnergyChunkToForceVector.get( energyChunk ).plus( edgeForce ) );
                 }
 
@@ -154,12 +154,12 @@ define( function( require ) {
                 // that can be applied.
                 Object.keys( mapEnergyChunkToForceVector ).forEach( function( energyChunk ) {
 
-                  if ( energyChunk == otherEnergyChunk ) {
+                  if ( energyChunk === otherEnergyChunk ) {
                     continue;
                   }
 
                   // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = energyChunk.position.get().minus( otherEnergyChunk.position.get() );
+                  var vectorToOther = energyChunk.position.minus( otherEnergyChunk.position );
                   if ( vectorToOther.magnitude() < minDistance ) {
                     if ( vectorToOther.magnitude() == 0 ) {
                       // Create a random vector of min distance.
@@ -171,82 +171,84 @@ define( function( require ) {
                     }
                   }
                   // Add the force to the accumulated forces on this energy chunk.
-                  mapEnergyChunkToForceVector.put( energyChunk, mapEnergyChunkToForceVector.get( energyChunk ).plus( vectorToOther.setMagnitude( forceConstant / ( vectorToOther.magnitudeSquared() ) ) ) );
-
-                  else
-                  {
-                    // Point is outside container, move it towards center of shape.
-                    var vectorToCenter = new Vector2( boundingRect.getCenterX(), boundingRect.getCenterY() ).minus( energyChunk.position.get() );
-                    mapEnergyChunkToForceVector.put( energyChunk, vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE ) );
-                  }
-                } );
-
-              }
-
-              // Update energy chunk velocities, drag force, and position.
-              var maxEnergy = 0;
-              Object.keys( mapEnergyChunkToForceVector ).forEach( function( energyChunk ) {
-
-                // Calculate the energy chunk's velocity as a result of forces acting on it.
-                var forceOnThisChunk = mapEnergyChunkToForceVector.get( energyChunk );
-                var newVelocity = energyChunk.getVelocity().plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
-
-                // Calculate drag force.  Uses standard drag equation.
-                var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
-                var dragForceVector = dragMagnitude > 0 ? newVelocity.rotate( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
-
-                // Update velocity based on drag force.
-                newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
-                energyChunk.setVelocity( newVelocity );
-
-                // Update max energy.
-                var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
-                if ( totalParticleEnergy > maxEnergy ) {
-                  maxEnergy = totalParticleEnergy;
+                  mapEnergyChunkToForceVector.put( energyChunk,
+                    mapEnergyChunkToForceVector.get( energyChunk ).plus( vectorToOther.setMagnitude( forceConstant / ( vectorToOther.magnitudeSquared() ) ) ) );
                 }
-              } );
-
-              particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
-
-              if ( particlesRedistributed ) {
-                Object.keys( mapEnergyChunkToForceVector ).forEach( function( energyChunk ) {
-                  // Update position.
-                  energyChunk.position.set( energyChunk.position.get().plus( energyChunk.getVelocity().times( timeStep ) ) );
-                } );
               }
+              else {
+                // Point is outside container, move it towards center of shape.
+                var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
+                mapEnergyChunkToForceVector.put( energyChunk, vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE ) );
+              }
+            } );
 
-              return particlesRedistributed;
-            }
           }
-          ,
 
-          /*
-           * Super simple alternative energy chunk distribution algorithm - just puts
-           * all energy chunks in center of slide.  This is useful for debugging.
-           * Rename it to substitute if for the 'real' algorithm.
-           */
-          updatePositionsDbg: function( energyChunkContainerSlices, dt ) {
-            // Update the positions of the energy chunks.
-            energyChunkContainerSlices.forEach( function( slice ) {
-              var sliceCenter = new Vector2( slice.getShape().getBounds2D().getCenterX(), slice.getShape().getBounds2D().getCenterY() );
-              slice.energyChunkList.forEach( function( energyChunk ) {
-                energyChunk.position.set( sliceCenter );
-              } );
+          // Update energy chunk velocities, drag force, and position.
+          var maxEnergy = 0;
+          Object.keys( mapEnergyChunkToForceVector ).forEach( function( energyChunk ) {
+
+            // Calculate the energy chunk's velocity as a result of forces acting on it.
+            var forceOnThisChunk = mapEnergyChunkToForceVector.get( energyChunk );
+            var newVelocity = energyChunk.getVelocity().plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
+
+            // Calculate drag force.  Uses standard drag equation.
+            var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
+            var dragForceVector = dragMagnitude > 0 ? newVelocity.rotate( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
+
+            // Update velocity based on drag force.
+            newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
+            energyChunk.setVelocity( newVelocity );
+
+            // Update max energy.
+            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
+            if ( totalParticleEnergy > maxEnergy ) {
+              maxEnergy = totalParticleEnergy;
+            }
+          } );
+
+          particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
+
+          if ( particlesRedistributed ) {
+            Object.keys( mapEnergyChunkToForceVector ).forEach( function( energyChunk ) {
+              // Update position.
+              energyChunk.position.set( energyChunk.position.plus( energyChunk.getVelocity().times( timeStep ) ) );
             } );
           }
-          ,
 
-
-          generateRandomLocation: function( rectangle ) {
-            return new Vector2( rectangle.getMinX() + ( Math.random() * rect.getWidth() ), rectangle.getMinY() + ( Math.random() * rectangle.getHeight() ) );
-          }
+          return particlesRedistributed;
         }
       }
-    } );
+      ,
+
+      /*
+       * Super simple alternative energy chunk distribution algorithm - just puts
+       * all energy chunks in center of slide.  This is useful for debugging.
+       * Rename it to substitute if for the 'real' algorithm.
+       */
+      updatePositionsDbg: function( energyChunkContainerSlices, dt ) {
+        // Update the positions of the energy chunks.
+        energyChunkContainerSlices.forEach( function( slice ) {
+          var sliceCenter = slice.getShape().bounds.center;
+          slice.energyChunkList.forEach( function( energyChunk ) {
+            energyChunk.position.set( sliceCenter );
+          } );
+        } );
+      }
+      ,
+
+
+      generateRandomLocation: function( rectangle ) {
+        return new Vector2( rectangle.minX + ( Math.random() * rect.width ), rectangle.minY + ( Math.random() * rectangle.height ) );
+      }
+    }
+  }
+} );
 
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.*;
@@ -312,10 +314,10 @@ define( function( require ) {
 //      double maxX = Double.NEGATIVE_INFINITY;
 //      double maxY = Double.NEGATIVE_INFINITY;
 //      for ( EnergyChunkContainerSlice slice : energyChunkContainerSlices ) {
-//      minX = Math.min( slice.getShape().getBounds2D().getMinX(), minX );
-//      maxX = Math.max( slice.getShape().getBounds2D().getMaxX(), maxX );
-//      minY = Math.min( slice.getShape().getBounds2D().getMinY(), minY );
-//      maxY = Math.max( slice.getShape().getBounds2D().getMaxY(), maxY );
+//      minX = Math.min( slice.getShape().bounds.minX(), minX );
+//      maxX = Math.max( slice.getShape().bounds.getMaxX(), maxX );
+//      minY = Math.min( slice.getShape().bounds.getMinY(), minY );
+//      maxY = Math.max( slice.getShape().bounds.getMaxY(), maxY );
 //    }
 //      boundingRect = new Rectangle2D.Double( minX, minY, maxX - minX, maxY - minY );
 //    }
@@ -336,13 +338,13 @@ define( function( require ) {
 //    // Determine the minimum distance that is allowed to be used in the
 //    // force calculations.  This prevents hitting infinities that can
 //    // cause run time issues or unreasonably large forces.
-//    double minDistance = Math.min( boundingRect.getWidth(), boundingRect.getHeight() ) / 20; // Divisor empirically determined.
+//    double minDistance = Math.min( boundingRect.width, boundingRect.height ) / 20; // Divisor empirically determined.
 //
 //    // The particle repulsion force varies inversely with the density of
 //    // particles so that we don't end up with hugely repulsive forces that
 //    // tend to push the particles out of the container.  This formula was
 //    // made up, and can be adjusted if needed.
-//    double forceConstant = ENERGY_CHUNK_MASS * boundingRect.getWidth() * boundingRect.getHeight() * 0.1 / mapEnergyChunkToForceVector.size();
+//    double forceConstant = ENERGY_CHUNK_MASS * boundingRect.width * boundingRect.height * 0.1 / mapEnergyChunkToForceVector.size();
 //
 //    // Loop once for each max time step plus any remainder.
 //    boolean particlesRedistributed = false;
@@ -358,38 +360,38 @@ define( function( require ) {
 //        Shape containerShape = energyChunkContainerSlice.getShape();
 //
 //        // Determine the max possible distance to an edge.
-//        double maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.getBounds2D().getWidth(), 2 ) +
-//                                              Math.pow( containerShape.getBounds2D().getHeight(), 2 ) );
+//        double maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) +
+//                                              Math.pow( containerShape.bounds.height, 2 ) );
 //
 //        // Determine forces on each energy chunk.
 //        for ( EnergyChunk ec : energyChunkContainerSlice.energyChunkList ) {
 //          // Reset accumulated forces.
 //          mapEnergyChunkToForceVector.put( ec, ZERO_VECTOR );
 //
-//          if ( containerShape.contains( ec.position.get().toPoint2D() ) ) {
+//          if ( containerShape.contains( ec.position ) ) {
 //
 //            // Loop on several angles, calculating the forces from the
 //            // edges at the given angle.
 //            for ( double angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
 //              int edgeDetectSteps = 8;
-//              DoubleRange lengthBounds = new DoubleRange( 0, maxDistanceToEdge );
+//              DoubleRange lengthRange = new DoubleRange( 0, maxDistanceToEdge );
 //              for ( int edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-//                Vector2D vectorToEdge = new Vector2D( lengthBounds.getCenter(), 0 ).getRotatedInstance( angle );
-//                if ( containerShape.contains( ec.position.get().plus( vectorToEdge ).toPoint2D() ) ) {
-//                  lengthBounds = new DoubleRange( lengthBounds.getCenter(), lengthBounds.getMax() );
+//                Vector2D vectorToEdge = new Vector2D( lengthRange.getCenter(), 0 ).getRotatedInstance( angle );
+//                if ( containerShape.contains( ec.position.plus( vectorToEdge ).toPoint2D() ) ) {
+//                  lengthRange = new DoubleRange( lengthRange.getCenter(), lengthRange.getMax() );
 //                }
 //                else {
-//                  lengthBounds = new DoubleRange( lengthBounds.getMin(), lengthBounds.getCenter() );
+//                  lengthRange = new DoubleRange( lengthRange.getMin(), lengthRange.getCenter() );
 //                }
 //              }
 //
 //              // Handle case where point is too close to the container's edge.
-//              if ( lengthBounds.getCenter() < minDistance ) {
-//                lengthBounds = new DoubleRange( minDistance, minDistance );
+//              if ( lengthRange.getCenter() < minDistance ) {
+//                lengthRange = new DoubleRange( minDistance, minDistance );
 //              }
 //
 //              // Apply the force due to this edge.
-//              Vector2D edgeForce = new Vector2D( forceConstant / Math.pow( lengthBounds.getCenter(), 2 ), 0 ).getRotatedInstance( angle + Math.PI );
+//              Vector2D edgeForce = new Vector2D( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).getRotatedInstance( angle + Math.PI );
 //              mapEnergyChunkToForceVector.put( ec, mapEnergyChunkToForceVector.get( ec ).plus( edgeForce ) );
 //            }
 //
@@ -402,7 +404,7 @@ define( function( require ) {
 //              }
 //
 //              // Calculate force vector, but handle cases where too close.
-//              Vector2D vectorToOther = ec.position.get().minus( otherEnergyChunk.position.get() );
+//              Vector2D vectorToOther = ec.position.minus( otherEnergyChunk.position );
 //              if ( vectorToOther.magnitude() < minDistance ) {
 //                if ( vectorToOther.magnitude() == 0 ) {
 //                  // Create a random vector of min distance.
@@ -419,7 +421,7 @@ define( function( require ) {
 //          }
 //          else {
 //            // Point is outside container, move it towards center of shape.
-//            Vector2D vectorToCenter = new Vector2D( boundingRect.getCenterX(), boundingRect.getCenterY() ).minus( ec.position.get() );
+//            Vector2D vectorToCenter = new Vector2D( boundingRect.centerX, boundingRect.centerY ).minus( ec.position );
 //            mapEnergyChunkToForceVector.put( ec, vectorToCenter.getInstanceOfMagnitude( OUTSIDE_CONTAINER_FORCE ) );
 //          }
 //        }
@@ -453,7 +455,7 @@ define( function( require ) {
 //      if ( particlesRedistributed ) {
 //        for ( EnergyChunk energyChunk : mapEnergyChunkToForceVector.keySet() ) {
 //          // Update position.
-//          energyChunk.position.set( energyChunk.position.get().plus( energyChunk.getVelocity().times( timeStep ) ) );
+//          energyChunk.position.set( energyChunk.position.plus( energyChunk.getVelocity().times( timeStep ) ) );
 //        }
 //      }
 //    }
@@ -468,7 +470,7 @@ define( function( require ) {
 //  public static void updatePositionsDbg( List<EnergyChunkContainerSlice> energyChunkContainerSlices, double dt ) {
 //    // Update the positions of the energy chunks.
 //    for ( EnergyChunkContainerSlice slice : energyChunkContainerSlices ) {
-//      Vector2D sliceCenter = new Vector2D( slice.getShape().getBounds2D().getCenterX(), slice.getShape().getBounds2D().getCenterY() );
+//      Vector2D sliceCenter = new Vector2D( slice.getShape().bounds.centerX, slice.getShape().bounds.centerY );
 //      for ( EnergyChunk energyChunk : slice.energyChunkList ) {
 //        energyChunk.position.set( sliceCenter );
 //      }
@@ -476,7 +478,7 @@ define( function( require ) {
 //  }
 //
 //  public static Vector2D generateRandomLocation( Rectangle2D rect ) {
-//    return new Vector2D( rect.getMinX() + ( RAND.nextDouble() * rect.getWidth() ), rect.getMinY() + ( RAND.nextDouble() * rect.getHeight() ) );
+//    return new Vector2D( rect.minX + ( RAND.nextDouble() * rect.getWidth() ), rect.getMinY() + ( RAND.nextDouble() * rect.getHeight() ) );
 //  }
 //}
 //

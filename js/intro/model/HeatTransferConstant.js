@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Class containing the constants that control the rate of heat transfer
@@ -12,7 +12,7 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
 
   function HeatTransferConstants() {

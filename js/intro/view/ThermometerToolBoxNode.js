@@ -1,4 +1,5 @@
-// Copyright 2002-2013, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Scenery Node that is used to represent thermometers in the tool box and that
  * controls the initial movement of thermometers in and out of the tool
@@ -20,18 +21,18 @@ define( function( require ) {
   /**
    *
    * @param thermometerNode
-   * @param mvt
+   * @param modelViewTransform
    * @param canvas
    * @constructor
    */
-  function ThermometerToolBoxNode( thermometerNode, mvt, canvas ) {
+  function ThermometerToolBoxNode( thermometerNode, modelViewTransform, canvas ) {
     ThermometerNode.call( this );
     var self = this;
     this.canvas = canvas;
-    this.mvt = mvt;
+    this.modelViewTransform = modelViewTransform;
     // getThermometer is defined in  sensing Thermometer Node
     var thermometer = thermometerNode.getThermometer();
-    var positioningOffset = mvt.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
+    var positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
     this.setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
     this.setSensedColor( 'white' );
     // This node's visibility is the inverse of the thermometer's.
@@ -48,13 +49,13 @@ define( function( require ) {
 
       // Handler that moves the shape in model space.
       translate: function( translationParams ) {
-        thermometer.position = thermometer.position.plus( mvt.viewToModelDelta( translationParams.delta ) );
+        thermometer.position = thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
       },
 
       start: function( event, trail ) {
         thermometer.userControlled = true;
         thermometer.active = true;
-        // thermometer.position=mvt.viewToModelPosition(event.pointer.point);
+        // thermometer.position=modelViewTransform.viewToModelPosition(event.pointer.point);
         // Find the parent screen by moving up the scene graph.
         var testNode = self;
         while ( testNode !== null ) {
@@ -72,8 +73,8 @@ define( function( require ) {
 //        var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
         //      var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 //        var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
-//        thermometer.position= mvt.viewToModelPosition(initialPosition);
-        thermometer.position = mvt.viewToModelPosition( compensatedLocation );
+//        thermometer.position= modelViewTransform.viewToModelPosition(initialPosition);
+        thermometer.position = modelViewTransform.viewToModelPosition( compensatedLocation );
       },
       end: function( event, trail ) {
         thermometer.userControlled = false;
@@ -96,7 +97,8 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2013, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.*;
@@ -122,14 +124,14 @@ define( function( require ) {
 //public class ThermometerToolBoxNode extends ThermometerNode {
 //
 //  private final PhetPCanvas canvas;
-//  private final ModelViewTransform mvt;
+//  private final ModelViewTransform modelViewTransform;
 //  private Rectangle2D returnRect = null;
 //
-//  public ThermometerToolBoxNode( final MovableThermometerNode thermometerNode, ModelViewTransform mvt, PhetPCanvas canvas ) {
+//  public ThermometerToolBoxNode( final MovableThermometerNode thermometerNode, ModelViewTransform modelViewTransform, PhetPCanvas canvas ) {
 //    this.canvas = canvas;
-//    this.mvt = mvt;
+//    this.modelViewTransform = modelViewTransform;
 //    final Thermometer thermometer = thermometerNode.getThermometer();
-//    final Vector2D positioningOffset = mvt.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
+//    final Vector2D positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
 //
 //    setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
 //    setSensedColor( Color.WHITE );
@@ -169,7 +171,7 @@ define( function( require ) {
 //    Point2D worldPos = new Point2D.Double( canvasPos.getX(), canvasPos.getY() );
 //    canvas.getPhetRootNode().screenToWorld( worldPos );
 //    Point2D adjustedWorldPos = new Point2D.Double( worldPos.getX(), worldPos.getY() );
-//    return mvt.viewToModel( adjustedWorldPos );
+//    return modelViewTransform.viewToModel( adjustedWorldPos );
 //  }
 //
 //  public void setReturnRect( Rectangle2D returnRect ) {

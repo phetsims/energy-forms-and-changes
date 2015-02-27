@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Class that represents a thermometer that can stick to other elements as
@@ -76,7 +76,7 @@ define( function( require ) {
 //            elementFollower.follow( block.position );
 //          }
 //        } );
-//        if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().getBounds().contains( position.get().toPoint2D() ) ) {
+//        if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().getBounds().contains( position ) ) {
 //          // Stick to the beaker.
 //          elementFollower.follow( model.getBeaker().position );
 //        }
@@ -95,7 +95,8 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import edu.colorado.phet.common.phetcommon.math.vector.Vector2D;
@@ -130,12 +131,12 @@ define( function( require ) {
 //          // The user has dropped this thermometer.  See if it was
 //          // dropped over something that it should follow.
 //          for ( Block block : model.getBlockList() ) {
-//            if ( block.getProjectedShape().contains( position.get().toPoint2D() ) ) {
+//            if ( block.getProjectedShape().contains( position ) ) {
 //              // Stick to this block.
 //              elementFollower.follow( block.position );
 //            }
 //          }
-//          if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().getBounds().contains( position.get().toPoint2D() ) ) {
+//          if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().getBounds().contains( position ) ) {
 //            // Stick to the beaker.
 //            elementFollower.follow( model.getBeaker().position );
 //          }

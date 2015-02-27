@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Node that represents a burner stand in the view.  A burner stand is a faux-
  * 3D representation of an object upon which other objects may be placed in
@@ -8,16 +9,18 @@
  */
 define( function( require ) {
   'use strict';
-  var inherit = require( 'PHET_CORE/inherit' );
+
+  // modules
   var Color = require( 'SCENERY/util/Color' );
-  var Vector2 = require( 'DOT/Vector2' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var LineStyles = require( 'KITE/util/LineStyles' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var LineStyles = require( 'KITE/util/LineStyles' );
+  var Vector2 = require( 'DOT/Vector2' );
 
-//constants
+// constants
   var BURNER_STAND_STROKE_LINEWIDTH = 4;
   var BURNER_STAND_STROKE_COLOR = 'black';
   var PERSPECTIVE_ANGLE = Math.PI / 4; // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
@@ -33,10 +36,10 @@ define( function( require ) {
     Node.call( this );
     // Add the left and right sides of the stand.
 
-    this.addChild( new BurnerStandSide( new Vector2( rect.getX(), rect.getY() ), rect.getHeight(), projectedEdgeLength ) );
-    this.addChild( new BurnerStandSide( new Vector2( rect.getMaxX(), rect.getY() ), rect.getHeight(), projectedEdgeLength ) );
+    this.addChild( new BurnerStandSide( new Vector2( rect.getX(), rect.getY() ), rect.height, projectedEdgeLength ) );
+    this.addChild( new BurnerStandSide( new Vector2( rect.maxX, rect.getY() ), rect.height, projectedEdgeLength ) );
     /// Add the top of the burner stand.
-    this.addChild( new BurnerStandTop( new Vector2( rect.getX(), rect.getY() ), rect.getWidth(), projectedEdgeLength ) );
+    this.addChild( new BurnerStandTop( new Vector2( rect.getX(), rect.getY() ), rect.width, projectedEdgeLength ) );
 
 
     function BurnerStandSide( topCenter, height, edgeLength ) {
@@ -118,7 +121,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.common.view;
 //
 //import java.awt.BasicStroke;
@@ -162,7 +166,7 @@ define( function( require ) {
 //
 //    // Add the left and right sides of the stand.
 //    addChild( new BurnerStandSide( new Vector2D( rect.getX(), rect.getY() ), rect.getHeight(), projectedEdgeLength ) );
-//    addChild( new BurnerStandSide( new Vector2D( rect.getMaxX(), rect.getY() ), rect.getHeight(), projectedEdgeLength ) );
+//    addChild( new BurnerStandSide( new Vector2D( rect.maxX, rect.getY() ), rect.getHeight(), projectedEdgeLength ) );
 //
 //    // Add the top of the burner stand.
 //    addChild( new BurnerStandTop( new Vector2D( rect.getX(), rect.getY() ), rect.getWidth(), projectedEdgeLength ) );

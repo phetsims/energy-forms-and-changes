@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * A movable model element that contains thermal energy and that, at least in
@@ -10,18 +10,17 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
-  var inherit = require( 'PHET_CORE/inherit' );
+  // modules
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
-
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyType' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   // var Path = require('SCENERY/nodes/Path');
   var PropertySet = require( 'AXON/PropertySet' );
@@ -41,7 +40,7 @@ define( function( require ) {
    * @param {number} height
    * @param {number} mass // In kg
    * @param {number} specificHeat // In J/kg-K
-   * @param {Property} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function RectangularThermalMovableModelElement( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty ) {
@@ -62,7 +61,6 @@ define( function( require ) {
     // 2D "slices" of the container, used for 3D layering of energy chunks.
     this.slices = [];
 
-
     // Add the slices, a.k.a. layers, where the energy chunks will live.
     this.addEnergyChunkSlices();
     this.nextSliceIndex = this.slices.length / 2;
@@ -82,25 +80,43 @@ define( function( require ) {
 //      assert & assert(true,'getRect() must be define in a subclass');
 //      return null;
 //    },
-
+    /**
+     *
+     * @param {number} deltaEnergy
+     */
     changeEnergy: function( deltaEnergy ) {
       this.energy += deltaEnergy;
     },
 
+    /**
+     *
+     * @returns {number}
+     */
     getEnergy: function() {
       return this.energy;
     },
 
+    /**
+     *
+     * @returns {number}
+     */
     getTemperature: function() {
       return this.energy / ( this.mass * this.specificHeat );
     },
 
+    /**
+     *
+     */
     reset: function() {
       UserMovableModelElement.prototype.reset.call( this );
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
       this.addInitialEnergyChunks();
     },
 
+    /**
+     *
+     * @param {number} dt
+     */
     step: function( dt ) {
 
       // Distribute the energy chunks contained within this model element.
@@ -110,6 +126,10 @@ define( function( require ) {
       this.animateNonContainedEnergyChunks( dt );
     },
 
+    /**
+     *
+     * @param {number} dt
+     */
     animateNonContainedEnergyChunks: function( dt ) {
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
@@ -127,7 +147,7 @@ define( function( require ) {
      * positioned already inside, in which case it is immediately added to one
      * of the energy chunk "slices".
      *
-     * @param energyChunk energy chunk to  add.
+     * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
       if ( this.getSliceBounds().containsPoint( energyChunk.position ) ) {
@@ -144,31 +164,37 @@ define( function( require ) {
       }
     },
 
-    // Add an energy chunk to the next available slice.  Override for more elaborate behavior.
-
+    /**
+     * Add an energy chunk to the next available slice.  Override for more elaborate behavior.
+     * @param {EnergyChunk} energyChunk
+     */
     addEnergyChunkToNextSlice: function( energyChunk ) {
       this.slices.get( this.nextSliceIndex ).addEnergyChunk( energyChunk );
       this.nextSliceIndex = ( this.nextSliceIndex + 1 ) % this.slices.length;
     },
 
+    /**
+     * Returns the bounds of all the slices.
+     * @returns {Rectangle}
+     */
     getSliceBounds: function() {
       var minX = Number.POSITIVE_INFINITY;
       var minY = Number.POSITIVE_INFINITY;
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
       this.slices.forEach( function( slice ) {
-        var sliceBounds = slice.getShape().getBounds2D();
-        if ( sliceBounds.getMinX() < minX ) {
-          minX = sliceBounds.getMinX();
+        var sliceBounds = slice.getShape().bounds;
+        if ( sliceBounds.minX < minX ) {
+          minX = sliceBounds.minX;
         }
-        if ( sliceBounds.getMaxX() > maxX ) {
-          maxX = sliceBounds.getMaxX();
+        if ( sliceBounds.maxX > maxX ) {
+          maxX = sliceBounds.maxX;
         }
-        if ( sliceBounds.getMinY() < minY ) {
-          minY = sliceBounds.getMinY();
+        if ( sliceBounds.minY < minY ) {
+          minY = sliceBounds.minY;
         }
-        if ( sliceBounds.getMaxY() > maxY ) {
-          maxY = sliceBounds.getMaxY();
+        if ( sliceBounds.maxY > maxY ) {
+          maxY = sliceBounds.maxY;
         }
       } );
       return new Rectangle( minX, minY, maxX - minX, maxY - minY );
@@ -253,8 +279,8 @@ define( function( require ) {
         var closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
-            var distanceToVerticalEdge = Math.min( Math.abs( myBounds.getMinX() - energyChunk.position.x ),
-              Math.abs( myBounds.getMaxX() - energyChunk.position.x ) );
+            var distanceToVerticalEdge = Math.min( Math.abs( myBounds.minX - energyChunk.position.x ),
+              Math.abs( myBounds.x - energyChunk.position.x ) );
 
             if ( distanceToVerticalEdge < closestDistanceToVerticalEdge ) {
               chunkToExtract = energyChunk;
@@ -263,15 +289,15 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( getThermalContactArea().getBounds().containsBound( destinationShape.getBounds2D() ) ) {
+      else if ( getThermalContactArea().getBounds().containsBound( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
         var closestDistanceToDestinationEdge = Number.POSITIVE_INFINITY;
-        var destinationBounds = destinationShape.getBounds2D();
+        var destinationBounds = destinationShape.bounds;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
-            var distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.getMinX() - energyChunk.position.x ), Math.abs( destinationBounds.getMaxX() - energyChunk.position.x ) );
+            var distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.minX - energyChunk.position.x ), Math.abs( destinationBounds.maxX - energyChunk.position.x ) );
             if ( !destinationShape.contains( energyChunk.position ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;
@@ -281,7 +307,7 @@ define( function( require ) {
       }
       else {
         // There is no or limited overlap, so use center points.
-        chunkToExtract = this.extractClosestEnergyChunkForPoint( new Vector2( destinationShape.getBounds2D().getCenterX(), destinationShape.getBounds2D().getCenterY() ) );
+        chunkToExtract = this.extractClosestEnergyChunkForPoint( new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
       }
 
       // Fail safe - If nothing found, get the first chunk.
@@ -403,12 +429,12 @@ define( function( require ) {
       var shape = new Shape();
 
       var rect = this.getRect();
-      shape.moveToPoint( new Vector2( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.getMaxX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.getMaxX(), rect.getY() ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.getMaxX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.getMinX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.getMinX(), rect.getMaxY() ).plus( forwardPerspectiveOffset ) )
+      shape.moveToPoint( new Vector2( rect.x, rect.y ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
         .close();
       return shape;
     },
@@ -436,7 +462,8 @@ define( function( require ) {
 } )
 ;
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.Shape;
@@ -548,7 +575,7 @@ define( function( require ) {
 //  protected void animateNonContainedEnergyChunks( double dt ) {
 //    for ( EnergyChunkWanderController energyChunkWanderController : new ArrayList<EnergyChunkWanderController>( energyChunkWanderControllers ) ) {
 //      energyChunkWanderController.updatePosition( dt );
-//      if ( getSliceBounds().contains( energyChunkWanderController.getEnergyChunk().position.get().toPoint2D() ) ) {
+//      if ( getSliceBounds().contains( energyChunkWanderController.getEnergyChunk().position ) ) {
 //        moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );
 //      }
 //    }
@@ -564,7 +591,7 @@ define( function( require ) {
 //   * @param ec Energy chunk to add.
 //   */
 //  public void addEnergyChunk( EnergyChunk ec ) {
-//    if ( getSliceBounds().contains( ec.position.get().toPoint2D() ) ) {
+//    if ( getSliceBounds().contains( ec.position ) ) {
 //      // Energy chunk is positioned within container bounds, so add it
 //      // directly to a slice.
 //      addEnergyChunkToNextSlice( ec );
@@ -590,7 +617,7 @@ define( function( require ) {
 //    double maxX = Double.NEGATIVE_INFINITY;
 //    double maxY = Double.NEGATIVE_INFINITY;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      Rectangle2D sliceBounds = slice.getShape().getBounds2D();
+//      Rectangle2D sliceBounds = slice.getShape().bounds;
 //      if ( sliceBounds.getMinX() < minX ) {
 //        minX = sliceBounds.getMinX();
 //      }
@@ -643,7 +670,7 @@ define( function( require ) {
 //      for ( EnergyChunk ec : slice.energyChunkList ) {
 //        // Compensate for the Z offset.  Otherwise front chunk will
 //        // almost always be chosen.
-//        Vector2D compensatedEcPosition = ec.position.get().minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * ec.zPosition.get() );
+//        Vector2D compensatedEcPosition = ec.position.minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * ec.zPosition.get() );
 //        double compensatedDistance = compensatedEcPosition.distance( point );
 //        if ( compensatedDistance < closestCompensatedDistance ) {
 //          closestEnergyChunk = ec;
@@ -674,7 +701,7 @@ define( function( require ) {
 //      double closestDistanceToVerticalEdge = Double.POSITIVE_INFINITY;
 //      for ( EnergyChunkContainerSlice slice : slices ) {
 //        for ( EnergyChunk ec : slice.energyChunkList ) {
-//          double distanceToVerticalEdge = Math.min( Math.abs( myBounds.getMinX() - ec.position.get().getX() ), Math.abs( myBounds.getMaxX() - ec.position.get().getX() ) );
+//          double distanceToVerticalEdge = Math.min( Math.abs( myBounds.getMinX() - ec.position.x ), Math.abs( myBounds.getMaxX() - ec.position.x ) );
 //          if ( distanceToVerticalEdge < closestDistanceToVerticalEdge ) {
 //            chunkToExtract = ec;
 //            closestDistanceToVerticalEdge = distanceToVerticalEdge;
@@ -682,15 +709,15 @@ define( function( require ) {
 //        }
 //      }
 //    }
-//    else if ( getThermalContactArea().getBounds().contains( destinationShape.getBounds2D() ) ) {
+//    else if ( getThermalContactArea().getBounds().contains( destinationShape.bounds ) ) {
 //      // Our shape encloses the destination shape.  Choose a chunk that
 //      // is close but doesn't overlap with the destination shape.
 //      double closestDistanceToDestinationEdge = Double.POSITIVE_INFINITY;
-//      Rectangle2D destinationBounds = destinationShape.getBounds2D();
+//      Rectangle2D destinationBounds = destinationShape.bounds;
 //      for ( EnergyChunkContainerSlice slice : slices ) {
 //        for ( EnergyChunk ec : slice.energyChunkList ) {
-//          double distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.getMinX() - ec.position.get().getX() ), Math.abs( destinationBounds.getMaxX() - ec.position.get().getX() ) );
-//          if ( !destinationShape.contains( ec.position.get().toPoint2D() ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
+//          double distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.getMinX() - ec.position.x ), Math.abs( destinationBounds.getMaxX() - ec.position.x ) );
+//          if ( !destinationShape.contains( ec.position ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
 //            chunkToExtract = ec;
 //            closestDistanceToDestinationEdge = distanceToDestinationEdge;
 //          }
@@ -699,7 +726,7 @@ define( function( require ) {
 //    }
 //    else {
 //      // There is no or limited overlap, so use center points.
-//      chunkToExtract = extractClosestEnergyChunk( new Vector2D( destinationShape.getBounds2D().getCenterX(), destinationShape.getBounds2D().getCenterY() ) );
+//      chunkToExtract = extractClosestEnergyChunk( new Vector2D( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
 //    }
 //
 //    // Fail safe - If nothing found, get the first chunk.
@@ -795,17 +822,17 @@ define( function( require ) {
 //    DoubleGeneralPath path = new DoubleGeneralPath();
 //    Rectangle2D rect = getRect();
 //    path.moveTo( new Vector2D( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( backwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.getMaxX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( forwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) );
 //    path.closePath();
 //    return path.getGeneralPath();
 //  }
 //
 //  public Vector2D getCenterPoint() {
-//    return new Vector2D( position.get().getX(), position.get().getY() + height / 2 );
+//    return new Vector2D( position.x, position.y + height / 2 );
 //  }
 //
 //  /**

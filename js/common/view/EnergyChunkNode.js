@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Class that represents a chunk of energy in the view.
  *
@@ -7,6 +8,7 @@
 define( function( require ) {
   'use strict';
 
+  // modules
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -17,6 +19,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters.
   var WIDTH = 24; // In screen coords, which is close to pixels.
 
@@ -29,7 +32,7 @@ define( function( require ) {
 //    put( EnergyType.HIDDEN, EnergyFormsAndChangesResources.Images.E_DASHED_BLANK );
 //  }};
 
-  function EnergyChunkNode( energyChunk, mvt ) {
+  function EnergyChunkNode( energyChunk, modelViewTransform ) {
 
     Node.call( this );
     var energyChunkNode = this;
@@ -39,20 +42,23 @@ define( function( require ) {
         energyChunkNode.setVisible( visible );
       }
     );
+
     // Set up updating of transparency based on Z position.
     energyChunk.zPositionProperty.link( function( zPosition ) {
         energyChunkNode.updateTransparency( zPosition );
       }
     );
+
     // Monitor the energy type and make the image match it.
     energyChunk.energyTypeProperty.link( function( energyType ) {
         energyChunkNode.removeAllChildren();
         energyChunkNode.addChild( this.createEnergyChunkNode( energyType ) );
       }
     );
+
     // Set this node's position when the corresponding model element moves.
     energyChunk.positionProperty.link( function( position ) {
-        energyChunkNode.setOffset( mvt.modelToView( position ) );
+        energyChunkNode.setOffset( modelViewTransform.modelToView( position ) );
       }
     );
   }
@@ -83,7 +89,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.common.view;
 //
 //import java.awt.*;
@@ -120,7 +127,7 @@ define( function( require ) {
 //    put( EnergyType.HIDDEN, EnergyFormsAndChangesResources.Images.E_DASHED_BLANK );
 //  }};
 //
-//  public EnergyChunkNode( final EnergyChunk energyChunk, final ModelViewTransform mvt ) {
+//  public EnergyChunkNode( final EnergyChunk energyChunk, final ModelViewTransform modelViewTransform ) {
 //
 //    // Control the overall visibility of this node.
 //    energyChunk.visible.addObserver( new VoidFunction1<Boolean>() {
@@ -147,7 +154,7 @@ define( function( require ) {
 //    // Set this node's position when the corresponding model element moves.
 //    energyChunk.position.addObserver( new VoidFunction1<Vector2D>() {
 //      public void apply( Vector2D immutableVector2D ) {
-//        setOffset( mvt.modelToView( immutableVector2D ).toPoint2D() );
+//        setOffset( modelViewTransform.modelToView( immutableVector2D ).toPoint2D() );
 //      }
 //    } );
 //  }

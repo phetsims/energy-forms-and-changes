@@ -1,4 +1,5 @@
-// Copyright 2002-2013, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  *  Function that represents a thermometer in the view.
  *
@@ -32,7 +33,7 @@ define( function( require ) {
    * Constructor.
    *
    * @param thermometer
-   * @param mvt
+   * @param modelViewTransform
    */
   function ThermometerNode() {
     Node.call( this, { cursor: 'pointer' } );
@@ -146,7 +147,8 @@ define( function( require ) {
 } )
 ;
 //
-//// Copyright 2002-2013, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.*;
@@ -208,7 +210,7 @@ define( function( require ) {
 //   * Constructor.
 //   *
 //   * @param thermometer
-//   * @param mvt
+//   * @param modelViewTransform
 //   */
 //  public ThermometerNode() {
 //

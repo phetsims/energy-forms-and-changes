@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Thermometer node that updates its displayed temperature and color based on
@@ -40,7 +40,8 @@ define( function( require ) {
 } );
 
 //
-//// Copyright 2002-2013, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.*;

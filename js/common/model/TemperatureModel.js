@@ -1,7 +1,8 @@
 ///**
 // * Created by veillettem on 10/4/2014.
 // */
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.common.model;
 //
 //import edu.colorado.phet.common.phetcommon.math.vector.Vector2D;

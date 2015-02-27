@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * This class defines the motion constraints for the model elements that can
  * be moved on and off the burners.  These elements are prevented from
@@ -22,23 +23,23 @@ define( function( require ) {
    * @param model
    * @param {RectangularThermalMovableModelElement} modelElement
    * @param {Node} node
-   * @param {ModevlViewTransform} mvt
+   * @param {ModevlViewTransform} modelViewTransform
    * @param {Vector2} offsetPosToNodeCenter
    * @constructor
    */
-  function ThermalItemMotionConstraint( model, modelElement, node, mvt, offsetPosToNodeCenter ) {
+  function ThermalItemMotionConstraint( model, modelElement, node, modelViewTransform, offsetPosToNodeCenter ) {
     this.model = model;
     this.modelElement = modelElement;
     var nodeSize = new Dimension2( node.width, node.height );
     // the nature of the provided node.
-    var boundsMinX = mvt.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
+    var boundsMinX = modelViewTransform.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
     //TODO fix with appropriate bounds
-//    var boundsMaxX = mvt.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
-//    var boundsMinY = mvt.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
-    var boundsMaxX = mvt.viewToModelX( 1000 - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
-    var boundsMinY = mvt.viewToModelY( 800 - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
+//    var boundsMaxX = modelViewTransform.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
+//    var boundsMinY = modelViewTransform.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
+    var boundsMaxX = modelViewTransform.viewToModelX( 1000 - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.x );
+    var boundsMinY = modelViewTransform.viewToModelY( 800 - offsetPosToNodeCenter.y - nodeSize.getHeight() / 2 );
 
-    var boundsMaxY = mvt.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.getHeight() / 2 );
+    var boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.y + nodeSize.getHeight() / 2 );
     this.modelBounds = new Rectangle( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
   }
 
@@ -56,7 +57,8 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.geom.Dimension2D;
@@ -86,7 +88,7 @@ define( function( require ) {
 //private final RectangularThermalMovableModelElement modelElement;
 //
 //public ThermalItemMotionConstraint( EFACIntroModel model, RectangularThermalMovableModelElement modelElement, PNode node,
-//  ModelViewTransform mvt, Vector2D offsetPosToNodeCenter ) {
+//  ModelViewTransform modelViewTransform, Vector2D offsetPosToNodeCenter ) {
 //
 //  this.model = model;
 //  this.modelElement = modelElement;
@@ -95,10 +97,10 @@ define( function( require ) {
 //
 //  // Calculate the bounds based on the stage size of the canvas and
 //  // the nature of the provided node.
-//  double boundsMinX = mvt.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
-//  double boundsMaxX = mvt.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
-//  double boundsMinY = mvt.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.getY() - nodeSize.getHeight() / 2 );
-//  double boundsMaxY = mvt.viewToModelY( -offsetPosToNodeCenter.getY() + nodeSize.getHeight() / 2 );
+//  double boundsMinX = modelViewTransform.viewToModelX( nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
+//  double boundsMaxX = modelViewTransform.viewToModelX( EFACIntroCanvas.STAGE_SIZE.getWidth() - nodeSize.getWidth() / 2 - offsetPosToNodeCenter.getX() );
+//  double boundsMinY = modelViewTransform.viewToModelY( EFACIntroCanvas.STAGE_SIZE.getHeight() - offsetPosToNodeCenter.getY() - nodeSize.getHeight() / 2 );
+//  double boundsMaxY = modelViewTransform.viewToModelY( -offsetPosToNodeCenter.getY() + nodeSize.getHeight() / 2 );
 //  modelBounds = new Rectangle2D.Double( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
 //}
 //

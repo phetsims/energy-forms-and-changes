@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * This class represents a "slice" within a 2D container that contains a set of
@@ -13,6 +13,7 @@
 define( function() {
   'use strict';
 
+  //modules
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
 
@@ -65,7 +66,8 @@ define( function() {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.Shape;

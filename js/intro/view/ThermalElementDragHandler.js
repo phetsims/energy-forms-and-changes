@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Drag handler for objects that can be moved by the user.  This is constructed
  * with a constraint function that defines where the model object can go.
@@ -15,7 +16,7 @@ define( function( require ) {
    * Constructor.  The node must be property positioned before calling
    * this, or it won't work correctly.
    */
-  function ThermalElementDragHandler( modelElement, node, mvt, constraint ) {
+  function ThermalElementDragHandler( modelElement, node, modelViewTransform, constraint ) {
     this.modelElement = modelElement;
     SimpleDragHandler.call( this, {
 
@@ -24,7 +25,7 @@ define( function( require ) {
 
       // Handler that moves the particle in model space.
       translate: function( translationParams ) {
-        modelElement.position = modelElement.position.plus( mvt.viewToModelDelta( translationParams.delta ) );
+        modelElement.position = modelElement.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
         return translationParams.position;
       },
 
@@ -43,7 +44,8 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.geom.Point2D;
@@ -67,8 +69,8 @@ define( function( require ) {
 //   * Constructor.  The node must be property positioned before calling
 //   * this, or it won't work correctly.
 //   */
-//  public ThermalElementDragHandler( UserMovableModelElement modelElement, PNode node, ModelViewTransform mvt, Function1<Point2D, Point2D> constraint ) {
-//    super( node, mvt, modelElement.position, constraint );
+//  public ThermalElementDragHandler( UserMovableModelElement modelElement, PNode node, ModelViewTransform modelViewTransform, Function1<Point2D, Point2D> constraint ) {
+//    super( node, modelViewTransform, modelElement.position, constraint );
 //    this.modelElement = modelElement;
 //  }
 //

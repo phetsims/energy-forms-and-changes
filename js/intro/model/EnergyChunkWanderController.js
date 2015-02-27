@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * This class is used to make an energy chunk wander, i.e. to perform somewhat
@@ -12,12 +12,12 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  //constants
+  // constants
   var MIN_VELOCITY = 0.06; // In m/s.
   var MAX_VELOCITY = 0.10; // In m/s.
   // Random RAND = new Random();
@@ -32,7 +32,7 @@ define( function( require ) {
 
   var velocity = new Vector2( 0, MAX_VELOCITY );
   var countdownTimer = 0;
-  initialWanderConstraint;
+
 
   //-------------------------------------------------------------------------
   // Constructor(s)
@@ -42,6 +42,13 @@ define( function( require ) {
     this( energyChunk, destination, null );
   }
 
+  /**
+   *
+   * @param {EnergyChunk} energyChunk
+   * @param {Property.<Vector2>} destinationProperty
+   * @param {Rectangle} initialWanderConstraint
+   * @constructor
+   */
   function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {
     this.energyChunk = energyChunk;
     this.destinationProperty = destinationProperty;
@@ -65,11 +72,11 @@ define( function( require ) {
       }
 
       // Stay within the horizontal confines of the initial bounds.
-      if ( initialWanderConstraint != null && this.energyChunk.position.y < initialWanderConstraint.getMaxY() ) {
+      if ( this.initialWanderConstraint != null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
         var proposedPosition = this.energyChunk.position.plus( velocity.times( dt ) );
-        if ( proposedPosition.getX() < initialWanderConstraint.getMinX() || proposedPosition.getX() > initialWanderConstraint.getMaxX() ) {
+        if ( proposedPosition.x < this.initialWanderConstraint.minX || proposedPosition.x > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
-          velocity.setComponents( -velocity.getX(), velocity.getY() );
+          velocity.setComponents( -velocity.x, velocity.y );
         }
       }
 
@@ -108,7 +115,8 @@ define( function( require ) {
 //
 //
 ////
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.geom.Rectangle2D;
@@ -170,27 +178,27 @@ define( function( require ) {
 //  //-------------------------------------------------------------------------
 //
 //  public void updatePosition( double dt ) {
-//    double distanceToDestination = energyChunk.position.get().distance( destination.get() );
-//    if ( distanceToDestination < velocity.magnitude() * dt && !energyChunk.position.get().equals( destination.get() ) ) {
+//    double distanceToDestination = energyChunk.position.distance( destination.get() );
+//    if ( distanceToDestination < velocity.magnitude() * dt && !energyChunk.position.equals( destination.get() ) ) {
 //      // Destination reached.
 //      energyChunk.position.set( destination.get() );
 //      velocity.setMagnitude( 0 );
 //    }
-//    else if ( energyChunk.position.get().distance( destination.get() ) < dt * velocity.magnitude() ) {
+//    else if ( energyChunk.position.distance( destination.get() ) < dt * velocity.magnitude() ) {
 //      // Prevent overshoot.
-//      velocity.times( energyChunk.position.get().distance( destination.get() ) * dt );
+//      velocity.times( energyChunk.position.distance( destination.get() ) * dt );
 //    }
 //
 //    // Stay within the horizontal confines of the initial bounds.
-//    if ( initialWanderConstraint != null && energyChunk.position.get().getY() < initialWanderConstraint.getMaxY() ){
-//      Vector2D proposedPosition = energyChunk.position.get().plus( velocity.times( dt ) );
-//      if ( proposedPosition.getX() < initialWanderConstraint.getMinX() || proposedPosition.getX() > initialWanderConstraint.getMaxX() ){
+//    if ( initialWanderConstraint != null && energyChunk.position.y < initialWanderConstraint.getMaxY() ){
+//      Vector2D proposedPosition = energyChunk.position.plus( velocity.times( dt ) );
+//      if ( proposedPosition.x < initialWanderConstraint.getMinX() || proposedPosition.x > initialWanderConstraint.getMaxX() ){
 //        // Bounce in the x direction to prevent going outside initial bounds.
 //        velocity.setComponents( -velocity.getX(), velocity.getY() );
 //      }
 //    }
 //
-//    energyChunk.position.set( energyChunk.position.get().plus( velocity.times( dt ) ) );
+//    energyChunk.position.set( energyChunk.position.plus( velocity.times( dt ) ) );
 //    countdownTimer -= dt;
 //    if ( countdownTimer <= 0 ) {
 //      changeVelocityVector();
@@ -199,7 +207,7 @@ define( function( require ) {
 //  }
 //
 //  private void changeVelocityVector() {
-//    Vector2D vectorToDestination = destination.get().minus( energyChunk.position.get() );
+//    Vector2D vectorToDestination = destination.get().minus( energyChunk.position );
 //    double angle = vectorToDestination.getAngle();
 //    if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
 //      // Add some randomness to the direction of travel.
@@ -218,6 +226,6 @@ define( function( require ) {
 //  }
 //
 //  public boolean destinationReached() {
-//    return destination.get().distance( energyChunk.position.get() ) < 1E-7;
+//    return destination.get().distance( energyChunk.position ) < 1E-7;
 //  }
 //}

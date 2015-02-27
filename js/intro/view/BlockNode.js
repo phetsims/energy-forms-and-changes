@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Piccolo node that represents a block in the view.  The blocks in the model
  * are 2D, and this class gives them some perspective in order to make them
@@ -9,6 +10,7 @@
 define( function( require ) {
   'use strict';
 
+  // modules
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -30,8 +32,6 @@ define( function( require ) {
 
 
   // constants
-
-
   // Constants that define the 3D projection.  Public so that model can reference.
   var PERSPECTIVE_ANGLE = Math.atan2( -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, -EFACConstants.Z_TO_X_OFFSET_MULTIPLIER );
   var PERSPECTIVE_EDGE_PROPORTION = Math.sqrt( Math.pow( EFACConstants.Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
@@ -44,15 +44,15 @@ define( function( require ) {
   var SHOW_2D_REPRESENTATION = false;
 
 
-  function BlockNode( model, block, mvt ) {
+  function BlockNode( model, block, modelViewTransform ) {
     Node.call( this, { cursor: 'pointer' } );
     var blockNode = this;
     this.block = block;
     // shape from the position of the block.
-    var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
+    var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // Create the shape for the front of the block.
     var blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).bounds;
-    var perspectiveEdgeSize = mvt.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotate( -PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotate( -PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
@@ -96,7 +96,7 @@ define( function( require ) {
     var energyChunkRootNode = new Node();
     this.addChild( energyChunkRootNode );
     for ( var i = block.getSlices().size() - 1; i >= 0; i-- ) {
-      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), mvt ) );
+      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), modelViewTransform ) );
     }
     // Add the face, top, and sides of the block.
     var blockFace = this.createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
@@ -111,24 +111,24 @@ define( function( require ) {
     // Position and add the label.
     var label = new Text( block.getLabel() );
     label.setFont( LABEL_FONT );
-    if ( label.bounds.width >= mvt.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
+    if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
       // Scale the label to fit on the face of the block.
-      var scale = (mvt.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.bounds.width);
+      var scale = (modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.bounds.width);
       label.setScale( scale );
     }
     var labelCenterX = (upperLeftFrontCorner.x + upperRightFrontCorner.x) / 2;
-    var labelCenterY = (upperLeftFrontCorner.y - mvt.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2);
+    var labelCenterY = (upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2);
     label.translation = { x: labelCenterX, y: labelCenterY };
     this.addChild( label );
     // this model element and add/remove them as needed.
 
     this.approachingEnergyChunkParentNode = new Node();
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
-      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
-      var parentNode = this.approachingEnergyChunkParentNode == null ? energyChunkRootNode : this.approachingEnergyChunkParentNode;
+      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+      var parentNode = (this.approachingEnergyChunkParentNode === null) ? energyChunkRootNode : this.approachingEnergyChunkParentNode;
       parentNode.addChild( energyChunkNode );
       block.approachingEnergyChunks.addItemRemovedListener( function( removedEnergyChunk ) {
-        if ( removedEnergyChunk == addedEnergyChunk ) {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
           parentNode.removeChild( energyChunkNode );
           block.approachingEnergyChunks.removeItemRemovedListener( this );
         }
@@ -144,13 +144,13 @@ define( function( require ) {
     } );
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      setOffset( mvt.modelToView( newPosition ) );
+      setOffset( modelViewTransform.modelToView( newPosition ) );
       // nodes can handle their own positioning.
-      energyChunkRootNode.translation = mvt.modelToView( newPosition ).rotate( Math.PI );
+      energyChunkRootNode.translation = modelViewTransform.modelToView( newPosition ).rotate( Math.PI );
     } );
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( this.bounds.getCenterX() - mvt.modelToViewX( block.position.x ), this.bounds.getCenterY() - mvt.modelToViewY( block.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler( block, this, mvt, new ThermalItemMotionConstraint( model, block, this, mvt, offsetPosToCenter ) ) );
+    var offsetPosToCenter = new Vector2( this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ), this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
+    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform, new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( Node, BlockNode, {
@@ -171,7 +171,7 @@ define( function( require ) {
       var root = new Node();
       // provided, this may end up getting partially or entirely covered up.
       root.addChild( new Path( shape, { fill: fillColor } ) );
-      if ( textureImage != null ) {
+      if ( textureImage !== null ) {
         // Add the clipped texture.
         var clippedTexture = new Node();
         clippedTexture.shape = shape;
@@ -198,7 +198,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.BasicStroke;
@@ -266,15 +267,15 @@ define( function( require ) {
 //  // Constructor(s)
 //  //-------------------------------------------------------------------------
 //
-//  public BlockNode( final EFACIntroModel model, final Block block, final ModelViewTransform mvt ) {
+//  public BlockNode( final EFACIntroModel model, final Block block, final ModelViewTransform modelViewTransform ) {
 //
 //    // Extract the scale transform from the MVT so that we can separate the
 //    // shape from the position of the block.
-//    AffineTransform scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
+//    AffineTransform scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
 //
 //    // Create the shape for the front of the block.
-//    Rectangle2D blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).getBounds2D();
-//    double perspectiveEdgeSize = mvt.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
+//    Rectangle2D blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).bounds;
+//    double perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
 //    Vector2D blockFaceOffset = new Vector2D( -perspectiveEdgeSize / 2, 0 ).getRotatedInstance( -PERSPECTIVE_ANGLE );
 //    Vector2D backCornersOffset = new Vector2D( perspectiveEdgeSize, 0 ).getRotatedInstance( -PERSPECTIVE_ANGLE );
 //    Vector2D lowerLeftFrontCorner = new Vector2D( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
@@ -326,7 +327,7 @@ define( function( require ) {
 //    final PNode energyChunkRootNode = new PNode();
 //    addChild( energyChunkRootNode );
 //    for ( int i = block.getSlices().size() - 1; i >= 0; i-- ) {
-//      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), mvt ) );
+//      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), modelViewTransform ) );
 //    }
 //
 //    // Add the face, top, and sides of the block.
@@ -344,13 +345,13 @@ define( function( require ) {
 //    // Position and add the label.
 //    final PText label = new PText( block.getLabel() );
 //    label.setFont( LABEL_FONT );
-//    if ( label.getFullBoundsReference().width >= mvt.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
+//    if ( label.getFullBoundsReference().width >= modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
 //      // Scale the label to fit on the face of the block.
-//      double scale = ( mvt.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.getFullBoundsReference().width );
+//      double scale = ( modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.getFullBoundsReference().width );
 //      label.setScale( scale );
 //    }
 //    double labelCenterX = ( upperLeftFrontCorner.getX() + upperRightFrontCorner.getX() ) / 2;
-//    double labelCenterY = ( upperLeftFrontCorner.getY() - mvt.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2 );
+//    double labelCenterY = ( upperLeftFrontCorner.getY() - modelViewTransform.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2 );
 //    label.centerFullBoundsOnPoint( labelCenterX, labelCenterY );
 //    addChild( label );
 //
@@ -358,7 +359,7 @@ define( function( require ) {
 //    // this model element and add/remove them as needed.
 //    block.approachingEnergyChunks.addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
 //      public void apply( final EnergyChunk addedEnergyChunk ) {
-//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 //        final PNode parentNode = approachingEnergyChunkParentNode == null ? energyChunkRootNode : approachingEnergyChunkParentNode;
 //        parentNode.addChild( energyChunkNode );
 //        block.approachingEnergyChunks.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
@@ -388,11 +389,11 @@ define( function( require ) {
 //    block.position.addObserver( new VoidFunction1<Vector2D>() {
 //      public void apply( Vector2D newPosition ) {
 //
-//        setOffset( mvt.modelToView( newPosition ).toPoint2D() );
+//        setOffset( modelViewTransform.modelToView( newPosition ).toPoint2D() );
 //
 //        // Compensate the energy chunk layer so that the energy chunk
 //        // nodes can handle their own positioning.
-//        energyChunkRootNode.setOffset( mvt.modelToView( newPosition ).getRotatedInstance( Math.PI ).toPoint2D() );
+//        energyChunkRootNode.setOffset( modelViewTransform.modelToView( newPosition ).getRotatedInstance( Math.PI ).toPoint2D() );
 //      }
 //    } );
 //
@@ -400,9 +401,9 @@ define( function( require ) {
 //    addInputEventListener( new CursorHandler( CursorHandler.HAND ) );
 //
 //    // Add the drag handler.
-//    Vector2D offsetPosToCenter = new Vector2D( getFullBoundsReference().getCenterX() - mvt.modelToViewX( block.position.get().getX() ),
-//        getFullBoundsReference().getCenterY() - mvt.modelToViewY( block.position.get().getY() ) );
-//    addInputEventListener( new ThermalElementDragHandler( block, this, mvt, new ThermalItemMotionConstraint( model, block, this, mvt, offsetPosToCenter ) ) );
+//    Vector2D offsetPosToCenter = new Vector2D( getFullBoundsReference().getCenterX() - modelViewTransform.modelToViewX( block.position.x ),
+//        getFullBoundsReference().getCenterY() - modelViewTransform.modelToViewY( block.position.y ) );
+//    addInputEventListener( new ThermalElementDragHandler( block, this, modelViewTransform, new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
 //  }
 //
 //  //-------------------------------------------------------------------------

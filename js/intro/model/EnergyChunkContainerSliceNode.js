@@ -10,13 +10,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/energyChunkNode' );
-
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/node/Node' );
@@ -47,7 +45,8 @@ define( function( require ) {
 
 //TODO remove comments
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.BasicStroke;
@@ -71,16 +70,16 @@ define( function( require ) {
 //
 //  private static final boolean ALWAYS_SHOW_OUTLINE = false;
 //
-//  public EnergyChunkContainerSliceNode( final EnergyChunkContainerSlice energyChunkContainerSlice, final ModelViewTransform mvt ) {
-//    this( energyChunkContainerSlice, mvt, false, Color.RED );
+//  public EnergyChunkContainerSliceNode( final EnergyChunkContainerSlice energyChunkContainerSlice, final ModelViewTransform modelViewTransform ) {
+//    this( energyChunkContainerSlice, modelViewTransform, false, Color.RED );
 //  }
 //
-//  public EnergyChunkContainerSliceNode( final EnergyChunkContainerSlice energyChunkContainerSlice, final ModelViewTransform mvt, boolean showOutline, Color outlineColor ) {
+//  public EnergyChunkContainerSliceNode( final EnergyChunkContainerSlice energyChunkContainerSlice, final ModelViewTransform modelViewTransform, boolean showOutline, Color outlineColor ) {
 //
 //    // Watch for energy chunks coming and going and add/remove nodes accordingly.
 //    energyChunkContainerSlice.energyChunkList.addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
 //      public void apply( final EnergyChunk addedEnergyChunk ) {
-//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 //        addChild( energyChunkNode );
 //        energyChunkContainerSlice.energyChunkList.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
@@ -95,7 +94,7 @@ define( function( require ) {
 //
 //    // For debug.
 //    if ( showOutline || ALWAYS_SHOW_OUTLINE ) {
-//      addChild( new PhetPPath( mvt.modelToView( energyChunkContainerSlice.getShape() ), new BasicStroke( 1 ), outlineColor ) );
+//      addChild( new PhetPPath( modelViewTransform.modelToView( energyChunkContainerSlice.getShape() ), new BasicStroke( 1 ), outlineColor ) );
 //    }
 //  }
 //}

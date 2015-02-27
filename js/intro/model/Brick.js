@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+//  Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Class that represents a brick in the model.
@@ -11,7 +11,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -20,14 +19,13 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
 
   // constants
-
   var SPECIFIC_HEAT = 840; // In J/kg-K, source = design document.
   var DENSITY = 3300; // In kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable.
 
   /**
    *
    * @param {Vector2} initialPosition
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function Brick( initialPosition, energyChunksVisibleProperty ) {
@@ -76,7 +74,8 @@ define( function( require ) {
 // */
 //
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.Color;

@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+//  Copyright 2002-2015, University of Colorado Boulder
 
 /**
  *  Model for the 'Intro' screen of the Energy Forms And Changes simulation.
@@ -10,7 +10,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-
 //  var Air = require( 'ENERGY_FORMS_AND_CHANGES/common/intro/model/Air' );
   //   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
 //  var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/common/intro/model/BeakerContainer' );
@@ -34,7 +33,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
 
-  //constants
+  // constants
 //   Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
   var EDGE_INSET = 10;
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
@@ -73,12 +72,12 @@ define( function( require ) {
 
 //    thermometer.sensedElementColor.addObserver( new ChangeObserver );
 //    {
-//      var blockWidthIncludingPerspective = ironBlock.getProjectedShape().getBounds2D().getWidth();
+//      var blockWidthIncludingPerspective = ironBlock.getProjectedShape().bounds.width;
 //      update( newColor, oldColor );
 //      {
 //        var xRange = new Range( beaker.getRect().getCenterX() - blockWidthIncludingPerspective / 2,
 //            beaker.getRect().getCenterX() + blockWidthIncludingPerspective / 2 );
-//        if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.get().getX() ) ) {
+//        if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
 //          thermometer.userControlled.set( true ); // Must toggle userControlled to enable element following.
 //          thermometer.position.set( new Vector2( beaker.getRect().getMaxX() - 0.01, beaker.getRect().getMinY() + beaker.getRect().getHeight() * 0.33 ) );
 //          thermometer.userControlled.set( false ); // Must toggle userControlled to enable element following.
@@ -100,7 +99,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.*;
@@ -241,12 +241,12 @@ define( function( require ) {
 //      // location where it continues to sense the beaker temperature.
 //      // This was requested after interviews.
 //      thermometer.sensedElementColor.addObserver( new ChangeObserver<Color>() {
-//        final double blockWidthIncludingPerspective = ironBlock.getProjectedShape().getBounds2D().getWidth();
+//        final double blockWidthIncludingPerspective = ironBlock.getProjectedShape().bounds.width;
 //
 //        public void update( Color newColor, Color oldColor ) {
 //          DoubleRange xRange = new DoubleRange( beaker.getRect().getCenterX() - blockWidthIncludingPerspective / 2,
 //              beaker.getRect().getCenterX() + blockWidthIncludingPerspective / 2 );
-//          if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.get().getX() ) ) {
+//          if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
 //            thermometer.userControlled.set( true ); // Must toggle userControlled to enable element following.
 //            thermometer.position.set( new Vector2D( beaker.getRect().getMaxX() - 0.01, beaker.getRect().getMinY() + beaker.getRect().getHeight() * 0.33 ) );
 //            thermometer.userControlled.set( false ); // Must toggle userControlled to enable element following.
@@ -307,7 +307,7 @@ define( function( require ) {
 //    // surface to fall (or, in some cases, jump up) towards the nearest
 //    // supporting surface.
 //    for ( UserMovableModelElement movableModelElement : Arrays.asList( ironBlock, brick, beaker ) ) {
-//      if ( !movableModelElement.userControlled.get() && movableModelElement.getSupportingSurface() == null && movableModelElement.position.get().getY() != 0 ) {
+//      if ( !movableModelElement.userControlled.get() && movableModelElement.getSupportingSurface() == null && movableModelElement.position.y != 0 ) {
 //        double minYPos = 0;
 //
 //        // Determine whether there is something below this element that
@@ -324,7 +324,7 @@ define( function( require ) {
 //        // Calculate a proposed Y position based on gravitational falling.
 //        double acceleration = -9.8; // meters/s*s
 //        double velocity = movableModelElement.verticalVelocity.get() + acceleration * dt;
-//        double proposedYPos = movableModelElement.position.get().getY() + velocity * dt;
+//        double proposedYPos = movableModelElement.position.y + velocity * dt;
 //        if ( proposedYPos < minYPos ) {
 //          // The element has landed on the ground or some other surface.
 //          proposedYPos = minYPos;
@@ -337,7 +337,7 @@ define( function( require ) {
 //        else {
 //          movableModelElement.verticalVelocity.set( velocity );
 //        }
-//        movableModelElement.position.set( new Vector2D( movableModelElement.position.get().getX(), proposedYPos ) );
+//        movableModelElement.position.set( new Vector2D( movableModelElement.position.x, proposedYPos ) );
 //      }
 //    }
 //
@@ -497,7 +497,7 @@ define( function( require ) {
 //  public Point2D validatePosition( RectangularThermalMovableModelElement modelElement, Point2D proposedPosition ) {
 //
 //    // Compensate for the model element's center X position.
-//    Vector2D translation = new Vector2D( proposedPosition ).minus( modelElement.position.get() );
+//    Vector2D translation = new Vector2D( proposedPosition ).minus( modelElement.position );
 //
 //    // Figure out how far the block's right edge appears to protrude to
 //    // the side due to perspective.
@@ -574,7 +574,7 @@ define( function( require ) {
 //    }
 //
 //    // Determine the new position based on the resultant translation.
-//    MutableVector2D newPosition = new MutableVector2D( modelElement.position.get().plus( translation ) );
+//    MutableVector2D newPosition = new MutableVector2D( modelElement.position.plus( translation ) );
 //
 //    // Clamp Y position to be positive to prevent dragging below table.
 //    newPosition.setY( Math.max( newPosition.getY(), 0 ) );
@@ -817,10 +817,10 @@ define( function( require ) {
 //    List<Block> copyOfBlockList = new ArrayList<Block>( getBlockList() );
 //    Collections.sort( copyOfBlockList, new Comparator<Block>() {
 //      public int compare( Block b1, Block b2 ) {
-//        if ( b1.position.get().equals( b2.position.get() ) ) {
+//        if ( b1.position.equals( b2.position ) ) {
 //          return 0;
 //        }
-//        if ( b2.position.get().getX() > b1.position.get().getX() || b2.position.get().getY() > b1.position.get().getY() ) {
+//        if ( b2.position.x > b1.position.x || b2.position.y > b1.position.y ) {
 //          return 1;
 //        }
 //        return -1;

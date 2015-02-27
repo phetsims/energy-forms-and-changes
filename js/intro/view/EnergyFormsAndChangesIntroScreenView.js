@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2014, University of Colorado Boulder
+ * Copyright 2002-2015, University of Colorado Boulder
  */
 
 /**
@@ -82,7 +82,7 @@ define( function( require ) {
     // which is on the middle of the screen above the counter as located
     // in the view.
 //TODO change back to 2200;
-    var mvt = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( Math.round( thisScreen.layoutBounds.width * 0.5 ), Math.round( thisScreen.layoutBounds.height * 0.85 ) ), // "Zoom factor" - smaller zooms out, larger zooms in.
       2200 );
@@ -125,7 +125,7 @@ define( function( require ) {
     // Add the thermometer nodes.
     var movableThermometerNodes = [];
     model.thermometers.forEach( function( thermometer ) {
-      var thermometerNode = new MovableThermometerNode( thermometer, mvt );
+      var thermometerNode = new MovableThermometerNode( thermometer, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
 //      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
@@ -142,7 +142,7 @@ define( function( require ) {
     var thermometerBox = new HBox();
     var thermometerToolBoxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
-      var thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, mvt, this );
+      var thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, modelViewTransform, this );
       thermometerBox.addChild( thermometerToolBoxNode );
       thermometerToolBoxNodes.push( thermometerToolBoxNode );
     } );
@@ -178,7 +178,8 @@ define( function( require ) {
 
 //
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.Color;
@@ -262,7 +263,7 @@ define( function( require ) {
 //    // adjusted to shift the center right or left, and the scale factor
 //    // can be adjusted to zoom in or out (smaller numbers zoom out, larger
 //    // ones zoom in).
-//    final ModelViewTransform mvt = ModelViewTransform.createSinglePointScaleInvertedYMapping(
+//    final ModelViewTransform modelViewTransform = ModelViewTransform.createSinglePointScaleInvertedYMapping(
 //      new Point2D.Double( 0, 0 ),
 //      new Point( (int) Math.round( STAGE_SIZE.getWidth() * 0.5 ), (int) Math.round( STAGE_SIZE.getHeight() * 0.85 ) ),
 //    2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
@@ -294,8 +295,8 @@ define( function( require ) {
 //
 //    // Add the lab bench surface.
 //    final PNode labBenchSurface = new PImage( EnergyFormsAndChangesResources.Images.SHELF_LONG );
-//    labBenchSurface.setOffset( mvt.modelToViewX( 0 ) - labBenchSurface.getFullBoundsReference().getWidth() / 2,
-//        mvt.modelToViewY( 0 ) - labBenchSurface.getFullBoundsReference().getHeight() / 2 + 10 ); // Slight tweak factor here due to nature of image.
+//    labBenchSurface.setOffset( modelViewTransform.modelToViewX( 0 ) - labBenchSurface.getFullBoundsReference().getWidth() / 2,
+//        modelViewTransform.modelToViewY( 0 ) - labBenchSurface.getFullBoundsReference().getHeight() / 2 + 10 ); // Slight tweak factor here due to nature of image.
 //    backLayer.addChild( labBenchSurface );
 //
 //    // Add a node that will act as the background below the lab bench
@@ -390,8 +391,8 @@ define( function( require ) {
 //    }
 //
 //    // Add the burners.
-//    double burnerProjectionAmount = mvt.modelToView( model.getLeftBurner().getOutlineRect() ).getBounds2D().getWidth() * BURNER_EDGE_TO_HEIGHT_RATIO;
-//    double burnerWidth = mvt.modelToViewDeltaX( model.getLeftBurner().getOutlineRect().getWidth() ) * 0.7;
+//    double burnerProjectionAmount = modelViewTransform.modelToView( model.getLeftBurner().getOutlineRect() ).bounds.width * BURNER_EDGE_TO_HEIGHT_RATIO;
+//    double burnerWidth = modelViewTransform.modelToViewDeltaX( model.getLeftBurner().getOutlineRect().getWidth() ) * 0.7;
 //    double burnerHeight = burnerWidth * 0.8;
 //    double burnerOpeningHeight = burnerHeight * 0.2;
 //    double burnerYPosTweak = -10; // Empirically determined for best look.
@@ -401,11 +402,11 @@ define( function( require ) {
 //      EnergyFormsAndChangesResources.Strings.HEAT,
 //      EnergyFormsAndChangesResources.Strings.COOL,
 //      burnerWidth, burnerHeight, burnerOpeningHeight, true,
-//      model.getLeftBurner().energyChunkList, mvt );
-//    leftHeaterCooler.setOffset( mvt.modelToViewX( model.getLeftBurner().getOutlineRect().getCenterX() ) - leftHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
-//        mvt.modelToViewY( model.getLeftBurner().getOutlineRect().getMinY() ) - leftHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
+//      model.getLeftBurner().energyChunkList, modelViewTransform );
+//    leftHeaterCooler.setOffset( modelViewTransform.modelToViewX( model.getLeftBurner().getOutlineRect().getCenterX() ) - leftHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
+//        modelViewTransform.modelToViewY( model.getLeftBurner().getOutlineRect().getMinY() ) - leftHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
 //    backLayer.addChild( leftHeaterCooler.getHoleNode() );
-//    backLayer.addChild( new BurnerStandNode( mvt.modelToView( model.getLeftBurner().getOutlineRect() ).getBounds2D(), burnerProjectionAmount ) );
+//    backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToView( model.getLeftBurner().getOutlineRect() ).bounds, burnerProjectionAmount ) );
 //    heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );
 //
 //    // Set up right heater-cooler node.
@@ -413,24 +414,24 @@ define( function( require ) {
 //      EnergyFormsAndChangesResources.Strings.HEAT,
 //      EnergyFormsAndChangesResources.Strings.COOL,
 //      burnerWidth, burnerHeight, burnerOpeningHeight, true,
-//      model.getRightBurner().energyChunkList, mvt );
-//    rightHeaterCooler.setOffset( mvt.modelToViewX( model.getRightBurner().getOutlineRect().getCenterX() ) - rightHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
-//        mvt.modelToViewY( model.getRightBurner().getOutlineRect().getMinY() ) - rightHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
+//      model.getRightBurner().energyChunkList, modelViewTransform );
+//    rightHeaterCooler.setOffset( modelViewTransform.modelToViewX( model.getRightBurner().getOutlineRect().getCenterX() ) - rightHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
+//        modelViewTransform.modelToViewY( model.getRightBurner().getOutlineRect().getMinY() ) - rightHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
 //    backLayer.addChild( rightHeaterCooler.getHoleNode() );
-//    backLayer.addChild( new BurnerStandNode( mvt.modelToView( model.getRightBurner().getOutlineRect() ).getBounds2D(), burnerProjectionAmount ) );
+//    backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToView( model.getRightBurner().getOutlineRect() ).bounds, burnerProjectionAmount ) );
 //    heaterCoolerFrontLayer.addChild( rightHeaterCooler.getFrontNode() );
 //
 //    // Add the air.
-//    airLayer.addChild( new AirNode( model.getAir(), mvt ) );
+//    airLayer.addChild( new AirNode( model.getAir(), modelViewTransform ) );
 //
 //    // Add the movable objects.
-//    final BlockNode brickNode = new BlockNode( model, model.getBrick(), mvt );
+//    final BlockNode brickNode = new BlockNode( model, model.getBrick(), modelViewTransform );
 //    brickNode.setApproachingEnergyChunkParentNode( airLayer );
 //    blockLayer.addChild( brickNode );
-//    final BlockNode ironBlockNode = new BlockNode( model, model.getIronBlock(), mvt );
+//    final BlockNode ironBlockNode = new BlockNode( model, model.getIronBlock(), modelViewTransform );
 //    ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
 //    blockLayer.addChild( ironBlockNode );
-//    BeakerView beakerView = new BeakerContainerView( model.getClock(), model, mvt );
+//    BeakerView beakerView = new BeakerContainerView( model.getClock(), model, modelViewTransform );
 //    beakerFrontLayer.addChild( beakerView.getFrontNode() );
 //    beakerBackLayer.addChild( beakerView.getBackNode() );
 //    beakerGrabLayer.addChild( beakerView.getGrabNode() );
@@ -438,7 +439,7 @@ define( function( require ) {
 //    // Add the thermometer nodes.
 //    ArrayList<MovableThermometerNode> movableThermometerNodes = new ArrayList<MovableThermometerNode>();
 //    for ( final ElementFollowingThermometer thermometer : model.thermometers ) {
-//      final MovableThermometerNode thermometerNode = new MovableThermometerNode( thermometer, mvt );
+//      final MovableThermometerNode thermometerNode = new MovableThermometerNode( thermometer, modelViewTransform );
 //      thermometerLayer.addChild( thermometerNode );
 //      thermometerNode.addInputEventListener( new PBasicInputEventHandler() {
 //        @Override public void mouseReleased( PInputEvent event ) {
@@ -455,7 +456,7 @@ define( function( require ) {
 //    HBox thermometerBox = new HBox();
 //    ArrayList<ThermometerToolBoxNode> thermometerToolBoxNodes = new ArrayList<ThermometerToolBoxNode>();
 //    for ( MovableThermometerNode movableThermometerNode : movableThermometerNodes ) {
-//      ThermometerToolBoxNode thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, mvt, this );
+//      ThermometerToolBoxNode thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, modelViewTransform, this );
 //      thermometerBox.addChild( thermometerToolBoxNode );
 //      thermometerToolBoxNodes.add( thermometerToolBoxNode );
 //    }

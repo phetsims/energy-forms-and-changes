@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Object that represents a beaker in the view.  This representation is split
  * between a front node and a back node, which must be separately added to the
@@ -9,6 +10,8 @@
  */
 define( function( require ) {
   'use strict';
+
+  // modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -29,26 +32,32 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
 
-//constants
+// constants
   var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
   var OUTLINE_COLOR = Color.LIGHT_GRAY;
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32, false );
   var SHOW_MODEL_RECT = false;
-  var BEAKER_COLOR = new Color( 250, 250, 250, 100 );
+  var BEAKER_COLOR = new Color( 250, 250, 250, 0.5 );
 
-  function BeakerView( beaker, energyChunksVisible, mvt ) {
-    this.mvt = mvt;
+  /**
+   *
+   * @param {Beaker} beaker
+   * @param {boolean} energyChunksVisible
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
+  function BeakerView( beaker, energyChunksVisible, modelViewTransform ) {
+    this.modelViewTransform = modelViewTransform;
 
-    //
     var frontNode = new Node();
     var backNode = new Node();
     var grabNode = new Node();
 
     // shape from the position.
-    var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
+    var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // location in the view.
-    var beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).getBounds2D();
+    var beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).bounds;
     // ellipses in order to create a 3D-ish look.
     var ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
     //   Shape.ellipse = function( centerX, centerY, radiusX, radiusY, rotation )
@@ -89,11 +98,11 @@ define( function( require ) {
     energyChunkRootNode.addChild( energyChunkClipNode );
     energyChunkClipNode.setStroke( null );
     for ( var i = beaker.getSlices().size() - 1; i >= 0; i-- ) {
-      energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.getSlices().get( i ), mvt ) );
+      energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.getSlices().get( i ), modelViewTransform ) );
     }
     // this model element and add/remove them as needed.
     beaker.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
-      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       energyChunkRootNode.addChild( energyChunkNode );
       beaker.approachingEnergyChunks.removeItemAddedListener( function( removedEnergyChunk ) {
         if ( removedEnergyChunk == addedEnergyChunk ) {
@@ -113,11 +122,11 @@ define( function( require ) {
     }
     // Update the offset if and when the model position changes.
     beaker.positionProperty.link( function( position ) {
-        frontNode.setOffset( mvt.modelToView( position ) );
-        backNode.setOffset( mvt.modelToView( position ) );
-        grabNode.setOffset( mvt.modelToView( position ) );
+        frontNode.setOffset( modelViewTransform.modelToView( position ) );
+        backNode.setOffset( modelViewTransform.modelToView( position ) );
+        grabNode.setOffset( modelViewTransform.modelToView( position ) );
         // nodes can handle their own positioning.
-        energyChunkRootNode.setOffset( mvt.modelToView( position ).rotate( Math.PI ) );
+        energyChunkRootNode.setOffset( modelViewTransform.modelToView( position ).rotate( Math.PI ) );
       }
     );
     // chunk visibility.
@@ -289,7 +298,7 @@ define( function( require ) {
               this.fill = new Color( 255, 255, 255, opacity );
             },
             getDiameter: function() {
-              return this.bounds.getWidth();
+              return this.bounds.width;
             },
             setDiameter: function( newDiameter ) {
               this.setPathTo( new Ellipse2D.Number( -newDiameter / 2, -newDiameter / 2, newDiameter, newDiameter ) );
@@ -314,7 +323,8 @@ define( function( require ) {
 ;
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.common.view;
 //
 //import java.awt.*;
@@ -367,24 +377,24 @@ define( function( require ) {
 //  private static final Color BEAKER_COLOR = new Color( 250, 250, 250, 100 );
 //  private static final Random RAND = new Random();
 //
-//  protected final ModelViewTransform mvt;
+//  protected final ModelViewTransform modelViewTransform;
 //  protected final PClip energyChunkClipNode;
 //
 //  protected final PNode frontNode = new PNode();
 //  private final PNode backNode = new PNode();
 //  protected final PNode grabNode = new PNode();
 //
-//  public BeakerView( IClock clock, final Beaker beaker, BooleanProperty energyChunksVisible, final ModelViewTransform mvt ) {
+//  public BeakerView( IClock clock, final Beaker beaker, BooleanProperty energyChunksVisible, final ModelViewTransform modelViewTransform ) {
 //
-//    this.mvt = mvt;
+//    this.modelViewTransform = modelViewTransform;
 //
 //    // Extract the scale transform from the MVT so that we can separate the
 //    // shape from the position.
-//    AffineTransform scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
+//    AffineTransform scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
 //
 //    // Get a version of the rectangle that defines the beaker size and
 //    // location in the view.
-//    final Rectangle2D beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).getBounds2D();
+//    final Rectangle2D beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).bounds;
 //
 //    // Create the shapes for the top and bottom of the beaker.  These are
 //    // ellipses in order to create a 3D-ish look.
@@ -439,14 +449,14 @@ define( function( require ) {
 //    energyChunkRootNode.addChild( energyChunkClipNode );
 //    energyChunkClipNode.setStroke( null );
 //    for ( int i = beaker.getSlices().size() - 1; i >= 0; i-- ) {
-//      energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.getSlices().get( i ), mvt ) );
+//      energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.getSlices().get( i ), modelViewTransform ) );
 //    }
 //
 //    // Watch for coming and going of energy chunks that are approaching
 //    // this model element and add/remove them as needed.
 //    beaker.approachingEnergyChunks.addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
 //      public void apply( final EnergyChunk addedEnergyChunk ) {
-//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 //        energyChunkRootNode.addChild( energyChunkNode );
 //        beaker.approachingEnergyChunks.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
@@ -473,12 +483,12 @@ define( function( require ) {
 //    // Update the offset if and when the model position changes.
 //    beaker.position.addObserver( new VoidFunction1<Vector2D>() {
 //      public void apply( Vector2D position ) {
-//        frontNode.setOffset( mvt.modelToView( position ).toPoint2D() );
-//        backNode.setOffset( mvt.modelToView( position ).toPoint2D() );
-//        grabNode.setOffset( mvt.modelToView( position ).toPoint2D() );
+//        frontNode.setOffset( modelViewTransform.modelToView( position ).toPoint2D() );
+//        backNode.setOffset( modelViewTransform.modelToView( position ).toPoint2D() );
+//        grabNode.setOffset( modelViewTransform.modelToView( position ).toPoint2D() );
 //        // Compensate the energy chunk layer so that the energy chunk
 //        // nodes can handle their own positioning.
-//        energyChunkRootNode.setOffset( mvt.modelToView( position ).getRotatedInstance( Math.PI ).toPoint2D() );
+//        energyChunkRootNode.setOffset( modelViewTransform.modelToView( position ).getRotatedInstance( Math.PI ).toPoint2D() );
 //      }
 //    } );
 //

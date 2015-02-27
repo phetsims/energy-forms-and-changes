@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Model that combines values for temperature and color.  Used
@@ -15,7 +15,6 @@ define( function( require ) {
    * @param {Color} color
    * @constructor
    */
-
   function TemperatureAndColor( temperature, color ) {
     this.temperature = temperature;
     this.color = color;

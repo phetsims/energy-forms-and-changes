@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Basic thermometer that senses temperature, has a position. The thermometer
@@ -11,15 +11,15 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
-  var inherit = require( 'PHET_CORE/inherit' );
+  // modules
   var Color = require( 'SCENERY/util/Color' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PropertySet = require( 'AXON/PropertySet' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
-//constants
+  // constants
   var RED_COLORBLIND = new Color( 255, 85, 0 );
 
   /**
@@ -63,7 +63,8 @@ define( function( require ) {
 } );
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.common.model;
 //
 //import java.awt.Color;
@@ -107,7 +108,7 @@ define( function( require ) {
 //    // Update the sensed temperature at each clock tick.
 //    clock.addClockListener( new ClockAdapter() {
 //      @Override public void clockTicked( ClockEvent clockEvent ) {
-//        TemperatureAndColor temperatureAndColor = model.getTemperatureAndColorAtLocation( position.get() );
+//        TemperatureAndColor temperatureAndColor = model.getTemperatureAndColorAtLocation( position );
 //        sensedTemperature.set( temperatureAndColor.temperature );
 //        sensedElementColor.set( temperatureAndColor.color );
 //      }

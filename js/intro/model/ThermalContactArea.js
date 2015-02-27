@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Class that represents a 2D space that can come into contact with other
@@ -11,7 +11,7 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -60,11 +60,11 @@ define( function( require ) {
         if ( this.supportsImmersion || that.supportsImmersion ) {
           var immersionRect = this.bounds.intersection( that.bounds );
           contactLength = immersionRect.getWidth() * 2 + immersionRect.getHeight() * 2;
-          if ( immersionRect.getWidth() != this.bounds.getWidth() && immersionRect.getWidth() != that.bounds.getWidth() ) {
+          if ( immersionRect.getWidth() != this.bounds.width && immersionRect.getWidth() != that.bounds.width ) {
             // Not fully overlapping in X direction, so adjust contact length accordingly.
             contactLength -= immersionRect.getHeight();
           }
-          if ( immersionRect.getHeight() != this.bounds.getHeight() && immersionRect.getHeight() != that.bounds.getHeight() ) {
+          if ( immersionRect.getHeight() != this.bounds.height && immersionRect.getHeight() != that.bounds.height ) {
             // Not fully overlapping in Y direction, so adjust contact length accordingly.
             contactLength -= immersionRect.getWidth();
           }
@@ -85,13 +85,13 @@ define( function( require ) {
         // There is overlap in one dimension but not the other, so test to
         // see if the two containers are touching.
         if ( xOverlap > 0 &&
-             Math.abs( this.bounds.getMaxY() - that.bounds.getMinY() ) < TOUCH_DISTANCE_THRESHOLD ||
-             Math.abs( this.bounds.getMinY() - that.bounds.getMaxY() ) < TOUCH_DISTANCE_THRESHOLD ) {
+             Math.abs( this.bounds.maxY - that.bounds.minY ) < TOUCH_DISTANCE_THRESHOLD ||
+             Math.abs( this.bounds.minY - that.bounds.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
         }
         else if ( yOverlap > 0 &&
-                  Math.abs( this.bounds.getMaxX() - that.bounds.getMinX() ) < TOUCH_DISTANCE_THRESHOLD ||
-                  Math.abs( this.bounds.getMinX() - that.bounds.getMaxX() ) < TOUCH_DISTANCE_THRESHOLD ) {
+                  Math.abs( this.bounds.maxX - that.bounds.minX ) < TOUCH_DISTANCE_THRESHOLD ||
+                  Math.abs( this.bounds.minX - that.bounds.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
         }
       }
@@ -115,7 +115,8 @@ define( function( require ) {
   } );
 
 } );
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.geom.Rectangle2D;
@@ -167,11 +168,11 @@ define( function( require ) {
 //      if ( this.supportsImmersion || that.supportsImmersion ) {
 //        Rectangle2D immersionRect = this.bounds.createIntersection( that.bounds );
 //        contactLength = immersionRect.getWidth() * 2 + immersionRect.getHeight() * 2;
-//        if ( immersionRect.getWidth() != this.bounds.getWidth() && immersionRect.getWidth() != that.bounds.getWidth() ) {
+//        if ( immersionRect.getWidth() != this.bounds.width && immersionRect.getWidth() != that.bounds.width ) {
 //          // Not fully overlapping in X direction, so adjust contact length accordingly.
 //          contactLength -= immersionRect.getHeight();
 //        }
-//        if ( immersionRect.getHeight() != this.bounds.getHeight() && immersionRect.getHeight() != that.bounds.getHeight() ) {
+//        if ( immersionRect.getHeight() != this.bounds.height && immersionRect.getHeight() != that.bounds.height ) {
 //          // Not fully overlapping in Y direction, so adjust contact length accordingly.
 //          contactLength -= immersionRect.getWidth();
 //        }
@@ -192,13 +193,13 @@ define( function( require ) {
 //      // There is overlap in one dimension but not the other, so test to
 //      // see if the two containers are touching.
 //      if ( xOverlap > 0 &&
-//           Math.abs( this.bounds.getMaxY() - that.bounds.getMinY() ) < TOUCH_DISTANCE_THRESHOLD ||
-//           Math.abs( this.bounds.getMinY() - that.bounds.getMaxY() ) < TOUCH_DISTANCE_THRESHOLD ) {
+//           Math.abs( this.bounds.maxY - that.bounds.minY ) < TOUCH_DISTANCE_THRESHOLD ||
+//           Math.abs( this.bounds.minY - that.bounds.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
 //        contactLength = xOverlap;
 //      }
 //      else if ( yOverlap > 0 &&
-//                Math.abs( this.bounds.getMaxX() - that.bounds.getMinX() ) < TOUCH_DISTANCE_THRESHOLD ||
-//                Math.abs( this.bounds.getMinX() - that.bounds.getMaxX() ) < TOUCH_DISTANCE_THRESHOLD ) {
+//                Math.abs( this.bounds.maxX - that.bounds.minX ) < TOUCH_DISTANCE_THRESHOLD ||
+//                Math.abs( this.bounds.minX - that.bounds.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
 //        contactLength = xOverlap;
 //      }
 //    }

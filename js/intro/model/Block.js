@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+//  Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Class that represents a block in the model.  In the model, a block is two-
@@ -100,11 +100,13 @@ define( function( require ) {
     },
 
     updateTopSurfaceProperty: function() {
-      this.topSurfaceProperty.set( new HorizontalSurface( new Range( this.getRect().getMinX(), this.getRect().getMaxX() ), this.getRect().getMaxY(), this ) );
+      var rectangle = this.getRect();
+      this.topSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
     },
 
     updateBottomSurfaceProperty: function() {
-      this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( this.getRect().getMinX(), this.getRect().getMaxX() ), this.getRect().getMinY(), this ) );
+      var rectangle = this.getRect();
+      this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
     },
 
     getRawShape: function() {
@@ -119,7 +121,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.*;
@@ -237,8 +240,8 @@ define( function( require ) {
 //   * @return rectangle that defines this item's 2D shape
 //   */
 //  public Rectangle2D getRect() {
-//    return new Rectangle2D.Double( position.get().getX() - SURFACE_WIDTH / 2,
-//      position.get().getY(),
+//    return new Rectangle2D.Double( position.x - SURFACE_WIDTH / 2,
+//      position.y,
 //      SURFACE_WIDTH,
 //      SURFACE_WIDTH );
 //  }

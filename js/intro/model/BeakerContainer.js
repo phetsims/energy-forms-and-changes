@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Model element that represents a beaker that can contain other thermal
@@ -9,6 +9,8 @@
 
 define( function( require ) {
   'use strict';
+
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Shape = require( 'java.awt.Shape' );
   var AffineTransform = require( 'java.awt.geom.AffineTransform' );
@@ -19,19 +21,18 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/Beaker' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/EnergyChunk' );
-  /*
-   * Constructor.
-   */
+
   /**
    *
    * @param {Vector2} initialPosition
-   * @param {Number} width
-   * @param {Number} height
+   * @param {number} width
+   * @param {number} height
    * @param potentiallyContainedElements
-   * @param {Property} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function BeakerContainer( initialPosition, width, height, potentiallyContainedElements, energyChunksVisibleProperty ) {
+
     Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty );
     this.potentiallyContainedElements = potentiallyContainedElements;
   }
@@ -61,31 +62,43 @@ define( function( require ) {
       var proportionateIncrease = newFluidLevel / fluidLevel.get();
       fluidLevel.set( newFluidLevel );
       // Update the shapes of the energy chunk slices.
-      slices.for(
-      var slice
+      slices.for(;
+      var slice;
       in
-      slices
+      slices;
       )
       {
         var originalShape = slice.getShape();
         var expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
-        var translationTransform = AffineTransform.getTranslateInstance( originalShape.getBounds2D().getX() - expandedOrCompressedShape.getBounds2D().getX(), originalShape.getBounds2D().getY() - expandedOrCompressedShape.getBounds2D().getY() );
+        var translationTransform = AffineTransform.getTranslateInstance( originalShape.bounds.getX() - expandedOrCompressedShape.bounds.getX(), originalShape.bounds.getY() - expandedOrCompressedShape.bounds.getY() );
         slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
       }
     },
-//private
+
+    /**
+     * *
+     * @private
+     * @param {EnergyChunk} energyChunk
+     * @returns {boolean}
+     */
     isEnergyChunkObscured: function( energyChunk ) {
-      for ( var potentiallyContainedElement in potentiallyContainedElements ) {
-        if ( this.getThermalContactArea().getBounds().contains( potentiallyContainedElement.getRect() ) && potentiallyContainedElement.getProjectedShape().contains( energyChunk.position.get().toPoint2D() ) ) {
+      for ( var i = 0; i < this.potentiallyContainedElements.length; i++ ) {
+        element = this.potentiallyContainedElements[ i ];
+        if ( this.getThermalContactArea().getBounds().contains( element.getRect() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
           return true;
         }
       }
       return false;
     },
+
+    /**
+     *
+     * @param {number} dt
+     */
     animateNonContainedEnergyChunks: function( dt ) {
       for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
         var energyChunk = energyChunkWanderController.getEnergyChunk();
-        if ( isEnergyChunkObscured( energyChunk ) ) {
+        if ( this.isEnergyChunkObscured( energyChunk ) ) {
           // beaker to the fluid, so move it sideways.
           var xVel = 0.05 * dt * (getCenterPoint().getX() > energyChunk.position.x ? -1 : 1);
           var motionVector = new Vector2( xVel, 0 );
@@ -94,14 +107,19 @@ define( function( require ) {
         else {
           energyChunkWanderController.updatePosition( dt );
         }
-        if ( !isEnergyChunkObscured( energyChunk ) && getSliceBounds().contains( energyChunk.position.get().toPoint2D() ) ) {
+        if ( !this.isEnergyChunkObscured( energyChunk ) && getSliceBounds().contains( energyChunk.position ) ) {
           // stop moving.
           moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );
         }
       }
     },
+
+    /**
+     * *
+     * @param {EnergyChunk} energyChunk
+     */
     addEnergyChunk: function( energyChunk ) {
-      if ( isEnergyChunkObscured( energyChunk ) ) {
+      if ( this.isEnergyChunkObscured( energyChunk ) ) {
         // because the chunk just came from the model element.
         energyChunk.zPosition.set( 0.0 );
         approachingEnergyChunks.add( energyChunk );
@@ -115,7 +133,8 @@ define( function( require ) {
 } );
 
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.Shape;
@@ -200,15 +219,15 @@ define( function( require ) {
 //    for ( EnergyChunkContainerSlice slice : slices ) {
 //      Shape originalShape = slice.getShape();
 //      Shape expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
-//      AffineTransform translationTransform = AffineTransform.getTranslateInstance( originalShape.getBounds2D().getX() - expandedOrCompressedShape.getBounds2D().getX(),
-//          originalShape.getBounds2D().getY() - expandedOrCompressedShape.getBounds2D().getY() );
+//      AffineTransform translationTransform = AffineTransform.getTranslateInstance( originalShape.bounds.getX() - expandedOrCompressedShape.bounds.getX(),
+//          originalShape.bounds.getY() - expandedOrCompressedShape.bounds.getY() );
 //      slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
 //    }
 //  }
 //
 //  private boolean isEnergyChunkObscured( EnergyChunk ec ) {
 //    for ( RectangularThermalMovableModelElement potentiallyContainedElement : potentiallyContainedElements ) {
-//      if ( this.getThermalContactArea().getBounds().contains( potentiallyContainedElement.getRect() ) && potentiallyContainedElement.getProjectedShape().contains( ec.position.get().toPoint2D() ) ) {
+//      if ( this.getThermalContactArea().getBounds().contains( potentiallyContainedElement.getRect() ) && potentiallyContainedElement.getProjectedShape().contains( ec.position ) ) {
 //        return true;
 //      }
 //    }
@@ -221,7 +240,7 @@ define( function( require ) {
 //      if ( isEnergyChunkObscured( ec ) ) {
 //        // This chunk is being transferred from a container in the
 //        // beaker to the fluid, so move it sideways.
-//        double xVel = 0.05 * dt * ( getCenterPoint().getX() > ec.position.get().getX() ? -1 : 1 );
+//        double xVel = 0.05 * dt * ( getCenterPoint().getX() > ec.position.x ? -1 : 1 );
 //        Vector2D motionVector = new Vector2D( xVel, 0 );
 //        ec.translate( motionVector );
 //      }
@@ -229,7 +248,7 @@ define( function( require ) {
 //        energyChunkWanderController.updatePosition( dt );
 //      }
 //
-//      if ( !isEnergyChunkObscured( ec ) && getSliceBounds().contains( ec.position.get().toPoint2D() ) ) {
+//      if ( !isEnergyChunkObscured( ec ) && getSliceBounds().contains( ec.position ) ) {
 //        // Chunk is in a place where it can migrate to the slices and
 //        // stop moving.
 //        moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );

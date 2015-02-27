@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Interface for model elements that contain energy.
  *
@@ -34,7 +35,7 @@ define( function( require ) {
      * gradient and do the exchange based on these conditions.
      *
      * @param energyContainer Energy container with with to exchange energy.
-     * @param dt Amount of time for energy exchange.
+     * @param {number} dt - Amount of time for energy exchange.
      */
     exchangeEnergyWith: function( energyContainer, dt ) {},
     /**
@@ -74,7 +75,8 @@ define( function( require ) {
   } );
 } );
 
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import edu.colorado.phet.common.phetcommon.math.vector.Vector2D;

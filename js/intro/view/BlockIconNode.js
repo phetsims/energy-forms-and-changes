@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Created for the Heat Capacity Lab (HCL) prototype, clean up and document if kept.
  *
@@ -6,17 +7,17 @@
  */
 define( function( require ) {
   'use strict';
+
+  //modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Color = require( 'SCENERY/util/Color' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Property = require( 'AXON/Property' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
-
+  var Property = require( 'AXON/Property' );
+  var Shape = require( 'KITE/Shape' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-
   var EDGE_LENGTH = 15; // In screen coordinates, which are roughly pixels.
   var FORESHORTENING_PROPORTION = 0.35;
 
@@ -60,7 +61,8 @@ define( function( require ) {
 } );
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.BasicStroke;

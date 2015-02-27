@@ -1,6 +1,5 @@
-/*
- * Copyright 2002-2014, University of Colorado Boulder
- */
+// Copyright 2002-2015, University of Colorado Boulder
+
 
 /**
  * Class that represents the air in the model.  Air can hold heat, and can
@@ -13,12 +12,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
-  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' )
+  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
@@ -28,7 +26,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-
   // 2D size of the air.  It is sized such that it will extend off the left,
   // right, and top edges of screen for the most common aspect ratios of the
   // view.
@@ -53,6 +50,11 @@ define( function( require ) {
   var energy = INITIAL_ENERGY;
 
 
+  /**
+   * *
+   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @constructor
+   */
   function Air( energyChunksVisibleProperty ) {
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -75,7 +77,6 @@ define( function( require ) {
           this.energyChunkWanderControllers.remove( energyChunkWanderController );
         }
       } )
-
 
     },
 
@@ -173,7 +174,8 @@ define( function( require ) {
 ///**
 // * Created by veillettem on 10/5/2014.
 // */
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import java.awt.geom.Dimension2D;
@@ -263,7 +265,7 @@ define( function( require ) {
 //    // Update the position of any energy chunks.
 //    for ( EnergyChunkWanderController energyChunkWanderController : new ArrayList<EnergyChunkWanderController>( energyChunkWanderControllers ) ) {
 //      energyChunkWanderController.updatePosition( dt );
-//      if ( !getThermalContactArea().getBounds().contains( energyChunkWanderController.getEnergyChunk().position.get().toPoint2D() ) ) {
+//      if ( !getThermalContactArea().getBounds().contains( energyChunkWanderController.getEnergyChunk().position ) ) {
 //        // Remove this energy chunk.
 //        energyChunkList.remove( energyChunkWanderController.getEnergyChunk() );
 //        energyChunkWanderControllers.remove( energyChunkWanderController );
@@ -327,7 +329,7 @@ define( function( require ) {
 //    ec.zPosition.set( 0.0 );
 //    energyChunkList.add( ec );
 //    energyChunkWanderControllers.add( new EnergyChunkWanderController( ec,
-//        new Property<Vector2D>( new Vector2D( ec.position.get().getX(), SIZE.getHeight() ) ),
+//        new Property<Vector2D>( new Vector2D( ec.position.x, SIZE.getHeight() ) ),
 //      initialWanderConstraint ) );
 //  }
 //

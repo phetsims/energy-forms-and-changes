@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 
 /**
@@ -11,7 +11,7 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
 
   /**
@@ -58,7 +58,8 @@ define( function( require ) {
 } );
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.model;
 //
 //import edu.colorado.phet.common.phetcommon.util.DoubleRange;

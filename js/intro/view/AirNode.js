@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * @author John Blanco
  */
@@ -16,21 +17,23 @@ define( function( require ) {
 
 
   // constants
-
   var SHOW_BOUNDS = false;
 
 
-  function AirNode( air, mvt ) {
+  function AirNode( air, modelViewTransform ) {
     var airNode = this;
     if ( SHOW_BOUNDS ) {
-      this.addChild( new Path( mvt.modelToView( air.getThermalContactArea().bounds ), { fill: 'red', lineWidth: 1 } ) );
+      this.addChild( new Path( modelViewTransform.modelToView( air.getThermalContactArea().bounds ), {
+        fill: 'red',
+        lineWidth: 1
+      } ) );
     }
     // Create a layer where energy chunks will be placed.
     var energyChunkLayer = new Node();
     this.addChild( energyChunkLayer );
     // Watch for energy chunks coming and going and add/remove nodes accordingly.
     air.getEnergyChunkList().addItemAddedListener( function( addedEnergyChunk ) {
-      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       energyChunkLayer.addChild( energyChunkNode );
       air.getEnergyChunkList().addItemRemovedListener( function( removedEnergyChunk ) {
         if ( removedEnergyChunk == addedEnergyChunk ) {
@@ -46,7 +49,8 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.BasicStroke;
@@ -67,9 +71,9 @@ define( function( require ) {
 //
 //  private static final boolean SHOW_BOUNDS = false;
 //
-//  public AirNode( final Air air, final ModelViewTransform mvt ) {
+//  public AirNode( final Air air, final ModelViewTransform modelViewTransform ) {
 //    if ( SHOW_BOUNDS ) {
-//      addChild( new PhetPPath( mvt.modelToView( air.getThermalContactArea().getBounds() ), new BasicStroke( 1 ), Color.RED ) );
+//      addChild( new PhetPPath( modelViewTransform.modelToView( air.getThermalContactArea().getBounds() ), new BasicStroke( 1 ), Color.RED ) );
 //    }
 //
 //    // Create a layer where energy chunks will be placed.
@@ -79,7 +83,7 @@ define( function( require ) {
 //    // Watch for energy chunks coming and going and add/remove nodes accordingly.
 //    air.getEnergyChunkList().addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
 //      public void apply( final EnergyChunk addedEnergyChunk ) {
-//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, mvt );
+//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 //        energyChunkLayer.addChild( energyChunkNode );
 //        air.getEnergyChunkList().addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {

@@ -1,5 +1,4 @@
-// Copyright 2002-2014, University of Colorado
-
+// Copyright 2002-2015, University of Colorado
 
 /**
  * Resources (images and translated strings) for "EnergyFormsAndChanges" are loaded eagerly to make sure everything exists on sim startup.

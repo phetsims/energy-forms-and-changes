@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 
 /**
@@ -18,7 +18,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-
   var FRAMES_PER_SECOND = 30.0;
   var SIM_TIME_PER_TICK_NORMAL = 1 / FRAMES_PER_SECOND;
   var NOMINAL_WATER_OPACITY = 0.75;

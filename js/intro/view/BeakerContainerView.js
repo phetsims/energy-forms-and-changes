@@ -1,4 +1,5 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * Class that represents a "beaker container" in the view.  A beaker container
  * is a beaker that contains fluid, and in which other objects can be placed,
@@ -12,6 +13,7 @@
 define( function( require ) {
   'use strict';
 
+  //modules
   var Area = require( 'java.awt.geom.Area' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
@@ -20,16 +22,25 @@ define( function( require ) {
   var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
-  var ThermalElementDragHandler =
+  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
 
 
-  function BeakerContainerView( model, mvt ) {
-    BeakerView.call( this, model.getBeaker(), model.energyChunksVisible, mvt );
+  /**
+   * *
+   * @param model
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
+  function BeakerContainerView( model, modelViewTransform ) {
+    BeakerView.call( this, model.getBeaker(), model.energyChunksVisible, modelViewTransform );
+
+    this.modelViewTransform = modelViewTransform;
+    this.model = model;
+    
     // mask hides energy chunks that overlap with blocks.
     for ( var block in model.getBlockList() ) {
       block.positionProperty.link( function() {
@@ -43,8 +54,8 @@ define( function( require ) {
     // Add the cursor handler.
     grabNode.addInputListener( new CursorHandler( CursorHandler.HAND ) );
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( grabNode.bounds.centerX - mvt.modelToViewX( beaker.position.x ), grabNode.bounds.centerY - mvt.modelToViewY( beaker.position.y ) );
-    grabNode.addInputListener( new ThermalElementDragHandler( beaker, grabNode, mvt, new ThermalItemMotionConstraint( model, beaker, grabNode, mvt, offsetPosToCenter ) ) );
+    var offsetPosToCenter = new Vector2( grabNode.bounds.centerX - modelViewTransform.modelToViewX( beaker.position.x ), grabNode.bounds.centerY - modelViewTransform.modelToViewY( beaker.position.y ) );
+    grabNode.addInputListener( new ThermalElementDragHandler( beaker, grabNode, modelViewTransform, new ThermalItemMotionConstraint( model, beaker, grabNode, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( BeakerView, BeakerContainerView, {
@@ -55,18 +66,17 @@ define( function( require ) {
       var clippingMask = new Area( frontNode.bounds );
       for ( var block in model.getBlockList() ) {
         if ( model.getBeaker().getRect().contains( block.getRect() ) ) {
-          var path = new DoubleGeneralPath();
           var rect = block.getRect();
-          //TODO charge path to shape
-        .
-          moveToPoint( new Vector2( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.getMaxX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.getMaxX(), rect.getY() ).plus( backwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.getMaxX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.getMinX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.getMinX(), rect.getMaxY() ).plus( forwardPerspectiveOffset ) )
+
+          var shape = new Shape()
+            .moveToPoint( new Vector2( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
             .close();
-          clippingMask.subtract( new Area( mvt.modelToView( path.getGeneralPath() ) ) );
+          clippingMask.subtract( new Area( this.modelViewTransform.modelToViewShape( shape ) ) );
         }
       }
       clip.setPathTo( clippingMask );
@@ -77,7 +87,8 @@ define( function( require ) {
 
 //
 //
-//// Copyright 2002-2012, University of Colorado
+//// Copyright 2002-2015, University of Colorado
+
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //
 //import java.awt.geom.Area;
@@ -109,8 +120,8 @@ define( function( require ) {
 // */
 //public class BeakerContainerView extends BeakerView {
 //
-//  public BeakerContainerView( IClock clock, final EFACIntroModel model, final ModelViewTransform mvt ) {
-//    super( clock, model.getBeaker(), model.energyChunksVisible, mvt );
+//  public BeakerContainerView( IClock clock, final EFACIntroModel model, final ModelViewTransform modelViewTransform ) {
+//    super( clock, model.getBeaker(), model.energyChunksVisible, modelViewTransform );
 //
 //    // Update the clipping mask when any of the blocks move.  The clipping
 //    // mask hides energy chunks that overlap with blocks.
@@ -133,16 +144,16 @@ define( function( require ) {
 //    grabNode.addInputEventListener( new CursorHandler( CursorHandler.HAND ) );
 //
 //    // Add the drag handler.
-//    final Vector2D offsetPosToCenter = new Vector2D( grabNode.getFullBoundsReference().getCenterX() - mvt.modelToViewX( beaker.position.get().getX() ),
-//        grabNode.getFullBoundsReference().getCenterY() - mvt.modelToViewY( beaker.position.get().getY() ) );
+//    final Vector2D offsetPosToCenter = new Vector2D( grabNode.getFullBoundsReference().getCenterX() - modelViewTransform.modelToViewX( beaker.position.x ),
+//        grabNode.getFullBoundsReference().getCenterY() - modelViewTransform.modelToViewY( beaker.position.y ) );
 //
 //    grabNode.addInputEventListener( new ThermalElementDragHandler( beaker,
 //      grabNode,
-//      mvt,
+//      modelViewTransform,
 //      new ThermalItemMotionConstraint( model,
 //        beaker,
 //        grabNode,
-//        mvt,
+//        modelViewTransform,
 //        offsetPosToCenter ) ) );
 //  }
 //
@@ -157,13 +168,13 @@ define( function( require ) {
 //        DoubleGeneralPath path = new DoubleGeneralPath();
 //        Rectangle2D rect = block.getRect();
 //        path.moveTo( new Vector2D( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( backwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.getMaxX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( forwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.minX, rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.minX, rect.getMaxY() ).plus( forwardPerspectiveOffset ) );
 //        path.closePath();
-//        clippingMask.subtract( new Area( mvt.modelToView( path.getGeneralPath() ) ) );
+//        clippingMask.subtract( new Area( modelViewTransform.modelToView( path.getGeneralPath() ) ) );
 //      }
 //    }
 //    clip.setPathTo( clippingMask );
