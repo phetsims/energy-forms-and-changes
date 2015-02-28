@@ -73,10 +73,10 @@ define( function( require ) {
       fluidLevel: INITIAL_FLUID_LEVEL,
       // Top surface, which is the surface upon which other model elements can
       // sit.  For the beaker, this is only slightly above the bottom surface.
-      topSurface: null,
+      topSurface: null,// {HorizontalSurface}
       // Bottom surface, which is the surface that touches the ground, or sits
       // on a burner, etc.
-      bottomSurface: null,
+      bottomSurface: null, // {HorizontalSurface}
       // Property that allows temperature changes to be monitored.
       temperature: EFACConstants.ROOM_TEMPERATURE
     } );
@@ -105,246 +105,292 @@ define( function( require ) {
         rectangle.minY,
         self );
     }
-
-    return inherit( RectangularThermalMovableModelElement, Beaker, {
-      /*
-       * Get the untranslated rectangle that defines the shape of the beaker.
-       */
-      getRawOutlineRect: function() {
-        return new Rectangle( -this.width / 2, 0, this.width, this.height );
-      },
-
-      /**
-       *
-       * @returns {Rectangle}
-       */
-      getRect: function() {
-        return new Rectangle(
-          this.position.x - this.width / 2,
-          this.position.y,
-          this.width,
-          this.height );
-      },
-
-      /**
-       * Function that steps in time dt
-       * @param {number} dt
-       */
-      step: function( dt ) {
-        RectangularThermalMovableModelElement.prototype.step.call( this, dt );
-        this.temperature = this.getTemperature();
-        this.steamingProportion = 0;
-        if ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature < STEAMING_RANGE ) {
-          // Water is emitting some amount of steam.  Set the proportionate amount.
-          this.steamingProportion = Util.clamp( 0, 1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature ) / STEAMING_RANGE, 1 );
-        }
-      },
-
-      getWidth: function() {
-        return this.width;
-      },
-
-      getHeight: function() {
-        return this.height;
-      },
-
-      getTopSurfaceProperty: function() {
-        return this.topSurfaceProperty;
-      },
-
-      getBottomSurfaceProperty: function() {
-        return this.bottomSurfaceProperty;
-      },
-
-      addInitialEnergyChunks: function() {
-        this.slices.forEach( function( slice ) {
-          slice.energyChunkList.clear();
-          //TODO: this energy comes from nowhere
-          var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this, 'energy' );
-          var initialChunkBounds = this.getSliceBounds();
-          while ( this.getNumEnergyChunks() < targetNumChunks ) {
-            // Add a chunk at a random location in the beaker.
-            this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), energyChunksVisibleProperty ) );
-          }
-
-          // Distribute the energy chunks within the beaker.
-          var i;
-          for ( i = 0; i < 1000; i++ ) {
-            if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-              break;
-            }
-          }
-        } );
-      },
-
-      addEnergyChunkToNextSlice: function( energyChunk ) {
-        var totalSliceArea = 0;
-        this.slices.forEach( function( slice ) {
-          totalSliceArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
-        } );
-
-        var sliceSelectionValue = Math.random();
-        var chosenSlice = this.slices.get( 0 );
-        var accumulatedArea = 0;
-        this.slices.forEach( function( slice ) {
-          accumulatedArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
-          if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
-            chosenSlice = this.slice;
-            break;
-          }
-        } );
-
-        chosenSlice.addEnergyChunk( energyChunk );
-      },
-
-      calculateWaterMass: function( width, height ) {
-        return Math.PI * Math.pow( width / 2, 2 ) * height * WATER_DENSITY;
-      },
-
-      getThermalContactArea: function() {
-        return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
-          this.position.y, this.width, this.height * this.fluidLevel ), true );
-      },
-
-      /*
-       * Get the area where the temperature of the steam can be sensed.
-       */
-
-      getSteamArea: function() {
-        // Height of steam rectangle is based on beaker height and steamingProportion.
-
-        var liquidWaterHeight = this.height * this.fluidLevel;
-        return new Rectangle( this.position.x - this.getWidth() / 2,
-          this.position.y + liquidWaterHeight,
-          this.width,
-          this.maxSteamHeight );
-      },
-
-      getSteamTemperature: function( heightAboveWater ) {
-        var mappingFunction = new LinearFunction( 0, this.maxSteamHeight * this.steamingProportion, this.temperature, EFACConstants.ROOM_TEMPERATURE );
-        return Math.max( mappingFunction.evaluate( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
-      },
-
-
-      addEnergyChunkSlices: function() {
-        assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
-        var fluidRect = new Rectangle(
-          this.position.x - this.width / 2,
-          this.position.y,
-          this.width,
-          this.height * INITIAL_FLUID_LEVEL );
-
-        var widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );
-        var i;
-        for ( i = 0; i < NUM_SLICES; i++ ) {
-          var proportion = ( i + 1 ) * ( 1 / ( NUM_SLICES + 1 ) );
-
-          var slicePath = new Path();
-          {
-            // The slice width is calculated to fit into the 3D projection.
-            // It uses an exponential function that is shifted in order to
-            // yield width value proportional to position in Z-space.
-
-            var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
-
-            var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
-
-            var topY = bottomY + fluidRect.height;
-
-            var centerX = fluidRect.centerX;
-
-            var controlPointYOffset = ( bottomY - fluidRect.getMinY() ) * 0.5;
-            var sliceShape = new Shape();
-            sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
-              .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
-              .lineTo( centerX + sliceWidth / 2, topY )
-              .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
-              .lineTo( centerX - sliceWidth / 2, bottomY );
-            slicePath.shape = sliceShape;
-          }
-          slices.push( new EnergyChunkContainerSlice( slicePath, -proportion * this.width, this.position ) );
-        }
-      },
-
-
-      /**
-       * Function that returns the energy Container Category
-       * @returns {string}
-       */
-      getEnergyContainerCategory: function() {
-        return EnergyContainerCategory.WATER;
-      },
-
-      /**
-       * Function that returns the beaker energy beyond the max temperature (the boiling point)
-       * @returns {number}
-       */
-      getEnergyBeyondMaxTemperature: function() {
-        return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * mass * specificHeat ), 0 );
-      },
-
-      /**
-       * Function that returns temperature of the beaker
-       * Limit max temp to the boiling point.
-       * @returns {number}
-       */
-      getTemperature: function() {
-        return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
-      },
-
-      /*
-       * This override handles the case where the point is above the beaker.
-       * In this case, we want to pull from all slices evenly, and not favor
-       * the slices the bump up at the top in order to match the 3D look of the
-       * water surface.
-       */
-      extractClosestEnergyChunk: function( point ) {
-        var pointIsAboveWaterSurface = true;
-        var i;
-        for ( i = 0; i < this.slices.length; i++ ) {
-          if ( point.y < this.slices[ i ].getShape().bounds.maxY ) {
-            pointIsAboveWaterSurface = false;
-            break;
-          }
-        }
-
-        if ( !pointIsAboveWaterSurface ) {
-          return RectangularThermalMovableModelElement.extractClosestEnergyChunk( point );
-        }
-
-        // Point is above water surface.  Identify the slice with the highest
-        // density, since this is where we will get the energy chunk.
-        var maxSliceDensity = 0;
-        var densestSlice = null;
-        this.slices.forEach( function( slice ) {
-          var sliceDensity = slice.energyChunkList.size() / ( slice.getShape().bounds.width * slice.getShape().bounds.height );
-          if ( sliceDensity > maxSliceDensity ) {
-            maxSliceDensity = sliceDensity;
-            densestSlice = slice;
-          }
-        } );
-
-        if ( densestSlice == null || densestSlice.energyChunkList.size() == 0 ) {
-          console.log( " - Warning: No energy chunks in the beaker, can't extract any." );
-          return null;
-        }
-
-        var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
-        densestSlice.energyChunkList.forEach( function( energyChunk ) {
-          if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
-            highestEnergyChunk = energyChunk;
-          }
-        } );
-      },
-
-      removeEnergyChunk: function( highestEnergyChunk ) {
-        return highestEnergyChunk;
-      }
-    }
   }
 
-  )
-} );
+  return inherit( RectangularThermalMovableModelElement, Beaker, {
+    /*
+     * Get the untranslated rectangle that defines the shape of the beaker.
+     */
+    getRawOutlineRect: function() {
+      return new Rectangle( -this.width / 2, 0, this.width, this.height );
+    },
+
+    /**
+     *
+     * @returns {Rectangle}
+     */
+    getRect: function() {
+      return new Rectangle(
+        this.position.x - this.width / 2,
+        this.position.y,
+        this.width,
+        this.height );
+    },
+
+    /**
+     * Function that steps in time dt
+     * @param {number} dt
+     */
+    step: function( dt ) {
+      RectangularThermalMovableModelElement.prototype.step.call( this, dt );
+      this.temperature = this.getTemperature();
+      this.steamingProportion = 0;
+      if ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature < STEAMING_RANGE ) {
+        // Water is emitting some amount of steam.  Set the proportionate amount.
+        this.steamingProportion = Util.clamp( 0, 1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature ) / STEAMING_RANGE, 1 );
+      }
+    },
+
+    /**
+     * *
+     * @returns {RectangularThermalMovableModelElement.width|*}
+     */
+    getWidth: function() {
+      return this.width;
+    },
+
+    /**
+     * *
+     * @returns {RectangularThermalMovableModelElement.height|*}
+     */
+    getHeight: function() {
+      return this.height;
+    },
+
+    /**
+     * *
+     * @returns {*}
+     */
+    getTopSurfaceProperty: function() {
+      return this.topSurfaceProperty;
+    },
+
+    /**
+     * *
+     * @returns {*}
+     */
+    getBottomSurfaceProperty: function() {
+      return this.bottomSurfaceProperty;
+    },
+
+    /**
+     * *
+     */
+    addInitialEnergyChunks: function() {
+      this.slices.forEach( function( slice ) {
+        slice.energyChunkList.clear();
+        //TODO: this energy comes from nowhere
+        var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this, energy );
+        var initialChunkBounds = this.getSliceBounds();
+        while ( this.getNumEnergyChunks() < targetNumChunks ) {
+          // Add a chunk at a random location in the beaker.
+          this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), energyChunksVisibleProperty ) );
+        }
+
+        // Distribute the energy chunks within the beaker.
+        var i;
+        for ( i = 0; i < 1000; i++ ) {
+          if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+            break;
+          }
+        }
+      } );
+    },
+
+    /**
+     * *
+     * @param energyChunk
+     */
+    addEnergyChunkToNextSlice: function( energyChunk ) {
+      var totalSliceArea = 0;
+      this.slices.forEach( function( slice ) {
+        totalSliceArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
+      } );
+
+      var sliceSelectionValue = Math.random();
+      var chosenSlice = this.slices.get( 0 );
+      var accumulatedArea = 0;
+      for ( var i = 0; i < this.slices.length; i++ ) {
+        accumulatedArea += this.slices.get( i ).getShape().bounds.width * this.slices.get( i ).getShape().bounds.height;
+        if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
+          chosenSlice = this.slice;
+          break;
+        }
+      }
+      chosenSlice.addEnergyChunk( energyChunk );
+    },
+
+    /**
+     * *
+     * @param width
+     * @param height
+     * @returns {number}
+     */
+    calculateWaterMass: function( width, height ) {
+      return Math.PI * Math.pow( width / 2, 2 ) * height * WATER_DENSITY;
+    }
+    ,
+
+    /**
+     * *
+     * @returns {ThermalContactArea}
+     */
+    getThermalContactArea: function() {
+      return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
+        this.position.y, this.width, this.height * this.fluidLevel ), true );
+    }
+    ,
+
+    /*
+     * Get the area where the temperature of the steam can be sensed.
+     */
+
+    getSteamArea: function() {
+      // Height of steam rectangle is based on beaker height and steamingProportion.
+
+      var liquidWaterHeight = this.height * this.fluidLevel;
+      return new Rectangle( this.position.x - this.getWidth() / 2,
+        this.position.y + liquidWaterHeight,
+        this.width,
+        this.maxSteamHeight );
+    }
+    ,
+    /**
+     *
+     * @param heightAboveWater
+     * @returns {number}
+     */
+    getSteamTemperature: function( heightAboveWater ) {
+      var mappingFunction = new LinearFunction( 0, this.maxSteamHeight * this.steamingProportion, this.temperature, EFACConstants.ROOM_TEMPERATURE );
+      return Math.max( mappingFunction.evaluate( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
+    }
+    ,
+
+    /**
+     *
+     */
+    addEnergyChunkSlices: function() {
+      assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
+      var fluidRect = new Rectangle(
+        this.position.x - this.width / 2,
+        this.position.y,
+        this.width,
+        this.height * INITIAL_FLUID_LEVEL );
+
+      var widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );
+      var i;
+      for ( i = 0; i < NUM_SLICES; i++ ) {
+        var proportion = ( i + 1 ) * ( 1 / ( NUM_SLICES + 1 ) );
+
+        var slicePath = new Path();
+        {
+          // The slice width is calculated to fit into the 3D projection.
+          // It uses an exponential function that is shifted in order to
+          // yield width value proportional to position in Z-space.
+
+          var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
+
+          var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
+
+          var topY = bottomY + fluidRect.height;
+
+          var centerX = fluidRect.centerX;
+
+          var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
+          var sliceShape = new Shape();
+          sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
+            .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
+            .lineTo( centerX + sliceWidth / 2, topY )
+            .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
+            .lineTo( centerX - sliceWidth / 2, bottomY );
+          slicePath.shape = sliceShape;
+        }
+        this.slices.push( new EnergyChunkContainerSlice( slicePath, -proportion * this.width, this.position ) );
+      }
+    }
+    ,
+
+
+    /**
+     * Function that returns the energy Container Category
+     * @returns {string}
+     */
+    getEnergyContainerCategory: function() {
+      return EnergyContainerCategory.WATER;
+    }
+    ,
+
+    /**
+     * Function that returns the beaker energy beyond the max temperature (the boiling point)
+     * @returns {number}
+     */
+    getEnergyBeyondMaxTemperature: function() {
+      return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * mass * specificHeat ), 0 );
+    }
+    ,
+
+    /**
+     * Function that returns temperature of the beaker
+     * Limit max temp to the boiling point.
+     * @returns {number}
+     */
+    getTemperature: function() {
+      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
+    }
+    ,
+
+    /*
+     * This override handles the case where the point is above the beaker.
+     * In this case, we want to pull from all slices evenly, and not favor
+     * the slices the bump up at the top in order to match the 3D look of the
+     * water surface.
+     */
+    extractClosestEnergyChunk: function( point ) {
+      var pointIsAboveWaterSurface = true;
+      var i;
+      for ( i = 0; i < this.slices.length; i++ ) {
+        if ( point.y < this.slices[ i ].getShape().bounds.maxY ) {
+          pointIsAboveWaterSurface = false;
+          break;
+        }
+      }
+
+      if ( !pointIsAboveWaterSurface ) {
+        return RectangularThermalMovableModelElement.extractClosestEnergyChunk( point );
+      }
+
+      // Point is above water surface.  Identify the slice with the highest
+      // density, since this is where we will get the energy chunk.
+      var maxSliceDensity = 0;
+      var densestSlice = null;
+      this.slices.forEach( function( slice ) {
+        var sliceDensity = slice.energyChunkList.size() / ( slice.getShape().bounds.width * slice.getShape().bounds.height );
+        if ( sliceDensity > maxSliceDensity ) {
+          maxSliceDensity = sliceDensity;
+          densestSlice = slice;
+        }
+      } );
+
+      if ( densestSlice == null || densestSlice.energyChunkList.size() == 0 ) {
+        console.log( " - Warning: No energy chunks in the beaker, can't extract any." );
+        return null;
+      }
+
+      var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
+      densestSlice.energyChunkList.forEach( function( energyChunk ) {
+        if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
+          highestEnergyChunk = energyChunk;
+        }
+      } );
+
+      this.removeEnergyChunk( highestEnergyChunk );
+      return highestEnergyChunk;
+    }
+  } )
+    ;
+} )
+;
+
 
 //TODO remove comments
 //// Copyright 2002-2015, University of Colorado
@@ -568,11 +614,11 @@ define( function( require ) {
 //        // The slice width is calculated to fit into the 3D projection.
 //        // It uses an exponential function that is shifted in order to
 //        // yield width value proportional to position in Z-space.
-//        double sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.getWidth();
-//        double bottomY = fluidRect.getMinY() - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
-//        double topY = bottomY + fluidRect.getHeight();
+//        double sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
+//        double bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
+//        double topY = bottomY + fluidRect.height;
 //        double centerX = fluidRect.getCenterX();
-//        double controlPointYOffset = ( bottomY - fluidRect.getMinY() ) * 0.5;
+//        double controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
 //        slicePath.moveTo( centerX - sliceWidth / 2, bottomY );
 //        slicePath.curveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY );
 //        slicePath.lineTo( centerX + sliceWidth / 2, topY );

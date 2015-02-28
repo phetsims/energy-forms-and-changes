@@ -21,7 +21,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
 // constants
-  var BURNER_STAND_STROKE_LINEWIDTH = 4;
+  var BURNER_STAND_STROKE_LINEWIDTH = 2;
   var BURNER_STAND_STROKE_COLOR = 'black';
   var PERSPECTIVE_ANGLE = Math.PI / 4; // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
 //
@@ -36,10 +36,10 @@ define( function( require ) {
     Node.call( this );
     // Add the left and right sides of the stand.
 
-    this.addChild( new BurnerStandSide( new Vector2( rect.getX(), rect.getY() ), rect.height, projectedEdgeLength ) );
-    this.addChild( new BurnerStandSide( new Vector2( rect.maxX, rect.getY() ), rect.height, projectedEdgeLength ) );
+    this.addChild( new BurnerStandSide( new Vector2( rect.x, rect.y ), rect.height, projectedEdgeLength ) );
+    this.addChild( new BurnerStandSide( new Vector2( rect.maxX, rect.y ), rect.height, projectedEdgeLength ) );
     /// Add the top of the burner stand.
-    this.addChild( new BurnerStandTop( new Vector2( rect.getX(), rect.getY() ), rect.width, projectedEdgeLength ) );
+    this.addChild( new BurnerStandTop( new Vector2( rect.x, rect.y ), rect.width, projectedEdgeLength ) );
 
 
     function BurnerStandSide( topCenter, height, edgeLength ) {

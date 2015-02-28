@@ -626,10 +626,10 @@ define( function( require ) {
 //    // This is the area where the flame and ice appear in the view.  Must
 //    // be coordinated with the view.
 //    Rectangle2D outlineRect = getOutlineRect();
-//    return new Rectangle2D.Double( outlineRect.getCenterX() - outlineRect.getWidth() / 4,
+//    return new Rectangle2D.Double( outlineRect.getCenterX() - outlineRect.width / 4,
 //      outlineRect.getCenterY(),
-//        outlineRect.getWidth() / 2,
-//        outlineRect.getHeight() / 2 );
+//        outlineRect.width / 2,
+//        outlineRect.height / 2 );
 //  }
 //
 //  public double getTemperature() {

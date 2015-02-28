@@ -57,14 +57,18 @@ define( function( require ) {
     // shape from the position.
     var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // location in the view.
-    var beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).bounds;
+    var beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).bounds; //{Bounds2}
     // ellipses in order to create a 3D-ish look.
-    var ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
+    var ellipseHeight = beakerViewRect.width * PERSPECTIVE_PROPORTION;
     //   Shape.ellipse = function( centerX, centerY, radiusX, radiusY, rotation )
-    var topEllipse = new Ellipse2D.Number( beakerViewRect.getMinX(), beakerViewRect.getMinY() - ellipseHeight / 2, beakerViewRect.getWidth(), ellipseHeight );
-    var bottomEllipse = new Ellipse2D.Number( beakerViewRect.getMinX(), beakerViewRect.getMaxY() - ellipseHeight / 2, beakerViewRect.getWidth(), ellipseHeight );
+    var topEllipse = new Ellipse2D.Number( beakerViewRect.minX, beakerViewRect.minY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight );
+    var bottomEllipse = new Ellipse2D.Number( beakerViewRect.minX, beakerViewRect.maxY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight );
     // Add the bottom ellipse.
-    backNode.addChild( new Path( bottomEllipse, BEAKER_COLOR, OUTLINE_STROKE, OUTLINE_COLOR ) );
+    backNode.addChild( new Path( bottomEllipse, {
+      fill: BEAKER_COLOR,
+      lineWidth: OUTLINE_STROKE,
+      stroke: OUTLINE_COLOR
+    } ) );
     // Add the water.  It will adjust its size based on the fluid level.
     var water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevel, beaker.temperature );
     frontNode.addChild( water );
@@ -72,9 +76,17 @@ define( function( require ) {
     var beakerBody = new Area( beakerViewRect );
     beakerBody.add( new Area( bottomEllipse ) );
     beakerBody.subtract( new Area( topEllipse ) );
-    frontNode.addChild( new Path( beakerBody, BEAKER_COLOR, OUTLINE_STROKE, OUTLINE_COLOR ) );
+    frontNode.addChild( new Path( beakerBody, {
+      fill: BEAKER_COLOR,
+      lineWidth: OUTLINE_STROKE,
+      stroke: OUTLINE_COLOR
+    } ) );
     // Add the top ellipse.  It is behind the water for proper Z-order behavior.
-    backNode.addChild( new Path( topEllipse, BEAKER_COLOR, OUTLINE_STROKE, OUTLINE_COLOR ) );
+    backNode.addChild( new Path( topEllipse, {
+      fill: BEAKER_COLOR,
+      lineWidth: OUTLINE_STROKE,
+      stroke: OUTLINE_COLOR
+    } ) );
     // grab the beaker.
     backNode.addChild( new Path( beakerViewRect, new Color( 0, 0, 0, 0 ) ) );
     // remove things from the beaker.
@@ -85,7 +97,7 @@ define( function( require ) {
     // Add the label.  Position it just below the front, top water line.
     var label = new Text( EnergyFormsAndChangesResources.Strings.WATER );
     label.setFont( LABEL_FONT );
-    label.setOffset( beakerViewRect.getCenterX() - label.bounds.width / 2, beakerViewRect.getMaxY() - beakerViewRect.getHeight() * beaker.fluidLevel.get() + topEllipse.getHeight() / 2 );
+    label.setOffset( beakerViewRect.centerX - label.bounds.width / 2, beakerViewRect.maxY - beakerViewRect.height * beaker.fluidLevel.get() + topEllipse.getHeight() / 2 );
     label.setPickable( false );
     label.setChildrenPickable( false );
     frontNode.addChild( label );
@@ -153,18 +165,13 @@ define( function( require ) {
       var Property = require( 'AXON/Property' );
       var DoubleRange = require( 'edu.colorado.phet.common.phetcommon.util.DoubleRange' );
 
-      var ModelViewTransform = require( 'edu.colorado.phet.common.phetcommon.view.graphics.transforms.ModelViewTransform' );
-      var ColorUtils = require( 'edu.colorado.phet.common.phetcommon.view.util.ColorUtils' );
-      var PhetFont = require( 'edu.colorado.phet.common.phetcommon.view.util.PhetFont' );
-      var PhetPPath = require( 'edu.colorado.phet.common.piccolophet.nodes.PhetPPath' );
       var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/EnergyFormsAndChangesResources' );
       var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/EFACConstants' );
       var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/Beaker' );
       var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/EnergyChunk' );
       var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/EnergyChunkContainerSliceNode' );
       var Node = require( 'SCENERY/nodes/Node' );
-      var PText = require( 'edu.umd.cs.piccolo.nodes.PText' );
-      var PClip = require( 'edu.umd.cs.piccolox.nodes.PClip' );
+
       /*
        * Constructor.
        */
@@ -189,6 +196,13 @@ define( function( require ) {
 //    // Miscellaneous other variables.
 //    private double bubbleProductionRemainder;
 //private
+      /**
+       * *
+       * @param {Rectangle} beakerOutlineRect
+       * @param waterLevel
+       * @param temperature
+       * @constructor
+       */
       function PerspectiveWaterNode( beakerOutlineRect, waterLevel, temperature ) {
 
         Node.call( this );
@@ -212,12 +226,13 @@ define( function( require ) {
       return inherit( Node, PerspectiveWaterNode, {
 //private
         updateAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
-          var waterHeight = beakerOutlineRect.getHeight() * fluidLevel;
-          var liquidWaterRect = new Rectangle.Number( beakerOutlineRect.getX(), beakerOutlineRect.getMaxY() - waterHeight, beakerOutlineRect.getWidth(), waterHeight );
-          var ellipseWidth = beakerOutlineRect.getWidth();
+          var waterHeight = beakerOutlineRect.height * fluidLevel;
+          var liquidWaterRect = new Rectangle.Number( beakerOutlineRect.getX(), beakerOutlineRect.maxY - waterHeight, beakerOutlineRect.width, waterHeight );
+          var ellipseWidth = beakerOutlineRect.width;
           var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-          var liquidWaterTopEllipse = new Ellipse2D.Number( liquidWaterRect.getMinX(), liquidWaterRect.getMinY() - ellipseHeight / 2, liquidWaterRect.getWidth(), ellipseHeight );
-          var bottomEllipse = new Ellipse2D.Number( liquidWaterRect.getMinX(), liquidWaterRect.getMaxY() - ellipseHeight / 2, liquidWaterRect.getWidth(), ellipseHeight );
+
+          var liquidWaterTopEllipse = new Ellipse2D.Number( liquidWaterRect.minX, liquidWaterRect.minY - ellipseHeight / 2, liquidWaterRect.width, ellipseHeight );
+          var bottomEllipse = new Ellipse2D.Number( liquidWaterRect.minX, liquidWaterRect.maxY - ellipseHeight / 2, liquidWaterRect.width, ellipseHeight );
           // Update shape of the the liquid water.
           var liquidWaterBodyArea = new Area( liquidWaterRect );
           liquidWaterBodyArea.add( new Area( bottomEllipse ) );
@@ -241,10 +256,10 @@ define( function( require ) {
             }
             for ( var i = 0; i < bubblesToProduce; i++ ) {
               var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.getMin() + Math.random() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
-              var steamBubbleCenterXPos = beakerOutlineRect.getCenterX() + (Math.random() - 0.5) * (beakerOutlineRect.getWidth() - steamBubbleDiameter);
+              var steamBubbleCenterXPos = beakerOutlineRect.centerX + (Math.random() - 0.5) * (beakerOutlineRect.width - steamBubbleDiameter);
               var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
               // Invisible to start, will fade in.
-              steamBubble.setOffset( steamBubbleCenterXPos, liquidWaterRect.getMinY() );
+              steamBubble.setOffset( steamBubbleCenterXPos, liquidWaterRect.minY );
               steamBubble.setOpacity( 0 );
               steamBubbles.add( steamBubble );
               this.steamNode.addChild( steamBubble );
@@ -252,26 +267,27 @@ define( function( require ) {
           }
           // Update the position and appearance of the existing steam bubbles.
           var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.getMin() + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
-          var unfilledBeakerHeight = beakerOutlineRect.getHeight() - waterHeight;
-          for ( var steamBubble in new ArrayList( steamBubbles ) ) {
+          var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
+
+          steamBubbles.copy().forEach( function( steamBubble ) {
             steamBubble.setOffset( steamBubble.getXOffset(), steamBubble.getYOffset() + dt * (-steamBubbleSpeed) );
-            if ( beakerOutlineRect.getMinY() - steamBubble.getYOffset() > MAX_STEAM_BUBBLE_HEIGHT ) {
+            if ( beakerOutlineRect.minY - steamBubble.getYOffset() > MAX_STEAM_BUBBLE_HEIGHT ) {
               steamBubbles.remove( steamBubble );
               this.steamNode.removeChild( steamBubble );
             }
-            else if ( steamBubble.getYOffset() < beakerOutlineRect.getMinY() ) {
+            else if ( steamBubble.getYOffset() < beakerOutlineRect.minY ) {
               steamBubble.setDiameter( steamBubble.getDiameter() * (1 + (STEAM_BUBBLE_GROWTH_RATE * dt)) );
-              var distanceFromCenterX = steamBubble.getXOffset() - beakerOutlineRect.getCenterX();
+              var distanceFromCenterX = steamBubble.getXOffset() - beakerOutlineRect.centerX;
               steamBubble.setOffset( steamBubble.getXOffset() + (distanceFromCenterX * 0.2 * dt), steamBubble.getYOffset() );
               // Fade the bubble as it reaches the end of its range.
-              steamBubble.setOpacity( (1 - (beakerOutlineRect.getMinY() - steamBubble.getYOffset()) / MAX_STEAM_BUBBLE_HEIGHT) * MAX_STEAM_BUBBLE_OPACITY );
+              steamBubble.setOpacity( (1 - (beakerOutlineRect.minY - steamBubble.getYOffset()) / MAX_STEAM_BUBBLE_HEIGHT) * MAX_STEAM_BUBBLE_OPACITY );
             }
             else {
               // Fade the bubble in.
-              var distanceFromWater = liquidWaterRect.getMinY() - steamBubble.getYOffset();
+              var distanceFromWater = liquidWaterRect.minY - steamBubble.getYOffset();
               steamBubble.setOpacity( MathUtil.clamp( 0, distanceFromWater / (unfilledBeakerHeight / 4), 1 ) * MAX_STEAM_BUBBLE_OPACITY );
             }
-          }
+          } );
         },
 //private
         define( function( require ) {
@@ -287,7 +303,12 @@ define( function( require ) {
           var Node = require( 'SCENERY/nodes/Node' );
           var Shape = require( 'KITE/Shape' );
 
-
+          /**
+           *
+           * @param initialDiameter
+           * @param initialOpacity
+           * @constructor
+           */
           function SteamBubble( initialDiameter, initialOpacity ) {
             Path( this, new Ellipse2D.Number( -initialDiameter / 2, -initialDiameter / 2, initialDiameter, initialDiameter ), new Color( 255, 255, 255, (initialOpacity * 255) ) );
           }
@@ -398,9 +419,9 @@ define( function( require ) {
 //
 //    // Create the shapes for the top and bottom of the beaker.  These are
 //    // ellipses in order to create a 3D-ish look.
-//    double ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
-//    final Ellipse2D.Double topEllipse = new Ellipse2D.Double( beakerViewRect.getMinX(), beakerViewRect.getMinY() - ellipseHeight / 2, beakerViewRect.getWidth(), ellipseHeight );
-//    final Ellipse2D.Double bottomEllipse = new Ellipse2D.Double( beakerViewRect.getMinX(), beakerViewRect.getMaxY() - ellipseHeight / 2, beakerViewRect.getWidth(), ellipseHeight );
+//    double ellipseHeight = beakerViewRect.width * PERSPECTIVE_PROPORTION;
+//    final Ellipse2D.Double topEllipse = new Ellipse2D.Double( beakerViewRect.minX, beakerViewRect.minY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight );
+//    final Ellipse2D.Double bottomEllipse = new Ellipse2D.Double( beakerViewRect.minX, beakerViewRect.maxY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight );
 //
 //    // Add the bottom ellipse.
 //    backNode.addChild( new PhetPPath( bottomEllipse, BEAKER_COLOR, OUTLINE_STROKE, OUTLINE_COLOR ) );
@@ -433,8 +454,8 @@ define( function( require ) {
 //    // Add the label.  Position it just below the front, top water line.
 //    final PText label = new PText( EnergyFormsAndChangesResources.Strings.WATER );
 //    label.setFont( LABEL_FONT );
-//    label.setOffset( beakerViewRect.getCenterX() - label.getFullBoundsReference().width / 2,
-//        beakerViewRect.getMaxY() - beakerViewRect.getHeight() * beaker.fluidLevel.get() + topEllipse.getHeight() / 2 );
+//    label.setOffset( beakerViewRect.centerX - label.getFullBoundsReference().width / 2,
+//        beakerViewRect.maxY - beakerViewRect.height * beaker.fluidLevel.get() + topEllipse.getHeight() / 2 );
 //    label.setPickable( false );
 //    label.setChildrenPickable( false );
 //    frontNode.addChild( label );
@@ -550,21 +571,21 @@ define( function( require ) {
 //
 //    private void updateAppearance( double fluidLevel, Rectangle2D beakerOutlineRect, double temperature, double dt ) {
 //
-//      double waterHeight = beakerOutlineRect.getHeight() * fluidLevel;
+//      double waterHeight = beakerOutlineRect.height * fluidLevel;
 //
 //      Rectangle2D liquidWaterRect = new Rectangle2D.Double( beakerOutlineRect.getX(),
-//          beakerOutlineRect.getMaxY() - waterHeight,
-//        beakerOutlineRect.getWidth(),
+//          beakerOutlineRect.maxY - waterHeight,
+//        beakerOutlineRect.width,
 //        waterHeight );
-//      double ellipseWidth = beakerOutlineRect.getWidth();
+//      double ellipseWidth = beakerOutlineRect.width;
 //      double ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-//      Shape liquidWaterTopEllipse = new Ellipse2D.Double( liquidWaterRect.getMinX(),
-//          liquidWaterRect.getMinY() - ellipseHeight / 2,
-//        liquidWaterRect.getWidth(),
+//      Shape liquidWaterTopEllipse = new Ellipse2D.Double( liquidWaterRect.minX,
+//          liquidWaterRect.minY - ellipseHeight / 2,
+//        liquidWaterRect.width,
 //        ellipseHeight );
-//      Shape bottomEllipse = new Ellipse2D.Double( liquidWaterRect.getMinX(),
-//          liquidWaterRect.getMaxY() - ellipseHeight / 2,
-//        liquidWaterRect.getWidth(),
+//      Shape bottomEllipse = new Ellipse2D.Double( liquidWaterRect.minX,
+//          liquidWaterRect.maxY - ellipseHeight / 2,
+//        liquidWaterRect.width,
 //        ellipseHeight );
 //
 //      //----------------------------------------------------------------
@@ -599,9 +620,9 @@ define( function( require ) {
 //        }
 //        for ( int i = 0; i < bubblesToProduce; i++ ) {
 //          double steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.getMin() + RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
-//          double steamBubbleCenterXPos = beakerOutlineRect.getCenterX() + ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.getWidth() - steamBubbleDiameter );
+//          double steamBubbleCenterXPos = beakerOutlineRect.centerX + ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
 //          SteamBubble steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
-//          steamBubble.setOffset( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
+//          steamBubble.setOffset( steamBubbleCenterXPos, liquidWaterRect.minY ); // Invisible to start, will fade in.
 //          steamBubble.setOpacity( 0 );
 //          steamBubbles.add( steamBubble );
 //          steamNode.addChild( steamBubble );
@@ -610,23 +631,23 @@ define( function( require ) {
 //
 //      // Update the position and appearance of the existing steam bubbles.
 //      double steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.getMin() + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
-//      double unfilledBeakerHeight = beakerOutlineRect.getHeight() - waterHeight;
+//      double unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
 //      for ( SteamBubble steamBubble : new ArrayList<SteamBubble>( steamBubbles ) ) {
 //        steamBubble.setOffset( steamBubble.getXOffset(), steamBubble.getYOffset() + dt * ( -steamBubbleSpeed ) );
-//        if ( beakerOutlineRect.getMinY() - steamBubble.getYOffset() > MAX_STEAM_BUBBLE_HEIGHT ) {
+//        if ( beakerOutlineRect.minY - steamBubble.getYOffset() > MAX_STEAM_BUBBLE_HEIGHT ) {
 //          steamBubbles.remove( steamBubble );
 //          steamNode.removeChild( steamBubble );
 //        }
-//        else if ( steamBubble.getYOffset() < beakerOutlineRect.getMinY() ) {
+//        else if ( steamBubble.getYOffset() < beakerOutlineRect.minY ) {
 //          steamBubble.setDiameter( steamBubble.getDiameter() * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) ) );
-//          double distanceFromCenterX = steamBubble.getXOffset() - beakerOutlineRect.getCenterX();
+//          double distanceFromCenterX = steamBubble.getXOffset() - beakerOutlineRect.centerX;
 //          steamBubble.setOffset( steamBubble.getXOffset() + ( distanceFromCenterX * 0.2 * dt ), steamBubble.getYOffset() );
 //          // Fade the bubble as it reaches the end of its range.
-//          steamBubble.setOpacity( ( 1 - ( beakerOutlineRect.getMinY() - steamBubble.getYOffset() ) / MAX_STEAM_BUBBLE_HEIGHT ) * MAX_STEAM_BUBBLE_OPACITY );
+//          steamBubble.setOpacity( ( 1 - ( beakerOutlineRect.minY - steamBubble.getYOffset() ) / MAX_STEAM_BUBBLE_HEIGHT ) * MAX_STEAM_BUBBLE_OPACITY );
 //        }
 //        else {
 //          // Fade the bubble in.
-//          double distanceFromWater = liquidWaterRect.getMinY() - steamBubble.getYOffset();
+//          double distanceFromWater = liquidWaterRect.minY - steamBubble.getYOffset();
 //          steamBubble.setOpacity( MathUtil.clamp( 0, distanceFromWater / ( unfilledBeakerHeight / 4 ), 1 ) * MAX_STEAM_BUBBLE_OPACITY );
 //        }
 //      }

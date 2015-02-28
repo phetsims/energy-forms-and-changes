@@ -70,9 +70,9 @@ define( function( require ) {
           var rect = block.getRect();
 
           var shape = new Shape()
-            .moveToPoint( new Vector2( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) )
-            .lineToPoint( new Vector2( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) )
+            .moveToPoint( new Vector2( rect.x, rect.y ).plus( forwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( forwardPerspectiveOffset ) )
+            .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( backwardPerspectiveOffset ) )
             .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
             .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
             .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
@@ -168,9 +168,9 @@ define( function( require ) {
 //      if ( model.getBeaker().getRect().contains( block.getRect() ) ) {
 //        DoubleGeneralPath path = new DoubleGeneralPath();
 //        Rectangle2D rect = block.getRect();
-//        path.moveTo( new Vector2D( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) );
-//        path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) );
+//        path.moveTo( new Vector2D( rect.x, rect.y ).plus( forwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.maxX, rect.y ).plus( forwardPerspectiveOffset ) );
+//        path.lineTo( new Vector2D( rect.maxX, rect.y ).plus( backwardPerspectiveOffset ) );
 //        path.lineTo( new Vector2D( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) );
 //        path.lineTo( new Vector2D( rect.minX, rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
 //        path.lineTo( new Vector2D( rect.minX, rect.getMaxY() ).plus( forwardPerspectiveOffset ) );

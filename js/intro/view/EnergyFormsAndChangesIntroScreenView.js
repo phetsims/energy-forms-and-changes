@@ -49,7 +49,7 @@ define( function( require ) {
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
-
+  var shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' );
 
   // constants
   var EDGE_INSET = 10;
@@ -63,7 +63,7 @@ define( function( require ) {
 
 
   /**
-   * @param {model} model
+   * @param {EnergyFormsAndChangesIntroModel} model
    * @constructor
    */
   function EnergyFormsAndChangesIntroScreenView( model ) {
@@ -84,8 +84,8 @@ define( function( require ) {
 //TODO change back to 2200;
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
-      new Vector2( Math.round( thisScreen.layoutBounds.width * 0.5 ), Math.round( thisScreen.layoutBounds.height * 0.85 ) ), // "Zoom factor" - smaller zooms out, larger zooms in.
-      2200 );
+      new Vector2( Math.round( thisScreen.layoutBounds.width * 0.5 ), Math.round( thisScreen.layoutBounds.height * 0.85 ) ),
+      2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
 
 
     //    // Set up a root node for our scene graph.
@@ -117,7 +117,7 @@ define( function( require ) {
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
 
-    this.addChild( new BurnerStandNode( new Rectangle( 100, 200, 100, 100 ), 50 ) );
+    this.addChild( new BurnerStandNode( new Rectangle( 400, 400, 100, 100 ), 25 ) );
 
 //    heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );
 

@@ -522,7 +522,7 @@ define( function( require ) {
 //      // of the beaker.
 //      double testRectThickness = 1E-3; // 1 mm thick walls.
 //      Rectangle2D beakerRect = beaker.getRect();
-//      Rectangle2D beakerLeftSide = new Rectangle2D.Double( beakerRect.getMinX() - blockPerspectiveExtension,
+//      Rectangle2D beakerLeftSide = new Rectangle2D.Double( beakerRect.minX - blockPerspectiveExtension,
 //        beaker.getRect().getMinY(),
 //          testRectThickness + blockPerspectiveExtension * 2,
 //          beaker.getRect().getHeight() + blockPerspectiveExtension );
@@ -562,8 +562,8 @@ define( function( require ) {
 //        // simplify z-order handling.
 //        testRect = new Rectangle2D.Double( testRect.getX() - blockPerspectiveExtension,
 //          testRect.getY(),
-//            testRect.getWidth() + blockPerspectiveExtension * 2,
-//          testRect.getHeight() );
+//            testRect.width + blockPerspectiveExtension * 2,
+//          testRect.height );
 //      }
 //
 //      // Clamp the translation based on the test block's position, but
@@ -616,18 +616,18 @@ define( function( require ) {
 //      // Determine the motion in the X & Y directions that will "cure"
 //      // the overlap.
 //      double xOverlapCure = 0;
-//      if ( movingRect.getMaxX() > stationaryRect.getMinX() && movingRect.getMinX() < stationaryRect.getMinX() ) {
-//        xOverlapCure = stationaryRect.getMinX() - movingRect.getMaxX();
+//      if ( movingRect.getMaxX() > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
+//        xOverlapCure = stationaryRect.minX - movingRect.getMaxX();
 //      }
-//      else if ( stationaryRect.getMaxX() > movingRect.getMinX() && stationaryRect.getMinX() < movingRect.getMinX() ) {
-//        xOverlapCure = stationaryRect.getMaxX() - movingRect.getMinX();
+//      else if ( stationaryRect.getMaxX() > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
+//        xOverlapCure = stationaryRect.getMaxX() - movingRect.minX;
 //      }
 //      double yOverlapCure = 0;
-//      if ( movingRect.getMaxY() > stationaryRect.getMinY() && movingRect.getMinY() < stationaryRect.getMinY() ) {
-//        yOverlapCure = stationaryRect.getMinY() - movingRect.getMaxY();
+//      if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
+//        yOverlapCure = stationaryRect.minY - movingRect.maxY;
 //      }
-//      else if ( stationaryRect.getMaxY() > movingRect.getMinY() && stationaryRect.getMinY() < movingRect.getMinY() ) {
-//        yOverlapCure = stationaryRect.getMaxY() - movingRect.getMinY();
+//      else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
+//        yOverlapCure = stationaryRect.maxY - movingRect.minY;
 //      }
 //
 //      // Something is wrong with algorithm if both values are zero,
@@ -651,18 +651,18 @@ define( function( require ) {
 //    if ( proposedTranslation.getX() > 0 ) {
 //
 //      // Check for collisions moving right.
-//      Line2D rightEdge = new Line2D.Double( movingRect.getMaxX(), movingRect.getMinY(), movingRect.getMaxX(), movingRect.getMaxY() );
+//      Line2D rightEdge = new Line2D.Double( movingRect.getMaxX(), movingRect.minY, movingRect.getMaxX(), movingRect.maxY );
 //      Shape rightEdgeSmear = projectShapeFromLine( rightEdge, proposedTranslation );
 //
-//      if ( rightEdge.getX1() <= stationaryRect.getMinX() && rightEdgeSmear.intersects( stationaryRect ) ) {
+//      if ( rightEdge.getX1() <= stationaryRect.minX && rightEdgeSmear.intersects( stationaryRect ) ) {
 //        // Collision detected, limit motion.
-//        xTranslation = stationaryRect.getMinX() - rightEdge.getX1() - MIN_INTER_ELEMENT_DISTANCE;
+//        xTranslation = stationaryRect.minX - rightEdge.getX1() - MIN_INTER_ELEMENT_DISTANCE;
 //      }
 //    }
 //    else if ( proposedTranslation.getX() < 0 ) {
 //
 //      // Check for collisions moving left.
-//      Line2D leftEdge = new Line2D.Double( movingRect.getMinX(), movingRect.getMinY(), movingRect.getMinX(), movingRect.getMaxY() );
+//      Line2D leftEdge = new Line2D.Double( movingRect.minX, movingRect.minY, movingRect.minX, movingRect.maxY );
 //      Shape leftEdgeSmear = projectShapeFromLine( leftEdge, proposedTranslation );
 //
 //      if ( leftEdge.getX1() >= stationaryRect.getMaxX() && leftEdgeSmear.intersects( stationaryRect ) ) {
@@ -675,23 +675,23 @@ define( function( require ) {
 //    if ( proposedTranslation.getY() > 0 && restrictPosY ) {
 //
 //      // Check for collisions moving up.
-//      Line2D movingTopEdge = new Line2D.Double( movingRect.getMinX(), movingRect.getMaxY(), movingRect.getMaxX(), movingRect.getMaxY() );
+//      Line2D movingTopEdge = new Line2D.Double( movingRect.minX, movingRect.maxY, movingRect.getMaxX(), movingRect.maxY );
 //      Shape topEdgeSmear = projectShapeFromLine( movingTopEdge, proposedTranslation );
 //
-//      if ( movingTopEdge.getY1() <= stationaryRect.getMinY() && topEdgeSmear.intersects( stationaryRect ) ) {
+//      if ( movingTopEdge.getY1() <= stationaryRect.minY && topEdgeSmear.intersects( stationaryRect ) ) {
 //        // Collision detected, limit motion.
-//        yTranslation = stationaryRect.getMinY() - movingTopEdge.getY1() - MIN_INTER_ELEMENT_DISTANCE;
+//        yTranslation = stationaryRect.minY - movingTopEdge.getY1() - MIN_INTER_ELEMENT_DISTANCE;
 //      }
 //    }
 //    if ( proposedTranslation.getY() < 0 ) {
 //
 //      // Check for collisions moving down.
-//      Line2D movingBottomEdge = new Line2D.Double( movingRect.getMinX(), movingRect.getMinY(), movingRect.getMaxX(), movingRect.getMinY() );
+//      Line2D movingBottomEdge = new Line2D.Double( movingRect.minX, movingRect.minY, movingRect.getMaxX(), movingRect.minY );
 //      Shape bottomEdgeSmear = projectShapeFromLine( movingBottomEdge, proposedTranslation );
 //
-//      if ( movingBottomEdge.getY1() >= stationaryRect.getMaxY() && bottomEdgeSmear.intersects( stationaryRect ) ) {
+//      if ( movingBottomEdge.getY1() >= stationaryRect.maxY && bottomEdgeSmear.intersects( stationaryRect ) ) {
 //        // Collision detected, limit motion.
-//        yTranslation = stationaryRect.getMaxY() - movingBottomEdge.getY1() + MIN_INTER_ELEMENT_DISTANCE;
+//        yTranslation = stationaryRect.maxY - movingBottomEdge.getY1() + MIN_INTER_ELEMENT_DISTANCE;
 //      }
 //    }
 //

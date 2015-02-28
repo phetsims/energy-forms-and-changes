@@ -59,14 +59,14 @@ define( function( require ) {
         // the other.
         if ( this.supportsImmersion || that.supportsImmersion ) {
           var immersionRect = this.bounds.intersection( that.bounds );
-          contactLength = immersionRect.getWidth() * 2 + immersionRect.getHeight() * 2;
-          if ( immersionRect.getWidth() != this.bounds.width && immersionRect.getWidth() != that.bounds.width ) {
+          contactLength = immersionRect.width * 2 + immersionRect.height * 2;
+          if ( immersionRect.width != this.bounds.width && immersionRect.width != that.bounds.width ) {
             // Not fully overlapping in X direction, so adjust contact length accordingly.
-            contactLength -= immersionRect.getHeight();
+            contactLength -= immersionRect.height;
           }
-          if ( immersionRect.getHeight() != this.bounds.height && immersionRect.getHeight() != that.bounds.height ) {
+          if ( immersionRect.height != this.bounds.height && immersionRect.height != that.bounds.height ) {
             // Not fully overlapping in Y direction, so adjust contact length accordingly.
-            contactLength -= immersionRect.getWidth();
+            contactLength -= immersionRect.width;
           }
         }
         else {
@@ -167,14 +167,14 @@ define( function( require ) {
 //      // the other.
 //      if ( this.supportsImmersion || that.supportsImmersion ) {
 //        Rectangle2D immersionRect = this.bounds.createIntersection( that.bounds );
-//        contactLength = immersionRect.getWidth() * 2 + immersionRect.getHeight() * 2;
-//        if ( immersionRect.getWidth() != this.bounds.width && immersionRect.getWidth() != that.bounds.width ) {
+//        contactLength = immersionRect.width * 2 + immersionRect.height * 2;
+//        if ( immersionRect.width != this.bounds.width && immersionRect.width != that.bounds.width ) {
 //          // Not fully overlapping in X direction, so adjust contact length accordingly.
-//          contactLength -= immersionRect.getHeight();
+//          contactLength -= immersionRect.height;
 //        }
-//        if ( immersionRect.getHeight() != this.bounds.height && immersionRect.getHeight() != that.bounds.height ) {
+//        if ( immersionRect.height != this.bounds.height && immersionRect.height != that.bounds.height ) {
 //          // Not fully overlapping in Y direction, so adjust contact length accordingly.
-//          contactLength -= immersionRect.getWidth();
+//          contactLength -= immersionRect.width;
 //        }
 //      }
 //      else {

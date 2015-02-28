@@ -821,9 +821,9 @@ define( function( require ) {
 //
 //    DoubleGeneralPath path = new DoubleGeneralPath();
 //    Rectangle2D rect = getRect();
-//    path.moveTo( new Vector2D( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( forwardPerspectiveOffset ) );
-//    path.lineTo( new Vector2D( rect.maxX, rect.getY() ).plus( backwardPerspectiveOffset ) );
+//    path.moveTo( new Vector2D( rect.x, rect.y ).plus( forwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.maxX, rect.y ).plus( forwardPerspectiveOffset ) );
+//    path.lineTo( new Vector2D( rect.maxX, rect.y ).plus( backwardPerspectiveOffset ) );
 //    path.lineTo( new Vector2D( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) );
 //    path.lineTo( new Vector2D( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) );
 //    path.lineTo( new Vector2D( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) );
