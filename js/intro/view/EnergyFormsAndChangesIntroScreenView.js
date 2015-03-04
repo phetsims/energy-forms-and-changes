@@ -69,7 +69,7 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroScreenView( model ) {
 
 
-    ScreenView.call( this, { renderer: 'svg', layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
     var thisScreen = this;
     this.model = model;
 
