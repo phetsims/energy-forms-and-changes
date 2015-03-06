@@ -18,9 +18,7 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
-
-  // constants
-  var RED_COLORBLIND = new Color( 255, 85, 0 );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   /**
    *
@@ -36,7 +34,7 @@ define( function( require ) {
     this.model = model;
 
     this.addProperty( 'sensedTemperature', EFACConstants.ROOM_TEMPERATURE );
-    this.addProperty( 'sensedElementColor', RED_COLORBLIND );
+    this.addProperty( 'sensedElementColor', PhetColorScheme.RED_COLORBLIND );
 
     // Property that is used primarily to control visibility in the view.
     this.addProperty( 'active', initiallyActive );
