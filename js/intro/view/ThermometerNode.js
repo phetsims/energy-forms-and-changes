@@ -132,12 +132,26 @@ define( function( require ) {
 
   return inherit( Node, ThermometerNode, {
 
+    /**
+     *
+     * @returns {Vector2}
+     */
     getOffsetCenterShaftToTriangleTip: function() {
       return new Vector2( -this.width + this.liquidShaft.centerX, this.height / 2 );
     },
+
+    /**
+     *
+     * @param sensedColor
+     */
     setSensedColor: function( sensedColor ) {
       this.triangle.fill = sensedColor;
     },
+
+    /**
+     *
+     * @param {number} temperature
+     */
     setSensedTemperature: function( temperature ) {
 
       var liquidShaftHeight = this.liquidHeightMapFunction( temperature );

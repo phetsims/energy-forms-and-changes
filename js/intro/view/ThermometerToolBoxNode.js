@@ -20,15 +20,13 @@ define( function( require ) {
 
   /**
    *
-   * @param thermometerNode
-   * @param modelViewTransform
-   * @param canvas
+   * @param {ThermometerNode} thermometerNode
+   * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function ThermometerToolBoxNode( thermometerNode, modelViewTransform, canvas ) {
+  function ThermometerToolBoxNode( thermometerNode, modelViewTransform ) {
     ThermometerNode.call( this );
     var self = this;
-    this.canvas = canvas;
     this.modelViewTransform = modelViewTransform;
     // getThermometer is defined in  sensing Thermometer Node
     var thermometer = thermometerNode.getThermometer();
@@ -36,26 +34,21 @@ define( function( require ) {
     this.setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
     this.setSensedColor( 'white' );
     // This node's visibility is the inverse of the thermometer's.
-    thermometer.activeProperty.link( function( active ) {
-        self.visible = !active;
-      }
-    );
-    this.addInputListener( new SimpleDragHandler( {
 
+    thermometer.activeProperty.link( function( active ) {
+      self.visible = !active;
+    } );
+
+    this.addInputListener( new SimpleDragHandler( {
 
       parentScreen: null, // needed for coordinate transforms
       // Allow moving a finger (touch) across a node to pick it up.
       allowTouchSnag: true,
 
-      // Handler that moves the shape in model space.
-      translate: function( translationParams ) {
-        thermometer.position = thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
-      },
-
       start: function( event, trail ) {
         thermometer.userControlled = true;
         thermometer.active = true;
-        // thermometer.position=modelViewTransform.viewToModelPosition(event.pointer.point);
+
         // Find the parent screen by moving up the scene graph.
         var testNode = self;
         while ( testNode !== null ) {
@@ -67,15 +60,17 @@ define( function( require ) {
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
-        //       var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop.plus(thermometerNode.getOffsetCenterShaftToTriangleTip()) );
-        var compensatedLocation = self.parentToGlobalPoint( event.pointer.point );
-//        var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftBottom );
-//        var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        //      var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
-//        var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
-//        thermometer.position= modelViewTransform.viewToModelPosition(initialPosition);
-        thermometer.position = modelViewTransform.viewToModelPosition( compensatedLocation );
+        var triangleTipGlobal = self.parentToGlobalPoint( self.rightCenter.plus( thermometerNode.getOffsetCenterShaftToTriangleTip() ) );
+        var initialPosition = this.parentScreen.globalToLocalPoint( triangleTipGlobal );
+
+        thermometer.position = modelViewTransform.viewToModelPosition( initialPosition );
+
       },
+      // Handler that moves the shape in model space.
+      translate: function( translationParams ) {
+        thermometer.position = thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
+      },
+
       end: function( event, trail ) {
         thermometer.userControlled = false;
         if ( this.returnRect != null && thermometerNode.bounds.intersects( this.returnRect ) ) {
@@ -90,7 +85,7 @@ define( function( require ) {
   return inherit( ThermometerNode, ThermometerToolBoxNode, {
     /**
      * @public
-     * @param returnRect
+     * @param {Rectangle} returnRect
      */
     setReturnRect: function( returnRect ) {
       this.returnRect = returnRect;

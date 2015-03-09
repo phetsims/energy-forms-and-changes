@@ -142,7 +142,7 @@ define( function( require ) {
     var thermometerBox = new HBox();
     var thermometerToolBoxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
-      var thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, modelViewTransform, this );
+      var thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, modelViewTransform );
       thermometerBox.addChild( thermometerToolBoxNode );
       thermometerToolBoxNodes.push( thermometerToolBoxNode );
     } );
