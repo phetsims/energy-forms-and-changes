@@ -13,7 +13,7 @@ define( function( require ) {
   // modules
 //  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Color = require( 'SCENERY/util/Color' );
-  var Util = require( 'DOT/Util' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -32,12 +32,12 @@ define( function( require ) {
   var NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING = 1.25;
   var NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP = 2.4; //Close to rounding to 3 so that little energy needed to transfer a chunk.
 
-  var MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE = new Util.linear( LOW_ENERGY_FOR_MAP_FUNCTION,
+  var MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE = new LinearFunction( LOW_ENERGY_FOR_MAP_FUNCTION,
     HIGH_ENERGY_FOR_MAP_FUNCTION,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP );
 
-  var MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE = new Util.linear( NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
+  var MAP_NUM_CHUNKS_TO_ENERGY_DOUBLE = new LinearFunction( NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP,
     LOW_ENERGY_FOR_MAP_FUNCTION,
     HIGH_ENERGY_FOR_MAP_FUNCTION );

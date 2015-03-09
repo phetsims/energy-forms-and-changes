@@ -88,7 +88,10 @@ define( function( require ) {
   }
 
   return inherit( ThermometerNode, ThermometerToolBoxNode, {
-
+    /**
+     * @public
+     * @param returnRect
+     */
     setReturnRect: function( returnRect ) {
       this.returnRect = returnRect;
     }

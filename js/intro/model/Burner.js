@@ -12,8 +12,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  'use strict';
-
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
@@ -70,7 +68,7 @@ define( function( require ) {
   /**
    * *
    * @param {Vector2} position - The position in model space where this burner exists. By convention for this simulation, the position is
-   *  @param {Property.<boolean>} energyChunksVisibleProperty Property that controls whether the energy chunks are visible
+   * @param {Property.<boolean>} energyChunksVisibleProperty Property that controls whether the energy chunks are visible
    * @constructor
    */
   function Burner( position, energyChunksVisibleProperty ) {

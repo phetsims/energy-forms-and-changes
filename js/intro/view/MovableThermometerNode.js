@@ -35,11 +35,15 @@ define( function( require ) {
     // Update the offset if and when the model position changes.
     thermometer.positionProperty.link( function( position ) {
       //TODO check if ok
-      movableThermometerNode.translation = new Vector2( modelViewTransform.modelToViewX( position.x ), modelViewTransform.modelToViewY( position.y ) - (movableThermometerNode.height / 2 + movableThermometerNode.triangleTipOffset.height) );
+      movableThermometerNode.translation = new Vector2(
+        modelViewTransform.modelToViewX( position.x ),
+        modelViewTransform.modelToViewY( position.y ) - (movableThermometerNode.height / 2 + movableThermometerNode.triangleTipOffset.height) );
 //        movableThermometerNode.translation = new Vector2( modelViewTransform.modelToViewX( position.x ), modelViewTransform.modelToViewY( position.y ) );
     } );
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( this.centerX - modelViewTransform.modelToViewX( thermometer.position.x ), this.centerY - modelViewTransform.modelToViewY( thermometer.position.y ) );
+    var offsetPosToCenter = new Vector2(
+      this.centerX - modelViewTransform.modelToViewX( thermometer.position.x ),
+      this.centerY - modelViewTransform.modelToViewY( thermometer.position.y ) );
     this.addInputListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform, new ThermometerLocationConstraint( modelViewTransform, this, offsetPosToCenter ) ) );
   }
 

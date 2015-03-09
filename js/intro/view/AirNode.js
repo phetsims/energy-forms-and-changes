@@ -21,12 +21,16 @@ define( function( require ) {
 
   /**
    *
-   * @param air
-   * @param modelViewTransform
+   * @param {Air} air
+   * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
   function AirNode( air, modelViewTransform ) {
+
+    Node.call( this );
+
     var airNode = this;
+
     if ( SHOW_BOUNDS ) {
       this.addChild( new Path( modelViewTransform.modelToView( air.getThermalContactArea().bounds ), {
         fill: 'red',
