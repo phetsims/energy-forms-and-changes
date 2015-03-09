@@ -17,7 +17,7 @@ define( function( require ) {
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACIntroCanvas = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EFACIntroCanvas' );
+  var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
@@ -52,10 +52,6 @@ define( function( require ) {
   //-------------------------------------------------------------------------
 
 
-  BoundedProperty;
-  heatCoolLevel = new BoundedDoubleProperty( 0.0, -1, 1 );
-  Property < HorizontalSurface > topSurface;
-
   var energyChunkList = new ObservableArray();
   var energyChunkWanderControllers = [];
 
@@ -76,18 +72,21 @@ define( function( require ) {
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     // dropping objects on top of burner.
 
+    // TODO heat cool level is not a range but a number
+    this.heatCoolLevelProperty = new Property( new Range( -1, 1, 0.0 ) );
     var rectangle = this.getOutlineRect();
-    var perspectiveCompensation = rectangle.height * EFACIntroCanvas.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( BurnerStandNode.PERSPECTIVE_ANGLE );
-    this.topSurface = new Property( new HorizontalSurface( new Range( rectangle.minX - perspectiveCompensation, rectangle.maxX + perspectiveCompensation ), rectangle.maxY, this ) );
+    var perspectiveCompensation = rectangle.height * EnergyFormsAndChangesIntroScreenView.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( BurnerStandNode.PERSPECTIVE_ANGLE );
+    this.topSurfaceProperty = new Property( new HorizontalSurface( new Range( rectangle.minX - perspectiveCompensation, rectangle.maxX + perspectiveCompensation ), rectangle.maxY, this ) );
 
-    heatCoolLevelProperty.link( function( newValue, oldValue ) {
+    // TODO this is not the correct type
+    this.heatCoolLevelProperty.link( function( newValue, oldValue ) {
       if ( newValue == 0 || (Math.signum( oldValue ) != Math.signum( newValue )) ) {
         // clear accumulated heat/cool amount.
         energyExchangedWithAirSinceLastChunkTransfer = 0;
       }
     } );
     // Clear the accumulated energy transfer if thing is removed from burner.
-    var somethingOnTop = new BooleanProperty( false );
+    var somethingOnTopProperty = new BooleanProperty( false );
     somethingOnTopProperty.link( function( somethingOnTop ) {
       if ( !somethingOnTop ) {
         energyExchangedWithObjectSinceLastChunkTransfer = 0;
@@ -128,7 +127,7 @@ define( function( require ) {
       if ( this.inContactWith( thermalEnergyContainer ) ) {
         var deltaEnergy = 0;
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
-          deltaEnergy = MAX_ENERGY_GENERATION_RATE * heatCoolLevel.get() * dt;
+          deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevel * dt;
         }
         thermalEnergyContainer.changeEnergy( deltaEnergy );
         energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;
@@ -140,7 +139,7 @@ define( function( require ) {
      * @param dt
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
-      var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * heatCoolLevel.get() * dt;
+      var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevel * dt;
       air.changeEnergy( deltaEnergy );
       energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
     },
@@ -152,7 +151,10 @@ define( function( require ) {
      */
     inContactWith: function( thermalEnergyContainer ) {
       var containerThermalArea = thermalEnergyContainer.getThermalContactArea().getBounds();
-      return (containerThermalArea.getCenterX() > this.getOutlineRect().getMinX() && containerThermalArea.getCenterX() < this.getOutlineRect().getMaxX() && Math.abs( containerThermalArea.getMinY() - this.getOutlineRect().getMaxY() ) < CONTACT_DISTANCE);
+      return (
+      containerThermalArea.getCenterX() > this.getOutlineRect().minX &&
+      containerThermalArea.getCenterX() < this.getOutlineRect().maxX &&
+      Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY < CONTACT_DISTANCE ));
     },
 
     /**
@@ -184,7 +186,9 @@ define( function( require ) {
       var closestEnergyChunk = null;
       if ( energyChunkList.size() > 0 ) {
         for ( var energyChunk in energyChunkList ) {
-          if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE && (closestEnergyChunk == null || energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
+          if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+               (closestEnergyChunk == null ||
+                energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
           }
@@ -196,9 +200,9 @@ define( function( require ) {
           }
         }
       }
-      if ( closestEnergyChunk == null && heatCoolLevel.get() > 0 ) {
+      if ( closestEnergyChunk == null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
-        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, getEnergyChunkStartEndPoint(), energyChunksVisible );
+        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), energyChunksVisible );
       }
       if ( closestEnergyChunk != null ) {
         energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -225,7 +229,7 @@ define( function( require ) {
       energyChunkWanderControllers.clear();
       energyExchangedWithAirSinceLastChunkTransfer = 0;
       energyExchangedWithObjectSinceLastChunkTransfer = 0;
-      heatCoolLevel.reset();
+      this.heatCoolLevel.reset();
     },
 
     /**
@@ -248,7 +252,7 @@ define( function( require ) {
     getEnergyChunkCountForAir: function() {
       var count = 0;
       // almost to the burner).
-      if ( energyChunkList.size() > 0 && heatCoolLevel.get() >= 0 ) {
+      if ( energyChunkList.size() > 0 && this.heatCoolLevel >= 0 ) {
         for ( var energyChunk in energyChunkList ) {
           if ( position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
@@ -293,7 +297,7 @@ define( function( require ) {
      */
     getTemperature: function() {
       // low value is limited to the freezing point of water.
-      return Math.max( EFACConstants.ROOM_TEMPERATURE + heatCoolLevel.get() * 100, EFACConstants.FREEZING_POINT_TEMPERATURE );
+      return Math.max( EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevel * 100, EFACConstants.FREEZING_POINT_TEMPERATURE );
     },
     /**
      * Get the number of excess of deficit energy chunks for interaction with
@@ -310,32 +314,17 @@ define( function( require ) {
      * @returns {boolean}
      */
     canSupplyEnergyChunk: function() {
-      return heatCoolLevel.get() > 0;
+      return this.heatCoolLevel > 0;
     },
     /**
      * *
      * @returns {boolean}
      */
     canAcceptEnergyChunk: function() {
-      return heatCoolLevel.get() < 0;
-    },
-// Convenience class - a Property<Double> with a limited range.
-    define( function( require ) {
-
-      function BoundedDoubleProperty( value, minValue, maxValue ) {
-        super( value );
-        bounds = new Property( new DoubleRange( minValue, maxValue ) );
-      }
-
-      return inherit( Property, BoundedDoubleProperty, {
-        set: function( value ) {
-          var boundedValue = MathUtil.clamp( bounds.get().getMin(), value, bounds.get().getMax() );
-          super.set( boundedValue );
-        }
-      } );
-    } );
+      return this.heatCoolLevel < 0;
+    }
+  } );
 } );
-} )
 
 
 /*

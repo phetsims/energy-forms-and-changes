@@ -74,7 +74,6 @@ define( function( require ) {
     // HIGH_ENERGY_FOR_MAP_FUNCTION: Brick.ENERGY_AT_ROOM_TEMPERATURE,
 
 
-//TODO: comment out this function
     ENERGY_TO_NUM_CHUNKS_MAPPER: function( energy ) {
       return Math.max( Math.round( MAP_ENERGY_TO_NUM_CHUNKS_DOUBLE( energy ) ), 0 );
     },

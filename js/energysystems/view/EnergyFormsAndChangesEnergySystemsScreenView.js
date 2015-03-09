@@ -12,13 +12,13 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var Bounds2 = require( 'DOT/Bounds2' );
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_energy_systems.png' );
@@ -48,7 +48,6 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 10
     } );
     this.addChild( resetAllButton );
-
 
   }
 

@@ -110,6 +110,7 @@ define( function( require ) {
   return inherit( RectangularThermalMovableModelElement, Beaker, {
     /*
      * Get the untranslated rectangle that defines the shape of the beaker.
+     * @returns {Rectangle}
      */
     getRawOutlineRect: function() {
       return new Rectangle( -this.width / 2, 0, this.width, this.height );
@@ -222,8 +223,8 @@ define( function( require ) {
 
     /**
      * *
-     * @param width
-     * @param height
+     * @param {number} width
+     * @param {number} height
      * @returns {number}
      */
     calculateWaterMass: function( width, height ) {
@@ -257,7 +258,7 @@ define( function( require ) {
     ,
     /**
      *
-     * @param heightAboveWater
+     * @param {number} heightAboveWater
      * @returns {number}
      */
     getSteamTemperature: function( heightAboveWater ) {
