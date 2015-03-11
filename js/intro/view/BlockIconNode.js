@@ -21,6 +21,11 @@ define( function( require ) {
   var EDGE_LENGTH = 15; // In screen coordinates, which are roughly pixels.
   var FORESHORTENING_PROPORTION = 0.35;
 
+  /**
+   *
+   * @param {Property.<Color>} colorProperty
+   * @constructor
+   */
   function BlockIconNode( colorProperty ) {
 
     Node.call( this );

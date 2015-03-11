@@ -19,7 +19,10 @@ define( function( require ) {
    * @constructor
    */
   function ModelElement() {
+
     PropertySet.call( this, {
+      // Surface upon which this model element is resting.  Null if the element
+      // is floating in the air (which is perfectly legitimate for some Model Element)
       supportingSurface: null, // {HorizontalSurface}
       topSurface: null, //  {HorizontalSurface}
       bottomSurface: null // {HorizontalSurface}
@@ -72,9 +75,9 @@ define( function( require ) {
      * cases where one or more elements are in between.
      */
     isStackedUpon: function( element ) {
-      return (this.getSupportingSurfaceProperty() !== null) &&
-             ( this.getSupportingSurfaceProperty().value.getOwner() === element ||
-               this.getSupportingSurfaceProperty().value.getOwner().isStackedUpon( element ) );
+      return (this.supportingSurfaceProperty !== null) &&
+             ( this.supportingSurface.getOwner() === element ||
+               this.supportingSurface.getOwner().isStackedUpon( element ) );
     },
 
     /**
@@ -86,7 +89,7 @@ define( function( require ) {
       if ( this.supportingSurfaceProperty !== null ) {
         // TODO: the next line was in the java code but we dont' think it is needed (JB)
         //        this.supportingSurfaceProperty.removeAllObservers();
-        this.supportingSurfaceProperty.value.clearSurface();
+        this.supportingSurface.clearSurface();
         this.supportingSurfaceProperty.reset();
       }
     }

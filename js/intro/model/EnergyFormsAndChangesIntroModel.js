@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-//  var Air = require( 'ENERGY_FORMS_AND_CHANGES/common/intro/model/Air' );
+  //var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   //   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
 //  var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/common/intro/model/BeakerContainer' );
 //  var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
@@ -20,8 +20,8 @@ define( function( require ) {
 //  var EFACIntroCanvas = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EFACIntroCanvas' );
   var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
 
-  //var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-//  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  //var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var inherit = require( 'PHET_CORE/inherit' );
 //  var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );

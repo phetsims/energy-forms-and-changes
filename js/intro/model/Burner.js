@@ -135,7 +135,7 @@ define( function( require ) {
     },
     /**
      * *
-     * @param air
+     * @param {Air} air
      * @param dt
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
@@ -146,7 +146,7 @@ define( function( require ) {
 
     /**
      * *
-     * @param thermalEnergyContainer
+     * @param {ThermalEnergyContainer} thermalEnergyContainer
      * @returns {boolean}
      */
     inContactWith: function( thermalEnergyContainer ) {
@@ -179,7 +179,7 @@ define( function( require ) {
     /**
      * Request an energy chunk from the burner.
      *
-     * @param {Vector2} point Point from which to search for closest chunk.
+     * @param {Vector2} point - Point from which to search for closest chunk.
      * @return {EnergyChunk} Closest energy chunk, null if none are contained.
      */
     extractClosestEnergyChunk: function( point ) {
@@ -224,7 +224,7 @@ define( function( require ) {
      *
      */
     reset: function() {
-      super.reset();
+      ModelElement.reset();
       energyChunkList.clear();
       energyChunkWanderControllers.clear();
       energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -661,4 +661,3 @@ define( function( require ) {
 //}
 //}
 
-* /

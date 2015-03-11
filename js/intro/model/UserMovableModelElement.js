@@ -22,25 +22,25 @@ define( function( require ) {
   function UserMovableModelElement( initialPosition ) {
 
     var self = this;
+
     ModelElement.call( this );
 
     this.addProperty( 'userControlled', false );
     this.addProperty( 'position', initialPosition );// Position of the center of the bottom of the block.
     this.addProperty( 'verticalVelocity', 0 ); //Velocity in the up/down direction.
 
-
     // Observer that moves this model element if and when the surface that is
     // supporting it moves.
     this.surfaceMotionObserver = function( horizontalSurface ) {
-      this.position = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
+      self.position = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
 
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // The user has grabbed this model element, so it is no
         // longer sitting on any surface.
-        if ( self.getSupportingSurfaceProperty() !== null ) {
-          self.getSupportingSurfaceProperty().unlink( self.surfaceMotionObserver );
+        if ( self.supportingSurfaceProperty !== null ) {
+          self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
           //TODO change and reinstate;
           //    self.getSupportingSurfaceProperty().value.clearSurface();
           //    self.setSupportingSurfaceProperty( null );
@@ -52,17 +52,21 @@ define( function( require ) {
   return inherit( ModelElement, UserMovableModelElement, {
 
     reset: function() {
-      if ( this.getSupportingSurfaceProperty() !== null ) {
-        this.getSupportingSurfaceProperty().unlink( this.surfaceMotionObserver() );
+      if ( this.supportingSurfaceProperty !== null ) {
+        this.supportingSurfaceProperty.unlink( this.surfaceMotionObserver );
       }
       this.userControlledProperty.reset();
       this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
       //TODO reached for prototype
-      // this.modelElement.reset();
+      this.modelElement.reset();
 
     },
 
+    /**
+     *
+     * @param {Property.<HorizontalSurface>} surfaceProperty
+     */
     setSupportingSurfaceProperty: function( surfaceProperty ) {
       this.setSupportingSurfaceProperty( surfaceProperty );
       if ( surfaceProperty !== null ) {
@@ -70,6 +74,10 @@ define( function( require ) {
       }
     },
 
+    /**
+     *
+     * @param {number} x
+     */
     setX: function( x ) {
       this.position = new Vector2( x, this.position.y );
     }

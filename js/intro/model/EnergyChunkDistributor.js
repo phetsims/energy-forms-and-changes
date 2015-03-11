@@ -20,9 +20,10 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var Vector2 = require( 'DOT/Vector2' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
+  var Vector2 = require( 'DOT/Vector2' );
+
 
   // /constants
   var OUTSIDE_CONTAINER_FORCE = 0.01; // In Newtons, empirically determined.
@@ -237,7 +238,9 @@ define( function( require ) {
       }
       ,
 
-
+      /**
+       *
+       */
       generateRandomLocation: function( rectangle ) {
         return new Vector2( rectangle.minX + ( Math.random() * rect.width ), rectangle.minY + ( Math.random() * rectangle.height ) );
       }

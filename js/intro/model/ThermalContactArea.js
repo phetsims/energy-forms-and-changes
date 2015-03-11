@@ -12,10 +12,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-
 
   // Threshold of distance for determining whether two areas are in contact.
   var TOUCH_DISTANCE_THRESHOLD = 0.001; // In meters.
@@ -27,12 +26,16 @@ define( function( require ) {
    * @constructor
    */
   function ThermalContactArea( bounds, supportsImmersion ) {
-    this.bounds.set( bounds );
+    this.bounds = bounds;
     this.supportsImmersion = supportsImmersion;
   }
 
   return inherit( Object, ThermalContactArea, {
 
+    /**
+     *
+     * @returns {Bounds2}
+     */
     getBounds: function() {
       return this.bounds;
     },
@@ -44,8 +47,8 @@ define( function( require ) {
      * on top of another that is the same width, the contact length is the
      * width of the shared edge.
      *
-     * @param that Other thermal contact area.
-     * @return Length of contact
+     * @param {ThermalContactArea} that -  Other thermal contact area.
+     * @return {number} Length of contact
      */
     getThermalContactLength: function( that ) {
 
@@ -99,17 +102,27 @@ define( function( require ) {
       return contactLength;
     },
 
-    // Convenience method for determining overlap of rectangles in X dimension.
+    /**
+     * Convenience method for determining overlap of rectangles in X dimension.
+     * @param {Rectangle} rectangle1
+     * @param {Rectangle} rectangle2
+     * @returns {number}
+     */
     getHorizontalOverlap: function( rectangle1, rectangle2 ) {
-      var lowestMax = Math.min( rectangle1.getMaxX(), rectangle2.getMaxX() );
-      var highestMin = Math.max( rectangle1.getMinX(), rectangle2.getMinX() );
+      var lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
+      var highestMin = Math.max( rectangle1.minX, rectangle2.minX );
       return Math.max( lowestMax - highestMin, 0 );
     },
 
-    // Convenience method for determining overlap of rectangles in Y dimension.
+    /**
+     * Convenience method for determining overlap of rectangles in Y dimension.
+     * @param {Rectangle} rectangle1
+     * @param {Rectangle} rectangle2
+     * @returns {number}
+     */
     getVerticalOverlap: function( rectangle1, rectangle2 ) {
-      var lowestMax = Math.min( rectangle1.getMaxY(), rectangle2.getMaxY() );
-      var highestMin = Math.max( rectangle1.getMinY(), rectangle2.getMinY() );
+      var lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
+      var highestMin = Math.max( rectangle1.minY, rectangle2.minY );
       return Math.max( lowestMax - highestMin, 0 );
     }
   } );

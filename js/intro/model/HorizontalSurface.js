@@ -21,6 +21,7 @@ define( function( require ) {
    * @constructor
    */
   function HorizontalSurface( xRange, yPos, owner ) {
+
     this.xRange = xRange; // {Range}
     this.yPos = yPos; // {number}
     this.owner = owner; // @private {ModelElement}

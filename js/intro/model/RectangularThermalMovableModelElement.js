@@ -200,6 +200,10 @@ define( function( require ) {
       return new Rectangle( minX, minY, maxX - minX, maxY - minY );
     },
 
+    /**
+     *
+     * @param {EnergyChunk} energyChunk
+     */
     moveEnergyChunkToSlices: function( energyChunk ) {
       this.approachingEnergyChunks.remove( energyChunk );
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
@@ -211,7 +215,11 @@ define( function( require ) {
       this.addEnergyChunkToNextSlice( energyChunk );
     },
 
-    // Boolean Operator
+    /**
+     *
+     * @param {EnergyChunk} energyChunk
+     * @returns {boolean}
+     */
     removeEnergyChunk: function( energyChunk ) {
       this.slices.forEach( function( slice ) {
         if ( slice.energyChunkList.remove( energyChunk ) ) {
@@ -264,10 +272,8 @@ define( function( require ) {
      * needed, it will need some work.
      *
      * @param destinationShape
-     * @return Energy chunk, null if none are available.
+     * @returns {EnergyChunk||null} return null if none are available.
      */
-
-
     extractClosestEnergyChunk: function( destinationShape ) {
 
       var chunkToExtract = null;

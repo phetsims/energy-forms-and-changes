@@ -44,7 +44,13 @@ define( function( require ) {
 
   var SHOW_2D_REPRESENTATION = false;
 
-
+  /**
+   *
+   * @param model
+   * @param {Block} block
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
   function BlockNode( model, block, modelViewTransform ) {
     Node.call( this, { cursor: 'pointer' } );
     var blockNode = this;
