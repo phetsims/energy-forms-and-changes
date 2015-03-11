@@ -69,7 +69,7 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroScreenView( model ) {
 
 
-    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
     var thisScreen = this;
     this.model = model;
 
@@ -112,7 +112,7 @@ define( function( require ) {
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
     var image = new Image( mockupImage, { pickable: false } );
-    image.scale( this.layoutBounds.width / image.width );
+    image.scale( this.layoutBounds.width / image.width, this.layoutBounds.height / image.height );
     mockupOpacityProperty.linkAttribute( image, 'opacity' );
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
