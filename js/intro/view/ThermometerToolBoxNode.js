@@ -9,14 +9,12 @@
  */
 define( function( require ) {
   'use strict';
-  var inherit = require( 'PHET_CORE/inherit' );
+
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var ThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerNode' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    *
