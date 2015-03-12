@@ -13,7 +13,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Dimension2 = require( 'DOT/Dimension2' );
+  //var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
@@ -24,7 +24,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var Path = require( 'SCENERY/Path' );
-  var Property = require( 'AXON/Property' );
+  //var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
@@ -88,9 +88,6 @@ define( function( require ) {
     // Max height above water where steam still affects the temperature.
     this.maxSteamHeight = 2 * height;
 
-    // Update the top and bottom surfaces whenever the position changes.
-    this.positionProperty.link( updateSurfaces );
-
     /**
      * Function that updates the bottom and top surfaces
      */
@@ -105,6 +102,11 @@ define( function( require ) {
         rectangle.minY,
         self );
     }
+
+    // Update the top and bottom surfaces whenever the position changes.
+    this.positionProperty.link( updateSurfaces );
+
+
   }
 
   return inherit( RectangularThermalMovableModelElement, Beaker, {
@@ -229,8 +231,7 @@ define( function( require ) {
      */
     calculateWaterMass: function( width, height ) {
       return Math.PI * Math.pow( width / 2, 2 ) * height * WATER_DENSITY;
-    }
-    ,
+    },
 
     /**
      * *
@@ -239,8 +240,7 @@ define( function( require ) {
     getThermalContactArea: function() {
       return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
         this.position.y, this.width, this.height * this.fluidLevel ), true );
-    }
-    ,
+    },
 
     /*
      * Get the area where the temperature of the steam can be sensed.
@@ -254,8 +254,7 @@ define( function( require ) {
         this.position.y + liquidWaterHeight,
         this.width,
         this.maxSteamHeight );
-    }
-    ,
+    },
     /**
      *
      * @param {number} heightAboveWater
@@ -264,8 +263,7 @@ define( function( require ) {
     getSteamTemperature: function( heightAboveWater ) {
       var mappingFunction = new LinearFunction( 0, this.maxSteamHeight * this.steamingProportion, this.temperature, EFACConstants.ROOM_TEMPERATURE );
       return Math.max( mappingFunction.evaluate( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
-    }
-    ,
+    },
 
     /**
      *
@@ -308,8 +306,7 @@ define( function( require ) {
         }
         this.slices.push( new EnergyChunkContainerSlice( slicePath, -proportion * this.width, this.position ) );
       }
-    }
-    ,
+    },
 
 
     /**
@@ -318,8 +315,7 @@ define( function( require ) {
      */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.WATER;
-    }
-    ,
+    },
 
     /**
      * Function that returns the beaker energy beyond the max temperature (the boiling point)
@@ -327,8 +323,7 @@ define( function( require ) {
      */
     getEnergyBeyondMaxTemperature: function() {
       return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * mass * specificHeat ), 0 );
-    }
-    ,
+    },
 
     /**
      * Function that returns temperature of the beaker
@@ -337,8 +332,7 @@ define( function( require ) {
      */
     getTemperature: function() {
       return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
-    }
-    ,
+    },
 
     /*
      * This override handles the case where the point is above the beaker.
@@ -372,7 +366,7 @@ define( function( require ) {
         }
       } );
 
-      if ( densestSlice == null || densestSlice.energyChunkList.size() == 0 ) {
+      if ( densestSlice === null || densestSlice.energyChunkList.size() === 0 ) {
         console.log( " - Warning: No energy chunks in the beaker, can't extract any." );
         return null;
       }
@@ -602,7 +596,7 @@ define( function( require ) {
 //  }
 //
 //  @Override protected void addEnergyChunkSlices() {
-//    assert slices.size() == 0; // Check that his has not been already called.
+//    assert slices.size() === 0; // Check that his has not been already called.
 //    final Rectangle2D fluidRect = new Rectangle2D.Double( position.x - width / 2,
 //      position.y,
 //      width,
@@ -678,7 +672,7 @@ define( function( require ) {
 //      }
 //    }
 //
-//    if ( densestSlice == null || densestSlice.energyChunkList.size() == 0 ) {
+//    if ( densestSlice === null || densestSlice.energyChunkList.size() === 0 ) {
 //      System.out.println( getClass().getName() + " - Warning: No energy chunks in the beaker, can't extract any." );
 //      return null;
 //    }

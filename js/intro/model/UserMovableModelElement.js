@@ -129,7 +129,7 @@ define( function( require ) {
 //        if ( userControlled ) {
 //          // The user has grabbed this model element, so it is no
 //          // longer sitting on any surface.
-//          if ( getSupportingSurface() != null ) {
+//          if ( getSupportingSurface() !== null ) {
 //            getSupportingSurface().removeObserver( surfaceMotionObserver );
 //            getSupportingSurface().get().clearSurface();
 //            setSupportingSurface( null );
@@ -141,13 +141,13 @@ define( function( require ) {
 //
 //  @Override public void setSupportingSurface( Property<HorizontalSurface> surfaceProperty ) {
 //    super.setSupportingSurface( surfaceProperty );
-//    if ( surfaceProperty != null ) {
+//    if ( surfaceProperty !== null ) {
 //      surfaceProperty.addObserver( surfaceMotionObserver );
 //    }
 //  }
 //
 //  @Override public void reset() {
-//    if ( getSupportingSurface() != null ) {
+//    if ( getSupportingSurface() !== null ) {
 //      getSupportingSurface().removeObserver( surfaceMotionObserver );
 //    }
 //    userControlled.reset();

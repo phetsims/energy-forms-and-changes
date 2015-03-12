@@ -8,7 +8,6 @@
 define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   return inherit( Object, ThermalEnergyContainer, {
     /**

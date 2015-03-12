@@ -12,11 +12,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
+  //var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  //var PropertySet = require( 'AXON/PropertySet' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
   /**

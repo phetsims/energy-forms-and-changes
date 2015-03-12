@@ -11,16 +11,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Shape = require( 'java.awt.Shape' );
-  var AffineTransform = require( 'java.awt.geom.AffineTransform' );
-  var Rectangle = require( 'KITE/Rectangle' );
-  var ArrayList = require( 'java.util.ArrayList' );
-  var List = require( 'java.util.List' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Property = require( 'AXON/Property' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/Beaker' );
-  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/EnergyChunk' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Rectangle = require( 'KITE/Rectangle' );
+  var Vector2 = require( 'DOT/Vector2' );
+
 
   /**
    *
@@ -49,7 +44,7 @@ define( function( require ) {
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
       // represents the fluid and the displacing rectangles.
-      var fluidRectangle = new Rectangle( getRect().getX(), getRect().getY(), width, height * fluidLevel.get() );
+      var fluidRectangle = new Rectangle( this.getRect().getX(), this.getRect().getY(), this.width, this.height * this.fluidLevel );
       var overlappingArea = 0;
       for ( var rectangle in potentiallyDisplacingRectangles ) {
         if ( rectangle.intersects( fluidRectangle ) ) {
@@ -59,8 +54,8 @@ define( function( require ) {
       }
       // empirically determined to look good.
       var newFluidLevel = Math.min( INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
-      var proportionateIncrease = newFluidLevel / fluidLevel.get();
-      fluidLevel.set( newFluidLevel );
+      var proportionateIncrease = newFluidLevel / this.fluidLevel;
+      this.fluidLevel.set( newFluidLevel );
       // Update the shapes of the energy chunk slices.
       slices.for(;
       var slice;
@@ -100,7 +95,7 @@ define( function( require ) {
         var energyChunk = energyChunkWanderController.getEnergyChunk();
         if ( this.isEnergyChunkObscured( energyChunk ) ) {
           // beaker to the fluid, so move it sideways.
-          var xVel = 0.05 * dt * (getCenterPoint().getX() > energyChunk.position.x ? -1 : 1);
+          var xVel = 0.05 * dt * ( this.getCenterPoint().getX() > energyChunk.position.x ? -1 : 1);
           var motionVector = new Vector2( xVel, 0 );
           energyChunk.translate( motionVector );
         }

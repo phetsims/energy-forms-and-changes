@@ -117,7 +117,7 @@ define( function( require ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       energyChunkRootNode.addChild( energyChunkNode );
       beaker.approachingEnergyChunks.removeItemAddedListener( function( removedEnergyChunk ) {
-        if ( removedEnergyChunk == addedEnergyChunk ) {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
           energyChunkRootNode.removeChild( energyChunkNode );
           beaker.approachingEnergyChunks.removeItemRemovedListener( this );
         }
@@ -481,7 +481,7 @@ define( function( require ) {
 //        energyChunkRootNode.addChild( energyChunkNode );
 //        beaker.approachingEnergyChunks.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk == addedEnergyChunk ) {
+//            if ( removedEnergyChunk === addedEnergyChunk ) {
 //              energyChunkRootNode.removeChild( energyChunkNode );
 //              beaker.approachingEnergyChunks.removeElementRemovedObserver( this );
 //            }

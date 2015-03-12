@@ -5,7 +5,6 @@
  */
 define( function( require ) {
   'use strict';
-  var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var BasicStroke = require( 'java.awt.BasicStroke' );
   var Color = require( 'SCENERY/util/Color' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -45,7 +44,7 @@ define( function( require ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       energyChunkLayer.addChild( energyChunkNode );
       air.getEnergyChunkList().addItemRemovedListener( function( removedEnergyChunk ) {
-        if ( removedEnergyChunk == addedEnergyChunk ) {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
           energyChunkLayer.removeChild( energyChunkNode );
           air.getEnergyChunkList().removeItemRemovedListener( this );
         }
@@ -96,7 +95,7 @@ define( function( require ) {
 //        energyChunkLayer.addChild( energyChunkNode );
 //        air.getEnergyChunkList().addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk == addedEnergyChunk ) {
+//            if ( removedEnergyChunk === addedEnergyChunk ) {
 //              energyChunkLayer.removeChild( energyChunkNode );
 //              air.getEnergyChunkList().removeElementRemovedObserver( this );
 //            }

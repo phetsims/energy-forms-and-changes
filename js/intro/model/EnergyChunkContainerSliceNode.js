@@ -10,9 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
-  var Color = require( 'SCENERY/util/Color' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/energyChunkNode' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
@@ -20,7 +18,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/node/Node' );
 
   // constants
-  var ALWAYS_SHOW_OUTLINE = false;
+  //var ALWAYS_SHOW_OUTLINE = false;
 
 
   /**
@@ -32,12 +30,13 @@ define( function( require ) {
   function EnergyChunkContainerSliceNode( energyChunkContainerSlice, modelViewTransform ) {
 
     var self = this;
+    Node.call( this );
 
     energyChunkContainerSlice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       self.addChild( energyChunkNode );
       energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function( removedEnergyChunk ) {
-        if ( removedEnergyChunk == addedEnergyChunk ) {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
           self.removeChild( energyChunkNode );
           energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( this );
         }
@@ -89,7 +88,7 @@ define( function( require ) {
 //        addChild( energyChunkNode );
 //        energyChunkContainerSlice.energyChunkList.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk == addedEnergyChunk ) {
+//            if ( removedEnergyChunk === addedEnergyChunk ) {
 //              removeChild( energyChunkNode );
 //              energyChunkContainerSlice.energyChunkList.removeElementRemovedObserver( this );
 //            }

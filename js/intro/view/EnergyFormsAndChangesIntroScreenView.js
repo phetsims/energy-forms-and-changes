@@ -518,7 +518,7 @@ define( function( require ) {
 //    // blocks can be extracted.
 //    model.getBeaker().fluidLevel.addObserver( new VoidFunction1<Double>() {
 //      public void apply( Double fluidLevel ) {
-//        if ( fluidLevel != Beaker.INITIAL_FLUID_LEVEL ) {
+//        if ( fluidLevel !== Beaker.INITIAL_FLUID_LEVEL ) {
 //          beakerGrabLayer.moveInBackOf( blockLayer );
 //        }
 //        else {

@@ -73,7 +73,7 @@ define( function( require ) {
 
       end: function( event, trail ) {
         thermometer.userControlled = false;
-        if ( this.returnRect != null && thermometerNode.bounds.intersects( this.returnRect ) ) {
+        if ( this.returnRect !== null && thermometerNode.bounds.intersects( this.returnRect ) ) {
           // Released over tool box, so return it.
           thermometer.active = false;
         }
@@ -154,7 +154,7 @@ define( function( require ) {
 //
 //      @Override public void mouseReleased( PInputEvent event ) {
 //        thermometer.userControlled.set( false );
-//        if ( returnRect != null && thermometerNode.getFullBoundsReference().intersects( returnRect ) ){
+//        if ( returnRect !== null && thermometerNode.getFullBoundsReference().intersects( returnRect ) ){
 //          // Released over tool box, so return it.
 //          thermometer.active.set( false );
 //        }

@@ -87,8 +87,8 @@ define( function( require ) {
       var background = new Image( mapEnergyTypeToImage.get( energyType ) );
       background.addChild( new Text( EnergyFormsAndChangesResources.Strings.ENERGY_CHUNK_LABEL, new PhetFont( 16, true ) ).withAnonymousClassBody( {
         initializer: function() {
-          setScale( Math.min( background.bounds.width / this.bounds.width, background.bounds.height / bounds.height ) * 0.95 );
-          setOffset( background.bounds.width / 2 - bounds.width / 2, background.bounds.height / 2 - this.bounds.height / 2 );
+          setScale( Math.min( background.bounds.width / this.bounds.width, background.bounds.height / this.bounds.height ) * 0.95 );
+          setOffset( background.bounds.width / 2 - this.bounds.width / 2, background.bounds.height / 2 - this.bounds.height / 2 );
         }
       } ) );
       background.setScale( WIDTH / background.bounds.width );

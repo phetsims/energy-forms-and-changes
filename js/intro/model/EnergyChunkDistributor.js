@@ -19,7 +19,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -162,7 +161,7 @@ define( function( require ) {
                   // Calculate force vector, but handle cases where too close.
                   var vectorToOther = energyChunk.position.minus( otherEnergyChunk.position );
                   if ( vectorToOther.magnitude() < minDistance ) {
-                    if ( vectorToOther.magnitude() == 0 ) {
+                    if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
                       var randomAngle = Math.random() * Math.PI * 2;
                       vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ), minDistance * Math.sin( randomAngle ) );
@@ -402,14 +401,14 @@ define( function( require ) {
 //            // particles, but set some limits on the max force
 //            // that can be applied.
 //            for ( EnergyChunk otherEnergyChunk : mapEnergyChunkToForceVector.keySet() ) {
-//              if ( ec == otherEnergyChunk ) {
+//              if ( ec === otherEnergyChunk ) {
 //                continue;
 //              }
 //
 //              // Calculate force vector, but handle cases where too close.
 //              Vector2D vectorToOther = ec.position.minus( otherEnergyChunk.position );
 //              if ( vectorToOther.magnitude() < minDistance ) {
-//                if ( vectorToOther.magnitude() == 0 ) {
+//                if ( vectorToOther.magnitude() === 0 ) {
 //                  // Create a random vector of min distance.
 //                  double randomAngle = RAND.nextDouble() * Math.PI * 2;
 //                  vectorToOther = new Vector2D( minDistance * Math.cos( randomAngle ), minDistance * Math.sin( randomAngle ) );

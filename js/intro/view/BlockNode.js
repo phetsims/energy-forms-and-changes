@@ -169,7 +169,7 @@ define( function( require ) {
 //-------------------------------------------------------------------------
     setApproachingEnergyChunkParentNode: function( node ) {
       // This should not be set more than once.
-      assert && assert( this.approachingEnergyChunkParentNode == null );
+      assert && assert( this.approachingEnergyChunkParentNode === null );
       this.approachingEnergyChunkParentNode = node;
     },
     /*
@@ -370,11 +370,11 @@ define( function( require ) {
 //    block.approachingEnergyChunks.addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
 //      public void apply( final EnergyChunk addedEnergyChunk ) {
 //        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-//        final PNode parentNode = approachingEnergyChunkParentNode == null ? energyChunkRootNode : approachingEnergyChunkParentNode;
+//        final PNode parentNode = approachingEnergyChunkParentNode === null ? energyChunkRootNode : approachingEnergyChunkParentNode;
 //        parentNode.addChild( energyChunkNode );
 //        block.approachingEnergyChunks.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk == addedEnergyChunk ) {
+//            if ( removedEnergyChunk === addedEnergyChunk ) {
 //              parentNode.removeChild( energyChunkNode );
 //              block.approachingEnergyChunks.removeElementRemovedObserver( this );
 //            }
@@ -421,7 +421,7 @@ define( function( require ) {
 //  //-------------------------------------------------------------------------
 //
 //  public void setApproachingEnergyChunkParentNode( PNode node ) {
-//    assert approachingEnergyChunkParentNode == null; // This should not be set more than once.
+//    assert approachingEnergyChunkParentNode === null; // This should not be set more than once.
 //    approachingEnergyChunkParentNode = node;
 //  }
 //
@@ -438,7 +438,7 @@ define( function( require ) {
 //    // provided, this may end up getting partially or entirely covered up.
 //    root.addChild( new PhetPPath( shape, fillColor ) );
 //
-//    if ( textureImage != null ) {
+//    if ( textureImage !== null ) {
 //
 //      // Add the clipped texture.
 //      PClip clippedTexture = new PClip();

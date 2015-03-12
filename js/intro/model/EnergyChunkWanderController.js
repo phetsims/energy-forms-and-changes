@@ -68,7 +68,7 @@ define( function( require ) {
       }
 
       // Stay within the horizontal confines of the initial bounds.
-      if ( this.initialWanderConstraint != null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
+      if ( this.initialWanderConstraint !== null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
         var proposedPosition = this.energyChunk.position.plus( velocity.times( dt ) );
         if ( proposedPosition.x < this.initialWanderConstraint.minX || proposedPosition.x > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
@@ -199,7 +199,7 @@ define( function( require ) {
 //    }
 //
 //    // Stay within the horizontal confines of the initial bounds.
-//    if ( initialWanderConstraint != null && energyChunk.position.y < initialWanderConstraint.getMaxY() ){
+//    if ( initialWanderConstraint !== null && energyChunk.position.y < initialWanderConstraint.getMaxY() ){
 //      Vector2D proposedPosition = energyChunk.position.plus( velocity.times( dt ) );
 //      if ( proposedPosition.x < initialWanderConstraint.getMinX() || proposedPosition.x > initialWanderConstraint.getMaxX() ){
 //        // Bounce in the x direction to prevent going outside initial bounds.

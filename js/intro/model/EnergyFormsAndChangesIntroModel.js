@@ -77,7 +77,7 @@ define( function( require ) {
 //      {
 //        var xRange = new Range( beaker.getRect().getCenterX() - blockWidthIncludingPerspective / 2,
 //            beaker.getRect().getCenterX() + blockWidthIncludingPerspective / 2 );
-//        if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
+//        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
 //          thermometer.userControlled.set( true ); // Must toggle userControlled to enable element following.
 //          thermometer.position.set( new Vector2( beaker.getRect().getMaxX() - 0.01, beaker.getRect().getMinY() + beaker.getRect().getHeight() * 0.33 ) );
 //          thermometer.userControlled.set( false ); // Must toggle userControlled to enable element following.
@@ -246,7 +246,7 @@ define( function( require ) {
 //        public void update( Color newColor, Color oldColor ) {
 //          DoubleRange xRange = new DoubleRange( beaker.getRect().getCenterX() - blockWidthIncludingPerspective / 2,
 //              beaker.getRect().getCenterX() + blockWidthIncludingPerspective / 2 );
-//          if ( oldColor == EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
+//          if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled.get() && xRange.contains( thermometer.position.x ) ) {
 //            thermometer.userControlled.set( true ); // Must toggle userControlled to enable element following.
 //            thermometer.position.set( new Vector2D( beaker.getRect().getMaxX() - 0.01, beaker.getRect().getMinY() + beaker.getRect().getHeight() * 0.33 ) );
 //            thermometer.userControlled.set( false ); // Must toggle userControlled to enable element following.
@@ -292,7 +292,7 @@ define( function( require ) {
 //    if ( ENABLE_INTERNAL_PROFILING ) {
 //      long time = System.currentTimeMillis();
 //      times[countUnderMin++] = time - previousTime;
-//      if ( previousTime != 0 && time - previousTime > 48 || countUnderMin + 1 >= TIME_ARRAY_LENGTH ) {
+//      if ( previousTime !== 0 && time - previousTime > 48 || countUnderMin + 1 >= TIME_ARRAY_LENGTH ) {
 //        System.out.println( "----------------------" );
 //        for ( int i = 0; i < countUnderMin; i++ ) {
 //          System.out.print( times[i] + " " );
@@ -307,13 +307,13 @@ define( function( require ) {
 //    // surface to fall (or, in some cases, jump up) towards the nearest
 //    // supporting surface.
 //    for ( UserMovableModelElement movableModelElement : Arrays.asList( ironBlock, brick, beaker ) ) {
-//      if ( !movableModelElement.userControlled.get() && movableModelElement.getSupportingSurface() == null && movableModelElement.position.y != 0 ) {
+//      if ( !movableModelElement.userControlled.get() && movableModelElement.getSupportingSurface() === null && movableModelElement.position.y !== 0 ) {
 //        double minYPos = 0;
 //
 //        // Determine whether there is something below this element that
 //        // it can land upon.
 //        Property<HorizontalSurface> potentialSupportingSurface = findBestSupportSurface( movableModelElement );
-//        if ( potentialSupportingSurface != null ) {
+//        if ( potentialSupportingSurface !== null ) {
 //          minYPos = potentialSupportingSurface.get().yPos;
 //
 //          // Center the movableModelElement above its new parent
@@ -329,7 +329,7 @@ define( function( require ) {
 //          // The element has landed on the ground or some other surface.
 //          proposedYPos = minYPos;
 //          movableModelElement.verticalVelocity.set( 0.0 );
-//          if ( potentialSupportingSurface != null ) {
+//          if ( potentialSupportingSurface !== null ) {
 //            movableModelElement.setSupportingSurface( potentialSupportingSurface );
 //            potentialSupportingSurface.get().addElementToSurface( movableModelElement );
 //          }
@@ -345,9 +345,9 @@ define( function( require ) {
 //    // one or more of the blocks.
 //    beaker.updateFluidLevel( Arrays.asList( brick.getRect(), ironBlock.getRect() ) );
 //
-//    //=====================================================================
+//    //====================================================================================================
 //    // Energy and Energy Chunk Exchange
-//    //=====================================================================
+//    //============================================================================================
 //
 //    // Note: The original intent was to design all the energy containers
 //    // such that the order of the exchange didn't matter, nor who was
@@ -389,7 +389,7 @@ define( function( require ) {
 //          else if ( burner.canAcceptEnergyChunk() && ( burner.getEnergyChunkBalanceWithObjects() < 0 || thermalModelElement.getEnergyChunkBalance() > 0 ) ) {
 //            // Extract an energy chunk from the model element.
 //            EnergyChunk ec = thermalModelElement.extractClosestEnergyChunk( burner.getFlameIceRect() );
-//            if ( ec != null ) {
+//            if ( ec !== null ) {
 //              burner.addEnergyChunk( ec );
 //            }
 //          }
@@ -425,7 +425,7 @@ define( function( require ) {
 //      // Figure out the max temperature difference between touching
 //      // energy containers.
 //      for ( ThermalEnergyContainer otherMovableEnergyContainer : movableThermalEnergyContainers ) {
-//        if ( movableEnergyContainer == otherMovableEnergyContainer ) {
+//        if ( movableEnergyContainer === otherMovableEnergyContainer ) {
 //          continue;
 //        }
 //        if ( movableEnergyContainer.getThermalContactArea().getThermalContactLength( otherMovableEnergyContainer.getThermalContactArea() ) > 0 ) {
@@ -447,7 +447,7 @@ define( function( require ) {
 //          Vector2D pointAbove = new Vector2D( RAND.nextDouble() * movableEnergyContainer.getRect().getWidth() + movableEnergyContainer.getRect().getMinX(),
 //            movableEnergyContainer.getRect().getMaxY() );
 //          EnergyChunk ec = movableEnergyContainer.extractClosestEnergyChunk( pointAbove );
-//          if ( ec != null ) {
+//          if ( ec !== null ) {
 //            Rectangle2D ecInitialMotionConstraints = null;
 //            if ( movableEnergyContainer instanceof Beaker ) {
 //
@@ -508,7 +508,7 @@ define( function( require ) {
 //    // them.  Also, compensate for perspective so that we can avoid
 //    // difficult z-order issues.
 //    double standPerspectiveExtension = leftBurner.getOutlineRect().getHeight() * EFACIntroCanvas.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( BurnerStandNode.PERSPECTIVE_ANGLE ) / 2;
-//    double burnerRectX = leftBurner.getOutlineRect().getX() - standPerspectiveExtension - ( modelElement != beaker ? blockPerspectiveExtension : 0 );
+//    double burnerRectX = leftBurner.getOutlineRect().getX() - standPerspectiveExtension - ( modelElement !== beaker ? blockPerspectiveExtension : 0 );
 //    Rectangle2D burnerBlockingRect = new Rectangle2D.Double( burnerRectX,
 //      leftBurner.getOutlineRect().getY(),
 //        rightBurner.getOutlineRect().getMaxX() - burnerRectX,
@@ -516,7 +516,7 @@ define( function( require ) {
 //    translation = determineAllowedTranslation( modelElement.getRect(), burnerBlockingRect, translation, false );
 //
 //    // Validate against the sides of the beaker.
-//    if ( modelElement != beaker ) {
+//    if ( modelElement !== beaker ) {
 //
 //      // Create three rectangles to represent the two sides and the top
 //      // of the beaker.
@@ -545,7 +545,7 @@ define( function( require ) {
 //
 //    // Now check the model element's motion against each of the blocks.
 //    for ( Block block : Arrays.asList( ironBlock, brick ) ) {
-//      if ( modelElement == block ) {
+//      if ( modelElement === block ) {
 //        // Don't test against self.
 //        continue;
 //      }
@@ -556,7 +556,7 @@ define( function( require ) {
 //      boolean restrictPositiveY = !block.isStackedUpon( modelElement );
 //
 //      Rectangle2D testRect = modelElement.getRect();
-//      if ( modelElement == beaker ) {
+//      if ( modelElement === beaker ) {
 //        // Special handling for the beaker - block it at the outer
 //        // edge of the block instead of the center in order to
 //        // simplify z-order handling.
@@ -568,7 +568,7 @@ define( function( require ) {
 //
 //      // Clamp the translation based on the test block's position, but
 //      // handle the case where the block is immersed in the beaker.
-//      if ( modelElement != beaker || !beaker.getRect().contains( block.getRect() ) ) {
+//      if ( modelElement !== beaker || !beaker.getRect().contains( block.getRect() ) ) {
 //        translation = determineAllowedTranslation( testRect, block.getRect(), translation, restrictPositiveY );
 //      }
 //    }
@@ -608,7 +608,7 @@ define( function( require ) {
 //    if ( movingRect.intersects( stationaryRect ) ) {
 //
 //      // The rectangles already overlap.  Are they right on top of one another?
-//      if ( movingRect.getCenterX() == stationaryRect.getCenterX() && movingRect.getCenterY() == stationaryRect.getCenterY() ) {
+//      if ( movingRect.getCenterX() === stationaryRect.getCenterX() && movingRect.getCenterY() === stationaryRect.getCenterY() ) {
 //        System.out.println( getClass().getName() + " - Warning: Rectangle centers in same location, returning zero vector." );
 //        return new Vector2D( 0, 0 );
 //      }
@@ -632,11 +632,11 @@ define( function( require ) {
 //
 //      // Something is wrong with algorithm if both values are zero,
 //      // since overlap was detected by the "intersects" method.
-//      assert !( xOverlapCure == 0 && yOverlapCure == 0 );
+//      assert !( xOverlapCure === 0 && yOverlapCure === 0 );
 //
 //      // Return a vector with the smallest valid "cure" value, leaving
 //      // the other translation value unchanged.
-//      if ( xOverlapCure != 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
+//      if ( xOverlapCure !== 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
 //        return new Vector2D( xOverlapCure, proposedTranslation.getY() );
 //      }
 //      else {
@@ -746,7 +746,7 @@ define( function( require ) {
 //    // Check each of the possible supporting elements in the model to see
 //    // if this element can go on top of it.
 //    for ( ModelElement potentialSupportingElement : Arrays.asList( leftBurner, rightBurner, brick, ironBlock, beaker ) ) {
-//      if ( potentialSupportingElement == element || potentialSupportingElement.isStackedUpon( element ) ) {
+//      if ( potentialSupportingElement === element || potentialSupportingElement.isStackedUpon( element ) ) {
 //        // The potential supporting element is either the same as the
 //        // test element or is sitting on top of the test element.  In
 //        // either case, it can't be used to support the test element,
@@ -764,7 +764,7 @@ define( function( require ) {
 //        // based on whether we have one at all, or has more overlap
 //        // than the previous best choice, or is directly above the
 //        // current one.
-//        if ( bestOverlappingSurface == null ||
+//        if ( bestOverlappingSurface === null ||
 //             ( surfaceOverlap > getHorizontalOverlap( bestOverlappingSurface.get(), element.getBottomSurfaceProperty().get() ) &&
 //               !isDirectlyAbove( bestOverlappingSurface.get(), potentialSupportingElement.getTopSurfaceProperty().get() ) ) ||
 //             ( isDirectlyAbove( potentialSupportingElement.getTopSurfaceProperty().get(), bestOverlappingSurface.get() ) ) ) {
@@ -776,8 +776,8 @@ define( function( require ) {
 //    // Make sure that the best supporting surface isn't at the bottom of
 //    // a stack, which can happen in cases where the model element being
 //    // tested isn't directly above the best surface's center.
-//    if ( bestOverlappingSurface != null ) {
-//      while ( bestOverlappingSurface.get().getElementOnSurface() != null ) {
+//    if ( bestOverlappingSurface !== null ) {
+//      while ( bestOverlappingSurface.get().getElementOnSurface() !== null ) {
 //        bestOverlappingSurface = bestOverlappingSurface.get().getElementOnSurface().getTopSurfaceProperty();
 //      }
 //    }

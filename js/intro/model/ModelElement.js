@@ -167,7 +167,7 @@ define( function( require ) {
 //   *         one, which includes cases where one or more elements are in between.
 //   */
 //  public boolean isStackedUpon( ModelElement element ) {
-//    return getSupportingSurface() != null && ( getSupportingSurface().get().getOwner() == element || getSupportingSurface().get().getOwner().isStackedUpon( element ) );
+//    return getSupportingSurface() !== null && ( getSupportingSurface().get().getOwner() === element || getSupportingSurface().get().getOwner().isStackedUpon( element ) );
 //  }
 //
 //  /**
@@ -175,7 +175,7 @@ define( function( require ) {
 //   * reset functionality for any state that they add.
 //   */
 //  public void reset() {
-//    if ( supportingSurface != null ) {
+//    if ( supportingSurface !== null ) {
 //      supportingSurface.removeAllObservers();
 //      supportingSurface.get().clearSurface();
 //      supportingSurface = null;

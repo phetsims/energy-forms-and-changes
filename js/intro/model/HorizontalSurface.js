@@ -125,7 +125,7 @@ define( function( require ) {
 //  }
 //
 //  public void addElementToSurface( ModelElement modelElement ) {
-//    assert elementOnSurface == null; // Only one thing on surface allowed at a time.
+//    assert elementOnSurface === null; // Only one thing on surface allowed at a time.
 //    elementOnSurface = modelElement;
 //  }
 //
@@ -135,12 +135,12 @@ define( function( require ) {
 //
 //  @Override
 //  public boolean equals( final Object o ) {
-//    if ( this == o ) { return true; }
-//    if ( o == null || getClass() != o.getClass() ) { return false; }
+//    if ( this === o ) { return true; }
+//    if ( o === null || getClass() !== o.getClass() ) { return false; }
 //
 //    final HorizontalSurface that = (HorizontalSurface) o;
 //
-//    return Double.compare( that.yPos, yPos ) == 0 && !( xRange != null ? !xRange.equals( that.xRange ) : that.xRange != null );
+//    return Double.compare( that.yPos, yPos ) === 0 && !( xRange !== null ? !xRange.equals( that.xRange ) : that.xRange !== null );
 //
 //  }
 //
@@ -148,8 +148,8 @@ define( function( require ) {
 //  public int hashCode() {
 //    int result;
 //    long temp;
-//    result = xRange != null ? xRange.hashCode() : 0;
-//    temp = yPos != +0.0d ? Double.doubleToLongBits( yPos ) : 0L;
+//    result = xRange !== null ? xRange.hashCode() : 0;
+//    temp = yPos !== +0.0d ? Double.doubleToLongBits( yPos ) : 0L;
 //    result = 31 * result + (int) ( temp ^ ( temp >>> 32 ) );
 //    return result;
 //  }

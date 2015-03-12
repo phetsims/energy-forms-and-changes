@@ -95,7 +95,7 @@ define( function( require ) {
     for ( var i = 0; i < NUM_TICK_MARKS; i++ ) {
       // Tick marks are set to have a longer one at freezing, boiling, and half way between.
       var tickMarkShape = new Shape();
-      tickMarkShape.moveTo( 0, 0 ).lineTo( (i - 1) % 5 == 0 ? longTickMarkWidth : shortTickMarkWidth, 0 );
+      tickMarkShape.moveTo( 0, 0 ).lineTo( (i - 1) % 5 === 0 ? longTickMarkWidth : shortTickMarkWidth, 0 );
       var tickMark = new Path( tickMarkShape, {
         stroke: 'black',
         lineWidth: TICK_MARK_STROKE_LINEWIDTH
@@ -300,7 +300,7 @@ define( function( require ) {
 //    double tickMarkSpacing = ( ( tickMarkMinY - thermometerBack.getFullBoundsReference().getMinY() ) / NUM_TICK_MARKS ) * 0.945;
 //    for ( int i = 0; i < NUM_TICK_MARKS; i++ ) {
 //      // Tick marks are set to have a longer one at freezing, boiling, and half way between.
-//      Line2D tickMarkShape = new Line2D.Double( 0, 0, ( i - 1 ) % 5 == 0 ?  longTickMarkWidth : shortTickMarkWidth, 0 );
+//      Line2D tickMarkShape = new Line2D.Double( 0, 0, ( i - 1 ) % 5 === 0 ?  longTickMarkWidth : shortTickMarkWidth, 0 );
 //      PNode tickMark = new PhetPPath( tickMarkShape, TICK_MARK_STROKE, Color.BLACK );
 //      tickMark.setOffset( tickMarkXOffset, tickMarkMinY - i * tickMarkSpacing );
 //      frontLayer.addChild( tickMark );

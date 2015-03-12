@@ -11,12 +11,12 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
+  //var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LineStyles = require( 'KITE/util/LineStyles' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
+  //var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -34,13 +34,6 @@ define( function( require ) {
   function BurnerStandNode( rect, projectedEdgeLength ) {
 
     Node.call( this );
-    // Add the left and right sides of the stand.
-
-    this.addChild( new BurnerStandSide( new Vector2( rect.x, rect.y ), rect.height, projectedEdgeLength ) );
-    this.addChild( new BurnerStandSide( new Vector2( rect.maxX, rect.y ), rect.height, projectedEdgeLength ) );
-    /// Add the top of the burner stand.
-    this.addChild( new BurnerStandTop( new Vector2( rect.x, rect.y ), rect.width, projectedEdgeLength ) );
-
 
     function BurnerStandSide( topCenter, height, edgeLength ) {
 
@@ -115,6 +108,13 @@ define( function( require ) {
 
       return burnerStandTopPath;
     }
+
+    // Add the left and right sides of the stand.
+
+    this.addChild( new BurnerStandSide( new Vector2( rect.x, rect.y ), rect.height, projectedEdgeLength ) );
+    this.addChild( new BurnerStandSide( new Vector2( rect.maxX, rect.y ), rect.height, projectedEdgeLength ) );
+    /// Add the top of the burner stand.
+    this.addChild( new BurnerStandTop( new Vector2( rect.x, rect.y ), rect.width, projectedEdgeLength ) );
   }
 
   return inherit( Node, BurnerStandNode );

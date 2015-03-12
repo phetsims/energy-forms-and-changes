@@ -14,7 +14,7 @@ define( function( require ) {
 //  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Color = require( 'SCENERY/util/Color' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants

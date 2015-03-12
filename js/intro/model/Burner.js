@@ -12,10 +12,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
-  var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -26,10 +25,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
-  var SetProperty = require( 'AXON/SetProperty' );
   var Vector2 = require( 'DOT/Vector2' );
 
 
@@ -80,7 +77,7 @@ define( function( require ) {
 
     // TODO this is not the correct type
     this.heatCoolLevelProperty.link( function( newValue, oldValue ) {
-      if ( newValue == 0 || (Math.signum( oldValue ) != Math.signum( newValue )) ) {
+      if ( newValue === 0 || (Math.signum( oldValue ) !== Math.signum( newValue )) ) {
         // clear accumulated heat/cool amount.
         energyExchangedWithAirSinceLastChunkTransfer = 0;
       }
@@ -187,7 +184,7 @@ define( function( require ) {
       if ( energyChunkList.size() > 0 ) {
         for ( var energyChunk in energyChunkList ) {
           if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-               (closestEnergyChunk == null ||
+               (closestEnergyChunk === null ||
                 energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
@@ -195,16 +192,16 @@ define( function( require ) {
         }
         energyChunkList.remove( closestEnergyChunk );
         for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
-          if ( energyChunkWanderController.getEnergyChunk() == closestEnergyChunk ) {
+          if ( energyChunkWanderController.getEnergyChunk() === closestEnergyChunk ) {
             energyChunkWanderControllers.remove( energyChunkWanderController );
           }
         }
       }
-      if ( closestEnergyChunk == null && this.heatCoolLevel > 0 ) {
+      if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
         closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), energyChunksVisible );
       }
-      if ( closestEnergyChunk != null ) {
+      if ( closestEnergyChunk !== null ) {
         energyExchangedWithAirSinceLastChunkTransfer = 0;
         energyExchangedWithObjectSinceLastChunkTransfer = 0;
       }
@@ -259,7 +256,7 @@ define( function( require ) {
           }
         }
       }
-      if ( count == 0 ) {
+      if ( count === 0 ) {
         // chunk transfer warrants another chunk.
         count = Math.round( energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
@@ -430,7 +427,7 @@ define( function( require ) {
 //
 //    heatCoolLevel.addObserver( new ChangeObserver<Double>() {
 //      public void update( Double newValue, Double oldValue ) {
-//        if ( newValue == 0 || ( Math.signum( oldValue ) != Math.signum( newValue ) ) ) {
+//        if ( newValue === 0 || ( Math.signum( oldValue ) !== Math.signum( newValue ) ) ) {
 //          // If the burner has been turned off or switched modes,
 //          // clear accumulated heat/cool amount.
 //          energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -525,25 +522,25 @@ define( function( require ) {
 //    if ( energyChunkList.size() > 0 ) {
 //      for ( EnergyChunk energyChunk : energyChunkList ) {
 //        if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-//             ( closestEnergyChunk == null || energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
+//             ( closestEnergyChunk === null || energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
 //          // Found a closer chunk.
 //          closestEnergyChunk = energyChunk;
 //        }
 //      }
 //      energyChunkList.remove( closestEnergyChunk );
 //      for ( EnergyChunkWanderController energyChunkWanderController : new ArrayList<EnergyChunkWanderController>( energyChunkWanderControllers ) ) {
-//        if ( energyChunkWanderController.getEnergyChunk() == closestEnergyChunk ) {
+//        if ( energyChunkWanderController.getEnergyChunk() === closestEnergyChunk ) {
 //          energyChunkWanderControllers.remove( energyChunkWanderController );
 //        }
 //      }
 //    }
 //
-//    if ( closestEnergyChunk == null && heatCoolLevel.get() > 0 ) {
+//    if ( closestEnergyChunk === null && heatCoolLevel.get() > 0 ) {
 //      // Create an energy chunk.
 //      closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, getEnergyChunkStartEndPoint(), energyChunksVisible );
 //    }
 //
-//    if ( closestEnergyChunk != null ) {
+//    if ( closestEnergyChunk !== null ) {
 //      energyExchangedWithAirSinceLastChunkTransfer = 0;
 //      energyExchangedWithObjectSinceLastChunkTransfer = 0;
 //    }
@@ -588,7 +585,7 @@ define( function( require ) {
 //        }
 //      }
 //    }
-//    if ( count == 0 ) {
+//    if ( count === 0 ) {
 //      // See whether the energy exchanged with the air since the last
 //      // chunk transfer warrants another chunk.
 //      count = (int) Math.round( energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );

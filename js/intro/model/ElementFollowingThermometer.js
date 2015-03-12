@@ -33,7 +33,7 @@ define( function( require ) {
 
     ElementFollower = inherit( Object, ElementFollower, {
       follow: function( locationToFollow ) {
-        if ( locationBeingFollowed != null ) {
+        if ( locationBeingFollowed !== null ) {
           locationBeingFollowed.link( this.followerFunction );
         }
         var offset = this.follower.minus( locationToFollow.get() );
@@ -41,13 +41,13 @@ define( function( require ) {
         locationBeingFollowed = locationToFollow;
       },
       stopFollowing: function() {
-        if ( locationBeingFollowed != null ) {
+        if ( locationBeingFollowed !== null ) {
           locationBeingFollowed.unlink( this.followerFunction );
           locationBeingFollowed = null;
         }
       },
       isFollowing: function() {
-        return locationBeingFollowed != null;
+        return locationBeingFollowed !== null;
       }
     } );
   }
@@ -172,7 +172,7 @@ define( function( require ) {
 //    }
 //
 //    public void follow( Property<Vector2D> locationToFollow ) {
-//      if ( locationBeingFollowed != null ) {
+//      if ( locationBeingFollowed !== null ) {
 //        locationBeingFollowed.removeObserver( followerFunction );
 //      }
 //      offset = follower.get().minus( locationToFollow.get() );
@@ -181,14 +181,14 @@ define( function( require ) {
 //    }
 //
 //    public void stopFollowing() {
-//      if ( locationBeingFollowed != null ) {
+//      if ( locationBeingFollowed !== null ) {
 //        locationBeingFollowed.removeObserver( followerFunction );
 //        locationBeingFollowed = null;
 //      }
 //    }
 //
 //    public boolean isFollowing() {
-//      return locationBeingFollowed != null;
+//      return locationBeingFollowed !== null;
 //    }
 //  }
 //}

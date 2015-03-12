@@ -16,14 +16,10 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkNode' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
-  var Vector2 = require( 'DOT/Vector2' );
+
 
   /**
    * *
@@ -98,7 +94,7 @@ define( function( require ) {
 //        // Remove the energy chunk nodes as they are removed from the model.
 //        energyChunkList.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
 //          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk == addedEnergyChunk ) {
+//            if ( removedEnergyChunk === addedEnergyChunk ) {
 //              removeChild( energyChunkNode );
 //            }
 //          }

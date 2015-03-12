@@ -136,7 +136,7 @@ define( function( require ) {
       var thermalContactLength = this.getThermalContactArea().getThermalContactLength( energyContainer.getThermalContactArea() );
       if ( thermalContactLength > 0 ) {
         var excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
-        if ( excessEnergy == 0 ) {
+        if ( excessEnergy === 0 ) {
           // Container is below max temperature, exchange energy normally.
           //TODO: find a method to getHeatTransferFactor
           var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), energyContainer.getEnergyContainerCategory() );
@@ -353,7 +353,7 @@ define( function( require ) {
 //    double thermalContactLength = getThermalContactArea().getThermalContactLength( energyContainer.getThermalContactArea() );
 //    if ( thermalContactLength > 0 ) {
 //      double excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
-//      if ( excessEnergy == 0 ) {
+//      if ( excessEnergy === 0 ) {
 //        // Container is below max temperature, exchange energy normally.
 //        double heatTransferConstant = getHeatTransferFactor( this.getEnergyContainerCategory(), energyContainer.getEnergyContainerCategory() );
 //        int numFullTimeStepExchanges = (int) Math.floor( dt / MAX_HEAT_EXCHANGE_TIME_STEP );

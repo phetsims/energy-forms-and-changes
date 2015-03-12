@@ -12,9 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
 
   // Threshold of distance for determining whether two areas are in contact.
   var TOUCH_DISTANCE_THRESHOLD = 0.001; // In meters.
@@ -63,11 +61,11 @@ define( function( require ) {
         if ( this.supportsImmersion || that.supportsImmersion ) {
           var immersionRect = this.bounds.intersection( that.bounds );
           contactLength = immersionRect.width * 2 + immersionRect.height * 2;
-          if ( immersionRect.width != this.bounds.width && immersionRect.width != that.bounds.width ) {
+          if ( immersionRect.width !== this.bounds.width && immersionRect.width !== that.bounds.width ) {
             // Not fully overlapping in X direction, so adjust contact length accordingly.
             contactLength -= immersionRect.height;
           }
-          if ( immersionRect.height != this.bounds.height && immersionRect.height != that.bounds.height ) {
+          if ( immersionRect.height !== this.bounds.height && immersionRect.height !== that.bounds.height ) {
             // Not fully overlapping in Y direction, so adjust contact length accordingly.
             contactLength -= immersionRect.width;
           }
@@ -181,11 +179,11 @@ define( function( require ) {
 //      if ( this.supportsImmersion || that.supportsImmersion ) {
 //        Rectangle2D immersionRect = this.bounds.createIntersection( that.bounds );
 //        contactLength = immersionRect.width * 2 + immersionRect.height * 2;
-//        if ( immersionRect.width != this.bounds.width && immersionRect.width != that.bounds.width ) {
+//        if ( immersionRect.width !== this.bounds.width && immersionRect.width !== that.bounds.width ) {
 //          // Not fully overlapping in X direction, so adjust contact length accordingly.
 //          contactLength -= immersionRect.height;
 //        }
-//        if ( immersionRect.height != this.bounds.height && immersionRect.height != that.bounds.height ) {
+//        if ( immersionRect.height !== this.bounds.height && immersionRect.height !== that.bounds.height ) {
 //          // Not fully overlapping in Y direction, so adjust contact length accordingly.
 //          contactLength -= immersionRect.width;
 //        }

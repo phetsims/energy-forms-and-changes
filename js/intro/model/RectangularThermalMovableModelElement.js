@@ -12,7 +12,6 @@ define( function( require ) {
 
   // modules
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
-  var Color = require( 'SCENERY/util/Color' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
@@ -23,7 +22,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   // var Path = require('SCENERY/nodes/Path');
-  var PropertySet = require( 'AXON/PropertySet' );
   var Rectangle = require( 'DOT/Rectangle' );
   // var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/common/TemperatureAndColor' );
   var Shape = require( 'KITE/Shape' );
@@ -317,7 +315,7 @@ define( function( require ) {
       }
 
       // Fail safe - If nothing found, get the first chunk.
-      if ( chunkToExtract == null ) {
+      if ( chunkToExtract === null ) {
         console.log( " - Warning: No energy chunk found by extraction algorithm, trying first available.." );
         var i;
         var length = this.slices.length;
@@ -331,7 +329,7 @@ define( function( require ) {
           }
           //       } );
         }
-        if ( chunkToExtract == null ) {
+        if ( chunkToExtract === null ) {
           console.log( " - Warning: No chunks available for extraction." );
         }
       }
@@ -348,7 +346,7 @@ define( function( require ) {
 
     addEnergyChunkSlices: function() {
 
-      assert && assert( this.slices.length == 0 ); // Make sure this method isn't being misused.
+      assert && assert( this.slices.length === 0 ); // Make sure this method isn't being misused.
 
       // Defaults to a single slice matching the outline rectangle, override
       // for more sophisticated behavior.
@@ -643,7 +641,7 @@ define( function( require ) {
 //  protected void moveEnergyChunkToSlices( EnergyChunk ec ) {
 //    approachingEnergyChunks.remove( ec );
 //    for ( EnergyChunkWanderController energyChunkWanderController : new ArrayList<EnergyChunkWanderController>( energyChunkWanderControllers ) ) {
-//      if ( energyChunkWanderController.getEnergyChunk() == ec ) {
+//      if ( energyChunkWanderController.getEnergyChunk() === ec ) {
 //        energyChunkWanderControllers.remove( energyChunkWanderController );
 //      }
 //    }
@@ -736,7 +734,7 @@ define( function( require ) {
 //    }
 //
 //    // Fail safe - If nothing found, get the first chunk.
-//    if ( chunkToExtract == null ) {
+//    if ( chunkToExtract === null ) {
 //      System.out.println( getClass().getName() + " - Warning: No energy chunk found by extraction algorithm, trying first available.." );
 //      for ( EnergyChunkContainerSlice slice : slices ) {
 //        if ( slice.energyChunkList.size() > 0 ){
@@ -744,7 +742,7 @@ define( function( require ) {
 //          break;
 //        }
 //      }
-//      if ( chunkToExtract == null ){
+//      if ( chunkToExtract === null ){
 //        System.out.println(getClass().getName() + " - Warning: No chunks available for extraction.");
 //      }
 //    }
@@ -759,7 +757,7 @@ define( function( require ) {
 //   */
 //  protected void addEnergyChunkSlices() {
 //
-//    assert ( slices.size() == 0 ); // Make sure this method isn't being misused.
+//    assert ( slices.size() === 0 ); // Make sure this method isn't being misused.
 //
 //    // Defaults to a single slice matching the outline rectangle, override
 //    // for more sophisticated behavior.

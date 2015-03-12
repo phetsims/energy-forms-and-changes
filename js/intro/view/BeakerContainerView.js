@@ -15,7 +15,7 @@ define( function( require ) {
 
   //modules
   var Area = require( 'java.awt.geom.Area' );
-  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
