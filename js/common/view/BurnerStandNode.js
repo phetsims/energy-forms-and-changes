@@ -16,7 +16,7 @@ define( function( require ) {
   var LineStyles = require( 'KITE/util/LineStyles' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  //var Shape = require( 'KITE/Shape' );
+  var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 

@@ -73,7 +73,7 @@ define( function( require ) {
 
       end: function( event, trail ) {
         thermometer.userControlled = false;
-        if ( this.returnRect !== null && thermometerNode.bounds.intersects( this.returnRect ) ) {
+        if ( self.returnRect !== null && thermometerNode.bounds.intersectsBounds( self.returnRect ) ) {
           // Released over tool box, so return it.
           thermometer.active = false;
         }
