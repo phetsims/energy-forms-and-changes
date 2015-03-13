@@ -37,7 +37,7 @@ define( function() {
       // TODO: there is something wrong here
       var translation = newPosition.minus( oldPosition );
       //TODO How to do this in javascript?
-      self.shape = AffineTransform.getTranslateInstance( translation.x, translation.y ).createTransformedShape( EnergyChunkContainerSlice.this.shape );
+      self.shape = AffineTransform.getTranslateInstance( translation.x, translation.y ).createTransformedShape( this.shape );
       self.energyChunkList.forEach( function( energyChunk ) {
         energyChunk.translate( translation );
       } );

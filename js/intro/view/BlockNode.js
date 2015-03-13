@@ -36,7 +36,7 @@ define( function( require ) {
                                                Math.pow( EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, 2 ) );
 
   var LABEL_FONT = new PhetFont( 32, false );
-  var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
+  var OUTLINE_LINEWIDTH = 3;
   var OUTLINE_STROKE_COLOR = Color.DARK_GRAY;
 
   var SHOW_2D_REPRESENTATION = false;
@@ -52,10 +52,8 @@ define( function( require ) {
     Node.call( this, { cursor: 'pointer' } );
     var blockNode = this;
     this.block = block;
-    // shape from the position of the block.
-    var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // Create the shape for the front of the block.
-    var blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).bounds;
+    var blockRectInViewCoords = modelViewTransform.modelToViewBounds( this.getRawShape() );
     var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotate( -PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotate( -PERSPECTIVE_ANGLE );
@@ -94,7 +92,7 @@ define( function( require ) {
       .lineToPoint( upperLeftBackCorner );
 
     // Add the back of the block.
-    var blockBack = new Path( blockBackShape, OUTLINE_STROKE, OUTLINE_STROKE_COLOR );
+    var blockBack = new Path( blockBackShape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE_COLOR } );
     this.addChild( blockBack );
     // Create the layers where the energy chunks will be placed.
     var energyChunkRootNode = new Node();
@@ -157,23 +155,37 @@ define( function( require ) {
     } );
     // Add the drag handler.
     var offsetPosToCenter = new Vector2( this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ), this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform, new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
+    this.addInputListener( new ThermalElementDragHandler(
+      block,
+      this,
+      modelViewTransform,
+      new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( Node, BlockNode, {
 //-------------------------------------------------------------------------
 // Methods
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param {Node] node
+     */
     setApproachingEnergyChunkParentNode: function( node ) {
       // This should not be set more than once.
       assert && assert( this.approachingEnergyChunkParentNode === null );
       this.approachingEnergyChunkParentNode = node;
     },
-    /*
+
+    /**
      * Convenience method to avoid code duplication.  Adds a node of the given
      * shape, color, and texture (if a texture is specified).
+     * @private
+     * @param {Shape} shape
+     * @param {Color} fillColor
+     * @param {Image} textureImage
+     * @returns {Node}
      */
-//private
     createSurface: function( shape, fillColor, textureImage ) {
       var root = new Node();
       // provided, this may end up getting partially or entirely covered up.
@@ -198,7 +210,7 @@ define( function( require ) {
         root.addChild( clippedTexture );
       }
       // Add the outlined shape so that edges are visible.
-      root.addChild( new Path( shape, OUTLINE_STROKE, OUTLINE_STROKE_COLOR ) );
+      root.addChild( new Path( shape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE_COLOR } ) );
       return root;
     }
   } );

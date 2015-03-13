@@ -33,7 +33,7 @@ define( function( require ) {
 
 
 // constants
-  var OUTLINE_STROKE = 3;
+  var OUTLINE_LINEWIDTH = 3;
   var OUTLINE_COLOR = Color.LIGHT_GRAY;
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32, false );
@@ -54,10 +54,8 @@ define( function( require ) {
     var backNode = new Node();
     var grabNode = new Node();
 
-    // shape from the position.
-    var scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
     // location in the view.
-    var beakerViewRect = scaleTransform.createTransformedShape( beaker.getRawOutlineRect() ).bounds; //{Bounds2}
+    var beakerViewRect = modelViewTransform.modelToViewBounds( beaker.getRawOutlineRect() ); //{Bounds2}
     // ellipses in order to create a 3D-ish look.
     var ellipseHeight = beakerViewRect.width * PERSPECTIVE_PROPORTION;
     //   Shape.ellipse = function( centerX, centerY, radiusX, radiusY, rotation )
@@ -66,7 +64,7 @@ define( function( require ) {
     // Add the bottom ellipse.
     backNode.addChild( new Path( bottomEllipse, {
       fill: BEAKER_COLOR,
-      lineWidth: OUTLINE_STROKE,
+      lineWidth: OUTLINE_LINEWIDTH,
       stroke: OUTLINE_COLOR
     } ) );
     // Add the water.  It will adjust its size based on the fluid level.
@@ -78,13 +76,13 @@ define( function( require ) {
     beakerBody.subtract( new Area( topEllipse ) );
     frontNode.addChild( new Path( beakerBody, {
       fill: BEAKER_COLOR,
-      lineWidth: OUTLINE_STROKE,
+      lineWidth: OUTLINE_LINEWIDTH,
       stroke: OUTLINE_COLOR
     } ) );
     // Add the top ellipse.  It is behind the water for proper Z-order behavior.
     backNode.addChild( new Path( topEllipse, {
       fill: BEAKER_COLOR,
-      lineWidth: OUTLINE_STROKE,
+      lineWidth: OUTLINE_LINEWIDTH,
       stroke: OUTLINE_COLOR
     } ) );
     // grab the beaker.
@@ -153,17 +151,10 @@ define( function( require ) {
     define( function( require ) {
       'use strict';
       var inherit = require( 'PHET_CORE/inherit' );
-      var AffineTransform = require( 'java.awt.geom.AffineTransform' );
-      var Area = require( 'java.awt.geom.Area' );
-      var Ellipse2D = require( 'java.awt.geom.Ellipse2D' );
+
       var Rectangle = require( 'KITE/Rectangle' );
-      var ArrayList = require( 'java.util.ArrayList' );
-      var List = require( 'java.util.List' );
-      var Random = require( 'java.util.Random' );
-      var MathUtil = require( 'edu.colorado.phet.common.phetcommon.math.MathUtil' );
       var Vector2 = require( 'DOT/Vector2' );
       var Property = require( 'AXON/Property' );
-      var DoubleRange = require( 'edu.colorado.phet.common.phetcommon.util.DoubleRange' );
 
       var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/EnergyFormsAndChangesResources' );
       var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/EFACConstants' );
@@ -178,7 +169,7 @@ define( function( require ) {
 
 //
       var LIQUID_WATER_OUTLINE_COLOR = ColorUtils.darkerColor( EFACConstants.WATER_COLOR_IN_BEAKER, 0.2 );
-      var WATER_OUTLINE_STROKE = new BasicStroke( 2 );
+      var WATER_OUTLINE_STROKE = 2;
       var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
       var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (basically pixels) per second.
       var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (basically pixels).
@@ -292,16 +283,7 @@ define( function( require ) {
 //private
         define( function( require ) {
           'use strict';
-          var inherit = require( 'PHET_CORE/inherit' );
-          var Vector2 = require( 'DOT/Vector2' );
-          var Property = require( 'AXON/Property' );
-          var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/EnergyFormsAndChangesResources' );
-          var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-          var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-          var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-          var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSliceNode' );
-          var Node = require( 'SCENERY/nodes/Node' );
-          var Shape = require( 'KITE/Shape' );
+
 
           /**
            *
