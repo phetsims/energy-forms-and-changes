@@ -11,9 +11,6 @@ define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/EFACIntroModel' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/intro/model/RectangularThermalMovableModelElement' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );

@@ -5,14 +5,10 @@
  */
 define( function( require ) {
   'use strict';
-  var BasicStroke = require( 'java.awt.BasicStroke' );
-  var Color = require( 'SCENERY/util/Color' );
-  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
 
 
   // constants

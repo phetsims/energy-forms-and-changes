@@ -13,7 +13,6 @@ define( function( require ) {
 
   var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/energyChunkNode' );
-  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/node/Node' );
 

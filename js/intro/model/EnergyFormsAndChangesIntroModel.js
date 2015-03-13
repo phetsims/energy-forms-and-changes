@@ -27,7 +27,7 @@ define( function( require ) {
 //  var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var PropertySet = require( 'AXON/PropertySet' );
 
-  var Range = require( 'DOT/Range' );
+  //var Range = require( 'DOT/Range' );
 
   var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );

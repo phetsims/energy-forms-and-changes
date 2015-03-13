@@ -12,37 +12,37 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Circle = require( 'SCENERY/nodes/Circle' );
+  //var Circle = require( 'SCENERY/nodes/Circle' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Panel = require( 'SUN/Panel' );
+  //var Panel = require( 'SUN/Panel' );
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
 
 //  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+//  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
 //  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   // var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
 //  var HeaterCoolerView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/HeaterCoolerView' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
-  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
+//  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
 
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
 
   var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  //var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'DOT/Rectangle' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  //var PropertySet = require( 'AXON/PropertySet' );
 
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  //var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
   var Bounds2 = require( 'DOT/Bounds2' );
 

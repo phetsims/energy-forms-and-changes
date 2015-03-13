@@ -18,7 +18,7 @@ define( function( require ) {
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   //var PropertySet = require( 'AXON/PropertySet' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
-  var Vector2 = require( 'DOT/Vector2' );
+
   /**
    *
    * @param {model} model

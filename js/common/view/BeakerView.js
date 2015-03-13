@@ -33,7 +33,7 @@ define( function( require ) {
 
 
 // constants
-  var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
+  var OUTLINE_STROKE = 3;
   var OUTLINE_COLOR = Color.LIGHT_GRAY;
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32, false );
@@ -130,7 +130,7 @@ define( function( require ) {
     grabNode.addChild( new Path( grabNodeShape, new Color( 0, 0, 0, 0 ) ) );
     // beaker's position in the model.
     if ( SHOW_MODEL_RECT ) {
-      frontNode.addChild( new Path( beakerViewRect, new BasicStroke( 1 ), Color.RED ) );
+      frontNode.addChild( new Path( beakerViewRect, { lineWidth: 1, stroke: Color.RED } ) );
     }
     // Update the offset if and when the model position changes.
     beaker.positionProperty.link( function( position ) {
@@ -208,7 +208,7 @@ define( function( require ) {
         Node.call( this );
         this.addChild( liquidWaterBodyNode );
         this.addChild( liquidWaterTopNode );
-        this.steamNode = new Node;
+        this.steamNode = new Node();
         this.addChild( this.steamNode );
         clock.addClockListener( new ClockAdapter().withAnonymousClassBody( {
           clockTicked: function( clockEvent ) {
@@ -310,7 +310,7 @@ define( function( require ) {
            * @constructor
            */
           function SteamBubble( initialDiameter, initialOpacity ) {
-            Path( this, new Ellipse2D.Number( -initialDiameter / 2, -initialDiameter / 2, initialDiameter, initialDiameter ), new Color( 255, 255, 255, (initialOpacity * 255) ) );
+            Path.call( this, new Ellipse2D.Number( -initialDiameter / 2, -initialDiameter / 2, initialDiameter, initialDiameter ), new Color( 255, 255, 255, (initialOpacity * 255) ) );
           }
 
           return inherit( Path, SteamBubble, {
@@ -326,7 +326,7 @@ define( function( require ) {
             }
           } );
         } );
-      ,
+
       getFrontNode: function() {
         return this.frontNode;
       }

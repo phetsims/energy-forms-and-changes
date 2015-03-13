@@ -80,7 +80,7 @@ define( function( require ) {
           this.energyChunkList.remove( energyChunkWanderController.energyChunk );
           this.energyChunkWanderControllers.remove( energyChunkWanderController );
         }
-      } )
+      } );
 
     },
 

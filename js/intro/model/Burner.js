@@ -19,7 +19,7 @@ define( function( require ) {
   var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
+  //var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -77,7 +77,7 @@ define( function( require ) {
 
     // TODO this is not the correct type
     this.heatCoolLevelProperty.link( function( newValue, oldValue ) {
-      if ( newValue === 0 || (Math.signum( oldValue ) !== Math.signum( newValue )) ) {
+      if ( newValue === 0 || (Math.sign( oldValue ) !== Math.sign( newValue )) ) {
         // clear accumulated heat/cool amount.
         energyExchangedWithAirSinceLastChunkTransfer = 0;
       }
@@ -89,6 +89,15 @@ define( function( require ) {
         energyExchangedWithObjectSinceLastChunkTransfer = 0;
       }
     } );
+
+    // polyfill
+    Math.sign = Math.sign || function( x ) {
+      x = +x; // convert to a number
+      if ( x === 0 || isNaN( x ) ) {
+        return x;
+      }
+      return x > 0 ? 1 : -1;
+    };
   }
 
   return inherit( ModelElement, Burner, {
@@ -101,7 +110,7 @@ define( function( require ) {
      * @return {Rectangle} Rectangle that defines the outline in model space.
      */
     getOutlineRect: function() {
-      return new Rectangle( position.x - WIDTH / 2, position.y, WIDTH, HEIGHT );
+      return new Rectangle( this.position.x - WIDTH / 2, this.position.y, WIDTH, HEIGHT );
     },
 
     /**
@@ -183,7 +192,7 @@ define( function( require ) {
       var closestEnergyChunk = null;
       if ( energyChunkList.size() > 0 ) {
         for ( var energyChunk in energyChunkList ) {
-          if ( energyChunk.position.distance( position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+          if ( energyChunk.position.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
                (closestEnergyChunk === null ||
                 energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
             // Found a closer chunk.
@@ -215,7 +224,7 @@ define( function( require ) {
      * @returns {Vector2}
      */
     getCenterPoint: function() {
-      return new Vector2( position.x, position.y + HEIGHT / 2 );
+      return new Vector2( this.position.x, this.position.y + HEIGHT / 2 );
     },
     /**
      *
@@ -251,7 +260,7 @@ define( function( require ) {
       // almost to the burner).
       if ( energyChunkList.size() > 0 && this.heatCoolLevel >= 0 ) {
         for ( var energyChunk in energyChunkList ) {
-          if ( position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+          if ( this.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
         }
@@ -304,7 +313,7 @@ define( function( require ) {
      *         Negative value indicates that chunks should come in.
      */
     getEnergyChunkBalanceWithObjects: function() {
-      return (Math.floor( Math.abs( energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.signum( energyExchangedWithObjectSinceLastChunkTransfer ));
+      return (Math.floor( Math.abs( energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( energyExchangedWithObjectSinceLastChunkTransfer ));
     },
     /**
      * *
