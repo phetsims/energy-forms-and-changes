@@ -120,7 +120,7 @@ define( function( require ) {
               // Reset accumulated forces.
 //              mapEnergyChunkToForceVector[energyChunk] = ZERO_VECTOR;
 
-              if ( containerShape.contains( energyChunk.position ) ) {
+              if ( containerShape.containsPoint( energyChunk.position ) ) {
 
                 // Loop on several angles, calculating the forces from the
                 // edges at the given angle.
@@ -131,7 +131,7 @@ define( function( require ) {
                   var edgeDetectStep;
                   for ( edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
                     var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotate( angle );
-                    if ( containerShape.contains( energyChunk.position.plus( vectorToEdge ) ) ) {
+                    if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
                       lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
                     }
                     else {
