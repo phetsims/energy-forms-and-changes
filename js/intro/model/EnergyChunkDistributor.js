@@ -243,7 +243,10 @@ define( function( require ) {
       generateRandomLocation: function( rectangle ) {
         return new Vector2( rectangle.minX + ( Math.random() * rect.width ), rectangle.minY + ( Math.random() * rectangle.height ) );
       }
-      };;;
+      }
+      ;
+      ;
+      ;
   }
 } );
 
