@@ -28,9 +28,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
 
-  // this.energy = 0; // In Joules.
-
-
   /*
    * @param {Vector2} initialPosition
    * @param {number} width
@@ -128,11 +125,12 @@ define( function( require ) {
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
+      var self=this;
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         energyChunkWanderController.updatePosition( dt );
-        if ( this.getSliceBounds().containsPoint( energyChunkWanderController.energyChunk.position ) ) {
-          this.moveEnergyChunkToSlices( energyChunkWanderController.energyChunk );
+        if ( self.getSliceBounds().containsPoint( energyChunkWanderController.energyChunk.position ) ) {
+          self.moveEnergyChunkToSlices( energyChunkWanderController.energyChunk );
         }
       } );
     },
@@ -202,11 +200,12 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
+      var self= this;
       this.approachingEnergyChunks.remove( energyChunk );
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       this.energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         if ( energyChunkWanderController.energyChunk === energyChunk ) {
-          this.energyChunkWanderControllers.remove( energyChunkWanderController );
+          self.energyChunkWanderControllers.remove( energyChunkWanderController );
         }
       } );
       this.addEnergyChunkToNextSlice( energyChunk );
@@ -231,8 +230,8 @@ define( function( require ) {
      * distances for the z-offset so that z-positioning doesn't skew the
      * results, since the provided point is only 2D.
      *
-     * @param point Comparison point.
-     * @return Energy chunk, null if there are none available.
+     * @param {Vector2} point - Comparison point.
+     * @return {EnergyChunk||null} closestEnergyChunk, null if there are none available.
      */
 
     //TODO: this method was renamed
@@ -275,7 +274,7 @@ define( function( require ) {
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
-      if ( destinationShape.contains( getThermalContactArea().getBounds() ) ) {
+      if ( destinationShape.intersectsBounds( this.getThermalContactArea().bounds ) ) {
         // Our shape is contained by the destination.  Pick a chunk near
         // our right or left edge.
 
@@ -292,7 +291,7 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( getThermalContactArea().getBounds().containsBound( destinationShape.bounds ) ) {
+      else if ( this.getThermalContactArea().bounds.containsBound( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
@@ -301,7 +300,7 @@ define( function( require ) {
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
             var distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.minX - energyChunk.position.x ), Math.abs( destinationBounds.maxX - energyChunk.position.x ) );
-            if ( !destinationShape.contains( energyChunk.position ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
+            if ( !destinationShape.containsPoint( energyChunk.position ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;
             }
@@ -342,7 +341,6 @@ define( function( require ) {
      * Initialization method that add the "slices" where the energy chunks
      * reside.  Should be called only once at initialization.
      */
-
     addEnergyChunkSlices: function() {
 
       assert && assert( this.slices.length === 0 ); // Make sure this method isn't being misused.
@@ -352,15 +350,17 @@ define( function( require ) {
       this.slices.push( new EnergyChunkContainerSlice( this.getRect(), 0, this.position ) );
     },
 
-
+    /**
+     *
+     */
     addInitialEnergyChunks: function() {
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
       } );
 
-      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( energy );
+      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
 
-      var energyChunkBounds = this.getThermalContactArea().getBounds();
+      var energyChunkBounds = this.getThermalContactArea().bounds;
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
         this.addEnergyChunk( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation.call( this, energyChunkBounds ), this.energyChunksVisibleProperty ) );
@@ -376,6 +376,10 @@ define( function( require ) {
     },
 
 
+    /**
+     *
+     * @returns {number}
+     */
     getNumEnergyChunks: function() {
 
       var numChunks = 0;
@@ -386,6 +390,10 @@ define( function( require ) {
     },
 
 
+    /**
+     *
+     * @returns {Array.<EnergyChunkContainerSlice>}
+     */
     getSlices: function() {
       return this.slices;
     },
@@ -393,7 +401,7 @@ define( function( require ) {
 
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 
-      var thermalContactLength = getThermalContactArea().getThermalContactLength( otherEnergyContainer.getThermalContactArea() );
+      var thermalContactLength = this.getThermalContactArea().getThermalContactLength( otherEnergyContainer.getThermalContactArea() );
       if ( thermalContactLength > 0 ) {
         if ( Math.abs( otherEnergyContainer.getTemperature() - this.getTemperature() ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
           // Exchange energy between this and the other energy container.
@@ -416,12 +424,12 @@ define( function( require ) {
       }
     },
 
-    /*
+    /**
      * Get the shape as is is projected into 3D in the view.  Ideally, this
      * wouldn't even be in the model, because it would be purely handled in the
      * view, but it proved necessary.
+     * @returns {Shape}
      */
-
     getProjectedShape: function() {
       // This projects a rectangle, override for other behavior.
 
@@ -442,7 +450,10 @@ define( function( require ) {
       return shape;
     },
 
-
+    /**
+     *
+     * @returns {Vector2}
+     */
     getCenterPoint: function() {
       return new Vector2( this.position.x, this.position.y + this.height / 2 );
     },
@@ -460,8 +471,5 @@ define( function( require ) {
     getEnergyChunkBalance: function() {
       return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
     }
-  } )
-    ;
-} )
-;
-}
+  } );
+} );

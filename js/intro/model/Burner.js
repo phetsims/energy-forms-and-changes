@@ -156,7 +156,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     inContactWith: function( thermalEnergyContainer ) {
-      var containerThermalArea = thermalEnergyContainer.getThermalContactArea().getBounds();
+      var containerThermalArea = thermalEnergyContainer.getThermalContactArea().bounds;
       return (
       containerThermalArea.getCenterX() > this.getOutlineRect().minX &&
       containerThermalArea.getCenterX() < this.getOutlineRect().maxX &&
@@ -502,7 +502,7 @@ define( function( require ) {
 //  }
 //
 //  public boolean inContactWith( ThermalEnergyContainer thermalEnergyContainer ) {
-//    Rectangle2D containerThermalArea = thermalEnergyContainer.getThermalContactArea().getBounds();
+//    Rectangle2D containerThermalArea = thermalEnergyContainer.getThermalContactArea().bounds;
 //    return ( containerThermalArea.getCenterX() > getOutlineRect().getMinX() &&
 //             containerThermalArea.getCenterX() < getOutlineRect().getMaxX() &&
 //             Math.abs( containerThermalArea.getMinY() - getOutlineRect().getMaxY() ) < CONTACT_DISTANCE );

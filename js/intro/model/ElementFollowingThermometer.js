@@ -79,7 +79,7 @@ define( function( require ) {
 //            elementFollower.follow( block.position );
 //          }
 //        } );
-//        if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().getBounds().contains( position ) ) {
+//        if ( !elementFollower.isFollowing() && model.getBeaker().getThermalContactArea().bounds.contains( position ) ) {
 //          // Stick to the beaker.
 //          elementFollower.follow( model.getBeaker().position );
 //        }
