@@ -180,7 +180,7 @@ define( function( require ) {
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
       this.slices.forEach( function( slice ) {
-        var sliceBounds = slice.getShape().bounds;
+        var sliceBounds = slice.shape.bounds;
         if ( sliceBounds.minX < minX ) {
           minX = sliceBounds.minX;
         }
@@ -620,7 +620,7 @@ define( function( require ) {
 //    double maxX = Double.NEGATIVE_INFINITY;
 //    double maxY = Double.NEGATIVE_INFINITY;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      Rectangle2D sliceBounds = slice.getShape().bounds;
+//      Rectangle2D sliceBounds = slice.shape.bounds;
 //      if ( sliceBounds.getMinX() < minX ) {
 //        minX = sliceBounds.getMinX();
 //      }

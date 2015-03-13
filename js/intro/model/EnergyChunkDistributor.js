@@ -63,10 +63,10 @@ define( function( require ) {
         var maxX = Number.NEGATIVE_INFINITY;
         var maxY = Number.NEGATIVE_INFINITY;
         energyChunkContainerSlices.forEach( function( slice ) {
-          minX = Math.min( slice.getShape().bounds.minX, minX );
-          maxX = Math.max( slice.getShape().bounds.minY, maxX );
-          minY = Math.min( slice.getShape().bounds.maxX, minY );
-          maxY = Math.max( slice.getShape().bounds.maxY, maxY );
+          minX = Math.min( slice.shape.bounds.minX, minX );
+          maxX = Math.max( slice.shape.bounds.minY, maxX );
+          minY = Math.min( slice.shape.bounds.maxX, minY );
+          maxY = Math.max( slice.shape.bounds.maxY, maxY );
         } );
         boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
       }
@@ -218,8 +218,7 @@ define( function( require ) {
 
           return particlesRedistributed;
 
-        } )
-      ,
+        } ),
 
       /*
        * Super simple alternative energy chunk distribution algorithm - just puts
@@ -229,12 +228,13 @@ define( function( require ) {
       updatePositionsDbg: function( energyChunkContainerSlices, dt ) {
         // Update the positions of the energy chunks.
         energyChunkContainerSlices.forEach( function( slice ) {
-          var sliceCenter = slice.getShape().bounds.center;
+          var sliceCenter = slice.shape.bounds.center;
           slice.energyChunkList.forEach( function( energyChunk ) {
             energyChunk.position.set( sliceCenter );
           } );
         } );
-      }
+        }
+
       ,
 
       /**
@@ -243,10 +243,8 @@ define( function( require ) {
       generateRandomLocation: function( rectangle ) {
         return new Vector2( rectangle.minX + ( Math.random() * rect.width ), rectangle.minY + ( Math.random() * rectangle.height ) );
       }
-      }
-      ;
-      ;
-      ;
+      };
+
   }
 } );
 
@@ -319,10 +317,10 @@ define( function( require ) {
 //      double maxX = Double.NEGATIVE_INFINITY;
 //      double maxY = Double.NEGATIVE_INFINITY;
 //      for ( EnergyChunkContainerSlice slice : energyChunkContainerSlices ) {
-//      minX = Math.min( slice.getShape().bounds.minX(), minX );
-//      maxX = Math.max( slice.getShape().bounds.getMaxX(), maxX );
-//      minY = Math.min( slice.getShape().bounds.getMinY(), minY );
-//      maxY = Math.max( slice.getShape().bounds.getMaxY(), maxY );
+//      minX = Math.min( slice.shape.bounds.minX(), minX );
+//      maxX = Math.max( slice.shape.bounds.getMaxX(), maxX );
+//      minY = Math.min( slice.shape.bounds.getMinY(), minY );
+//      maxY = Math.max( slice.shape.bounds.getMaxY(), maxY );
 //    }
 //      boundingRect = new Rectangle2D.Double( minX, minY, maxX - minX, maxY - minY );
 //    }
@@ -475,7 +473,7 @@ define( function( require ) {
 //  public static void updatePositionsDbg( List<EnergyChunkContainerSlice> energyChunkContainerSlices, double dt ) {
 //    // Update the positions of the energy chunks.
 //    for ( EnergyChunkContainerSlice slice : energyChunkContainerSlices ) {
-//      Vector2D sliceCenter = new Vector2D( slice.getShape().bounds.centerX, slice.getShape().bounds.centerY );
+//      Vector2D sliceCenter = new Vector2D( slice.shape.bounds.centerX, slice.shape.bounds.centerY );
 //      for ( EnergyChunk energyChunk : slice.energyChunkList ) {
 //        energyChunk.position.set( sliceCenter );
 //      }

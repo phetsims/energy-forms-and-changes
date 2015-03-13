@@ -57,17 +57,13 @@ define( function( require ) {
       var proportionateIncrease = newFluidLevel / this.fluidLevel;
       this.fluidLevel.set( newFluidLevel );
       // Update the shapes of the energy chunk slices.
-      slices.for(;
-      var slice;
-      in
-      slices;
-      )
+      slices.forEach( function( slice )
       {
-        var originalShape = slice.getShape();
+        var originalShape = slice.shape;
         var expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
         var translationTransform = AffineTransform.getTranslateInstance( originalShape.bounds.getX() - expandedOrCompressedShape.bounds.getX(), originalShape.bounds.getY() - expandedOrCompressedShape.bounds.getY() );
         slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
-      }
+      } );
     },
 
     /**
@@ -121,7 +117,7 @@ define( function( require ) {
         energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, position ) );
       }
       else {
-        super.addEnergyChunk( energyChunk );
+        this.addEnergyChunk( energyChunk );
       }
     }
   } );
@@ -212,7 +208,7 @@ define( function( require ) {
 //
 //    // Update the shapes of the energy chunk slices.
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      Shape originalShape = slice.getShape();
+//      Shape originalShape = slice.shape;
 //      Shape expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
 //      AffineTransform translationTransform = AffineTransform.getTranslateInstance( originalShape.bounds.getX() - expandedOrCompressedShape.bounds.getX(),
 //          originalShape.bounds.getY() - expandedOrCompressedShape.bounds.getY() );

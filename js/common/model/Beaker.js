@@ -207,7 +207,7 @@ define( function( require ) {
     addEnergyChunkToNextSlice: function( energyChunk ) {
       var totalSliceArea = 0;
       this.slices.forEach( function( slice ) {
-        totalSliceArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
+        totalSliceArea += slice.shape.bounds.width * slice.shape.bounds.height;
       } );
 
       var sliceSelectionValue = Math.random();
@@ -281,30 +281,28 @@ define( function( require ) {
       for ( i = 0; i < NUM_SLICES; i++ ) {
         var proportion = ( i + 1 ) * ( 1 / ( NUM_SLICES + 1 ) );
 
-        var slicePath = new Path();
-        {
-          // The slice width is calculated to fit into the 3D projection.
-          // It uses an exponential function that is shifted in order to
-          // yield width value proportional to position in Z-space.
 
-          var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
+        // The slice width is calculated to fit into the 3D projection.
+        // It uses an exponential function that is shifted in order to
+        // yield width value proportional to position in Z-space.
 
-          var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
+        var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
 
-          var topY = bottomY + fluidRect.height;
+        var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
 
-          var centerX = fluidRect.centerX;
+        var topY = bottomY + fluidRect.height;
 
-          var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
-          var sliceShape = new Shape();
-          sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
-            .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
-            .lineTo( centerX + sliceWidth / 2, topY )
-            .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
-            .lineTo( centerX - sliceWidth / 2, bottomY );
-          slicePath.shape = sliceShape;
-        }
-        this.slices.push( new EnergyChunkContainerSlice( slicePath, -proportion * this.width, this.position ) );
+        var centerX = fluidRect.centerX;
+
+        var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
+        var sliceShape = new Shape();
+        sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
+          .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
+          .lineTo( centerX + sliceWidth / 2, topY )
+          .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
+          .lineTo( centerX - sliceWidth / 2, bottomY );
+
+        this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.position ) );
       }
     },
 
@@ -344,7 +342,7 @@ define( function( require ) {
       var pointIsAboveWaterSurface = true;
       var i;
       for ( i = 0; i < this.slices.length; i++ ) {
-        if ( point.y < this.slices[ i ].getShape().bounds.maxY ) {
+        if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
           pointIsAboveWaterSurface = false;
           break;
         }
@@ -359,7 +357,7 @@ define( function( require ) {
       var maxSliceDensity = 0;
       var densestSlice = null;
       this.slices.forEach( function( slice ) {
-        var sliceDensity = slice.energyChunkList.size() / ( slice.getShape().bounds.width * slice.getShape().bounds.height );
+        var sliceDensity = slice.energyChunkList.size() / ( slice.shape.bounds.width * slice.shape.bounds.height );
         if ( sliceDensity > maxSliceDensity ) {
           maxSliceDensity = sliceDensity;
           densestSlice = slice;
@@ -552,13 +550,13 @@ define( function( require ) {
 //  @Override protected void addEnergyChunkToNextSlice( EnergyChunk ec ) {
 //    double totalSliceArea = 0;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      totalSliceArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
+//      totalSliceArea += slice.shape.bounds.width * slice.shape.bounds.height;
 //    }
 //    double sliceSelectionValue = RAND.nextDouble();
 //    EnergyChunkContainerSlice chosenSlice = slices.get( 0 );
 //    double accumulatedArea = 0;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      accumulatedArea += slice.getShape().bounds.width * slice.getShape().bounds.height;
+//      accumulatedArea += slice.shape.bounds.width * slice.shape.bounds.height;
 //      if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
 //        chosenSlice = slice;
 //        break;
@@ -650,7 +648,7 @@ define( function( require ) {
 //  @Override public EnergyChunk extractClosestEnergyChunk( Vector2D point ) {
 //    boolean pointIsAboveWaterSurface = true;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      if ( point.getY() < slice.getShape().bounds.maxY ) {
+//      if ( point.getY() < slice.shape.bounds.maxY ) {
 //        pointIsAboveWaterSurface = false;
 //        break;
 //      }
@@ -665,7 +663,7 @@ define( function( require ) {
 //    double maxSliceDensity = 0;
 //    EnergyChunkContainerSlice densestSlice = null;
 //    for ( EnergyChunkContainerSlice slice : slices ) {
-//      double sliceDensity = slice.energyChunkList.size() / ( slice.getShape().bounds.width * slice.getShape().bounds.height );
+//      double sliceDensity = slice.energyChunkList.size() / ( slice.shape.bounds.width * slice.shape.bounds.height );
 //      if ( sliceDensity > maxSliceDensity ) {
 //        maxSliceDensity = sliceDensity;
 //        densestSlice = slice;
