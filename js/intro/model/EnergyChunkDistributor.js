@@ -50,8 +50,8 @@ define( function( require ) {
      * a set of slices interact with each other, but the container for each is
      * defined by the boundary of its containing slice.
      *
-     * @param energyChunkContainerSlices Set of slices, each containing a set of energy chunks.
-     * @param dt                         Delta time
+     * @param {Array.<energyChunkContainerSlice>} energyChunkContainerSlices - Set of slices, each containing a set of energy chunks.
+     * @param {number} dt - Delta time
      */
     updatePositions: function( energyChunkContainerSlices, dt ) {
 
@@ -193,6 +193,7 @@ define( function( require ) {
             var newVelocity = energyChunk.getVelocity().plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
 
             // Calculate drag force.  Uses standard drag equation.
+            // Calculate drag force.  Uses standard drag equation.
             var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
             var dragForceVector = dragMagnitude > 0 ? newVelocity.rotate( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
 
@@ -224,6 +225,9 @@ define( function( require ) {
        * Super simple alternative energy chunk distribution algorithm - just puts
        * all energy chunks in center of slide.  This is useful for debugging.
        * Rename it to substitute if for the 'real' algorithm.
+       *
+       * @param {Array.<energyChunkContainerSlice>} energyChunkContainerSlices - Set of slices, each containing a set of energy chunks.
+       * @param {number} dt - Delta time
        */
       updatePositionsDbg: function( energyChunkContainerSlices, dt ) {
         // Update the positions of the energy chunks.
@@ -233,18 +237,17 @@ define( function( require ) {
             energyChunk.position.set( sliceCenter );
           } );
         } );
-        }
+        },
 
-      ,
-
-      /**
-       *
-       */
+        /**
+         * Function that returns a random location within a rectangle
+         * @param {Rectangle} rectangle
+         * @returns {Vector2}
+         */
       generateRandomLocation: function( rectangle ) {
         return new Vector2( rectangle.minX + ( Math.random() * rect.width ), rectangle.minY + ( Math.random() * rectangle.height ) );
       }
       };
-
   }
 } );
 
