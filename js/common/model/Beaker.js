@@ -1,10 +1,10 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Model element that represents a beaker that contains some amount of water,
- * and the water contains energy, which includes energy chunks, and has
- * temperature.
+ * Model element that represents a beaker that contains some amount of water, and the water contains energy, which
+ * includes energy chunks, and has temperature.
  *
+ * TODO: Some functions in the file could use documentation.
  * @author John Blanco
  */
 
@@ -17,14 +17,13 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
-  var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
-  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyType' );
+  var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSlice' );
+  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Path = require( 'SCENERY/Path' );
-  //var Property = require( 'AXON/Property' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
@@ -45,6 +44,7 @@ define( function( require ) {
   var INITIAL_FLUID_LEVEL = 0.5;
 
   /**
+   * Constructor for Beaker.  Initial posiition is the center bottom of the beaker rectangle.
    *
    * @param {Vector2} initialPosition
    * @param {number} width
@@ -58,31 +58,30 @@ define( function( require ) {
       initialPosition,
       width,
       height,
-      this.calculateWaterMass( width, height * INITIAL_FLUID_LEVEL ),
+      5, // random test number, I dont think we have access to self here yet.
+//      this.calculateWaterMass( width, height * INITIAL_FLUID_LEVEL ),
       WATER_SPECIFIC_HEAT,
       energyChunksVisibleProperty );
 
-    var self = this;
+      var thisBeaker = this;
+//    var self = this;
 
     this.width = width;
     this.height = height;
 
-    // Property that is used to control and track the amount of fluid in the beaker.
-    //TODO : should nt this be added to property set?
-    PropertySet.call( this, {
-      fluidLevel: INITIAL_FLUID_LEVEL,
-      // Top surface, which is the surface upon which other model elements can
-      // sit.  For the beaker, this is only slightly above the bottom surface.
-      topSurface: null,// {HorizontalSurface}
-      // Bottom surface, which is the surface that touches the ground, or sits
-      // on a burner, etc.
-      bottomSurface: null, // {HorizontalSurface}
-      // Property that allows temperature changes to be monitored.
-      temperature: EFACConstants.ROOM_TEMPERATURE
+    //TODO: Find PhET naming convention when using propertySet without inherit
+    this.propertySet = new PropertySet( {
+      fluidLevel: INITIAL_FLUID_LEVEL, // Property that is used to control and track the amount of fluid in the beaker.
+      // Top surface, which is the surface upon which other model elements can sit.  For the beaker, this is only
+      // slightly above the bottom surface.
+      topSurface: null,
+      // Bottom surface, which is the surface that touches the ground, or sits on a burner, etc.
+      bottomSurface: null,
+      temperature: EFACConstants.ROOM_TEMPERATURE // Property that allows temperature changes to be monitored.
     } );
 
-    // Indicator of how much steam is being emitted.  Ranges from 0 to 1, where
-    // 0 is no steam, 1 is the max amount (full boil).
+    // Indicator of how much steam is being emitted.  Ranges from 0 to 1, where 0 is no steam, 1 is the max amount
+    // (full boil).
     this.steamingProportion = 0;
 
     // Max height above water where steam still affects the temperature.
@@ -92,20 +91,19 @@ define( function( require ) {
      * Function that updates the bottom and top surfaces
      */
     function updateSurfaces() {
-      var rectangle = self.getRect();
-      self.topSurface = new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.minY + MATERIAL_THICKNESS,
-        self );
-      self.bottomSurface = new HorizontalSurface(
+      var rectangle = thisBeaker.getRect();
+      thisBeaker.topSurface = new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
+      thisBeaker.bottomSurface = new HorizontalSurface(
         new Range( rectangle.minX, rectangle.maxX ),
         rectangle.minY,
-        self );
+        thisBeaker );
     }
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( updateSurfaces );
-
+    this.positionProperty.link( function() {
+      console.log( ' beaker position changing' );
+    });
 
   }
 
@@ -124,7 +122,7 @@ define( function( require ) {
      */
     getRect: function() {
       return new Rectangle(
-        this.position.x - this.width / 2,
+          this.position.x - this.width / 2,
         this.position.y,
         this.width,
         this.height );
@@ -135,7 +133,7 @@ define( function( require ) {
      * @param {number} dt
      */
     step: function( dt ) {
-      RectangularThermalMovableModelElement.prototype.step.call( this, dt );
+//      RectangularThermalMovableModelElement.prototype.step.call( this, dt );
       this.temperature = this.getTemperature();
       this.steamingProportion = 0;
       if ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature < STEAMING_RANGE ) {
@@ -180,20 +178,24 @@ define( function( require ) {
      * *
      */
     addInitialEnergyChunks: function() {
+
+      // extend scope for nested functions
+      var thisBeaker = this;
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
-        //TODO: this energy comes from nowhere
-        var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this, energy );
-        var initialChunkBounds = this.getSliceBounds();
-        while ( this.getNumEnergyChunks() < targetNumChunks ) {
+        var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( thisBeaker.energy );
+        var initialChunkBounds = thisBeaker.getSliceBounds();
+        while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
           // Add a chunk at a random location in the beaker.
+          // TODO: energyChunksVisibleProperty should probably bet energyChunksVisibleProperty.get() OR energyChungsVisible
           this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), energyChunksVisibleProperty ) );
         }
 
         // Distribute the energy chunks within the beaker.
-        var i;
-        for ( i = 0; i < 1000; i++ ) {
-          if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+        // TODO: What is this loop?  Why 1000? (this number is in the Java, but there is no explanation there either.)
+        // TODO: Investigate !EnergyChunkDistributor.updatePositions().
+        for ( var i = 0; i < 1000; i++ ) {
+          if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
             break;
           }
         }
@@ -201,8 +203,8 @@ define( function( require ) {
     },
 
     /**
-     * *
-     * @param energyChunk
+     * Add an energy chunk to the next horizontntal slize
+     * @param {EnergyChunk} energyChunk
      */
     addEnergyChunkToNextSlice: function( energyChunk ) {
       var totalSliceArea = 0;
@@ -211,6 +213,8 @@ define( function( require ) {
       } );
 
       var sliceSelectionValue = Math.random();
+      // TODO: this.slices.get() should probably be this.slices[0]? Unless '0' is an id for getElementById()
+      // TODO: Probably have to change this throughout this function( if not the file )
       var chosenSlice = this.slices.get( 0 );
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
@@ -242,19 +246,19 @@ define( function( require ) {
         this.position.y, this.width, this.height * this.fluidLevel ), true );
     },
 
-    /*
+    /**
      * Get the area where the temperature of the steam can be sensed.
      */
-
     getSteamArea: function() {
       // Height of steam rectangle is based on beaker height and steamingProportion.
-
+      // TODO: this.fluidLevel should be changed to this.propterySet.fluidLevel ( or equivalent after naming updates )
       var liquidWaterHeight = this.height * this.fluidLevel;
       return new Rectangle( this.position.x - this.getWidth() / 2,
-        this.position.y + liquidWaterHeight,
+          this.position.y + liquidWaterHeight,
         this.width,
         this.maxSteamHeight );
     },
+
     /**
      *
      * @param {number} heightAboveWater
@@ -271,21 +275,17 @@ define( function( require ) {
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
       var fluidRect = new Rectangle(
-        this.position.x - this.width / 2,
+          this.position.x - this.width / 2,
         this.position.y,
         this.width,
-        this.height * INITIAL_FLUID_LEVEL );
+          this.height * INITIAL_FLUID_LEVEL );
 
       var widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );
-      var i;
-      for ( i = 0; i < NUM_SLICES; i++ ) {
+      for ( var i = 0; i < NUM_SLICES; i++ ) {
         var proportion = ( i + 1 ) * ( 1 / ( NUM_SLICES + 1 ) );
 
-
-        // The slice width is calculated to fit into the 3D projection.
-        // It uses an exponential function that is shifted in order to
-        // yield width value proportional to position in Z-space.
-
+        // The slice width is calculated to fit into the 3D projection. It uses an exponential function that is shifted
+        // in order to yield width value proportional to position in Z-space.
         var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
 
         var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
@@ -302,10 +302,9 @@ define( function( require ) {
           .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
           .lineTo( centerX - sliceWidth / 2, bottomY );
 
-        this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.position ) );
+        this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.positionProperty ) );
       }
     },
-
 
     /**
      * Function that returns the energy Container Category
@@ -329,19 +328,19 @@ define( function( require ) {
      * @returns {number}
      */
     getTemperature: function() {
-      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
+//      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
     },
 
-    /*
-     * This override handles the case where the point is above the beaker.
-     * In this case, we want to pull from all slices evenly, and not favor
-     * the slices the bump up at the top in order to match the 3D look of the
-     * water surface.
+    /**
+     * This override handles the case where the point is above the beaker.  In this case, we want to pull from all
+     * slices evenly, and not favor the slices the bump up at the top in order to match the 3D look of the water
+     * surface.
+     *
+     * @param {Vector2} point
      */
     extractClosestEnergyChunk: function( point ) {
       var pointIsAboveWaterSurface = true;
-      var i;
-      for ( i = 0; i < this.slices.length; i++ ) {
+      for ( var i = 0; i < this.slices.length; i++ ) {
         if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
           pointIsAboveWaterSurface = false;
           break;
@@ -349,27 +348,27 @@ define( function( require ) {
       }
 
       if ( !pointIsAboveWaterSurface ) {
-        return RectangularThermalMovableModelElement.extractClosestEnergyChunk( point );
+        return this.extractClosestEnergyChunk( point )
       }
 
-      // Point is above water surface.  Identify the slice with the highest
-      // density, since this is where we will get the energy chunk.
+      // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the
+      // energy chunk.
       var maxSliceDensity = 0;
       var densestSlice = null;
       this.slices.forEach( function( slice ) {
-        var sliceDensity = slice.energyChunkList.size() / ( slice.shape.bounds.width * slice.shape.bounds.height );
+        var sliceDensity = slice.energyChunkList.length / ( slice.shape.bounds.width * slice.shape.bounds.height );
         if ( sliceDensity > maxSliceDensity ) {
           maxSliceDensity = sliceDensity;
           densestSlice = slice;
         }
       } );
 
-      if ( densestSlice === null || densestSlice.energyChunkList.size() === 0 ) {
+      if ( densestSlice === null || densestSlice.energyChunkList.length === 0 ) {
         console.log( " - Warning: No energy chunks in the beaker, can't extract any." );
         return null;
       }
 
-      var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
+      var highestEnergyChunk = densestSlice.energyChunkList.get(0);
       densestSlice.energyChunkList.forEach( function( energyChunk ) {
         if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
           highestEnergyChunk = energyChunk;
@@ -379,9 +378,6 @@ define( function( require ) {
       this.removeEnergyChunk( highestEnergyChunk );
       return highestEnergyChunk;
     }
-  } )
-    ;
-} )
-;
 
-
+  } );
+} );

@@ -17,7 +17,6 @@ define( function() {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
 
-
   /**
    *
    * @param {Shape} shape
@@ -33,7 +32,8 @@ define( function() {
     this.energyChunkList = new ObservableArray();
 
     // Monitor the anchor position and move the contained energy chunks to match.
-    anchorPointProperty.link( function( newPosition, oldPosition ) {
+    anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+      debugger;
       // TODO: there is something wrong here
       var translation = newPosition.minus( oldPosition );
       //TODO How to do this in javascript?

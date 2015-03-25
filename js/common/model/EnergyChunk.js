@@ -15,6 +15,9 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   //var Vector2 = require( 'DOT/Vector2' );
 
+  //static data
+  var instanceCount = 0; // Base count for the unique ID of this slice.
+
   /**
    *
    * @param {EnergyType} initialEnergyType
@@ -32,6 +35,9 @@ define( function( require ) {
       energyType: initialEnergyType,
       visible: null // a boolean
     } );
+
+    // add a unique for the hash map that will call on these slices
+    this.uniqueID = instanceCount++;
 
     this.visibleProperty = visibilityControlProperty;
     this.velocity = initialVelocity;

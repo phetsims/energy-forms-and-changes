@@ -11,12 +11,13 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  // TODO: calling block in this file creates circular dependancy
+//  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-  var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
+  var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyType' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -24,7 +25,7 @@ define( function( require ) {
   var Rectangle = require( 'DOT/Rectangle' );
   // var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/common/TemperatureAndColor' );
   var Shape = require( 'KITE/Shape' );
-  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserModelMovableElement' );
+  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
 
@@ -433,9 +434,9 @@ define( function( require ) {
     getProjectedShape: function() {
       // This projects a rectangle, override for other behavior.
 
-      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, Block.SURFACE_WIDTH / 2 );
+//      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, Block.SURFACE_WIDTH / 2 );
 
-      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, -Block.SURFACE_WIDTH / 2 );
+//      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, -Block.SURFACE_WIDTH / 2 );
 
       var shape = new Shape();
 

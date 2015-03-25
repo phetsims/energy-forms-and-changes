@@ -28,7 +28,7 @@ define( function( require ) {
     this.elementOnSurface = null; // {ModelElement}
   }
 
-  inherit( Object, HorizontalSurface, {
+  return inherit( Object, HorizontalSurface, {
 
     /**
      * @public
