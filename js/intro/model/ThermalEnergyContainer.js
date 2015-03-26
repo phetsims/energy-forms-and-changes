@@ -9,7 +9,18 @@ define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
 
+  /**
+   * Basic constructor for ThermalEnergyContainer.
+   * TODO: This constructor does nothing.  Is the interface necessary for javascript?
+   *
+   * @constructor
+   */
+  function ThermalEnergyContainer() {
+
+  }
+
   return inherit( Object, ThermalEnergyContainer, {
+
     /**
      * Change the amount of energy contained.  This is used to both add and
      * remove energy.
