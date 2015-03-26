@@ -96,6 +96,7 @@ define( function( require ) {
         for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
           var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
           //TODO: decide if we want HEAT transfer constants as properties;
+          debugger;
           var thermalEnergyLost = ( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) * HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
           this.changeEnergy( -thermalEnergyLost );
         }

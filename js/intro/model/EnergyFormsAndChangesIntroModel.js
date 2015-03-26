@@ -10,8 +10,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  //var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
-     var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
+  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
 //  var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/common/intro/model/BeakerContainer' );
 //  var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
 //  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
@@ -56,7 +56,7 @@ define( function( require ) {
       energyChunksVisible: false
     } );
 
-    var beaker = new Beaker( new Vector2(0, 0), 5, 5, true );
+    var beaker = new Beaker( new Vector2( 0, 0 ), 5, 5, true );
 
     this.thermometers = [];
     var i;

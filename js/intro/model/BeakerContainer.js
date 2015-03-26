@@ -1,8 +1,7 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Model element that represents a beaker that can contain other thermal
- * model elements.
+ * Model element that represents a beaker that can contain other thermal model elements.
  *
  * @author John Blanco
  */
@@ -30,14 +29,14 @@ define( function( require ) {
 
     Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty );
     this.potentiallyContainedElements = potentiallyContainedElements;
+
   }
 
   return inherit( Beaker, BeakerContainer, {
 
-    /*
-     * Update the fluid level in the beaker based upon any displacement that
-     * could be caused by the given rectangles.  This algorithm is strictly
-     * two dimensional, even though displacement is more of the 3D concept.
+    /**
+     * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
+     * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
      *
      * @param potentiallyDisplacingRectangles
      *
