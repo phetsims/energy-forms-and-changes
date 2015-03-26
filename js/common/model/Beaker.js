@@ -58,14 +58,11 @@ define( function( require ) {
       initialPosition,
       width,
       height,
-      5, // random test number, I dont think we have access to self here yet.
-//      this.calculateWaterMass( width, height * INITIAL_FLUID_LEVEL ),
+      this.calculateWaterMass( width, height * INITIAL_FLUID_LEVEL ),
       WATER_SPECIFIC_HEAT,
       energyChunksVisibleProperty );
 
-      var thisBeaker = this;
-//    var self = this;
-
+    var thisBeaker = this;
     this.width = width;
     this.height = height;
 
@@ -101,14 +98,12 @@ define( function( require ) {
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( updateSurfaces );
-    this.positionProperty.link( function() {
-      console.log( ' beaker position changing' );
-    });
 
   }
 
   return inherit( RectangularThermalMovableModelElement, Beaker, {
-    /*
+
+    /**
      * Get the untranslated rectangle that defines the shape of the beaker.
      * @returns {Rectangle}
      */
@@ -178,7 +173,6 @@ define( function( require ) {
      * *
      */
     addInitialEnergyChunks: function() {
-
       // extend scope for nested functions
       var thisBeaker = this;
       this.slices.forEach( function( slice ) {
@@ -187,13 +181,11 @@ define( function( require ) {
         var initialChunkBounds = thisBeaker.getSliceBounds();
         while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
           // Add a chunk at a random location in the beaker.
-          // TODO: energyChunksVisibleProperty should probably bet energyChunksVisibleProperty.get() OR energyChungsVisible
-          this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), energyChunksVisibleProperty ) );
+          this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), thisBeaker.energyChunksVisibleProperty.get() ) );
         }
 
         // Distribute the energy chunks within the beaker.
-        // TODO: What is this loop?  Why 1000? (this number is in the Java, but there is no explanation there either.)
-        // TODO: Investigate !EnergyChunkDistributor.updatePositions().
+        // TODO: Why 1000 for the loop max?
         for ( var i = 0; i < 1000; i++ ) {
           if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
             break;
@@ -203,7 +195,8 @@ define( function( require ) {
     },
 
     /**
-     * Add an energy chunk to the next horizontntal slize
+     * Add an energy chunk to the next horizontal slice.
+     *
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunkToNextSlice: function( energyChunk ) {
@@ -213,12 +206,10 @@ define( function( require ) {
       } );
 
       var sliceSelectionValue = Math.random();
-      // TODO: this.slices.get() should probably be this.slices[0]? Unless '0' is an id for getElementById()
-      // TODO: Probably have to change this throughout this function( if not the file )
-      var chosenSlice = this.slices.get( 0 );
+      var chosenSlice = this.slices[0];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
-        accumulatedArea += this.slices.get( i ).getShape().bounds.width * this.slices.get( i ).getShape().bounds.height;
+        accumulatedArea += this.slices[ i ].getShape().bounds.width * this.slices[i].getShape().bounds.height;
         if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
           chosenSlice = this.slice;
           break;
@@ -243,7 +234,7 @@ define( function( require ) {
      */
     getThermalContactArea: function() {
       return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
-        this.position.y, this.width, this.height * this.fluidLevel ), true );
+        this.position.y, this.width, this.height * this.propertySet.fluidLevel ), true );
     },
 
     /**
@@ -251,8 +242,7 @@ define( function( require ) {
      */
     getSteamArea: function() {
       // Height of steam rectangle is based on beaker height and steamingProportion.
-      // TODO: this.fluidLevel should be changed to this.propterySet.fluidLevel ( or equivalent after naming updates )
-      var liquidWaterHeight = this.height * this.fluidLevel;
+      var liquidWaterHeight = this.height * this.propertySet.fluidLevel;
       return new Rectangle( this.position.x - this.getWidth() / 2,
           this.position.y + liquidWaterHeight,
         this.width,
@@ -328,7 +318,7 @@ define( function( require ) {
      * @returns {number}
      */
     getTemperature: function() {
-//      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
+      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
     },
 
     /**
@@ -368,7 +358,7 @@ define( function( require ) {
         return null;
       }
 
-      var highestEnergyChunk = densestSlice.energyChunkList.get(0);
+      var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
       densestSlice.energyChunkList.forEach( function( energyChunk ) {
         if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
           highestEnergyChunk = energyChunk;
