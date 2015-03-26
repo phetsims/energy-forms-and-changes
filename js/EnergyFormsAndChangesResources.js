@@ -16,31 +16,29 @@ define( function( require ) {
     //public static final PhetResources RESOURCES : new PhetResources( PROJECT_NAME );
 
 
-//TODO: Refactor Strings: Append the word 'String' to every string variable and use CamelCase
 //Strings
 
-    BRICK: require( 'string!ENERGY_FORMS_AND_CHANGES/brick' ),
-    CHEMICAL: require( 'string!ENERGY_FORMS_AND_CHANGES/chemical' ),
-    CLOUDS: require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' ),
-    COOL: require( 'string!ENERGY_FORMS_AND_CHANGES/cool' ),
-    ELECTRICAL: require( 'string!ENERGY_FORMS_AND_CHANGES/electrical' ),
-    ENERGY_CHUNK_LABEL: require( 'string!ENERGY_FORMS_AND_CHANGES/energyChunkLabel' ),
-    ENERGY_SYMBOLS: require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' ),
-    ENERGY_SYSTEMS: require( 'string!ENERGY_FORMS_AND_CHANGES/energySystems' ),
-    FAST_FORWARD: require( 'string!ENERGY_FORMS_AND_CHANGES/fastForward' ),
-    FEED_ME: require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' ),
-    FORMS_OF_ENERGY: require( 'string!ENERGY_FORMS_AND_CHANGES/formsOfEnergy' ),
-    HEAT: require( 'string!ENERGY_FORMS_AND_CHANGES/heat' ),
-    INTRO: require( 'string!ENERGY_FORMS_AND_CHANGES/intro' ),
-    IRON: require( 'string!ENERGY_FORMS_AND_CHANGES/iron' ),
-    LIGHT: require( 'string!ENERGY_FORMS_AND_CHANGES/light' ),
-    LOTS: require( 'string!ENERGY_FORMS_AND_CHANGES/lots' ),
-    MECHANICAL: require( 'string!ENERGY_FORMS_AND_CHANGES/mechanical' ),
-    NONE: require( 'string!ENERGY_FORMS_AND_CHANGES/none' ),
-    NORMAL: require( 'string!ENERGY_FORMS_AND_CHANGES/normal' ),
-    THERMAL: require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' ),
-    WATER: require( 'string!ENERGY_FORMS_AND_CHANGES/water' ),
-
+    brickString: require( 'string!ENERGY_FORMS_AND_CHANGES/brick' ),
+    chemicalString: require( 'string!ENERGY_FORMS_AND_CHANGES/chemical' ),
+    cloudsString: require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' ),
+    coolString: require( 'string!ENERGY_FORMS_AND_CHANGES/cool' ),
+    electricalString: require( 'string!ENERGY_FORMS_AND_CHANGES/electrical' ),
+    energyChunkLabelString: require( 'string!ENERGY_FORMS_AND_CHANGES/energyChunkLabel' ),
+    energySymbolsString: require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' ),
+    energySystemsString: require( 'string!ENERGY_FORMS_AND_CHANGES/energySystems' ),
+    fastForwardString: require( 'string!ENERGY_FORMS_AND_CHANGES/fastForward' ),
+    feedMeString: require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' ),
+    formsOfEnergyString: require( 'string!ENERGY_FORMS_AND_CHANGES/formsOfEnergy' ),
+    heatString: require( 'string!ENERGY_FORMS_AND_CHANGES/heat' ),
+    introString: require( 'string!ENERGY_FORMS_AND_CHANGES/intro' ),
+    ironString: require( 'string!ENERGY_FORMS_AND_CHANGES/iron' ),
+    lightString: require( 'string!ENERGY_FORMS_AND_CHANGES/light' ),
+    lotsString: require( 'string!ENERGY_FORMS_AND_CHANGES/lots' ),
+    mechanicalString: require( 'string!ENERGY_FORMS_AND_CHANGES/mechanical' ),
+    noneString: require( 'string!ENERGY_FORMS_AND_CHANGES/none' ),
+    normalString: require( 'string!ENERGY_FORMS_AND_CHANGES/normal' ),
+    thermalString: require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' ),
+    waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' ),
 
 //Images
 

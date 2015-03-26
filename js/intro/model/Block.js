@@ -4,6 +4,7 @@
  * Class that represents a block in the model.  In the model, a block is two-
  * dimensional, so its shape is represented by a rectangle.
  *
+ * TODO: Some functions in this model object could use documentation.
  * @author John Blanco
  */
 
@@ -38,12 +39,12 @@ define( function( require ) {
   function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
     RectangularThermalMovableModelElement.call( this, initialPosition, SURFACE_WIDTH, SURFACE_WIDTH, Math.pow( SURFACE_WIDTH, 3 ) * density, specificHeat, energyChunksVisibleProperty );
 
-    var block = this;
+    var thisBlock = this;
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
-      block.updateTopSurfaceProperty();
-      block.updateBottomSurfaceProperty();
+      thisBlock.updateTopSurfaceProperty();
+      thisBlock.updateBottomSurfaceProperty();
     } );
   }
 

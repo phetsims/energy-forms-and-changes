@@ -47,7 +47,7 @@ define( function( require ) {
      * @returns {EnergyContainerCategory.IRON|*|exports.IRON}
      */
     getLabel: function() {
-      return EnergyFormsAndChangesResources.Strings.IRON;
+      return EnergyFormsAndChangesResources.ironString;
     },
 
     /**
