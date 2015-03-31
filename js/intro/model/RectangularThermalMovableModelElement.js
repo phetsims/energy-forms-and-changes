@@ -11,8 +11,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  // TODO: calling block in this file creates circular dependancy
-//  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkDistributor' );
@@ -433,10 +431,8 @@ define( function( require ) {
      */
     getProjectedShape: function() {
       // This projects a rectangle, override for other behavior.
-
-//      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, Block.SURFACE_WIDTH / 2 );
-
-//      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, -Block.SURFACE_WIDTH / 2 );
+      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, EFACConstants.SURFACE_WIDTH / 2 );
+      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, -EFACConstants.SURFACE_WIDTH / 2 );
 
       var shape = new Shape();
 

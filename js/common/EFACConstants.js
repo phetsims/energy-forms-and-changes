@@ -95,7 +95,6 @@ define( function( require ) {
     SECOND_TAB_BACKGROUND_COLOR: FIRST_TAB_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
 
-
     CONTROL_PANEL_OUTLINE_STROKE: 1.5,
     CONTROL_PANEL_OUTLINE_COLOR: 'black',
     CLOCK_CONTROL_BACKGROUND_COLOR: new Color( 120, 120, 120 ),
@@ -104,6 +103,9 @@ define( function( require ) {
     ENERGY_SYSTEMS_MVT_SCALE_FACTOR: 2200,
 
     // Constants that control the speed of the energy chunks
-    ENERGY_CHUNK_VELOCITY: 0.04 // In meters/sec.
+    ENERGY_CHUNK_VELOCITY: 0.04, // In meters/sec.
+
+    // Constants that define surface width of various rectangular objects
+    SURFACE_WIDTH: 0.045
   };
 } );

@@ -24,7 +24,7 @@ define( function( require ) {
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
 
   // constants
-  var SURFACE_WIDTH = 0.045; // In meters
+  //var SURFACE_WIDTH = 0.045; // In meters
   var NUM_ENERGY_CHUNK_SLICES = 4;  // Number of slices where energy chunks may be placed.
   var MAX_TEMPERATURE = 450; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
 
@@ -37,7 +37,7 @@ define( function( require ) {
    * @constructor
    */
   function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
-    RectangularThermalMovableModelElement.call( this, initialPosition, SURFACE_WIDTH, SURFACE_WIDTH, Math.pow( SURFACE_WIDTH, 3 ) * density, specificHeat, energyChunksVisibleProperty );
+    RectangularThermalMovableModelElement.call( this, initialPosition, EFACConstants.BLOCK_SURFACE_WIDTH, EFACConstants.BLOCK_SURFACE_WIDTH, Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * density, specificHeat, energyChunksVisibleProperty );
 
     var thisBlock = this;
 
@@ -96,14 +96,14 @@ define( function( require ) {
      */
     addEnergyChunkSlices: function() {
       // The slices for the block are intended to match the projection used in the view.
-      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, SURFACE_WIDTH / 2 );
+      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, EFACConstants.SURFACE_WIDTH / 2 );
       var i;
       for ( i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
-        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, i * ( -SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
+        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, i * ( -EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
 
         var transform = new Matrix3.translation( projectionToFront.getX() + projectionOffsetVector.getX(),
           projectionToFront.getY() + projectionOffsetVector.getY() );
-        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
+        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
       }
     },
 
@@ -112,10 +112,10 @@ define( function( require ) {
      * @returns {Rectangle}
      */
     getRect: function() {
-      return new Rectangle( this.position.x - SURFACE_WIDTH / 2,
+      return new Rectangle( this.position.x - EFACConstants.SURFACE_WIDTH / 2,
         this.position.y,
-        SURFACE_WIDTH,
-        SURFACE_WIDTH );
+        EFACConstants.SURFACE_WIDTH,
+        EFACConstants.SURFACE_WIDTH );
     },
 
     /**
@@ -139,7 +139,7 @@ define( function( require ) {
      * @returns {Rectangle}
      */
     getRawShape: function() {
-      return new Rectangle( -SURFACE_WIDTH / 2, 0, SURFACE_WIDTH, SURFACE_WIDTH );
+      return new Rectangle( -EFACConstants.SURFACE_WIDTH / 2, 0, EFACConstants.SURFACE_WIDTH, EFACConstants.SURFACE_WIDTH );
     },
 
     /**
