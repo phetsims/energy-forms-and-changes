@@ -1,8 +1,8 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * A movable model element that contains thermal energy and that, at least in
- * the model, has an overall shape that can be represented as a rectangle.
+ * A movable model element that contains thermal energy and that, at least in the model, has an overall shape that can
+ * be represented as a rectangle.
  *
  * @author John Blanco
  */
@@ -19,15 +19,15 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  // var Path = require('SCENERY/nodes/Path');
   var Rectangle = require( 'DOT/Rectangle' );
-  // var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/common/TemperatureAndColor' );
   var Shape = require( 'KITE/Shape' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
-
-  /*
+  /**
+   * Constructor for a RectangularThermalMovableModelElement.  This implements the behavior of a superclass for many
+   * objects in this sim such as Block, Beaker, Brick, and IronBlock.
+   *
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {number} height
@@ -43,7 +43,6 @@ define( function( require ) {
     this.height = height;
     this.specificHeat = specificHeat;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-
 
     this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
 
@@ -64,16 +63,17 @@ define( function( require ) {
 
 
   return inherit( UserMovableModelElement, RectangularThermalMovableModelElement, {
+
     /**
      * Get the rectangle that defines this elements position and shape in
      * model space.
      */
+    getRect: function() {
+      throw new error( 'getRect() must be implemented in descendant classes.' );
+    },
 
-//    getRect: function() {
-//      assert & assert(true,'getRect() must be define in a subclass');
-//      return null;
-//    },
     /**
+     * Change the energy of this element by the desired value.
      *
      * @param {number} deltaEnergy
      */
@@ -81,15 +81,12 @@ define( function( require ) {
       this.energy += deltaEnergy;
     },
 
-    /**
-     *
-     * @returns {number}
-     */
     getEnergy: function() {
       return this.energy;
     },
 
     /**
+     *  Get the temperature of this element as a function of energy, mass, and specific heat.
      *
      * @returns {number}
      */
@@ -97,19 +94,12 @@ define( function( require ) {
       return this.energy / ( this.mass * this.specificHeat );
     },
 
-    /**
-     *
-     */
     reset: function() {
       UserMovableModelElement.prototype.reset.call( this );
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
       this.addInitialEnergyChunks();
     },
 
-    /**
-     *
-     * @param {number} dt
-     */
     step: function( dt ) {
 
       // Distribute the energy chunks contained within this model element.
@@ -124,7 +114,7 @@ define( function( require ) {
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
-      var self=this;
+      var self = this;
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         energyChunkWanderController.updatePosition( dt );
@@ -135,23 +125,19 @@ define( function( require ) {
     },
 
     /**
-     * Add an energy chunk to this model element.  The energy chunk can be
-     * outside of the element's rectangular bounds, in which case it is added
-     * to the list of chunks that are moving towards the element, or it can be
-     * positioned already inside, in which case it is immediately added to one
-     * of the energy chunk "slices".
+     * Add an energy chunk to this model element.  The energy chunk can be outside of the element's rectangular bounds,
+     * in which case it is added to the list of chunks that are moving towards the element, or it can be positioned
+     * already inside, in which case it is immediately added to one of the energy chunk "slices".
      *
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
       if ( this.getSliceBounds().containsPoint( energyChunk.position ) ) {
-        // Energy chunk is positioned within container bounds, so add it
-        // directly to a slice.
+        // Energy chunk is positioned within container bounds, so add it directly to a slice.
         this.addEnergyChunkToNextSlice( energyChunk );
       }
       else {
-        // Chunk is out of the bounds of this element, so make it wander
-        // towards it.
+        // Chunk is out of the bounds of this element, so make it wander towards it.
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
         this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, this.position ) );
@@ -160,6 +146,7 @@ define( function( require ) {
 
     /**
      * Add an energy chunk to the next available slice.  Override for more elaborate behavior.
+     *
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunkToNextSlice: function( energyChunk ) {
@@ -169,6 +156,7 @@ define( function( require ) {
 
     /**
      * Returns the bounds of all the slices.
+     *
      * @returns {Rectangle}
      */
     getSliceBounds: function() {
@@ -195,11 +183,12 @@ define( function( require ) {
     },
 
     /**
+     *  Move the energy chunk
      *
      * @param {EnergyChunk} energyChunk
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
-      var self= this;
+      var self = this;
       this.approachingEnergyChunks.remove( energyChunk );
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       this.energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
@@ -211,6 +200,8 @@ define( function( require ) {
     },
 
     /**
+     * Remove an energy chunk from whatever energy chunk list it belongs to.  If the chunk does not belong to a
+     * specific energy chunk list, return false.
      *
      * @param {EnergyChunk} energyChunk
      * @returns {boolean}
@@ -224,17 +215,14 @@ define( function( require ) {
       return false;
     },
 
-    /*
-     * Extract the closest energy chunk to the provided point.  Compensate
-     * distances for the z-offset so that z-positioning doesn't skew the
-     * results, since the provided point is only 2D.
+    /**
+     * Extract the closest energy chunk to the provided point.  Compensate distances for the z-offset so that
+     * z-positioning doesn't skew the results, since the provided point is only 2D.
      *
      * @param {Vector2} point - Comparison point.
      * @return {EnergyChunk||null} closestEnergyChunk, null if there are none available.
      */
-
-    //TODO: this method was renamed
-    extractClosestEnergyChunkForPoint: function( point ) {
+    extractClosestEnergyChunkToPoint: function( point ) {
 
       var closestEnergyChunk = null;
       var closestCompensatedDistance = Number.POSITIVE_INFINITY;
@@ -242,12 +230,8 @@ define( function( require ) {
       // Identify the closest energy chunk.
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( energyChunk ) {
-
-          // Compensate for the Z offset.  Otherwise front chunk will
-          // almost always be chosen.
-
+          // Compensate for the Z offset.  Otherwise front chunk will almost always be chosen.
           var compensatedEnergyChunkPosition = energyChunk.position.minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
-
           var compensatedDistance = compensatedEnergyChunkPosition.distance( point );
           if ( compensatedDistance < closestCompensatedDistance ) {
             closestEnergyChunk = energyChunk;
@@ -259,12 +243,10 @@ define( function( require ) {
       return closestEnergyChunk;
     },
 
-    /*
-     * Extract an energy chunk that is a good choice for being transferred to
-     * the provided shape.  Generally, this means that it is close to the
-     * shape.  This routine is not hugely general - it makes some assumptions
-     * that make it work for blocks in beakers.  If support for other shapes is
-     * needed, it will need some work.
+    /**
+     * Extract an energy chunk that is a good choice for being transferred to the provided shape.  Generally, this
+     * means that it is close to the shape.  This routine is not hugely general - it makes some assumption that make it
+     * work for blocks in beakers.  If support for other shapes is needed, it will need some work.
      *
      * @param destinationShape
      * @returns {EnergyChunk||null} return null if none are available.
@@ -290,7 +272,7 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( this.getThermalContactArea().bounds.containsBound( destinationShape.bounds ) ) {
+      else if ( this.getThermalContactArea().bounds.containsBounds( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
@@ -308,23 +290,18 @@ define( function( require ) {
       }
       else {
         // There is no or limited overlap, so use center points.
-        chunkToExtract = this.extractClosestEnergyChunkForPoint( new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
+        chunkToExtract = this.extractClosestEnergyChunkToPoint( new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
       }
 
       // Fail safe - If nothing found, get the first chunk.
       if ( chunkToExtract === null ) {
         console.log( " - Warning: No energy chunk found by extraction algorithm, trying first available.." );
-        var i;
         var length = this.slices.length;
-        for ( i = 0; i < length; i++ ) {
-//        this.slices.forEach( function( slice ) {
-          if ( this.slices[ i ].energyChunkList.length > 0 ) {
-
-            chunkToExtract = this.slices[ i ].energyChunkList.get( 0 );
-            //TODO do we want to break out from the if statement only
+        for ( var i = 0; i < length; i++ ) {
+          if ( this.slices[i].energyChunkList.length > 0 ) {
+            chunkToExtract = this.slices[i].energyChunkList.get( 0 );
             break;
           }
-          //       } );
         }
         if ( chunkToExtract === null ) {
           console.log( " - Warning: No chunks available for extraction." );
@@ -337,8 +314,8 @@ define( function( require ) {
     },
 
     /**
-     * Initialization method that add the "slices" where the energy chunks
-     * reside.  Should be called only once at initialization.
+     * Initialization method that add the "slices" where the energy chunks reside.  Should be called only once at
+     * initialization.
      */
     addEnergyChunkSlices: function() {
 
@@ -350,7 +327,7 @@ define( function( require ) {
     },
 
     /**
-     *
+     *  Add initial energy chunks to this model element.
      */
     addInitialEnergyChunks: function() {
       this.slices.forEach( function( slice ) {
@@ -424,9 +401,9 @@ define( function( require ) {
     },
 
     /**
-     * Get the shape as is is projected into 3D in the view.  Ideally, this
-     * wouldn't even be in the model, because it would be purely handled in the
-     * view, but it proved necessary.
+     * Get the shape as is is projected into 3D in the view.  Ideally, this wouldn't even be in the model, because it
+     * would be purely handled in the view, but it proved necessary.
+     *
      * @returns {Shape}
      */
     getProjectedShape: function() {
@@ -457,14 +434,12 @@ define( function( require ) {
 
 
     /**
-     * Get a number indicating the balance between the energy level and the
-     * number of energy chunks owned by this model element.
+     * Get a number indicating the balance between the energy level and the number of energy chunks owned by this model
+     * element.  Returns 0 if the number of energy chunks matches the energy level, a negative value if there is a
+     * deficity, and a positive value if there is a surplus.
      *
-     * @return 0 if the number of energy chunks matches the energy level, a
-     *         negative value if there is a deficit, and a positive value if there is
-     *         a surplus.
+     * @returns {number}
      */
-
     getEnergyChunkBalance: function() {
       return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
     }

@@ -1,9 +1,8 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Class that represents a 2D space that can come into contact with other
- * thermal areas.  This is basically just a shape and a flag that indicates
- * whether immersion can occur
+ * Class that represents a 2D space that can come into contact with other thermal areas.  This is basically just a
+ * shape and a flag that indicates whether immersion can occur
  *
  * @author John Blanco
  */
@@ -18,14 +17,17 @@ define( function( require ) {
   var TOUCH_DISTANCE_THRESHOLD = 0.001; // In meters.
 
   /**
+   *  Constructor for a ThermalContactArea.
    *
    * @param {Bounds2} bounds
    * @param {Boolean} supportsImmersion
    * @constructor
    */
   function ThermalContactArea( bounds, supportsImmersion ) {
+
     this.bounds = bounds;
     this.supportsImmersion = supportsImmersion;
+
   }
 
   return inherit( Object, ThermalContactArea, {
@@ -39,11 +41,9 @@ define( function( require ) {
     },
 
     /**
-     * Get the amount of thermal contact that exists between this and another
-     * thermal area.  Since thermal contact areas are 2D, the amount of
-     * contact is a 1D quantity.  For example, when a rectangle is sitting
-     * on top of another that is the same width, the contact length is the
-     * width of the shared edge.
+     * Get the amount of thermal contact that exists between this and another thermal area.  Since thermal contact
+     * areas are 2D, the amount of contact is a 1D quantity.  For example, when a rectangle is sitting on top of
+     * another that is the same width, the contact length is the width of the shared edge.
      *
      * @param {ThermalContactArea} that -  Other thermal contact area.
      * @return {number} Length of contact
@@ -55,9 +55,8 @@ define( function( require ) {
 
       var contactLength = 0;
       if ( xOverlap > 0 && yOverlap > 0 ) {
-        // One of the areas is overlapping another.  This should be an
-        // 'immersion' situation, i.e. one is all or partially immersed in
-        // the other.
+        // One of the areas is overlapping another.  This should be an 'immersion' situation, i.e. one is all or
+        // partially immersed in the other.
         if ( this.supportsImmersion || that.supportsImmersion ) {
           var immersionRect = this.bounds.intersection( that.bounds );
           contactLength = immersionRect.width * 2 + immersionRect.height * 2;
@@ -71,10 +70,8 @@ define( function( require ) {
           }
         }
         else {
-          // This shouldn't occur, but it practice it sometimes does due
-          // to floating point tolerances.  Print out an error if a
-          // threshold is exceeded.  The threshold value was determined
-          // by testing.
+          // This shouldn't occur, but it practice it sometimes does due to floating point tolerances.  Print out an
+          // error if a threshold is exceeded.  The threshold value was determined by testing.
           if ( yOverlap > 1E-6 && xOverlap > 1E-6 ) {
             console.log( " - Error: Double overlap detected in case where neither energy container supports immersion.  Ignoring." );
             console.log( "yOverlap = " + yOverlap );
@@ -83,8 +80,7 @@ define( function( require ) {
         }
       }
       else if ( xOverlap > 0 || yOverlap > 0 ) {
-        // There is overlap in one dimension but not the other, so test to
-        // see if the two containers are touching.
+        // There is overlap in one dimension but not the other, so test to see if the two containers are touching.
         if ( xOverlap > 0 &&
              Math.abs( this.bounds.maxY - that.bounds.minY ) < TOUCH_DISTANCE_THRESHOLD ||
              Math.abs( this.bounds.minY - that.bounds.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
@@ -102,6 +98,7 @@ define( function( require ) {
 
     /**
      * Convenience method for determining overlap of rectangles in X dimension.
+     *
      * @param {Rectangle} rectangle1
      * @param {Rectangle} rectangle2
      * @returns {number}
@@ -114,6 +111,7 @@ define( function( require ) {
 
     /**
      * Convenience method for determining overlap of rectangles in Y dimension.
+     *
      * @param {Rectangle} rectangle1
      * @param {Rectangle} rectangle2
      * @returns {number}
