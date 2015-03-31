@@ -6,6 +6,7 @@
  * of exchanging heat.
  *
  * @author John Blanco
+ * @author Jesse Greenberg
  */
 
 define( function( require ) {
@@ -24,27 +25,36 @@ define( function( require ) {
   var AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
   // Map to obtain heat transfer constants for given thermal elements.
-  var heatTransferConstantsMap = {};
-  heatTransferConstantsMap[ 'iron' ][ 'brick' ] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'brick' ][ 'iron' ] = BRICK_IRON_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'water' ][ 'brick' ] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'brick' ][ 'water' ] = BRICK_WATER_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'air' ][ 'brick' ] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'brick' ][ 'air' ] = BRICK_AIR_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'water' ][ 'air' ] = WATER_AIR_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'air' ][ 'water' ] = WATER_AIR_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'water' ][ 'iron' ] = IRON_WATER_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'iron' ][ 'water' ] = IRON_WATER_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'iron' ][ 'air' ] = IRON_AIR_HEAT_TRANSFER_FACTOR;
-  heatTransferConstantsMap[ 'air' ][ 'iron' ] = IRON_AIR_HEAT_TRANSFER_FACTOR;
+  var heatTransferConstantsMap = {
+    'iron': {
+      'brick': BRICK_IRON_HEAT_TRANSFER_FACTOR,
+      'water': IRON_WATER_HEAT_TRANSFER_FACTOR,
+      'air': IRON_AIR_HEAT_TRANSFER_FACTOR
+    },
+    'brick': {
+      'iron': BRICK_IRON_HEAT_TRANSFER_FACTOR,
+      'air': BRICK_AIR_HEAT_TRANSFER_FACTOR,
+      'water': BRICK_WATER_HEAT_TRANSFER_FACTOR
+    },
+    'water': {
+      'brick': BRICK_WATER_HEAT_TRANSFER_FACTOR,
+      'air': WATER_AIR_HEAT_TRANSFER_FACTOR,
+      'iron': IRON_WATER_HEAT_TRANSFER_FACTOR
+    },
+    'air': {
+      'brick': BRICK_AIR_HEAT_TRANSFER_FACTOR,
+      'water': WATER_AIR_HEAT_TRANSFER_FACTOR,
+      'iron': IRON_AIR_HEAT_TRANSFER_FACTOR
+    }
+  };
 
   return {
 
     /**
      * Get the heat transfer constants for two given model elements that can contain heat.
-     * @param element1
-     * @param element2
-     * @returns {*}
+     * @param {string} element1
+     * @param {string} element2
+     * @returns {number}
      */
     getHeatTransferFactor: function( element1, element2 ) {
       return heatTransferConstantsMap[ element1 ][ element2 ];
