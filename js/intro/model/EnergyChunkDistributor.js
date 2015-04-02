@@ -62,10 +62,10 @@ define( function( require ) {
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
       energyChunkContainerSlices.forEach( function( slice ) {
-        minX = Math.min( slice.shape.bounds.minX, minX );
-        maxX = Math.max( slice.shape.bounds.minY, maxX );
-        minY = Math.min( slice.shape.bounds.maxX, minY );
-        maxY = Math.max( slice.shape.bounds.maxY, maxY );
+        minX = Math.min( slice.shape.minX, minX );
+        maxX = Math.max( slice.shape.minY, maxX );
+        minY = Math.min( slice.shape.maxX, minY );
+        maxY = Math.max( slice.shape.maxY, maxY );
       } );
       var boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
 

@@ -10,9 +10,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes/common/model/Beaker' );
+  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Rectangle = require( 'KITE/Rectangle' );
+  var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -44,12 +44,15 @@ define( function( require ) {
       // represents the fluid and the displacing rectangles.
       var fluidRectangle = new Rectangle( this.getRect().getX(), this.getRect().getY(), this.width, this.height * this.fluidLevel );
       var overlappingArea = 0;
-      for ( var rectangle in potentiallyDisplacingRectangles ) {
-        if ( rectangle.intersects( fluidRectangle ) ) {
-          var intersection = rectangle.createIntersection( fluidRectangle );
-          overlappingArea += intersection.getWidth() * intersection.getHeight();
+      potentiallyDisplacingRectangles.forEach( function( rectangle ) {
+      //for ( var rectangle in potentiallyDisplacingRectangles ) {
+        debugger;
+        if ( rectangle.intersectsBounds( fluidRectangle ) ) {
+          // TODO: Find the javascript equivalent for createIntersection!
+          //var intersection = rectangle.createIntersection( fluidRectangle );
+          //overlappingArea += intersection.getWidth() * intersection.getHeight();
         }
-      }
+      } );
       // empirically determined to look good.
       var newFluidLevel = Math.min( INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
       var proportionateIncrease = newFluidLevel / this.fluidLevel;

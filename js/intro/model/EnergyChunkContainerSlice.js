@@ -1,12 +1,12 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * This class represents a "slice" within a 2D container that contains a set of
- * energy chunks and can be used to add some limited 3D capabilities by having
- * some z-dimension information.  The slice consists of a 2D shape and a Z
- * value representing its position in Z space.
+ * This class represents a "slice" within a 2D container that contains a set of energy chunks and can be used to add some limited 3D capabilities by
+ * having some z-dimension information.  The slice consists of a 2D shape and a Z value representing its position in Z space.
  *
  * @author John Blanco
+ * @author Jesse Greenberg
+ * @author Martin Veillette
  */
 
 
@@ -32,12 +32,11 @@ define( function() {
     this.energyChunkList = new ObservableArray();
 
     // Monitor the anchor position and move the contained energy chunks to match.
-    anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
-      debugger;
-      // TODO: there is something wrong here
-      var translation = newPosition.minus( oldPosition );
+    anchorPointProperty.link( function( newPosition ) {
+      // Translation vector is new position minus the old position.
+      var translation = newPosition.minus( anchorPointProperty.get() );
       //TODO How to do this in javascript?
-      self.shape = AffineTransform.getTranslateInstance( translation.x, translation.y ).createTransformedShape( this.shape );
+      //self.shape = AffineTransform.getTranslateInstance( translation.x, translation.y ).createTransformedShape( this.shape );
       self.energyChunkList.forEach( function( energyChunk ) {
         energyChunk.translate( translation );
       } );

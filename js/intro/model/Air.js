@@ -24,6 +24,8 @@ define( function( require ) {
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var ThermalEnergyContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalEnergyContainer' );
   var Vector2 = require( 'DOT/Vector2' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
 
   // constants
   // 2D size of the air.  It is sized such that it will extend off the left,
@@ -56,6 +58,8 @@ define( function( require ) {
    * @constructor
    */
   function Air( energyChunksVisibleProperty ) {
+
+    ThermalEnergyContainer.call( this );
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
@@ -178,6 +182,11 @@ define( function( require ) {
      */
     getCenterPoint: function() {
       return new Vector2( 0, SIZE.height / 2 );
+    },
+
+    requestEnergyChunk: function( point ) {
+      // Create a new chunk at the top of the air above the specified point.
+      return new EnergyChunk( EnergyType.THERMAL, point.x, SIZE.height, this.energyChunksVisibleProperty.get() );
     },
 
     /**

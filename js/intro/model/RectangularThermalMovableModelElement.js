@@ -408,8 +408,8 @@ define( function( require ) {
      */
     getProjectedShape: function() {
       // This projects a rectangle, override for other behavior.
-      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, EFACConstants.SURFACE_WIDTH / 2 );
-      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, -EFACConstants.SURFACE_WIDTH / 2 );
+      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.SURFACE_WIDTH / 2 );
+      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.SURFACE_WIDTH / 2 );
 
       var shape = new Shape();
 

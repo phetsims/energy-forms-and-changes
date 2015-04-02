@@ -96,14 +96,14 @@ define( function( require ) {
      */
     addEnergyChunkSlices: function() {
       // The slices for the block are intended to match the projection used in the view.
-      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, EFACConstants.SURFACE_WIDTH / 2 );
+      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.SURFACE_WIDTH / 2 );
       var i;
       for ( i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
-        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( this, i * ( -EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
+        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( i * ( -EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
 
-        var transform = new Matrix3.translation( projectionToFront.getX() + projectionOffsetVector.getX(),
-          projectionToFront.getY() + projectionOffsetVector.getY() );
-        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.position ) );
+        var transform = new Matrix3.translation( projectionToFront.x + projectionOffsetVector.x,
+          projectionToFront.y + projectionOffsetVector.y );
+        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.positionProperty ) );
       }
     },
 
