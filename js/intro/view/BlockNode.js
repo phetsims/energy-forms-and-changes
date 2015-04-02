@@ -1,11 +1,12 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Piccolo node that represents a block in the view.  The blocks in the model
- * are 2D, and this class gives them some perspective in order to make them
- * appear to be 3D.
+ * Node that represents a block in the view.  The blocks in the model are 2D, and this class gives them some perspective
+ * in order to make them appear to be 3D.
  *
  * @author John Blanco
+ * @author Martin Veillette
+ * @author Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
@@ -22,12 +23,11 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
-  //var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
-
 
   // constants
   // Constants that define the 3D projection.  Public so that model can reference.
@@ -42,6 +42,7 @@ define( function( require ) {
   var SHOW_2D_REPRESENTATION = false;
 
   /**
+   * Constructor for a BlockNode.
    *
    * @param model
    * @param {Block} block
@@ -49,9 +50,14 @@ define( function( require ) {
    * @constructor
    */
   function BlockNode( model, block, modelViewTransform ) {
+
     Node.call( this, { cursor: 'pointer' } );
+
+    // extend the scope
     var blockNode = this;
+
     this.block = block;
+
     // Create the shape for the front of the block.
     var blockRectInViewCoords = modelViewTransform.modelToViewBounds( this.getRawShape() );
     var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * PERSPECTIVE_EDGE_PROPORTION );
@@ -62,6 +68,7 @@ define( function( require ) {
     var upperRightFrontCorner = new Vector2( blockRectInViewCoords.getMaxX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
     var upperLeftFrontCorner = new Vector2( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
     var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.getX(), upperLeftFrontCorner.getY(), blockRectInViewCoords.getWidth(), blockRectInViewCoords.getHeight() );
+
     // Create the shape of the top of the block.
     var upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
     var upperRightBackCorner = upperRightFrontCorner.plus( backCornersOffset );
@@ -71,7 +78,7 @@ define( function( require ) {
       .lineToPoint( upperRightBackCorner )
       .lineToPoint( upperLeftBackCorner )
       .lineToPoint( upperLeftFrontCorner );
-    //   var blockTopShape = blockTopPath.getGeneralPath();
+
     // Create the shape of the side of the block.
     var lowerRightBackCorner = lowerRightFrontCorner.plus( backCornersOffset );
     var blockSideShape = new Shape();
@@ -109,7 +116,7 @@ define( function( require ) {
     this.addChild( blockSide );
     if ( SHOW_2D_REPRESENTATION ) {
       this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), {
-        stroke: Color.RED,
+        stroke: 'red',
         lineWidth: 1
       } ) );
     }
@@ -139,6 +146,7 @@ define( function( require ) {
         }
       } );
     } );
+
     // that it looks like they are in the block.
     block.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       var opaqueness = energyChunksVisible ? 0.5 : 1.0;
@@ -147,12 +155,14 @@ define( function( require ) {
       blockSide.setTransparency( opaqueness );
       label.setTransparency( opaqueness );
     } );
+
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
       setOffset( modelViewTransform.modelToView( newPosition ) );
       // nodes can handle their own positioning.
       energyChunkRootNode.translation = modelViewTransform.modelToView( newPosition ).rotate( Math.PI );
     } );
+
     // Add the drag handler.
     var offsetPosToCenter = new Vector2( this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ), this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
     this.addInputListener( new ThermalElementDragHandler(
@@ -163,13 +173,10 @@ define( function( require ) {
   }
 
   return inherit( Node, BlockNode, {
-//-------------------------------------------------------------------------
-// Methods
-//-------------------------------------------------------------------------
 
     /**
      *
-     * @param {Node] node
+     * @param {Node} node
      */
     setApproachingEnergyChunkParentNode: function( node ) {
       // This should not be set more than once.
@@ -178,15 +185,17 @@ define( function( require ) {
     },
 
     /**
-     * Convenience method to avoid code duplication.  Adds a node of the given
-     * shape, color, and texture (if a texture is specified).
-     * @private
+     * Convenience method to avoid code duplication.  Adds a node of the given shape, color, and texture (if a texture
+     * is specified).
+     *
      * @param {Shape} shape
      * @param {Color} fillColor
      * @param {Image} textureImage
      * @returns {Node}
+     * @private
      */
     createSurface: function( shape, fillColor, textureImage ) {
+
       var root = new Node();
       // provided, this may end up getting partially or entirely covered up.
       root.addChild( new Path( shape, { fill: fillColor } ) );

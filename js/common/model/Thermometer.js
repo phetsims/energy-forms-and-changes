@@ -1,9 +1,8 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Basic thermometer that senses temperature, has a position. The thermometer
- * has only a point and a temperature in the model.  Its visual representation
- * is left entirely to the view.
+ * Basic thermometer that senses temperature, has a position. The thermometer has only a point and a temperature in the model.  Its visual
+ * representation is left entirely to the view.
  *
  * @author John Blanco
  */
@@ -20,6 +19,7 @@ define( function( require ) {
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
 
   /**
+   * Constructor for a Thermometer.
    *
    * @param {model} model
    * @param {Vector2} initialPosition

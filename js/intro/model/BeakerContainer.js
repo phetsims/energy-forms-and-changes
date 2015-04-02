@@ -15,7 +15,6 @@ define( function( require ) {
   var Rectangle = require( 'KITE/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
-
   /**
    *
    * @param {Vector2} initialPosition
@@ -38,7 +37,7 @@ define( function( require ) {
      * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
      * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
      *
-     * @param potentiallyDisplacingRectangles
+     * @param {Array.<Rectangle>} potentiallyDisplacingRectangles
      *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
