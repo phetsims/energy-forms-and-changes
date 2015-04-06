@@ -14,6 +14,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Matrix3 = require( 'DOT/Matrix3' );
 
   /**
    *
@@ -45,25 +47,34 @@ define( function( require ) {
       var fluidRectangle = new Rectangle( this.getRect().getX(), this.getRect().getY(), this.width, this.height * this.fluidLevel );
       var overlappingArea = 0;
       potentiallyDisplacingRectangles.forEach( function( rectangle ) {
-      //for ( var rectangle in potentiallyDisplacingRectangles ) {
-        debugger;
         if ( rectangle.intersectsBounds( fluidRectangle ) ) {
-          // TODO: Find the javascript equivalent for createIntersection!
-          //var intersection = rectangle.createIntersection( fluidRectangle );
-          //overlappingArea += intersection.getWidth() * intersection.getHeight();
+          var intersection = rectangle.intersection( fluidRectangle );
+          overlappingArea += intersection.width * intersection.height;
         }
       } );
+
       // empirically determined to look good.
-      var newFluidLevel = Math.min( INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
+      var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
       var proportionateIncrease = newFluidLevel / this.fluidLevel;
-      this.fluidLevel.set( newFluidLevel );
+      this.fluidLevel = newFluidLevel;
+
       // Update the shapes of the energy chunk slices.
-      slices.forEach( function( slice )
-      {
+      this.slices.forEach( function( slice ) {
+
+        // TODO: I believe that this is a correct port of the affine transformations required here.  However, I am leaving the in the Java until this
+        // can be thoroughly tested.
         var originalShape = slice.shape;
-        var expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
-        var translationTransform = AffineTransform.getTranslateInstance( originalShape.bounds.getX() - expandedOrCompressedShape.bounds.getX(), originalShape.bounds.getY() - expandedOrCompressedShape.bounds.getY() );
-        slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
+        var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, proportionateIncrease ) );
+        var translationTransform = Matrix3.translation( originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
+          originalShape.bounds.y - expandedOrCompressedShape.bounds.y );
+        slice.shape = expandedOrCompressedShape.transformed( translationTransform );
+
+        //Shape originalShape = slice.getShape();
+        //Shape expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
+        //AffineTransform translationTransform = AffineTransform.getTranslateInstance( originalShape.getBounds2D().getX() - expandedOrCompressedShape.getBounds2D().getX(),
+        //  originalShape.getBounds2D().getY() - expandedOrCompressedShape.getBounds2D().getY() );
+        //slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
+
       } );
     },
 

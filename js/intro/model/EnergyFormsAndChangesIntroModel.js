@@ -149,13 +149,11 @@ define( function( require ) {
     /**
      * Update the state of the model.
      *
-     * // TODO: This is temporarily renamed to stepFunction.  This function needs to be tested but temporary rename gets the sim running.
-     *
-     * @param {number} dt Time step.
+     *   @param {number} dt Time step.
      */
-    stepFunction: function( dt ) {
+    step: function( dt ) {
 
-      // Extend Scope for nested callbcks
+      // Extend Scope for nested callbacks
       var thisModel = this;
 
       if ( ENABLE_INTERNAL_PROFILING ) {
@@ -174,8 +172,6 @@ define( function( require ) {
       // surface.
       this.movableThermalEnergyContainers.forEach( function( movableModelElement ) {
 
-        //for ( var movableModelElement in this.movableThermalEnergyContainers ) {
-        //if ( thisModel.movableThermalEnergyContainers.hasOwnProperty( movableModelElement ) ) {
         if ( !movableModelElement.userControlled && movableModelElement.supportingSurface == null && movableModelElement.position.y != 0 ) {
           var minYPos = 0;
 
@@ -293,7 +289,7 @@ define( function( require ) {
           if ( otherMovableEnergyContainer === movableEnergyContainer ) {
             continue;
           }
-          if ( movableEnergyContainer.getThermalContactArea().getThermalContactLength( otherMovableEnergyContainer.getThermalContactArea() > 0 ) ) {
+          if ( movableEnergyContainer.getThermalContactArea().getThermalContactLength( otherMovableEnergyContainer.getThermalContactArea() ) > 0 ) {
             contactWithOtherMovableElement = true;
             maxTemperatureDifference = Math.max( Math.abs( movableEnergyContainer.getTemperature() - otherMovableEnergyContainer.getTemperature() ), maxTemperatureDifference );
           }

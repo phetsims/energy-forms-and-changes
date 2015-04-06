@@ -58,7 +58,11 @@ define( function( require ) {
     } );
 
     this.position = position;
+    this.energyChunkList = new ObservableArray();
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+
+    // Track build up of energy for transferring chunks to/from the air.
+    this.energyExchangedWithAirSinceLastChunkTransfer = 0;
 
     //this.heatCoolLevelProperty = new Property( new Range( -1, 1, 0 ) );
 
@@ -162,7 +166,7 @@ define( function( require ) {
      */
     addEnergyChunk: function( energyChunk ) {
       energyChunk.zPosition.set( 0.0 );
-      energyChunkList.add( energyChunk );
+      this.energyChunkList.add( energyChunk );
       //energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
@@ -183,16 +187,18 @@ define( function( require ) {
      */
     extractClosestEnergyChunk: function( point ) {
       var closestEnergyChunk = null;
-      if ( energyChunkList.size() > 0 ) {
-        for ( var energyChunk in energyChunkList ) {
-          if ( energyChunk.position.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-               (closestEnergyChunk === null ||
-                energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
-            // Found a closer chunk.
-            closestEnergyChunk = energyChunk;
+      if ( this.energyChunkList.size() > 0 ) {
+        for ( var energyChunk in this.energyChunkList ) {
+          if ( this.energyChunkList.hasOwnProperty( energyChunk ) ) {
+            if ( this.energyChunkList[ energyChunk ].position.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+                 (closestEnergyChunk === null ||
+                  this.energyChunkList[ energyChunk ].position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
+              // Found a closer chunk.
+              closestEnergyChunk = this.energyChunkList[ energyChunk ];
+            }
           }
         }
-        energyChunkList.remove( closestEnergyChunk );
+        this.energyChunkList.remove( closestEnergyChunk );
         //for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
         //  if ( energyChunkWanderController.getEnergyChunk() === closestEnergyChunk ) {
         //    energyChunkWanderControllers.remove( energyChunkWanderController );
@@ -224,7 +230,7 @@ define( function( require ) {
      */
     reset: function() {
       ModelElement.reset();
-      energyChunkList.clear();
+      this.energyChunkList.clear();
       //energyChunkWanderControllers.clear();
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
@@ -238,7 +244,7 @@ define( function( require ) {
      */
     areAnyOnTop: function( thermalEnergyContainers ) {
       for ( var thermalEnergyContainer in thermalEnergyContainers ) {
-        if ( this.inContactWith( thermalEnergyContainer ) ) {
+        if ( this.inContactWith( thermalEnergyContainers[ thermalEnergyContainer ] ) ) {
           return true;
         }
       }
@@ -251,16 +257,16 @@ define( function( require ) {
     getEnergyChunkCountForAir: function() {
       var count = 0;
       // almost to the burner).
-      if ( energyChunkList.size() > 0 && this.heatCoolLevel >= 0 ) {
-        for ( var energyChunk in energyChunkList ) {
-          if ( this.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+      if ( this.energyChunkList.length > 0 && this.heatCoolLevel >= 0 ) {
+        this.energyChunkList.forEach( function( energyChunk ) {
+          if( this.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
-        }
+        } );
       }
       if ( count === 0 ) {
         // chunk transfer warrants another chunk.
-        count = Math.round( energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
+        count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
       return count;
     },
