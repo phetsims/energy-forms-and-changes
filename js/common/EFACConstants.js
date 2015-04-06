@@ -106,6 +106,10 @@ define( function( require ) {
     ENERGY_CHUNK_VELOCITY: 0.04, // In meters/sec.
 
     // Constants that define surface width of various rectangular objects
-    SURFACE_WIDTH: 0.045
+    SURFACE_WIDTH: 0.045,
+
+    // Defines the initial fluid level for beakers.
+    INITIAL_FLUID_LEVEL: 0.5
   };
-} );
+} )
+;

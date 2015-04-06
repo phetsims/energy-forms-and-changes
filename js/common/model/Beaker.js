@@ -41,7 +41,6 @@ define( function( require ) {
   var WATER_SPECIFIC_HEAT = 3000; // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
   // aren't too many chunks and so that a chunk is needed as soon as heating starts.
   var WATER_DENSITY = 1000.0; // In kg/m^3, source = design document (and common knowledge).
-  var INITIAL_FLUID_LEVEL = 0.5;
 
   /**
    * Constructor for Beaker.  Initial posiition is the center bottom of the beaker rectangle.
@@ -58,7 +57,7 @@ define( function( require ) {
       initialPosition,
       width,
       height,
-      this.calculateWaterMass( width, height * INITIAL_FLUID_LEVEL ),
+      this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL ),
       WATER_SPECIFIC_HEAT,
       energyChunksVisibleProperty );
 
@@ -66,16 +65,12 @@ define( function( require ) {
     this.width = width;
     this.height = height;
 
-    //TODO: Find PhET naming convention when using propertySet without inherit
-    this.propertySet = new PropertySet( {
-      fluidLevel: INITIAL_FLUID_LEVEL, // Property that is used to control and track the amount of fluid in the beaker.
-      // Top surface, which is the surface upon which other model elements can sit.  For the beaker, this is only
-      // slightly above the bottom surface.
-      topSurface: null,
-      // Bottom surface, which is the surface that touches the ground, or sits on a burner, etc.
-      bottomSurface: null,
-      temperature: EFACConstants.ROOM_TEMPERATURE // Property that allows temperature changes to be monitored.
-    } );
+    // Add the Beaker Properties.
+    // TODO: Can this get added directly to the supertype constructor if its most base class is PropertySet? Would be cleaner.
+    this.addProperty( 'fluidLevel', EFACConstants.INITIAL_FLUID_LEVEL );
+    this.addProperty( 'topSurface', null );
+    this.addProperty( 'bottomSurface', null );
+    this.addProperty( 'temperature', EFACConstants.ROOM_TEMPERATURE );
 
     // Indicator of how much steam is being emitted.  Ranges from 0 to 1, where 0 is no steam, 1 is the max amount
     // (full boil).
@@ -234,7 +229,7 @@ define( function( require ) {
      */
     getThermalContactArea: function() {
       return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
-        this.position.y, this.width, this.height * this.propertySet.fluidLevel ), true );
+        this.position.y, this.width, this.height * this.fluidLevel ), true );
     },
 
     /**
@@ -242,7 +237,7 @@ define( function( require ) {
      */
     getSteamArea: function() {
       // Height of steam rectangle is based on beaker height and steamingProportion.
-      var liquidWaterHeight = this.height * this.propertySet.fluidLevel;
+      var liquidWaterHeight = this.height * this.fluidLevel;
       return new Rectangle( this.position.x - this.getWidth() / 2,
           this.position.y + liquidWaterHeight,
         this.width,
@@ -268,7 +263,7 @@ define( function( require ) {
           this.position.x - this.width / 2,
         this.position.y,
         this.width,
-          this.height * INITIAL_FLUID_LEVEL );
+          this.height * EFACConstants.INITIAL_FLUID_LEVEL );
 
       var widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );
       for ( var i = 0; i < NUM_SLICES; i++ ) {
@@ -309,7 +304,7 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyBeyondMaxTemperature: function() {
-      return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * mass * specificHeat ), 0 );
+      return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     },
 
     /**
@@ -318,7 +313,7 @@ define( function( require ) {
      * @returns {number}
      */
     getTemperature: function() {
-      return Math.min( RectangularThermalMovableModelElement.getTemperature(), EFACConstants.BOILING_POINT_TEMPERATURE );
+      return Math.min( RectangularThermalMovableModelElement.prototype.getTemperature.call( this ), EFACConstants.BOILING_POINT_TEMPERATURE );
     },
 
     /**
