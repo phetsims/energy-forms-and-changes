@@ -30,7 +30,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  // Constants that define the 3D projection.  Public so that model can reference.
+  // Constants that define the 3D projection.  Public so that model can reference. TODO: Moved to EFACConstants!
   var PERSPECTIVE_ANGLE = Math.atan2( -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, -EFACConstants.Z_TO_X_OFFSET_MULTIPLIER );
   var PERSPECTIVE_EDGE_PROPORTION = Math.sqrt( Math.pow( EFACConstants.Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
                                                Math.pow( EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, 2 ) );

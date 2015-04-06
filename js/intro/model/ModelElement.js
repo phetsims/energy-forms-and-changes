@@ -75,6 +75,7 @@ define( function( require ) {
      * cases where one or more elements are in between.
      */
     isStackedUpon: function( element ) {
+      debugger;
       return (this.supportingSurfaceProperty !== null) &&
              ( this.supportingSurface.getOwner() === element ||
                this.supportingSurface.getOwner().isStackedUpon( element ) );

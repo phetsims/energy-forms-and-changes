@@ -28,6 +28,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Line = require( 'KITE/segments/Line' );
+  var Shape = require( 'KITE/Shape' );
 
   // constants
 //   Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
@@ -118,7 +120,6 @@ define( function( require ) {
         }
       } )
     }
-
   }
 
   return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
@@ -144,8 +145,6 @@ define( function( require ) {
 
     },
 
-
-//
     /**
      * Update the state of the model.
      *
@@ -274,7 +273,6 @@ define( function( require ) {
         }
       }
 
-
       // Exchange energy and energy chunks between the movable thermal energy containers and the air.
       this.movableThermalEnergyContainers.forEach( function( movableEnergyContainer ) {
         // Set up some variables that are used to decide whether or not energy should be exchanged with air.
@@ -287,7 +285,7 @@ define( function( require ) {
           // Localize object of interest to reduce number of array lookups.
           var otherMovableEnergyContainer = thisModel.movableThermalEnergyContainers[ i ];
           if ( otherMovableEnergyContainer === movableEnergyContainer ) {
-            continue;
+            return;
           }
           if ( movableEnergyContainer.getThermalContactArea().getThermalContactLength( otherMovableEnergyContainer.getThermalContactArea() ) > 0 ) {
             contactWithOtherMovableElement = true;
@@ -339,33 +337,232 @@ define( function( require ) {
 
     getBlockList: function() {
       return [ this.brick, this.ironBlock ];
+    },
+
+    /** Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by the code that detects potential
+     *  collisions between the 2D objects in model space.
+     *
+     * @param {Line} edge
+     * @param {Vector2} projection
+     * @returns {Shape}
+     */
+    projectShapeFromLine: function( edge, projection ) {
+
+      var shape = new Shape();
+      shape.moveToPoint( edge.start );
+      shape.lineTo( edge.start.x + projection.x, edge.start.y + projection.y );
+      shape.lineTo( edge.end.x + projection.x, edge.end.y + projection.y );
+      shape.lineToPoint( edge.end );
+      shape.close();
+      return shape;
+
+    },
+
+    /**
+     * Validate the position being proposed for the given model element.  This evaluates whether the proposed position would cause the model element
+     * to move through another solid element, or the side of the beaker, or something that would look weird to the user and, if so, prevent the odd
+     * behavior from happening by returning a location that works better.
+     *
+     * @param {RectangularThermalMovableModelElement} modelElement     Element whose position is being validated.
+     * @param {Vector2} proposedPosition Proposed new position for element
+     * @returns The original proposed position if valid, or alternative position
+     *         if not.
+     */
+    validatePosition: function( modelElement, proposedPosition ) {
+      debugger;
+
+      // Carry this model through scope of nested callbacks.
+      var thisModel = this;
+
+      // Compensate for the model element's center X position.
+      var translation = proposedPosition.copy().minus( modelElement.position );
+
+      // Figure out how far the block's right edge appears to protrude to the side due to perspective.
+      var blockPerspectiveExtension = EFACConstants.SURFACE_WIDTH * EFACConstants.PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.PERSPECTIVE_ANGLE ) / 2;
+
+      // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't drag things betweenthem.  Also,
+      // compensate for perspective so that we can avoid difficult z-order issues.
+      var standPerspectiveExtension = this.leftBurner.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+      var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension - ( modelElement != this.beaker ? blockPerspectiveExtension : 0 );
+      var burnerBlockingRect = new Rectangle(
+        burnerRectX,
+        this.leftBurner.getOutlineRect().minY,
+        this.rightBurner.getOutlineRect().maxX - burnerRectX,
+        this.leftBurner.getOutlineRect().height );
+      translation = this.determineAllowedTranslation( modelElement.getRect(), burnerBlockingRect, translation, false );
+
+      // Validate against the sides of the beaker.
+      if ( modelElement != this.beaker ) {
+
+        // Create three rectangles to represent the two sides and the top of the beaker.
+        var testRectThickness = 1E-3; // 1 mm thick walls.
+        var beakerRect = this.beaker.getRect();
+        var beakerLeftSide = new Rectangle( beakerRect.minX - blockPerspectiveExtension,
+          this.beaker.getRect().minY,
+          testRectThickness + blockPerspectiveExtension * 2,
+          this.beaker.getRect().height + blockPerspectiveExtension );
+        var beakerRightSide = new Rectangle( this.beaker.getRect().maxX - testRectThickness - blockPerspectiveExtension,
+          this.beaker.getRect().minY,
+          testRectThickness + blockPerspectiveExtension * 2,
+          this.beaker.getRect().height + blockPerspectiveExtension );
+        var beakerBottom = new Rectangle( this.beaker.getRect().minX, this.beaker.getRect().minY, this.beaker.getRect().width, testRectThickness );
+
+        // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the model element - the beaker will
+        // simply be lifted up.
+        var restrictPositiveY = !this.beaker.isStackedUpon( modelElement );
+
+        // Clamp the translation based on the beaker position.
+        translation = this.determineAllowedTranslation( modelElement.getRect(), beakerLeftSide, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation( modelElement.getRect(), beakerRightSide, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation( modelElement.getRect(), beakerBottom, translation, restrictPositiveY );
+      }
+
+      // Now check the model element's motion against each of the blocks.
+      this.getBlockList().forEach( function( block ) {
+        if( modelElement === block ) {
+          // Don't test against self.
+          return; // continue to next iteration.
+        }
+
+        // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of the model element - the block
+        // will simply be lifted up.
+        var restrictPositiveY = !block.isStackedUpon( modelElement );
+
+        var testRect = modelElement.getRect();
+        if ( modelElement ===  thisModel.beaker ) {
+          // Special handling for the beaker - block it at the outer edge of the block instead of the center in order to simplify z-order handling.
+          testRect = new Rectangle( testRect.minX - blockPerspectiveExtension,
+            testRect.minY,
+            testRect.width + blockPerspectiveExtension * 2,
+            testRect.height );
+        }
+
+        // Clamp the translation based on the test block's position, but handle the case where the block is immersed in the beaker.
+        if ( modelElement != thisModel.beaker || !thisModel.beaker.getRect().containsBounds( block.getRect() ) ) {
+          translation = thisModel.determineAllowedTranslation( testRect, block.getRect(), translation, restrictPositiveY );
+        }
+
+      });
+
+      // Determine the new position based on the resultant translation.
+      var newPosition = modelElement.position.plus( translation ).copy();
+
+      // Clamp Y position to be positive to prevent dragging below table.
+      newPosition.setY( Math.max( newPosition.getY(), 0 ) );
+
+      return newPosition;
+    },
+
+    /**
+     * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary rectangle that can block the moving
+     * one.
+     *
+     * @param {Rectangle} movingRect
+     * @param {Rectangle} stationaryRect
+     * @param {Vector2} proposedTranslation
+     * @param {boolean} restrictPosY        Boolean that controls whether the positive Y direction is restricted.  This is often set false if there
+     *                                      is another model element on top of the one being tested.
+     * @returns {Vector2}
+     */
+    determineAllowedTranslation: function( movingRect, stationaryRect, proposedTranslation, restrictPosY ) {
+
+      // Test for case where rectangles already overlap.
+      if ( movingRect.intersectsBounds( stationaryRect ) ) {
+
+        // The rectangles already overlap.  Are they right on top of one another?
+        if ( movingRect.centerX == stationaryRect.centerX && movingRect.centerX == stationaryRect.centerY ) {
+          console.log( 'Warning: Rectangle centers in same location, returning zero vector.' );
+          return new Vector2( 0, 0 );
+        }
+
+        // Determine the motion in the X & Y directions that will "cure" the overlap.
+        var xOverlapCure = 0;
+        if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
+          xOverlapCure = stationaryRect.minX - movingRect.maxX;
+        }
+        else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
+          xOverlapCure = stationaryRect.maxX - movingRect.minX;
+        }
+        var yOverlapCure = 0;
+        if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
+          yOverlapCure = stationaryRect.minY - movingRect.maxY;
+        }
+        else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
+          yOverlapCure = stationaryRect.maxY - movingRect.minY;
+        }
+
+        // Something is wrong with algorithm if both values are zero,
+        // since overlap was detected by the "intersects" method.
+        assert && assert( !(xOverlapCure === 0 && yOverlapCure === 0), 'xOverlap and yOverlap should not both be zero' );
+
+        // Return a vector with the smallest valid "cure" value, leaving the other translation value unchanged.
+        if ( xOverlapCure != 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
+          return new Vector2( xOverlapCure, proposedTranslation.y );
+        }
+        else {
+          return new Vector2( proposedTranslation.x, yOverlapCure );
+        }
+      }
+
+      var xTranslation = proposedTranslation.x;
+      var yTranslation = proposedTranslation.y;
+
+      // X direction.
+      if ( proposedTranslation.x > 0 ) {
+
+        // Check for collisions moving right.
+        var rightEdge = new Line( movingRect.maxX, movingRect.minY, movingRect.maxX, movingRect.maxY );
+        var rightEdgeSmear = this.projectShapeFromLine( rightEdge, proposedTranslation );
+
+        if ( rightEdge.start.x <= stationaryRect.minX && rightEdgeSmear.intersectsBounds( stationaryRect ) ) {
+          // Collision detected, limit motion.
+          xTranslation = stationaryRect.minX - rightEdge.start.x - MIN_INTER_ELEMENT_DISTANCE;
+        }
+      }
+      else if ( proposedTranslation.x < 0 ) {
+
+        // Check for collisions moving left.
+        var leftEdge = new Line( movingRect.minX, movingRect.minY, movingRect.minX, movingRect.maxY );
+        var leftEdgeSmear = this.projectShapeFromLine( leftEdge, proposedTranslation );
+
+        if ( leftEdge.start.x >= stationaryRect.maxX && leftEdgeSmear.intersectsBounds( stationaryRect ) ) {
+          // Collision detected, limit motion.
+          xTranslation = stationaryRect.getMaxX() - leftEdge.getX1() + MIN_INTER_ELEMENT_DISTANCE;
+        }
+      }
+
+      // Y direction.
+      if ( proposedTranslation.y > 0 && restrictPosY ) {
+
+        // Check for collisions moving up.
+        var movingTopEdge = new Line( movingRect.minX, movingRect.maxY, movingRect.maxX, movingRect.maxY );
+        var topEdgeSmear = this.projectShapeFromLine( movingTopEdge, proposedTranslation );
+
+        if ( movingTopEdge.start.y <= stationaryRect.minY && topEdgeSmear.intersectsBounds( stationaryRect ) ) {
+          // Collision detected, limit motion.
+          yTranslation = stationaryRect.minY - movingTopEdge.start.y - MIN_INTER_ELEMENT_DISTANCE;
+        }
+      }
+      if ( proposedTranslation.y < 0 ) {
+
+        // Check for collisions moving down.
+        var movingBottomEdge = new Line( movingRect.minX, movingRect.minY, movingRect.maxX, movingRect.minY );
+        var bottomEdgeSmear = this.projectShapeFromLine( movingBottomEdge, proposedTranslation );
+
+        if ( movingBottomEdge.start.y >= stationaryRect.maxY && bottomEdgeSmear.intersectsBounds( stationaryRect ) ) {
+          // Collision detected, limit motion.
+          yTranslation = stationaryRect.maxY - movingBottomEdge.start.y + MIN_INTER_ELEMENT_DISTANCE;
+        }
+      }
+
+      return new Vector2( xTranslation, yTranslation );
     }
 
   } )
-} )
-;
+} );
 
-//
-//    /**
-//     * Validate the position being proposed for the given model element.  This
-//     * evaluates whether the proposed position would cause the model element
-//     * to move through another solid element, or the side of the beaker, or
-//     * something that would look weird to the user and, if so, prevent the odd
-//     * behavior from happening by returning a location that works better.
-//     *
-//     * @param modelElement     Element whose position is being validated.
-//     * @param proposedPosition Proposed new position for element
-//     * @return The original proposed position if valid, or alternative position
-//     *         if not.
-//     */
 //    public Point2D validatePosition( RectangularThermalMovableModelElement modelElement, Point2D proposedPosition ) {
 //
-//        // Compensate for the model element's center X position.
-//        Vector2D translation = new Vector2D( proposedPosition ).minus( modelElement.position.get() );
-//
-//        // Figure out how far the block's right edge appears to protrude to
-//        // the side due to perspective.
-//        double blockPerspectiveExtension = Block.SURFACE_WIDTH * BlockNode.PERSPECTIVE_EDGE_PROPORTION * Math.cos( BlockNode.PERSPECTIVE_ANGLE ) / 2;
 //
 //        // Validate against burner boundaries.  Treat the burners as one big
 //        // blocking rectangle so that the user can't drag things between

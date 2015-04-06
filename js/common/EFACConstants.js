@@ -105,11 +105,16 @@ define( function( require ) {
     // Constants that control the speed of the energy chunks
     ENERGY_CHUNK_VELOCITY: 0.04, // In meters/sec.
 
-    // Constants that define surface width of various rectangular objects
+    // Constants that define surface width and edge properties of various rectangular objects
     SURFACE_WIDTH: 0.045,
+    PERSPECTIVE_EDGE_PROPORTION: Math.sqrt( Math.pow( Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
+                                             Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
+    PERSPECTIVE_ANGLE: Math.atan2( -Z_TO_Y_OFFSET_MULTIPLIER, -Z_TO_X_OFFSET_MULTIPLIER ),
 
-    // Defines the initial fluid level for beakers.
-    INITIAL_FLUID_LEVEL: 0.5
+    // Constants for the burners.
+    INITIAL_FLUID_LEVEL: 0.5,
+    BURNER_EDGE_TO_HEIGHT_RATIO: 0.2, // Multiplier empirically determined for best look.
+    BURNER_PERSPECTIVE_ANGLE: Math.PI / 4 // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
   };
 } )
 ;
