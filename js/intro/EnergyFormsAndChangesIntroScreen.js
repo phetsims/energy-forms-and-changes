@@ -15,6 +15,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
 
   // strings
   var introString = require( 'string!ENERGY_FORMS_AND_CHANGES/intro' );
@@ -36,7 +37,7 @@ define( function( require ) {
       icon,
       function() { return new EnergyFormsAndChangesIntroModel(); },
       function( model ) { return new EnergyFormsAndChangesIntroScreenView( model ); },
-      { backgroundColor: 'white' }
+      { backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR }
     );
   }
 

@@ -4,7 +4,6 @@
  * Resources (images and translated strings) for "EnergyFormsAndChanges" are loaded eagerly to make sure everything exists on sim startup.
  */
 
-
 define( function( require ) {
   'use strict';
 

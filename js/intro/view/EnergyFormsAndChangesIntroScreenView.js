@@ -1,12 +1,11 @@
-/*
- * Copyright 2002-2015, University of Colorado Boulder
- */
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * View for the 'Intro' screen of the Energy Forms And Changes simulation.
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
+ * @author Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
@@ -20,7 +19,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-
 //  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
 //  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
 //  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
@@ -29,23 +27,20 @@ define( function( require ) {
 //  var HeaterCoolerView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/HeaterCoolerView' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
 //  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
-
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
-
   var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-
   //var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'DOT/Rectangle' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   //var PropertySet = require( 'AXON/PropertySet' );
-
   //var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
   var Bounds2 = require( 'DOT/Bounds2' );
-
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
@@ -59,55 +54,77 @@ define( function( require ) {
   // var showDumpEnergiesButton = new BooleanProperty( false );
 
 
-//  var normalSimSpeed = new BooleanProperty( true );
 
 
   /**
+   * Constructor for the Energy Forms and Changes Intro Screen.
+   *
    * @param {EnergyFormsAndChangesIntroModel} model
    * @constructor
    */
   function EnergyFormsAndChangesIntroScreenView( model ) {
 
-
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
+
     var thisScreen = this;
     this.model = model;
 
-    var STAGE_SIZE = this.layoutBounds;
+    //var STAGE_SIZE = this.layoutBounds;
 
+    // Set up the canvas-screen transform. TODO: Not sure if this is still used or necessary for HTML5. Ask John.
+    //setWorldTransformStrategy( new CenteredStage( this ) );
 
-    // Create the model-view transform.  The primary units used in the model
-    // are meters, so significant zoom is used.  The multipliers for the 2nd
-    // parameter can be used to adjust where the point (0, 0) in the model,
-    // which is on the middle of the screen above the counter as located
-    // in the view.
-//TODO change back to 2200;
+    // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.  The multipliers for the 2nd
+    // parameter can be used to adjust where the point (0, 0) in the model, which is on the middle of the screen above the counter as located in the
+    // view.
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( Math.round( thisScreen.layoutBounds.width * 0.5 ), Math.round( thisScreen.layoutBounds.height * 0.85 ) ),
       2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
 
-
-    //    // Set up a root node for our scene graph.
-    var rootNode = new Node();
-    this.addChild( rootNode );
-    // needed Z-order behavior.
+    // Create some nodes that will act as layers in order to create the needed Z-order behavior.
     var backLayer = new Node();
-    rootNode.addChild( backLayer );
+    this.addChild( backLayer );
     var beakerBackLayer = new Node();
-    rootNode.addChild( beakerBackLayer );
+    this.addChild( beakerBackLayer );
     var beakerGrabLayer = new Node();
-    rootNode.addChild( beakerGrabLayer );
+    this.addChild( beakerGrabLayer );
     var blockLayer = new Node();
-    rootNode.addChild( blockLayer );
+    this.addChild( blockLayer );
     var airLayer = new Node();
-    rootNode.addChild( airLayer );
+    this.addChild( airLayer );
     var heaterCoolerFrontLayer = new Node();
-    rootNode.addChild( heaterCoolerFrontLayer );
+    this.addChild( heaterCoolerFrontLayer );
     var thermometerLayer = new Node();
-    rootNode.addChild( thermometerLayer );
+    this.addChild( thermometerLayer );
     var beakerFrontLayer = new Node();
-    rootNode.addChild( beakerFrontLayer );
+    this.addChild( beakerFrontLayer );
+
+    // Create the lab bench surface image.
+    var labBenchSurfaceImage = new Image( shelfImage );
+    labBenchSurfaceImage.leftTop = ( new Vector2(
+        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
+        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
+    );
+
+    // Create a rectangle that will act as the background below the lab bench surface, basically like the side of the bench.
+    var benchWidth = labBenchSurfaceImage.width * 0.95;
+    var benchHeight = 1000; // Arbitrary large number, user should never see the bottom of this.
+    var labBenchSide = new Rectangle( labBenchSurfaceImage.centerX - benchWidth/2, labBenchSurfaceImage.centerY, benchWidth, benchHeight, {
+      fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
+    } );
+
+    // Add the bench side and top to the scene.  The lab bench side must be behind the bench top.
+    backLayer.addChild( labBenchSide );
+    backLayer.addChild( labBenchSurfaceImage );
+
+    // Calculate the vertical center between the lower edge of the top of the bench and the bottom of the canvas.  This is for layout.
+    var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
+
+    // Add the clock controls.
+    var clockControlPanel = new NormalAndFastForwardTimeControlPanel( model );
+    clockControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
+    backLayer.addChild( clockControlPanel );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
@@ -117,9 +134,7 @@ define( function( require ) {
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
 
-    this.addChild( new BurnerStandNode( new Rectangle( 400, 400, 100, 100 ), 25 ) );
-
-//    heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );
+//    heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );(
 
 
     // Add the thermometer nodes.

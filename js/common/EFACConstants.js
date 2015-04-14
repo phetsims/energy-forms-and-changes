@@ -18,7 +18,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var FRAMES_PER_SECOND = 30.0;
+  var FRAMES_PER_SECOND = 60.0;
   var SIM_TIME_PER_TICK_NORMAL = 1 / FRAMES_PER_SECOND;
   var NOMINAL_WATER_OPACITY = 0.75;
 
@@ -116,5 +116,4 @@ define( function( require ) {
     BURNER_EDGE_TO_HEIGHT_RATIO: 0.2, // Multiplier empirically determined for best look.
     BURNER_PERSPECTIVE_ANGLE: Math.PI / 4 // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
   };
-} )
-;
+} );

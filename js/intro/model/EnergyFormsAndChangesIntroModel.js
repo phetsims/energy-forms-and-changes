@@ -13,18 +13,14 @@ define( function( require ) {
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
-  //var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
-  //var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
-  //var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
-  //var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -68,11 +64,16 @@ define( function( require ) {
   function EnergyFormsAndChangesIntroModel() {
 
     PropertySet.call( this, {
-      energyChunksVisible: false
+      energyChunksVisible: false,
+      play: true, // is the sim running or paused
+      normalSimSpeed: true // is the sim running at normal speed or fast forward
     } );
 
     // Extend the scope of this.
     var thisModel = this;
+
+    // Sim stepping clock that keeps track of time per frame.
+    this.timePerTick = EFACConstants.SIM_TIME_PER_TICK_NORMAL;
 
     // Add the air.
     this.air = new Air( this.energyChunksVisible );
@@ -124,6 +125,10 @@ define( function( require ) {
       } )
     }
 
+    this.normalSimSpeedProperty.link( function() {
+      thisModel.timePerTick = thisModel.normalSimSpeed ? EFACConstants.SIM_TIME_PER_TICK_NORMAL : EFACConstants.SIM_TIME_PER_TICK_FAST_FORWARD;
+    } );
+
   }
 
   return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
@@ -150,11 +155,34 @@ define( function( require ) {
     },
 
     /**
-     * Update the state of the model.
+     * Manually step the sim by one frame, assuming 60 frames per second.
      *
-     *   @param {number} dt Time step.
+     * TODO: Better way to do this?  One line functions like this are silly, but it might match the PhET step pattern.
+     *
+     * @param {number} dt Time step.
+     */
+    manualStep: function() {
+      this.stepModel( 1 / 60 );
+    },
+
+    /**
+     * Step function or this model, automatically called by joist.
+     * TODO: This pattern OK?  dt is not used, but we need to call the step with variable times per tick of the clock.
+     *
+     * @param {number} dt Time step.
      */
     step: function( dt ) {
+      if ( this.play ) {
+        this.stepModel( this.timePerTick );
+      }
+    },
+
+    /**
+     * Update the state of the model for a given time step.
+     *
+     * @param {number} dt Time step.
+     */
+    stepModel: function( dt ) {
 
       // Extend Scope for nested callbacks
       var thisModel = this;
@@ -261,7 +289,7 @@ define( function( require ) {
       // Exchange energy chunks between movable thermal energy containers.
       for ( i = 0; i < this.movableThermalEnergyContainers.length; i++ ) {
         for ( j = i + 1; j < this.movableThermalEnergyContainers.length; j++ ) {
-          // localize objects of interest to reduce array lookups. // TODO: Refactor to do this throughout.
+          // localize objects of interest to reduce array lookups.
           var thermalModelElement1 = this.movableThermalEnergyContainers[ i ];
           var thermalModelElement2 = this.movableThermalEnergyContainers[ j ];
 
@@ -337,11 +365,14 @@ define( function( require ) {
           burner.addEnergyChunk( thisModel.air.requestEnergyChunk( burner.getCenterPoint() ) );
         }
       } );
-    },
+    }
+
+    ,
 
     getBlockList: function() {
       return [ this.brick, this.ironBlock ];
-    },
+    }
+    ,
 
     /** Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by the code that detects potential
      *  collisions between the 2D objects in model space.
@@ -360,7 +391,8 @@ define( function( require ) {
       shape.close();
       return shape;
 
-    },
+    }
+    ,
 
     /**
      * Validate the position being proposed for the given model element.  This evaluates whether the proposed position would cause the model element
@@ -455,7 +487,8 @@ define( function( require ) {
       newPosition.setY( Math.max( newPosition.getY(), 0 ) );
 
       return newPosition;
-    },
+    }
+    ,
 
     /**
      * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary rectangle that can block the moving
@@ -560,7 +593,8 @@ define( function( require ) {
       }
 
       return new Vector2( xTranslation, yTranslation );
-    },
+    }
+    ,
 
     /**
      * Returns true if surface s1's center is above surface s2.
@@ -570,7 +604,8 @@ define( function( require ) {
      */
     isDirectlyAbove: function( surface1, surface2 ) {
       return surface2.xRange.containsBounds( surface2.getCenterX() ) && surface1.yPos > surface2.yPos;
-    },
+    }
+    ,
 
     /**
      *
@@ -611,7 +646,8 @@ define( function( require ) {
         }
       }
       return bestOverlappingSurfaceProperty;
-    },
+    }
+    ,
 
     /**
      * Get the amount of overlap in the x direction between two horizontal surfaces.
@@ -623,7 +659,8 @@ define( function( require ) {
       var lowestMax = Math.min( surface1.xRange.max, surface2.xRange.max );
       var highestMin = Math.max( surface1.xRange.min, surface2.xRange.min );
       return Math.max( lowestMax - highestMin, 0 );
-    },
+    }
+    ,
 
     /**
      * Get the temperature and color that would be sensed by a thermometer at
@@ -671,7 +708,7 @@ define( function( require ) {
         return new TemperatureAndColor( this.beaker.temperature, EFACConstants.WATER_COLOR_IN_BEAKER );
       }
       else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
-        return new TemperatureAndColor( beaker.getSteamTemperature( locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
+        return new TemperatureAndColor( this.beaker.getSteamTemperature( locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
       }
 
       // Test if the point is a burner.
@@ -685,4 +722,5 @@ define( function( require ) {
       return new TemperatureAndColor( this.air.getTemperature(), EFACConstants.FIRST_TAB_BACKGROUND_COLOR );
     }
   } )
-} );
+} )
+;

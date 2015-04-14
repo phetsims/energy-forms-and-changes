@@ -1,11 +1,11 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Clock control panel that shows "Normal Speed" and "Fast Forward" as radio
- * buttons with a play/pause and step button.
+ * Clock control panel that shows "Normal Speed" and "Fast Forward" as radio buttons with a play/pause and step button.
  *
  * @author Sam Reid
  * @author John Blanco
+ * @author Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
@@ -13,96 +13,65 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  /*
-   * Constructor.
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
+  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Panel = require( 'SUN/Panel' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
+
+  // strings
+  var normalString = require( 'string!ENERGY_FORMS_AND_CHANGES/normal' );
+  var fastForwardString = require( 'string!ENERGY_FORMS_AND_CHANGES/fastForward' );
+
+  // static data
+  var RADIO_BUTTON_FONT = new PhetFont( 16 );
+
+  /**
+   * Constructor for the NormalAndFastForwardTimeControlPanel.
+   *
+   * @param {EnergyFormsAndChangesIntroModel} model
+   * @constructor
    */
-  function NormalAndFastForwardTimeControlPanel( normalSpeed, clock ) {
-    Node.call( this );
-    var clockControlPanel = new PSwing( new PiccoloClockControlPanel( clock ).withAnonymousClassBody( {
-      initializer: function() {
-        setBackground( TRANSPARENT );
-        getButtonCanvas().setBackground( TRANSPARENT );
-        getBackgroundNode().setVisible( false );
-        clearAllToolTips();
-      }
-    } ) );
-    var normalSpeedButton = new PSwing( new PropertyRadioButton( normalMotionRadioButton, EnergyFormsAndChangesResources.Strings.NORMAL, normalSpeed, true ).withAnonymousClassBody( {
-      initializer: function() {
-        setBackground( TRANSPARENT );
-        setFont( RADIO_BUTTON_FONT );
-      }
-    } ) );
-    var fastForwardButton = new PSwing( new PropertyRadioButton( fastForwardRadioButton, EnergyFormsAndChangesResources.Strings.FAST_FORWARD, normalSpeed, false ).withAnonymousClassBody( {
-      initializer: function() {
-        setBackground( TRANSPARENT );
-        setFont( RADIO_BUTTON_FONT );
-      }
-    } ) );
-    this.addChild( new HBox( normalSpeedButton, fastForwardButton, clockControlPanel ) );
+  function NormalAndFastForwardTimeControlPanel( model ) {
+
+    // Add play/pause button.
+    var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
+
+    // Add the step button to manually step animation.
+    var stepButton = new StepButton( function() { model.manualStep(); }, model.playProperty,
+      {
+        radius: 15,
+        centerX: playPauseButton.centerX
+      } );
+
+    // Group the play and pause buttons into their own panel for correct layout in the LayoutBox.
+    var playPauseButtonGroup = new LayoutBox( {
+      children: [playPauseButton, stepButton],
+      spacing: 10,
+      orientation: 'horizontal'
+    });
+
+    // TODO: Scale the text to make it translatable.
+    var radioButtonContent = [
+      { value: true, node: new Text( normalString, { font: RADIO_BUTTON_FONT } ) },
+      { value: false, node: new Text( fastForwardString, { font: RADIO_BUTTON_FONT } ) }
+    ];
+    var radioButtonGroup = new RadioButtonGroup( model.normalSimSpeedProperty, radioButtonContent, {
+      orientation: 'horizontal',
+      selectedLineWidth: 4
+    });
+    //this.addChild( radioButtonGroup );
+
+    LayoutBox.call( this, {
+      children: [radioButtonGroup, playPauseButtonGroup ],
+      orientation: 'horizontal',
+      spacing: 35
+    } );
+
   }
 
-  return inherit( Node, NormalAndFastForwardTimeControlPanel, {} );
+  return inherit( LayoutBox, NormalAndFastForwardTimeControlPanel );
+
 } );
-
-
-//
-//// Copyright 2002-2015, University of Colorado
-
-//package edu.colorado.phet.energyformsandchanges.intro.view;
-//
-//import java.awt.Color;
-//
-//import edu.colorado.phet.common.phetcommon.model.clock.IClock;
-//import edu.colorado.phet.common.phetcommon.model.property.SettableProperty;
-//import edu.colorado.phet.common.phetcommon.view.controls.PropertyRadioButton;
-//import edu.colorado.phet.common.phetcommon.view.util.PhetFont;
-//import edu.colorado.phet.common.piccolophet.RichPNode;
-//import edu.colorado.phet.common.piccolophet.nodes.layout.HBox;
-//import edu.colorado.phet.common.piccolophet.nodes.mediabuttons.PiccoloClockControlPanel;
-//import edu.colorado.phet.energyformsandchanges.EnergyFormsAndChangesResources;
-//import edu.umd.cs.piccolo.PNode;
-//import edu.umd.cs.piccolox.pswing.PSwing;
-//
-//import static edu.colorado.phet.energyformsandchanges.EnergyFormsAndChangesSimSharing.UserComponents.fastForwardRadioButton;
-//import static edu.colorado.phet.energyformsandchanges.EnergyFormsAndChangesSimSharing.UserComponents.normalMotionRadioButton;
-//
-///**
-// * Clock control panel that shows "Normal Speed" and "Fast Forward" as radio
-// * buttons with a play/pause and step button.
-// *
-// * @author Sam Reid
-// * @author John Blanco
-// */
-//public class NormalAndFastForwardTimeControlPanel extends RichPNode {
-//
-//  private final Color TRANSPARENT = new Color( 0, 0, 0, 0 );
-//  private final PhetFont RADIO_BUTTON_FONT = new PhetFont( 16 );
-//
-//  /*
-//   * Constructor.
-//   */
-//  public NormalAndFastForwardTimeControlPanel( SettableProperty<Boolean> normalSpeed, IClock clock ) {
-//    PNode clockControlPanel = new PSwing( new PiccoloClockControlPanel( clock ) {{
-//      setBackground( TRANSPARENT );
-//      getButtonCanvas().setBackground( TRANSPARENT );
-//      getBackgroundNode().setVisible( false );
-//      clearAllToolTips();
-//    }} );
-//    PNode normalSpeedButton = new PSwing( new PropertyRadioButton<Boolean>( normalMotionRadioButton,
-//      EnergyFormsAndChangesResources.Strings.NORMAL,
-//      normalSpeed,
-//      true ) {{
-//      setBackground( TRANSPARENT );
-//      setFont( RADIO_BUTTON_FONT );
-//    }} );
-//    PNode fastForwardButton = new PSwing( new PropertyRadioButton<Boolean>( fastForwardRadioButton,
-//      EnergyFormsAndChangesResources.Strings.FAST_FORWARD,
-//      normalSpeed,
-//      false ) {{
-//      setBackground( TRANSPARENT );
-//      setFont( RADIO_BUTTON_FONT );
-//    }} );
-//
-//    addChild( new HBox( normalSpeedButton, fastForwardButton, clockControlPanel ) );
-//  }
-//}
