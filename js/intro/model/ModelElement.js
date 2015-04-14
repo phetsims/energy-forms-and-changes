@@ -75,7 +75,6 @@ define( function( require ) {
      * cases where one or more elements are in between.
      */
     isStackedUpon: function( element ) {
-      debugger;
       return (this.supportingSurfaceProperty !== null) &&
              ( this.supportingSurface.getOwner() === element ||
                this.supportingSurface.getOwner().isStackedUpon( element ) );
@@ -90,7 +89,8 @@ define( function( require ) {
       if ( this.supportingSurfaceProperty !== null ) {
         // TODO: the next line was in the java code but we dont' think it is needed (JB)
         //        this.supportingSurfaceProperty.removeAllObservers();
-        this.supportingSurface.clearSurface();
+        // TODO: Re-test this once supporting surfaces have been added to the model elements!
+        //this.supportingSurface.clearSurface();
         this.supportingSurfaceProperty.reset();
       }
     }

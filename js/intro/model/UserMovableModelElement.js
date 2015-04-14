@@ -58,8 +58,7 @@ define( function( require ) {
       this.userControlledProperty.reset();
       this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
-      //TODO reached for prototype
-      this.modelElement.reset();
+      ModelElement.prototype.reset.call( this );
 
     },
 

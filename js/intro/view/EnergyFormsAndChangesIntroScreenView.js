@@ -54,8 +54,6 @@ define( function( require ) {
   // var showDumpEnergiesButton = new BooleanProperty( false );
 
 
-
-
   /**
    * Constructor for the Energy Forms and Changes Intro Screen.
    *
@@ -103,14 +101,14 @@ define( function( require ) {
     // Create the lab bench surface image.
     var labBenchSurfaceImage = new Image( shelfImage );
     labBenchSurfaceImage.leftTop = ( new Vector2(
-        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
-        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
+      modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
+      modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
     );
 
     // Create a rectangle that will act as the background below the lab bench surface, basically like the side of the bench.
     var benchWidth = labBenchSurfaceImage.width * 0.95;
     var benchHeight = 1000; // Arbitrary large number, user should never see the bottom of this.
-    var labBenchSide = new Rectangle( labBenchSurfaceImage.centerX - benchWidth/2, labBenchSurfaceImage.centerY, benchWidth, benchHeight, {
+    var labBenchSide = new Rectangle( labBenchSurfaceImage.centerX - benchWidth / 2, labBenchSurfaceImage.centerY, benchWidth, benchHeight, {
       fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
     } );
 
@@ -125,6 +123,16 @@ define( function( require ) {
     var clockControlPanel = new NormalAndFastForwardTimeControlPanel( model );
     clockControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
     backLayer.addChild( clockControlPanel );
+
+    // Create and add the Reset All Button in the bottom right, which resets the model
+    var resetAllButton = new ResetAllButton( {
+      listener: function() {
+        model.reset();
+      },
+      radius: 20
+    } );
+    resetAllButton.center = new Vector2( this.layoutBounds.width - 2 * resetAllButton.width, centerYBelowSurface );
+    this.addChild( resetAllButton );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
@@ -170,16 +178,6 @@ define( function( require ) {
       thermometerToolBoxNode.setReturnRect( thermometerBox.bounds );
     } );
 
-    // Create and add the Reset All Button in the bottom right, which resets the model
-    var resetAllButton = new ResetAllButton( {
-      listener: function() {
-        model.reset();
-      },
-      right: this.layoutBounds.maxX - 10,
-      bottom: this.layoutBounds.maxY - 10
-    } );
-
-    this.addChild( resetAllButton );
   }
 
   return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView, {

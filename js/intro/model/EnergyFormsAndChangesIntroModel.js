@@ -146,11 +146,9 @@ define( function( require ) {
       this.brick.reset();
       this.beaker.reset();
 
-      for ( var thermometer in this.thermometers ) {
-        if ( this.thermometers.hasOwnProperty( thermometer ) ) {
-          thermometer.reset();
-        }
-      }
+      this.thermometers.forEach( function( thermometer ) {
+        thermometer.reset()
+      } );
 
     },
 

@@ -129,7 +129,6 @@ define( function( require ) {
     reset: function() {
       energy = INITIAL_ENERGY;
       this.energyChunkList.clear();
-      this.energyChunkWanderControllers.clear();
     },
 
     /**

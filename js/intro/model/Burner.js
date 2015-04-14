@@ -30,6 +30,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var PropertySet = require( 'AXON/PropertySet' );
   var IntroConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/IntroConstants' );
+  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
 
   // constants
   var WIDTH = 0.075; // In meters.
@@ -51,11 +52,11 @@ define( function( require ) {
    */
   function Burner( position, energyChunksVisibleProperty ) {
 
-    var thisBurner = this;
+    ModelElement.call( this );
 
-    PropertySet.call( this, {
-      heatCoolLevel: new Range( -1, 1, 0 )
-    } );
+    this.addProperty( 'heatCoolLevel', new Range( -1, 1, 0 ) );
+
+    var thisBurner = this;
 
     this.position = position;
     this.energyChunkList = new ObservableArray();
@@ -97,7 +98,7 @@ define( function( require ) {
 
   }
 
-  return inherit( PropertySet, Burner, {
+  return inherit( ModelElement, Burner, {
 
     /**
      * Get a rectangle that defines the outline of the burner.  In the model the burner is essentially a 2D rectangle.
@@ -229,12 +230,11 @@ define( function( require ) {
      *
      */
     reset: function() {
-      ModelElement.reset();
+      ModelElement.prototype.reset.call( this );
       this.energyChunkList.clear();
-      //energyChunkWanderControllers.clear();
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
-      this.heatCoolLevel.reset();
+      this.heatCoolLevelProperty.reset();
     },
 
     /**
