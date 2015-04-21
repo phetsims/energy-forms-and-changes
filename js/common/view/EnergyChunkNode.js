@@ -16,20 +16,39 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
+
+  // images
+  var thermalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_therm_blank_orange.png' );
+  var electricalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_electric_blank.png' );
+  var mechanicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_mech_blank.png' );
+  var lightEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_light_blank.png' );
+  var chemicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_chem_blank_light.png' );
+  var hiddenEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_dashed_blank.png' );
+
+  // strings
+  var energyChunkLabelString = require( 'string!ENERGY_FORMS_AND_CHANGES/energyChunkLabel' );
 
   // constants
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters.
   var WIDTH = 24; // In screen coords, which is close to pixels.
 
-//  private static final Map<EnergyType, Image> mapEnergyTypeToImage = new HashMap<EnergyType, Image>() {{
-//    put( EnergyType.THERMAL, EnergyFormsAndChangesResources.Images.E_THERM_BLANK_ORANGE );
-//    put( EnergyType.ELECTRICAL, EnergyFormsAndChangesResources.Images.E_ELECTRIC_BLANK );
-//    put( EnergyType.MECHANICAL, EnergyFormsAndChangesResources.Images.E_MECH_BLANK );
-//    put( EnergyType.LIGHT, EnergyFormsAndChangesResources.Images.E_LIGHT_BLANK );
-//    put( EnergyType.CHEMICAL, EnergyFormsAndChangesResources.Images.E_CHEM_BLANK_LIGHT );
-//    put( EnergyType.HIDDEN, EnergyFormsAndChangesResources.Images.E_DASHED_BLANK );
-//  }};
+  // Convenience map that links energy types to their representing images.
+  var mapEnergyTypeToImage = {};
+  mapEnergyTypeToImage[ EnergyType.THERMAL ] = thermalEnergyImage;
+  mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = electricalEnergyImage;
+  mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = mechanicalEnergyImage;
+  mapEnergyTypeToImage[ EnergyType.LIGHT ] = lightEnergyImage;
+  mapEnergyTypeToImage[ EnergyType.CHEMICAL ] = chemicalEnergyImage;
+  mapEnergyTypeToImage[ EnergyType.HIDDEN ] = hiddenEnergyImage;
 
+  /**
+   * Constructor for an EnergyChunkNode.
+   *
+   * @param {EnergyChunk} energyChunk
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
   function EnergyChunkNode( energyChunk, modelViewTransform ) {
 
     Node.call( this );
@@ -73,25 +92,30 @@ define( function( require ) {
       if ( zPosition < 0 ) {
         zFadeValue = Math.max( (Z_DISTANCE_WHERE_FULLY_FADED + zPosition) / Z_DISTANCE_WHERE_FULLY_FADED, 0 );
       }
-      setTransparency( zFadeValue );
-    },
+      this.setOpacity( 1 - zFadeValue );
+    }
+  }, {
 
     /**
-     * *
-     * @param energyType
+     * Function that returns the correct image for this EnergyChunkNode.  This is a static function so that an image can be generated without an
+     * EnergyChunkNode instance.  This is mostly useful for button icons that should not have visibility properties linked to the model.
+     *
+     * @static
+     * @param {string} energyType
      * @returns {Image}
      */
     createEnergyChunkNode: function( energyType ) {
-      var background = new Image( mapEnergyTypeToImage.get( energyType ) );
-      background.addChild( new Text( EnergyFormsAndChangesResources.Strings.ENERGY_CHUNK_LABEL, new PhetFont( 16, true ) ).withAnonymousClassBody( {
-        initializer: function() {
-          setScale( Math.min( background.bounds.width / this.bounds.width, background.bounds.height / this.bounds.height ) * 0.95 );
-          setOffset( background.bounds.width / 2 - this.bounds.width / 2, background.bounds.height / 2 - this.bounds.height / 2 );
-        }
-      } ) );
-      background.setScale( WIDTH / background.bounds.width );
-      background.setOffset( -background.bounds.width / 2, -background.bounds.height / 2 );
+
+      var background = new Image( mapEnergyTypeToImage[ energyType ] );
+      var energyText = new Text( energyChunkLabelString, new PhetFont( 16 ) );
+      energyText.scale( Math.min( background.width / energyText.width, background.height/ energyText.height ) * 0.95 );
+      energyText.center = background.center;
+      background.addChild( energyText );
+      background.scale( WIDTH / background.width );
+      background.center = ( new Vector2( -background.width / 2, -background.height / 2 ) );
       return background;
+
     }
+
   } );
 } );
