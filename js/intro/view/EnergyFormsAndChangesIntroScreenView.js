@@ -15,16 +15,21 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var CheckBox = require( 'SUN/CheckBox' );
+  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
+  var Panel = require( 'SUN/Panel' );
   //var Panel = require( 'SUN/Panel' );
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
 //  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-//  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
 //  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
-  // var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-//  var HeaterCoolerView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/HeaterCoolerView' );
+  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var HeaterCoolerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/HeaterCoolerNode' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
 //  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -41,6 +46,11 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
+
+  // strings
+  var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
+  var heatString = require( 'string!ENERGY_FORMS_AND_CHANGES/heat' );
+  var coolString = require( 'string!ENERGY_FORMS_AND_CHANGES/cool' );
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
@@ -68,9 +78,6 @@ define( function( require ) {
     this.model = model;
 
     //var STAGE_SIZE = this.layoutBounds;
-
-    // Set up the canvas-screen transform. TODO: Not sure if this is still used or necessary for HTML5. Ask John.
-    //setWorldTransformStrategy( new CenteredStage( this ) );
 
     // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.  The multipliers for the 2nd
     // parameter can be used to adjust where the point (0, 0) in the model, which is on the middle of the screen above the counter as located in the
@@ -133,6 +140,52 @@ define( function( require ) {
     } );
     resetAllButton.center = new Vector2( this.layoutBounds.width - 2 * resetAllButton.width, centerYBelowSurface );
     this.addChild( resetAllButton );
+
+    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow each to be independently
+    // scaled.
+    var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
+    energyChunkNode.scale( 1.0 ); // TODO: Why is this here?
+    energyChunkNode.pickable = false;
+    var label = new Text( energySymbolsString, { font: new PhetFont( 20 ) } );
+    var showEnergyCheckBox = new CheckBox( new LayoutBox( {
+      children: [ label, energyChunkNode ],
+      orientation: 'horizontal',
+      spacing: 5
+    } ), model.energyChunksVisibleProperty );
+    var controlPanel = new Panel( showEnergyCheckBox, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
+    } );
+    controlPanel.rightTop = new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET );
+    this.addChild( controlPanel );
+
+
+    // Add the burners.
+    var burnerProjectionAmount = modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
+    var burnerWidth = modelViewTransform.modelToViewDeltaX( model.leftBurner.getOutlineRect().width ) * 0.7;
+    var burnerHeight = burnerWidth * 0.8;
+    var burnerOpeningHeight = burnerHeight * 0.2;
+    var burnerYPosTweak = -10; // Empirically determined for best look.
+
+    // Set up left heater-cooler node.
+    // TODO: This will require HeaterCoolerNode.  The plan is to make StoveNode of States of Matter common in scenery-phet.
+
+    //var leftHeaterCooler = new HeaterCoolerNode( model.leftBurner.heatCoolLevelProperty, true, true,
+    //  heatString, coolString, burnerWidth, burnerHeight, burnerOpeningHeight, true, model.leftBurner.energyChunkList, modelViewTransform );
+
+    //leftHeaterCooler.setOffset( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCooler.holeLayer.bounds.width / 2,
+    //  modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCooler.frontLayer.bounds.height - burnerYPosTweak );
+
+    //backLayer.addChild( leftHeaterCooler.holeLayer );
+    //backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ), burnerProjectionAmount ) );
+    //heaterCoolerFrontLayer.addChild( leftHeaterCooler.frontLayer );
+    //leftHeaterCooler.setOffset( mvt.modelToViewX( model.getLeftBurner().getOutlineRect().getCenterX() ) - leftHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
+    //  mvt.modelToViewY( model.getLeftBurner().getOutlineRect().getMinY() ) - leftHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
+    //backLayer.addChild( leftHeaterCooler.getHoleNode() );
+    //backLayer.addChild( new BurnerStandNode( mvt.modelToView( model.getLeftBurner().getOutlineRect() ).getBounds2D(), burnerProjectionAmount ) );
+    //heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );
+
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );

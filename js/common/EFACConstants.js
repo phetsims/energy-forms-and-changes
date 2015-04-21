@@ -95,8 +95,8 @@ define( function( require ) {
     SECOND_TAB_BACKGROUND_COLOR: FIRST_TAB_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
 
-    CONTROL_PANEL_OUTLINE_STROKE: 1.5,
-    CONTROL_PANEL_OUTLINE_COLOR: 'black',
+    CONTROL_PANEL_OUTLINE_LINE_WIDTH: 1.5,
+    CONTROL_PANEL_OUTLINE_STROKE: 'black',
     CLOCK_CONTROL_BACKGROUND_COLOR: new Color( 120, 120, 120 ),
 
     // Model-view transform scale factor for Energy Systems tab.

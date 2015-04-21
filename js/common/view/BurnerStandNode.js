@@ -1,8 +1,7 @@
 // Copyright 2002-2015, University of Colorado
 
 /**
- * Node that represents a burner stand in the view.  A burner stand is a faux-
- * 3D representation of an object upon which other objects may be placed in
+ * Node that represents a burner stand in the view.  A burner stand is a faux-3D representation of an object upon which other objects may be placed in
  * order to be heated or cooled.  The burner is not included.
  *
  * @author John Blanco
