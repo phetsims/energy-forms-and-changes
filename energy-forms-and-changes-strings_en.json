@@ -1,0 +1,68 @@
+{
+  "energy-forms-and-changes.name": {
+    "value": "Energy Forms And Changes"
+  },
+  "intro": {
+    "value": "Intro"
+  },
+  "energySystems": {
+    "value": "Energy Systems"
+  },
+  "brick": {
+    "value": "Brick"
+  },
+  "iron": {
+    "value": "Iron"
+  },
+  "energySymbols": {
+    "value": "Energy Symbols"
+  },
+  "water": {
+    "value": "Water"
+  },
+  "clouds": {
+    "value": "Clouds"
+  },
+  "lots": {
+    "value": "Lots"
+  },
+  "none": {
+    "value": "None"
+  },
+  "heat": {
+    "value": "Heat"
+  },
+  "cool": {
+    "value": "Cool"
+  },
+  "feedMe": {
+    "value": "Feed Me"
+  },
+  "normal": {
+    "value": "Normal"
+  },
+  "fastForward": {
+    "value": "Fast Forward"
+  },
+  "formsOfEnergy": {
+    "value": "Forms of Energy"
+  },
+  "mechanical": {
+    "value": "Mechanical"
+  },
+  "electrical": {
+    "value": "Electrical"
+  },
+  "thermal": {
+    "value": "Thermal"
+  },
+  "light": {
+    "value": "Light"
+  },
+  "chemical": {
+    "value": "Chemical"
+  },
+  "energyChunkLabel": {
+    "value": "E"
+  }
+}
