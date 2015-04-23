@@ -61,7 +61,7 @@ define( function( require ) {
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
   // Boolean property for showing/hiding developer control for dumping energy levels.
-  // var showDumpEnergiesButton = new BooleanProperty( false );
+  // var showDumpEnergiesButton = new Property( false );
 
 
   /**

@@ -13,7 +13,6 @@ define( function( require ) {
 
   // modules
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
