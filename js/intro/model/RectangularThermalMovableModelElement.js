@@ -408,18 +408,22 @@ define( function( require ) {
      */
     getProjectedShape: function() {
       // This projects a rectangle, override for other behavior.
-      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.SURFACE_WIDTH / 2 );
-      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.SURFACE_WIDTH / 2 );
+      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
+      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
 
       var shape = new Shape();
 
       var rect = this.getRect();
-      shape.moveToPoint( new Vector2( rect.x, rect.y ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.y ).plus( backwardPerspectiveOffset ) )
+      var leftTop = new Vector2( rect.minX, rect.minY );
+      var rightTop = new Vector2( rect.maxX, rect.minY );
+      var leftBottom = new Vector2( rect.minX, rect.maxY );
+      var rightBottom = new Vector2( rect.maxX, rect.maxY );
+      shape.moveToPoint( new Vector2( rect.minX, rect.minY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( backwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( forwardPerspectiveOffset ) )
         .close();
       return shape;
     },

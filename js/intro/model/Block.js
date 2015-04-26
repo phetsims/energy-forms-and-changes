@@ -112,10 +112,10 @@ define( function( require ) {
      * @returns {Rectangle}
      */
     getRect: function() {
-      return new Rectangle( this.position.x - EFACConstants.SURFACE_WIDTH / 2,
+      return new Rectangle( this.position.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
         this.position.y,
-        EFACConstants.SURFACE_WIDTH,
-        EFACConstants.SURFACE_WIDTH );
+        EFACConstants.BLOCK_SURFACE_WIDTH,
+        EFACConstants.BLOCK_SURFACE_WIDTH );
     },
 
     /**
@@ -139,7 +139,7 @@ define( function( require ) {
      * @returns {Rectangle}
      */
     getRawShape: function() {
-      return new Rectangle( -EFACConstants.SURFACE_WIDTH / 2, 0, EFACConstants.SURFACE_WIDTH, EFACConstants.SURFACE_WIDTH );
+      return new Rectangle( -EFACConstants.BLOCK_SURFACE_WIDTH / 2, 0, EFACConstants.BLOCK_SURFACE_WIDTH, EFACConstants.BLOCK_SURFACE_WIDTH );
     },
 
     /**
