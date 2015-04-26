@@ -24,7 +24,6 @@ define( function( require ) {
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
    * @param {Property.<boolean>} visibilityControlProperty
-   * @returns {Vector2}
    * @constructor
    */
   function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibilityControlProperty ) {
@@ -43,7 +42,7 @@ define( function( require ) {
     this.velocity = initialVelocity;
   }
 
-  return inherit( Object, EnergyChunk, {
+  return inherit( PropertySet, EnergyChunk, {
     /**
      * Function that translate the energy chunk by a vector movement
      * @param {Vector2} movement
