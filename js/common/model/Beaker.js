@@ -31,6 +31,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Util = require( 'DOT/Util' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var MATERIAL_THICKNESS = 0.001; // In meters.
@@ -112,7 +113,7 @@ define( function( require ) {
      */
     getRect: function() {
       return new Rectangle(
-          this.position.x - this.width / 2,
+        this.position.x - this.width / 2,
         this.position.y,
         this.width,
         this.height );
@@ -176,7 +177,7 @@ define( function( require ) {
         var initialChunkBounds = thisBeaker.getSliceBounds();
         while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
           // Add a chunk at a random location in the beaker.
-          this.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), thisBeaker.energyChunksVisibleProperty.get() ) );
+          thisBeaker.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty.get() ) );
         }
 
         // Distribute the energy chunks within the beaker.
@@ -201,12 +202,12 @@ define( function( require ) {
       } );
 
       var sliceSelectionValue = Math.random();
-      var chosenSlice = this.slices[0];
+      var chosenSlice = this.slices[ 0 ];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
-        accumulatedArea += this.slices[ i ].getShape().bounds.width * this.slices[i].getShape().bounds.height;
+        accumulatedArea += this.slices[ i ].getShape().bounds.width * this.slices[ i ].getShape().bounds.height;
         if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
-          chosenSlice = this.slice;
+          chosenSlice = this.slices[ i ];
           break;
         }
       }
@@ -239,7 +240,7 @@ define( function( require ) {
       // Height of steam rectangle is based on beaker height and steamingProportion.
       var liquidWaterHeight = this.height * this.fluidLevel;
       return new Rectangle( this.position.x - this.getWidth() / 2,
-          this.position.y + liquidWaterHeight,
+        this.position.y + liquidWaterHeight,
         this.width,
         this.maxSteamHeight );
     },
@@ -260,10 +261,10 @@ define( function( require ) {
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
       var fluidRect = new Rectangle(
-          this.position.x - this.width / 2,
+        this.position.x - this.width / 2,
         this.position.y,
         this.width,
-          this.height * EFACConstants.INITIAL_FLUID_LEVEL );
+        this.height * EFACConstants.INITIAL_FLUID_LEVEL );
 
       var widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );
       for ( var i = 0; i < NUM_SLICES; i++ ) {

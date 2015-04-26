@@ -76,7 +76,7 @@ define( function( require ) {
     this.timePerTick = EFACConstants.SIM_TIME_PER_TICK_NORMAL;
 
     // Add the air.
-    this.air = new Air( this.energyChunksVisible );
+    this.air = new Air( this.energyChunksVisibleProperty );
 
     // Add the burners.
     this.rightBurner = new Burner( new Vector2( 0.18, 0 ), this.energyChunksVisibleProperty );

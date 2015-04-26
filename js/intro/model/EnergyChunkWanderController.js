@@ -41,11 +41,14 @@ define( function( require ) {
    * @constructor
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {
+
     this.energyChunk = energyChunk;
-    this.destinationProperty = destinationProperty;
     this.initialWanderConstraint = initialWanderConstraint;
+    this.destinationProperty = destinationProperty;
+
     this.resetCountdownTimer();
     this.changeVelocityVector();
+
   }
 
   return inherit( Object, EnergyChunkWanderController, {
@@ -55,15 +58,15 @@ define( function( require ) {
      * @param dt
      */
     updatePosition: function( dt ) {
-      var distanceToDestination = this.energyChunk.position.distance( this.destination );
-      if ( distanceToDestination < velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destination ) ) {
+      var distanceToDestination = this.energyChunk.position.distance( this.destinationProperty.value );
+      if ( distanceToDestination < velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
         // Destination reached.
-        this.energyChunk.position = this.destination;
+        this.energyChunk.position = this.destination.value;
         velocity.setMagnitude( 0 );
       }
-      else if ( this.energyChunk.position.distance( this.destination ) < dt * velocity.magnitude() ) {
+      else if ( this.energyChunk.position.distance( this.destinationProperty.value ) < dt * velocity.magnitude() ) {
         // Prevent overshoot.
-        velocity.times( this.energyChunk.position.distance( this.destination ) * dt );
+        velocity.times( this.energyChunk.position.distance( this.destinationProperty.value ) * dt );
       }
 
       // Stay within the horizontal confines of the initial bounds.
@@ -86,14 +89,14 @@ define( function( require ) {
      *
      */
     changeVelocityVector: function() {
-      var vectorToDestination = this.destination.minus( this.energyChunk.position );
-      var angle = vectorToDestination.getAngle();
+      var vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.position );
+      var angle = vectorToDestination.angle();
       if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
         // Add some randomness to the direction of travel.
         angle = angle + ( Math.random() - 0.5 ) * 2 * MAX_ANGLE_VARIATION;
       }
       var scalarVelocity = MIN_VELOCITY + ( MAX_VELOCITY - MIN_VELOCITY ) * Math.random();
-      velocity.setComponents( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
+      velocity.setXY( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
     },
 
     /**
@@ -116,7 +119,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     destinationReached: function() {
-      return this.destination.distance( this.energyChunk.position ) < 1E-7;
+      return this.destinationProperty.value.distance( this.energyChunk.position ) < 1E-7;
     }
   } );
 } );

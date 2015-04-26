@@ -75,8 +75,8 @@ define( function( require ) {
       var mapIDToEnergyChunk = {};
       energyChunkContainerSlices.forEach( function( energyChunkContainerSlice ) {
         energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
-          mapEnergyChunkToForceVector[energyChunk.uniqueID] = ZERO_VECTOR;
-          mapIDToEnergyChunk[energyChunk.uniqueID] = energyChunk;
+          mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
+          mapIDToEnergyChunk[ energyChunk.uniqueID ] = energyChunk;
         } )
       } );
 
@@ -118,81 +118,80 @@ define( function( require ) {
           var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) + Math.pow( containerShape.bounds.height, 2 ) );
 
           // Determine forces on each energy chunk.
-          energyChunkContainerSlice.forEach( function( energyChunk ) {
+          energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
             // Reset accumulated forces.
-            mapEnergyChunkToForceVector[energyChunk.uniqueID] = ZERO_VECTOR;
-          } );
+            mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
 
-          if ( containerShape.containsPoint( energyChunk.position ) ) {
-            // Loop on several angles, calculating the forces from the edges at the given angle.
-            for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-              var edgeDetectSteps = 8;
-              var lengthBounds = new Range( 0, maxDistanceToEdge );
-              for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-                var vectorToEdge = new Vector2( lengthBounds.getCenter(), 0 ).rotated( angle );
-                if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
-                  lengthBounds = new Range( lengthBounds.getCenter(), lengthBounds.max );
-                }
-                else {
-                  lengthBounds = new Range( lengthBounds.min, lengthBounds.getCenter() );
-                }
-              }
-
-              // Handle case where point is too close to the container's edge.
-              if ( lengthBounds.getCenter() < minDistance ) {
-                lengthBounds = new DoubleRange( minDistance, minDistance );
-              }
-
-              // Apply the force due to this edge.
-              var edgeForce = new Vector2( forceConstant / Math.pow( lengthBounds.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
-              mapEnergyChunkToForceVector[energyChunk.uniqueID] = mapEnergyChunkToForceVector[energyChunk.uniqueID].plus( edgeForce );
-            }
-            // Now apply the force from each of the other particles, but set some limits on the max force that can be
-            // applied.
-            for ( var otherEnergyChunk in mapEnergyChunkToForceVector ) {
-              if ( mapEnergyChunkToForceVector.hasOwnProperty( otherEnergyChunk ) ) {
-                if ( energyChunk === otherEnergyChunk ) {
-                  continue;
-                }
-
-                // Calculate force vector, but handle cases where too close.
-                var vectorToOther = energyChunk.position.minus( otherEnergyChunk.position );
-                if ( vectorToOther.magnitude() < minDistance ) {
-                  if ( vectorToOther.magnitude() == 0 ) {
-                    // Create a random vector of min distance.
-                    var randomAngle = Math.random() * Math.PI * 2;
-                    vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ), minDistance * Math.sin( randomAngle ) );
+            if ( containerShape.containsPoint( energyChunk.position ) ) {
+              // Loop on several angles, calculating the forces from the edges at the given angle.
+              for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
+                var edgeDetectSteps = 8;
+                var lengthBounds = new Range( 0, maxDistanceToEdge );
+                for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
+                  var vectorToEdge = new Vector2( lengthBounds.getCenter(), 0 ).rotated( angle );
+                  if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
+                    lengthBounds = new Range( lengthBounds.getCenter(), lengthBounds.max );
                   }
                   else {
-                    vectorToOther = vectorToOther.setMagnitude( minDistance ); // TODO: Not entirely sure if this is the right vec2 method.
-//                  vectorToOther = vectorToOther.getInstanceOfMagnitude( minDistance ); // Old Javas method.
+                    lengthBounds = new Range( lengthBounds.min, lengthBounds.getCenter() );
                   }
                 }
-                // Add the force to the accumulated forces on this energy chunk.
-                // TODO: Again, not sure if setMagnitude() is the right vector function call here.
-                mapEnergyChunkToForceVector[energyChunk.uniqueID] = mapEnergyChunkToForceVector[energyChunk.uniqueID].plus( vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
+
+                // Handle case where point is too close to the container's edge.
+                if ( lengthBounds.getCenter() < minDistance ) {
+                  lengthBounds = new DoubleRange( minDistance, minDistance );
+                }
+
+                // Apply the force due to this edge.
+                var edgeForce = new Vector2( forceConstant / Math.pow( lengthBounds.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+                mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( edgeForce );
+              }
+              // Now apply the force from each of the other particles, but set some limits on the max force that can be
+              // applied.
+              for ( var otherEnergyChunk in mapEnergyChunkToForceVector ) {
+                if ( mapEnergyChunkToForceVector.hasOwnProperty( otherEnergyChunk ) ) {
+                  if ( energyChunk === mapEnergyChunkToForceVector[ otherEnergyChunk ] ) {
+                    continue;
+                  }
+                  // Calculate force vector, but handle cases where too close.
+                  var vectorToOther = energyChunk.position.minus( mapEnergyChunkToForceVector[ otherEnergyChunk ] );
+                  if ( vectorToOther.magnitude() < minDistance ) {
+                    if ( vectorToOther.magnitude() == 0 ) {
+                      // Create a random vector of min distance.
+                      var randomAngle = Math.random() * Math.PI * 2;
+                      vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ), minDistance * Math.sin( randomAngle ) );
+                    }
+                    else {
+                      vectorToOther = vectorToOther.setMagnitude( minDistance ); // TODO: Not entirely sure if this is the right vec2 method.
+//                  vectorToOther = vectorToOther.getInstanceOfMagnitude( minDistance ); // Old Javas method.
+                    }
+                  }
+                  // Add the force to the accumulated forces on this energy chunk.
+                  // TODO: Again, not sure if setMagnitude() is the right vector function call here.
+                  mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
 //                    mapEnergyChunkToForceVector.put( ec, mapEnergyChunkToForceVector.get( ec ).plus( vectorToOther.getInstanceOfMagnitude( forceConstant / ( vectorToOther.magnitudeSquared() ) ) ) );
+                }
               }
             }
-          }
-          else {
-            // Point is outside container, move it towards center of shape.
-            var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
-            // TODO: Test this to make sure that setMagnitude is the correct AbstractVector2D equivalent.
-            mapEnergyChunkToForceVector[energyChunk.uniqueID] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
+            else {
+              // Point is outside container, move it towards center of shape.
+              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
+              // TODO: Test this to make sure that setMagnitude is the correct AbstractVector2D equivalent.
+              mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
 //            mapEnergyChunkToForceVector.put( ec, vectorToCenter.getInstanceOfMagnitude( OUTSIDE_CONTAINER_FORCE ) );
-          }
+            }
+          } );
         } )
       }
 
       // Update energy chunk velocities, drag force, and position.
       var maxEnergy = 0;
-      for ( var energyChunk in mapIDToEnergyChunk ) {
-        if ( mapIDToEnergyChunk.hasOwnProperty( energyChunk ) ) {
+      for ( var energyChunkID in mapIDToEnergyChunk ) {
+        if ( mapIDToEnergyChunk.hasOwnProperty( energyChunkID ) ) {
 
           // Calculate the energy chunk's velocity as a result of forces acting on it.
-          var forceOnThisChunk = mapEnergyChunkToForceVector[ energyChunk ];
-          var newVelocity = energyChunk.velocity.plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
+          var forceOnThisChunk = mapEnergyChunkToForceVector[ energyChunkID ];
+          var newVelocity = mapIDToEnergyChunk[ energyChunkID ].velocity.plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
 
           // Calculate drag force.  Uses standard drag equation.
           var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
@@ -201,7 +200,7 @@ define( function( require ) {
           // Update velocity based on drag force.
           newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
           // TODO: It is possible that EnergyChunk velocity should be observable.  Come back to this when that is determined.
-          mapIDToEnergyChunk[ energyChunk ].velocity = newVelocity;
+          mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
 
           // Update max energy.
           var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
