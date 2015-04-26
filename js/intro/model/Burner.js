@@ -53,7 +53,7 @@ define( function( require ) {
 
     ModelElement.call( this );
 
-    this.addProperty( 'heatCoolLevel', new Range( -1, 1, 0 ) );
+    this.addProperty( 'heatCoolLevel', 0 );
 
     var thisBurner = this;
 
@@ -143,6 +143,8 @@ define( function( require ) {
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevel * dt;
+      if(deltaEnergy > 0 ){
+      }
       air.changeEnergy( deltaEnergy );
       this.energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
     },
@@ -165,7 +167,7 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
-      energyChunk.zPosition.set( 0.0 );
+      energyChunk.zPosition = 0;
       this.energyChunkList.add( energyChunk );
       //energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -187,9 +189,10 @@ define( function( require ) {
      */
     extractClosestEnergyChunk: function( point ) {
       var closestEnergyChunk = null;
-      if ( this.energyChunkList.size() > 0 ) {
+      if ( this.energyChunkList.length > 0 ) {
         for ( var energyChunk in this.energyChunkList ) {
           if ( this.energyChunkList.hasOwnProperty( energyChunk ) ) {
+            debugger;
             if ( this.energyChunkList[ energyChunk ].position.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
                  (closestEnergyChunk === null ||
                   this.energyChunkList[ energyChunk ].position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
@@ -207,14 +210,14 @@ define( function( require ) {
       //}
       if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
-        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), energyChunksVisible );
+        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), this.energyChunksVisibleProperty.value );
       }
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;
         this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
       }
       else {
-        console.log( getClass().getName() + " - Warning: Request for energy chunk from burner when not in heat mode and no chunks contained, returning null." );
+        console.log( 'Warning: Request for energy chunk from burner when not in heat mode and no chunks contained, returning null.' );
       }
       return closestEnergyChunk;
     },
@@ -254,17 +257,21 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyChunkCountForAir: function() {
+      var thisModel = this; // extend scope for nested loop function.
       var count = 0;
+      // If there are approaching chunks, and the mode has switched to off or to heating, the chunks should go back to the air (if they're not
       // almost to the burner).
       if ( this.energyChunkList.length > 0 && this.heatCoolLevel >= 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
-          if( this.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+          if ( thisModel.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
         } );
       }
       if ( count === 0 ) {
-        // chunk transfer warrants another chunk.
+        //console.log( EFACConstants.ENERGY_PER_CHUNK );
+        //console.log( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK )
+        // See whether the energy exchanged with the air since the last chunk transfer warrants another chunk.
         count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
       return count;
