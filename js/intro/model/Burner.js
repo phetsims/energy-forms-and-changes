@@ -59,6 +59,7 @@ define( function( require ) {
 
     this.position = position;
     this.energyChunkList = new ObservableArray();
+    this.energyChunkWanderControllers = [];
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     // Track build up of energy for transferring chunks to/from the air.
@@ -143,7 +144,7 @@ define( function( require ) {
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevel * dt;
-      if(deltaEnergy > 0 ){
+      if ( deltaEnergy > 0 ) {
       }
       air.changeEnergy( deltaEnergy );
       this.energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
@@ -169,7 +170,7 @@ define( function( require ) {
     addEnergyChunk: function( energyChunk ) {
       energyChunk.zPosition = 0;
       this.energyChunkList.add( energyChunk );
-      //energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
+      this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
     },
@@ -188,24 +189,25 @@ define( function( require ) {
      * @return {EnergyChunk} Closest energy chunk, null if none are contained.
      */
     extractClosestEnergyChunk: function( point ) {
+      // Extend the scope for callbacks.
+      var thisBurner = this;
       var closestEnergyChunk = null;
       if ( this.energyChunkList.length > 0 ) {
-        for ( var energyChunk in this.energyChunkList ) {
-          if ( this.energyChunkList.hasOwnProperty( energyChunk ) ) {
-            debugger;
-            if ( this.energyChunkList[ energyChunk ].position.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-                 (closestEnergyChunk === null ||
-                  this.energyChunkList[ energyChunk ].position.distance( point ) < closestEnergyChunk.position.distance( point )) ) {
-              // Found a closer chunk.
-              closestEnergyChunk = this.energyChunkList[ energyChunk ];
-            }
+        this.energyChunkList.forEach( function( energyChunk ) {
+          if ( energyChunk.position.distance( thisBurner.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+               ( closestEnergyChunk === null ||
+                 energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
+            // Found a closer chunk.
+            closestEnergyChunk = energyChunk;
           }
-        }
+        } );
+
         this.energyChunkList.remove( closestEnergyChunk );
-        //for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
-        //  if ( energyChunkWanderController.getEnergyChunk() === closestEnergyChunk ) {
-        //    energyChunkWanderControllers.remove( energyChunkWanderController );
-        //  }
+        this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
+          if( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
+            thisBurner.energyChunkWanderControllers.splice( index, 1 );
+          }
+        } );
       }
       //}
       if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
