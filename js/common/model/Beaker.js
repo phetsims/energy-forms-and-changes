@@ -334,7 +334,7 @@ define( function( require ) {
       }
 
       if ( !pointIsAboveWaterSurface ) {
-        return this.extractClosestEnergyChunk( point )
+        return this.extractClosestEnergyChunk( point );
       }
 
       // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the

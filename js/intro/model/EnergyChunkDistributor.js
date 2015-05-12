@@ -77,7 +77,7 @@ define( function( require ) {
         energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
           mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
           mapIDToEnergyChunk[ energyChunk.uniqueID ] = energyChunk;
-        } )
+        } );
       } );
 
       // Get the size of the map above.
@@ -181,7 +181,7 @@ define( function( require ) {
 //            mapEnergyChunkToForceVector.put( ec, vectorToCenter.getInstanceOfMagnitude( OUTSIDE_CONTAINER_FORCE ) );
             }
           } );
-        } )
+        } );
       }
 
       // Update energy chunk velocities, drag force, and position.
@@ -239,8 +239,8 @@ define( function( require ) {
         var sliceCenter = new Vector2( slice.shape.bounds.centerX, slice.shape.bounds.centerY );
         slice.energyChunkList.forEach( function( energyChunk ) {
           energyChunk.position = sliceCenter;
-        } )
-      } )
+        } );
+      } );
     },
 
     /**
@@ -251,5 +251,5 @@ define( function( require ) {
     generateRandomLocation: function( rect ) {
       return new Vector2( rect.x + ( Math.random() * rect.width ), rect.y + ( Math.random() * rect.height ) );
     }
-  }
+  };
 } );
