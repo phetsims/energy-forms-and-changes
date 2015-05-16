@@ -13,7 +13,6 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
-  //var Vector2 = require( 'DOT/Vector2' );
 
   //static data
   var instanceCount = 0; // Base count for the unique ID of this slice.
@@ -23,22 +22,22 @@ define( function( require ) {
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
-   * @param {Property.<boolean>} visibilityControlProperty
+   * @param {boolean} visibilityControl
    * @constructor
    */
-  function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibilityControlProperty ) {
+  function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibilityControl ) {
 
     PropertySet.call( this, {
       position: initialPosition,
       zPosition: 0,  // Used for some simple 3D layering effects.
       energyType: initialEnergyType,
-      visible: null // a boolean
+      visible: visibilityControl
     } );
 
     // add a unique for the hash map that will call on these slices
     this.uniqueID = instanceCount++;
 
-    this.visibleProperty = visibilityControlProperty;
+    //this.visibleProperty = visibilityControl;
     this.velocity = initialVelocity;
   }
 
@@ -67,7 +66,6 @@ define( function( require ) {
       return this.velocity.copy();
     },
 
-    //TODO make sure setVelocity has been renamed everywhere
     /**
      * Function that sets the X and Y velocity of the energy chunk
      * @param {number} x
