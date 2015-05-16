@@ -13,12 +13,9 @@ define( function( require ) {
 
   // modules
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
-  var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -27,7 +24,6 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var IntroConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/IntroConstants' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
 
@@ -119,7 +115,7 @@ define( function( require ) {
     /**
      * Interact with a thermal energy container, adding or removing energy based on the current heat/cool setting.
      *
-     * @param [ThermalEnergyContainer} thermalEnergyContainer - Model object that will get or give energy.
+     * @param {ThermalEnergyContainer} thermalEnergyContainer - Model object that will get or give energy.
      * @param {number} dt - Amount of time (delta time).
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
@@ -247,11 +243,11 @@ define( function( require ) {
      * @returns {boolean}
      */
     areAnyOnTop: function( thermalEnergyContainers ) {
-      for ( var thermalEnergyContainer in thermalEnergyContainers ) {
+      thermalEnergyContainers.forEach( function( thermalEnergyContainer ) {
         if ( this.inContactWith( thermalEnergyContainers[ thermalEnergyContainer ] ) ) {
           return true;
         }
-      }
+      } );
       return false;
     },
     /**
@@ -320,7 +316,7 @@ define( function( require ) {
      *         Negative value indicates that chunks should come in.
      */
     getEnergyChunkBalanceWithObjects: function() {
-      return (Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( energyExchangedWithObjectSinceLastChunkTransfer ));
+      return (Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( this.energyExchangedWithObjectSinceLastChunkTransfer ));
     },
     /**
      * *

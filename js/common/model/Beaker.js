@@ -4,7 +4,6 @@
  * Model element that represents a beaker that contains some amount of water, and the water contains energy, which
  * includes energy chunks, and has temperature.
  *
- * TODO: Some functions in the file could use documentation.
  * @author John Blanco
  */
 
@@ -23,8 +22,6 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );

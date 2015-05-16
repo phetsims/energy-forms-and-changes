@@ -30,7 +30,7 @@ define( function( require ) {
   //-------------------------------------------------------------------------
 
   var velocity = new Vector2( 0, MAX_VELOCITY );
-  var countdownTimer = 0;
+  //var countdownTimer = 0;
 
 
   /**

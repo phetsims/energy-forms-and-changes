@@ -9,15 +9,11 @@
  */
 define( function( require ) {
   'use strict';
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
 

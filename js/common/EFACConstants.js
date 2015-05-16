@@ -24,7 +24,7 @@ define( function( require ) {
   // Physical temperature constants.
   var ROOM_TEMPERATURE = 296; // In Kelvin.
   var FREEZING_POINT_TEMPERATURE = 273.15; // In Kelvin.
-  var BOILING_POINT_TEMPERATURE = 373.15; // In Kelvin.
+  //var BOILING_POINT_TEMPERATURE = 373.15; // In Kelvin.
 
   // Constants that define physical parameters of various rectangular objects.
   var BRICK_DENSITY = 3300; // In kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable.

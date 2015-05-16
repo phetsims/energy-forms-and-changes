@@ -29,8 +29,7 @@ define( function( require ) {
 //  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
-  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' )
+  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
 //  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
@@ -164,9 +163,9 @@ define( function( require ) {
 
     // Add the burners.
     var burnerProjectionAmount = modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
-    var burnerWidth = modelViewTransform.modelToViewDeltaX( model.leftBurner.getOutlineRect().width ) * 0.7;
-    var burnerHeight = burnerWidth * 0.8;
-    var burnerOpeningHeight = burnerHeight * 0.2;
+    //var burnerWidth = modelViewTransform.modelToViewDeltaX( model.leftBurner.getOutlineRect().width ) * 0.7;
+    //var burnerHeight = burnerWidth * 0.8;
+    //var burnerOpeningHeight = burnerHeight * 0.2;
     var burnerYPosTweak = -10; // Empirically determined for best look.
 
     // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
@@ -233,7 +232,7 @@ define( function( require ) {
       thermometerBox.addChild( thermometerToolBoxNode );
       thermometerToolBoxNodes.push( thermometerToolBoxNode );
     } );
-    var thermometerToolBox = new Node();
+    //var thermometerToolBox = new Node();
 //    var thermometerToolBox = new ControlPanelNode( thermometerBox, CONTROL_PANEL_BACKGROUND_COLOR, CONTROL_PANEL_OUTLINE_STROKE, CONTROL_PANEL_OUTLINE_COLOR );
 //    thermometerToolBox.translation({x: EDGE_INSET, y:EDGE_INSET} );
     backLayer.addChild( thermometerBox );

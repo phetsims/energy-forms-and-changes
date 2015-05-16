@@ -11,7 +11,6 @@ define( function( require ) {
 
   //modules
   var Dimension2 = require( 'DOT/Dimension2' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
 //  var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   //var Node = require( 'SCENERY/nodes/Node' );

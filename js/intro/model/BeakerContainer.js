@@ -16,6 +16,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Matrix3 = require( 'DOT/Matrix3' );
+  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
 
   /**
    *
@@ -85,12 +86,11 @@ define( function( require ) {
      * @returns {boolean}
      */
     isEnergyChunkObscured: function( energyChunk ) {
-      for ( var i = 0; i < this.potentiallyContainedElements.length; i++ ) {
-        element = this.potentiallyContainedElements[ i ];
+      this.potentiallyContainedElements.forEach( function( element ) {
         if ( this.getThermalContactArea().bounds.contains( element.getRect() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
           return true;
         }
-      }
+      } );
       return false;
     },
 
@@ -99,7 +99,7 @@ define( function( require ) {
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
-      for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
+      this.energyChunkWanderControllers.slice( 0 ).forEach( function( energyChunkWanderController ) {
         var energyChunk = energyChunkWanderController.getEnergyChunk();
         if ( this.isEnergyChunkObscured( energyChunk ) ) {
           // beaker to the fluid, so move it sideways.
@@ -110,11 +110,11 @@ define( function( require ) {
         else {
           energyChunkWanderController.updatePosition( dt );
         }
-        if ( !this.isEnergyChunkObscured( energyChunk ) && getSliceBounds().contains( energyChunk.position ) ) {
+        if ( !this.isEnergyChunkObscured( energyChunk ) && this.getSliceBounds().contains( energyChunk.position ) ) {
           // stop moving.
-          moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );
+          this.moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );
         }
-      }
+      } );
     },
 
     /**
@@ -125,8 +125,8 @@ define( function( require ) {
       if ( this.isEnergyChunkObscured( energyChunk ) ) {
         // because the chunk just came from the model element.
         energyChunk.zPosition.set( 0.0 );
-        approachingEnergyChunks.add( energyChunk );
-        energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, position ) );
+        this.approachingEnergyChunks.add( energyChunk );
+        this.energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, this.position ) );
       }
       else {
         this.addEnergyChunk( energyChunk );

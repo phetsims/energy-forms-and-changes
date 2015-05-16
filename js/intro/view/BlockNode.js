@@ -23,7 +23,6 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
@@ -39,7 +38,7 @@ define( function( require ) {
   var OUTLINE_LINEWIDTH = 3;
   var OUTLINE_STROKE_COLOR = Color.DARK_GRAY;
 
-  var SHOW_2D_REPRESENTATION = false;
+  //var SHOW_2D_REPRESENTATION = false;
 
   /**
    * Constructor for a BlockNode.
@@ -52,9 +51,6 @@ define( function( require ) {
   function BlockNode( model, block, modelViewTransform ) {
 
     Node.call( this, { cursor: 'pointer' } );
-
-    // extend the scope
-    var blockNode = this;
 
     this.block = block;
 
@@ -114,12 +110,12 @@ define( function( require ) {
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
-    if ( SHOW_2D_REPRESENTATION ) {
-      this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), {
-        stroke: 'red',
-        lineWidth: 1
-      } ) );
-    }
+    //if ( SHOW_2D_REPRESENTATION ) {
+    //  this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), {
+    //    stroke: 'red',
+    //    lineWidth: 1
+    //  } ) );
+    //}
     // Position and add the label.
     var label = new Text( block.getLabel() );
     label.setFont( LABEL_FONT );
@@ -158,7 +154,7 @@ define( function( require ) {
 
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      setOffset( modelViewTransform.modelToView( newPosition ) );
+      //setOffset( modelViewTransform.modelToView( newPosition ) );
       // nodes can handle their own positioning.
       energyChunkRootNode.translation = modelViewTransform.modelToView( newPosition ).rotate( Math.PI );
     } );

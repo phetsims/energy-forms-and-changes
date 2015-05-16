@@ -49,10 +49,10 @@ define( function( require ) {
       BeakerContainerView.this.updateEnergyChunkClipMask( model, this.energyChunkClipNode );
     } );
     // Add the cursor handler.
-    grabNode.addInputListener( new CursorHandler( CursorHandler.HAND ) );
+    //this.grabNode.addInputListener( new CursorHandler( CursorHandler.HAND ) );
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( grabNode.bounds.centerX - modelViewTransform.modelToViewX( beaker.position.x ), grabNode.bounds.centerY - modelViewTransform.modelToViewY( beaker.position.y ) );
-    grabNode.addInputListener( new ThermalElementDragHandler( beaker, grabNode, modelViewTransform, new ThermalItemMotionConstraint( model, beaker, grabNode, modelViewTransform, offsetPosToCenter ) ) );
+    var offsetPosToCenter = new Vector2( this.grabNode.bounds.centerX - modelViewTransform.modelToViewX( beaker.position.x ), this.grabNode.bounds.centerY - modelViewTransform.modelToViewY( beaker.position.y ) );
+    this.grabNode.addInputListener( new ThermalElementDragHandler( beaker, this.grabNode, modelViewTransform, new ThermalItemMotionConstraint( model, beaker, this.grabNode, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( BeakerView, BeakerContainerView, {
@@ -60,7 +60,7 @@ define( function( require ) {
     updateEnergyChunkClipMask: function( model, clip ) {
       var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( Block.SURFACE_WIDTH / 2 );
       var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( -Block.SURFACE_WIDTH / 2 );
-      var clippingMask = new Area( frontNode.bounds );
+      var clippingMask = new Area( this.frontNode.bounds );
       for ( var block in model.getBlockList() ) {
         if ( model.getBeaker().getRect().contains( block.getRect() ) ) {
           var rect = block.getRect();

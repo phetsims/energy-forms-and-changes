@@ -10,16 +10,13 @@
  * parameters changed as needed.
  *
  * @author John Blanco
- *
- * TODO: Java did not include constructor for this.  To match the Java, this will be a Utility object rather than an
- * instantiated model element. This will hold the constants and functions described above.
+ * @author Jesse Greenberg
  */
 
 define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -27,10 +24,6 @@ define( function( require ) {
   // constants
   var OUTSIDE_CONTAINER_FORCE = 0.01; // In Newtons, empirically determined.
   var ZERO_VECTOR = Vector2.ZERO;
-
-  // TODO: It seems that seeding a random number generator in javascript is not typically done.  This can probably be
-  // removed.
-  var RAND = Math.random(); // Seeded for greater consistency.
 
   // Parameters that can be adjusted to change they nature of the redistribution.
   var MAX_TIME_STEP = 5E-3; // In seconds, for algorithm that moves the points.
@@ -92,8 +85,6 @@ define( function( require ) {
         return false; // Nothing to do - abort.
       }
 
-      // TODO: Tested through here, make sure the following works once maps are populated.
-
       // Determine the minimum distance that is allowed to be used in the force calculations.  This prevents hitting
       // infinities that can cause run time issues or unreasonably large forces.
       var minDistance = Math.min( boundingRect.width, boundingRect.height ) / 20; // Divisor empirically determined.
@@ -139,7 +130,7 @@ define( function( require ) {
 
                 // Handle case where point is too close to the container's edge.
                 if ( lengthBounds.getCenter() < minDistance ) {
-                  lengthBounds = new DoubleRange( minDistance, minDistance );
+                  lengthBounds = new Range( minDistance, minDistance );
                 }
 
                 // Apply the force due to this edge.
@@ -156,18 +147,17 @@ define( function( require ) {
                   // Calculate force vector, but handle cases where too close.
                   var vectorToOther = energyChunk.position.minus( mapEnergyChunkToForceVector[ otherEnergyChunk ] );
                   if ( vectorToOther.magnitude() < minDistance ) {
-                    if ( vectorToOther.magnitude() == 0 ) {
+                    if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
                       var randomAngle = Math.random() * Math.PI * 2;
                       vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ), minDistance * Math.sin( randomAngle ) );
                     }
                     else {
-                      vectorToOther = vectorToOther.setMagnitude( minDistance ); // TODO: Not entirely sure if this is the right vec2 method.
+                      vectorToOther = vectorToOther.setMagnitude( minDistance );
 //                  vectorToOther = vectorToOther.getInstanceOfMagnitude( minDistance ); // Old Javas method.
                     }
                   }
                   // Add the force to the accumulated forces on this energy chunk.
-                  // TODO: Again, not sure if setMagnitude() is the right vector function call here.
                   mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
 //                    mapEnergyChunkToForceVector.put( ec, mapEnergyChunkToForceVector.get( ec ).plus( vectorToOther.getInstanceOfMagnitude( forceConstant / ( vectorToOther.magnitudeSquared() ) ) ) );
                 }
@@ -176,52 +166,50 @@ define( function( require ) {
             else {
               // Point is outside container, move it towards center of shape.
               var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
-              // TODO: Test this to make sure that setMagnitude is the correct AbstractVector2D equivalent.
               mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
 //            mapEnergyChunkToForceVector.put( ec, vectorToCenter.getInstanceOfMagnitude( OUTSIDE_CONTAINER_FORCE ) );
             }
           } );
         } );
-      }
 
-      // Update energy chunk velocities, drag force, and position.
-      var maxEnergy = 0;
-      for ( var energyChunkID in mapIDToEnergyChunk ) {
-        if ( mapIDToEnergyChunk.hasOwnProperty( energyChunkID ) ) {
 
-          // Calculate the energy chunk's velocity as a result of forces acting on it.
-          var forceOnThisChunk = mapEnergyChunkToForceVector[ energyChunkID ];
-          var newVelocity = mapIDToEnergyChunk[ energyChunkID ].velocity.plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
-
-          // Calculate drag force.  Uses standard drag equation.
-          var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
-          var dragForceVector = dragMagnitude > 0 ? newVelocity.rotated( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
-
-          // Update velocity based on drag force.
-          newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
-          // TODO: It is possible that EnergyChunk velocity should be observable.  Come back to this when that is determined.
-          mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
-
-          // Update max energy.
-          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
-          if ( totalParticleEnergy > maxEnergy ) {
-            maxEnergy = totalParticleEnergy;
-          }
-        }
-      }
-
-      particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
-
-      if ( particlesRedistributed ) {
+        // Update energy chunk velocities, drag force, and position.
+        var maxEnergy = 0;
         for ( var energyChunkID in mapIDToEnergyChunk ) {
           if ( mapIDToEnergyChunk.hasOwnProperty( energyChunkID ) ) {
 
-            // Update position.
-            mapIDToEnergyChunk[ energyChunkID ].position = mapIDToEnergyChunk[ energyChunk ].position.plus( mapIDToEnergyChunk[ energyChunkID ].velocity.times( timeStep ) );
+            // Calculate the energy chunk's velocity as a result of forces acting on it.
+            var forceOnThisChunk = mapEnergyChunkToForceVector[ energyChunkID ];
+            var newVelocity = mapIDToEnergyChunk[ energyChunkID ].velocity.plus( forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
+
+            // Calculate drag force.  Uses standard drag equation.
+            var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
+            var dragForceVector = dragMagnitude > 0 ? newVelocity.rotated( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
+
+            // Update velocity based on drag force.
+            newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
+            mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
+
+            // Update max energy.
+            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
+            if ( totalParticleEnergy > maxEnergy ) {
+              maxEnergy = totalParticleEnergy;
+            }
+          }
+        }
+
+        particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
+
+        if ( particlesRedistributed ) {
+          for ( var newEnergyChunkID in mapIDToEnergyChunk ) {
+            if ( mapIDToEnergyChunk.hasOwnProperty( newEnergyChunkID ) ) {
+
+              // Update position.
+              mapIDToEnergyChunk[ newEnergyChunkID ].position = mapIDToEnergyChunk[ newEnergyChunkID ].position.plus( mapIDToEnergyChunk[ newEnergyChunkID ].velocity.times( timeStep ) );
+            }
           }
         }
       }
-
       return particlesRedistributed;
     },
 

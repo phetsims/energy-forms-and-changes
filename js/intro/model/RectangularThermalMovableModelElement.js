@@ -69,7 +69,7 @@ define( function( require ) {
      * model space.
      */
     getRect: function() {
-      throw new error( 'getRect() must be implemented in descendant classes.' );
+      console.error( 'getRect() must be implemented in descendant classes.' );
     },
 
     /**
@@ -191,7 +191,7 @@ define( function( require ) {
       var self = this;
       this.approachingEnergyChunks.remove( energyChunk );
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
-      this.energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
+      energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         if ( energyChunkWanderController.energyChunk === energyChunk ) {
           self.energyChunkWanderControllers.remove( energyChunkWanderController );
         }
@@ -382,15 +382,14 @@ define( function( require ) {
         if ( Math.abs( otherEnergyContainer.getTemperature() - this.getTemperature() ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
           // Exchange energy between this and the other energy container.
 
-          // TODO  do we use the getHeatTransferFactor
           var heatTransferConstant = this.getHeatTransferFactor( this.getEnergyContainerCategory(), otherEnergyContainer.getEnergyContainerCategory() );
 
-          var numFullTimeStepExchanges = Math.floor( dt / MAX_HEAT_EXCHANGE_TIME_STEP );
+          var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 
-          var leftoverTime = dt - ( numFullTimeStepExchanges * MAX_HEAT_EXCHANGE_TIME_STEP );
+          var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var i;
           for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
-            var timeStep = i < numFullTimeStepExchanges ? MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+            var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
 
             var thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) * thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
@@ -414,16 +413,12 @@ define( function( require ) {
       var shape = new Shape();
 
       var rect = this.getRect();
-      var leftTop = new Vector2( rect.minX, rect.minY );
-      var rightTop = new Vector2( rect.maxX, rect.minY );
-      var leftBottom = new Vector2( rect.minX, rect.maxY );
-      var rightBottom = new Vector2( rect.maxX, rect.maxY );
       shape.moveToPoint( new Vector2( rect.minX, rect.minY ).plus( forwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( forwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( backwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
         .close();
       return shape;
     },

@@ -12,7 +12,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -30,12 +29,8 @@ define( function( require ) {
       locationBeingFollowed: null
     } );
 
-    var thisElementFollower = this;
     this.offset = new Vector2( 0, 0 );
 
-    function followerFunction( location ) {
-      thisElementFollower.followerProperty = location.plus( thisElementFollower.offset );
-    }
   }
 
   inherit( PropertySet, ElementFollower, {
@@ -45,7 +40,7 @@ define( function( require ) {
     },
 
     follow: function( locationToFollowProperty ) {
-      if ( this.locationBeingFollowed != null ) {
+      if ( this.locationBeingFollowed !== null ) {
         this.locationBeingFollowed.unlink( this.followerFunction );
       }
       this.offset = this.follower.minus( locationToFollowProperty.get() );
@@ -54,14 +49,14 @@ define( function( require ) {
     },
 
     stopFollowing: function() {
-      if ( this.locationBeingFollowed != null ) {
+      if ( this.locationBeingFollowed !== null ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
         this.locationBeingFollowed = null;
       }
     },
 
     isFollowing: function() {
-      return this.locationBeingFollowed != null;
+      return this.locationBeingFollowed !== null;
     }
   } );
 

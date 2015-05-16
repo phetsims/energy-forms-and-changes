@@ -12,9 +12,6 @@
 define( function( require ) {
   'use strict';
 
-  // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-
   // constants
   var BRICK_IRON_HEAT_TRANSFER_FACTOR = 1000.0;
   var BRICK_WATER_HEAT_TRANSFER_FACTOR = 1000.0;

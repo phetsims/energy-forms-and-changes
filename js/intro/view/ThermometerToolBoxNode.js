@@ -28,7 +28,7 @@ define( function( require ) {
     this.modelViewTransform = modelViewTransform;
     // getThermometer is defined in  sensing Thermometer Node
     var thermometer = thermometerNode.getThermometer();
-    var positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
+    //var positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
     this.setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
     this.setSensedColor( 'white' );
     // This node's visibility is the inverse of the thermometer's.
