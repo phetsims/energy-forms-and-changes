@@ -28,13 +28,12 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
 
   // constants
-  // 2D size of the air.  It is sized such that it will extend off the left,
-  // right, and top edges of screen for the most common aspect ratios of the
-  // view.
+  // 2D size of the air.  It is sized such that it will extend off the left, right, and top edges of screen for the
+  // most common aspect ratios of the view.
   var SIZE = new Dimension2( 0.7, 0.3 );
 
-  // The thickness of the slice of air being modeled.  This is basically the
-  // z dimension, and is used solely for volume calculations.
+  // The thickness of the slice of air being modeled.  This is basically the z dimension, and is used solely for
+  // volume calculations.
   var DEPTH = 0.1; // In meters.
 
   // Constants that define the heat carrying capacity of the air.
@@ -48,9 +47,8 @@ define( function( require ) {
   var INITIAL_ENERGY = MASS * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE;
   var THERMAL_CONTACT_AREA = new ThermalContactArea( new Rectangle( -SIZE.width / 2, 0, SIZE.width, SIZE.height ), true );
 
-
+  // Class variable that keeps track of energy state for all air.
   var energy = INITIAL_ENERGY;
-
 
   /**
    * *
@@ -65,7 +63,8 @@ define( function( require ) {
 
     // Energy chunks that are approaching this model element.
     this.energyChunkWanderControllers = [];
-    this.energyChunkList = new ObservableArray(); //
+    this.energyChunkList = new ObservableArray();
+
   }
 
   return inherit( ThermalEnergyContainer, Air, {
@@ -75,17 +74,16 @@ define( function( require ) {
      * @param dt
      */
     step: function( dt ) {
+      var self  = this;
       // Update the position of any energy chunks.
-      this.energyChunkWanderControllers.forEach( function( energyChunkWanderController ) {
+      this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
         energyChunkWanderController.updatePosition( dt );
         if ( !(this.getThermalContactArea().bounds.contains( energyChunkWanderController.energyChunk.position ) ) ) {
           // Remove this energy chunk.
-          //TODO: dont we new to pass a copy instead
-          this.energyChunkList.remove( energyChunkWanderController.energyChunk );
-          this.energyChunkWanderControllers.remove( energyChunkWanderController );
+          self.energyChunkList.remove( energyChunkWanderController.energyChunk );
+          self.energyChunkWanderControllers.splice( index, 1 );
         }
       } );
-
     },
 
     /**
@@ -99,7 +97,6 @@ define( function( require ) {
         var i;
         for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
           var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
-          //TODO: decide if we want HEAT transfer constants as properties;
           var thermalEnergyLost = ( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) * HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
           this.changeEnergy( -thermalEnergyLost );
         }
@@ -141,7 +138,6 @@ define( function( require ) {
         var excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
         if ( excessEnergy === 0 ) {
           // Container is below max temperature, exchange energy normally.
-          //TODO: find a method to getHeatTransferFactor
           var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), energyContainer.getEnergyContainerCategory() );
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
@@ -167,7 +163,7 @@ define( function( require ) {
      * @param initialWanderConstraint
      */
     addEnergyChunk: function( energyChunk, initialWanderConstraint ) {
-      energyChunk.zPosition = 0.0;
+      energyChunk.zPosition = 0;
       this.energyChunkList.push( energyChunk );
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk,
         new Property( new Vector2( energyChunk.position.x, SIZE.height ) ),
@@ -184,7 +180,7 @@ define( function( require ) {
 
     requestEnergyChunk: function( point ) {
       // Create a new chunk at the top of the air above the specified point.
-      return new EnergyChunk( EnergyType.THERMAL, new Vector2( point.x, SIZE.height), new Vector2( 0, 0 ), this.energyChunksVisibleProperty.get() );
+      return new EnergyChunk( EnergyType.THERMAL, new Vector2( point.x, SIZE.height ), new Vector2( 0, 0 ), this.energyChunksVisibleProperty.value );
     },
 
     /**

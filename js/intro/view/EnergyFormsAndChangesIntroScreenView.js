@@ -30,10 +30,13 @@ define( function( require ) {
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
+  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' )
+  var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
 //  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
+  var AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
   var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -142,7 +145,7 @@ define( function( require ) {
     // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow each to be independently
     // scaled.
     var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
-    energyChunkNode.scale( 1.0 ); // TODO: Why is this here?
+    energyChunkNode.scale( 1.0 );
     energyChunkNode.pickable = false;
     var label = new Text( energySymbolsString, { font: new PhetFont( 20 ) } );
     var showEnergyCheckBox = new CheckBox( new LayoutBox( {
@@ -166,47 +169,37 @@ define( function( require ) {
     var burnerOpeningHeight = burnerHeight * 0.2;
     var burnerYPosTweak = -10; // Empirically determined for best look.
 
-    // Set up left heater-cooler node.
-    // TODO: This will require HeaterCoolerNode.  The plan is to make StoveNode of States of Matter common in scenery-phet.
-    // TODO; This implementation does not include behavior for the energyChunks.
-    var leftHeaterCooler = new HeaterCoolerNode( {
+    // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
+    var leftHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
-    } );
-    leftHeaterCooler.leftTop = new Vector2( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCooler.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCooler.bounds.height - burnerYPosTweak );
-    backLayer.addChild( leftHeaterCooler );
+    });
+    var leftHeaterCoolerFront = new HeaterCoolerFront( {
+      heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
+    });
+    leftHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCoolerBack.bounds.width / 2,
+      modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCoolerBack.bounds.union( leftHeaterCoolerFront.bounds ).height - burnerYPosTweak );
+    leftHeaterCoolerFront.leftTop = leftHeaterCoolerBack.getHeaterFrontPosition();
+    heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
+    backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ), burnerProjectionAmount ) );
 
     // Set up right heater-cooler node.
-    var rightHeaterCooler = new HeaterCoolerNode( {
+    var rightHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
-    } );
-    rightHeaterCooler.leftTop = new Vector2( modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) - rightHeaterCooler.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) - rightHeaterCooler.bounds.height - burnerYPosTweak );
-    backLayer.addChild( rightHeaterCooler );
+    });
+    var rightHeaterCoolerFront = new HeaterCoolerFront( {
+      heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
+    });
+    rightHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) - rightHeaterCoolerBack.bounds.width / 2,
+      modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) - rightHeaterCoolerBack.bounds.union( rightHeaterCoolerFront.bounds ).height - burnerYPosTweak );
+    rightHeaterCoolerFront.leftTop = rightHeaterCoolerBack.getHeaterFrontPosition();
+    heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
+    backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.rightBurner.getOutlineRect() ), burnerProjectionAmount ) );
-    //heaterCoolerFrontLayer.addChild( rightHeaterCooler.getFrontNode() );
-    //rightHeaterCooler.setOffset( mvt.modelToViewX( model.getRightBurner().getOutlineRect().getCenterX() ) - rightHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
-    //  mvt.modelToViewY( model.getRightBurner().getOutlineRect().getMinY() ) - rightHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
-    //backLayer.addChild( rightHeaterCooler.getHoleNode() );
-    //backLayer.addChild( new BurnerStandNode( mvt.modelToView( model.getRightBurner().getOutlineRect() ).getBounds2D(), burnerProjectionAmount ) );
-    //heaterCoolerFrontLayer.addChild( rightHeaterCooler.getFrontNode() );
 
-    //var leftHeaterCooler = new HeaterCoolerNode( model.leftBurner.heatCoolLevelProperty, true, true,
-    //  heatString, coolString, burnerWidth, burnerHeight, burnerOpeningHeight, true, model.leftBurner.energyChunkList, modelViewTransform );
-
-    //leftHeaterCooler.setOffset( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCooler.holeLayer.bounds.width / 2,
-    //  modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCooler.frontLayer.bounds.height - burnerYPosTweak );
-
-    //backLayer.addChild( leftHeaterCooler.holeLayer );
-    //backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ), burnerProjectionAmount ) );
-    //heaterCoolerFrontLayer.addChild( leftHeaterCooler.frontLayer );
-    //leftHeaterCooler.setOffset( mvt.modelToViewX( model.getLeftBurner().getOutlineRect().getCenterX() ) - leftHeaterCooler.getHoleNode().getFullBounds().getWidth() / 2,
-    //  mvt.modelToViewY( model.getLeftBurner().getOutlineRect().getMinY() ) - leftHeaterCooler.getFrontNode().getFullBounds().getHeight() - burnerYPosTweak );
-    //backLayer.addChild( leftHeaterCooler.getHoleNode() );
-    //backLayer.addChild( new BurnerStandNode( mvt.modelToView( model.getLeftBurner().getOutlineRect() ).getBounds2D(), burnerProjectionAmount ) );
-    //heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );
-
+    // Add the air.
+    airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
+    //airLayer.center = this.layoutBounds.center;
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
@@ -215,9 +208,6 @@ define( function( require ) {
     mockupOpacityProperty.linkAttribute( image, 'opacity' );
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
-
-//    heaterCoolerFrontLayer.addChild( leftHeaterCooler.getFrontNode() );(
-
 
     // Add the thermometer nodes.
     var movableThermometerNodes = [];

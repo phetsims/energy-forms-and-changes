@@ -212,7 +212,7 @@ define( function( require ) {
       //}
       if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
-        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), this.energyChunksVisibleProperty.value );
+        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), new Vector2( 0, 0 ), this.energyChunksVisibleProperty.value );
       }
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;

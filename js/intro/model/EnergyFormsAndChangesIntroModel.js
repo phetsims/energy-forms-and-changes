@@ -155,7 +155,6 @@ define( function( require ) {
     /**
      * Manually step the sim by one frame, assuming 60 frames per second.
      *
-     * TODO: Better way to do this?  One line functions like this are silly, but it might match the PhET step pattern.
      *
      * @param {number} dt Time step.
      */
@@ -165,7 +164,6 @@ define( function( require ) {
 
     /**
      * Step function or this model, automatically called by joist.
-     * TODO: This pattern OK?  dt is not used, but we need to call the step with variable times per tick of the clock.
      *
      * @param {number} dt Time step.
      */
@@ -673,7 +671,6 @@ define( function( require ) {
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
       var copyOfBlockList = this.getBlockList().slice( 0 );
 
-      // TODO: Lets check this solution.
       copyOfBlockList.sort( function( block1, block2 ) {
         if ( block1.position == block2.position ) {
           return 0;
