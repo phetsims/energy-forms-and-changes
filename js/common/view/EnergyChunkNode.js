@@ -4,6 +4,7 @@
  * Class that represents a chunk of energy in the view.
  *
  * @author John Blanco
+ * @author Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
@@ -43,6 +44,24 @@ define( function( require ) {
   mapEnergyTypeToImage[ EnergyType.HIDDEN ] = hiddenEnergyImage;
 
   /**
+   * Function that returns the correct image for an EnergyChunkNode.  This is function is needed in both static and
+   * private scopes and is declared here so that it can be used in both scopes as necessary.
+   *
+   * @param {string} energyType
+   * @returns {Image}
+   */
+  function createEnergyChunkNode( energyType ) {
+    var background = new Image( mapEnergyTypeToImage[ energyType ] );
+    var energyText = new Text( energyChunkLabelString, new PhetFont( 16 ) );
+    energyText.scale( Math.min( background.width / energyText.width, background.height/ energyText.height ) * 0.95 );
+    energyText.center = background.center;
+    background.addChild( energyText );
+    background.scale( WIDTH / background.width );
+    background.center = ( new Vector2( -background.width / 2, -background.height / 2 ) );
+    return background;
+  }
+
+  /**
    * Constructor for an EnergyChunkNode.
    *
    * @param {EnergyChunk} energyChunk
@@ -69,13 +88,13 @@ define( function( require ) {
     // Monitor the energy type and make the image match it.
     energyChunk.energyTypeProperty.link( function( energyType ) {
         energyChunkNode.removeAllChildren();
-        energyChunkNode.addChild( this.createEnergyChunkNode( energyType ) );
+        energyChunkNode.addChild( energyChunkNode.createEnergyChunkNode( energyType ) );
       }
     );
 
     // Set this node's position when the corresponding model element moves.
     energyChunk.positionProperty.link( function( position ) {
-        energyChunkNode.setOffset( modelViewTransform.modelToView( position ) );
+        energyChunkNode.center = modelViewTransform.modelToViewPosition( position );
       }
     );
   }
@@ -92,29 +111,32 @@ define( function( require ) {
       if ( zPosition < 0 ) {
         zFadeValue = Math.max( (Z_DISTANCE_WHERE_FULLY_FADED + zPosition) / Z_DISTANCE_WHERE_FULLY_FADED, 0 );
       }
-      this.setOpacity( 1 - zFadeValue );
-    }
-  }, {
+      this.setOpacity( zFadeValue );
+    },
 
     /**
-     * Function that returns the correct image for this EnergyChunkNode.  This is a static function so that an image can be generated without an
-     * EnergyChunkNode instance.  This is mostly useful for button icons that should not have visibility properties linked to the model.
+     * Function that returns the correct image for this EnergyChunkNode.
      *
      * @static
      * @param {string} energyType
      * @returns {Image}
      */
     createEnergyChunkNode: function( energyType ) {
+      return createEnergyChunkNode( energyType );
+    }
+  }, {
 
-      var background = new Image( mapEnergyTypeToImage[ energyType ] );
-      var energyText = new Text( energyChunkLabelString, new PhetFont( 16 ) );
-      energyText.scale( Math.min( background.width / energyText.width, background.height/ energyText.height ) * 0.95 );
-      energyText.center = background.center;
-      background.addChild( energyText );
-      background.scale( WIDTH / background.width );
-      background.center = ( new Vector2( -background.width / 2, -background.height / 2 ) );
-      return background;
-
+    /**
+     * Function that returns the correct image for this EnergyChunkNode.  This is a static function so that an image
+     * can be generated without an EnergyChunkNode instance.  This is mostly useful for button icons that should not
+     * have visibility properties linked to the model.
+     *
+     * @static
+     * @param {string} energyType
+     * @returns {Image}
+     */
+    createEnergyChunkNode: function( energyType ) {
+      return createEnergyChunkNode( energyType );
     }
 
   } );
