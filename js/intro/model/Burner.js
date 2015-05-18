@@ -243,8 +243,9 @@ define( function( require ) {
      * @returns {boolean}
      */
     areAnyOnTop: function( thermalEnergyContainers ) {
+      var self = this;
       thermalEnergyContainers.forEach( function( thermalEnergyContainer ) {
-        if ( this.inContactWith( thermalEnergyContainers[ thermalEnergyContainer ] ) ) {
+        if ( self.inContactWith( thermalEnergyContainer ) ) {
           return true;
         }
       } );
