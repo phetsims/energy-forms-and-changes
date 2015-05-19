@@ -4,21 +4,7 @@
   "license": "GPLv3",
   "simTitleStringKey": "ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name",
   "phetLibs": [
-    "energy-forms-and-changes",
-    "assert",
-    "axon",
-    "babel",
-    "brand",
-    "chipper",
-    "dot",
-    "joist",
-    "kite",
-    "phet-core",
-    "phetcommon",
-    "scenery",
-    "scenery-phet",
-    "sherpa",
-    "sun"
+    "energy-forms-and-changes"
   ],
   "repository": {
     "type": "git",
