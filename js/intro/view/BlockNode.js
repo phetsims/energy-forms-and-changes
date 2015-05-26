@@ -12,7 +12,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -27,43 +26,43 @@ define( function( require ) {
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // constants
-  // Constants that define the 3D projection.  Public so that model can reference. TODO: Moved to EFACConstants!
-  var PERSPECTIVE_ANGLE = Math.atan2( -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, -EFACConstants.Z_TO_X_OFFSET_MULTIPLIER );
-  var PERSPECTIVE_EDGE_PROPORTION = Math.sqrt( Math.pow( EFACConstants.Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
-                                               Math.pow( EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, 2 ) );
-
   var LABEL_FONT = new PhetFont( 32, false );
   var OUTLINE_LINEWIDTH = 3;
-  var OUTLINE_STROKE_COLOR = Color.DARK_GRAY;
+  var OUTLINE_STROKE = Color.DARK_GRAY;
 
-  //var SHOW_2D_REPRESENTATION = false;
+  var SHOW_2D_REPRESENTATION = false;
 
   /**
    * Constructor for a BlockNode.
    *
    * @param model
    * @param {Block} block
+   * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function BlockNode( model, block, modelViewTransform ) {
+  function BlockNode( model, block, stageBounds, modelViewTransform ) {
+
+    var thisNode = this;
 
     Node.call( this, { cursor: 'pointer' } );
 
     this.block = block;
+    this.approachingEnergyChunkParentNode = null;
 
     // Create the shape for the front of the block.
-    var blockRectInViewCoords = modelViewTransform.modelToViewBounds( this.getRawShape() );
-    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * PERSPECTIVE_EDGE_PROPORTION );
-    var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotate( -PERSPECTIVE_ANGLE );
-    var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotate( -PERSPECTIVE_ANGLE );
-    var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-    var lowerRightFrontCorner = new Vector2( blockRectInViewCoords.getMaxX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-    var upperRightFrontCorner = new Vector2( blockRectInViewCoords.getMaxX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-    var upperLeftFrontCorner = new Vector2( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-    var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.getX(), upperLeftFrontCorner.getY(), blockRectInViewCoords.getWidth(), blockRectInViewCoords.getHeight() );
+    var blockRectInViewCoords = modelViewTransform.modelToViewShape( block.getRawShape() );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
+    var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
+    var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
+    var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
+    var lowerRightFrontCorner = new Vector2( blockRectInViewCoords.maxX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
+    var upperRightFrontCorner = new Vector2( blockRectInViewCoords.maxX, blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
+    var upperLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
+    var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.x, upperLeftFrontCorner.y, blockRectInViewCoords.width, blockRectInViewCoords.height );
 
     // Create the shape of the top of the block.
     var upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
@@ -95,14 +94,16 @@ define( function( require ) {
       .lineToPoint( upperLeftBackCorner );
 
     // Add the back of the block.
-    var blockBack = new Path( blockBackShape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE_COLOR } );
+    var blockBack = new Path( blockBackShape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } );
     this.addChild( blockBack );
+
     // Create the layers where the energy chunks will be placed.
     var energyChunkRootNode = new Node();
     this.addChild( energyChunkRootNode );
-    for ( var i = block.getSlices().size() - 1; i >= 0; i-- ) {
-      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), modelViewTransform ) );
+    for ( var i = block.slices.length - 1; i >= 0; i-- ) {
+      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
     }
+
     // Add the face, top, and sides of the block.
     var blockFace = this.createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
     var blockTop = this.createSurface( blockTopShape, block.getColor(), block.getTopTextureImage() );
@@ -110,30 +111,31 @@ define( function( require ) {
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
-    //if ( SHOW_2D_REPRESENTATION ) {
-    //  this.addChild( new Path( scaleTransform.createTransformedShape( Block.getRawShape() ), {
-    //    stroke: 'red',
-    //    lineWidth: 1
-    //  } ) );
-    //}
+
+    if ( SHOW_2D_REPRESENTATION ) {
+      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( block.getRawShape() ), {
+        stroke: 'red',
+        lineWidth: 1
+      } ) );
+    }
+
     // Position and add the label.
     var label = new Text( block.getLabel() );
     label.setFont( LABEL_FONT );
-    if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
-      // Scale the label to fit on the face of the block.
-      var scale = (modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.bounds.width);
+    if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) ) {
+      // Scale the label to fit on the face of the block.  This also supports translations.
+      var scale = ( modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width);
       label.setScale( scale );
     }
     var labelCenterX = (upperLeftFrontCorner.x + upperRightFrontCorner.x) / 2;
-    var labelCenterY = (upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2);
-    label.translation = { x: labelCenterX, y: labelCenterY };
+    var labelCenterY = (upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2);
+    label.center = new Vector2( labelCenterX, labelCenterY );
     this.addChild( label );
-    // this model element and add/remove them as needed.
 
-    this.approachingEnergyChunkParentNode = new Node();
+    // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed.
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      var parentNode = (this.approachingEnergyChunkParentNode === null) ? energyChunkRootNode : this.approachingEnergyChunkParentNode;
+      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ? energyChunkRootNode : thisNode.approachingEnergyChunkParentNode;
       parentNode.addChild( energyChunkNode );
       block.approachingEnergyChunks.addItemRemovedListener( function( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
@@ -143,29 +145,27 @@ define( function( require ) {
       } );
     } );
 
-    // that it looks like they are in the block.
+    // Make the block be transparent when the energy chunks are visible so that it looks like they are in the block.
     block.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       var opaqueness = energyChunksVisible ? 0.5 : 1.0;
-      blockFace.setTransparency( opaqueness );
-      blockTop.setTransparency( opaqueness );
-      blockSide.setTransparency( opaqueness );
-      label.setTransparency( opaqueness );
+      blockFace.opacity = opaqueness;
+      blockTop.opacity = opaqueness;
+      blockSide.opacity = opaqueness;
+      label.opacity = opaqueness;
     } );
 
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      //setOffset( modelViewTransform.modelToView( newPosition ) );
-      // nodes can handle their own positioning.
-      energyChunkRootNode.translation = modelViewTransform.modelToView( newPosition ).rotate( Math.PI );
+      thisNode.centerBottom = modelViewTransform.modelToViewPosition( newPosition );
+
+      // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
+      //energyChunkRootNode.leftTop = modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
     } );
 
     // Add the drag handler.
     var offsetPosToCenter = new Vector2( this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ), this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler(
-      block,
-      this,
-      modelViewTransform,
-      new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
+    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
+      new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( Node, BlockNode, {
@@ -192,293 +192,37 @@ define( function( require ) {
      */
     createSurface: function( shape, fillColor, textureImage ) {
 
-      var root = new Node();
-      // provided, this may end up getting partially or entirely covered up.
-      root.addChild( new Path( shape, { fill: fillColor } ) );
+      var root = new Node( { clipArea: shape } );
+
+      // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
+      // entirely covered up.
+      root.addChild( new Path( shape, {fill: fillColor }) );
+
       if ( textureImage !== null ) {
-        // Add the clipped texture.
-        var clippedTexture = new Node();
-        clippedTexture.shape = shape;
+
+        // Add the texture image.
         var texture = new Image( textureImage );
+
         // Scale up the texture image if needed.
         var textureScale = 1;
-        if ( texture.bounds.width < clippedTexture.bounds.width ) {
-          textureScale = clippedTexture.bounds.width / texture.bounds.width;
+        if ( texture.bounds.width < shape.bounds.width ) {
+          textureScale = shape.bounds.width / texture.bounds.width;
         }
-        if ( texture.bounds.height < clippedTexture.bounds.height ) {
-          textureScale = Math.max( clippedTexture.bounds.height / texture.bounds.height, textureScale );
+        if ( texture.bounds.height < shape.bounds.height ) {
+          textureScale = Math.max( shape.bounds.height / texture.bounds.height, textureScale );
         }
-        texture.setScale( textureScale );
+        texture.scale( textureScale );
+
         // Add the texture to the clip node in order to clip it.
-        texture.translation = { x: clippedTexture.bounds.minX, y: clippedTexture.bounds.minY };
-        clippedTexture.addChild( texture );
-        root.addChild( clippedTexture );
+        texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
+        root.addChild( texture );
       }
+
       // Add the outlined shape so that edges are visible.
-      root.addChild( new Path( shape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE_COLOR } ) );
+      root.addChild( new Path( shape, { lineWidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } ) );
+
       return root;
+
     }
   } );
 } );
-
-
-//// Copyright 2002-2015, University of Colorado
-
-//package edu.colorado.phet.energyformsandchanges.intro.view;
-//
-//import java.awt.BasicStroke;
-//import java.awt.Color;
-//import java.awt.Font;
-//import java.awt.Image;
-//import java.awt.Shape;
-//import java.awt.Stroke;
-//import java.awt.geom.AffineTransform;
-//import java.awt.geom.Rectangle2D;
-//
-//import edu.colorado.phet.common.phetcommon.math.vector.Vector2D;
-//import edu.colorado.phet.common.phetcommon.util.function.VoidFunction1;
-//import edu.colorado.phet.common.phetcommon.view.graphics.transforms.ModelViewTransform;
-//import edu.colorado.phet.common.phetcommon.view.util.DoubleGeneralPath;
-//import edu.colorado.phet.common.phetcommon.view.util.PhetFont;
-//import edu.colorado.phet.common.piccolophet.event.CursorHandler;
-//import edu.colorado.phet.common.piccolophet.nodes.PhetPPath;
-//import edu.colorado.phet.energyformsandchanges.common.EFACConstants;
-//import edu.colorado.phet.energyformsandchanges.common.model.EnergyChunk;
-//import edu.colorado.phet.energyformsandchanges.common.view.EnergyChunkNode;
-//import edu.colorado.phet.energyformsandchanges.intro.model.Block;
-//import edu.colorado.phet.energyformsandchanges.intro.model.EFACIntroModel;
-//import edu.colorado.phet.energyformsandchanges.intro.model.EnergyChunkContainerSliceNode;
-//import edu.umd.cs.piccolo.PNode;
-//import edu.umd.cs.piccolo.nodes.PImage;
-//import edu.umd.cs.piccolo.nodes.PText;
-//import edu.umd.cs.piccolox.nodes.PClip;
-//import edu.umd.cs.piccolox.nodes.PComposite;
-//
-///**
-// * Piccolo node that represents a block in the view.  The blocks in the model
-// * are 2D, and this class gives them some perspective in order to make them
-// * appear to be 3D.
-// *
-// * @author John Blanco
-// */
-//public class BlockNode extends PComposite {
-//
-//  //-------------------------------------------------------------------------
-//  // Class Data
-//  //-------------------------------------------------------------------------
-//
-//  // Constants that define the 3D projection.  Public so that model can reference.
-//  public static final double PERSPECTIVE_ANGLE = Math.atan2( -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, -EFACConstants.Z_TO_X_OFFSET_MULTIPLIER );
-//  public static final double PERSPECTIVE_EDGE_PROPORTION = Math.sqrt( Math.pow( EFACConstants.Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
-//                                                                      Math.pow( EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER, 2 ) );
-//
-//  private static final Font LABEL_FONT = new PhetFont( 32, false );
-//  private static final Stroke OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
-//  private static final Color OUTLINE_STROKE_COLOR = Color.DARK_GRAY;
-//
-//  // Debug controls.
-//  private static final boolean SHOW_2D_REPRESENTATION = false;
-//
-//  //-------------------------------------------------------------------------
-//  // Instance Data
-//  //-------------------------------------------------------------------------
-//
-//  // Node where approaching energy chunks are placed if set.  This can be
-//  // used to make sure that approaching energy chunks stay "out front".
-//  private PNode approachingEnergyChunkParentNode = null;
-//
-//  //-------------------------------------------------------------------------
-//  // Constructor(s)
-//  //-------------------------------------------------------------------------
-//
-//  public BlockNode( final EFACIntroModel model, final Block block, final ModelViewTransform modelViewTransform ) {
-//
-//    // Extract the scale transform from the MVT so that we can separate the
-//    // shape from the position of the block.
-//    AffineTransform scaleTransform = AffineTransform.getScaleInstance( modelViewTransform.getTransform().getScaleX(), modelViewTransform.getTransform().getScaleY() );
-//
-//    // Create the shape for the front of the block.
-//    Rectangle2D blockRectInViewCoords = scaleTransform.createTransformedShape( Block.getRawShape() ).bounds;
-//    double perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().getWidth() * PERSPECTIVE_EDGE_PROPORTION );
-//    Vector2D blockFaceOffset = new Vector2D( -perspectiveEdgeSize / 2, 0 ).getRotatedInstance( -PERSPECTIVE_ANGLE );
-//    Vector2D backCornersOffset = new Vector2D( perspectiveEdgeSize, 0 ).getRotatedInstance( -PERSPECTIVE_ANGLE );
-//    Vector2D lowerLeftFrontCorner = new Vector2D( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-//    Vector2D lowerRightFrontCorner = new Vector2D( blockRectInViewCoords.getMaxX(), blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-//    Vector2D upperRightFrontCorner = new Vector2D( blockRectInViewCoords.getMaxX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-//    Vector2D upperLeftFrontCorner = new Vector2D( blockRectInViewCoords.getMinX(), blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-//    Shape blockFaceShape = new Rectangle2D.Double( lowerLeftFrontCorner.getX(),
-//      upperLeftFrontCorner.getY(),
-//      blockRectInViewCoords.getWidth(),
-//      blockRectInViewCoords.getHeight() );
-//
-//    // Create the shape of the top of the block.
-//    Vector2D upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
-//    Vector2D upperRightBackCorner = upperRightFrontCorner.plus( backCornersOffset );
-//    DoubleGeneralPath blockTopPath = new DoubleGeneralPath();
-//    blockTopPath.moveTo( upperLeftFrontCorner );
-//    blockTopPath.lineTo( upperRightFrontCorner );
-//    blockTopPath.lineTo( upperRightBackCorner );
-//    blockTopPath.lineTo( upperLeftBackCorner );
-//    blockTopPath.lineTo( upperLeftFrontCorner );
-//    Shape blockTopShape = blockTopPath.getGeneralPath();
-//
-//    // Create the shape of the side of the block.
-//    Vector2D lowerRightBackCorner = lowerRightFrontCorner.plus( backCornersOffset );
-//    DoubleGeneralPath blockSidePath = new DoubleGeneralPath();
-//    blockSidePath.moveTo( upperRightFrontCorner );
-//    blockSidePath.lineTo( lowerRightFrontCorner );
-//    blockSidePath.lineTo( lowerRightBackCorner );
-//    blockSidePath.lineTo( upperRightBackCorner );
-//    blockSidePath.lineTo( upperRightFrontCorner );
-//    Shape blockSideShape = blockSidePath.getGeneralPath();
-//
-//    // Create the shape for the back of the block.
-//    Vector2D lowerLeftBackCorner = lowerLeftFrontCorner.plus( backCornersOffset );
-//    DoubleGeneralPath blockBackPath = new DoubleGeneralPath();
-//    blockBackPath.moveTo( lowerLeftBackCorner );
-//    blockBackPath.lineTo( lowerRightBackCorner );
-//    blockBackPath.moveTo( lowerLeftBackCorner );
-//    blockBackPath.lineTo( lowerLeftFrontCorner );
-//    blockBackPath.moveTo( lowerLeftBackCorner );
-//    blockBackPath.lineTo( upperLeftBackCorner );
-//    Shape blockBackShape = blockBackPath.getGeneralPath();
-//
-//    // Add the back of the block.
-//    final PNode blockBack = new PhetPPath( blockBackShape, OUTLINE_STROKE, OUTLINE_STROKE_COLOR );
-//    addChild( blockBack );
-//
-//    // Create the layers where the energy chunks will be placed.
-//    final PNode energyChunkRootNode = new PNode();
-//    addChild( energyChunkRootNode );
-//    for ( int i = block.getSlices().size() - 1; i >= 0; i-- ) {
-//      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.getSlices().get( i ), modelViewTransform ) );
-//    }
-//
-//    // Add the face, top, and sides of the block.
-//    final PNode blockFace = createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
-//    final PNode blockTop = createSurface( blockTopShape, block.getColor(), block.getTopTextureImage() );
-//    final PNode blockSide = createSurface( blockSideShape, block.getColor(), block.getSideTextureImage() );
-//    addChild( blockFace );
-//    addChild( blockTop );
-//    addChild( blockSide );
-//
-//    if ( SHOW_2D_REPRESENTATION ) {
-//      addChild( new PhetPPath( scaleTransform.createTransformedShape( Block.getRawShape() ), new BasicStroke( 1 ), Color.RED ) );
-//    }
-//
-//    // Position and add the label.
-//    final PText label = new PText( block.getLabel() );
-//    label.setFont( LABEL_FONT );
-//    if ( label.getFullBoundsReference().width >= modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) ) {
-//      // Scale the label to fit on the face of the block.
-//      double scale = ( modelViewTransform.modelToViewDeltaX( Block.SURFACE_WIDTH * 0.9 ) / label.getFullBoundsReference().width );
-//      label.setScale( scale );
-//    }
-//    double labelCenterX = ( upperLeftFrontCorner.getX() + upperRightFrontCorner.getX() ) / 2;
-//    double labelCenterY = ( upperLeftFrontCorner.getY() - modelViewTransform.modelToViewDeltaY( Block.SURFACE_WIDTH ) / 2 );
-//    label.centerFullBoundsOnPoint( labelCenterX, labelCenterY );
-//    addChild( label );
-//
-//    // Watch for coming and going of energy chunks that are approaching
-//    // this model element and add/remove them as needed.
-//    block.approachingEnergyChunks.addElementAddedObserver( new VoidFunction1<EnergyChunk>() {
-//      public void apply( final EnergyChunk addedEnergyChunk ) {
-//        final PNode energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-//        final PNode parentNode = approachingEnergyChunkParentNode === null ? energyChunkRootNode : approachingEnergyChunkParentNode;
-//        parentNode.addChild( energyChunkNode );
-//        block.approachingEnergyChunks.addElementRemovedObserver( new VoidFunction1<EnergyChunk>() {
-//          public void apply( EnergyChunk removedEnergyChunk ) {
-//            if ( removedEnergyChunk === addedEnergyChunk ) {
-//              parentNode.removeChild( energyChunkNode );
-//              block.approachingEnergyChunks.removeElementRemovedObserver( this );
-//            }
-//          }
-//        } );
-//      }
-//    } );
-//
-//    // Make the block be transparent when the energy chunks are visible so
-//    // that it looks like they are in the block.
-//    block.energyChunksVisible.addObserver( new VoidFunction1<Boolean>() {
-//      public void apply( Boolean energyChunksVisible ) {
-//        float opaqueness = energyChunksVisible ? 0.5f : 1.0f;
-//        blockFace.setTransparency( opaqueness );
-//        blockTop.setTransparency( opaqueness );
-//        blockSide.setTransparency( opaqueness );
-//        label.setTransparency( opaqueness );
-//      }
-//    } );
-//
-//    // Update the offset if and when the model position changes.
-//    block.position.addObserver( new VoidFunction1<Vector2D>() {
-//      public void apply( Vector2D newPosition ) {
-//
-//        setOffset( modelViewTransform.modelToView( newPosition ).toPoint2D() );
-//
-//        // Compensate the energy chunk layer so that the energy chunk
-//        // nodes can handle their own positioning.
-//        energyChunkRootNode.setOffset( modelViewTransform.modelToView( newPosition ).getRotatedInstance( Math.PI ).toPoint2D() );
-//      }
-//    } );
-//
-//    // Add the cursor handler.
-//    addInputEventListener( new CursorHandler( CursorHandler.HAND ) );
-//
-//    // Add the drag handler.
-//    Vector2D offsetPosToCenter = new Vector2D( getFullBoundsReference().getCenterX() - modelViewTransform.modelToViewX( block.position.x ),
-//        getFullBoundsReference().getCenterY() - modelViewTransform.modelToViewY( block.position.y ) );
-//    addInputEventListener( new ThermalElementDragHandler( block, this, modelViewTransform, new ThermalItemMotionConstraint( model, block, this, modelViewTransform, offsetPosToCenter ) ) );
-//  }
-//
-//  //-------------------------------------------------------------------------
-//  // Methods
-//  //-------------------------------------------------------------------------
-//
-//  public void setApproachingEnergyChunkParentNode( PNode node ) {
-//    assert approachingEnergyChunkParentNode === null; // This should not be set more than once.
-//    approachingEnergyChunkParentNode = node;
-//  }
-//
-//  /*
-//   * Convenience method to avoid code duplication.  Adds a node of the given
-//   * shape, color, and texture (if a texture is specified).
-//   */
-//
-//  private PNode createSurface( Shape shape, Color fillColor, Image textureImage ) {
-//
-//    PNode root = new PNode();
-//
-//    // Add the filled shape.  Note that in cases where a texture is
-//    // provided, this may end up getting partially or entirely covered up.
-//    root.addChild( new PhetPPath( shape, fillColor ) );
-//
-//    if ( textureImage !== null ) {
-//
-//      // Add the clipped texture.
-//      PClip clippedTexture = new PClip();
-//      clippedTexture.setPathTo( shape );
-//      PImage texture = new PImage( textureImage );
-//
-//      // Scale up the texture image if needed.
-//      double textureScale = 1;
-//      if ( texture.getFullBoundsReference().width < clippedTexture.getFullBoundsReference().width ) {
-//        textureScale = clippedTexture.getFullBoundsReference().width / texture.getFullBoundsReference().width;
-//      }
-//      if ( texture.getFullBoundsReference().height < clippedTexture.getFullBoundsReference().height ) {
-//        textureScale = Math.max( clippedTexture.getFullBoundsReference().height / texture.getFullBoundsReference().height, textureScale );
-//      }
-//      texture.setScale( textureScale );
-//
-//      // Add the texture to the clip node in order to clip it.
-//      texture.setOffset( clippedTexture.getFullBoundsReference().getMinX(), clippedTexture.getFullBoundsReference().getMinY() );
-//      clippedTexture.addChild( texture );
-//      root.addChild( clippedTexture );
-//    }
-//
-//    // Add the outlined shape so that edges are visible.
-//    root.addChild( new PhetPPath( shape, OUTLINE_STROKE, OUTLINE_STROKE_COLOR ) );
-//
-//    return root;
-//  }
-//}
-

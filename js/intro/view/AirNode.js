@@ -36,7 +36,6 @@ define( function( require ) {
 
     // Watch for energy chunks coming and going and add/remove nodes accordingly.
     air.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
-      console.log( 'energyChunk added to screen ');
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       energyChunkLayer.addChild( energyChunkNode );
       air.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {

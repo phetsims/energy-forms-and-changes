@@ -34,9 +34,9 @@ define( function( require ) {
   var CONTACT_DISTANCE = 0.001; // In meters.
   var ENERGY_CHUNK_CAPTURE_DISTANCE = 0.2; // In meters, empirically chosen.
 
-  // Because of the way that energy chunks are exchanged between thermal modeling elements within this simulation, things can end up looking a bit
-  // odd if a burner is turned on with nothing on it.  To account for this, a separate energy generation rate is used when a burner is exchanging
-  // energy directly with the air.
+  // Because of the way that energy chunks are exchanged between thermal modeling elements within this simulation,
+  // things can end up looking a bit odd if a burner is turned on with nothing on it.  To account for this, a separate
+  // energy generation rate is used when a burner is exchanging energy directly with the air.
   var MAX_ENERGY_GENERATION_RATE_INTO_AIR = MAX_ENERGY_GENERATION_RATE * 0.3; // joules/sec, multiplier empirically chosen.
 
   /**
@@ -65,9 +65,9 @@ define( function( require ) {
 
     //  Create and add the top surface.  Some compensation for perspective is necessary in order to avoid problems with edge overlap when dropping
     // objects on top of burner.
-    // TODO: Create a shared constants file
     var perspectiveCompensation = thisBurner.getOutlineRect().height * IntroConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( IntroConstants.PERSPECTIVE_ANGLE );
-    this.topSurfaceProperty = new Property( new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
+
+    this.addProperty( 'topSurface', new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
       thisBurner.getOutlineRect().maxX + perspectiveCompensation ), thisBurner.getOutlineRect().maxY, this ) );
 
 //    heatCoolLevel.addObserver( new ChangeObserver<Double>() {

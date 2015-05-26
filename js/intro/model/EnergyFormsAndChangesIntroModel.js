@@ -23,7 +23,7 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
   var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Rectangle = require( 'DOT/Rectangle' );
   var Line = require( 'KITE/segments/Line' );
   var Shape = require( 'KITE/Shape' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
@@ -203,32 +203,34 @@ define( function( require ) {
           var minYPos = 0;
 
           //Determine whether there is something below this element that it can land upon.
-          var potentialSupportingSurface = this.findBestSupportSurface( movableModelElement );
-          if ( potentialSupportingSurface !== null ) {
-            minYPos = potentialSupportingSurface.yPos;
+          var potentialSupportingSurface = thisModel.findBestSupportSurface( movableModelElement );
+          if ( potentialSupportingSurface.value !== null ) {
+            minYPos = potentialSupportingSurface.value.yPos;
 
             // Center the movableModelElement above its new parent
-            var targetX = potentialSupportingSurface.centerX;
-            thisModel.movableThermalEnergyContainers[ movableModelElement ].x = targetX;
+            var targetX = potentialSupportingSurface.value.getCenterX();
+            movableModelElement.position.x = targetX;
 
           }
+
           // Calculate a proposed Y position based on gravitational falling.
           var acceleration = -9.8; // meters/s*s
           var velocity = movableModelElement.verticalVelocity + acceleration * dt;
-          var proposedYPos = movableModelElement.positiony + velocity * dt;
+          var proposedYPos = movableModelElement.position.y + velocity * dt;
           if ( proposedYPos < minYPos ) {
             // The element has landed on the ground or some other surface.
             proposedYPos = minYPos;
-            thisModel.movableThermalEnergyContainers[ movableModelElement ].verticalVelocity = 0;
-            if ( potentialSupportingSurface !== null ) {
-              thisModel.movableThermalEnergyContainers[ movableModelElement ].supportingSurface = potentialSupportingSurface;
-              potentialSupportingSurface.addElementToSurface( thisModel.movableThermalEnergyContainers[ movableModelElement ] );
-            }
-            else {
-              thisModel.movableThermalEnergyContainers[ movableModelElement ].verticalVelocity = velocity;
+            movableModelElement.verticalVelocity = 0;
+            if (potentialSupportingSurface.value !== null) {
+              movableModelElement.supportingSurface = potentialSupportingSurface.value;
+              potentialSupportingSurface.value.addElementToSurface(movableModelElement);
             }
           }
-          thisModel.movableThermalEnergyContainers[ movableModelElement ].position = new Vector2( thisModel.movableThermalEnergyContainers[ movableModelElement.position.x ], proposedYPos );
+          else {
+            movableModelElement.verticalVelocity = velocity;
+          }
+
+          movableModelElement.position = new Vector2( movableModelElement.position.x, proposedYPos );
         }
       } );
 
@@ -358,7 +360,7 @@ define( function( require ) {
     },
 
     getBlockList: function() {
-      return [ this.brick, this.ironBlock ];
+      return [ this.ironBlock, this.brick ];
     },
 
     /** Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by the code that detects potential
@@ -369,7 +371,6 @@ define( function( require ) {
      * @returns {Shape}
      */
     projectShapeFromLine: function( edge, projection ) {
-
       var shape = new Shape();
       shape.moveToPoint( edge.start );
       shape.lineTo( edge.start.x + projection.x, edge.start.y + projection.y );
@@ -381,14 +382,14 @@ define( function( require ) {
     },
 
     /**
-     * Validate the position being proposed for the given model element.  This evaluates whether the proposed position would cause the model element
-     * to move through another solid element, or the side of the beaker, or something that would look weird to the user and, if so, prevent the odd
-     * behavior from happening by returning a location that works better.
+     * Validate the position being proposed for the given model element.  This evaluates whether the proposed position
+     * would cause the model element to move through another solid element, or the side of the beaker, or something that
+     * would look weird to the user and, if so, prevent the odd behavior from happening by returning a location that
+     * works better.
      *
-     * @param {RectangularThermalMovableModelElement} modelElement     Element whose position is being validated.
+     * @param {RectangularThermalMovableModelElement} modelElement Element whose position is being validated.
      * @param {Vector2} proposedPosition Proposed new position for element
-     * @returns The original proposed position if valid, or alternative position
-     *         if not.
+     * @returns The original proposed position if valid, or alternative position if not.
      */
     validatePosition: function( modelElement, proposedPosition ) {
 
@@ -399,10 +400,10 @@ define( function( require ) {
       var translation = proposedPosition.copy().minus( modelElement.position );
 
       // Figure out how far the block's right edge appears to protrude to the side due to perspective.
-      var blockPerspectiveExtension = EFACConstants.SURFACE_WIDTH * EFACConstants.PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.PERSPECTIVE_ANGLE ) / 2;
+      var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
-      // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't drag things betweenthem.  Also,
-      // compensate for perspective so that we can avoid difficult z-order issues.
+      // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't
+      // drag things between them.  Also, compensate for perspective so that we can avoid difficult z-order issues.
       var standPerspectiveExtension = this.leftBurner.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
       var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension - ( modelElement !== this.beaker ? blockPerspectiveExtension : 0 );
       var burnerBlockingRect = new Rectangle(
@@ -469,20 +470,21 @@ define( function( require ) {
       var newPosition = modelElement.position.plus( translation ).copy();
 
       // Clamp Y position to be positive to prevent dragging below table.
-      newPosition.setY( Math.max( newPosition.getY(), 0 ) );
+      newPosition.setY( Math.max( newPosition.y, 0 ) );
 
       return newPosition;
     },
 
     /**
-     * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary rectangle that can block the moving
-     * one.
+     * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
+     * rectangle that can block the moving one.
      *
      * @param {Rectangle} movingRect
      * @param {Rectangle} stationaryRect
      * @param {Vector2} proposedTranslation
-     * @param {boolean} restrictPosY        Boolean that controls whether the positive Y direction is restricted.  This is often set false if there
-     *                                      is another model element on top of the one being tested.
+     * @param {boolean} restrictPosY        Boolean that controls whether the positive Y direction is restricted.  This
+     *                                      is often set false if there is another model element on top of the one
+     *                                      being tested.
      * @returns {Vector2}
      */
     determineAllowedTranslation: function( movingRect, stationaryRect, proposedTranslation, restrictPosY ) {
@@ -497,7 +499,7 @@ define( function( require ) {
         }
 
         // Determine the motion in the X & Y directions that will "cure" the overlap.
-        var xOverlapCure = 0;
+        var  xOverlapCure = 0;
         if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
           xOverlapCure = stationaryRect.minX - movingRect.maxX;
         }
@@ -512,8 +514,24 @@ define( function( require ) {
           yOverlapCure = stationaryRect.maxY - movingRect.minY;
         }
 
-        // Something is wrong with algorithm if both values are zero,
-        // since overlap was detected by the "intersects" method.
+        //// Determine the motion in the X & Y directions that will "cure" the overlap.
+        //var xOverlapCure = 0;
+        //if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
+        //  xOverlapCure = stationaryRect.minX - movingRect.maxX;
+        //}
+        //else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
+        //  xOverlapCure = stationaryRect.maxX - movingRect.minX;
+        //}
+        //var yOverlapCure = 0;
+        //if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
+        //  yOverlapCure = stationaryRect.minY - movingRect.maxY;
+        //}
+        //else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
+        //  yOverlapCure = stationaryRect.maxY - movingRect.minY;
+        //}
+
+        // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
+        // method.
         assert && assert( !(xOverlapCure === 0 && yOverlapCure === 0), 'xOverlap and yOverlap should not both be zero' );
 
         // Return a vector with the smallest valid "cure" value, leaving the other translation value unchanged.
@@ -532,7 +550,7 @@ define( function( require ) {
       if ( proposedTranslation.x > 0 ) {
 
         // Check for collisions moving right.
-        var rightEdge = new Line( movingRect.maxX, movingRect.minY, movingRect.maxX, movingRect.maxY );
+        var rightEdge = new Line( new Vector2( movingRect.maxX, movingRect.minY ), new Vector2( movingRect.maxX, movingRect.maxY ) );
         var rightEdgeSmear = this.projectShapeFromLine( rightEdge, proposedTranslation );
 
         if ( rightEdge.start.x <= stationaryRect.minX && rightEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -543,12 +561,12 @@ define( function( require ) {
       else if ( proposedTranslation.x < 0 ) {
 
         // Check for collisions moving left.
-        var leftEdge = new Line( movingRect.minX, movingRect.minY, movingRect.minX, movingRect.maxY );
+        var leftEdge = new Line( new Vector2( movingRect.minX, movingRect.minY ), new Vector2( movingRect.minX, movingRect.maxY ) );
         var leftEdgeSmear = this.projectShapeFromLine( leftEdge, proposedTranslation );
 
         if ( leftEdge.start.x >= stationaryRect.maxX && leftEdgeSmear.intersectsBounds( stationaryRect ) ) {
           // Collision detected, limit motion.
-          xTranslation = stationaryRect.getMaxX() - leftEdge.getX1() + MIN_INTER_ELEMENT_DISTANCE;
+          xTranslation = stationaryRect.maxX - leftEdge.start.x + MIN_INTER_ELEMENT_DISTANCE;
         }
       }
 
@@ -556,7 +574,7 @@ define( function( require ) {
       if ( proposedTranslation.y > 0 && restrictPosY ) {
 
         // Check for collisions moving up.
-        var movingTopEdge = new Line( movingRect.minX, movingRect.maxY, movingRect.maxX, movingRect.maxY );
+        var movingTopEdge = new Line( new Vector2( movingRect.minX, movingRect.maxY ), new Vector2( movingRect.maxX, movingRect.maxY ) );
         var topEdgeSmear = this.projectShapeFromLine( movingTopEdge, proposedTranslation );
 
         if ( movingTopEdge.start.y <= stationaryRect.minY && topEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -567,7 +585,7 @@ define( function( require ) {
       if ( proposedTranslation.y < 0 ) {
 
         // Check for collisions moving down.
-        var movingBottomEdge = new Line( movingRect.minX, movingRect.minY, movingRect.maxX, movingRect.minY );
+        var movingBottomEdge = new Line( new Vector2( movingRect.minX, movingRect.minY ), new Vector2( movingRect.maxX, movingRect.minY ) );
         var bottomEdgeSmear = this.projectShapeFromLine( movingBottomEdge, proposedTranslation );
 
         if ( movingBottomEdge.start.y >= stationaryRect.maxY && bottomEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -586,7 +604,7 @@ define( function( require ) {
      * @param {HorizontalSurface} surface2
      */
     isDirectlyAbove: function( surface1, surface2 ) {
-      return surface2.xRange.containsBounds( surface2.getCenterX() ) && surface1.yPos > surface2.yPos;
+      return surface2.xRange.contains( surface1.getCenterX() ) && surface1.yPos > surface2.yPos;
     },
 
     /**
@@ -595,36 +613,39 @@ define( function( require ) {
      * @returns {Property} bestOverlappingSurfaceProperty
      */
     findBestSupportSurface: function( element ) {
+      var thisModel = this; // Extend scope for nested functions.
+
       var bestOverlappingSurfaceProperty = new Property( null ); // Property holding the best overlapping surface.
 
       // Check each of the possible supporting elements in the model to see if this element can go on top of it.
       this.modelElementList.forEach( function( potentialSupportingElement ) {
         if ( potentialSupportingElement === element || potentialSupportingElement.isStackedUpon( element ) ) {
-          // The potential supporting element is either the same as the test element or is sitting on top of the test element.  In either case, it
-          // can't be used to support the test element, so skip it.
+          // The potential supporting element is either the same as the test element or is sitting on top of the test
+          // element.  In either case, it can't be used to support the test element, so skip it.
           return;
         }
 
         if ( element.bottomSurface.overlapsWith( potentialSupportingElement.topSurface ) ) {
 
           // There is at least some overlap.  Determine if this surface is the best one so far.
-          var surfaceOverlap = this.getHorizontalOverlap( potentialSupportingElement.topSurface, element.bottomSurface );
+          var surfaceOverlap = thisModel.getHorizontalOverlap( potentialSupportingElement.topSurface, element.bottomSurface );
 
-          // The following nasty 'if' clause determines if the potential supporting surface is a better one than we currently have based on whether
-          // we have one at all, or has more overlap than the previous best choice, or is directly above the current one.
-          if ( bestOverlappingSurfaceProperty.get() === null ||
-               ( surfaceOverlap > this.getHorizontalOverlap( bestOverlappingSurfaceProperty.get(), element.bottomSurface ) && !this.isDirectlyAbove( bestOverlappingSurfaceProperty.get(), potentialSupportingElement.topSurface ) ) ||
-               ( this.isDirectlyAbove( potentialSupportingElement.topSurface, bestOverlappingSurfaceProperty.get() ) ) ) {
-            bestOverlappingSurfaceProperty.set( potentialSupportingElement.getTopSurfaceProperty() );
+          // The following nasty 'if' clause determines if the potential supporting surface is a better one than we
+          // currently have based on whether we have one at all, or has more overlap than the previous best choice, or
+          // is directly above the current one.
+          if ( bestOverlappingSurfaceProperty.value === null ||
+               ( surfaceOverlap > thisModel.getHorizontalOverlap( bestOverlappingSurfaceProperty.value, element.bottomSurface ) && !thisModel.isDirectlyAbove( bestOverlappingSurfaceProperty.get(), potentialSupportingElement.topSurface ) ) ||
+               ( thisModel.isDirectlyAbove( potentialSupportingElement.topSurface, bestOverlappingSurfaceProperty.get() ) ) ) {
+            bestOverlappingSurfaceProperty.set( potentialSupportingElement.topSurface );
           }
         }
       } );
 
-      // Make sure that the best supporting surface isn't at the bottom of a stack, which can happen in cases where the model element being tested
-      // isn't directly above the best surface's center.
+      // Make sure that the best supporting surface isn't at the bottom of a stack, which can happen in cases where the
+      // model element being tested isn't directly above the best surface's center.
       if ( bestOverlappingSurfaceProperty.get() !== null ) {
-        while ( bestOverlappingSurfaceProperty.get().getElementOnSurface() !== null ) {
-          bestOverlappingSurfaceProperty.set( bestOverlappingSurfaceProperty.get().getElementOnSurface().getTopSurfaceProperty() );
+        while ( bestOverlappingSurfaceProperty.value.getElementOnSurface() !== null ) {
+          bestOverlappingSurfaceProperty.set( bestOverlappingSurfaceProperty.value.getElementOnSurface().topSurface );
         }
       }
       return bestOverlappingSurfaceProperty;
@@ -664,17 +685,6 @@ define( function( require ) {
         }
         return -1;
       } );
-      //Collections.sort( copyOfBlockList, new Comparator<Block>() {
-      //  public int compare( Block b1, Block b2 ) {
-      //    if ( b1.position.get().equals( b2.position.get() ) ) {
-      //      return 0;
-      //    }
-      //    if ( b2.position.get().getX() > b1.position.get().getX() || b2.position.get().getY() > b1.position.get().getY() ) {
-      //      return 1;
-      //    }
-      //    return -1;
-      //  }
-      //} );
 
       copyOfBlockList.forEach( function( block ) {
         if ( block.getProjectedShape().containsPoint( locationAsPoint ) ) {

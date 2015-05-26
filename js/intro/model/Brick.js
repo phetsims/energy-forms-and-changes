@@ -14,13 +14,20 @@ define( function( require ) {
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   // constants
   var SPECIFIC_HEAT = 840; // In J/kg-K, source = design document.
   var DENSITY = 3300; // In kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable.
+
+  // images
+  var brickTextureFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_front.png' );
+  var brickTextureRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_right.png' );
+  var brickTextureTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_top.png' );
+
+  // strings
+  var brickString =  require( 'string!ENERGY_FORMS_AND_CHANGES/brick' );
 
   /**
    *
@@ -39,7 +46,7 @@ define( function( require ) {
        * @returns {exports.BRICK_TEXTURE_FRONT|*}
        */
       getFrontTextureImage: function() {
-        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_FRONT;
+        return brickTextureFrontImage;
       },
 
       /**
@@ -47,11 +54,11 @@ define( function( require ) {
        * @returns {exports.BRICK_TEXTURE_TOP|*}
        */
       getTopTextureImage: function() {
-        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_TOP;
+        return brickTextureTopImage;
       },
 
       getSideTextureImage: function() {
-        return EnergyFormsAndChangesResources.Images.BRICK_TEXTURE_RIGHT;
+        return brickTextureRightImage;
       },
 
       /**
@@ -67,7 +74,7 @@ define( function( require ) {
        * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
        */
       getLabel: function() {
-        return EnergyFormsAndChangesResources.Strings.BRICK;
+        return brickString;
       },
 
       /**

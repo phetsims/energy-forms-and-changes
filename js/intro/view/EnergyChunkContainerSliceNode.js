@@ -13,7 +13,7 @@ define( function( require ) {
 
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/energyChunkNode' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/node/Node' );
+  var Node = require( 'SCENERY/nodes/Node' );
 
   // constants
   //var ALWAYS_SHOW_OUTLINE = false;

@@ -131,7 +131,6 @@ define( function( require ) {
     BURNER_EDGE_TO_HEIGHT_RATIO: 0.2, // Multiplier empirically determined for best look.
     BURNER_PERSPECTIVE_ANGLE: Math.PI / 4, // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
 
-
     // Constants used for creating projections that have a 3D-ish look.
     Z_TO_X_OFFSET_MULTIPLIER: Z_TO_X_OFFSET_MULTIPLIER,
     Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER

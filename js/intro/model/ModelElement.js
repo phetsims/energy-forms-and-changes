@@ -34,10 +34,10 @@ define( function( require ) {
     /**
      * Set the surface upon which this model element is resting.
      * @public
-     * @param {HorizontalSurface} surfaceProperty
+     * @param {HorizontalSurface} surface
      */
-    setSupportingSurfaceProperty: function( surfaceProperty ) {
-      this.supportingSurfaceProperty = surfaceProperty;
+    setSupportingSurfaceProperty: function( surface ) {
+      this.supportingSurface = surface;
     },
 
     /**
@@ -69,13 +69,15 @@ define( function( require ) {
 
     /**
      * Get a value that indicates whether this element is stacked upon the given model element.
+     *
      * @public
      * @param {ModelElement} element -  Model element to be checked.
-     * @returns {boolean}  true if the given element is stacked anywhere on top of this one, which includes
-     * cases where one or more elements are in between.
+     * @returns {boolean}  true if the given element is stacked anywhere on top of this one, which includes cases where
+     * one or more elements are in between.
      */
     isStackedUpon: function( element ) {
-      return (this.supportingSurfaceProperty !== null) &&
+
+      return ( this.supportingSurface !== null ) &&
              ( this.supportingSurface.getOwner() === element ||
                this.supportingSurface.getOwner().isStackedUpon( element ) );
     },

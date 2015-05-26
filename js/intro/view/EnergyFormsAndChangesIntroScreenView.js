@@ -24,13 +24,13 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-//  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-//  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
+  //var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
+  var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
 //  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
 //  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -74,7 +74,9 @@ define( function( require ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
 
-    var thisScreen = this;
+    this.addChild( new Rectangle( this.layoutBounds, { fill: 'rgba( 255, 0, 0, 0.14 )' } ) );
+
+    var thisScreenView = this;
     this.model = model;
 
     //var STAGE_SIZE = this.layoutBounds;
@@ -84,7 +86,7 @@ define( function( require ) {
     // view.
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
-      new Vector2( Math.round( thisScreen.layoutBounds.width * 0.5 ), Math.round( thisScreen.layoutBounds.height * 0.85 ) ),
+      new Vector2( Math.round( thisScreenView.layoutBounds.width * 0.5 ), Math.round( thisScreenView.layoutBounds.height * 0.85 ) ),
       2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
 
     // Create some nodes that will act as layers in order to create the needed Z-order behavior.
@@ -198,7 +200,18 @@ define( function( require ) {
 
     // Add the air.
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
-    //airLayer.center = this.layoutBounds.center;
+
+    // Add the movable objects.
+    var brickNode = new BlockNode( model, model.brick, this.layoutBounds, modelViewTransform );
+    brickNode.setApproachingEnergyChunkParentNode( airLayer );
+    blockLayer.addChild( brickNode );
+    var ironBlockNode = new BlockNode( model, model.ironBlock, this.layoutBounds, modelViewTransform );
+    ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
+    blockLayer.addChild( ironBlockNode );
+    //var beakerView = new BeakerContainerView( model, modelViewTransform );
+    //beakerFrontLayer.addChild( beakerView.getFrontNode() );
+    //beakerBackLayer.addChild( beakerView.getBackNode() );
+    //beakerGrabLayer.addChild( beakerView.getGrabNode() );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
@@ -211,7 +224,7 @@ define( function( require ) {
     // Add the thermometer nodes.
     var movableThermometerNodes = [];
     model.thermometers.forEach( function( thermometer ) {
-      var thermometerNode = new MovableThermometerNode( thermometer, modelViewTransform );
+      var thermometerNode = new MovableThermometerNode( thermometer, thisScreenView.layoutBounds, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
 //      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
@@ -240,6 +253,31 @@ define( function( require ) {
     thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
       thermometerToolBoxNode.setReturnRect( thermometerBox.bounds );
     } );
+
+
+    // Create a function that updates the Z-order of the blocks when the user controlled state changes.
+    var blockChangeObserver = function() {
+
+        if ( model.ironBlock.isStackedUpon( model.brick ) ) {
+          brickNode.moveToBack();
+        }
+        else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
+          ironBlockNode.moveToBack();
+        }
+        else if ( model.ironBlock.getRect().minX >= model.brick.getRect().maxX ||
+            model.ironBlock.getRect().minY >= model.brick.getRect().maxY ) {
+          ironBlockNode.moveToFront();
+        }
+        else if ( model.brick.getRect().minX >= model.ironBlock.getRect().maxX ||
+            model.brick.getRect().minY >= model.ironBlock.getRect().maxY ) {
+          brickNode.moveToFront();
+        }
+
+    };
+
+    // Update the Z-order of the blocks whenever the "userControlled" state of either changes.
+      model.brick.positionProperty.link( blockChangeObserver );
+      model.ironBlock.positionProperty.link( blockChangeObserver );
 
   }
 

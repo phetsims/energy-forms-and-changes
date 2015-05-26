@@ -24,7 +24,6 @@ define( function( require ) {
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
 
   // constants
-  //var SURFACE_WIDTH = 0.045; // In meters
   var NUM_ENERGY_CHUNK_SLICES = 4;  // Number of slices where energy chunks may be placed.
   var MAX_TEMPERATURE = 450; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
 
@@ -53,6 +52,10 @@ define( function( require ) {
     getColor: function() {
       assert && assert( true, 'This function should not be called, getColor() needs to be implemented in a subclass' );
       return 'pink';
+    },
+
+    getLabel: function() {
+      assert && assert( true, 'Get label should be implemented in subclasses.' );
     },
 
     getFrontTextureImage: function() {
@@ -108,8 +111,10 @@ define( function( require ) {
     },
 
     /**
-     * *
-     * @returns {Rectangle}
+     * Get a rectangle the defines the current shape in model space.  By convention for this simulation, the position
+     * is the middle of the bottom of the block's defining rectangle.
+     *
+     * @return {Rectangle} rectangle that defines this item's 2D shape
      */
     getRect: function() {
       return new Rectangle( this.position.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
