@@ -48,7 +48,7 @@ define( function( require ) {
 
     // Energy chunks that are approaching this model element.
     this.energyChunkWanderControllers = [];
-    this.approachingEnergyChunks = new ObservableArray(); //
+    this.approachingEnergyChunks = new ObservableArray();
 
     // 2D "slices" of the container, used for 3D layering of energy chunks.
     this.slices = [];

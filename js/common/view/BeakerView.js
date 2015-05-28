@@ -1,323 +1,381 @@
-//// Copyright 2002-2015, University of Colorado
-//
-///**
-// * Object that represents a beaker in the view.  This representation is split
-// * between a front node and a back node, which must be separately added to the
-// * canvas.  This is done to allow a layering effect.  Hence, this cannot be
-// * added directly to the canvas, and the client must add each layer separately.
-// *
-// * @author John Blanco
-// */
-//define( function( require ) {
-//  'use strict';
-//
-//  // modules
-//  var Color = require( 'SCENERY/util/Color' );
-//  //var ColorUtils = require( 'edu.colorado.phet.common.phetcommon.view.util.ColorUtils' );
-//  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
-//  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-//  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-//  var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSliceNode' );
-//  var inherit = require( 'PHET_CORE/inherit' );
-//  var Node = require( 'SCENERY/nodes/Node' );
-//  var Path = require( 'SCENERY/nodes/Path' );
-//  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-//  var Range = require( 'DOT/Range' );
-//  var Rectangle = require( 'DOT/Rectangle' );
-//  var Shape = require( 'KITE/Shape' );
-//  var Text = require( 'SCENERY/nodes/Text' );
-//  var Util = require( 'DOT/Util' );
-//  var Vector2 = require( 'DOT/Vector2' );
-//
-//// constants
-//  var OUTLINE_LINEWIDTH = 3;
-//  var OUTLINE_COLOR = Color.LIGHT_GRAY;
-//  var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
-//  var LABEL_FONT = new PhetFont( 32, false );
-//  var SHOW_MODEL_RECT = false;
-//  var BEAKER_COLOR = new Color( 250, 250, 250, 0.5 );
-//
-//
-//  //var LIQUID_WATER_OUTLINE_COLOR = ColorUtils.darkerColor( EFACConstants.WATER_COLOR_IN_BEAKER, 0.2 );
-//  //var WATER_OUTLINE_STROKE = 2;
-//  var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
-//  var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (basically pixels) per second.
-//  var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (basically pixels).
-//  var MAX_STEAM_BUBBLE_HEIGHT = 300;
-//  var STEAM_BUBBLE_PRODUCTION_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
-//  var STEAM_BUBBLE_GROWTH_RATE = 0.2; // Proportion per second.
-//  var MAX_STEAM_BUBBLE_OPACITY = 0.7; // Proportion, 1 is max.
-//
-//  /**
-//   * *
-//   * @param {Rectangle} beakerOutlineRect
-//   * @param {number} waterLevel
-//   * @param {number} temperature
-//   * @constructor
-//   */
-//  function PerspectiveWaterNode( beakerOutlineRect, waterLevel, temperature ) {
-//
-//    Node.call( this );
-//    this.liquidWaterBodyNode = new Node();
-//    this.liquidWaterTopNode = new Node();
-//    this.addChild( this.liquidWaterBodyNode );
-//    this.addChild( this.liquidWaterTopNode );
-//    this.steamNode = new Node();
-//    this.addChild( this.steamNode );
-//    //clock.addClockListener( new ClockAdapter().withAnonymousClassBody( {
-//    //  clockTicked: function( clockEvent ) {
-//    //    updateAppearance( waterLevel.get(), beakerOutlineRect, temperature.get(), clockEvent.getSimulationTimeChange() );
-//    //  },
-//    //  simulationTimeReset: function( clockEvent ) {
-//    //    // Get rid of steam when a reset occurs.
-//    //    steamBubbles.clear();
-//    //    steamNode.removeAllChildren();
-//    //  }
-//    //} ) );
-//    this.updateAppearance( waterLevel.get(), beakerOutlineRect, temperature.get(), 1 / EFACConstants.FRAMES_PER_SECOND );
-//  }
-//
-//  inherit( Node, PerspectiveWaterNode, {
-//
-//    /**
-//     *
-//     * @param {number} fluidLevel
-//     * @param {Rectangle} beakerOutlineRect
-//     * @param {number} temperature
-//     * @param {number} dt
-//     */
-//    updateAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
-//      var self = this;
-//      var waterHeight = beakerOutlineRect.height * fluidLevel;
-//      var liquidWaterRect = new Rectangle.Number( beakerOutlineRect.getX(), beakerOutlineRect.maxY - waterHeight, beakerOutlineRect.width, waterHeight );
-//      var ellipseWidth = beakerOutlineRect.width;
-//      var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-//
-//      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.minX, liquidWaterRect.minY - ellipseHeight / 2, liquidWaterRect.width, ellipseHeight,0 );
-//      var bottomEllipse = Shape.ellipse( liquidWaterRect.minX, liquidWaterRect.maxY - ellipseHeight / 2, liquidWaterRect.width, ellipseHeight,0 );
-//      // Update shape of the the liquid water.
-//      var liquidWaterBodyArea = new Area( liquidWaterRect );
-//      liquidWaterBodyArea.add( new Area( bottomEllipse ) );
-//      liquidWaterBodyArea.subtract( new Area( liquidWaterTopEllipse ) );
-//      this.liquidWaterBodyNode.setPathTo( liquidWaterBodyArea );
-//      this.liquidWaterTopNode.setPathTo( liquidWaterTopEllipse );
-//      var steamingProportion = 0;
-//      var bubbleProductionRemainder;
-//      if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
-//        // Water is emitting some amount of steam.  Set the proportionate amount.
-//        steamingProportion = Util.clamp( 0, 1 - ((EFACConstants.BOILING_POINT_TEMPERATURE - temperature) / STEAMING_RANGE), 1 );
-//      }
-//      if ( steamingProportion > 0 ) {
-//        // Add any new steam bubbles.
-//        var bubblesToProduceCalc = (STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getMin() + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion) * dt;
-//        var bubblesToProduce = Math.floor( bubblesToProduceCalc );
-//        bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
-//        if ( bubbleProductionRemainder >= 1 ) {
-//          bubblesToProduce += Math.floor( bubbleProductionRemainder );
-//          bubbleProductionRemainder -= Math.floor( bubbleProductionRemainder );
-//        }
-//        for ( var i = 0; i < bubblesToProduce; i++ ) {
-//          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.getMin() + Math.random() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
-//          var steamBubbleCenterXPos = beakerOutlineRect.centerX + (Math.random() - 0.5) * (beakerOutlineRect.width - steamBubbleDiameter);
-//          var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
-//          // Invisible to start, will fade in.
-//          steamBubble.setOffset( steamBubbleCenterXPos, liquidWaterRect.minY );
-//          steamBubble.setOpacity( 0 );
-//          steamBubbles.add( steamBubble );
-//          this.steamNode.addChild( steamBubble );
-//        }
-//      }
-//      // Update the position and appearance of the existing steam bubbles.
-//      var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.getMin() + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
-//      var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
-//
-//      steamBubbles.copy().forEach( function( steamBubble ) {
-//        steamBubble.setOffset( steamBubble.getXOffset(), steamBubble.getYOffset() + dt * (-steamBubbleSpeed) );
-//        if ( beakerOutlineRect.minY - steamBubble.getYOffset() > MAX_STEAM_BUBBLE_HEIGHT ) {
-//          steamBubbles.remove( steamBubble );
-//          self.steamNode.removeChild( steamBubble );
-//        }
-//        else if ( steamBubble.getYOffset() < beakerOutlineRect.minY ) {
-//          steamBubble.setDiameter( steamBubble.getDiameter() * (1 + (STEAM_BUBBLE_GROWTH_RATE * dt)) );
-//          var distanceFromCenterX = steamBubble.getXOffset() - beakerOutlineRect.centerX;
-//          steamBubble.setOffset( steamBubble.getXOffset() + (distanceFromCenterX * 0.2 * dt), steamBubble.getYOffset() );
-//          // Fade the bubble as it reaches the end of its range.
-//          steamBubble.setOpacity( (1 - (beakerOutlineRect.minY - steamBubble.getYOffset()) / MAX_STEAM_BUBBLE_HEIGHT) * MAX_STEAM_BUBBLE_OPACITY );
-//        }
-//        else {
-//          // Fade the bubble in.
-//          var distanceFromWater = liquidWaterRect.minY - steamBubble.getYOffset();
-//          steamBubble.setOpacity( Util.clamp( 0, distanceFromWater / (unfilledBeakerHeight / 4), 1 ) * MAX_STEAM_BUBBLE_OPACITY );
-//        }
-//      } );
-//    }
-//  } );
-//
-//  /**
-//   *
-//   * @param {number} initialDiameter
-//   * @param {number} initialOpacity
-//   * @constructor
-//   */
-//  function SteamBubble( initialDiameter, initialOpacity ) {
-//    Path.call( this, Shape.ellipse( -initialDiameter / 2, -initialDiameter / 2, initialDiameter, initialDiameter ,0),
-//      {fill: new Color( 255, 255, 255, initialOpacity ) } );
-//  }
-//
-//  inherit( Path, SteamBubble, {
-//    /**
-//     *
-//     * @param {number} opacity
-//     */
-//    setOpacity: function( opacity ) {
-//      assert && assert( opacity <= 1.0 );
-//      this.fill = new Color( 255, 255, 255, opacity );
-//    },
-//    /**
-//     *
-//     * @returns {number}
-//     */
-//    getDiameter: function() {
-//      return this.bounds.width;
-//    },
-//    /**
-//     *
-//     * @param {number} newDiameter
-//     */
-//    setDiameter: function( newDiameter ) {
-//      this.setPathTo( Shape.ellipse( -newDiameter / 2, -newDiameter / 2, newDiameter, newDiameter,0 ) );
-//    }
-//  } );
-//
-//  /**
-//   *
-//   * @param {Beaker} beaker
-//   * @param {Property.<boolean>} energyChunksVisibleProperty
-//   * @param {ModelViewTransform2} modelViewTransform
-//   * @constructor
-//   */
-//  function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform ) {
-//    this.modelViewTransform = modelViewTransform;
-//
-//    var beakerView= this;
-//    this.frontNode = new Node();
-//    this.backNode = new Node();
-//    this.grabNode = new Node();
-//
-//    // location in the view.
-//    var beakerViewRect = modelViewTransform.modelToViewBounds( beaker.getRawOutlineRect() ); //{Bounds2}
-//    // ellipses in order to create a 3D-ish look.
-//    var ellipseHeight = beakerViewRect.width * PERSPECTIVE_PROPORTION;
-//    //   Shape.ellipse = function( centerX, centerY, radiusX, radiusY, rotation )
-//    var topEllipse = Shape.ellipse( beakerViewRect.minX, beakerViewRect.minY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight, 0 );
-//    var bottomEllipse = Shape.ellipse( beakerViewRect.minX, beakerViewRect.maxY - ellipseHeight / 2, beakerViewRect.width, ellipseHeight, 0 );
-//    // Add the bottom ellipse.
-//    this.backNode.addChild( new Path( bottomEllipse, {
-//      fill: BEAKER_COLOR,
-//      lineWidth: OUTLINE_LINEWIDTH,
-//      stroke: OUTLINE_COLOR
-//    } ) );
-//    // Add the water.  It will adjust its size based on the fluid level.
-//    var water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevel, beaker.temperature );
-//    this.frontNode.addChild( water );
-//    // Create and add the shape for the body of the beaker.
-//    var beakerBody = new Area( beakerViewRect );
-//    beakerBody.add( new Area( bottomEllipse ) );
-//    beakerBody.subtract( new Area( topEllipse ) );
-//    this.frontNode.addChild( new Path( beakerBody, {
-//      fill: BEAKER_COLOR,
-//      lineWidth: OUTLINE_LINEWIDTH,
-//      stroke: OUTLINE_COLOR
-//    } ) );
-//    // Add the top ellipse.  It is behind the water for proper Z-order behavior.
-//    this.backNode.addChild( new Path( topEllipse, {
-//      fill: BEAKER_COLOR,
-//      lineWidth: OUTLINE_LINEWIDTH,
-//      stroke: OUTLINE_COLOR
-//    } ) );
-//    // grab the beaker.
-//    this.backNode.addChild( new Path( beakerViewRect, new Color( 0, 0, 0, 0 ) ) );
-//    // remove things from the beaker.
-//    this.frontNode.setPickable( false );
-//    this.frontNode.setChildrenPickable( false );
-//    this.backNode.setPickable( false );
-//    this.backNode.setChildrenPickable( false );
-//    // Add the label.  Position it just below the front, top water line.
-//    var label = new Text( EnergyFormsAndChangesResources.Strings.WATER );
-//    label.setFont( LABEL_FONT );
-//    label.setOffset( beakerViewRect.centerX - label.bounds.width / 2, beakerViewRect.maxY - beakerViewRect.height * beaker.fluidLevel.get() + topEllipse.getHeight() / 2 );
-//    label.setPickable( false );
-//    label.setChildrenPickable( false );
-//    this.frontNode.addChild( label );
-//    // other model elements.
-//    var energyChunkRootNode = new Node();
-//    this.backNode.addChild( energyChunkRootNode );
-//    var energyChunkClipNode = new Node();
-//    // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
-//    energyChunkClipNode.shape = beakerViewRect;
-//    energyChunkRootNode.addChild( energyChunkClipNode );
-//    energyChunkClipNode.setStroke( null );
-//    for ( var i = beaker.getSlices().size() - 1; i >= 0; i-- ) {
-//      energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.getSlices().get( i ), modelViewTransform ) );
-//    }
-//    // this model element and add/remove them as needed.
-//    beaker.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
-//      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-//      energyChunkRootNode.addChild( energyChunkNode );
-//      beaker.approachingEnergyChunks.removeItemAddedListener( function( removedEnergyChunk ) {
-//        if ( removedEnergyChunk === addedEnergyChunk ) {
-//          energyChunkRootNode.removeChild( energyChunkNode );
-//          beaker.approachingEnergyChunks.removeItemRemovedListener( this );
-//        }
-//      } );
-//    } );
-//    // Add the node that can be used to grab and move the beaker.
-//    var grabNodeShape = new Area( beakerBody );
-//    grabNodeShape.add( new Area( topEllipse ) );
-//    // Invisible, yet pickable.
-//    this.grabNode.addChild( new Path( grabNodeShape, new Color( 0, 0, 0, 0 ) ) );
-//    // beaker's position in the model.
-//    if ( SHOW_MODEL_RECT ) {
-//      this.frontNode.addChild( new Path( beakerViewRect, { lineWidth: 1, stroke: Color.RED } ) );
-//    }
-//    // Update the offset if and when the model position changes.
-//    beaker.positionProperty.link( function( position ) {
-//        beakerView.frontNode.setOffset( modelViewTransform.modelToView( position ) );
-//        beakerView.backNode.setOffset( modelViewTransform.modelToView( position ) );
-//        beakerView.grabNode.setOffset( modelViewTransform.modelToView( position ) );
-//        // nodes can handle their own positioning.
-//        energyChunkRootNode.setOffset( modelViewTransform.modelToView( position ).rotate( Math.PI ) );
-//      }
-//    );
-//    // chunk visibility.
-//    energyChunksVisibleProperty.link( function( energyChunksVisible ) {
-//      label.setTransparency( energyChunksVisible ? 0.5 : 1.0 );
-//      water.setTransparency( energyChunksVisible ? EFACConstants.NOMINAL_WATER_OPACITY / 2 : EFACConstants.NOMINAL_WATER_OPACITY );
-//    } );
-//  }
-//
-//  return inherit( Object, BeakerView, {
-//    /**
-//     *
-//     * @returns {Node}
-//     */
-//    getFrontNode: function() {
-//      return this.frontNode;
-//    },
-//    /**
-//     *
-//     * @returns {Node}
-//     */
-//    getBackNode: function() {
-//      return this.backNode;
-//    },
-//    /**
-//     *
-//     * @returns {Node}
-//     */
-//    getGrabNode: function() {
-//      return this.grabNode;
-//    }
-//  } );
-//
-//});
+// Copyright 2002-2015, University of Colorado
+
+/**
+ * Object that represents a beaker in the view.  This representation is split between a front node and a back node,
+ * which must be separately added to the canvas.  This is done to allow a layering effect.  Hence, this cannot be added
+ * directly to the canvas, and the client must add each layer separately.
+ *
+ * @author John Blanco
+ */
+
+define( function( require ) {
+  'use strict';
+
+  // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
+  var Matrix3 = require( 'DOT/Matrix3' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Transform3 = require( 'DOT/Transform3' );
+  var Shape = require( 'KITE/Shape' );
+  var Util = require( 'DOT/Util' );
+  var Range = require( 'DOT/Range' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Rectangle2 = require( 'DOT/Rectangle' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
+  //var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
+  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
+
+  // strings
+  var waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
+
+  // constants
+  //var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
+  var OUTLINE_COLOR = 'lightgrey';
+  var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
+  var LABEL_FONT = new PhetFont( 32 );
+  var SHOW_MODEL_RECT = false;
+  var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
+
+  // constants for the PerspectiveWaterNode
+  var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker(  0.2 );
+  var WATER_LINE_WIDTH= 2;
+  var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
+  var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (basically pixels) per second.
+  var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (basically pixels).
+  var MAX_STEAM_BUBBLE_HEIGHT = 300;
+  var STEAM_BUBBLE_PRODUCTION_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
+  var STEAM_BUBBLE_GROWTH_RATE = 0.2; // Proportion per second.
+  var MAX_STEAM_BUBBLE_OPACITY = 0.7; // Proportion, 1 is max.
+
+
+  /**
+   * Constructor for a SteamBubble.
+   *
+   * @param {number} initialDiameter
+   * @param {number} initialOpacity
+   */
+  function SteamBubble( initialDiameter, initialOpacity ) {
+
+    Circle.call( this, initialDiameter / 2, { fill: 'rgba( 255, 255, 255, initialOpacity )' } );
+
+  }
+
+  inherit( Circle, SteamBubble, {
+
+    /**
+     * Set the opacity of this Steam Bubble.
+     *
+     * @param {number} opacity
+     */
+    setOpacity: function( opacity ) {
+      assert && assert( opacity <= 1.0 );
+      this.fill = 'rgba( 255, 255, 255, opacity )';
+    }
+
+  } );
+
+  /**
+   * Constructor for the PerspectiveWaterNode.
+   *
+   * @param {Rectangle} beakerOutlineRect
+   * @param {Property} waterLevelProperty
+   * @param {Property} temperatureProperty
+   */
+  function PerspectiveWaterNode( beakerOutlineRect, waterLevelProperty, temperatureProperty ) {
+
+    Node.call( this );
+    var thisNode = this; // Extend scope for nested callbacks.
+
+    // Nodes that comprise this node.
+    this.liquidWaterTopNode = new Path( null, {
+      fill: EFACConstants.WATER_COLOR_IN_BEAKER,
+      lineWidth: WATER_LINE_WIDTH,
+      stroke: LIQUID_WATER_OUTLINE_COLOR
+      } );
+    this.liquidWaterBodyNode = new Path( null, {
+      fill: EFACConstants.WATER_COLOR_IN_BEAKER,
+      lineWidth: WATER_LINE_WIDTH,
+      stroke: LIQUID_WATER_OUTLINE_COLOR
+    } );
+
+    this.steamBubbles = new ObservableArray(); // TODO: Perhaps an array is sufficient.
+    this.steamNode = new Node();
+    this.waterLevelProperty = waterLevelProperty;
+    this.temperatureProperty = temperatureProperty;
+    this.beakerOutlineRect = beakerOutlineRect;
+
+    // Miscellaneous other variables.
+    this.bubbleProductionRemainder = 0; //@private
+
+    this.addChild( this.liquidWaterBodyNode );
+    this.addChild( this.liquidWaterTopNode );
+    //this.addChild( this.liquidWaterBottomNode );
+    this.addChild( this.steamNode );
+
+    this.waterLevelProperty.link( function( waterLevel ) {
+      thisNode.updateAppearance( waterLevel, beakerOutlineRect, thisNode.temperatureProperty.value, 1 / EFACConstants.FRAMES_PER_SECOND );
+    } );
+    //this.updateAppearance( this.waterLevelProperty.value, beakerOutlineRect, this.temperatureProperty.value, 1 / EFACConstants.FRAMES_PER_SECOND )
+
+  }
+
+  inherit( Node, PerspectiveWaterNode, {
+
+    reset: function() {
+      this.steamBubbles.clear();
+      this.steamNode.removeAllChildren();
+    },
+
+    /**
+     * Step function for the water.
+     * @param dt - The change in time.
+     */
+    step: function( dt ) {
+      this.updateAppearance( this.waterLevelProperty.value, this.beakerOutlineRect, this.temperatureProperty.value, dt );
+    },
+
+    /**
+     * Update the appearance of the water in the beaker.
+     *
+     * @param {number} fluidLevel
+     * @param {Rectangle} beakerOutlineRect
+     * @param {number} temperature
+     * @param {number} dt
+     */
+    updateAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
+
+      var thisNode = this; // extend scope for nested callbacks.
+
+      var waterHeight = beakerOutlineRect.height * fluidLevel;
+
+      var liquidWaterRect = new Rectangle2( beakerOutlineRect.minX,
+        beakerOutlineRect.maxY - waterHeight,
+        beakerOutlineRect.width,
+        waterHeight );
+      var ellipseWidth = beakerOutlineRect.width;
+      var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
+      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.centerX, liquidWaterRect.minY, ellipseWidth / 2, ellipseHeight / 2, 0, 0, Math.PI  / 2, false );
+
+      //----------------------------------------------------------------
+      // Update the liquid water.
+      //----------------------------------------------------------------
+
+      var liquidWaterBodyShape = new Shape()
+        .moveTo( liquidWaterRect.minX, liquidWaterRect.minY ) // Top let of the beaker body.
+        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.minY, liquidWaterRect.width / 2, ellipseHeight / 2, 0, Math.PI, 0, false )
+        .lineTo( liquidWaterRect.maxX, liquidWaterRect.maxY ) // Bottom right of the beaker body.
+        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.maxY, liquidWaterRect.width / 2, ellipseHeight / 2, 0, 0, Math.PI, false )
+        .close();
+
+      this.liquidWaterBodyNode.setShape( liquidWaterBodyShape );
+      this.liquidWaterTopNode.setShape( liquidWaterTopEllipse );
+
+      //----------------------------------------------------------------
+      // Update the steam.
+      //----------------------------------------------------------------
+
+      var steamingProportion = 0;
+      if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
+        // Water is emitting some amount of steam.  Set the proportionate amount.
+        steamingProportion = Util.clamp( 0, 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE ), 1 );
+      }
+
+      if ( steamingProportion > 0 ) {
+        // Add any new steam bubbles.
+        var bubblesToProduceCalc = ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
+        var bubblesToProduce = Math.floor( bubblesToProduceCalc );
+        this.bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
+        if ( this.bubbleProductionRemainder >= 1 ) {
+          bubblesToProduce += Math.floor( this.bubbleProductionRemainder );
+          this.bubbleProductionRemainder -= Math.floor( this.bubbleProductionRemainder );
+        }
+        for ( var i = 0; i < bubblesToProduce; i++ ) {
+          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + Math.random()* STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+          var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( Math.random() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
+          var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
+          steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
+          steamBubble.setOpacity( 0 );
+          this.steamBubbles.push( steamBubble );
+          this.steamNode.addChild( steamBubble );
+        }
+      }
+
+      // Update the position and appearance of the existing steam bubbles.
+      var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
+      var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
+      this.steamBubbles.forEach( function( steamBubble ) {
+        steamBubble.translate( steamBubble.x, steamBubble.y + dt * ( -steamBubbleSpeed ) );
+        if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
+          thisNode.steamBubbles.remove( steamBubble );
+          thisNode.steamNode.removeChild( steamBubble );
+        }
+        else if ( steamBubble.y < beakerOutlineRect.minY ) {
+          steamBubble.setRadius( steamBubble.bounds.width * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) )  / 2 );
+          var distanceFromCenterX = steamBubble.x - beakerOutlineRect.centerX;
+          steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
+          // Fade the bubble as it reaches the end of its range.
+          steamBubble.opacity = ( 1 - ( beakerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT ) * MAX_STEAM_BUBBLE_OPACITY;
+        }
+        else {
+          // Fade the bubble in.
+          var distanceFromWater = liquidWaterRect.y - steamBubble.y;
+          steamBubble.opacity = Util.clamp( 0, distanceFromWater / ( unfilledBeakerHeight / 4 ), 1 ) * MAX_STEAM_BUBBLE_OPACITY;
+        }
+
+      } );
+    }
+  } );
+
+  /**
+   * Constructor for the BeakerView.
+   *
+   * @param {Beaker} beaker
+   * @param {Property} energyChunksVisibleProperty
+   * @param {ModelViewTransform2} modelViewTransform
+   * @constructor
+   */
+  function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform ) {
+
+    Node.call( this );
+    var thisNode = this; // Extend scope for nested callbacks.
+    this.modelViewTransform = modelViewTransform;
+    this.energyChunkClipNode = new Node();
+
+    // These layer nodes are public so that the proper z-order can be established in the screen view.
+    this.frontNode = new Node(); // @public
+    this.backNode = new Node(); // @public
+    this.grabNode = new Node(); // @public
+
+    this.addChild( this.backNode );
+    this.addChild( this.frontNode );
+    this.addChild( this.grabNode );
+
+    // Extract the scale transform from the MVT so that we can separate the shape from the position.
+    // TODO: dis legit?
+    var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
+    //var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
+
+    // Get a version of the rectangle that defines the beaker size and location in the view.
+    var beakerViewRect = scaleTransform.transformShape( beaker.getRawOutlineRect() );
+
+    // Create the shapes for the top and bottom of the beaker.  These are
+    // ellipses in order to create a 3D-ish look.
+    var ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
+    var topEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.minY, beakerViewRect.width / 2, ellipseHeight / 2, 0 );
+    var bottomEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.maxY, beakerViewRect.width / 2, ellipseHeight / 2, 0 );
+
+    // Add the water.  It will adjust its size based on the fluid level.
+    // TODO: Port PerspectiveWaterNode
+    var water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
+    this.frontNode.addChild( water );
+
+    // Create and add the shape for the body of the beaker.
+    var beakerBody = new Shape()
+      .moveTo( beakerViewRect.minX, beakerViewRect.minY ) // Top let of the beaker body.
+      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.minY, beakerViewRect.width / 2, ellipseHeight / 2, 0, Math.PI, 0, true )
+      .lineTo( beakerViewRect.maxX, beakerViewRect.maxY ) // Bottom right of the beaker body.
+      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.maxY, beakerViewRect.width / 2, ellipseHeight / 2, 0, 0, Math.PI, false )
+      .close();
+
+    this.frontNode.addChild( new Path( beakerBody, {
+      fill: BEAKER_COLOR,
+      lineWidth: 3,
+      stroke: OUTLINE_COLOR
+    } ) );
+
+    // Add the bottom ellipse.
+    this.frontNode.addChild( new Path( bottomEllipse, {
+      fill: BEAKER_COLOR,
+      lineWidth: 3,
+      stroke: OUTLINE_COLOR
+    } ) );
+
+    // Add the top ellipse.  It is behind the water for proper Z-order behavior.
+    this.backNode.addChild( new Path( topEllipse, {
+      fill: BEAKER_COLOR,
+      stroke: OUTLINE_COLOR,
+      lineWidth: 3
+    } ) );
+
+    // Add a rectangle to the back that is invisible but allows the user to grab the beaker.
+    this.backNode.addChild( new Rectangle( beakerViewRect, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) );
+
+    // Make the front and back nodes non-pickable so that the grab node can be used for grabbing.  This is done to make
+    // it possible to remove things from the beaker.
+    this.frontNode.pickable = false;
+    this.backNode.pickable = false;
+
+    // Add the label.  Position it just below the front, top water line.
+    var label = new Text( waterString, {
+      font: LABEL_FONT
+    } );
+    label.translation = new Vector2( beakerViewRect.centerX - label.bounds.width / 2,
+      beakerViewRect.maxY - beakerViewRect.height * beaker.fluidLevel + topEllipse.bounds.height );
+    label.pickable = false;
+    this.frontNode.addChild( label );
+
+    // Create the layers where the contained energy chunks will be placed.  A clipping node is used to enable occlusion
+    // when interacting with other model elements.
+    // TODO: Work this one out with BeakerContainerView.
+    var energyChunkRootNode = new Node();
+    this.backNode.addChild( energyChunkRootNode );
+    ////energyChunkClipNode.setPathTo( beakerViewRect ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
+    //energyChunkRootNode.addChild( energyChunkClipNode );
+    ////energyChunkClipNode.setStroke( null );
+    //for( var i = beaker.slices.length - 1; i >= 0; i-- ) {
+    //  energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[i], modelViewTransform ) )
+    //}
+
+    // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
+    // needed.
+    beaker.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
+      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+      energyChunkRootNode.addChild( energyChunkNode );
+
+      beaker.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
+        if( removedEnergyChunk === addedEnergyChunk ) {
+          energyChunkRootNode.removeChild( energyChunkNode );
+          beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
+        }
+      } );
+    } );
+
+    // Add the node that can be used to grab and move the beaker.
+    var grabNodeShape = beakerBody;
+    // TODO: This does NOT include the top ellipse yet.
+    this.grabNode.addChild( new Path( grabNodeShape, { fill: 'rgba( 0, 0, 0, 0 )' } ) ); // Invisible, yet pickable.
+    this.grabNode.addChild( new Path( topEllipse, { fill: 'rgba( 0, 0, 0, 0 )' } ) );
+
+    // If enabled, show the outline of the rectangle that represents the beaker's position in the model.
+    if ( SHOW_MODEL_RECT ) {
+      this.frontNode.addChild( new Path( beakerViewRect, { fill: 'red', lineWidth: 2 } ) );
+    }
+
+    // Update the offset if and when the model position changes.
+    beaker.positionProperty.link( function( position ) {
+      thisNode.frontNode.translate( modelViewTransform.modelToViewPosition( position ) );
+      thisNode.backNode.translate( modelViewTransform.modelToViewPosition( position ) );
+      thisNode.grabNode.translate( modelViewTransform.modelToViewPosition( position ) );
+      // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
+      energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+    } );
+
+    // Adjust the transparency of the water and label based on energy chunk visibility.
+    energyChunksVisibleProperty.link( function( energyChunksVisible ) {
+      label.opacity = energyChunksVisible ? 0.5 : 1;
+      water.opacity = energyChunksVisible ? EFACConstants.NOMINAL_WATER_OPACITY / 2 : EFACConstants.NOMINAL_WATER_OPACITY;
+    });
+
+  }
+
+  return inherit( Node, BeakerView );
+
+} );

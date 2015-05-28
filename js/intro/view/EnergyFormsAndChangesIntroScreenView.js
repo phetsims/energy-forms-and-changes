@@ -48,6 +48,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
+  var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
 
   // strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
@@ -173,10 +174,10 @@ define( function( require ) {
     // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
     var leftHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
-    });
+    } );
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
-    });
+    } );
     leftHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCoolerBack.bounds.width / 2,
       modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCoolerBack.bounds.union( leftHeaterCoolerFront.bounds ).height - burnerYPosTweak );
     leftHeaterCoolerFront.leftTop = leftHeaterCoolerBack.getHeaterFrontPosition();
@@ -187,10 +188,10 @@ define( function( require ) {
     // Set up right heater-cooler node.
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
-    });
+    } );
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
-    });
+    } );
     rightHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) - rightHeaterCoolerBack.bounds.width / 2,
       modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) - rightHeaterCoolerBack.bounds.union( rightHeaterCoolerFront.bounds ).height - burnerYPosTweak );
     rightHeaterCoolerFront.leftTop = rightHeaterCoolerBack.getHeaterFrontPosition();
@@ -208,10 +209,10 @@ define( function( require ) {
     var ironBlockNode = new BlockNode( model, model.ironBlock, this.layoutBounds, modelViewTransform );
     ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
     blockLayer.addChild( ironBlockNode );
-    //var beakerView = new BeakerContainerView( model, modelViewTransform );
-    //beakerFrontLayer.addChild( beakerView.getFrontNode() );
-    //beakerBackLayer.addChild( beakerView.getBackNode() );
-    //beakerGrabLayer.addChild( beakerView.getGrabNode() );
+    var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
+    beakerFrontLayer.addChild( beakerView.frontNode );
+    beakerBackLayer.addChild( beakerView.backNode );
+    beakerGrabLayer.addChild( beakerView.grabNode );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
@@ -258,26 +259,26 @@ define( function( require ) {
     // Create a function that updates the Z-order of the blocks when the user controlled state changes.
     var blockChangeObserver = function() {
 
-        if ( model.ironBlock.isStackedUpon( model.brick ) ) {
-          brickNode.moveToBack();
-        }
-        else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
-          ironBlockNode.moveToBack();
-        }
-        else if ( model.ironBlock.getRect().minX >= model.brick.getRect().maxX ||
-            model.ironBlock.getRect().minY >= model.brick.getRect().maxY ) {
-          ironBlockNode.moveToFront();
-        }
-        else if ( model.brick.getRect().minX >= model.ironBlock.getRect().maxX ||
-            model.brick.getRect().minY >= model.ironBlock.getRect().maxY ) {
-          brickNode.moveToFront();
-        }
+      if ( model.ironBlock.isStackedUpon( model.brick ) ) {
+        brickNode.moveToBack();
+      }
+      else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
+        ironBlockNode.moveToBack();
+      }
+      else if ( model.ironBlock.getRect().minX >= model.brick.getRect().maxX ||
+                model.ironBlock.getRect().minY >= model.brick.getRect().maxY ) {
+        ironBlockNode.moveToFront();
+      }
+      else if ( model.brick.getRect().minX >= model.ironBlock.getRect().maxX ||
+                model.brick.getRect().minY >= model.ironBlock.getRect().maxY ) {
+        brickNode.moveToFront();
+      }
 
     };
 
     // Update the Z-order of the blocks whenever the "userControlled" state of either changes.
-      model.brick.positionProperty.link( blockChangeObserver );
-      model.ironBlock.positionProperty.link( blockChangeObserver );
+    model.brick.positionProperty.link( blockChangeObserver );
+    model.ironBlock.positionProperty.link( blockChangeObserver );
 
   }
 

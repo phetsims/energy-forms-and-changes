@@ -44,8 +44,9 @@ define( function( require ) {
      *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
-      // represents the fluid and the displacing rectangles.
-      var fluidRectangle = new Rectangle( this.getRect().getX(), this.getRect().getY(), this.width, this.height * this.fluidLevel );
+
+      // Calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles.
+      var fluidRectangle = new Rectangle( this.getRect().minX, this.getRect().minY, this.width, this.height * this.fluidLevel );
       var overlappingArea = 0;
       potentiallyDisplacingRectangles.forEach( function( rectangle ) {
         if ( rectangle.intersectsBounds( fluidRectangle ) ) {
@@ -54,7 +55,7 @@ define( function( require ) {
         }
       } );
 
-      // empirically determined to look good.
+      // Map the overlap to a new fluid height.  The scaling factor was empirically determined to look good.
       var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
       var proportionateIncrease = newFluidLevel / this.fluidLevel;
       this.fluidLevel = newFluidLevel;
@@ -62,19 +63,11 @@ define( function( require ) {
       // Update the shapes of the energy chunk slices.
       this.slices.forEach( function( slice ) {
 
-        // TODO: I believe that this is a correct port of the affine transformations required here.  However, I am leaving the in the Java until this
-        // can be thoroughly tested.
         var originalShape = slice.shape;
         var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, proportionateIncrease ) );
         var translationTransform = Matrix3.translation( originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
           originalShape.bounds.y - expandedOrCompressedShape.bounds.y );
         slice.shape = expandedOrCompressedShape.transformed( translationTransform );
-
-        //Shape originalShape = slice.getShape();
-        //Shape expandedOrCompressedShape = AffineTransform.getScaleInstance( 1, proportionateIncrease ).createTransformedShape( originalShape );
-        //AffineTransform translationTransform = AffineTransform.getTranslateInstance( originalShape.getBounds2D().getX() - expandedOrCompressedShape.getBounds2D().getX(),
-        //  originalShape.getBounds2D().getY() - expandedOrCompressedShape.getBounds2D().getY() );
-        //slice.setShape( translationTransform.createTransformedShape( expandedOrCompressedShape ) );
 
       } );
     },
