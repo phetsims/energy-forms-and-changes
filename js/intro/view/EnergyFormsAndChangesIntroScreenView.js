@@ -111,8 +111,8 @@ define( function( require ) {
     // Create the lab bench surface image.
     var labBenchSurfaceImage = new Image( shelfImage );
     labBenchSurfaceImage.leftTop = ( new Vector2(
-      modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
-      modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
+        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
+        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
     );
 
     // Create a rectangle that will act as the background below the lab bench surface, basically like the side of the bench.
@@ -282,13 +282,7 @@ define( function( require ) {
 
   }
 
-  return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView, {
-
-    //   Called by the animation loop. Optional, so if your view has no animation, you can omit this.
-    step: function( dt ) {
-      // Handle view animation here.
-    }
-  } );
+  return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView );
 } );
 
 //
