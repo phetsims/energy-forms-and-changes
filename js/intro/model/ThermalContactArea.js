@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   // Threshold of distance for determining whether two areas are in contact.
   var TOUCH_DISTANCE_THRESHOLD = 0.001; // In meters.
@@ -25,20 +26,12 @@ define( function( require ) {
    */
   function ThermalContactArea( bounds, supportsImmersion ) {
 
-    this.bounds = bounds;
+    Bounds2.call( this, bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
     this.supportsImmersion = supportsImmersion;
 
   }
 
-  return inherit( Object, ThermalContactArea, {
-
-    /**
-     *
-     * @returns {Bounds2}
-     */
-    getBounds: function() {
-      return this.bounds;
-    },
+  return inherit( Bounds2, ThermalContactArea, {
 
     /**
      * Get the amount of thermal contact that exists between this and another thermal area.  Since thermal contact
@@ -50,21 +43,21 @@ define( function( require ) {
      */
     getThermalContactLength: function( that ) {
 
-      var xOverlap = this.getHorizontalOverlap( this.bounds, that.bounds );
-      var yOverlap = this.getVerticalOverlap( this.bounds, that.bounds );
+      var xOverlap = this.getHorizontalOverlap( this, that );
+      var yOverlap = this.getVerticalOverlap( this, that );
 
       var contactLength = 0;
       if ( xOverlap > 0 && yOverlap > 0 ) {
         // One of the areas is overlapping another.  This should be an 'immersion' situation, i.e. one is all or
         // partially immersed in the other.
         if ( this.supportsImmersion || that.supportsImmersion ) {
-          var immersionRect = this.bounds.intersection( that.bounds );
+          var immersionRect = this.intersection( that );
           contactLength = immersionRect.width * 2 + immersionRect.height * 2;
-          if ( immersionRect.width !== this.bounds.width && immersionRect.width !== that.bounds.width ) {
+          if ( immersionRect.width !== this.width && immersionRect.width !== that.width ) {
             // Not fully overlapping in X direction, so adjust contact length accordingly.
             contactLength -= immersionRect.height;
           }
-          if ( immersionRect.height !== this.bounds.height && immersionRect.height !== that.bounds.height ) {
+          if ( immersionRect.height !== this.height && immersionRect.height !== that.height ) {
             // Not fully overlapping in Y direction, so adjust contact length accordingly.
             contactLength -= immersionRect.width;
           }
@@ -82,13 +75,13 @@ define( function( require ) {
       else if ( xOverlap > 0 || yOverlap > 0 ) {
         // There is overlap in one dimension but not the other, so test to see if the two containers are touching.
         if ( xOverlap > 0 &&
-             Math.abs( this.bounds.maxY - that.bounds.minY ) < TOUCH_DISTANCE_THRESHOLD ||
-             Math.abs( this.bounds.minY - that.bounds.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
+             Math.abs( this.maxY - that.minY ) < TOUCH_DISTANCE_THRESHOLD ||
+             Math.abs( this.minY - that.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
         }
         else if ( yOverlap > 0 &&
-                  Math.abs( this.bounds.maxX - that.bounds.minX ) < TOUCH_DISTANCE_THRESHOLD ||
-                  Math.abs( this.bounds.minX - that.bounds.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
+                  Math.abs( this.maxX - that.minX ) < TOUCH_DISTANCE_THRESHOLD ||
+                  Math.abs( this.minX - that.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
         }
       }

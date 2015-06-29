@@ -25,7 +25,7 @@ define( function( require ) {
     Node.call( this );
 
     if ( SHOW_BOUNDS ) {
-      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.getThermalContactArea().bounds ), {
+      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.getThermalContactArea() ), {
         fill: 'red',
         lineWidth: 1
       } ) );

@@ -29,6 +29,7 @@ define( function( require ) {
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   // constants
   var MATERIAL_THICKNESS = 0.001; // In meters.
@@ -226,8 +227,7 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      */
     getThermalContactArea: function() {
-      return new ThermalContactArea( new Rectangle( this.position.x - this.width / 2,
-        this.position.y, this.width, this.height * this.fluidLevel ), true );
+      return new ThermalContactArea( new Bounds2( this.position.x - this.width / 2, this.position.y, this.width, this.height * this.fluidLevel ), true );
     },
 
     /**

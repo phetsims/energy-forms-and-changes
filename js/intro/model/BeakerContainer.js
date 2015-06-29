@@ -80,7 +80,7 @@ define( function( require ) {
      */
     isEnergyChunkObscured: function( energyChunk ) {
       this.potentiallyContainedElements.forEach( function( element ) {
-        if ( this.getThermalContactArea().bounds.contains( element.getRect() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
+        if ( this.getThermalContactArea().containsBounds( element.getRect() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
           return true;
         }
       } );

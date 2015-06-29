@@ -291,10 +291,10 @@ define( function( require ) {
           if ( energyContainer1.getThermalContactArea().getThermalContactLength( energyContainer2.getThermalContactArea() ) > 0 ) {
             // Exchange chunks if approperiate.
             if ( energyContainer1.getEnergyChunkBalance() > 0 && energyContainer2.getEnergyChunkBalance < 0 ) {
-              energyContainer2.addEnergyChunk( energyContainer1.extractClosestEnergyChunk( energyContainer2.getThermalContactArea().bounds ) );
+              energyContainer2.addEnergyChunk( energyContainer1.extractClosestEnergyChunk( energyContainer2.getThermalContactArea() ) );
             }
             else if ( energyContainer1.getEnergyChunkBalance() < 0 && energyContainer2.getEnergyChunkBalance() > 0 ) {
-              energyContainer1.addEnergyChunk( energyContainer2.extractClosestEnergyChunk( energyContainer1.getThermalContactArea().bounds ) );
+              energyContainer1.addEnergyChunk( energyContainer2.extractClosestEnergyChunk( energyContainer1.getThermalContactArea() ) );
             }
           }
         } );
@@ -318,7 +318,7 @@ define( function( require ) {
           }
         } );
 
-        if ( thisModel.beaker.getThermalContactArea().bounds.containsPoint( movableEnergyContainer.getRect() ) ) {
+        if ( thisModel.beaker.getThermalContactArea().containsPoint( movableEnergyContainer.getRect() ) ) {
           // This model element is immersed in the beaker.
           immersedInBeaker = true;
         }
@@ -697,7 +697,7 @@ define( function( require ) {
       } );
 
       // Test if this point is in the water or steam associated with the beaker.
-      if ( this.beaker.getThermalContactArea().bounds.containsPoint( locationAsPoint ) ) {
+      if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
         return new TemperatureAndColor( this.beaker.temperature, EFACConstants.WATER_COLOR_IN_BEAKER );
       }
       else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {

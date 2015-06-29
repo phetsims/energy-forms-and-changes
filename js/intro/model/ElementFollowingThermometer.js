@@ -95,7 +95,7 @@ define( function( require ) {
             }
           }
         }
-        if ( !thisElementFollowingThermometer.elementFollower.isFollowing() && model.beaker.getThermalContactArea().bounds.containsPoint( thisElementFollowingThermometer.position ) ) {
+        if ( !thisElementFollowingThermometer.elementFollower.isFollowing() && model.beaker.getThermalContactArea().containsPoint( thisElementFollowingThermometer.position ) ) {
           // Stick to the beaker.
           thisElementFollowingThermometer.elementFollower.follow( model.beaker.position );
         }

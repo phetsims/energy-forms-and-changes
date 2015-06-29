@@ -152,7 +152,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     inContactWith: function( thermalEnergyContainer ) {
-      var containerThermalArea = thermalEnergyContainer.getThermalContactArea().bounds;
+      var containerThermalArea = thermalEnergyContainer.getThermalContactArea();
       return (
       containerThermalArea.getCenterX() > this.getOutlineRect().minX &&
       containerThermalArea.getCenterX() < this.getOutlineRect().maxX &&

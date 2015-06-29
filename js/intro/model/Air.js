@@ -79,7 +79,7 @@ define( function( require ) {
       // Update the position of any energy chunks.
       this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
         energyChunkWanderController.updatePosition( dt );
-        if ( !( thisModel.getThermalContactArea().bounds.containsPoint( energyChunkWanderController.energyChunk.position ) ) ) {
+        if ( !( thisModel.getThermalContactArea().containsPoint( energyChunkWanderController.energyChunk.position ) ) ) {
           // Remove this energy chunk.
           thisModel.energyChunkList.remove( energyChunkWanderController.energyChunk );
           thisModel.energyChunkWanderControllers.splice( index, 1 );

@@ -255,7 +255,7 @@ define( function( require ) {
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
-      if ( destinationShape.intersectsBounds( this.getThermalContactArea().bounds ) ) {
+      if ( destinationShape.intersectsBounds( this.getThermalContactArea() ) ) {
         // Our shape is contained by the destination.  Pick a chunk near
         // our right or left edge.
 
@@ -272,7 +272,7 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( this.getThermalContactArea().bounds.containsBounds( destinationShape.bounds ) ) {
+      else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
@@ -336,7 +336,7 @@ define( function( require ) {
 
       var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
 
-      var energyChunkBounds = this.getThermalContactArea().bounds;
+      var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
         this.addEnergyChunk( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation.call( this, energyChunkBounds ), this.energyChunksVisibleProperty ) );
