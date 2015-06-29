@@ -195,8 +195,8 @@ define( function( require ) {
         previousTime = time;
       }
 
-      // Cause any user-movable model elements that are not supported by a surface to fall (or, in some cases, jump up) towards the nearest supporting
-      // surface.
+      // Cause any user-movable model elements that are not supported by a surface to fall (or, in some cases, jump up)
+      // towards the nearest supporting surface.
       this.movableThermalEnergyContainers.forEach( function( movableModelElement ) {
 
         if ( !movableModelElement.userControlled && movableModelElement.supportingSurface === null && movableModelElement.position.y !== 0 ) {
@@ -241,9 +241,10 @@ define( function( require ) {
       // Energy and Energy Chunk Exchange
       //=====================================================================
 
-      // Note: The original intent was to design all the energy containers such that the order of the exchange didn't matter, nor who was exchanging
-      // with whom.  This turned out to be a lot of extra work to maintain, and was eventually abandoned.  So, the order and nature of the exchanged
-      // below should be maintained unless there is a good reason not to, and any changes should be well tested.
+      // Note: The original intent was to design all the energy containers such that the order of the exchange didn't
+      // matter, nor who was exchanging with whom.  This turned out to be a lot of extra work to maintain, and was
+      // eventually abandoned.  So, the order and nature of the exchanged below should be maintained unless there is a
+      // good reason not to, and any changes should be well tested.
 
       // Loop through all the movable thermal energy containers and have them exchange energy with one another.
       thisModel.movableThermalEnergyContainers.forEach( function( energyContainer1, index ) {
@@ -357,6 +358,9 @@ define( function( require ) {
           burner.addEnergyChunk( thisModel.air.requestEnergyChunk( burner.getCenterPoint() ) );
         }
       } );
+
+      // Now animate model elements.
+      this.air.step( dt );
     },
 
     getBlockList: function() {

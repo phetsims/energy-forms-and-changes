@@ -29,10 +29,6 @@ define( function( require ) {
   // Instance Data
   //-------------------------------------------------------------------------
 
-  var velocity = new Vector2( 0, MAX_VELOCITY );
-  //var countdownTimer = 0;
-
-
   /**
    *
    * @param {EnergyChunk} energyChunk
@@ -45,6 +41,7 @@ define( function( require ) {
     this.energyChunk = energyChunk;
     this.initialWanderConstraint = initialWanderConstraint;
     this.destinationProperty = destinationProperty;
+    this.velocity = new Vector2( 0, MAX_VELOCITY );
 
     this.resetCountdownTimer();
     this.changeVelocityVector();
@@ -54,31 +51,33 @@ define( function( require ) {
   return inherit( Object, EnergyChunkWanderController, {
 
     /**
-     * *
-     * @param dt
+     * Update the position of this energy chunk for a given change in time.
+     *
+     * @param {number} dt
      */
     updatePosition: function( dt ) {
+
       var distanceToDestination = this.energyChunk.position.distance( this.destinationProperty.value );
-      if ( distanceToDestination < velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
+      if ( distanceToDestination < this.velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
         // Destination reached.
-        this.energyChunk.position = this.destination.value;
-        velocity.setMagnitude( 0 );
+        this.energyChunk.position = this.destinationProperty.value;
+        this.velocity.setMagnitude( 0 );
       }
-      else if ( this.energyChunk.position.distance( this.destinationProperty.value ) < dt * velocity.magnitude() ) {
+      else if ( this.energyChunk.position.distance( this.destinationProperty.value ) < dt * this.velocity.magnitude() ) {
         // Prevent overshoot.
-        velocity.times( this.energyChunk.position.distance( this.destinationProperty.value ) * dt );
+        this.velocity.times( this.energyChunk.position.distance( this.destinationProperty.value ) * dt );
       }
 
       // Stay within the horizontal confines of the initial bounds.
       if ( this.initialWanderConstraint !== null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
-        var proposedPosition = this.energyChunk.position.plus( velocity.times( dt ) );
+        var proposedPosition = this.energyChunk.position.plus( this.velocity.times( dt ) );
         if ( proposedPosition.x < this.initialWanderConstraint.minX || proposedPosition.x > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
-          velocity.setComponents( -velocity.x, velocity.y );
+          this.velocity.setComponents( -this.velocity.x, this.velocity.y );
         }
       }
 
-      this.energyChunk.position.set( this.energyChunk.position.plus( velocity.times( dt ) ) );
+      this.energyChunk.position = this.energyChunk.position.plus( this.velocity.times( dt ) );
       this.countdownTimer -= dt;
       if ( this.countdownTimer <= 0 ) {
         this.changeVelocityVector();
@@ -96,7 +95,7 @@ define( function( require ) {
         angle = angle + ( Math.random() - 0.5 ) * 2 * MAX_ANGLE_VARIATION;
       }
       var scalarVelocity = MIN_VELOCITY + ( MAX_VELOCITY - MIN_VELOCITY ) * Math.random();
-      velocity.setXY( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
+      this.velocity.setXY( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
     },
 
     /**

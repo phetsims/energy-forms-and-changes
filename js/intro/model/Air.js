@@ -20,14 +20,15 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'DOT/Rectangle' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var ThermalEnergyContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalEnergyContainer' );
   var Vector2 = require( 'DOT/Vector2' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   // constants
+
   // 2D size of the air.  It is sized such that it will extend off the left, right, and top edges of screen for the
   // most common aspect ratios of the view.
   var SIZE = new Dimension2( 0.7, 0.3 );
@@ -45,7 +46,7 @@ define( function( require ) {
   var VOLUME = SIZE.width * SIZE.height * DEPTH;
   var MASS = VOLUME * DENSITY;
   var INITIAL_ENERGY = MASS * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE;
-  var THERMAL_CONTACT_AREA = new ThermalContactArea( new Rectangle( -SIZE.width / 2, 0, SIZE.width, SIZE.height ), true );
+  var THERMAL_CONTACT_AREA = new ThermalContactArea( new Bounds2( -SIZE.width / 2, 0, SIZE.width, SIZE.height ), true );
 
   // Class variable that keeps track of energy state for all air.
   var energy = INITIAL_ENERGY;
@@ -74,14 +75,14 @@ define( function( require ) {
      * @param dt
      */
     step: function( dt ) {
-      var self  = this;
+      var thisModel = this;
       // Update the position of any energy chunks.
       this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
         energyChunkWanderController.updatePosition( dt );
-        if ( !(this.getThermalContactArea().bounds.contains( energyChunkWanderController.energyChunk.position ) ) ) {
+        if ( !( thisModel.getThermalContactArea().bounds.containsPoint( energyChunkWanderController.energyChunk.position ) ) ) {
           // Remove this energy chunk.
-          self.energyChunkList.remove( energyChunkWanderController.energyChunk );
-          self.energyChunkWanderControllers.splice( index, 1 );
+          thisModel.energyChunkList.remove( energyChunkWanderController.energyChunk );
+          thisModel.energyChunkWanderControllers.splice( index, 1 );
         }
       } );
     },
