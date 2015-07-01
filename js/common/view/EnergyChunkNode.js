@@ -93,7 +93,7 @@ define( function( require ) {
 
     // Set this node's position when the corresponding model element moves.
     energyChunk.positionProperty.link( function( position ) {
-        energyChunkNode.center = modelViewTransform.modelToViewPosition( position );
+        energyChunkNode.translation = modelViewTransform.modelToViewPosition( position );
       }
     );
   }

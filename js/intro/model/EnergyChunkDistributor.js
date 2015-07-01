@@ -32,6 +32,7 @@ define( function( require ) {
   var ENERGY_CHUNK_DIAMETER = 1E-3; // In meters, chosen empirically.
   var ENERGY_CHUNK_CROSS_SECTIONAL_AREA = Math.PI * Math.pow( ENERGY_CHUNK_DIAMETER, 2 ); // Treat energy chunk as if it is shaped like a sphere.
   var DRAG_COEFFICIENT = 500; // Unitless, empirically chosen.
+
   // Thresholds for deciding whether or not to perform redistribution.
   // These value should be chosen such that particles spread out, then stop
   // all movement.
@@ -44,7 +45,7 @@ define( function( require ) {
      * because all of the energy chunks in a set of slices interact with each other, but the container for each is
      * defined by the boundary of its containing slice.
      *
-     * @param {array<EnergyChunkContainerSlice>} energyChunkContainerSlices Set of slices, each containing a set of energy chunks.
+     * @param {array.<EnergyChunkContainerSlice>} energyChunkContainerSlices Set of slices, each containing a set of energy chunks.
      * @param {number} dt change in time
      */
     updatePositions: function( energyChunkContainerSlices, dt ) {
@@ -55,10 +56,10 @@ define( function( require ) {
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
       energyChunkContainerSlices.forEach( function( slice ) {
-        minX = Math.min( slice.shape.minX, minX );
-        maxX = Math.max( slice.shape.minY, maxX );
-        minY = Math.min( slice.shape.maxX, minY );
-        maxY = Math.max( slice.shape.maxY, maxY );
+        minX = Math.min( slice.shape.bounds.minX, minX );
+        maxX = Math.max( slice.shape.bounds.minY, maxX );
+        minY = Math.min( slice.shape.bounds.maxX, minY );
+        maxY = Math.max( slice.shape.bounds.maxY, maxY );
       } );
       var boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
 
@@ -80,6 +81,7 @@ define( function( require ) {
           mapSize++;
         }
       }
+
       // Make sure that there is actually something to distribute.
       if ( mapSize === 0 ) {
         return false; // Nothing to do - abort.
@@ -96,7 +98,7 @@ define( function( require ) {
 
       // Loop once for each max time step plus any remainder.
       var particlesRedistributed = false;
-      var numForceCalcSteps = dt / MAX_TIME_STEP;
+      var numForceCalcSteps = Math.floor( dt / MAX_TIME_STEP );
       var extraTime = dt - numForceCalcSteps * MAX_TIME_STEP;
       for ( var forceCalcStep = 0; forceCalcStep <= numForceCalcSteps; forceCalcStep++ ) {
         var timeStep = forceCalcStep < numForceCalcSteps ? MAX_TIME_STEP : extraTime;
@@ -117,26 +119,27 @@ define( function( require ) {
               // Loop on several angles, calculating the forces from the edges at the given angle.
               for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
                 var edgeDetectSteps = 8;
-                var lengthBounds = new Range( 0, maxDistanceToEdge );
+                var lengthRange = new Range( 0, maxDistanceToEdge );
                 for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-                  var vectorToEdge = new Vector2( lengthBounds.getCenter(), 0 ).rotated( angle );
+                  var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
                   if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
-                    lengthBounds = new Range( lengthBounds.getCenter(), lengthBounds.max );
+                    lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
                   }
                   else {
-                    lengthBounds = new Range( lengthBounds.min, lengthBounds.getCenter() );
+                    lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
                   }
                 }
 
                 // Handle case where point is too close to the container's edge.
-                if ( lengthBounds.getCenter() < minDistance ) {
-                  lengthBounds = new Range( minDistance, minDistance );
+                if ( lengthRange.getCenter() < minDistance ) {
+                  lengthRange = new Range( minDistance, minDistance );
                 }
 
                 // Apply the force due to this edge.
-                var edgeForce = new Vector2( forceConstant / Math.pow( lengthBounds.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+                var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
                 mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( edgeForce );
               }
+
               // Now apply the force from each of the other particles, but set some limits on the max force that can be
               // applied.
               for ( var otherEnergyChunk in mapEnergyChunkToForceVector ) {

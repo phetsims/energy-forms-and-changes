@@ -58,8 +58,11 @@ define( function( require ) {
     this.energyChunkWanderControllers = [];
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
+    // Track energy transferred to anything sitting on the burner.
+    this.energyExchangedWithObjectSinceLastChunkTransfer = 0; // @private
+
     // Track build up of energy for transferring chunks to/from the air.
-    this.energyExchangedWithAirSinceLastChunkTransfer = 0;
+    this.energyExchangedWithAirSinceLastChunkTransfer = 0; // @private
 
     //this.heatCoolLevelProperty = new Property( new Range( -1, 1, 0 ) );
 
@@ -147,16 +150,17 @@ define( function( require ) {
     },
 
     /**
-     * *
+     * Determine if the burner is in contact with a thermal energy container.
+     *
      * @param {ThermalEnergyContainer} thermalEnergyContainer
      * @returns {boolean}
      */
     inContactWith: function( thermalEnergyContainer ) {
       var containerThermalArea = thermalEnergyContainer.getThermalContactArea();
       return (
-      containerThermalArea.getCenterX() > this.getOutlineRect().minX &&
-      containerThermalArea.getCenterX() < this.getOutlineRect().maxX &&
-      Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY < CONTACT_DISTANCE ));
+      containerThermalArea.centerX > this.getOutlineRect().minX &&
+      containerThermalArea.centerX < this.getOutlineRect().maxX &&
+      Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY ) < CONTACT_DISTANCE );
     },
 
     /**
@@ -166,7 +170,7 @@ define( function( require ) {
     addEnergyChunk: function( energyChunk ) {
       energyChunk.zPosition = 0;
       this.energyChunkList.add( energyChunk );
-      this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ) ) );
+      this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, new Property( this.getEnergyChunkStartEndPoint() ), null ) );
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
     },
@@ -200,7 +204,7 @@ define( function( require ) {
 
         this.energyChunkList.remove( closestEnergyChunk );
         this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
-          if( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
+          if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
             thisBurner.energyChunkWanderControllers.splice( index, 1 );
           }
         } );
@@ -208,7 +212,7 @@ define( function( require ) {
       //}
       if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
-        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), new Vector2( 0, 0 ), this.energyChunksVisibleProperty.value );
+        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
       }
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -277,9 +281,21 @@ define( function( require ) {
     },
 
     /**
+     * Animate the energy chunks.
+     *
      * @private
-     * @param dt
+     * @param {number} dt
      */
+    step: function( dt ) {
+      var thisBurner = this;
+      this.energyChunkWanderControllers.forEach( function( energyChunkWanderController ) {
+        energyChunkWanderController.updatePosition( dt );
+        if ( energyChunkWanderController.destinationReached() ) {
+          thisBurner.energyChunkList.remove( energyChunkWanderController.energyChunk );
+          thisBurner.energyChunkWanderControllers.remove( energyChunkWanderController );
+        }
+      } );
+    },
     //stepInTime: function( dt ) {
     //  // Animate energy chunks.
     //  for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
@@ -317,7 +333,7 @@ define( function( require ) {
      *         Negative value indicates that chunks should come in.
      */
     getEnergyChunkBalanceWithObjects: function() {
-      return (Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( this.energyExchangedWithObjectSinceLastChunkTransfer ));
+      return ( Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( this.energyExchangedWithObjectSinceLastChunkTransfer ));
     },
     /**
      * *

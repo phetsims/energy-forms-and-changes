@@ -16,6 +16,7 @@ define( function( require ) {
   var LinearFunction = require( 'DOT/LinearFunction' );
   //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Util = require( 'DOT/Util' );
 
   // Constants used for creating projections that have a 3D-ish look.
   var Z_TO_X_OFFSET_MULTIPLIER = -0.25;
@@ -50,7 +51,8 @@ define( function( require ) {
   var FIRST_TAB_BACKGROUND_COLOR = new Color( 245, 235, 175 );
 
   // Mapping function that maps the energy to the number of energy chunks.
-  var MAP_ENERGY_TO_NUM_CHUNKS = new LinearFunction( LOW_ENERGY_FOR_MAP_FUNCTION,
+  var MAP_ENERGY_TO_NUM_CHUNKS = new LinearFunction(
+    LOW_ENERGY_FOR_MAP_FUNCTION,
     HIGH_ENERGY_FOR_MAP_FUNCTION,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP );
@@ -88,7 +90,7 @@ define( function( require ) {
     SIGNIFICANT_TEMPERATURE_DIFFERENCE: 1E-3, // In degrees K.
 
     ENERGY_TO_NUM_CHUNKS_MAPPER: function( energy ) {
-      return Math.max( Math.round( MAP_ENERGY_TO_NUM_CHUNKS( energy ) ), 0 );
+      return Math.max( Util.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS( energy ) ), 0 );
     },
 
     ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY( 1 ),

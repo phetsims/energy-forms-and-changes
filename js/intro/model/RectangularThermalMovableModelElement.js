@@ -23,6 +23,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
+  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' );
 
   /**
    * Constructor for a RectangularThermalMovableModelElement.  This implements the behavior of a superclass for many
@@ -59,6 +60,7 @@ define( function( require ) {
 
     // Add the initial energy chunks.
     this.addInitialEnergyChunks();
+
   }
 
 
@@ -68,8 +70,13 @@ define( function( require ) {
      * Get the rectangle that defines this elements position and shape in
      * model space.
      */
-    getRect: function() {
-      console.error( 'getRect() must be implemented in descendant classes.' );
+    getRectangleBounds: function() {
+      console.error( 'getRectangleBounds must be implemented in descendant classes.' );
+    },
+
+    // TODO: This should probably replace getRect entirely.
+    getRectangleShape: function() {
+      console.error( 'getRectangleShape must be implemented in descendant classes' );
     },
 
     /**
@@ -103,7 +110,7 @@ define( function( require ) {
     step: function( dt ) {
 
       // Distribute the energy chunks contained within this model element.
-      EnergyChunkDistributor.updatePositions.call( this, this.slices, dt );
+      //EnergyChunkDistributor.updatePositionsDbg( this.slices, dt );
 
       // Animate the energy chunks that are outside this model element.
       this.animateNonContainedEnergyChunks( dt );
@@ -140,7 +147,7 @@ define( function( require ) {
         // Chunk is out of the bounds of this element, so make it wander towards it.
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
-        this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, this.position ) );
+        this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, this.positionProperty, null ) );
       }
     },
 
@@ -150,7 +157,7 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunkToNextSlice: function( energyChunk ) {
-      this.slices.get( this.nextSliceIndex ).addEnergyChunk( energyChunk );
+      this.slices[ this.nextSliceIndex ].addEnergyChunk( energyChunk );
       this.nextSliceIndex = ( this.nextSliceIndex + 1 ) % this.slices.length;
     },
 
@@ -298,8 +305,8 @@ define( function( require ) {
         console.log( " - Warning: No energy chunk found by extraction algorithm, trying first available.." );
         var length = this.slices.length;
         for ( var i = 0; i < length; i++ ) {
-          if ( this.slices[i].energyChunkList.length > 0 ) {
-            chunkToExtract = this.slices[i].energyChunkList.get( 0 );
+          if ( this.slices[ i ].energyChunkList.length > 0 ) {
+            chunkToExtract = this.slices[ i ].energyChunkList.get( 0 );
             break;
           }
         }
@@ -318,12 +325,11 @@ define( function( require ) {
      * initialization.
      */
     addEnergyChunkSlices: function() {
-
       assert && assert( this.slices.length === 0 ); // Make sure this method isn't being misused.
 
       // Defaults to a single slice matching the outline rectangle, override
       // for more sophisticated behavior.
-      this.slices.push( new EnergyChunkContainerSlice( this.getRect(), 0, this.position ) );
+      this.slices.push( new EnergyChunkContainerSlice( this.getRectangleShape(), 0, this.position ) );
     },
 
     /**
@@ -334,12 +340,16 @@ define( function( require ) {
         slice.energyChunkList.clear();
       } );
 
-      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
+      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
 
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
-        this.addEnergyChunk( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation.call( this, energyChunkBounds ), this.energyChunksVisibleProperty ) );
+        this.addEnergyChunk( new EnergyChunk(
+          EnergyType.THERMAL,
+          EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
+          new Vector2( 0, 0 ),
+          this.energyChunksVisibleProperty ) );
       }
 
       // Distribute the energy chunks within the container.
@@ -350,7 +360,6 @@ define( function( require ) {
         }
       }
     },
-
 
     /**
      *
@@ -382,7 +391,7 @@ define( function( require ) {
         if ( Math.abs( otherEnergyContainer.getTemperature() - this.getTemperature() ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
           // Exchange energy between this and the other energy container.
 
-          var heatTransferConstant = this.getHeatTransferFactor( this.getEnergyContainerCategory(), otherEnergyContainer.getEnergyContainerCategory() );
+          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), otherEnergyContainer.getEnergyContainerCategory() );
 
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 
@@ -412,7 +421,7 @@ define( function( require ) {
 
       var shape = new Shape();
 
-      var rect = this.getRect();
+      var rect = this.getRectangleBounds();
       shape.moveToPoint( new Vector2( rect.minX, rect.minY ).plus( forwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( forwardPerspectiveOffset ) )
         .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( backwardPerspectiveOffset ) )
@@ -440,7 +449,7 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyChunkBalance: function() {
-      return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER.apply( this.energy );
+      return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
     }
   } );
 } );

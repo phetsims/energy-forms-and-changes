@@ -20,6 +20,7 @@ define( function( require ) {
   var Matrix3 = require( 'DOT/Matrix3' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
 
@@ -42,6 +43,7 @@ define( function( require ) {
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
+      console.log( 'block position changing' );
       thisBlock.updateTopSurfaceProperty();
       thisBlock.updateBottomSurfaceProperty();
     } );
@@ -91,7 +93,7 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      */
     getThermalContactArea: function() {
-      return new ThermalContactArea( this.getRect(), false );
+      return new ThermalContactArea( this.getRectangleBounds(), false );
     },
 
     /**
@@ -99,14 +101,15 @@ define( function( require ) {
      */
     addEnergyChunkSlices: function() {
       // The slices for the block are intended to match the projection used in the view.
-      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.SURFACE_WIDTH / 2 );
-      var i;
-      for ( i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
-        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( i * ( -EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
+      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
+      for ( var i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
+        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( i * ( -EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ) );
 
-        var transform = new Matrix3.translation( projectionToFront.x + projectionOffsetVector.x,
-          projectionToFront.y + projectionOffsetVector.y );
-        this.slices.push( new EnergyChunkContainerSlice( this.getRect().transformed( transform ), -i * ( EFACConstants.SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ), this.positionProperty ) );
+        var transform = Matrix3.translation( projectionToFront.x + projectionOffsetVector.x, projectionToFront.y + projectionOffsetVector.y );
+        this.slices.push( new EnergyChunkContainerSlice(
+          this.getRectangleShape().transformed( transform ),
+          -i * ( EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ),
+          this.positionProperty ) );
       }
     },
 
@@ -114,20 +117,30 @@ define( function( require ) {
      * Get a rectangle the defines the current shape in model space.  By convention for this simulation, the position
      * is the middle of the bottom of the block's defining rectangle.
      *
-     * @return {Rectangle} rectangle that defines this item's 2D shape
+     * @return {Shape} rectangle that defines this item's 2D shape
      */
-    getRect: function() {
-      return new Rectangle( this.position.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
+    getRectangleShape: function() {
+      return Shape.rectangle( this.position.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
         this.position.y,
         EFACConstants.BLOCK_SURFACE_WIDTH,
         EFACConstants.BLOCK_SURFACE_WIDTH );
     },
 
     /**
+     * Convenience function to get the rectangle bounds.  Outlining bounds are needed in multiple places throughout the
+     * sim.
+     *
+     * @returns {Bounds2}
+     */
+    getRectangleBounds: function() {
+      return this.getRectangleShape().bounds;
+    },
+
+    /**
      * @private
      */
     updateTopSurfaceProperty: function() {
-      var rectangle = this.getRect();
+      var rectangle = this.getRectangleBounds();
       this.topSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
     },
 
@@ -135,7 +148,7 @@ define( function( require ) {
      * @private
      */
     updateBottomSurfaceProperty: function() {
-      var rectangle = this.getRect();
+      var rectangle = this.getRectangleBounds();
       this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
     },
 

@@ -181,7 +181,7 @@ define( function( require ) {
 
     requestEnergyChunk: function( point ) {
       // Create a new chunk at the top of the air above the specified point.
-      return new EnergyChunk( EnergyType.THERMAL, new Vector2( point.x, SIZE.height ), new Vector2( 0, 0 ), this.energyChunksVisibleProperty.value );
+      return new EnergyChunk( EnergyType.THERMAL, new Vector2( point.x, SIZE.height ), new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
     },
 
     /**

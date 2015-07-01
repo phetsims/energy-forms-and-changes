@@ -27,6 +27,8 @@ define( function( require ) {
   var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Transform3 = require( 'DOT/Transform3' );
+  var Matrix3 = require( 'DOT/Matrix3' );
 
   // constants
   var LABEL_FONT = new PhetFont( 32, false );
@@ -52,10 +54,15 @@ define( function( require ) {
 
     this.block = block;
     this.approachingEnergyChunkParentNode = null;
+    this.modelViewTransform = modelViewTransform;
+
+    // Extract the scale transform from the MVT so that we can separate the shape from the position of the block.
+    var scaleVector = modelViewTransform.matrix.getScaleVector();
+    var scaleTransform =  new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
 
     // Create the shape for the front of the block.
-    var blockRectInViewCoords = modelViewTransform.modelToViewShape( block.getRawShape() );
-    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRect().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
+    var blockRectInViewCoords = scaleTransform.transformShape( block.getRawShape() );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRectangleBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
@@ -94,14 +101,14 @@ define( function( require ) {
       .lineToPoint( upperLeftBackCorner );
 
     // Add the back of the block.
-    var blockBack = new Path( blockBackShape, { linewidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } );
+    var blockBack = new Path( blockBackShape, { lineWidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } );
     this.addChild( blockBack );
 
     // Create the layers where the energy chunks will be placed.
-    var energyChunkRootNode = new Node();
-    this.addChild( energyChunkRootNode );
+    this.energyChunkRootNode = new Node();
+    this.addChild( this.energyChunkRootNode ); // TODO: Adding this later.  There seems to be some layout issue with this.
     for ( var i = block.slices.length - 1; i >= 0; i-- ) {
-      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
+      this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
     }
 
     // Add the face, top, and sides of the block.
@@ -135,7 +142,7 @@ define( function( require ) {
     // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed.
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ? energyChunkRootNode : thisNode.approachingEnergyChunkParentNode;
+      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ? thisNode.approachingEnergyChunkParentNode : thisNode.approachingEnergyChunkParentNode;
       parentNode.addChild( energyChunkNode );
       block.approachingEnergyChunks.addItemRemovedListener( function( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
@@ -156,14 +163,21 @@ define( function( require ) {
 
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      thisNode.centerBottom = modelViewTransform.modelToViewPosition( newPosition );
+      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition );
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      //energyChunkRootNode.leftTop = modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
+      // TODO: Not sure why this is not working yet.
+      thisNode.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
     } );
 
+    // testing rectangle to figure out location bug.
+    //this.addChild( new Rectangle( this.bounds, { fill: 'rgba( 1, 0, 0, 0.75 )', center: this.center } ) );
+
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2( this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ), this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
+    // TODO: Resolve some buggy layout issues before this is added.
+    var offsetPosToCenter = new Vector2(
+      this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
+      this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
     this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
       new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }

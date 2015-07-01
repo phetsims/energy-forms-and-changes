@@ -10,7 +10,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
+  //var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var LinearFunction = require( 'DOT/LinearFunction' );
@@ -25,6 +25,10 @@ define( function( require ) {
   var TRIANGLE_SIDE_SIZE = 15; // In screen coordinates, which is close to pixels.
   var NUM_TICK_MARKS = 13;
   var TICK_MARK_STROKE_LINEWIDTH = 2;
+
+  // images
+  var thermometerMediumBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/thermometer_medium_back.png' );
+  var thermometerMediumFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/thermometer_medium_front.png' );
 
   /*
    * Constructor.
@@ -44,7 +48,7 @@ define( function( require ) {
     var frontLayer = new Node();
     rootNode.addChild( frontLayer );
     // Add the back of the thermometer.
-    var thermometerBack = new Image( EnergyFormsAndChangesResources.THERMOMETER_MEDIUM_BACK );
+    var thermometerBack = new Image( thermometerMediumBackImage );
     backLayer.addChild( thermometerBack );
     // clip will prevent the liquid from ever appearing to pop out the top.
     var liquidShaftClipNode = new Node();
@@ -82,7 +86,7 @@ define( function( require ) {
 
 
     // Add the image for the front of the thermometer.
-    frontLayer.addChild( new Image( EnergyFormsAndChangesResources.THERMOMETER_MEDIUM_FRONT ) );
+    frontLayer.addChild( new Image( thermometerMediumFrontImage ) );
     // Add the tick marks.  There are some tweak factors here.
     var tickMarkXOffset = thermometerBack.width * 0.3;
     var shortTickMarkWidth = thermometerBack.width * 0.1;

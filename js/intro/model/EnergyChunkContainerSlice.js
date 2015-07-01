@@ -9,13 +9,13 @@
  * @author Martin Veillette
  */
 
-
-define( function() {
+define( function( require ) {
   'use strict';
 
   //modules
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Matrix3 = require( 'DOT/Matrix3' );
 
   /**
    *
@@ -25,21 +25,25 @@ define( function() {
    * @constructor
    */
   function EnergyChunkContainerSlice( shape, zPosition, anchorPointProperty ) {
-    var self = this;
+
+    var thisContainerSlice = this;
     this.shape = shape;
     this.zPosition = zPosition;
-
     this.energyChunkList = new ObservableArray();
 
     // Monitor the anchor position and move the contained energy chunks to match.
-    anchorPointProperty.link( function( newPosition ) {
-      // Translation vector is new position minus the old position.
-      var translation = newPosition.minus( anchorPointProperty.get() );
-      //TODO How to do this in javascript?
-      //self.shape = AffineTransform.getTranslateInstance( translation.x, translation.y ).createTransformedShape( this.shape );
-      self.energyChunkList.forEach( function( energyChunk ) {
-        energyChunk.translate( translation );
-      } );
+    anchorPointProperty.link( function( newPosition, oldPosition ) {
+      // null check for first set of position.
+      if ( oldPosition !== null ) {
+        // Translation vector is new position minus the old position.
+        var translation = newPosition.minus( oldPosition );
+        // TODO: Check this ported transform, Java code left in for now.
+        thisContainerSlice.shape = thisContainerSlice.shape.transformed( Matrix3.translationFromVector( translation ) );
+        //EnergyChunkContainerSlice.this.shape = AffineTransform.getTranslateInstance( translation.getX(), translation.getY() ).createTransformedShape( EnergyChunkContainerSlice.this.shape );
+        thisContainerSlice.energyChunkList.forEach( function( energyChunk ) {
+          energyChunk.translate( translation.x, translation.y );
+        } );
+      }
     } );
   }
 

@@ -82,7 +82,7 @@ define( function( require ) {
      * Function that updates the bottom and top surfaces
      */
     function updateSurfaces() {
-      var rectangle = thisBeaker.getRect();
+      var rectangle = thisBeaker.getRectangleBounds();
       thisBeaker.topSurface = new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
       thisBeaker.bottomSurface = new HorizontalSurface(
         new Range( rectangle.minX, rectangle.maxX ),
@@ -109,12 +109,16 @@ define( function( require ) {
      *
      * @returns {Rectangle}
      */
-    getRect: function() {
-      return new Rectangle(
+    getRectangleShape: function() {
+      return Shape.rectangle(
         this.position.x - this.width / 2,
         this.position.y,
         this.width,
         this.height );
+    },
+
+    getRectangleBounds: function() {
+      return this.getRectangleShape().bounds;
     },
 
     /**
@@ -175,16 +179,18 @@ define( function( require ) {
         var initialChunkBounds = thisBeaker.getSliceBounds();
         while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
           // Add a chunk at a random location in the beaker.
-          thisBeaker.addEnergyChunkToNextSlice( new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ), new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty.get() ) );
+          thisBeaker.addEnergyChunkToNextSlice(
+            new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
+              new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty ) );
         }
 
         // Distribute the energy chunks within the beaker.
         // TODO: Why 1000 for the loop max?
-        for ( var i = 0; i < 1000; i++ ) {
-          if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-            break;
-          }
-        }
+        //for ( var i = 0; i < 1000; i++ ) {
+        //  if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+        //    break;
+        //  }
+        //}
       } );
     },
 
@@ -284,7 +290,6 @@ define( function( require ) {
           .lineTo( centerX + sliceWidth / 2, topY )
           .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
           .lineTo( centerX - sliceWidth / 2, bottomY );
-
         this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.positionProperty ) );
       }
     },
