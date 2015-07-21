@@ -80,6 +80,8 @@ heater_element_dark.png source=PhET author=Noah P
 incandescent_2.png source=PhET author=Noah P
 incandescent_icon.png source=PhET author=Noah P
 incandescent_on_3.png source=PhET author=Noah P
+mockup_energy_systems.png source=PhET
+mockup_intro.png source=PhET
 license.txt source=PhET author=Noah P
 shelf_long.png source=PhET author=Noah P
 solar_panel.png source=PhET author=Noah P
