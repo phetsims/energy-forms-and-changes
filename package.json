@@ -2,6 +2,7 @@
   "name": "energy-forms-and-changes",
   "version": "1.0.0-dev.1",
   "license": "GPLv3",
+  "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
   "simTitleStringKey": "ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name",
   "phetLibs": [
     "energy-forms-and-changes"
