@@ -15,9 +15,6 @@
   },
   "phet": {
     "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
-    "simTitleStringKey": "ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name",
-    "phetLibs": [
-      "energy-forms-and-changes"
-    ]
+    "simTitleStringKey": "ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name"
   }
 }
