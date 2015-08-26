@@ -38,10 +38,10 @@ define( function( require ) {
     energyChunkContainerSlice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       self.addChild( energyChunkNode );
-      energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function( removedEnergyChunk ) {
+      energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           self.removeChild( energyChunkNode );
-          energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( this );
+          energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( removalListener );
         }
       } );
     } );

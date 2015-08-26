@@ -23,8 +23,8 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
+  //var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  //var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Transform3 = require( 'DOT/Transform3' );
@@ -35,7 +35,7 @@ define( function( require ) {
   var OUTLINE_LINEWIDTH = 3;
   var OUTLINE_STROKE = Color.DARK_GRAY;
 
-  var SHOW_2D_REPRESENTATION = false;
+  var SHOW_2D_REPRESENTATION = true;
 
   /**
    * Constructor for a BlockNode.
@@ -58,7 +58,7 @@ define( function( require ) {
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position of the block.
     var scaleVector = modelViewTransform.matrix.getScaleVector();
-    var scaleTransform =  new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
+    var scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
 
     // Create the shape for the front of the block.
     var blockRectInViewCoords = scaleTransform.transformShape( block.getRawShape() );
@@ -120,10 +120,11 @@ define( function( require ) {
     this.addChild( blockSide );
 
     if ( SHOW_2D_REPRESENTATION ) {
-      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( block.getRawShape() ), {
-        stroke: 'red',
-        lineWidth: 1
-      } ) );
+      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( block.getRawShape(), {
+          fill: 'red',
+          lineWidth: 1
+        } )
+      ) );
     }
 
     // Position and add the label.
@@ -168,18 +169,19 @@ define( function( require ) {
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
       // TODO: Not sure why this is not working yet.
       thisNode.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
+      //thisNode.energyChunkRootNode.centerBottom = modelViewTransform.modelToViewPosition( newPosition )
     } );
 
     // testing rectangle to figure out location bug.
-    //this.addChild( new Rectangle( this.bounds, { fill: 'rgba( 1, 0, 0, 0.75 )', center: this.center } ) );
+    //this.addChild( new Rectangle( this.bounds, { fill: 'rgba( 1, 0, 0, 0.75 )', bottomCenter: this.bottomCenter } ) );
 
     // Add the drag handler.
     // TODO: Resolve some buggy layout issues before this is added.
-    var offsetPosToCenter = new Vector2(
-      this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
-      this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
-      new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
+    //var offsetPosToCenter = new Vector2(
+    //  this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
+    //  this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
+    //this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
+    //  new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( Node, BlockNode, {
@@ -210,7 +212,7 @@ define( function( require ) {
 
       // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
       // entirely covered up.
-      root.addChild( new Path( shape, {fill: fillColor }) );
+      root.addChild( new Path( shape, { fill: fillColor } ) );
 
       if ( textureImage !== null ) {
 

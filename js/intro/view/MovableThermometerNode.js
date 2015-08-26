@@ -21,7 +21,6 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-
   /**
    * Constructor for the Movable Thermometer Node.
    *
@@ -46,7 +45,8 @@ define( function( require ) {
     var offsetPosToCenter = new Vector2(
       this.centerX - modelViewTransform.modelToViewX( thermometer.position.x ),
       this.centerY - modelViewTransform.modelToViewY( thermometer.position.y ) );
-    this.addInputListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform, new ThermometerLocationConstraint( modelViewTransform, this, stageSize, offsetPosToCenter ) ) );
+    this.addInputListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform,
+      new ThermometerLocationConstraint( modelViewTransform, this, stageSize, offsetPosToCenter ) ) );
 
   }
 
@@ -63,15 +63,15 @@ define( function( require ) {
     this.modelBounds = new Rectangle( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
   }
 
-  return inherit( SensingThermometerNode, MovableThermometerNode, {
+  inherit( Object, ThermometerLocationConstraint, {
 
     apply: function( proposedModelPosition ) {
-
       // TODO: These bounds calculations for the constraint should be handled by MovableDragHandler.
       var constrainedXPos = Util.clamp( this.modelBounds.minX, proposedModelPosition.x, this.modelBounds.maxX );
       var constrainedYPos = Util.clamp( this.modelBounds.minY, proposedModelPosition.y, this.modelBounds.maxY );
       return new Vector2( constrainedXPos, constrainedYPos );
-
     }
   } );
+
+  return inherit( SensingThermometerNode, MovableThermometerNode );
 } );

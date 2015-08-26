@@ -292,7 +292,10 @@ define( function( require ) {
         energyChunkWanderController.updatePosition( dt );
         if ( energyChunkWanderController.destinationReached() ) {
           thisBurner.energyChunkList.remove( energyChunkWanderController.energyChunk );
-          thisBurner.energyChunkWanderControllers.remove( energyChunkWanderController );
+          var index = thisBurner.energyChunkWanderControllers.indexOf( energyChunkWanderController );
+          if ( index > -1 ) {
+            thisBurner.energyChunkWanderControllers.splice( index, 1 );
+          }
         }
       } );
     },

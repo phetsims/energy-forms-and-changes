@@ -28,29 +28,31 @@ define( function( require ) {
       follower: follower === null ? new Vector2( 0, 0 ) : follower,
       locationBeingFollowed: null
     } );
-
     this.offset = new Vector2( 0, 0 );
 
+    var thisThermometer = this;
+    // @private - function that gets linked/unlinked when the thermometer is following/unfollwing.
+    this.followerFunction = function( location ) {
+      thisThermometer.follower = location.plus( thisThermometer.offset );
+    };
   }
 
   inherit( PropertySet, ElementFollower, {
 
-    followerFunction: function( location ) {
-      this.follower = location.plus( this.offset );
-    },
-
     follow: function( locationToFollowProperty ) {
+      var thisThermometer = this;
       if ( this.locationBeingFollowed !== null ) {
-        this.locationBeingFollowed.unlink( this.followerFunction );
+        this.locationBeingFollowed.unlink( thisThermometer.followerFunction );
       }
       this.offset = this.follower.minus( locationToFollowProperty.get() );
-      locationToFollowProperty.link( this.followerFunction );
+      locationToFollowProperty.link( thisThermometer.followerFunction );
       this.locationBeingFollowed = locationToFollowProperty.get();
     },
 
     stopFollowing: function() {
+      var thisThermometer = this;
       if ( this.locationBeingFollowed !== null ) {
-        this.locationBeingFollowedProperty.unlink( this.followerFunction );
+        this.locationBeingFollowedProperty.unlink( thisThermometer.followerFunction );
         this.locationBeingFollowed = null;
       }
     },
@@ -91,13 +93,13 @@ define( function( require ) {
           if ( model.getBlockList.hasOwnProperty( block ) ) {
             if ( block.getProjectedShape().containsPoint( thisElementFollowingThermometer.position ) ) {
               // stick to this block.
-              thisElementFollowingThermometer.elementFollower.follow( block.position );
+              thisElementFollowingThermometer.elementFollower.follow( block.positionProperty );
             }
           }
         }
         if ( !thisElementFollowingThermometer.elementFollower.isFollowing() && model.beaker.getThermalContactArea().containsPoint( thisElementFollowingThermometer.position ) ) {
           // Stick to the beaker.
-          thisElementFollowingThermometer.elementFollower.follow( model.beaker.position );
+          thisElementFollowingThermometer.elementFollower.follow( model.beaker.positionProperty );
         }
       }
     } );

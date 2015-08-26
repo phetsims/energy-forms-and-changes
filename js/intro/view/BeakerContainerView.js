@@ -18,9 +18,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   //var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
-  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
-  var Vector2 = require( 'DOT/Vector2' );
+  //var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  //var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
+  //var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * Constructor for a BeakerContainerView.
@@ -49,8 +49,8 @@ define( function( require ) {
     } );
 
     // TODO: Remove offsetPosToCenter input - this is calculated in MovableDragHandler.
-    this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,
-      new ThermalItemMotionConstraint( model, model.beaker, this.grabNode, stageBounds, modelViewTransform, new Vector2( 0, 0 ) ) ) );
+    //this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,
+    //  new ThermalItemMotionConstraint( model, model.beaker, this.grabNode, stageBounds, modelViewTransform, new Vector2( 0, 0 ) ) ) );
 
   }
 

@@ -43,7 +43,7 @@ define( function( require ) {
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
-      console.log( 'block position changing' );
+      //console.log( 'block position changing' );
       thisBlock.updateTopSurfaceProperty();
       thisBlock.updateBottomSurfaceProperty();
     } );

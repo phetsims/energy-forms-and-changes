@@ -4,7 +4,7 @@
  * Model for the 'Energy Systems' screen of the Energy Forms And Changes simulation.
  *
  * @author John Blanco
- * @author Martin Veillette (Berea College)
+ * @author Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
