@@ -16,7 +16,7 @@ define( function( require ) {
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
   // strings
-  var simTitle = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.name' );
+  var simTitle = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.title' );
 
   var simOptions = {
     credits: {
