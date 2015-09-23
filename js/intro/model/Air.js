@@ -37,7 +37,7 @@ define( function( require ) {
   // volume calculations.
   var DEPTH = 0.1; // In meters.
 
-  // Constants that define the heat carrying capacity of the air.
+  // constants that define the heat carrying capacity of the air.
   var SPECIFIC_HEAT = 1012; // In J/kg-K, source = design document.
   // var DENSITY = 0.001; // In kg/m^3, source = design document (and common knowledge).
   var DENSITY = 10; // In kg/m^3, far more dense than real air, done to make things cool faster.

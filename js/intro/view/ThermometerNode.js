@@ -19,7 +19,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants that define the size and relative position of the triangle.
+  // constants that define the size and relative position of the triangle.
   // These values will need tweaking if the images used for the thermometer
   // are changed.
   var TRIANGLE_SIDE_SIZE = 15; // In screen coordinates, which is close to pixels.
@@ -198,7 +198,7 @@ define( function( require ) {
 //  // Class Data
 //  //-------------------------------------------------------------------------
 //
-//  // Constants that define the size and relative position of the triangle.
+//  // constants that define the size and relative position of the triangle.
 //  // These values will need tweaking if the images used for the thermometer
 //  // are changed.
 //  private static final double TRIANGLE_SIDE_SIZE = 15; // In screen coordinates, which is close to pixels.
