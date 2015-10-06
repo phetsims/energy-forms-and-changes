@@ -352,7 +352,7 @@ define( function( require ) {
       } );
 
       if ( densestSlice === null || densestSlice.energyChunkList.length === 0 ) {
-        console.log( " - Warning: No energy chunks in the beaker, can't extract any." );
+        console.log( ' - Warning: No energy chunks in the beaker, can\'t extract any.' );
         return null;
       }
 

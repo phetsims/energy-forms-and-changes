@@ -11,7 +11,7 @@ define( function( require ) {
 
 // Resources
 
-    PROJECT_NAME: "energy-forms-and-changes",
+    PROJECT_NAME: 'energy-forms-and-changes',
     //public static final PhetResources RESOURCES : new PhetResources( PROJECT_NAME );
 
 

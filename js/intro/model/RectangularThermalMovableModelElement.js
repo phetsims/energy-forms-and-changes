@@ -302,7 +302,7 @@ define( function( require ) {
 
       // Fail safe - If nothing found, get the first chunk.
       if ( chunkToExtract === null ) {
-        console.log( " - Warning: No energy chunk found by extraction algorithm, trying first available.." );
+        console.log( ' - Warning: No energy chunk found by extraction algorithm, trying first available..' );
         var length = this.slices.length;
         for ( var i = 0; i < length; i++ ) {
           if ( this.slices[ i ].energyChunkList.length > 0 ) {
@@ -311,7 +311,7 @@ define( function( require ) {
           }
         }
         if ( chunkToExtract === null ) {
-          console.log( " - Warning: No chunks available for extraction." );
+          console.log( ' - Warning: No chunks available for extraction.' );
         }
       }
 

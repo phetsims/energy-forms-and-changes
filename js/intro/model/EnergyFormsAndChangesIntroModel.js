@@ -188,7 +188,7 @@ define( function( require ) {
       if ( ENABLE_INTERNAL_PROFILING ) {
         var time = new Date().getTime();
         if ( previousTime !== 0 && time - previousTime > 48 || countUnderMin + 1 >= TIME_ARRAY_LENGTH ) {
-          console.log( "----------------------" );
+          console.log( '----------------------' );
           for ( var i = 0; i < countUnderMin; i++ ) {
             console.log( times[ i ] + ' ' );
           }
