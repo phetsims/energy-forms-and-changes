@@ -144,6 +144,7 @@ define( function( require ) {
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevel * dt;
       if ( deltaEnergy > 0 ) {
+        // TODO: is this a special case?
       }
       air.changeEnergy( deltaEnergy );
       this.energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;

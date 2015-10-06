@@ -1,3 +1,5 @@
+// Copyright 2002-2015, University of Colorado Boulder
+
 /**
  * A node that represents a 2D surface on which energy chunks reside.  The
  * surface contains z-dimension information, and can thus be used to create an

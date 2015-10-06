@@ -37,7 +37,7 @@ define( function( require ) {
     noneString: require( 'string!ENERGY_FORMS_AND_CHANGES/none' ),
     normalString: require( 'string!ENERGY_FORMS_AND_CHANGES/normal' ),
     thermalString: require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' ),
-    waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' ),
+    waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' )
 
 //Images
 
