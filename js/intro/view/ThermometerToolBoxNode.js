@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Scenery Node that is used to represent thermometers in the tool box and that
@@ -93,7 +93,7 @@ define( function( require ) {
 
 
 //
-//// Copyright 2002-2015, University of Colorado
+//// Copyright 2002-2015, University of Colorado Boulder
 
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //

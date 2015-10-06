@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Node that represents a block in the view.  The blocks in the model are 2D, and this class gives them some perspective

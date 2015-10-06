@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Model element that represents a burner in the simulation.  The burner can heat and also cool other model elements.

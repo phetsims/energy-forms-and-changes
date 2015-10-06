@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * A movable model element that contains thermal energy and that, at least in the model, has an overall shape that can

@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Node that represents a burner stand in the view.  A burner stand is a faux-3D representation of an object upon which other objects may be placed in

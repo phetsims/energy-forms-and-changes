@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  *  Function that represents a thermometer in the view.
@@ -162,7 +162,7 @@ define( function( require ) {
 } )
 ;
 //
-//// Copyright 2002-2015, University of Colorado
+//// Copyright 2002-2015, University of Colorado Boulder
 
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //

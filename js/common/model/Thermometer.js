@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Basic thermometer that senses temperature, has a position. The thermometer has only a point and a temperature in the model.  Its visual

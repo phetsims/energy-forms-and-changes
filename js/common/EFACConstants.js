@@ -1,6 +1,5 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
-
 /**
  * Shared constants used in multiple locations within the sim.
  *

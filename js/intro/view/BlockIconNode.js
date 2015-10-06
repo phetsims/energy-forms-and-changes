@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Created for the Heat Capacity Lab (HCL) prototype, clean up and document if kept.
@@ -64,7 +64,7 @@ define( function( require ) {
 } );
 
 //
-//// Copyright 2002-2015, University of Colorado
+//// Copyright 2002-2015, University of Colorado Boulder
 
 //package edu.colorado.phet.energyformsandchanges.intro.view;
 //

@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Class that represents a 2D space that can come into contact with other thermal areas.  This is basically just a

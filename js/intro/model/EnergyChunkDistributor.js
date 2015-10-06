@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * A class that contains  methods for redistributing a set of energy chunks within a shape.  The basic approach is to
