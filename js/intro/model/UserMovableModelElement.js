@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  * Base class for model elements that can be moved around by the user.

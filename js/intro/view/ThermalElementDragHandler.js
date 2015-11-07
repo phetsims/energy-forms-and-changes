@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  * Drag handler for objects that can be moved by the user.  This is constructed with a constraint boundary that defines

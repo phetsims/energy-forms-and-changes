@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  * This class represents a "slice" within a 2D container that contains a set of energy chunks and can be used to add some limited 3D capabilities by

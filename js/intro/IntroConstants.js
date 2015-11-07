@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2015, University of Colorado Boulder
 
 /**
  * Constants used in the Intro screen of Energy Forms and Changes.

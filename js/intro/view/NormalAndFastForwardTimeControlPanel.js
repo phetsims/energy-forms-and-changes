@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  * Clock control panel that shows "Normal Speed" and "Fast Forward" as radio buttons with a play/pause and step button.

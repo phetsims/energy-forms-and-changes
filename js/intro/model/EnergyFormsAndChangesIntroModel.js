@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  *  Model for the 'Intro' screen of the Energy Forms And Changes simulation.
