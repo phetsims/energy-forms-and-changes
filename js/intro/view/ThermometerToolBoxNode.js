@@ -39,7 +39,8 @@ define( function( require ) {
 
     this.addInputListener( new SimpleDragHandler( {
 
-      parentScreen: null, // needed for coordinate transforms
+      parentScreenView: null, // needed for coordinate transforms
+
       // Allow moving a finger (touch) across a node to pick it up.
       allowTouchSnag: true,
 
@@ -47,23 +48,27 @@ define( function( require ) {
         thermometer.userControlled = true;
         thermometer.active = true;
 
-        // Find the parent screen by moving up the scene graph.
-        var testNode = self;
-        while ( testNode !== null ) {
-          if ( testNode instanceof ScreenView ) {
-            this.parentScreen = testNode;
-            break;
+        if ( !this.parentScreenView ) {
+
+          // find the parent screen view by moving up the scene graph
+          var testNode = self;
+          while ( testNode !== null ) {
+            if ( testNode instanceof ScreenView ) {
+              this.parentScreenView = testNode;
+              break;
+            }
+            testNode = testNode.parents[ 0 ]; // move up the scene graph by one level
           }
-          testNode = testNode.parents[ 0 ]; // Move up the scene graph by one level
+          assert && assert( this.parentScreenView, 'unable to find parent screen view' );
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var triangleTipGlobal = self.parentToGlobalPoint( self.rightCenter.plus( thermometerNode.getOffsetCenterShaftToTriangleTip() ) );
-        var initialPosition = this.parentScreen.globalToLocalPoint( triangleTipGlobal );
+        var initialPosition = this.parentScreenView.globalToLocalPoint( triangleTipGlobal );
 
         thermometer.position = modelViewTransform.viewToModelPosition( initialPosition );
-
       },
+
       // Handler that moves the shape in model space.
       translate: function( translationParams ) {
         thermometer.position = thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
