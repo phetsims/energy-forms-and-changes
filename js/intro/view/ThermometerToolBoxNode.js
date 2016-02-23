@@ -37,9 +37,8 @@ define( function( require ) {
       self.visible = !active;
     } );
 
+    var parentScreenView = null;
     this.addInputListener( new SimpleDragHandler( {
-
-      parentScreenView: null, // needed for coordinate transforms
 
       // Allow moving a finger (touch) across a node to pick it up.
       allowTouchSnag: true,
@@ -48,23 +47,23 @@ define( function( require ) {
         thermometer.userControlled = true;
         thermometer.active = true;
 
-        if ( !this.parentScreenView ) {
+        if ( !parentScreenView ) {
 
           // find the parent screen view by moving up the scene graph
           var testNode = self;
           while ( testNode !== null ) {
             if ( testNode instanceof ScreenView ) {
-              this.parentScreenView = testNode;
+              parentScreenView = testNode;
               break;
             }
             testNode = testNode.parents[ 0 ]; // move up the scene graph by one level
           }
-          assert && assert( this.parentScreenView, 'unable to find parent screen view' );
+          assert && assert( parentScreenView, 'unable to find parent screen view' );
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var triangleTipGlobal = self.parentToGlobalPoint( self.rightCenter.plus( thermometerNode.getOffsetCenterShaftToTriangleTip() ) );
-        var initialPosition = this.parentScreenView.globalToLocalPoint( triangleTipGlobal );
+        var initialPosition = parentScreenView.globalToLocalPoint( triangleTipGlobal );
 
         thermometer.position = modelViewTransform.viewToModelPosition( initialPosition );
       },
