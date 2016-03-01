@@ -7,7 +7,7 @@
 define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
-  var MovableDragHandler =  require( 'SCENERY_PHET/input/MovableDragHandler' );
+  var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   var Bounds2 = require( 'DOT/Bounds2' );
 
   /**
@@ -33,11 +33,11 @@ define( function( require ) {
       dragBounds: modelViewTransform.viewToModelBounds( new Bounds2( 0, 0, 1024, 618 ) ),
 
       startDrag: function( event ) {
-        modelElement.userControlled = true;
+        modelElement.userControlledProperty.set( true );
       },
 
       endDrag: function( event ) {
-        modelElement.userControlled = false;
+        modelElement.userControlledProperty.set( false );
       },
 
       onDrag: function( event ) {
@@ -54,12 +54,12 @@ define( function( require ) {
 
       //start: function( event, trail ) {
       //  MovableDragHandler.prototype.start.call( this );
-      //  modelElement.userControlled = true;
+      //  modelElement.userControlledProperty.set(true);
       //},
       //
       //end: function( event, trail ) {
       //  SimpleDragHandler.prototype.end.call( this );
-        //modelElement.userControlled = false;
+      //modelElement.userControlledProperty.set(fals)e;
 
     } );
   }
