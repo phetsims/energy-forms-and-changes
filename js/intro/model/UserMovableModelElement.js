@@ -26,7 +26,7 @@ define( function( require ) {
     ModelElement.call( this );
 
     this.addProperty( 'userControlled', false );
-    this.addProperty( 'position', initialPosition );// Position of the center of the bottom of the block.
+    this.addProperty( 'position', initialPosition ); // Position of the center of the bottom of the block.
     this.addProperty( 'verticalVelocity', 0 ); //Velocity in the up/down direction.
 
     // Observer that moves this model element if and when the surface that is
@@ -39,11 +39,10 @@ define( function( require ) {
       if ( userControlled ) {
         // The user has grabbed this model element, so it is no
         // longer sitting on any surface.
-        if ( self.supportingSurfaceProperty !== null ) {
+        if ( self.supportingSurfaceProperty.value !== null ) {
           self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
-          //TODO change and reinstate;
-          //    self.getSupportingSurfaceProperty().value.clearSurface();
-          //    self.setSupportingSurfaceProperty( null );
+          self.getSupportingSurfaceProperty().value.clearSurface();
+          self.setSupportingSurfaceProperty( null );
         }
       }
     } );
@@ -63,13 +62,13 @@ define( function( require ) {
     },
 
     /**
-     *
-     * @param {Property.<HorizontalSurface>} surfaceProperty
+     * Assign the surface property (as an object, not a value)
+     * @param {Property.<HorizontalSurface>} supportingSurface
      */
-    setSupportingSurfaceProperty: function( surfaceProperty ) {
-      this.setSupportingSurfaceProperty( surfaceProperty );
-      if ( surfaceProperty !== null ) {
-        surfaceProperty.link( this.surfaceMotionObserver );
+    setSupportingSurfaceProperty: function( supportingSurface ) {
+      this.supportingSurfaceProperty.value = supportingSurface;
+      if ( supportingSurface !== null ) {
+        supportingSurface.link( this.surfaceMotionObserver );
       }
     },
 
@@ -82,4 +81,3 @@ define( function( require ) {
     }
   } );
 } );
-

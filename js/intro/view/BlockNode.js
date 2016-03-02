@@ -23,8 +23,8 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
-  //var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  //var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
+  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Transform3 = require( 'DOT/Transform3' );
@@ -50,7 +50,9 @@ define( function( require ) {
 
     var thisNode = this;
 
-    Node.call( this, { cursor: 'pointer' } );
+    Node.call( this, {
+      cursor: 'pointer'
+    } );
 
     this.block = block;
     this.approachingEnergyChunkParentNode = null;
@@ -101,7 +103,10 @@ define( function( require ) {
       .lineToPoint( upperLeftBackCorner );
 
     // Add the back of the block.
-    var blockBack = new Path( blockBackShape, { lineWidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } );
+    var blockBack = new Path( blockBackShape, {
+      lineWidth: OUTLINE_LINEWIDTH,
+      stroke: OUTLINE_STROKE
+    } );
     this.addChild( blockBack );
 
     // Create the layers where the energy chunks will be placed.
@@ -121,10 +126,9 @@ define( function( require ) {
 
     if ( SHOW_2D_REPRESENTATION ) {
       this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( block.getRawShape(), {
-          fill: 'red',
-          lineWidth: 1
-        } )
-      ) );
+        fill: 'red',
+        lineWidth: 1
+      } ) ) );
     }
 
     // Position and add the label.
@@ -132,11 +136,11 @@ define( function( require ) {
     label.setFont( LABEL_FONT );
     if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) ) {
       // Scale the label to fit on the face of the block.  This also supports translations.
-      var scale = ( modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width);
+      var scale = ( modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width );
       label.setScale( scale );
     }
-    var labelCenterX = (upperLeftFrontCorner.x + upperRightFrontCorner.x) / 2;
-    var labelCenterY = (upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2);
+    var labelCenterX = ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2;
+    var labelCenterY = ( upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2 );
     label.center = new Vector2( labelCenterX, labelCenterY );
     this.addChild( label );
 
@@ -177,11 +181,11 @@ define( function( require ) {
 
     // Add the drag handler.
     // TODO: Resolve some buggy layout issues before this is added.
-    //var offsetPosToCenter = new Vector2(
-    //  this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
-    //  this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
-    //this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
-    //  new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
+    var offsetPosToCenter = new Vector2(
+      this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
+      this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
+    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
+      new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   return inherit( Node, BlockNode, {
@@ -208,11 +212,15 @@ define( function( require ) {
      */
     createSurface: function( shape, fillColor, textureImage ) {
 
-      var root = new Node( { clipArea: shape } );
+      var root = new Node( {
+        clipArea: shape
+      } );
 
       // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
       // entirely covered up.
-      root.addChild( new Path( shape, { fill: fillColor } ) );
+      root.addChild( new Path( shape, {
+        fill: fillColor
+      } ) );
 
       if ( textureImage !== null ) {
 
@@ -235,7 +243,10 @@ define( function( require ) {
       }
 
       // Add the outlined shape so that edges are visible.
-      root.addChild( new Path( shape, { lineWidth: OUTLINE_LINEWIDTH, stroke: OUTLINE_STROKE } ) );
+      root.addChild( new Path( shape, {
+        lineWidth: OUTLINE_LINEWIDTH,
+        stroke: OUTLINE_STROKE
+      } ) );
 
       return root;
 
