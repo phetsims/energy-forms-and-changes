@@ -168,12 +168,12 @@ define( function( require ) {
 
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition );
+      var offset = block.getRawShape().height;
+      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) );
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
       // TODO: Not sure why this is not working yet.
-      thisNode.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
-      //thisNode.energyChunkRootNode.centerBottom = modelViewTransform.modelToViewPosition( newPosition )
+      thisNode.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
 
     // testing rectangle to figure out location bug.
