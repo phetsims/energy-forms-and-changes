@@ -29,9 +29,9 @@ define( function( require ) {
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
 
   // constants
-//   Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
-//  var EDGE_INSET = 10;
-//  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
+  // Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
+  // var EDGE_INSET = 10;
+  // var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
   // Initial thermometer location, intended to be away from any model objects.
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
@@ -88,7 +88,8 @@ define( function( require ) {
 
     // Add and position the beaker.
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
-    this.beaker = new BeakerContainer( new Vector2( -0.015, 0 ), BEAKER_WIDTH, BEAKER_HEIGHT, listOfThingsThatCanGoInBeaker, this.energyChunksVisibleProperty );
+    this.beaker = new BeakerContainer( new Vector2( -0.015, 0 ), BEAKER_WIDTH, BEAKER_HEIGHT,
+      listOfThingsThatCanGoInBeaker, this.energyChunksVisibleProperty );
 
     // Put all the thermal containers on a list for easy iteration.
     this.movableThermalEnergyContainers = [ this.brick, this.ironBlock, this.beaker ];
@@ -105,8 +106,10 @@ define( function( require ) {
       var thermometer = new ElementFollowingThermometer( this, INITIAL_THERMOMETER_LOCATION, false );
       this.thermometers.push( thermometer );
 
-      // Add handling for a special case where the user drops something (generally a block) in the beaker behind this thermometer.
-      // The action is to automatically move the thermometer to a location where it continues to sense the beaker temperature.
+      // Add handling for a special case where the user drops something (generally a block) in the beaker
+      // behind this thermometer.
+      // The action is to automatically move the thermometer to a location where it continues to sense
+      // the beaker temperature.
       // This was requested after interviews.
       thermometer.sensedElementColorProperty.link( function( newColor, oldColor ) {
 
@@ -117,7 +120,9 @@ define( function( require ) {
           thisModel.beaker.getRectangleBounds().centerX + blockWidthIncludingPerspective / 2
         );
 
-        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled && xRange.contains( thermometer.position.x ) ) {
+        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER &&
+          !thermometer.userControlled &&
+          xRange.contains( thermometer.position.x ) ) {
           thermometer.userControlled = true; // Must toggle userControlled to enable element following.
           thermometer.position = new Vector2(
             thisModel.beaker.getRectangleBounds().maxX - 0.01,
@@ -201,7 +206,9 @@ define( function( require ) {
       // towards the nearest supporting surface.
       this.movableThermalEnergyContainers.forEach( function( movableModelElement ) {
 
-        if ( !movableModelElement.userControlled && movableModelElement.supportingSurface === null && movableModelElement.position.y !== 0 ) {
+        if ( !movableModelElement.userControlled &&
+          movableModelElement.supportingSurface === null &&
+          movableModelElement.position.y !== 0 ) {
           var minYPos = 0;
 
           //Determine whether there is something below this element that it can land upon.
@@ -227,8 +234,7 @@ define( function( require ) {
               movableModelElement.supportingSurface = potentialSupportingSurface.value;
               potentialSupportingSurface.value.addElementToSurface( movableModelElement );
             }
-          }
-          else {
+          } else {
             movableModelElement.verticalVelocity = velocity;
           }
 
@@ -250,7 +256,8 @@ define( function( require ) {
 
       // Loop through all the movable thermal energy containers and have them exchange energy with one another.
       thisModel.movableThermalEnergyContainers.forEach( function( energyContainer1, index ) {
-        thisModel.movableThermalEnergyContainers.slice( index + 1, thisModel.movableThermalEnergyContainers.length ).forEach( function( energyContainer2 ) {
+        thisModel.movableThermalEnergyContainers.slice( index + 1,
+          thisModel.movableThermalEnergyContainers.length ).forEach( function( energyContainer2 ) {
           energyContainer1.exchangeEnergyWith( energyContainer2, dt );
         } );
       } );
@@ -261,8 +268,7 @@ define( function( require ) {
           thisModel.movableThermalEnergyContainers.forEach( function( energyContainer ) {
             burner.addOrRemoveEnergyToFromObject( energyContainer, dt );
           } );
-        }
-        else {
+        } else {
           // Nothing on a burner, so heat/cool the air.
           burner.addOrRemoveEnergyToFromAir( thisModel.air, dt );
         }
@@ -272,11 +278,12 @@ define( function( require ) {
       this.movableThermalEnergyContainers.forEach( function( thermalModelElement ) {
         thisModel.burners.forEach( function( burner ) {
           if ( burner.inContactWith( thermalModelElement ) ) {
-            if ( burner.canSupplyEnergyChunk() && ( burner.getEnergyChunkBalanceWithObjects() > 0 || thermalModelElement.getEnergyChunkBalance() < 0 ) ) {
+            if ( burner.canSupplyEnergyChunk() &&
+              ( burner.getEnergyChunkBalanceWithObjects() > 0 || thermalModelElement.getEnergyChunkBalance() < 0 ) ) {
               // Push an energy chunk into the item on the burner.
               thermalModelElement.addEnergyChunk( burner.extractClosestEnergyChunk( thermalModelElement.getCenterPoint() ) );
-            }
-            else if ( burner.canAcceptEnergyChunk() && ( burner.getEnergyChunkBalanceWithObjects() < 0 || thermalModelElement.getEnergyChunkBalance() > 0 ) ) {
+            } else if ( burner.canAcceptEnergyChunk() &&
+              ( burner.getEnergyChunkBalanceWithObjects() < 0 || thermalModelElement.getEnergyChunkBalance() > 0 ) ) {
               // Extract an energy chunk from the model element
               var energyChunk = thermalModelElement.extractClosestEnergyChunk( burner.getFlameIceRect() );
               if ( energyChunk !== null ) {
@@ -289,13 +296,13 @@ define( function( require ) {
 
       // Exchange energy chunks between movable thermal energy containers.
       thisModel.movableThermalEnergyContainers.forEach( function( energyContainer1, index ) {
-        thisModel.movableThermalEnergyContainers.slice( index + 1, thisModel.movableThermalEnergyContainers.length ).forEach( function( energyContainer2 ) {
+        thisModel.movableThermalEnergyContainers.slice( index + 1,
+          thisModel.movableThermalEnergyContainers.length ).forEach( function( energyContainer2 ) {
           if ( energyContainer1.getThermalContactArea().getThermalContactLength( energyContainer2.getThermalContactArea() ) > 0 ) {
             // Exchange chunks if approperiate.
             if ( energyContainer1.getEnergyChunkBalance() > 0 && energyContainer2.getEnergyChunkBalance < 0 ) {
               energyContainer2.addEnergyChunk( energyContainer1.extractClosestEnergyChunk( energyContainer2.getThermalContactArea() ) );
-            }
-            else if ( energyContainer1.getEnergyChunkBalance() < 0 && energyContainer2.getEnergyChunkBalance() > 0 ) {
+            } else if ( energyContainer1.getEnergyChunkBalance() < 0 && energyContainer2.getEnergyChunkBalance() > 0 ) {
               energyContainer1.addEnergyChunk( energyContainer2.extractClosestEnergyChunk( energyContainer1.getThermalContactArea() ) );
             }
           }
@@ -326,10 +333,13 @@ define( function( require ) {
         }
 
         // Exchange energy and energy chunks with the air if appropriate conditions are met.
-        if ( !contactWithOtherMovableElement || ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE || movableEnergyContainer.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
+        if ( !contactWithOtherMovableElement ||
+          ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
+            movableEnergyContainer.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
           thisModel.air.exchangeEnergyWith( movableEnergyContainer, dt );
           if ( movableEnergyContainer.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getRectangleBounds().width + movableEnergyContainer.getRectangleBounds().minX, movableEnergyContainer.getRectangleBounds().maxY );
+            var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getRectangleBounds().width + movableEnergyContainer.getRectangleBounds().minX,
+              movableEnergyContainer.getRectangleBounds().maxY );
             var energyChunk = movableEnergyContainer.extractClosestEnergyChunk( pointAbove );
             if ( energyChunk !== null ) {
               var energyChunkMotionConstraints = null;
@@ -344,8 +354,8 @@ define( function( require ) {
               }
               thisModel.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
-          }
-          else if ( movableEnergyContainer.getEnergyChunkBalance < 0 && movableEnergyContainer.getTemperature() < thisModel.air.getTemperature() ) {
+          } else if ( movableEnergyContainer.getEnergyChunkBalance < 0 &&
+            movableEnergyContainer.getTemperature() < thisModel.air.getTemperature() ) {
             movableEnergyContainer.addEnergyChunk( thisModel.air.requestEnergyChunk( movableEnergyContainer.getCenterPoint() ) );
           }
         }
@@ -355,8 +365,7 @@ define( function( require ) {
       this.burners.forEach( function( burner ) {
         if ( burner.getEnergyChunkCountForAir() > 0 ) {
           thisModel.air.addEnergyChunk( burner.extractClosestEnergyChunk( burner.getCenterPoint() ), null );
-        }
-        else if ( burner.getEnergyChunkCountForAir() < 0 ) {
+        } else if ( burner.getEnergyChunkCountForAir() < 0 ) {
           burner.addEnergyChunk( thisModel.air.requestEnergyChunk( burner.getCenterPoint() ) );
         }
       } );
@@ -514,15 +523,13 @@ define( function( require ) {
         var xOverlapCure = 0;
         if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
           xOverlapCure = stationaryRect.minX - movingRect.maxX;
-        }
-        else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
+        } else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
           xOverlapCure = stationaryRect.maxX - movingRect.minX;
         }
         var yOverlapCure = 0;
         if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
           yOverlapCure = stationaryRect.minY - movingRect.maxY;
-        }
-        else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
+        } else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
           yOverlapCure = stationaryRect.maxY - movingRect.minY;
         }
 
@@ -544,13 +551,13 @@ define( function( require ) {
 
         // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
         // method.
-        assert && assert( !(xOverlapCure === 0 && yOverlapCure === 0), 'xOverlap and yOverlap should not both be zero' );
+        assert && assert( !( xOverlapCure === 0 && yOverlapCure === 0 ),
+          'xOverlap and yOverlap should not both be zero' );
 
         // Return a vector with the smallest valid "cure" value, leaving the other translation value unchanged.
         if ( xOverlapCure !== 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
           return new Vector2( xOverlapCure, proposedTranslation.y );
-        }
-        else {
+        } else {
           return new Vector2( proposedTranslation.x, yOverlapCure );
         }
       }
@@ -569,8 +576,7 @@ define( function( require ) {
           // Collision detected, limit motion.
           xTranslation = stationaryRect.minX - rightEdge.start.x - MIN_INTER_ELEMENT_DISTANCE;
         }
-      }
-      else if ( proposedTranslation.x < 0 ) {
+      } else if ( proposedTranslation.x < 0 ) {
 
         // Check for collisions moving left.
         var leftEdge = new Line( new Vector2( movingRect.minX, movingRect.minY ), new Vector2( movingRect.minX, movingRect.maxY ) );
@@ -646,8 +652,9 @@ define( function( require ) {
           // currently have based on whether we have one at all, or has more overlap than the previous best choice, or
           // is directly above the current one.
           if ( bestOverlappingSurfaceProperty.value === null ||
-               ( surfaceOverlap > thisModel.getHorizontalOverlap( bestOverlappingSurfaceProperty.value, element.bottomSurface ) && !thisModel.isDirectlyAbove( bestOverlappingSurfaceProperty.get(), potentialSupportingElement.topSurface ) ) ||
-               ( thisModel.isDirectlyAbove( potentialSupportingElement.topSurface, bestOverlappingSurfaceProperty.get() ) ) ) {
+            ( surfaceOverlap > thisModel.getHorizontalOverlap( bestOverlappingSurfaceProperty.value, element.bottomSurface ) &&
+              !thisModel.isDirectlyAbove( bestOverlappingSurfaceProperty.get(), potentialSupportingElement.topSurface ) ) ||
+            ( thisModel.isDirectlyAbove( potentialSupportingElement.topSurface, bestOverlappingSurfaceProperty.get() ) ) ) {
             bestOverlappingSurfaceProperty.set( potentialSupportingElement.topSurface );
           }
         }
@@ -707,8 +714,7 @@ define( function( require ) {
       // Test if this point is in the water or steam associated with the beaker.
       if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
         return new TemperatureAndColor( this.beaker.temperature, EFACConstants.WATER_COLOR_IN_BEAKER );
-      }
-      else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
+      } else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
         return new TemperatureAndColor( this.beaker.getSteamTemperature( locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
       }
 
