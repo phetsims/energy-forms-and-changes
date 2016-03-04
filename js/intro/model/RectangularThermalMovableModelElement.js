@@ -142,8 +142,7 @@ define( function( require ) {
       if ( this.getSliceBounds().containsPoint( energyChunk.position ) ) {
         // Energy chunk is positioned within container bounds, so add it directly to a slice.
         this.addEnergyChunkToNextSlice( energyChunk );
-      }
-      else {
+      } else {
         // Chunk is out of the bounds of this element, so make it wander towards it.
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
@@ -190,7 +189,10 @@ define( function( require ) {
     },
 
     /**
-     *  Move the energy chunk
+     *  Transfer an EnergyChunk from the approachingEnergyChunks list to a slice
+     *  in this model element. Find the corresponding wander controller and
+     *  remove it. A new wander controller is then associated with the transferred
+     *  chunk via a call to addEnergyChunk.
      *
      * @param {EnergyChunk} energyChunk
      */
@@ -200,7 +202,10 @@ define( function( require ) {
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         if ( energyChunkWanderController.energyChunk === energyChunk ) {
-          self.energyChunkWanderControllers.remove( energyChunkWanderController );
+          var index = self.energyChunkWanderControllers.indexOf( energyChunk );
+          if ( index > -1 ) {
+            self.energyChunkWanderControllers.splice( index, 1 );
+          }
         }
       } );
       this.addEnergyChunkToNextSlice( energyChunk );
@@ -278,8 +283,7 @@ define( function( require ) {
             }
           } );
         } );
-      }
-      else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
+      } else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
@@ -294,8 +298,7 @@ define( function( require ) {
             }
           } );
         } );
-      }
-      else {
+      } else {
         // There is no or limited overlap, so use center points.
         chunkToExtract = this.extractClosestEnergyChunkToPoint( new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
       }
