@@ -347,7 +347,8 @@ define( function( require ) {
 
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
-        // Add a chunk at a random location in the block.
+        // Ad
+d a chunk at a random location in the block.
         this.addEnergyChunk( new EnergyChunk(
           EnergyType.THERMAL,
           EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
@@ -355,13 +356,15 @@ define( function( require ) {
           this.energyChunksVisibleProperty ) );
       }
 
+      // NOTE: temporarily commented because updatePositions is evidently extremely buggy.
+      // TODO (obviously): fix and uncomment
       // Distribute the energy chunks within the container.
-      var i;
-      for ( i = 0; i < 1000; i++ ) {
-        if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-          break;
-        }
-      }
+      // var i;
+      // for ( i = 0; i < 1000; i++ ) {
+      //   if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+      //     break;
+      //   }
+      // }
     },
 
     /**
