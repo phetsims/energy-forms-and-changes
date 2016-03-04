@@ -347,8 +347,7 @@ define( function( require ) {
 
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
-        // Ad
-d a chunk at a random location in the block.
+        // Add a chunk at a random location in the block.
         this.addEnergyChunk( new EnergyChunk(
           EnergyType.THERMAL,
           EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
