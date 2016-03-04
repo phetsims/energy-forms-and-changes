@@ -1,8 +1,10 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class represents a "slice" within a 2D container that contains a set of energy chunks and can be used to add some limited 3D capabilities by
- * having some z-dimension information.  The slice consists of a 2D shape and a Z value representing its position in Z space.
+ * This class represents a "slice" within a 2D container that contains a set of
+ * energy chunks and can be used to add some limited 3D capabilities by having
+ * some z-dimension information.  The slice consists of a 2D shape and a Z value
+ * representing its position in Z space.
  *
  * @author John Blanco
  * @author Jesse Greenberg
@@ -21,7 +23,7 @@ define( function( require ) {
    *
    * @param {Shape} shape
    * @param {Vector2} zPosition
-   * @param {Property} anchorPointProperty a vector
+   * @param {Property<Vector2>} anchorPointProperty
    * @constructor
    */
   function EnergyChunkContainerSlice( shape, zPosition, anchorPointProperty ) {
@@ -83,4 +85,3 @@ define( function( require ) {
     }
   } );
 } );
-
