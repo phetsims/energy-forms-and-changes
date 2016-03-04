@@ -35,7 +35,7 @@ define( function( require ) {
     Node.call( this );
 
     // Add the initial energy chunks.
-    //this.addInitialEnergyChunks();
+    this.addInitialEnergyChunks();
 
     energyChunkContainerSlice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
@@ -62,7 +62,7 @@ define( function( require ) {
     addInitialEnergyChunks: function() {
       var thisNode = this;
       this.energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
-        thisNode.addChild( new EnergyChunkNode( energyChunk, this.modelViewTransform ) );
+        thisNode.addChild( new EnergyChunkNode( energyChunk, thisNode.modelViewTransform ) );
       } );
     }
   } );
