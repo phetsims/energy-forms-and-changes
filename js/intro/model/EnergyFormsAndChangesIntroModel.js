@@ -340,7 +340,7 @@ define( function( require ) {
           if ( movableEnergyContainer.getEnergyChunkBalance() > 0 ) {
             var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getRectangleBounds().width + movableEnergyContainer.getRectangleBounds().minX,
               movableEnergyContainer.getRectangleBounds().maxY );
-            var energyChunk = movableEnergyContainer.extractClosestEnergyChunk( pointAbove );
+            var energyChunk = movableEnergyContainer.extractClosestEnergyChunkToPoint( pointAbove );
             if ( energyChunk !== null ) {
               var energyChunkMotionConstraints = null;
               if ( movableEnergyContainer instanceof Beaker ) {
