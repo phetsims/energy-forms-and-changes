@@ -218,7 +218,8 @@ define( function( require ) {
 
             // Center the movableModelElement above its new parent
             var targetX = potentialSupportingSurface.value.getCenterX();
-            movableModelElement.position.x = targetX;
+            var targetY = movableModelElement.positionProperty.value.y;
+            movableModelElement.positionProperty.set( new Vector2( targetX, targetY ) );
 
           }
 
