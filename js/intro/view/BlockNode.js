@@ -149,10 +149,10 @@ define( function( require ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ? thisNode.approachingEnergyChunkParentNode : thisNode.approachingEnergyChunkParentNode;
       parentNode.addChild( energyChunkNode );
-      block.approachingEnergyChunks.addItemRemovedListener( function( removedEnergyChunk ) {
+      block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           parentNode.removeChild( energyChunkNode );
-          block.approachingEnergyChunks.removeItemRemovedListener( this );
+          block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
       } );
     } );
