@@ -121,7 +121,7 @@ define( function( require ) {
             Math.pow( containerShape.bounds.height, 2 ) );
 
           // Determine forces on each energy chunk.
-          var ecIndex = 0;
+          // var ecIndex = 0; // TODO: Make sure that this is no longer needed
           energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
             // Reset accumulated forces.
             mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
@@ -153,13 +153,13 @@ define( function( require ) {
 
               // Now apply the force from each of the other particles, but set some limits on the max force that can be
               // applied.
-              for ( var otherEnergyChunk in mapEnergyChunkToForceVector ) {
-                if ( mapEnergyChunkToForceVector.hasOwnProperty( otherEnergyChunk ) ) {
-                  if ( energyChunk === mapEnergyChunkToForceVector[ otherEnergyChunk ] ) {
+              for ( var otherEnergyChunkID in mapEnergyChunkToForceVector ) {
+                if ( mapEnergyChunkToForceVector.hasOwnProperty( otherEnergyChunkID ) ) {
+                  if ( energyChunk === mapIDToEnergyChunk[ otherEnergyChunkID ] ) {
                     continue;
                   }
                   // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = energyChunk.position.minus( mapEnergyChunkToForceVector[ otherEnergyChunk ] );
+                  var vectorToOther = energyChunk.position.minus( mapEnergyChunkToForceVector[ otherEnergyChunkID ] );
                   if ( vectorToOther.magnitude() < minDistance ) {
                     if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
@@ -176,7 +176,8 @@ define( function( require ) {
                       vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
                 }
               }
-            } else {
+            } 
+            else {
               // Point is outside container, move it towards center of shape.
               var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
               mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
@@ -206,8 +207,7 @@ define( function( require ) {
             mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
 
             // Update max energy.
-            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() +
-              forceOnThisChunk.magnitude() * Math.PI / 2;
+            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
             if ( totalParticleEnergy > maxEnergy ) {
               maxEnergy = totalParticleEnergy;
             }
@@ -219,8 +219,6 @@ define( function( require ) {
         if ( particlesRedistributed ) {
           for ( var newEnergyChunkID in mapIDToEnergyChunk ) {
             if ( mapIDToEnergyChunk.hasOwnProperty( newEnergyChunkID ) ) {
-
-              // Update position.
               mapIDToEnergyChunk[ newEnergyChunkID ].position =
                 mapIDToEnergyChunk[ newEnergyChunkID ].position.plus(
                   mapIDToEnergyChunk[ newEnergyChunkID ].velocity.times( timeStep ) );

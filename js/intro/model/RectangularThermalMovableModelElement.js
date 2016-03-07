@@ -358,12 +358,12 @@ define( function( require ) {
       // NOTE: temporarily commented because updatePositions is evidently extremely buggy.
       // TODO (obviously): fix and uncomment
       // Distribute the energy chunks within the container.
-      // var i;
-      // for ( i = 0; i < 1000; i++ ) {
-      //   if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-      //     break;
-      //   }
-      // }
+      var i;
+      for ( i = 0; i < 1000; i++ ) {
+        if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+          break;
+        }
+      }
     },
 
     /**
