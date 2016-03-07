@@ -110,7 +110,7 @@ define( function( require ) {
     step: function( dt ) {
 
       // Distribute the energy chunks contained within this model element.
-      //EnergyChunkDistributor.updatePositionsDbg( this.slices, dt );
+      EnergyChunkDistributor.updatePositions( this.slices, dt );
 
       // Animate the energy chunks that are outside this model element.
       this.animateNonContainedEnergyChunks( dt );
