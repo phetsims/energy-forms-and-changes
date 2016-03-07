@@ -202,7 +202,7 @@ define( function( require ) {
       var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
       energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
         if ( energyChunkWanderController.energyChunk === energyChunk ) {
-          var index = self.energyChunkWanderControllers.indexOf( energyChunk );
+          var index = self.energyChunkWanderControllers.indexOf( energyChunkWanderController );
           if ( index > -1 ) {
             self.energyChunkWanderControllers.splice( index, 1 );
           }
