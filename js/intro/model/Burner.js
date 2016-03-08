@@ -72,29 +72,6 @@ define( function( require ) {
 
     this.addProperty( 'topSurface', new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
       thisBurner.getOutlineRect().maxX + perspectiveCompensation ), thisBurner.getOutlineRect().maxY, this ) );
-
-//    heatCoolLevel.addObserver( new ChangeObserver<Double>() {
-//      public void update( Double newValue, Double oldValue ) {
-//        if ( newValue === 0 || ( Math.signum( oldValue ) !== Math.signum( newValue ) ) ) {
-//          // If the burner has been turned off or switched modes,
-//          // clear accumulated heat/cool amount.
-//          energyExchangedWithAirSinceLastChunkTransfer = 0;
-//        }
-//      }
-//    } );
-//
-//    // Clear the accumulated energy transfer if thing is removed from burner.
-//    BooleanProperty somethingOnTop = new BooleanProperty( false );
-//    somethingOnTop.addObserver( new VoidFunction1<Boolean>() {
-//      public void apply( Boolean somethingOnTop ) {
-//        if ( !somethingOnTop ) {
-//          energyExchangedWithObjectSinceLastChunkTransfer = 0;
-//        }
-//      }
-//    } );
-//  }
-//
-
   }
 
   return inherit( ModelElement, Burner, {
@@ -123,7 +100,8 @@ define( function( require ) {
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
       // This shouldn't be used for air - there is a specific method for that.
-      assert && assert( !(thermalEnergyContainer instanceof Air), 'This function should not be used with air - there is a specific method for that.' );
+      assert && assert( !( thermalEnergyContainer instanceof Air ),
+        'This function should not be used with air - there is a specific method for that.' );
       if ( this.inContactWith( thermalEnergyContainer ) ) {
         var deltaEnergy = 0;
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
@@ -159,9 +137,9 @@ define( function( require ) {
     inContactWith: function( thermalEnergyContainer ) {
       var containerThermalArea = thermalEnergyContainer.getThermalContactArea();
       return (
-      containerThermalArea.centerX > this.getOutlineRect().minX &&
-      containerThermalArea.centerX < this.getOutlineRect().maxX &&
-      Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY ) < CONTACT_DISTANCE );
+        containerThermalArea.centerX > this.getOutlineRect().minX &&
+        containerThermalArea.centerX < this.getOutlineRect().maxX &&
+        Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY ) < CONTACT_DISTANCE );
     },
 
     /**
@@ -196,8 +174,8 @@ define( function( require ) {
       if ( this.energyChunkList.length > 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
           if ( energyChunk.position.distance( thisBurner.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
-               ( closestEnergyChunk === null ||
-                 energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
+            ( closestEnergyChunk === null ||
+              energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
           }
@@ -210,7 +188,7 @@ define( function( require ) {
           }
         } );
       }
-      //}
+
       if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
         // Create an energy chunk.
         closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(), new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
@@ -218,8 +196,7 @@ define( function( require ) {
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;
         this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
-      }
-      else {
+      } else {
         console.log( 'Warning: Request for energy chunk from burner when not in heat mode and no chunks contained, returning null.' );
       }
       return closestEnergyChunk;
@@ -300,16 +277,6 @@ define( function( require ) {
         }
       } );
     },
-    //stepInTime: function( dt ) {
-    //  // Animate energy chunks.
-    //  for ( var energyChunkWanderController in new ArrayList( energyChunkWanderControllers ) ) {
-    //    energyChunkWanderController.updatePosition( dt );
-    //    if ( energyChunkWanderController.destinationReached() ) {
-    //      energyChunkList.remove( energyChunkWanderController.getEnergyChunk() );
-    //      energyChunkWanderControllers.remove( energyChunkWanderController );
-    //    }
-    //  }
-    //},
 
     /**
      * *
@@ -329,16 +296,18 @@ define( function( require ) {
       // low value is limited to the freezing point of water.
       return Math.max( EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevel * 100, EFACConstants.FREEZING_POINT_TEMPERATURE );
     },
+
     /**
-     * Get the number of excess of deficit energy chunks for interaction with
-     * thermal objects (as opposed to air).
+     * Get the (signed) number of energy chunks for interaction with thermal
+     * objects (as opposed to air).
      *
      * @return Number of energy chunks that could be supplied or consumed.
      *         Negative value indicates that chunks should come in.
      */
     getEnergyChunkBalanceWithObjects: function() {
-      return ( Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( this.energyExchangedWithObjectSinceLastChunkTransfer ));
+      return ( Math.floor( Math.abs( this.energyExchangedWithObjectSinceLastChunkTransfer ) / EFACConstants.ENERGY_PER_CHUNK ) * Math.sign( this.energyExchangedWithObjectSinceLastChunkTransfer ) );
     },
+
     /**
      * *
      * @returns {boolean}
@@ -346,6 +315,7 @@ define( function( require ) {
     canSupplyEnergyChunk: function() {
       return this.heatCoolLevel > 0;
     },
+
     /**
      * *
      * @returns {boolean}
@@ -355,4 +325,3 @@ define( function( require ) {
     }
   } );
 } );
-
