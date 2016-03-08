@@ -5,6 +5,7 @@
  *
  * @author John Blanco
  * @author Jesse Greenberg
+ * @author Andrew Adare
  */
 
 
@@ -44,7 +45,7 @@ define( function( require ) {
    * Burner class
    *
    * @param {Vector2} position   The position in model space where this burner exists.
-   * @param {Property.<boolean>} energyChunksVisibleProperty Controls whether the energy chunks are visible
+   * @param {Property<boolean>} energyChunksVisibleProperty Controls whether the energy chunks are visible
    * @constructor
    */
   function Burner( position, energyChunksVisibleProperty ) {
@@ -110,7 +111,6 @@ define( function( require ) {
       assert && assert( !( thermalEnergyContainer instanceof Air ),
         'This function should not be used with air - there is a specific method for that.' );
       if ( this.inContactWith( thermalEnergyContainer ) ) {
-        var deltaEnergy = 0;
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevel * dt;
         }
@@ -142,11 +142,11 @@ define( function( require ) {
      * @returns {boolean}
      */
     inContactWith: function( thermalEnergyContainer ) {
-      var containerThermalArea = thermalEnergyContainer.getThermalContactArea();
-      return (
-        containerThermalArea.centerX > this.getOutlineRect().minX &&
-        containerThermalArea.centerX < this.getOutlineRect().maxX &&
-        Math.abs( containerThermalArea.minY - this.getOutlineRect().maxY ) < CONTACT_DISTANCE );
+      var burnerRect = this.getOutlineRect();
+      var area = thermalEnergyContainer.getThermalContactArea();
+      var xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
+      var yContact = ( Math.abs( area.minY - burnerRect.maxY ) < CONTACT_DISTANCE );
+      return ( xContact && yContact );
     },
 
     /**
@@ -235,17 +235,18 @@ define( function( require ) {
 
     /**
      * *
-     * @param {Array.<ThermalEnergyContainer>} thermalEnergyContainers
+     * @param {Array<ThermalEnergyContainer>} thermalEnergyContainers
      * @returns {boolean}
      */
     areAnyOnTop: function( thermalEnergyContainers ) {
-      var self = this;
+      var thisBurner = this; // Provide a handle for use in nested callback
+      var onTop = false;
       thermalEnergyContainers.forEach( function( thermalEnergyContainer ) {
-        if ( self.inContactWith( thermalEnergyContainer ) ) {
-          return true;
+        if ( thisBurner.inContactWith( thermalEnergyContainer ) ) {
+          onTop = true;
         }
       } );
-      return false;
+      return onTop;
     },
 
     /**
@@ -265,8 +266,6 @@ define( function( require ) {
         } );
       }
       if ( count === 0 ) {
-        //console.log( EFACConstants.ENERGY_PER_CHUNK );
-        //console.log( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK )
         // See whether the energy exchanged with the air since the last chunk transfer warrants another chunk.
         count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
