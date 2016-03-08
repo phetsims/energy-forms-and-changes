@@ -250,15 +250,18 @@ define( function( require ) {
       this.movableThermalEnergyContainers.forEach( function( thermalModelElement ) {
         thisModel.burners.forEach( function( burner ) {
           if ( burner.inContactWith( thermalModelElement ) ) {
-            if ( burner.canSupplyEnergyChunk() &&
-              ( burner.getEnergyChunkBalanceWithObjects() > 0 || thermalModelElement.getEnergyChunkBalance() < 0 ) ) {
+            var burnerChunkBalance = burner.getEnergyChunkBalanceWithObjects();
+            var elementChunkBalance = thermalModelElement.getEnergyChunkBalance();
 
+            // console.log(burnerChunkBalance, elementChunkBalance, burner.canSupplyEnergyChunk());
+
+            if ( burner.canSupplyEnergyChunk() && ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) ) {
               // Push an energy chunk into the item on the burner.
               thermalModelElement.addEnergyChunk( burner.extractClosestEnergyChunk( thermalModelElement.getCenterPoint() ) );
-            } else if ( burner.canAcceptEnergyChunk() &&
-              ( burner.getEnergyChunkBalanceWithObjects() < 0 || thermalModelElement.getEnergyChunkBalance() > 0 ) ) {
+            } else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
               // Extract an energy chunk from the model element
               var energyChunk = thermalModelElement.extractClosestEnergyChunk( burner.getFlameIceRect() );
+
               if ( energyChunk !== null ) {
                 burner.addEnergyChunk( energyChunk );
               }
