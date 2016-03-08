@@ -202,44 +202,15 @@ define( function( require ) {
         previousTime = time;
       }
 
-      // Cause any user-movable model elements that are not supported by a surface to fall (or, in some cases, jump up)
-      // towards the nearest supporting surface.
+      // Cause any user-movable model elements that are not supported by a surface
+      // to fall (or, in some cases, jump up) towards the nearest supporting surface.
+      var unsupported;
+      var raised;
       this.movableThermalEnergyContainers.forEach( function( movableModelElement ) {
-
-        if ( !movableModelElement.userControlled &&
-          movableModelElement.supportingSurface === null &&
-          movableModelElement.position.y !== 0 ) {
-          var minYPos = 0;
-
-          //Determine whether there is something below this element that it can land upon.
-          var potentialSupportingSurface = thisModel.findBestSupportSurface( movableModelElement );
-          if ( potentialSupportingSurface.value !== null ) {
-            minYPos = potentialSupportingSurface.value.yPos;
-
-            // Center the movableModelElement above its new parent
-            var targetX = potentialSupportingSurface.value.getCenterX();
-            var targetY = movableModelElement.positionProperty.value.y;
-            movableModelElement.positionProperty.set( new Vector2( targetX, targetY ) );
-
-          }
-
-          // Calculate a proposed Y position based on gravitational falling.
-          var acceleration = -9.8; // meters/s*s
-          var velocity = movableModelElement.verticalVelocity + acceleration * dt;
-          var proposedYPos = movableModelElement.position.y + velocity * dt;
-          if ( proposedYPos < minYPos ) {
-            // The element has landed on the ground or some other surface.
-            proposedYPos = minYPos;
-            movableModelElement.verticalVelocity = 0;
-            if ( potentialSupportingSurface.value !== null ) {
-              movableModelElement.supportingSurface = potentialSupportingSurface.value;
-              potentialSupportingSurface.value.addElementToSurface( movableModelElement );
-            }
-          } else {
-            movableModelElement.verticalVelocity = velocity;
-          }
-
-          movableModelElement.position = new Vector2( movableModelElement.position.x, proposedYPos );
+        unsupported = ( movableModelElement.supportingSurface === null );
+        raised = ( movableModelElement.position.y !== 0 );
+        if ( !movableModelElement.userControlled && unsupported && raised ) {
+          thisModel.fallToSurface( movableModelElement, dt );
         }
       } );
 
@@ -281,6 +252,7 @@ define( function( require ) {
           if ( burner.inContactWith( thermalModelElement ) ) {
             if ( burner.canSupplyEnergyChunk() &&
               ( burner.getEnergyChunkBalanceWithObjects() > 0 || thermalModelElement.getEnergyChunkBalance() < 0 ) ) {
+
               // Push an energy chunk into the item on the burner.
               thermalModelElement.addEnergyChunk( burner.extractClosestEnergyChunk( thermalModelElement.getCenterPoint() ) );
             } else if ( burner.canAcceptEnergyChunk() &&
@@ -380,6 +352,50 @@ define( function( require ) {
         thermalEnergyContainer.step( dt );
       } );
 
+    },
+
+    /**
+     * Make a user-movable model element fall to the nearest supporting
+     * surface.
+     *
+     * @private
+     * @param {MovableModelElement} The falling object.
+     * @param {number} dt Time step.
+     */
+    fallToSurface: function( modelElement, dt ) {
+      var thisModel = this;
+      var minYPos = 0;
+      var targetX = 0;
+      var targetY = 0;
+      var acceleration = -9.8; // meters/s/s
+
+      //Determine whether there is something below this element that it can land upon.
+      var potentialSupportingSurface = thisModel.findBestSupportSurface( modelElement );
+
+      // If so, center the modelElement above its new parent.
+      if ( potentialSupportingSurface.value !== null ) {
+        minYPos = potentialSupportingSurface.value.yPos;
+        targetX = potentialSupportingSurface.value.getCenterX();
+        targetY = modelElement.positionProperty.value.y;
+        modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
+      }
+
+      // Calculate a proposed Y position based on gravitational falling.
+      var velocity = modelElement.verticalVelocity + acceleration * dt;
+      var proposedYPos = modelElement.position.y + velocity * dt;
+      if ( proposedYPos < minYPos ) {
+        // The element has landed on the ground or some other surface.
+        proposedYPos = minYPos;
+        modelElement.verticalVelocity = 0;
+        if ( potentialSupportingSurface.value !== null ) {
+          modelElement.supportingSurface = potentialSupportingSurface.value;
+          potentialSupportingSurface.value.addElementToSurface( modelElement );
+        }
+      } else {
+        modelElement.verticalVelocity = velocity;
+      }
+
+      modelElement.position = new Vector2( modelElement.position.x, proposedYPos );
     },
 
     getBlockList: function() {
