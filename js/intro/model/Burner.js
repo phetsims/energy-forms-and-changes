@@ -108,6 +108,7 @@ define( function( require ) {
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
       // This shouldn't be used for air - there is a specific method for that.
+      var deltaEnergy = 0;
       assert && assert( !( thermalEnergyContainer instanceof Air ),
         'This function should not be used with air - there is a specific method for that.' );
       if ( this.inContactWith( thermalEnergyContainer ) ) {
