@@ -1,8 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * A movable model element that contains thermal energy and that, at least in the model, has an overall shape that can
- * be represented as a rectangle.
+ * A movable model element that contains thermal energy and that, at least in
+ * the model, has an overall shape that can be represented as a rectangle.
  *
  * @author John Blanco
  */
@@ -26,8 +26,9 @@ define( function( require ) {
   var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' );
 
   /**
-   * Constructor for a RectangularThermalMovableModelElement.  This implements the behavior of a superclass for many
-   * objects in this sim such as Block, Beaker, Brick, and IronBlock.
+   * Constructor for a RectangularThermalMovableModelElement.  This implements
+   * the behavior of a superclass for many objects in this sim such as Block,
+   * Beaker, Brick, and IronBlock.
    *
    * @param {Vector2} initialPosition
    * @param {number} width
@@ -132,9 +133,11 @@ define( function( require ) {
     },
 
     /**
-     * Add an energy chunk to this model element.  The energy chunk can be outside of the element's rectangular bounds,
-     * in which case it is added to the list of chunks that are moving towards the element, or it can be positioned
-     * already inside, in which case it is immediately added to one of the energy chunk "slices".
+     * Add an energy chunk to this model element.  The energy chunk can be outside
+     * of the element's rectangular bounds, in which case it is added to the list
+     * of chunks that are moving towards the element, or it can be positioned
+     * already inside, in which case it is immediately added to one of the energy
+     * chunk "slices".
      *
      * @param {EnergyChunk} energyChunk
      */
@@ -212,8 +215,8 @@ define( function( require ) {
     },
 
     /**
-     * Remove an energy chunk from whatever energy chunk list it belongs to.  If the chunk does not belong to a
-     * specific energy chunk list, return false.
+     * Remove an energy chunk from whatever energy chunk list it belongs to.
+     * If the chunk does not belong to a specific energy chunk list, return false.
      *
      * @param {EnergyChunk} energyChunk
      * @returns {boolean}
@@ -228,8 +231,9 @@ define( function( require ) {
     },
 
     /**
-     * Extract the closest energy chunk to the provided point.  Compensate distances for the z-offset so that
-     * z-positioning doesn't skew the results, since the provided point is only 2D.
+     * Extract the closest energy chunk to the provided point.  Compensate
+     * distances for the z-offset so that z-positioning doesn't skew the results,
+     * since the provided point is only 2D.
      *
      * @param {Vector2} point - Comparison point.
      * @return {EnergyChunk||null} closestEnergyChunk, null if there are none available.
@@ -243,7 +247,8 @@ define( function( require ) {
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( energyChunk ) {
           // Compensate for the Z offset.  Otherwise front chunk will almost always be chosen.
-          var compensatedEnergyChunkPosition = energyChunk.position.minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
+          var compensatedEnergyChunkPosition =
+            energyChunk.position.minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
           var compensatedDistance = compensatedEnergyChunkPosition.distance( point );
           if ( compensatedDistance < closestCompensatedDistance ) {
             closestEnergyChunk = energyChunk;
@@ -256,9 +261,11 @@ define( function( require ) {
     },
 
     /**
-     * Extract an energy chunk that is a good choice for being transferred to the provided shape.  Generally, this
-     * means that it is close to the shape.  This routine is not hugely general - it makes some assumption that make it
-     * work for blocks in beakers.  If support for other shapes is needed, it will need some work.
+     * Extract an energy chunk that is a good choice for being transferred to
+     * the provided shape.  Generally, this means that it is close to the shape.
+     * This routine is not hugely general - it makes some assumption that make it
+     * work for blocks in beakers.  If support for other shapes is needed, it
+     * will need some work.
      *
      * @param destinationShape
      * @returns {EnergyChunk||null} return null if none are available.
@@ -291,8 +298,11 @@ define( function( require ) {
         var destinationBounds = destinationShape.bounds;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
-            var distanceToDestinationEdge = Math.min( Math.abs( destinationBounds.minX - energyChunk.position.x ), Math.abs( destinationBounds.maxX - energyChunk.position.x ) );
-            if ( !destinationShape.containsPoint( energyChunk.position ) && distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
+            var distanceToDestinationEdge =
+              Math.min( Math.abs( destinationBounds.minX - energyChunk.position.x ),
+                Math.abs( destinationBounds.maxX - energyChunk.position.x ) );
+            if ( !destinationShape.containsPoint( energyChunk.position ) &&
+              distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;
             }
@@ -300,7 +310,8 @@ define( function( require ) {
         } );
       } else {
         // There is no or limited overlap, so use center points.
-        chunkToExtract = this.extractClosestEnergyChunkToPoint( new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
+        chunkToExtract = this.extractClosestEnergyChunkToPoint(
+          new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
       }
 
       // Fail safe - If nothing found, get the first chunk.
@@ -324,8 +335,8 @@ define( function( require ) {
     },
 
     /**
-     * Initialization method that add the "slices" where the energy chunks reside.  Should be called only once at
-     * initialization.
+     * Initialization method that add the "slices" where the energy chunks reside.
+     * Should be called only once at initialization.
      */
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // Make sure this method isn't being misused.
@@ -355,8 +366,6 @@ define( function( require ) {
           this.energyChunksVisibleProperty ) );
       }
 
-      // NOTE: temporarily commented because updatePositions is evidently extremely buggy.
-      // TODO (obviously): fix and uncomment
       // Distribute the energy chunks within the container.
       var i;
       for ( i = 0; i < 1000; i++ ) {
@@ -414,8 +423,9 @@ define( function( require ) {
     },
 
     /**
-     * Get the shape as is is projected into 3D in the view.  Ideally, this wouldn't even be in the model, because it
-     * would be purely handled in the view, but it proved necessary.
+     * Get the shape as is is projected into 3D in the view.  Ideally, this
+     * wouldn't even be in the model, because it would be purely handled in the
+     * view, but it proved necessary.
      *
      * @returns {Shape}
      */
@@ -447,9 +457,10 @@ define( function( require ) {
 
 
     /**
-     * Get a number indicating the balance between the energy level and the number of energy chunks owned by this model
-     * element.  Returns 0 if the number of energy chunks matches the energy level, a negative value if there is a
-     * deficity, and a positive value if there is a surplus.
+     * Get a number indicating the balance between the energy level and the
+     * number of energy chunks owned by this model element.  Returns 0 if the
+     * number of energy chunks matches the energy level, a negative value if
+     * there is a deficity, and a positive value if there is a surplus.
      *
      * @returns {number}
      */
