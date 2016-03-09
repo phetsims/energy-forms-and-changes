@@ -5,13 +5,14 @@
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
+ * @author Andrew Adare
  */
 define( function( require ) {
   'use strict';
 
   // modules
   var EnergyFormsAndChangesIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EnergyFormsAndChangesIntroScreen' );
-  var EnergyFormsAndChangesEnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/EnergyFormsAndChangesEnergySystemsScreen' );
+  var EnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/EnergySystemsScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
@@ -32,7 +33,10 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
 
-    var sim = new Sim( energyFormsAndChangesTitleString, [ new EnergyFormsAndChangesIntroScreen(), new EnergyFormsAndChangesEnergySystemsScreen() ], simOptions );
+    var sim = new Sim( energyFormsAndChangesTitleString, [
+      new EnergyFormsAndChangesIntroScreen(), new EnergySystemsScreen()
+    ], simOptions );
+
     sim.start();
   } );
 } );

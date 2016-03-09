@@ -1,7 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Resources (images and translated strings) for "EnergyFormsAndChanges" are loaded eagerly to make sure everything exists on sim startup.
+ * Resources (images and translated strings) for "EnergyFormsAndChanges" are
+ * loaded eagerly to make sure everything exists on sim startup.
  */
 
 define( function( require ) {
@@ -9,13 +10,9 @@ define( function( require ) {
 
   return {
 
-// Resources
-
     PROJECT_NAME: 'energy-forms-and-changes',
-    //public static final PhetResources RESOURCES : new PhetResources( PROJECT_NAME );
 
-
-//Strings
+    //Strings
 
     brickString: require( 'string!ENERGY_FORMS_AND_CHANGES/brick' ),
     chemicalString: require( 'string!ENERGY_FORMS_AND_CHANGES/chemical' ),
@@ -39,7 +36,7 @@ define( function( require ) {
     thermalString: require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' ),
     waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' )
 
-//Images
+    //Images
 
     //BACK_LEG_01: require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_01.png' ),
     //BACK_LEG_02: require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_02.png' ),
