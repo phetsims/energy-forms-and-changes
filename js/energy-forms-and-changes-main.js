@@ -12,7 +12,7 @@ define( function( require ) {
 
   // modules
   var EnergyFormsAndChangesIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EnergyFormsAndChangesIntroScreen' );
-  var EnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/EnergySystemsScreen' );
+  var EnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/EnergySystemsScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
 

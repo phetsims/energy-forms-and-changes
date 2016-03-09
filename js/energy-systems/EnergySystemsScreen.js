@@ -11,8 +11,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergySystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/model/EnergySystemsModel' );
-  var EnergySystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/energysystems/view/EnergySystemsScreenView' );
+  var EnergySystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemsModel' );
+  var EnergySystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemsScreenView' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
