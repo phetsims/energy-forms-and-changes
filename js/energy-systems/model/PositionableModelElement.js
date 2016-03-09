@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2016, University of Colorado Boulder
 
 /**
  * A model element that has a position (a.k.a. a location) which can be
@@ -26,4 +26,5 @@ define( function( require ) {
     } );
   }
 
+  return inherit( PropertySet, PositionableModelElement );
 } );
