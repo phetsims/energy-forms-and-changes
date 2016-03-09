@@ -121,7 +121,6 @@ define( function( require ) {
             Math.pow( containerShape.bounds.height, 2 ) );
 
           // Determine forces on each energy chunk.
-          // var ecIndex = 0; // TODO: Make sure that this is no longer needed
           energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
             // Reset accumulated forces.
             mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
@@ -145,8 +144,7 @@ define( function( require ) {
                 }
 
                 // Apply the force due to this edge.
-                var edgeForce =
-                  new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+                var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
                 mapEnergyChunkToForceVector[ energyChunk.uniqueID ] =
                   mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( edgeForce );
               }
@@ -159,7 +157,7 @@ define( function( require ) {
                     continue;
                   }
                   // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = energyChunk.position.minus( mapEnergyChunkToForceVector[ otherEnergyChunkID ] );
+                  var vectorToOther = energyChunk.position.minus( mapIDToEnergyChunk[ otherEnergyChunkID ].position );
                   if ( vectorToOther.magnitude() < minDistance ) {
                     if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
@@ -176,8 +174,7 @@ define( function( require ) {
                       vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
                 }
               }
-            } 
-            else {
+            } else {
               // Point is outside container, move it towards center of shape.
               var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
               mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
