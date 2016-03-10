@@ -26,8 +26,8 @@ define( function( require ) {
    * Carousel class
    * Container for positionable model elements
    *
-   * @param {Vector2} selectedElementPosition Location of currently selected element
-   * @param {Vector2} offsetBetweenElements   Offset between elements in the carousel
+   * @param {Vector2} selectedElementPosition Offset between elements in the carousel
+   * @param {Vector2} offsetBetweenElements   Location of currently selected element
    * @constructor
    */
   function Carousel( selectedElementPosition, offsetBetweenElements ) {
@@ -67,8 +67,8 @@ define( function( require ) {
       assert && assert( i === 0 || i < thisCarousel.managedElements.size() );
 
       thisCarousel.elapsedTransitionTime = 0;
-      thisCarousel.initialCarouselOffset = this.currentCarouselOffset;
-      this.animationInProgressProperty.set( true );
+      thisCarousel.initialCarouselOffset = thisCarousel.currentCarouselOffset;
+      thisCarousel.animationInProgressProperty.set( true );
     } );
 
   }
@@ -112,6 +112,11 @@ define( function( require ) {
       }
     },
 
+    /**
+     * Get selected element from carousel
+     *
+     * @return {[type]} Selected element
+     */
     getSelectedElement: function() {
       var i = this.targetIndexProperty.get();
       if ( i < this.managedElements.length ) {
