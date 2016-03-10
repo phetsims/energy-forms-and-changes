@@ -17,9 +17,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Util = require( 'DOT/Util' );
 
   // Constants
-  // var TRANSITION_DURATION = 0.5; // Comment until used
+  var TRANSITION_DURATION = 0.5;
 
   /**
    * Carousel class
@@ -55,7 +56,7 @@ define( function( require ) {
 
     this.currentCarouselOffset = new Vector2( 0, 0 );
 
-    this.carouselOffsetWhenTransitionStarted = new Vector2( 0, 0 );
+    this.initialCarouselOffset = new Vector2( 0, 0 );
 
     // Monitor our own target setting and set up the variables needed for
     // animation each time the target changes.
@@ -66,7 +67,7 @@ define( function( require ) {
       assert && assert( i === 0 || i < thisCarousel.managedElements.size() );
 
       thisCarousel.elapsedTransitionTime = 0;
-      thisCarousel.carouselOffsetWhenTransitionStarted = this.currentCarouselOffset;
+      thisCarousel.initialCarouselOffset = this.currentCarouselOffset;
       this.animationInProgressProperty.set( true );
     } );
 
@@ -120,23 +121,54 @@ define( function( require ) {
     },
 
     stepInTime: function( dt ) {
-      // TODO
+      if ( !this.atTargetPosition() ) {
+        this.elapsedTransitionTime += dt;
+        var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
+        var totalTravelVector = targetCarouselOffset.minus( this.initialCarouselOffset );
+        var proportionOfTimeElapsed = Util.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
+        this.currentCarouselOffset = this.initialCarouselOffset.plus( totalTravelVector.times( this.computeSlowInSlowOut( proportionOfTimeElapsed ) ) );
+        this.updateManagedElementPositions();
+
+        if ( proportionOfTimeElapsed === 1 ) {
+          this.currentCarouselOffset = targetCarouselOffset;
+        }
+
+        if ( this.currentCarouselOffset === targetCarouselOffset ) {
+          this.animationInProgressProperty.set( false );
+        }
+        this.updateManagedElementOpacities();
+      }
     },
 
     updateManagedElementPositions: function() {
-      // TODO
+      for ( var i = 0; i < this.managedElements.length; i++ ) {
+        var position = this.selectedElementPosition.plus( this.offsetBetweenElements.times( i ) );
+        this.managedElements[ i ].setPosition( position ).plus( this.currentCarouselOffset );
+      }
     },
 
     updateManagedElementOpacities: function() {
-      // TODO
+      var thisCarousel = this;
+      this.managedElements.forEach( function( managedElement ) {
+        var distanceFromSelectionPosition = managedElement.getPosition().distance( thisCarousel.selectedElementPosition );
+        var opacity = Util.clamp( 1 - ( distanceFromSelectionPosition / thisCarousel.offsetBetweenElements.magnitude() ), 0, 1 );
+        managedElement.opacity.set( opacity );
+      } );
     },
 
     atTargetPosition: function() {
-      // TODO
+      var targetCarouselOffset = new Vector2( this.offsetBetweenElements.times( -this.targetIndexProperty.get() ) );
+      return this.currentCarouselOffset.equals( targetCarouselOffset );
+
     },
 
     computeSlowInSlowOut: function( zeroToOne ) {
-      // TODO
+      if ( zeroToOne < 0.5 ) {
+        return 2.0 * zeroToOne * zeroToOne;
+      } else {
+        var complement = 1.0 - zeroToOne;
+        return 1.0 - 2.0 * complement * complement;
+      }
     }
   } );
 } );
