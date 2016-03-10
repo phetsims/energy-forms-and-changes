@@ -13,11 +13,13 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
-  // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' ); // Comment until used
-  // var Vector2 = require( 'DOT/Vector2' ); // Comment until used
+  // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Vector2 = require( 'DOT/Vector2' );
+  // var Carousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Carousel' );
+  var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
 
   // Constants
-  // var OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 ); // Comment until used
+  var OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 );
 
   /**
    * Main constructor for EnergySystemsModel, which contains all of the model
@@ -31,6 +33,20 @@ define( function( require ) {
       // Boolean property that controls whether the energy chunks are visible to the user.
       energyChunksVisible: false
     } );
+
+    // Carousels that control the positions of the energy sources, converters,
+    // and users.
+    var energySourcesCarousel = new EnergySystemElementCarousel( new Vector2( -0.15, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+    var energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+    var energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+
+
+    var carousels = [
+      energySourcesCarousel, energyConvertersCarousel, energyUsersCarousel
+    ];
+
+    // Just to pass lint
+    console.log( carousels );
 
   }
 
