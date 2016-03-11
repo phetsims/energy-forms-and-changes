@@ -13,9 +13,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
-  // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Vector2 = require( 'DOT/Vector2' );
-  // var Carousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Carousel' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
 
   // Constants
