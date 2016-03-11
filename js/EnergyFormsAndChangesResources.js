@@ -34,7 +34,7 @@ define( function( require ) {
     noneString: require( 'string!ENERGY_FORMS_AND_CHANGES/none' ),
     normalString: require( 'string!ENERGY_FORMS_AND_CHANGES/normal' ),
     thermalString: require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' ),
-    waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' )
+    waterString: require( 'string!ENERGY_FORMS_AND_CHANGES/water' ),
 
     //Images
 
@@ -125,7 +125,7 @@ define( function( require ) {
     //SOLAR_PANEL_GEN: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' ),
     //SOLAR_PANEL_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' ),
     //SOLAR_PANEL_POST_2: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' ),
-    //SUN_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' ),
+    SUN_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' )
     //TEAPOT_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_icon.png' ),
     //TEAPOT_LARGE: require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_large.png' ),
     //THERMOMETER_MEDIUM_BACK: require( 'image!ENERGY_FORMS_AND_CHANGES/thermometer_medium_back.png' ),
