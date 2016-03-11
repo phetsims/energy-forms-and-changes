@@ -61,8 +61,12 @@ define( function( require ) {
       return this.outgoingEnergyChunks.splice( 0 );
     },
 
+    /**
+     * Clear internal list of energy chunks and outgoing energy chunks
+     */
     clearEnergyChunks: function() {
-      // TODO
+      this.clearEnergyChunks(); // Inherited
+      this.outgoingEnergyChunks.clear();
     }
 
   } );
