@@ -69,7 +69,7 @@ define( function( require ) {
     // animation each time the target changes.
     this.targetIndexProperty.link( function() {
       // Check bounds
-      var i = thisCarousel.targetIndexProperty.get();
+      var i = thisCarousel.targetIndex;
       assert && assert( i === 0 || i < thisCarousel.managedElements.size() );
 
       thisCarousel.elapsedTransitionTime = 0;
