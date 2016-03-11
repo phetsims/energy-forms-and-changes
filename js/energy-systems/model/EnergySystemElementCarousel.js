@@ -30,8 +30,8 @@ define( function( require ) {
    * Container for containing and managing the position of energy system
    * elements.
    *
-   * @param {Vector2} selectedElementPosition Offset between elements in the carousel
-   * @param {Vector2} offsetBetweenElements   Location of currently selected element
+   * @param {Vector2} selectedElementPosition Location of currently selected element
+   * @param {Vector2} offsetBetweenElements   Offset between elements in the carousel
    * @constructor
    */
   function EnergySystemElementCarousel( selectedElementPosition, offsetBetweenElements ) {
