@@ -63,8 +63,8 @@ define( function( require ) {
       var maxY = Number.NEGATIVE_INFINITY;
       energyChunkContainerSlices.forEach( function( slice ) {
         minX = Math.min( slice.shape.bounds.minX, minX );
-        maxX = Math.max( slice.shape.bounds.minY, maxX );
-        minY = Math.min( slice.shape.bounds.maxX, minY );
+        maxX = Math.max( slice.shape.bounds.maxX, maxX );
+        minY = Math.min( slice.shape.bounds.minY, minY );
         maxY = Math.max( slice.shape.bounds.maxY, maxY );
       } );
       var boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
@@ -168,10 +168,12 @@ define( function( require ) {
                       vectorToOther = vectorToOther.setMagnitude( minDistance );
                     }
                   }
+
+                  var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
+
                   // Add the force to the accumulated forces on this energy chunk.
                   mapEnergyChunkToForceVector[ energyChunk.uniqueID ] =
-                    mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus(
-                      vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() ) );
+                    mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( forceToOther );
                 }
               }
             } else {
