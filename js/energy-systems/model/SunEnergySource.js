@@ -13,7 +13,9 @@ define( function( require ) {
   // Modules
   var inherit = require( 'PHET_CORE/inherit' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
-  var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
+
+  // TODO: rename to EFACResources
+  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
   var Vector2 = require( 'DOT/Vector2' );
   var Random = require( 'DOT/Random' );
 
@@ -27,9 +29,9 @@ define( function( require ) {
   // Constants that control the nature of the emission sectors.  These are
   // used to make emission look random yet still have a fairly steady rate
   // within each sector.  One sector is intended to point at the solar panel.
-  var int NUM_EMISSION_SECTORS = 10;
-  var double EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
-  var double EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71; // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
+  var NUM_EMISSION_SECTORS = 10;
+  var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
+  var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71; // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
 
 
   // TODO
@@ -52,7 +54,7 @@ define( function( require ) {
    */
   function SunEnergySource( solarPanel, energyChunksVisible ) {
 
-    EnergySource.call( this, new Image( EFACResources.SUN_ICON ) );
+    EnergySource.call( this, new Image( EnergyFormsAndChangesResources.SUN_ICON ) );
 
     this.solarPanel = solarPanel;
     this.energyChunksVisible = energyChunksVisible;
@@ -70,4 +72,19 @@ define( function( require ) {
 
   }
 
+  return inherit( EnergySource, SunEnergySource, {
+
+    // For linter
+    temp: function() {
+      console.log(
+        RADIUS,
+        OFFSET_TO_CENTER_OF_SUN,
+        ENERGY_CHUNK_EMISSION_PERIOD,
+        RAND,
+        MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN,
+        NUM_EMISSION_SECTORS,
+        EMISSION_SECTOR_SPAN,
+        EMISSION_SECTOR_OFFSET );
+    }
+  } );
 } );
