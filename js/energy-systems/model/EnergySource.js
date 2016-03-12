@@ -41,22 +41,24 @@ define( function( require ) {
      */
     extractOutgoingEnergyChunks: function() {
 
-      var thisSource = this;
+      // Remove all outgoing chunks from this.energyChunkList
+      this.energyChunkList = _.difference(this.energyChunkList, this.outgoingEnergyChunks);
 
+      // var thisSource = this;
       // Create a copy to iterate over while deleting from the original
-      var energyChunksCopy = this.energyChunkList.slice( 0 );
+      // var energyChunksCopy = this.energyChunkList.slice( 0 );
 
       // Remove all outgoing chunks from this.energyChunkList
-      energyChunksCopy.forEach( function( chunk ) {
-        thisSource.outgoingEnergyChunks.forEach( function( outgoingChunk ) {
-          if ( chunk === outgoingChunk ) {
-            var i = thisSource.energyChunkList.indexOf( chunk );
-            if ( i > -1 ) {
-              thisSource.energyChunkList.splice( i, 1 );
-            }
-          }
-        } );
-      } );
+      // energyChunksCopy.forEach( function( chunk ) {
+      //   thisSource.outgoingEnergyChunks.forEach( function( outgoingChunk ) {
+      //     if ( chunk === outgoingChunk ) {
+      //       var i = thisSource.energyChunkList.indexOf( chunk );
+      //       if ( i > -1 ) {
+      //         thisSource.energyChunkList.splice( i, 1 );
+      //       }
+      //     }
+      //   } );
+      // } );
 
       return this.outgoingEnergyChunks.splice( 0 );
     },
