@@ -12,9 +12,10 @@ define( function( require ) {
 
   // Modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
-
-  // TODO: rename to EFACResources
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var Vector2 = require( 'DOT/Vector2' );
   var Random = require( 'DOT/Random' );
@@ -31,8 +32,9 @@ define( function( require ) {
   // within each sector.  One sector is intended to point at the solar panel.
   var NUM_EMISSION_SECTORS = 10;
   var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
-  var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71; // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
 
+  // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
+  var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
   // TODO
   // Clouds that can potentially block the sun's rays.  The positions are
@@ -54,10 +56,25 @@ define( function( require ) {
    */
   function SunEnergySource( solarPanel, energyChunksVisible ) {
 
+    var thisSun = this;
+
     EnergySource.call( this, new Image( EFACResources.SUN_ICON ) );
 
-    this.solarPanel = solarPanel;
     this.energyChunksVisible = energyChunksVisible;
+
+    this.solarPanel = solarPanel;
+
+    this.energyChunkEmissionCountdownTimer = ENERGY_CHUNK_EMISSION_PERIOD;
+
+    this.sectorList = _.shuffle( _.range( NUM_EMISSION_SECTORS ) );
+
+    // List of energy chunks that should be allowed to pass through the clouds
+    // without bouncing (i.e. being reflected).
+    this.energyChunksPassingThroughClouds = [];
+
+    this.currentSectorIndex = 0;
+
+    this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 
     // TODO: implement this when Clouds exist. Pasting Java snippet for now.
     // Add/remove clouds based on the value of the cloudiness property.
@@ -70,9 +87,45 @@ define( function( require ) {
     //   }
     // } );
 
+    this.addProperty( 'cloudiness', 0 );
+    this.cloudinessProperty.link( function( cloudiness ) {
+      // TODO: Sun.java line 94 -> thisSun.clouds[i].
+    } );
+
+    this.positionProperty.link( function( position ) {
+      thisSun.sunPosition = position.plus( OFFSET_TO_CENTER_OF_SUN );
+    } );
+
   }
 
   return inherit( EnergySource, SunEnergySource, {
+
+    stepInTime: function( dt ) {
+      var energyProduced = 0;
+      if ( this.active === true ) {
+
+        // See if it is time to emit a new energy chunk.
+        this.energyChunkEmissionCountdownTimer -= dt;
+        if ( this.energyChunkEmissionCountdownTimer <= 0 ) {
+          // Create a new chunk and start it on its way.
+          this.emitEnergyChunk();
+          this.energyChunkEmissionCountdownTimer += ENERGY_CHUNK_EMISSION_PERIOD;
+        }
+
+        // Move the energy chunks.
+        this.updateEnergyChunkPositions( dt );
+
+        // Calculate the amount of energy produced.
+        energyProduced = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudiness ) * dt;
+      }
+
+      // Produce the energy.
+      return new Energy( EnergyType.LIGHT, energyProduced );
+    },
+
+    updateEnergyChunkPositions: function( dt ) {
+      // TODO
+    },
 
     // For linter
     temp: function() {
