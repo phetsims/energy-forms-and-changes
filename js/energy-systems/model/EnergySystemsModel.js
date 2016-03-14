@@ -55,6 +55,7 @@ define( function( require ) {
     // Appease eslint unused variable warnings
     temp: function() {
       console.log( this.carousels );
+      console.log( SunEnergySource );
     }
   } );
 } );
