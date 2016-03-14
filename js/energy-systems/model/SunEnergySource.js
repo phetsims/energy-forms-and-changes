@@ -15,10 +15,12 @@ define( function( require ) {
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
+  var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var Vector2 = require( 'DOT/Vector2' );
   var Random = require( 'DOT/Random' );
+  var Util = require( 'DOT/Util' );
 
   // Constants
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
@@ -36,15 +38,6 @@ define( function( require ) {
   // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
   var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
-  // TODO
-  // Clouds that can potentially block the sun's rays.  The positions are
-  // set so that they appear between the sun and the solar panel, and must
-  // not overlap with one another.
-  // public final List<Cloud> clouds = new ArrayList<Cloud>() {{
-  //     add( new Cloud( new Vector2D( 0.02, 0.105 ), getObservablePosition() ) );
-  //     add( new Cloud( new Vector2D( 0.017, 0.0875 ), getObservablePosition() ) );
-  //     add( new Cloud( new Vector2D( -0.01, 0.08 ), getObservablePosition() ) );
-  // }};
 
 
   /**
@@ -76,20 +69,25 @@ define( function( require ) {
 
     this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 
-    // TODO: implement this when Clouds exist. Pasting Java snippet for now.
-    // Add/remove clouds based on the value of the cloudiness property.
-    // cloudiness.addObserver( new VoidFunction1 < Double > () {
-    //   public void apply( Double cloudiness ) {
-    //     for ( int i = 0; i < clouds.size(); i++ ) {
-    //       // Stagger the existence strength of the clouds.
-    //       clouds.get( i ).existenceStrength.set( MathUtil.clamp( 0, cloudiness * clouds.size() - i, 1 ) );
-    //     }
-    //   }
-    // } );
+    // Clouds that can potentially block the sun's rays.  The positions are
+    // set so that they appear between the sun and the solar panel, and must
+    // not overlap with one another.
+    this.clouds = [
+      new Cloud( new Vector2( -0.01, 0.08 ), this.position ),
+      new Cloud( new Vector2( 0.017, 0.0875 ), this.position ),
+      new Cloud( new Vector2( 0.02, 0.105 ), this.position )
+    ];
 
     this.addProperty( 'cloudiness', 0 );
+
+    // Add/remove clouds based on the value of the cloudiness property.
     this.cloudinessProperty.link( function( cloudiness ) {
-      // TODO: Sun.java line 94 -> thisSun.clouds[i].
+      var nClouds = thisSun.clouds.length;
+      for ( var i = 0; i < nClouds; i++ ) {
+        // Stagger the existence strength of the clouds.
+        var value = Util.clamp( cloudiness * ( nClouds - i ), 0, 1 );
+        thisSun.clouds[ i ].existenceStrengthProperty.set( value );
+      }
     } );
 
     this.positionProperty.link( function( position ) {
