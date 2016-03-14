@@ -15,7 +15,7 @@ define( function( require ) {
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
 
   // TODO: rename to EFACResources
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
+  var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var Vector2 = require( 'DOT/Vector2' );
   var Random = require( 'DOT/Random' );
 
@@ -54,7 +54,7 @@ define( function( require ) {
    */
   function SunEnergySource( solarPanel, energyChunksVisible ) {
 
-    EnergySource.call( this, new Image( EnergyFormsAndChangesResources.SUN_ICON ) );
+    EnergySource.call( this, new Image( EFACResources.SUN_ICON ) );
 
     this.solarPanel = solarPanel;
     this.energyChunksVisible = energyChunksVisible;

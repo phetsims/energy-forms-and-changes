@@ -14,7 +14,7 @@ define( function( require ) {
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   //var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EnergyFormsAndChangesResources = require( 'ENERGY_FORMS_AND_CHANGES/EnergyFormsAndChangesResources' );
+  var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
 
@@ -47,7 +47,7 @@ define( function( require ) {
      * @returns {EnergyContainerCategory.IRON|*|exports.IRON}
      */
     getLabel: function() {
-      return EnergyFormsAndChangesResources.ironString;
+      return EFACResources.ironString;
     },
 
     /**
