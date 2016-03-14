@@ -11,7 +11,6 @@ define( function( require ) {
 
   // Modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -20,18 +19,14 @@ define( function( require ) {
   // Constants
   var RAND = new Random();
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
-  var SOLAR_PANEL_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL, 0.15, SOLAR_PANEL_OFFSET );
+  // var SOLAR_PANEL_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL, 0.15, SOLAR_PANEL_OFFSET );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
-  var CONVERTER_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL_GEN, CONVERTER_IMAGE_OFFSET );
-  var CURVED_WIRE_IMAGE = new ModelElementImage( EFACResources.WIRE_BLACK_LEFT,
-    CONVERTER_IMAGE_OFFSET.plus( 0.009, 0.024 ) );
-  var POST_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL_POST_2,
-    CONVERTER_IMAGE_OFFSET.plus( new Vector2( 0, 0.04 ) ) );
+  // var CONVERTER_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL_GEN, CONVERTER_IMAGE_OFFSET );
+  // var CURVED_WIRE_IMAGE = new ModelElementImage( EFACResources.WIRE_BLACK_LEFT, CONVERTER_IMAGE_OFFSET.plus( 0.009, 0.024 ) );
+  // var POST_IMAGE = new ModelElementImage( EFACResources.SOLAR_PANEL_POST_2, CONVERTER_IMAGE_OFFSET.plus( new Vector2( 0, 0.04 ) ) );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
-  var CONNECTOR_IMAGE = new ModelElementImage( EFACResources.CONNECTOR, CONNECTOR_IMAGE_OFFSET );
-  var PANEL_IMAGE_BOUNDS = new Rectangle2D.Double( -SOLAR_PANEL_IMAGE.getWidth() / 2, -SOLAR_PANEL_IMAGE.getHeight() / 2,
-    SOLAR_PANEL_IMAGE.getWidth(),
-    SOLAR_PANEL_IMAGE.getHeight() );
+  // var CONNECTOR_IMAGE = new ModelElementImage( EFACResources.CONNECTOR, CONNECTOR_IMAGE_OFFSET );
+  // var PANEL_IMAGE_BOUNDS = new Rectangle2D.Double( -SOLAR_PANEL_IMAGE.getWidth() / 2, -SOLAR_PANEL_IMAGE.getHeight() / 2, SOLAR_PANEL_IMAGE.getWidth(), SOLAR_PANEL_IMAGE.getHeight() );
 
   /**
    * Solar panel is an energy converter
@@ -59,6 +54,10 @@ define( function( require ) {
     createPathToPanelBottom: function() {},
     createPathThroughConverter: function() {},
     getAbsorptionShape: function() {},
-    getUserComponent: function() {}
+    getUserComponent: function() {},
+    temp: function() {
+      console.log( RAND, SOLAR_PANEL_OFFSET, CONVERTER_IMAGE_OFFSET, CONNECTOR_IMAGE_OFFSET );
+    }
+
   } );
 } );
