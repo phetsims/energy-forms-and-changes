@@ -31,7 +31,6 @@ define( function( require ) {
   return inherit( EnergySystemElement, EnergySource, {
 
     /**
-     * TODO: untested
      * Get the energy chunks that this source wants to transfer to the next
      * energy system element. This is a mutating operation: it removes all
      * outgoing chunks from both this.energyChunkList and
@@ -43,22 +42,6 @@ define( function( require ) {
 
       // Remove all outgoing chunks from this.energyChunkList
       this.energyChunkList = _.difference(this.energyChunkList, this.outgoingEnergyChunks);
-
-      // var thisSource = this;
-      // Create a copy to iterate over while deleting from the original
-      // var energyChunksCopy = this.energyChunkList.slice( 0 );
-
-      // Remove all outgoing chunks from this.energyChunkList
-      // energyChunksCopy.forEach( function( chunk ) {
-      //   thisSource.outgoingEnergyChunks.forEach( function( outgoingChunk ) {
-      //     if ( chunk === outgoingChunk ) {
-      //       var i = thisSource.energyChunkList.indexOf( chunk );
-      //       if ( i > -1 ) {
-      //         thisSource.energyChunkList.splice( i, 1 );
-      //       }
-      //     }
-      //   } );
-      // } );
 
       return this.outgoingEnergyChunks.splice( 0 );
     },
