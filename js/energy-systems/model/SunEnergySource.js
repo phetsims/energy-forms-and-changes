@@ -15,7 +15,7 @@ define( function( require ) {
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
-  var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Cloud' );
+  var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -121,9 +121,15 @@ define( function( require ) {
       return new Energy( EnergyType.LIGHT, energyProduced );
     },
 
-    updateEnergyChunkPositions: function( dt ) {
-      // TODO
-    },
+    // TODO: fill out these stubs
+    updateEnergyChunkPositions: function( dt ) {},
+    emitEnergyChunk: function() {},
+    preLoadEnergyChunks: function() {},
+    getEnergyOutputRate: function() {},
+    chooseNextEmissionAngle: function() {},
+    activate: function() {},
+    deactivate: function() {},
+    getUserComponent: function() {},
 
     // For linter
     temp: function() {
