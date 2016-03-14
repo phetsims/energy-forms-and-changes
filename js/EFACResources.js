@@ -71,7 +71,7 @@ define( function( require ) {
     //BRICK_TEXTURE_RIGHT: require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_right.png' ),
     //BRICK_TEXTURE_TOP: require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_top.png' ),
     //CLOUD_1: require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' ),
-    //CONNECTOR: require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' ),
+    CONNECTOR: require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' ),
     //ELEMENT_BASE_BACK: require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' ),
     //ELEMENT_BASE_FRONT: require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' ),
     //E_CHEM_BLANK_LIGHT: require( 'image!ENERGY_FORMS_AND_CHANGES/E_chem_blank_light.png' ),
@@ -121,18 +121,18 @@ define( function( require ) {
     //INCANDESCENT_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_icon.png' ),
     //INCANDESCENT_ON_3: require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_on_3.png' ),
     //SHELF_LONG: require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' ),
-    //SOLAR_PANEL: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' ),
-    //SOLAR_PANEL_GEN: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' ),
-    //SOLAR_PANEL_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' ),
-    //SOLAR_PANEL_POST_2: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' ),
-    SUN_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' )
+    SOLAR_PANEL: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' ),
+    SOLAR_PANEL_GEN: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' ),
+    SOLAR_PANEL_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' ),
+    SOLAR_PANEL_POST_2: require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' ),
+    SUN_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' ),
     //TEAPOT_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_icon.png' ),
     //TEAPOT_LARGE: require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_large.png' ),
     //THERMOMETER_MEDIUM_BACK: require( 'image!ENERGY_FORMS_AND_CHANGES/thermometer_medium_back.png' ),
     //THERMOMETER_MEDIUM_FRONT: require( 'image!ENERGY_FORMS_AND_CHANGES/thermometer_medium_front.png' ),
     //WATER_ICON: require( 'image!ENERGY_FORMS_AND_CHANGES/water_icon.png' ),
     //WIRE_BLACK_62: require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' ),
-    //WIRE_BLACK_LEFT: require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' ),
+    WIRE_BLACK_LEFT: require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' )
     //WIRE_BLACK_RIGHT: require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' )
   };
 
