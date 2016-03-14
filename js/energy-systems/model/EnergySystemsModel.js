@@ -15,6 +15,7 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
+  var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
 
   // Constants
   var OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 );
@@ -34,19 +35,26 @@ define( function( require ) {
 
     // Carousels that control the positions of the energy sources, converters,
     // and users.
-    var energySourcesCarousel = new EnergySystemElementCarousel( new Vector2( -0.15, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
-    var energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
-    var energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+    this.energySourcesCarousel = new EnergySystemElementCarousel( new Vector2( -0.15, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+    this.energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
+    this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
-
-    var carousels = [
-      energySourcesCarousel, energyConvertersCarousel, energyUsersCarousel
+    this.carousels = [
+      this.energySourcesCarousel,
+      this.energyConvertersCarousel,
+      this.energyUsersCarousel
     ];
 
-    // Just to pass lint
-    console.log( carousels );
+    // this.sun = new SunEnergySource( null, this.energyChunksVisible ); // TODO: null->solarPanel
+    // this.energySourcesCarousel.add( this.sun );
 
   }
 
-  return inherit( PropertySet, EnergySystemsModel );
+  return inherit( PropertySet, EnergySystemsModel, {
+
+    // Appease eslint unused variable warnings
+    temp: function() {
+      console.log( this.carousels );
+    }
+  } );
 } );
