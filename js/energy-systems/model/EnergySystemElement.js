@@ -15,7 +15,6 @@ define( function( require ) {
   var PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableFadableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // TODO: untested
   /**
    * Energy system element
    *
@@ -32,7 +31,8 @@ define( function( require ) {
     this.addProperty( 'active', false );
 
     var thisElement = this;
-    this.positionProperty.link( function( newPosition, oldPosition ) {
+    // At initialization, oldPosition is null, so skip that case with lazyLink
+    this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
       var deltaPosition = newPosition.minus( oldPosition );
       thisElement.energyChunkList.forEach( function( chunk ) {
         chunk.translate( deltaPosition );
