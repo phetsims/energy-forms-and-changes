@@ -17,7 +17,6 @@ define( function( require ) {
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var Vector2 = require( 'DOT/Vector2' );
   var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
@@ -38,7 +37,7 @@ define( function( require ) {
   // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
   var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
-
+  var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
 
   /**
    * Sun object as an energy source
@@ -51,7 +50,7 @@ define( function( require ) {
 
     var thisSun = this;
 
-    EnergySource.call( this, new Image( EFACResources.SUN_ICON ) );
+    EnergySource.call( this, new Image( SUN_ICON ) );
 
     this.energyChunksVisible = energyChunksVisible;
 

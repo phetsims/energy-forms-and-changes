@@ -10,7 +10,6 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  //var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var LinearFunction = require( 'DOT/LinearFunction' );

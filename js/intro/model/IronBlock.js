@@ -13,14 +13,14 @@ define( function( require ) {
   // modules
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
-  //var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACResources = require( 'ENERGY_FORMS_AND_CHANGES/EFACResources' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   // constants
   var SPECIFIC_HEAT = 450; // In J/kg-K
   var DENSITY = 7800; // In kg/m^3, source = design document.
+
+  var ironString = require( 'string!ENERGY_FORMS_AND_CHANGES/iron' );
 
   /**
    *
@@ -47,7 +47,7 @@ define( function( require ) {
      * @returns {EnergyContainerCategory.IRON|*|exports.IRON}
      */
     getLabel: function() {
-      return EFACResources.ironString;
+      return ironString;
     },
 
     /**
