@@ -100,14 +100,14 @@ define( function( require ) {
 
       // Set the element's position to be at the end of the carousel.
       if ( this.managedElements.length === 0 ) {
-        element.setPosition( this.selectedElementPosition );
+        element.positionProperty.set( this.selectedElementPosition );
       } else {
         var lastElement = this.managedElements[ this.managedElements.length - 1 ];
-        element.setPosition( lastElement.getPosition().plus( this.offsetBetweenElements ) );
+        element.positionProperty.set( lastElement.getPosition().plus( this.offsetBetweenElements ) );
       }
 
       // Add element to the list of managed elements.
-      this.managedElements.add( element );
+      this.managedElements.push( element );
 
       // Update opacities.
       this.updateManagedElementOpacities();
@@ -173,9 +173,9 @@ define( function( require ) {
     updateManagedElementOpacities: function() {
       var thisCarousel = this;
       this.managedElements.forEach( function( managedElement ) {
-        var distanceToSelection = managedElement.getPosition().distance( thisCarousel.selectedElementPosition );
+        var distanceToSelection = managedElement.position.distance( thisCarousel.selectedElementPosition );
         var opacity = Util.clamp( 1 - ( distanceToSelection / thisCarousel.offsetBetweenElements.magnitude() ), 0, 1 );
-        managedElement.opacity.set( opacity );
+        managedElement.opacityProperty.set( opacity );
       } );
     },
 
