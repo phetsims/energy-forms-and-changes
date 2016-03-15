@@ -12,10 +12,11 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
-  var Vector2 = require( 'DOT/Vector2' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
+  var PropertySet = require( 'AXON/PropertySet' );
+  var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
   var OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 );
@@ -45,8 +46,10 @@ define( function( require ) {
       this.energyUsersCarousel
     ];
 
-    // this.sun = new SunEnergySource( null, this.energyChunksVisible ); // TODO: null->solarPanel
-    // this.energySourcesCarousel.add( this.sun );
+    this.solarPanel = new SolarPanel( this.energyChunksVisible );
+
+    this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
+    this.energySourcesCarousel.add( this.sun );
 
   }
 
