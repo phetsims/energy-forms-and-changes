@@ -19,9 +19,12 @@ define( function( require ) {
   var CLOUD_HEIGHT = CLOUD_WIDTH; // TODO: Java code uses ModelElementImage. Equivalent in JS?
 
   function Cloud( offsetFromParent, parentPosition ) {
+    PropertySet.call( this, {
+      existenceStrength: 1.0
+    } );
+
     this.offsetFromParent = offsetFromParent;
     this.parentPosition = parentPosition;
-    this.addProperty( 'existenceStrength', 1.0 );
   }
 
   return inherit( PropertySet, Cloud, {
