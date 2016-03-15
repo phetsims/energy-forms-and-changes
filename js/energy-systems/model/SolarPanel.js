@@ -13,6 +13,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
@@ -39,8 +40,8 @@ define( function( require ) {
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
   var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR_IMAGE_OFFSET );
 
-  var halfWidth = SOLAR_PANEL_IMAGE.getWidth() / 2;
-  var halfHeight = SOLAR_PANEL_IMAGE.getHeight() / 2;
+  var halfWidth = SOLAR_PANEL_IMAGE.width / 2;
+  var halfHeight = SOLAR_PANEL_IMAGE.height / 2;
   var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
 
   // var PANEL_IMAGE_BOUNDS = new Rectangle2D.Double( -SOLAR_PANEL_IMAGE.getWidth() / 2, -SOLAR_PANEL_IMAGE.getHeight() / 2,
