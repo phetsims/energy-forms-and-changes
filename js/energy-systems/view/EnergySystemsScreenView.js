@@ -18,6 +18,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
 
   // images
   var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_energy_systems.png' );
@@ -37,6 +38,11 @@ define( function( require ) {
     mockupOpacityProperty.linkAttribute( image, 'opacity' );
     this.addChild( image );
     this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
+
+    // Create the legend for energy chunks.
+    var energyChunkLegend = new EnergyChunkLegend();
+    this.addChild( energyChunkLegend );
+
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
