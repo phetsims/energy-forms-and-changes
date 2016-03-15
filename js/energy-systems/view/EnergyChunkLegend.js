@@ -2,7 +2,8 @@
 
 /**
  * @author John Blanco
- * @
+ * @author Jesse Greenberg
+ * @author  Andrew Adare
  */
 define( function( require ) {
   'use strict';
@@ -35,27 +36,34 @@ define( function( require ) {
 
     options = _.extend( {}, options );
 
-    var titleText = new Text( formsOfEnergyString, { font: new PhetFont( { size: 14, weight: 'bold' } ) } );
+    var titleText = new Text( formsOfEnergyString, {
+      font: new PhetFont( {
+        size: 14,
+        weight: 'bold'
+      } )
+    } );
 
     var createEnergyChunkSymbol = function( labelString, energyType ) {
-      var labelText = new Text( labelString, { font: LEGEND_ENTRY_FONT } );
+      var labelText = new Text( labelString, {
+        font: LEGEND_ENTRY_FONT
+      } );
 
       var iconNode = EnergyChunkNode.createEnergyChunkNode( energyType );
 
-      return new HBox( { 
+      return new HBox( {
         children: [ iconNode, labelText ],
         spacing: 10
       } );
     };
 
     var content = new VBox( {
-      children: [ 
+      children: [
         titleText,
         createEnergyChunkSymbol( mechanicalString, EnergyType.MECHANICAL ),
         createEnergyChunkSymbol( electricalString, EnergyType.ELECTRICAL ),
-        createEnergyChunkSymbol( thermalString, EnergyType.THERMAL),
+        createEnergyChunkSymbol( thermalString, EnergyType.THERMAL ),
         createEnergyChunkSymbol( lightString, EnergyType.LIGHT ),
-        createEnergyChunkSymbol( chemicalString, EnergyType.CHEMICAL)
+        createEnergyChunkSymbol( chemicalString, EnergyType.CHEMICAL )
       ],
       align: 'left',
       spacing: 6
