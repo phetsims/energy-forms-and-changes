@@ -22,11 +22,13 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -50,6 +52,16 @@ define( function( require ) {
     } );
 
     var thisScreenView = this;
+
+    // Create the model-view transform.  The primary units used in the model are
+    // meters, so significant zoom is used. The multipliers for the 2nd parameter
+    // can be used to adjust where the point (0, 0) in the model, which is on the
+    // middle of the screen above the counter as located in the view.
+    // Final arg is zoom factor - smaller zooms out, larger zooms in.
+    var mvtOriginX = Math.round( thisScreenView.layoutBounds.width * 0.5 );
+    var mvtOriginY = Math.round( thisScreenView.layoutBounds.height * 0.475 );
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO, new Vector2( mvtOriginX, mvtOriginY ), 2200 );
 
     //Show the mock-up and a slider to change its transparency
     function addMockupImage() {
@@ -115,11 +127,16 @@ define( function( require ) {
       thisScreenView.addChild( resetAllButton );
     }
 
+    function addSun() {
+      var sun = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( sun );
+    }
+
     addMockupImage();
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
-
+    addSun();
   }
 
   return inherit( ScreenView, EnergySystemsScreenView );
