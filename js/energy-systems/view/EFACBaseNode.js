@@ -20,13 +20,15 @@ define( function( require ) {
   function EFACBaseNode( modelElement, modelViewTransform ) {
     Node.call( this );
 
+    var thisNode = this;
+
     /**
      * Update the overall offset based on the model position.
      *
      * @param  {Vector2} offset
      */
     modelElement.positionProperty.link( function( offset ) {
-      this.setTranslation( modelViewTransform.ModelToViewPosition( offset ) );
+      thisNode.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
     } );
 
     /**
@@ -35,7 +37,7 @@ define( function( require ) {
      * @param  {Number} opacity
      */
     modelElement.opacityProperty.link( function( opacity ) {
-      this.setOpacity( opacity );
+      thisNode.setOpacity( opacity );
     } );
   }
 
