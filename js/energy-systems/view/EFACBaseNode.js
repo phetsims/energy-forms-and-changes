@@ -17,7 +17,7 @@ define( function( require ) {
    * @param {ModelViewTransform} modelViewTransform
    * @constructor
    */
-  function EFACNode( modelElement, modelViewTransform ) {
+  function EFACBaseNode( modelElement, modelViewTransform ) {
     Node.call( this );
 
     /**
@@ -39,5 +39,5 @@ define( function( require ) {
     } );
   }
 
-  return inherit( Node, EFACNode );
+  return inherit( Node, EFACBaseNode );
 } );
