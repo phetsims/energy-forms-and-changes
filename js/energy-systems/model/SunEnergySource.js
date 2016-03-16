@@ -68,6 +68,8 @@ define( function( require ) {
 
     this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 
+    this.radius = RADIUS;
+
     // Clouds that can potentially block the sun's rays.  The positions are
     // set so that they appear between the sun and the solar panel, and must
     // not overlap with one another.
