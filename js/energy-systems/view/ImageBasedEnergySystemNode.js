@@ -32,8 +32,12 @@ define( function( require ) {
      */
     addImageNode: function( modelElementImage ) {
       var imageNode = new Image( modelElementImage.image );
-      var widthInView = this.modelViewTransform(modelElementImage.width);
+      var widthInView = this.modelViewTransform( modelElementImage.width );
       imageNode.setScale( widthInView / imageNode.getBounds().getWidth() );
+      var offset = this.ModelViewTransform.modelToViewDelta( modelElementImage.centerToCenterOffset );
+      imageNode.setCenterX( offset.x );
+      imageNode.setCenterY( offset.y );
+      return imageNode;
     }
 
   } );
