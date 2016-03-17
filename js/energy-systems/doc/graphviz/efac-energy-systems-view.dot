@@ -1,0 +1,35 @@
+digraph G {
+
+  "Node" -> EFACBaseNode;
+
+  NodeDescendants [shape=box, label=
+    "BeltNode,
+    CloudNode,
+    EnergyChunkLegend,
+    EnergySystemElementSelector,
+    FadingLineNode,
+    HeaterCoolerView,
+    LightRayNode,
+    LightRays,
+    ModelElementImageNode,
+    SunNode,
+    TeaPotNode,
+    WaterDropNode"];
+
+  "Node" -> NodeDescendants;
+
+  EFACBaseNodeDescendants [shape=box, label=
+    "BikerNode,
+    ElectricalGeneratorNode,
+    FaucetAndWaterNode,
+    FluorescentLightBulbNode,
+    SolarPanelNode,
+    SunNode,
+    TeaPotNode"];
+
+  EFACBaseNode -> EFACBaseNodeDescendants;
+  EFACBaseNode -> ImageBasedEnergySystemNode;
+
+  ImageBasedEnergySystemNode -> {BeakerHeaterNode, IncandescentLightBulbNode};
+
+}

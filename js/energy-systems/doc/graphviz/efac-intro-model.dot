@@ -1,0 +1,56 @@
+
+digraph G {
+
+# Flow horizontally
+rankdir=LR;
+
+# Built-in or common classes
+Object [shape=box];
+PropertySet [shape=box];
+Bounds2 [shape=box];
+
+UserMovableModelElement -> Thermometer -> ElementFollowingThermometer;
+
+Object -> {
+ThermalEnergyContainer,
+EnergyChunkContainerSlice,
+EnergyChunkWanderController,
+HorizontalSurface
+};
+
+ThermalEnergyContainer -> Air;
+
+PropertySet -> {
+  ElementFollower,
+  EnergyChunk,
+  ModelElement,
+  EnergyFormsAndChangesIntroModel,
+  EnergyFormsAndChangesEnergySystemsModel
+};
+
+Bounds2 -> ThermalContactArea;
+
+# Non-inherited classes - Fix their position to same rank (i.e. column) as ModelElement
+{rank = same;
+  ModelElement; HeatTransferConstants; TemperatureAndColor; EnergyChunkDistributor;
+}
+
+ModelElement -> {
+  UserMovableModelElement,
+  Burner
+};
+
+UserMovableModelElement -> RectangularThermalMovableModelElement;
+
+RectangularThermalMovableModelElement -> {Beaker, Block};
+Beaker -> BeakerContainer;
+Block -> {IronBlock, Brick};
+
+subgraph "cluster_enums" {
+  label="Enums:";
+  EnergyType;
+  EnergyContainerCategory;
+}
+
+TemperatureAndColor -> EnergyType [style="invis"];
+}
