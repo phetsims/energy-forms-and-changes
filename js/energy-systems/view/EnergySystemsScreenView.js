@@ -25,6 +25,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
@@ -54,6 +55,14 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 1008, 679 )
     } );
 
+    // Bounds2 object for use as primary geometric reference
+    var stage = this.layoutBounds;
+
+    // Node for back-most layer
+    var backLayer = new Node();
+    this.addChild( backLayer );
+
+    // ScreenView handle for use inside functions
     var thisScreenView = this;
 
     // Create the model-view transform.  The primary units used in the model are
@@ -61,10 +70,26 @@ define( function( require ) {
     // can be used to adjust where the point (0, 0) in the model, which is on the
     // middle of the screen above the counter as located in the view.
     // Final arg is zoom factor - smaller zooms out, larger zooms in.
-    var mvtOriginX = Math.round( thisScreenView.layoutBounds.width * 0.5 );
-    var mvtOriginY = Math.round( thisScreenView.layoutBounds.height * 0.475 );
+    var mvtOriginX = Math.round( stage.width * 0.5 );
+    var mvtOriginY = Math.round( stage.height * 0.475 );
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO, new Vector2( mvtOriginX, mvtOriginY ), 2200 );
+
+    // Add beige background rectangle
+    function addBackground() {
+      backLayer.addChild( new Rectangle( stage, {
+        fill: EFACConstants.SECOND_TAB_BACKGROUND_COLOR
+      } ) );
+    }
+
+    // Create a background rectangle for the play/pause controls.
+    function addPlayControls() {
+      var bottomPanel = new Rectangle( 0, stage.maxY - 114, stage.width, stage.height, 0, 0, {
+        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR,
+        stroke: 'black'
+      } );
+      backLayer.addChild( bottomPanel );
+    }
 
     //Show the mock-up and a slider to change its transparency
     function addMockupImage() {
@@ -72,7 +97,7 @@ define( function( require ) {
       var image = new Image( mockupImage, {
         pickable: false
       } );
-      image.scale( thisScreenView.layoutBounds.width / image.width );
+      image.scale( stage.width / image.width );
       opacity.linkAttribute( image, 'opacity' );
       thisScreenView.addChild( image );
       thisScreenView.addChild( new HSlider( opacity, {
@@ -87,9 +112,7 @@ define( function( require ) {
     // Create the legend for energy chunk types
     function addEnergyChunkLegend() {
       var legend = new EnergyChunkLegend();
-      var x = 0.9 * thisScreenView.layoutBounds.width;
-      var y = 0.5 * thisScreenView.layoutBounds.height;
-      legend.center = new Vector2( x, y );
+      legend.center = new Vector2( 0.9 * stage.width;, 0.5 * stage.height );
       thisScreenView.addChild( legend );
     }
 
@@ -114,7 +137,7 @@ define( function( require ) {
         stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
       } );
-      panel.rightTop = new Vector2( thisScreenView.layoutBounds.width - EDGE_INSET, EDGE_INSET );
+      panel.rightTop = new Vector2( stage.width - EDGE_INSET, EDGE_INSET );
       thisScreenView.addChild( panel );
     }
 
@@ -124,8 +147,8 @@ define( function( require ) {
         listener: function() {
           model.reset();
         },
-        right: thisScreenView.layoutBounds.maxX - 10,
-        bottom: thisScreenView.layoutBounds.maxY - 10
+        right: stage.maxX - 10,
+        bottom: stage.maxY - 10
       } );
       thisScreenView.addChild( resetAllButton );
     }
@@ -133,22 +156,6 @@ define( function( require ) {
     function addSun() {
       var sun = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
       thisScreenView.addChild( sun );
-    }
-
-    function addPlayControls() {
-
-      // Create a background rectangle for the play/pause controls.
-      var bounds = thisScreenView.layoutBounds;
-      var w = bounds.width;
-      var h = bounds.height;
-      var x = bounds.width / 2 - w / 2;
-      var y = bounds.maxY - 114; // Offset chosen to match mockup image
-
-      var bottomPanel = new Rectangle( x, y, w, h, 0, 0, {
-        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR,
-        stroke: 'black'
-      } );
-      thisScreenView.addChild( bottomPanel );
     }
 
     // Create the carousel control nodes.
@@ -162,11 +169,7 @@ define( function( require ) {
       // thisScreenView.addChild( usersCarousel );
     }
 
-    // Add beige background rectangle
-    this.addChild( new Rectangle( this.layoutBounds, {
-      fill: EFACConstants.SECOND_TAB_BACKGROUND_COLOR
-    } ) );
-
+    addBackground();
     addPlayControls();
     addMockupImage();
     addEnergyChunkLegend();
