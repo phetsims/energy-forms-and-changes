@@ -49,7 +49,7 @@ define( function( require ) {
   function EnergySystemsScreenView( model ) {
 
     ScreenView.call( this, {
-      layoutBounds: new Bounds2( 0, 0, 768, 504 )
+      layoutBounds: new Bounds2( 0, 0, 1008, 679 )
     } );
 
     var thisScreenView = this;
