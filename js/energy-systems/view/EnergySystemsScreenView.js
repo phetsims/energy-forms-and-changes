@@ -16,6 +16,7 @@ define( function( require ) {
   var CheckBox = require( 'SUN/CheckBox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -151,6 +152,8 @@ define( function( require ) {
     addSun();
     addCarousels();
   }
+
+  energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
 
   return inherit( ScreenView, EnergySystemsScreenView );
 } );
