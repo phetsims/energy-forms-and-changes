@@ -12,10 +12,10 @@ define( function( require ) {
   'use strict';
 
   // Modules
-  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  // var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // Constants
   var BUTTON_IMAGE_HEIGHT_OR_WIDTH = 50; // In screen coordinates, which is close to pixels.
@@ -25,35 +25,38 @@ define( function( require ) {
    * @constructor
    */
   function EnergySystemElementSelector( carousel ) {
-    Node.call( this );
 
     var buttonElementList = [];
 
     for ( var i = 0; i < carousel.managedElements.length; i++ ) {
       var element = carousel.managedElements[ i ];
-      var buttonImageNode = new Image( element.iconImage );
-      var width = buttonImageNode.getBounds().getWidth();
-      var height = buttonImageNode.getBounds().getHeight();
+      var iconImage = element.iconImage;
+      var width = iconImage.getBounds().getWidth();
+      var height = iconImage.getBounds().getHeight();
       var denominator = ( width > height ) ? width : height;
 
       assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
 
-      buttonImageNode.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
+      iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
 
-      buttonElementList.push( buttonImageNode );
-      // add( new RadioButtonStripControlPanelNode.Element < Integer > ( buttonImageNode, i, carousel.getElement( i ).getUserComponent() ) );
+      var imageBounds = iconImage.bounds.dilated( 5 );
+      var buttonRect = new Rectangle( imageBounds, 4, 4, {
+        fill: 'white',
+        stroke: 'black'
+      } );
+
+      buttonRect.addChild( iconImage );
+
+      buttonElementList.push( {
+        value: i,
+        node: buttonRect
+      } );
     }
 
-    // TODO
-    // addChild( new RadioButtonStripControlPanelNode < Integer > ( carousel.targetIndex,
-    //   buttonElementList,
-    //   5,
-    //   EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-    //   EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-    //   EFACConstants.CONTROL_PANEL_OUTLINE_COLOR,
-    //   4 ) );
-
+    RadioButtonGroup.call( this, carousel.targetIndexProperty, buttonElementList, {
+      baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+    } );
   }
 
-  return inherit( Node, EnergySystemElementSelector );
+  return inherit( RadioButtonGroup, EnergySystemElementSelector );
 } );
