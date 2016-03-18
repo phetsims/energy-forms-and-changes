@@ -5,8 +5,9 @@
  * a carousel by presenting a set of radio-style push buttons, each with an
  * icon image of the selection that it represents.
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author  John Blanco
+ * @author  Andrew Adare
+ * @author  Jesse Greenberg
  */
 define( function( require ) {
   'use strict';
