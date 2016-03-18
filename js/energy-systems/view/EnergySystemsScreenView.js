@@ -16,6 +16,7 @@ define( function( require ) {
   var CheckBox = require( 'SUN/CheckBox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
+  var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HSlider = require( 'SUN/HSlider' );
@@ -132,11 +133,23 @@ define( function( require ) {
       thisScreenView.addChild( sun );
     }
 
+    // Create the carousel control nodes.
+    function addCarousels() {
+      var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
+      var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
+      var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
+
+      thisScreenView.addChild( sourcesCarousel );
+      thisScreenView.addChild( convertersCarousel );
+      thisScreenView.addChild( usersCarousel );
+    }
+
     addMockupImage();
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
     addSun();
+    addCarousels();
   }
 
   return inherit( ScreenView, EnergySystemsScreenView );
