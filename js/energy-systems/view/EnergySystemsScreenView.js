@@ -112,7 +112,7 @@ define( function( require ) {
     // Create the legend for energy chunk types
     function addEnergyChunkLegend() {
       var legend = new EnergyChunkLegend();
-      legend.center = new Vector2( 0.9 * stage.width;, 0.5 * stage.height );
+      legend.center = new Vector2( 0.9 * stage.width, 0.5 * stage.height );
       thisScreenView.addChild( legend );
     }
 
