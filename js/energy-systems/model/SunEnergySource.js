@@ -145,5 +145,8 @@ define( function( require ) {
         EMISSION_SECTOR_SPAN,
         EMISSION_SECTOR_OFFSET );
     }
+  }, {
+    // @public
+    OFFSET_TO_CENTER_OF_SUN: OFFSET_TO_CENTER_OF_SUN
   } );
 } );
