@@ -137,12 +137,12 @@ define( function( require ) {
     // Create the carousel control nodes.
     function addCarousels() {
       var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
-      var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
-      var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
+      // var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
+      // var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
 
       thisScreenView.addChild( sourcesCarousel );
-      thisScreenView.addChild( convertersCarousel );
-      thisScreenView.addChild( usersCarousel );
+      // thisScreenView.addChild( convertersCarousel );
+      // thisScreenView.addChild( usersCarousel );
     }
 
     addMockupImage();
