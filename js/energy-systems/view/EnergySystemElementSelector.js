@@ -35,10 +35,12 @@ define( function( require ) {
       var width = buttonImageNode.getBounds().getWidth();
       var height = buttonImageNode.getBounds().getHeight();
       var denominator = ( width > height ) ? width : height;
-      buttonImageNode.setScale( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
 
-      // TODO: null -> RadioButton??
-      buttonElementList.push( null );
+      assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
+
+      buttonImageNode.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
+
+      buttonElementList.push( buttonImageNode );
       // add( new RadioButtonStripControlPanelNode.Element < Integer > ( buttonImageNode, i, carousel.getElement( i ).getUserComponent() ) );
     }
 
