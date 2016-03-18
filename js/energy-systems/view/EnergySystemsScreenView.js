@@ -28,6 +28,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
@@ -134,6 +135,22 @@ define( function( require ) {
       thisScreenView.addChild( sun );
     }
 
+    function addPlayControls() {
+
+      // Create a background rectangle for the play/pause controls.
+      var bounds = thisScreenView.layoutBounds;
+      var w = bounds.width;
+      var h = bounds.height;
+      var x = bounds.width / 2 - w / 2;
+      var y = bounds.maxY - 114; // Offset chosen to match mockup image
+
+      var bottomPanel = new Rectangle( x, y, w, h, 0, 0, {
+        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR,
+        stroke: 'black'
+      } );
+      thisScreenView.addChild( bottomPanel );
+    }
+
     // Create the carousel control nodes.
     function addCarousels() {
       var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
@@ -145,6 +162,12 @@ define( function( require ) {
       // thisScreenView.addChild( usersCarousel );
     }
 
+    // Add beige background rectangle
+    this.addChild( new Rectangle( this.layoutBounds, {
+      fill: EFACConstants.SECOND_TAB_BACKGROUND_COLOR
+    } ) );
+
+    addPlayControls();
     addMockupImage();
     addEnergyChunkLegend();
     addCheckBoxPanel();
