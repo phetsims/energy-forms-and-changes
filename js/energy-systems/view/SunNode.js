@@ -16,7 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
-  // var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
 
   // Constants
   // var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
@@ -57,17 +57,15 @@ define( function( require ) {
     //   }
     // }
 
-
-    // Add the sun.
-    var sunCenter = modelViewTransform.modelToViewDelta( sun.sunPosition );
-    var sunShape = new Shape.ellipse( sunCenter.x, sunCenter.y, 2 * sunRadius, 2 * sunRadius );
+    // Add the sun
+    var sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
     var sunPath = new Path( sunShape, {
-      fill: Color.White,
+      fill: Color.YELLOW,
       lineWidth: 1,
       stroke: Color.YELLOW
     } );
 
-    sunPath.setTranslation( modelViewTransform.modelToViewDelta( sun.sunPosition ) );
+    sunPath.setTranslation( modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN ) );
 
     // PNode sunNode = new PhetPPath( new Ellipse2D.Double( -sunRadius, -sunRadius, sunRadius * 2, sunRadius * 2 ) ) {
     //   {
