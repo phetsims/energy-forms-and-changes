@@ -25,19 +25,28 @@ define( function( require ) {
   // var introIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/intro-icon.png' );
 
   /**
+   * @param {Tandem} tandem
    * @constructor
    */
-  function EnergyFormsAndChangesIntroScreen() {
+  function EnergyFormsAndChangesIntroScreen( tandem ) {
 
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
-    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, { fill: 'white' } );
+    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {
+      fill: 'white'
+    } );
 
     Screen.call( this, introString,
       icon,
-      function() { return new EnergyFormsAndChangesIntroModel(); },
-      function( model ) { return new EnergyFormsAndChangesIntroScreenView( model ); },
-      { backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR }
+      function() {
+        return new EnergyFormsAndChangesIntroModel();
+      },
+      function( model ) {
+        return new EnergyFormsAndChangesIntroScreenView( model );
+      }, {
+        backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR,
+        tandem: tandem
+      }
     );
   }
 

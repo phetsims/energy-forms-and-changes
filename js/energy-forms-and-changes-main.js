@@ -15,9 +15,13 @@ define( function( require ) {
   var EnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/EnergySystemsScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
+  var Tandem = require( 'TANDEM/Tandem' );
 
   // strings
   var energyFormsAndChangesTitleString = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.title' );
+
+  // Constants
+  var tandem = Tandem.createRootTandem();
 
   var simOptions = {
     credits: {
@@ -28,13 +32,15 @@ define( function( require ) {
       interviews: 'Noah Podolefsky',
       graphicArts: 'Noah Podolefsky',
       thanks: ''
-    }
+    },
+    tandem: tandem
   };
 
   SimLauncher.launch( function() {
 
     var sim = new Sim( energyFormsAndChangesTitleString, [
-      new EnergyFormsAndChangesIntroScreen(), new EnergySystemsScreen()
+      new EnergyFormsAndChangesIntroScreen( tandem.createTandem( 'introScreen' ) ),
+      new EnergySystemsScreen( tandem.createTandem( 'energySystemsScreen' ) )
     ], simOptions );
 
     sim.start();

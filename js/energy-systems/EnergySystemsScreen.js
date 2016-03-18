@@ -23,24 +23,33 @@ define( function( require ) {
 
   // TODO: include icon for screen
   // images
-//  var energySystemsIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/energy-systems-icon.png' );
+  //  var energySystemsIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/energy-systems-icon.png' );
 
 
   /**
+   * @param {Tandem} tandem
    * @constructor
    */
-  function EnergySystemsScreen() {
+  function EnergySystemsScreen( tandem ) {
 
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
 
-    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, { fill: 'white' } );
+    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {
+      fill: 'white'
+    } );
 
     Screen.call( this, energySystemsString,
       icon,
-      function() { return new EnergySystemsModel(); },
-      function( model ) { return new EnergySystemsScreenView( model ); },
-      { backgroundColor: 'white' }
+      function() {
+        return new EnergySystemsModel();
+      },
+      function( model ) {
+        return new EnergySystemsScreenView( model );
+      }, {
+        backgroundColor: 'white',
+        tandem: tandem
+      }
     );
   }
 
