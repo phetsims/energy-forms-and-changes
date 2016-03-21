@@ -41,10 +41,8 @@ define( function( require ) {
   var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
 
   /**
-   * Sun object as an energy source
-   *
-   * @param {[type]} solarPanel          [description]
-   * @param {[type]} energyChunksVisible [description]
+   * @param {EnergyConverter} solarPanel
+   * @param {Property<boolean>} energyChunksVisible
    * @constructor
    */
   function SunEnergySource( solarPanel, energyChunksVisible ) {
