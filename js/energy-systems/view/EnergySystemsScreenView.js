@@ -58,6 +58,9 @@ define( function( require ) {
     // Bounds2 object for use as primary geometric reference
     var stage = this.layoutBounds;
 
+    // Upper y-border of play/pause control panel
+    var playControlYborder = stage.maxY - 114;
+
     // Node for back-most layer
     var backLayer = new Node();
     this.addChild( backLayer );
@@ -84,7 +87,7 @@ define( function( require ) {
 
     // Create a background rectangle for the play/pause controls.
     function addPlayControls() {
-      var bottomPanel = new Rectangle( 0, stage.maxY - 114, stage.width, stage.height, 0, 0, {
+      var bottomPanel = new Rectangle( 0, playControlYborder, stage.width, stage.height, 0, 0, {
         fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR,
         stroke: 'black'
       } );
@@ -160,9 +163,17 @@ define( function( require ) {
 
     // Create the carousel control nodes.
     function addCarousels() {
+
+      // Instantiate nodes for the three carousels
       var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
       // var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
       // var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
+
+      // Position carousels
+      // TODO: x positioning
+      // Assume all carousels have the height of the sources Carousel
+      var centerY = playControlYborder - sourcesCarousel.height / 2 - 5;
+      sourcesCarousel.centerY = centerY;
 
       thisScreenView.addChild( sourcesCarousel );
       // thisScreenView.addChild( convertersCarousel );
