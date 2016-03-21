@@ -104,8 +104,8 @@ define( function( require ) {
         min: 0,
         max: 1
       }, {
-        top: 10,
-        left: 10
+        top: 100,
+        left: stage.width - 150
       } ) );
     }
 
