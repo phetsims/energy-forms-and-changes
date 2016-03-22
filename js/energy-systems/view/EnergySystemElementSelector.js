@@ -55,7 +55,8 @@ define( function( require ) {
     }
 
     RadioButtonGroup.call( this, carousel.targetIndexProperty, buttonElementList, {
-      baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+      baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      orientation: 'horizontal'
     } );
   }
 
