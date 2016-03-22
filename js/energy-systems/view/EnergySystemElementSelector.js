@@ -13,8 +13,10 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  // var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Panel = require( 'SUN/Panel' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
@@ -54,11 +56,18 @@ define( function( require ) {
       } );
     }
 
-    RadioButtonGroup.call( this, carousel.targetIndexProperty, buttonElementList, {
+    var buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
       baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      orientation: 'horizontal'
+      orientation: 'horizontal',
+      selectedStroke: 'none',
+      deselectedStroke: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
     } );
+
+    Panel.call( this, buttonGroup, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+    } );
+
   }
 
-  return inherit( RadioButtonGroup, EnergySystemElementSelector );
+  return inherit( Panel, EnergySystemElementSelector );
 } );
