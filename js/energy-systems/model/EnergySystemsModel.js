@@ -37,7 +37,10 @@ define( function( require ) {
       // Boolean property that controls whether the energy chunks are visible to the user.
       energyChunksVisible: false,
 
-      steamPowerableElementInPlace: false
+      steamPowerableElementInPlace: false,
+
+      // Play/pause state
+      isPlaying: true
     } );
 
     // Carousels that control the positions of the energy sources, converters,
@@ -46,7 +49,10 @@ define( function( require ) {
     this.energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
     this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
-    // Uncomment when needed
+    // TODO change from the single-element version to all, once the others are non-empty
+    this.carousels = [
+      this.energySourcesCarousel
+    ];
     // this.carousels = [
     //   this.energySourcesCarousel,
     //   this.energyConvertersCarousel,
@@ -61,5 +67,19 @@ define( function( require ) {
     this.energySourcesCarousel.add( this.teaPot );
   }
 
-  return inherit( PropertySet, EnergySystemsModel );
+  return inherit( PropertySet, EnergySystemsModel, {
+    step: function( dt ) {
+
+      // Elements managed by carousels need to be scrollable/selectable regardless
+      // of play/pause state.
+      this.carousels.forEach( function( carousel ) {
+        carousel.stepInTime( dt );
+      } );
+
+      if ( this.isPlaying ) {
+        var energyFromSource = this.energySourcesCarousel.getSelectedElement().stepInTime( dt );
+      }
+
+    }
+  } );
 } );
