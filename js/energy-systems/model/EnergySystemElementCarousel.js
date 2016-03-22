@@ -166,7 +166,8 @@ define( function( require ) {
     updateManagedElementPositions: function() {
       for ( var i = 0; i < this.managedElements.length; i++ ) {
         var position = this.selectedElementPosition.plus( this.offsetBetweenElements.times( i ) );
-        this.managedElements[ i ].setPosition( position ).plus( this.currentCarouselOffset );
+        position = position.plus( this.currentCarouselOffset );
+        this.managedElements[ i ].position = position;
       }
     },
 
@@ -180,9 +181,8 @@ define( function( require ) {
     },
 
     atTargetPosition: function() {
-      var targetCarouselOffset = new Vector2( this.offsetBetweenElements.times( -this.targetIndexProperty.get() ) );
+      var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndex );
       return this.currentCarouselOffset.equals( targetCarouselOffset );
-
     },
 
     computeSlowInSlowOut: function( zeroToOne ) {
