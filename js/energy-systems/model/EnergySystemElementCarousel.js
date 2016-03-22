@@ -54,7 +54,7 @@ define( function( require ) {
     this.offsetBetweenElements = offsetBetweenElements;
 
     // List of the elements whose position is managed by this carousel.
-    this.managedElements = new Array();
+    this.managedElements = [];
 
     this.elapsedTransitionTime = 0;
 
@@ -70,7 +70,7 @@ define( function( require ) {
     this.targetIndexProperty.link( function() {
       // Check bounds
       var i = thisCarousel.targetIndex;
-      assert && assert( i === 0 || i < thisCarousel.managedElements.size() );
+      assert && assert( i === 0 || i < thisCarousel.managedElements.length );
 
       thisCarousel.elapsedTransitionTime = 0;
       thisCarousel.initialCarouselOffset = thisCarousel.currentCarouselOffset;
@@ -85,7 +85,7 @@ define( function( require ) {
           element.deactivate();
         } );
       } else {
-        thisCarousel.getElement( thisCarousel.targetIndexProperty.get() ).activate();
+        thisCarousel.getElement( thisCarousel.targetIndex ).activate();
       }
     } );
   }
@@ -103,7 +103,7 @@ define( function( require ) {
         element.positionProperty.set( this.selectedElementPosition );
       } else {
         var lastElement = this.managedElements[ this.managedElements.length - 1 ];
-        element.positionProperty.set( lastElement.getPosition().plus( this.offsetBetweenElements ) );
+        element.positionProperty.set( lastElement.position.plus( this.offsetBetweenElements ) );
       }
 
       // Add element to the list of managed elements.
