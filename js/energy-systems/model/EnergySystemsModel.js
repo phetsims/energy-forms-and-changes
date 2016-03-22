@@ -10,15 +10,19 @@
 define( function( require ) {
   'use strict';
 
-  // modules
-  var inherit = require( 'PHET_CORE/inherit' );
+  // Modules
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
+
+  // For the images (sun, teapot, biker, ...) scrolling like a one-armed bandit,
+  // this is the offset between them (purely vertical).
   var OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 );
 
   /**
@@ -31,7 +35,9 @@ define( function( require ) {
     PropertySet.call( this, {
 
       // Boolean property that controls whether the energy chunks are visible to the user.
-      energyChunksVisible: false
+      energyChunksVisible: false,
+
+      steamPowerableElementInPlace: false
     } );
 
     // Carousels that control the positions of the energy sources, converters,
@@ -40,25 +46,20 @@ define( function( require ) {
     this.energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
     this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
-    this.carousels = [
-      this.energySourcesCarousel,
-      this.energyConvertersCarousel,
-      this.energyUsersCarousel
-    ];
+    // Uncomment when needed
+    // this.carousels = [
+    //   this.energySourcesCarousel,
+    //   this.energyConvertersCarousel,
+    //   this.energyUsersCarousel
+    // ];
 
     this.solarPanel = new SolarPanel( this.energyChunksVisible );
-
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
-    this.energySourcesCarousel.add( this.sun );
+    this.teaPot = new TeaPot( this.energyChunksVisible, this.steamPowerableElementInPlace );
 
+    this.energySourcesCarousel.add( this.sun );
+    this.energySourcesCarousel.add( this.teaPot );
   }
 
-  return inherit( PropertySet, EnergySystemsModel, {
-
-    // Appease eslint unused variable warnings
-    temp: function() {
-      console.log( this.carousels );
-      console.log( SunEnergySource );
-    }
-  } );
+  return inherit( PropertySet, EnergySystemsModel );
 } );
