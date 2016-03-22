@@ -31,10 +31,9 @@ define( function( require ) {
       this.setScaleMagnitude( scale );
     }
 
-    // TODO port this line
-    // centerFullBoundsOnPoint( centerToCenterOffsetInView.getX(), centerToCenterOffsetInView.getY() );
-    console.log(offset);
-    
+    this.setCenterX( offset.x );
+    this.setCenterY( offset.y );
+
     this.addChild( img );
   }
 
