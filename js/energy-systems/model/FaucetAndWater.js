@@ -16,8 +16,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Random = require( 'DOT/Random' );
-  var Range = require( 'DOT/Range' );
+  // var Random = require( 'DOT/Random' );
+  // var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -36,7 +36,7 @@ define( function( require ) {
   // flows from the faucet.  The value used is not the actual value in
   // Earth's gravitational field - it has been tweaked for optimal visual
   // effect.
-  var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
+  // var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
   /**
    * @param {Property<boolean>} energyChunksVisible
