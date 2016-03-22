@@ -28,7 +28,7 @@ define( function( require ) {
 
   // Constants
   var TEAPOT_OFFSET = new Vector2( 0.0, 0.015 );
-  var TEAPOT_IMAGE = new EFACModelImage( TEAPOT_LARGE, TEAPOT_OFFSET );
+  var TEAPOT_IMAGE = new EFACModelImage( TEAPOT_LARGE, TEAPOT_LARGE.width, TEAPOT_OFFSET );
 
   // Offsets and other constants used for energy paths.  These are mostly
   // empirically determined and coordinated with the image.
@@ -197,5 +197,8 @@ define( function( require ) {
     // IUserComponent getUserComponent: function() {
     // }
 
+  }, {
+    // Expose the following as public static members
+    TEAPOT_IMAGE: TEAPOT_IMAGE
   } );
 } );
