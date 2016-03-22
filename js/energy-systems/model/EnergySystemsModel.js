@@ -12,6 +12,7 @@ define( function( require ) {
 
   // Modules
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
+  var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
@@ -39,6 +40,8 @@ define( function( require ) {
 
       steamPowerableElementInPlace: false,
 
+      waterPowerableElementInPlace: false,
+
       // Play/pause state
       isPlaying: true
     } );
@@ -62,9 +65,11 @@ define( function( require ) {
     this.solarPanel = new SolarPanel( this.energyChunksVisible );
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
     this.teaPot = new TeaPot( this.energyChunksVisible, this.steamPowerableElementInPlace );
+    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
 
     this.energySourcesCarousel.add( this.sun );
     this.energySourcesCarousel.add( this.teaPot );
+    this.energySourcesCarousel.add( this.faucet );
   }
 
   return inherit( PropertySet, EnergySystemsModel, {
@@ -77,7 +82,7 @@ define( function( require ) {
       } );
 
       if ( this.isPlaying ) {
-        var energyFromSource = this.energySourcesCarousel.getSelectedElement().stepInTime( dt );
+        // var energyFromSource = this.energySourcesCarousel.getSelectedElement().stepInTime( dt );
       }
 
     }
