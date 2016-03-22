@@ -145,9 +145,9 @@ define( function( require ) {
     /**
      * [stepInTime description]
      *
-     * @param  {Number} double dt            timestep
+     * @param  {Number} dt timestep
      *
-     * @return {Energy}        [description]
+     * @return {Energy}
      * @public
      * @override
      */
