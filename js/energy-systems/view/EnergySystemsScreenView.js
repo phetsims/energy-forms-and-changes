@@ -52,13 +52,15 @@ define( function( require ) {
   function EnergySystemsScreenView( model ) {
 
     ScreenView.call( this, {
+      // Boundaries taken from original Java sim
       layoutBounds: new Bounds2( 0, 0, 1008, 679 )
     } );
 
     // Bounds2 object for use as primary geometric reference
     var stage = this.layoutBounds;
 
-    // Upper y-border of play/pause control panel
+    // Upper y-border of play/pause control panel.
+    // The subtracted offset is from eyeballing a match to the mockup image.
     var playControlYborder = stage.maxY - 114;
 
     // Node for back-most layer
@@ -71,8 +73,8 @@ define( function( require ) {
     // Create the model-view transform.  The primary units used in the model are
     // meters, so significant zoom is used. The multipliers for the 2nd parameter
     // can be used to adjust where the point (0, 0) in the model, which is on the
-    // middle of the screen above the counter as located in the view.
-    // Final arg is zoom factor - smaller zooms out, larger zooms in.
+    // middle of the screen above the counter as located in the view. Final arg
+    // is zoom factor from original Java sim - smaller zooms out, larger zooms in.
     var mvtOriginX = Math.round( stage.width * 0.5 );
     var mvtOriginY = Math.round( stage.height * 0.475 );
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
