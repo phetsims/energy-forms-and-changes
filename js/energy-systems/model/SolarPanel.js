@@ -30,6 +30,9 @@ define( function( require ) {
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // Constants
+  // 
+  //  TODO: all EFACModelImage constructors need a width as a 2nd arg!
+  // 
   var RAND = new Random();
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
   var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, 0.15, SOLAR_PANEL_OFFSET );
