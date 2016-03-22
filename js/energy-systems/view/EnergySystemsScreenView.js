@@ -33,6 +33,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
+  var TeaPotNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaPotNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -182,6 +183,11 @@ define( function( require ) {
       // thisScreenView.addChild( usersCarousel );
     }
 
+    function addTeaPot() {
+      var teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( teaPotNode );
+    }
+
     addBackground();
     addPlayControls();
     addMockupImage();
@@ -189,6 +195,7 @@ define( function( require ) {
     addCheckBoxPanel();
     addResetButton();
     addSun();
+    addTeaPot();
     addCarousels();
   }
 
