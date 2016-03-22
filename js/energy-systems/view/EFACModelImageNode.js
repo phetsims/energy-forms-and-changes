@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
 
@@ -24,16 +25,16 @@ define( function( require ) {
     Node.call( this );
 
     var img = new Image( modelImage.image );
-    var scale = modelViewTransform.modelToViewDeltaX( modelImage.width ) / this.width;
     var offset = modelViewTransform.modelToViewDelta( modelImage.centerToCenterOffset );
 
-    if ( scale !== 1 ) {
-      this.setScaleMagnitude( scale );
-    }
+    // TODO: This scales node up x2200, but x1 looks about right.
+    // var scale = modelViewTransform.modelToViewDeltaX( modelImage.width ) / modelImage.image.width;
+    // if ( scale !== 1 ) {
+    //   img.setScaleMagnitude( scale );
+    // }
 
-    this.setCenterX( offset.x );
-    this.setCenterY( offset.y );
-
+    img.setCenterX( offset.x );
+    img.setCenterY( offset.y );
     this.addChild( img );
   }
 
