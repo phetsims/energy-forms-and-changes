@@ -19,6 +19,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -188,6 +189,11 @@ define( function( require ) {
       thisScreenView.addChild( teaPotNode );
     }
 
+    function addFaucet() {
+      var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( faucetNode );
+    }
+
     addBackground();
     addPlayControls();
     addMockupImage();
@@ -196,6 +202,7 @@ define( function( require ) {
     addResetButton();
     addSun();
     addTeaPot();
+    addFaucet();
     addCarousels();
   }
 
