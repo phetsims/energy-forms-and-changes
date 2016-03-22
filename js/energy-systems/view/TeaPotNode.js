@@ -5,9 +5,11 @@ define( function( require ) {
 
   // Modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
 
-  // TODO uncomment when needed
+  // Uncomment when needed
   // var BURNER_WIDTH = 125; // Empirically determined.
   // var BURNER_HEIGHT = BURNER_WIDTH * 0.75;
   // var BURNER_OPENING_WIDTH = BURNER_WIDTH * 0.1;
@@ -22,8 +24,8 @@ define( function( require ) {
 
     EFACBaseNode.call( this, teaPot, modelViewTransform );
 
-    // this.teaPotImageNode = new ModelElementImageNode( TeaPot.TEAPOT_IMAGE, mvt );
-
+    var teaPotImageNode = new EFACModelImageNode( TeaPot.TEAPOT_IMAGE, modelViewTransform );
+    this.addChild( teaPotImageNode );
   }
 
   return inherit( EFACBaseNode, TeaPotNode );
