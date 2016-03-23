@@ -52,24 +52,23 @@ define( function( require ) {
     this.energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
     this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
-    // TODO change from the single-element version to all, once the others are non-empty
-    this.carousels = [
-      this.energySourcesCarousel
-    ];
-    // this.carousels = [
-    //   this.energySourcesCarousel,
-    //   this.energyConvertersCarousel,
-    //   this.energyUsersCarousel
-    // ];
-
-    this.solarPanel = new SolarPanel( this.energyChunksVisible );
+    // Energy sources
+    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
     this.teaPot = new TeaPot( this.energyChunksVisible, this.steamPowerableElementInPlace );
-    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
-
+    this.energySourcesCarousel.add( this.faucet );
     this.energySourcesCarousel.add( this.sun );
     this.energySourcesCarousel.add( this.teaPot );
-    this.energySourcesCarousel.add( this.faucet );
+
+    // Energy converters
+    this.solarPanel = new SolarPanel( this.energyChunksVisible );
+    this.energyConvertersCarousel.add( this.solarPanel );
+
+    this.carousels = [
+      this.energySourcesCarousel,
+      this.energyConvertersCarousel
+      // this.energyUsersCarousel
+    ];
   }
 
   return inherit( PropertySet, EnergySystemsModel, {
