@@ -30,25 +30,20 @@ define( function( require ) {
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // Constants
-  // 
-  //  TODO: all EFACModelImage constructors need a width as a 2nd arg!
-  // 
   var RAND = new Random();
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
-  var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, 0.15, SOLAR_PANEL_OFFSET );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
-  var CONVERTER_IMAGE = new EFACModelImage( SOLAR_PANEL_GEN, CONVERTER_IMAGE_OFFSET );
-  var CURVED_WIRE_IMAGE = new EFACModelImage( WIRE_BLACK_LEFT, CONVERTER_IMAGE_OFFSET.plus( 0.009, 0.024 ) );
-  var POST_IMAGE = new EFACModelImage( SOLAR_PANEL_POST_2, CONVERTER_IMAGE_OFFSET.plus( new Vector2( 0, 0.04 ) ) );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
-  var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR_IMAGE_OFFSET );
+
+  var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, 0.15, SOLAR_PANEL_OFFSET );
+  var CONVERTER_IMAGE = new EFACModelImage( SOLAR_PANEL_GEN, SOLAR_PANEL_GEN.width, CONVERTER_IMAGE_OFFSET );
+  var CURVED_WIRE_IMAGE = new EFACModelImage( WIRE_BLACK_LEFT, WIRE_BLACK_LEFT.width, CONVERTER_IMAGE_OFFSET.plus( 0.009, 0.024 ) );
+  var POST_IMAGE = new EFACModelImage( SOLAR_PANEL_POST_2, SOLAR_PANEL_POST_2.width, CONVERTER_IMAGE_OFFSET.plus( new Vector2( 0, 0.04 ) ) );
+  var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR.width, CONNECTOR_IMAGE_OFFSET );
 
   var halfWidth = SOLAR_PANEL_IMAGE.width / 2;
   var halfHeight = SOLAR_PANEL_IMAGE.height / 2;
   var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
-
-  // var PANEL_IMAGE_BOUNDS = new Rectangle2D.Double( -SOLAR_PANEL_IMAGE.getWidth() / 2, -SOLAR_PANEL_IMAGE.getHeight() / 2,
-  //   SOLAR_PANEL_IMAGE.getWidth(), SOLAR_PANEL_IMAGE.getHeight() );
 
   // TODO
   // private static final DoubleGeneralPath ABSORPTION_SHAPE = new DoubleGeneralPath() {{
@@ -107,10 +102,6 @@ define( function( require ) {
       console.log(
         SUN_ICON,
         RAND,
-        CONVERTER_IMAGE,
-        CURVED_WIRE_IMAGE,
-        POST_IMAGE,
-        CONNECTOR_IMAGE,
         PANEL_IMAGE_BOUNDS,
         OFFSET_TO_CONVERGENCE_POINT,
         OFFSET_TO_FIRST_CURVE_POINT,
@@ -121,5 +112,11 @@ define( function( require ) {
       );
     }
 
+  }, {
+    CURVED_WIRE_IMAGE: CURVED_WIRE_IMAGE,
+    POST_IMAGE: POST_IMAGE,
+    SOLAR_PANEL_IMAGE: SOLAR_PANEL_IMAGE,
+    CONVERTER_IMAGE: CONVERTER_IMAGE,
+    CONNECTOR_IMAGE: CONNECTOR_IMAGE
   } );
 } );
