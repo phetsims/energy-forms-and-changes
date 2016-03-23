@@ -74,13 +74,12 @@ define( function( require ) {
   /**
    * Solar panel is an energy converter
    *
-   * @param {[type]} energyChunksVisible [description]
+   * @param {Property<boolean>} energyChunksVisible
    * @constructor
    */
   function SolarPanel( energyChunksVisible ) {
     EnergyConverter.call( this, new Image( SOLAR_PANEL_ICON ) );
     this.energyChunkMovers = [];
-    // TODO: simulation clock? I don't think it is needed.
     this.latestChunkArrivalTime = 0;
     this.energyOutputRate = 0;
     this.energyChunksVisible = energyChunksVisible;
