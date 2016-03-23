@@ -34,6 +34,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
+  var SolarPanelNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SolarPanelNode' );
   var TeaPotNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaPotNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -177,7 +178,7 @@ define( function( require ) {
       // Assume all carousels have the height of the sources Carousel
       var centerY = playControlYborder - sourcesCarousel.height / 2 - 5;
       var spacing = 50;
-      sourcesCarousel.leftCenter = new Vector2( spacing, centerY );
+      sourcesCarousel.leftCenter = new Vector2( EDGE_INSET, centerY );
       convertersCarousel.leftCenter = new Vector2( sourcesCarousel.rightCenter.x + spacing, centerY );
 
       thisScreenView.addChild( sourcesCarousel );
@@ -195,6 +196,11 @@ define( function( require ) {
       thisScreenView.addChild( faucetNode );
     }
 
+    function addSolarPanel() {
+      var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform);
+      thisScreenView.addChild(solarPanelNode);
+    }
+
     addBackground();
     addPlayControls();
     addMockupImage();
@@ -204,6 +210,7 @@ define( function( require ) {
     addSun();
     addTeaPot();
     addFaucet();
+    addSolarPanel();
     addCarousels();
   }
 
