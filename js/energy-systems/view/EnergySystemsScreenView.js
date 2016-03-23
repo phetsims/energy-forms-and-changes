@@ -21,6 +21,7 @@ define( function( require ) {
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
+  var FluorescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FluorescentBulbNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -202,18 +203,23 @@ define( function( require ) {
     }
 
     function addGenerator() {
-      var generatorNode = new GeneratorNode( model.generator, modelViewTransform);
-      thisScreenView.addChild(generatorNode);
+      var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
+      thisScreenView.addChild( generatorNode );
     }
 
     function addSolarPanel() {
-      var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform);
+      var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
       thisScreenView.addChild( solarPanelNode );
     }
 
     function addIncandescentBulb() {
       var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
       thisScreenView.addChild( incandescentBulbNode );
+    }
+
+    function addFluorescentBulb() {
+      var fluorescentBulbNode = new FluorescentBulbNode( model.fluorescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( fluorescentBulbNode );
     }
 
     addBackground();
@@ -225,9 +231,10 @@ define( function( require ) {
     addSun();
     addTeaPot();
     addFaucet();
+    addIncandescentBulb();
+    addFluorescentBulb();
     addGenerator();
     addSolarPanel();
-    addIncandescentBulb();
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {
