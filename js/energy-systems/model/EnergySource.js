@@ -41,7 +41,7 @@ define( function( require ) {
     extractOutgoingEnergyChunks: function() {
 
       // Remove all outgoing chunks from this.energyChunkList
-      this.energyChunkList = _.difference(this.energyChunkList, this.outgoingEnergyChunks);
+      this.energyChunkList = _.difference( this.energyChunkList, this.outgoingEnergyChunks );
 
       return this.outgoingEnergyChunks.splice( 0 );
     },
