@@ -21,6 +21,7 @@ define( function( require ) {
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
+  var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -196,6 +197,11 @@ define( function( require ) {
       thisScreenView.addChild( faucetNode );
     }
 
+    function addGenerator() {
+      var generatorNode = new GeneratorNode( model.generator, modelViewTransform);
+      thisScreenView.addChild(generatorNode);
+    }
+
     function addSolarPanel() {
       var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform);
       thisScreenView.addChild(solarPanelNode);
@@ -210,6 +216,7 @@ define( function( require ) {
     addSun();
     addTeaPot();
     addFaucet();
+    addGenerator();
     addSolarPanel();
     addCarousels();
   }

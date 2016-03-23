@@ -13,6 +13,7 @@ define( function( require ) {
   // Modules
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
+  var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
@@ -61,7 +62,9 @@ define( function( require ) {
     this.energySourcesCarousel.add( this.teaPot );
 
     // Energy converters
+    this.generator = new Generator( this.energyChunksVisible );
     this.solarPanel = new SolarPanel( this.energyChunksVisible );
+    this.energyConvertersCarousel.add( this.generator );
     this.energyConvertersCarousel.add( this.solarPanel );
 
     this.carousels = [
