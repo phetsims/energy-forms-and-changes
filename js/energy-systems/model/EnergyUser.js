@@ -15,7 +15,7 @@ define( function( require ) {
   var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElement' );
   var inherit = require( 'PHET_CORE/inherit' );
 
-  function EnergyUser() {
+  function EnergyUser( iconImage ) {
 
     EnergySystemElement.call( this, iconImage );
 
