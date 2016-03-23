@@ -24,6 +24,7 @@ define( function( require ) {
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var IncandescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/IncandescentBulbNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -168,12 +169,12 @@ define( function( require ) {
     }
 
     // Create the carousel control nodes.
-    function addCarousels() {
+    function createCarousels() {
 
       // Instantiate nodes for the three carousels
       var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
       var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
-      // var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
+      var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
 
       // Position carousels
       // Assume all carousels have the height of the sources Carousel
@@ -181,9 +182,12 @@ define( function( require ) {
       var spacing = 50;
       sourcesCarousel.leftCenter = new Vector2( EDGE_INSET, centerY );
       convertersCarousel.leftCenter = new Vector2( sourcesCarousel.rightCenter.x + spacing, centerY );
+      usersCarousel.leftCenter = new Vector2( convertersCarousel.rightCenter.x + spacing, centerY );
 
-      thisScreenView.addChild( sourcesCarousel );
-      thisScreenView.addChild( convertersCarousel );
+      return [ sourcesCarousel, convertersCarousel, usersCarousel ];
+
+      // thisScreenView.addChild( sourcesCarousel );
+      // thisScreenView.addChild( convertersCarousel );
       // thisScreenView.addChild( usersCarousel );
     }
 
@@ -204,7 +208,12 @@ define( function( require ) {
 
     function addSolarPanel() {
       var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform);
-      thisScreenView.addChild(solarPanelNode);
+      thisScreenView.addChild( solarPanelNode );
+    }
+
+    function addIncandescentBulb() {
+      var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( incandescentBulbNode );
     }
 
     addBackground();
@@ -218,7 +227,13 @@ define( function( require ) {
     addFaucet();
     addGenerator();
     addSolarPanel();
-    addCarousels();
+    addIncandescentBulb();
+
+    var carousels = createCarousels();
+    carousels.forEach( function( carousel ) {
+      thisScreenView.addChild( carousel );
+    } );
+    // addCarousels();
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );

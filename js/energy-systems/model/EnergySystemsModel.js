@@ -18,6 +18,7 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var IncandescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/IncandescentBulb' );
   var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -67,10 +68,14 @@ define( function( require ) {
     this.energyConvertersCarousel.add( this.generator );
     this.energyConvertersCarousel.add( this.solarPanel );
 
+    // Energy users
+    this.incandescentBulb = new IncandescentBulb( this.energyChunksVisible );
+    this.energyUsersCarousel.add( this.incandescentBulb );
+
     this.carousels = [
       this.energySourcesCarousel,
-      this.energyConvertersCarousel
-      // this.energyUsersCarousel
+      this.energyConvertersCarousel,
+      this.energyUsersCarousel
     ];
   }
 

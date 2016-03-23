@@ -27,6 +27,7 @@ define( function( require ) {
   function IncandescentBulb( energyChunksVisible ) {
 
     LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisible );
+    
   }
 
   return inherit( LightBulb, IncandescentBulb, {}, {

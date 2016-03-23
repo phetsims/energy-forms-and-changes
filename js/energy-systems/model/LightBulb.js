@@ -11,12 +11,12 @@ define( function( require ) {
 
   // Modules
   // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  // var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var inherit = require( 'PHET_CORE/inherit' );
   // var Image = require( 'SCENERY/nodes/Image' );
   // var Random = require( 'DOT/Random' );
-  // var Vector2 = require( 'DOT/Vector2' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // Images
   var ELEMENT_BASE_BACK = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
@@ -25,10 +25,10 @@ define( function( require ) {
   var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
 
   // Constants - uncomment as needed
-  // var WIRE_FLAT_IMAGE = new EFACModelImage( WIRE_BLACK_62, WIRE_BLACK_62.width, new Vector2( -0.036, -0.04 ) );
-  // var WIRE_CURVE_IMAGE = new EFACModelImage( WIRE_BLACK_RIGHT, WIRE_BLACK_RIGHT.width, new Vector2( -0.009, -0.016 ) );
-  // var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, ELEMENT_BASE_FRONT.width, new Vector2( 0, 0.0 ) );
-  // var ELEMENT_BASE_BACK_IMAGE = new EFACModelImage( ELEMENT_BASE_BACK, ELEMENT_BASE_BACK.width, new Vector2( 0, 0.0 ) );
+  var WIRE_FLAT_IMAGE = new EFACModelImage( WIRE_BLACK_62, WIRE_BLACK_62.width, new Vector2( -0.036, -0.04 ) );
+  var WIRE_CURVE_IMAGE = new EFACModelImage( WIRE_BLACK_RIGHT, WIRE_BLACK_RIGHT.width, new Vector2( -0.009, -0.016 ) );
+  var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, ELEMENT_BASE_FRONT.width, new Vector2( 0, 0.0 ) );
+  var ELEMENT_BASE_BACK_IMAGE = new EFACModelImage( ELEMENT_BASE_BACK, ELEMENT_BASE_BACK.width, new Vector2( 0, 0.0 ) );
 
   // var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
   // var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
@@ -164,6 +164,11 @@ define( function( require ) {
     WIRE_BLACK_RIGHT: WIRE_BLACK_RIGHT,
     WIRE_BLACK_62: WIRE_BLACK_62,
     ELEMENT_BASE_FRONT: ELEMENT_BASE_FRONT,
-    ELEMENT_BASE_BACK: ELEMENT_BASE_BACK
+    ELEMENT_BASE_BACK: ELEMENT_BASE_BACK,
+
+    WIRE_FLAT_IMAGE: WIRE_FLAT_IMAGE,
+    WIRE_CURVE_IMAGE: WIRE_CURVE_IMAGE,
+    ELEMENT_BASE_FRONT_IMAGE: ELEMENT_BASE_FRONT_IMAGE,
+    ELEMENT_BASE_BACK_IMAGE: ELEMENT_BASE_BACK_IMAGE
   } );
 } );
