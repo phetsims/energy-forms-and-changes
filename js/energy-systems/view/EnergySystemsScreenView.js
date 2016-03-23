@@ -19,8 +19,8 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -170,17 +170,18 @@ define( function( require ) {
 
       // Instantiate nodes for the three carousels
       var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
-      // var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
+      var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
       // var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
 
       // Position carousels
-      // TODO: x positioning
       // Assume all carousels have the height of the sources Carousel
       var centerY = playControlYborder - sourcesCarousel.height / 2 - 5;
-      sourcesCarousel.centerY = centerY;
+      var spacing = 50;
+      sourcesCarousel.leftCenter = new Vector2( spacing, centerY );
+      convertersCarousel.leftCenter = new Vector2( sourcesCarousel.rightCenter.x + spacing, centerY );
 
       thisScreenView.addChild( sourcesCarousel );
-      // thisScreenView.addChild( convertersCarousel );
+      thisScreenView.addChild( convertersCarousel );
       // thisScreenView.addChild( usersCarousel );
     }
 
