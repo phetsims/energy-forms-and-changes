@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var BeakerHeaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeakerHeaterNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var CheckBox = require( 'SUN/CheckBox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -222,6 +223,11 @@ define( function( require ) {
       thisScreenView.addChild( fluorescentBulbNode );
     }
 
+    function addbeakerHeater() {
+      var beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
+      thisScreenView.addChild( beakerHeaterNode );
+    }
+
     addBackground();
     addPlayControls();
     addMockupImage();
@@ -231,6 +237,7 @@ define( function( require ) {
     addSun();
     addTeaPot();
     addFaucet();
+    addbeakerHeater();
     addIncandescentBulb();
     addFluorescentBulb();
     addGenerator();

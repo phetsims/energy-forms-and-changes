@@ -74,9 +74,9 @@ define( function( require ) {
     this.incandescentBulb = new IncandescentBulb( this.energyChunksVisible );
     this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisible );
     this.beakerHeater = new BeakerHeater( this.energyChunksVisible );
+    this.energyUsersCarousel.add( this.beakerHeater );
     this.energyUsersCarousel.add( this.incandescentBulb );
     this.energyUsersCarousel.add( this.fluorescentBulb );
-    this.energyUsersCarousel.add( this.beakerHeater );
 
     this.carousels = [
       this.energySourcesCarousel,
