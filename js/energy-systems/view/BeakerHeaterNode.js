@@ -11,12 +11,14 @@ define( function( require ) {
 
   // Modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
+  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   // var Image = require( 'SCENERY/nodes/Image' );
-
+  var Vector2 = require( 'DOT/Vector2' );
   /**
    * @param {BeakerHeater} beakerHeater
    * @param {Property<boolean>} energyChunksVisibe
@@ -37,6 +39,21 @@ define( function( require ) {
 
     // final PImage energizedCoil = addImageNode( BeakerHeater.HEATER_ELEMENT_ON_IMAGE );
     // addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.getObservablePosition(), mvt ) );
+
+    // Add the beaker.
+    // A compensating MVT is needed because the beaker
+    // node is being added as a child of this node, but wants to set its
+    // own offset in model space.
+    var dx = -modelViewTransform.modelToViewDeltaX( beakerHeater.position.x );
+    var dy = -modelViewTransform.modelToViewDeltaY( beakerHeater.position.y );
+    var offset = new Vector2( dx, dy );
+    var scale = modelViewTransform.matrix.scaleVector;
+    var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
+
+    var beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisible, beakerMvt );
+    this.addChild( beakerView.backNode );
+    // addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.getObservablePosition(), mvt ) );
+    this.addChild( beakerView.frontNode );
 
   }
 

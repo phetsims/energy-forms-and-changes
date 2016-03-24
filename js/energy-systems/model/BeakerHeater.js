@@ -4,6 +4,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
@@ -60,7 +61,8 @@ define( function( require ) {
     this.heatingElementEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
 
-    // this.beaker = new Beaker( clock, BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisible );
+    this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisible );
+
     // this.thermometer = new Thermometer( clock, new ITemperatureModel() {
     //   public TemperatureAndColor getTemperatureAndColorAtLocation( Vector2D location ) {
     //     return new TemperatureAndColor( beaker.getTemperature(), EFACConstants.WATER_COLOR_OPAQUE );
