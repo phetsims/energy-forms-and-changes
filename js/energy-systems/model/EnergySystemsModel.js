@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
@@ -72,8 +73,10 @@ define( function( require ) {
     // Energy users
     this.incandescentBulb = new IncandescentBulb( this.energyChunksVisible );
     this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisible );
+    this.beakerHeater = new BeakerHeater( this.energyChunksVisible );
     this.energyUsersCarousel.add( this.incandescentBulb );
     this.energyUsersCarousel.add( this.fluorescentBulb );
+    this.energyUsersCarousel.add( this.beakerHeater );
 
     this.carousels = [
       this.energySourcesCarousel,
