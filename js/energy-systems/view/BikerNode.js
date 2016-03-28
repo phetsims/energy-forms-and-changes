@@ -32,6 +32,20 @@ define( function( require ) {
     var spokesImage = new EFACModelImageNode( Biker.REAR_WHEEL_SPOKES_IMAGE, modelViewTransform );
     var backLegRootNode = new Node();
     var frontLegRootNode = new Node();
+    var backLegImageNodes = [];
+    var frontLegImageNodes = [];
+
+    for ( var i = 0; i < Biker.NUM_LEG_IMAGES; i++ ) {
+      // Back leg image nodes
+      backLegImageNodes.push( new EFACModelImageNode( Biker.BACK_LEG_IMAGES[ i ], modelViewTransform ) );
+      backLegImageNodes[ i ].setVisible( false );
+      backLegRootNode.addChild( backLegImageNodes[ i ] );
+
+      // Front leg image nodes
+      frontLegImageNodes.push( new EFACModelImageNode( Biker.FRONT_LEG_IMAGES[ i ], modelViewTransform ) );
+      frontLegImageNodes[ i ].setVisible( false );
+      frontLegRootNode.addChild( frontLegImageNodes[ i ] );
+    }
 
     this.addChild( spokesImage );
     this.addChild( backLegRootNode );
