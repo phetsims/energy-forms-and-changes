@@ -11,12 +11,16 @@ define( function( require ) {
 
   // Modules
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var HSlider = require( 'SUN/HSlider' );
   // var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
 
   /**
    * @param {Biker} biker EnergySource
@@ -71,6 +75,24 @@ define( function( require ) {
       upperBodyTired.setVisible( !hasEnergy );
     } );
 
+    // Slider to control crank speed
+    var crankSlider = new HSlider( biker.targetCrankAngularVelocityProperty, {
+      min: 0,
+      max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
+    }, {
+      trackSize: new Dimension2( 200, 5 ),
+      thumbSize: new Dimension2( 20, 40 ) // Default: ( 22, 45 )
+    } );
+
+    this.addChild( new Panel( crankSlider, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      centerX: 0,
+      centerY: 110,
+      cornerRadius: 8
+    } ) );
+
+
+    // debugger;
     this.addChild( spokesImage );
     this.addChild( backLegRootNode );
     this.addChild( new EFACModelImageNode( Biker.FRAME_IMAGE, modelViewTransform ) );
