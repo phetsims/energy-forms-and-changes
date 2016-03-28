@@ -12,6 +12,7 @@ define( function( require ) {
 
   // Modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
+  var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
@@ -56,19 +57,21 @@ define( function( require ) {
     this.energyConvertersCarousel = new EnergySystemElementCarousel( new Vector2( -0.025, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
     this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
-    // Energy sources
-    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
-    this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
-    this.teaPot = new TeaPot( this.energyChunksVisible, this.steamPowerableElementInPlace );
-    this.energySourcesCarousel.add( this.faucet );
-    this.energySourcesCarousel.add( this.sun );
-    this.energySourcesCarousel.add( this.teaPot );
-
     // Energy converters
     this.generator = new Generator( this.energyChunksVisible );
     this.solarPanel = new SolarPanel( this.energyChunksVisible );
     this.energyConvertersCarousel.add( this.generator );
     this.energyConvertersCarousel.add( this.solarPanel );
+
+    // Energy sources
+    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
+    this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
+    this.teaPot = new TeaPot( this.energyChunksVisible, this.generator.activeProperty );
+    this.biker = new Biker( this.energyChunksVisible, this.generator.activeProperty );
+    this.energySourcesCarousel.add( this.faucet );
+    this.energySourcesCarousel.add( this.sun );
+    this.energySourcesCarousel.add( this.teaPot );
+    this.energySourcesCarousel.add( this.biker );
 
     // Energy users
     this.incandescentBulb = new IncandescentBulb( this.energyChunksVisible );
