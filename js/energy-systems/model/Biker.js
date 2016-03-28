@@ -109,10 +109,7 @@ define( function( require ) {
   var FRONT_LEG_IMAGES = [];
   var BACK_LEG_IMAGES = [];
 
-  var i = 0;
-  var index = '';
-  for ( i = 1; i < 25; i++ ) {
-    index = i < 10 ? '0' + i : i.toString();
+  for ( var i = 1; i < 25; i++ ) {
     BACK_LEG_IMAGES.push( new EFACModelImage( BACK_LEG[ i - 1 ], BACK_LEG[ i - 1 ].width, LEG_OFFSET ) );
     FRONT_LEG_IMAGES.push( new EFACModelImage( FRONT_LEG[ i - 1 ], FRONT_LEG[ i - 1 ].width, LEG_OFFSET ) );
   }
