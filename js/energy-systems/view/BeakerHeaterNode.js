@@ -44,17 +44,20 @@ define( function( require ) {
     // A compensating MVT is needed because the beaker
     // node is being added as a child of this node, but wants to set its
     // own offset in model space.
-    var dx = -modelViewTransform.modelToViewDeltaX( beakerHeater.position.x );
-    var dy = -modelViewTransform.modelToViewDeltaY( beakerHeater.position.y );
-    var offset = new Vector2( dx, dy );
+    // var dx = -modelViewTransform.modelToViewDeltaX( beakerHeater.position.x );
+    // var dy = -modelViewTransform.modelToViewDeltaY( beakerHeater.position.y );
+    // var offset = new Vector2( dx, dy );
+
+    var offset = new Vector2( -4,  -260 ); // Eyeballed. TODO: get from MVT?
     var scale = modelViewTransform.matrix.scaleVector;
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
 
     var beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisible, beakerMvt );
+
     this.addChild( beakerView.backNode );
     // addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.getObservablePosition(), mvt ) );
     this.addChild( beakerView.frontNode );
-
+    // debugger;
   }
 
   energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
