@@ -224,6 +224,14 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
 
+    },
+
+    mapAngleToImageIndex: function( angle ) {
+      var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_LEG_IMAGES ) );
+
+      assert && assert( i >= 0 && i < NUM_LEG_IMAGES );
+
+      return i;
     }
 
   }, {

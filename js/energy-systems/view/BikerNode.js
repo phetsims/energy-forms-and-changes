@@ -47,10 +47,36 @@ define( function( require ) {
       frontLegRootNode.addChild( frontLegImageNodes[ i ] );
     }
 
+    var upperBodyNormal = new EFACModelImageNode( Biker.RIDER_NORMAL_UPPER_BODY_IMAGE, modelViewTransform );
+    var upperBodyTired = new EFACModelImageNode( Biker.RIDER_TIRED_UPPER_BODY_IMAGE, modelViewTransform );
+
+    // Animate legs by setting image visibility based on crank arm angle
+    var visibleBackLeg = backLegImageNodes[ 0 ];
+    var visibleFrontLeg = frontLegImageNodes[ 0 ];
+    biker.crankAngleProperty.link( function( angle ) {
+      var i = biker.mapAngleToImageIndex( angle );
+      visibleFrontLeg.setVisible( false );
+      visibleBackLeg.setVisible( false );
+      visibleFrontLeg = frontLegImageNodes[ i ];
+      visibleBackLeg = backLegImageNodes[ i ];
+      visibleFrontLeg.setVisible( true );
+      visibleBackLeg.setVisible( true );
+    } );
+
+    // TODO "feed me" button
+
+    biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
+      // feedMeButton.setVisible(!hasEnergy);
+      upperBodyNormal.setVisible( hasEnergy );
+      upperBodyTired.setVisible( !hasEnergy );
+    } );
+
     this.addChild( spokesImage );
     this.addChild( backLegRootNode );
     this.addChild( new EFACModelImageNode( Biker.FRAME_IMAGE, modelViewTransform ) );
     this.addChild( frontLegRootNode );
+    this.addChild( upperBodyNormal );
+    this.addChild( upperBodyTired );
 
   }
 
