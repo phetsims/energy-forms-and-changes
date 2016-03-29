@@ -202,8 +202,8 @@ define( function( require ) {
         }
       }
 
-      var newAngle = ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.Pi );
-      console.log( 'newAngle:', newAngle );
+      var newAngle = ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
+
       this.crankAngleProperty.set( newAngle );
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
