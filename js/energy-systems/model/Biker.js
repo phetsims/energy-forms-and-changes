@@ -29,7 +29,7 @@ define( function( require ) {
   var ANGULAR_ACCELERATION = Math.PI / 2; // In radians/(sec^2).
   // var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
   // var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
-  // var CRANK_TO_REAR_WHEEL_RATIO = 1;
+  var CRANK_TO_REAR_WHEEL_RATIO = 1;
   // var INITIAL_NUM_ENERGY_CHUNKS = 15;
   // var RAND = new Random();
   // var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
@@ -206,6 +206,9 @@ define( function( require ) {
       var newAngle = ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
 
       this.crankAngleProperty.set( newAngle );
+
+      this.rearWheelAngleProperty.set( ( this.rearWheelAngle + this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
+
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
         // Set crank to a good position where animation will start
