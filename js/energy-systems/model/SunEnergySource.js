@@ -98,7 +98,7 @@ define( function( require ) {
 
   return inherit( EnergySource, SunEnergySource, {
 
-    stepInTime: function( dt ) {
+    step: function( dt ) {
       var energyProduced = 0;
       if ( this.active === true ) {
 

@@ -94,11 +94,11 @@ define( function( require ) {
       // Elements managed by carousels need to be scrollable/selectable regardless
       // of play/pause state.
       this.carousels.forEach( function( carousel ) {
-        carousel.stepInTime( dt );
+        carousel.step( dt );
       } );
 
       if ( this.isPlaying ) {
-        // var energyFromSource = this.energySourcesCarousel.getSelectedElement().stepInTime( dt );
+        // var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt );
       }
 
     }

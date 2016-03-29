@@ -79,7 +79,7 @@ define( function( require ) {
 
   return inherit( EnergyConverter, Generator, {
     /**
-     * [stepInTime description]
+     * [step description]
      *
      * @param {Number} dt timestep
      *
@@ -87,7 +87,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    stepInTime: function( dt ) {
+    step: function( dt ) {
 
     },
 

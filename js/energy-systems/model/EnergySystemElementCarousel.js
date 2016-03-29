@@ -142,7 +142,7 @@ define( function( require ) {
       return null;
     },
 
-    stepInTime: function( dt ) {
+    step: function( dt ) {
       if ( !this.atTargetPosition() ) {
         this.elapsedTransitionTime += dt;
         var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );

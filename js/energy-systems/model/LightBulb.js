@@ -69,14 +69,14 @@ define( function( require ) {
 
   return inherit( EnergyUser, LightBulb, {
     /**
-     * [stepInTime description]
+     * [step description]
      *
      * @param  {Number} dt timestep
      * @param  {Energy} incomingEnergy [description]
      * @public
      * @override
      */
-    stepInTime: function( dt, incomingEnergy ) {},
+    step: function( dt, incomingEnergy ) {},
 
     /**
      * [description]

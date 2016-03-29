@@ -87,7 +87,7 @@ define( function( require ) {
 
   // TODO fill out these stubs
   return inherit( EnergyConverter, SolarPanel, {
-    stepInTime: function( dt, incomingEnergy ) {},
+    step: function( dt, incomingEnergy ) {},
     moveEnergyChunks: function( dt ) {},
     preLoadEnergyChunks: function( incomingEnergyRate ) {},
     getEnergyOutputRate: function() {},
