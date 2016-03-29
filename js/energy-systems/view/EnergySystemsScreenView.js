@@ -106,7 +106,7 @@ define( function( require ) {
 
     //Show the mock-up and a slider to change its transparency
     function addMockupImage() {
-      var opacity = new Property( 0.8 );
+      var opacity = new Property( 0.0 );
       var image = new Image( mockupImage, {
         pickable: false
       } );
