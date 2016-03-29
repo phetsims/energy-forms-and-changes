@@ -148,15 +148,17 @@ define( function( require ) {
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
     this.mechanicalChunksSinceLastThermal = 0; // unsigned int (count)
 
-    // TODO:
     // Monitor target rotation rate for validity.
-    // (Link function for targetCrankAngularVelocity)
+    this.targetCrankAngularVelocityProperty.link( function( omega ) {
+      assert && assert( omega >= 0 && omega < MAX_ANGULAR_VELOCITY_OF_CRANK );
+    } )
 
+    // TODO:
     // Add initial set of energy chunks.
     // replenishEnergyChunks();
 
     // Get the crank into a position where animation will start right away.
-    // setCrankToPoisedPosition();
+    this.setCrankToPoisedPosition();
 
     // Add a handler for the situation when energy chunks were in transit
     // to the next energy system and that system is swapped out.
@@ -177,6 +179,30 @@ define( function( require ) {
      */
     step: function( dt ) {
 
+      // Update energy state
+      this.bikerHasEnergyProperty.set( this.bikerHasEnergy() );
+
+      // If there is no energy, the target speed is 0, otherwise it is
+      // the current set point.
+      var target = this.bikerHasEnergy ? this.targetCrankAngularVelocity : 0;
+
+      // Speed up or slow down the angular velocity of the crank.
+      var previousAngularVelocity = this.crankAngularVelocity;
+
+      var dOmega = target - this.crankAngularVelocity;
+
+      if ( dOmega !== 0 ) {
+        var change = ANGULAR_ACCELERATION * dt;
+        if ( dOmega > 0 ) {
+          // Accelerate
+          this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocity );
+        } else {
+          // Decelerate
+          this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
+        }
+      }
+
+      this.crankAngleProperty.set( ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.Pi ) );
     },
 
     /**
@@ -197,6 +223,19 @@ define( function( require ) {
      */
     getEnergyOutputRate: function() {
 
+    },
+
+    /*
+     * Set the crank to a position where a very small amount of motion will
+     * cause a new image to be chosen.  This is generally done when the biker
+     * stops so that the animation starts right away the next time the motion
+     * starts.
+     * @private
+     */
+    setCrankToPoisedPosition: function() {
+      var currentIndex = this.mapAngleToImageIndex( this.crankAngle );
+      var radiansPerImage = 2 * Math.PI / NUM_LEG_IMAGES;
+      this.crankAngleProperty.set( ( currentIndex % NUM_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
     },
 
     /**
@@ -232,6 +271,16 @@ define( function( require ) {
       assert && assert( i >= 0 && i < NUM_LEG_IMAGES );
 
       return i;
+    },
+
+    /**
+     * Say whether the biker has energy to pedal
+     *
+     * @return {Boolean}
+     */
+    bikerHasEnergy: function() {
+      var nChunks = this.energyChunkList.length;
+      return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     }
 
   }, {
