@@ -26,7 +26,7 @@ define( function( require ) {
 
   // Constants
   var MAX_ANGULAR_VELOCITY_OF_CRANK = 3 * Math.PI; // In radians/sec.
-  // var ANGULAR_ACCELERATION = Math.PI / 2; // In radians/(sec^2).
+  var ANGULAR_ACCELERATION = Math.PI / 2; // In radians/(sec^2).
   // var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
   // var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
   // var CRANK_TO_REAR_WHEEL_RATIO = 1;
@@ -151,7 +151,7 @@ define( function( require ) {
     // Monitor target rotation rate for validity.
     this.targetCrankAngularVelocityProperty.link( function( omega ) {
       assert && assert( omega >= 0 && omega < MAX_ANGULAR_VELOCITY_OF_CRANK );
-    } )
+    } );
 
     // TODO:
     // Add initial set of energy chunks.
@@ -203,6 +203,13 @@ define( function( require ) {
       }
 
       this.crankAngleProperty.set( ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.Pi ) );
+
+      if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
+        // Set crank to a good position where animation will start
+        // right away when motion is restarted.
+        this.setCrankToPoisedPosition();
+      }
+
     },
 
     /**
