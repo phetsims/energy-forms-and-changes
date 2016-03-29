@@ -98,7 +98,7 @@ define( function( require ) {
       } );
 
       if ( this.isPlaying ) {
-        // var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt );
+        var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt );
       }
 
     }
