@@ -180,7 +180,7 @@ define( function( require ) {
     step: function( dt ) {
 
       // Update energy state
-      this.bikerHasEnergyProperty.set( this.bikerHasEnergy() );
+      this.bikerHasEnergyProperty.set( this.bikerCanPedal() );
 
       // If there is no energy, the target speed is 0, otherwise it is
       // the current set point.
@@ -202,7 +202,9 @@ define( function( require ) {
         }
       }
 
-      this.crankAngleProperty.set( ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.Pi ) );
+      var newAngle = ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.Pi );
+      console.log( 'newAngle:', newAngle );
+      this.crankAngleProperty.set( newAngle );
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
         // Set crank to a good position where animation will start
@@ -243,6 +245,7 @@ define( function( require ) {
       var currentIndex = this.mapAngleToImageIndex( this.crankAngle );
       var radiansPerImage = 2 * Math.PI / NUM_LEG_IMAGES;
       this.crankAngleProperty.set( ( currentIndex % NUM_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
+      assert && assert( this.crankAngle >= 0 && this.crankAngle <= 2 * Math.PI );
     },
 
     /**
@@ -281,11 +284,13 @@ define( function( require ) {
     },
 
     /**
-     * Say whether the biker has energy to pedal
+     * Say whether the biker has energy to pedal.
+     * Renamed from bikerHasEnergy() to avoid collision with the identically-
+     * named property.
      *
      * @return {Boolean}
      */
-    bikerHasEnergy: function() {
+    bikerCanPedal: function() {
       var nChunks = this.energyChunkList.length;
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     }
