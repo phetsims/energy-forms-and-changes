@@ -150,7 +150,7 @@ define( function( require ) {
 
     // Monitor target rotation rate for validity.
     this.targetCrankAngularVelocityProperty.link( function( omega ) {
-      assert && assert( omega >= 0 && omega < MAX_ANGULAR_VELOCITY_OF_CRANK );
+      assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK, 'The angular velocity was out of range: ' + omega );
     } );
 
     // TODO:
@@ -196,7 +196,8 @@ define( function( require ) {
         if ( dOmega > 0 ) {
           // Accelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocity );
-        } else {
+        }
+        else {
           // Decelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
         }
