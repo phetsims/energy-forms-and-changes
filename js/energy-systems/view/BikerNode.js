@@ -90,7 +90,8 @@ define( function( require ) {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       centerX: 0,
       centerY: 110,
-      cornerRadius: 8
+      cornerRadius: 8,
+      resize: false
     } ) );
 
     this.addChild( spokesImage );
