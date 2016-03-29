@@ -58,8 +58,7 @@ define( function( require ) {
     var visibleBackLeg = backLegImageNodes[ 0 ];
     var visibleFrontLeg = frontLegImageNodes[ 0 ];
     biker.crankAngleProperty.link( function( angle ) {
-      console.log('angle', biker.crankAngle);
-      assert && assert( angle >= 0 && angle <= 2*Math.PI );
+      assert && assert( angle >= 0 && angle <= 2 * Math.PI );
       var i = biker.mapAngleToImageIndex( angle );
       visibleFrontLeg.setVisible( false );
       visibleBackLeg.setVisible( false );
