@@ -14,12 +14,13 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   // var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
-  // var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   // var Range = require( 'DOT/Range' );
   // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -30,8 +31,8 @@ define( function( require ) {
   // var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
   // var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
-  // var INITIAL_NUM_ENERGY_CHUNKS = 15;
-  // var RAND = new Random();
+  var INITIAL_NUM_ENERGY_CHUNKS = 15;
+  var RAND = new Random();
   // var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   // var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
 
@@ -153,9 +154,8 @@ define( function( require ) {
       assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK, 'The angular velocity was out of range: ' + omega );
     } );
 
-    // TODO:
     // Add initial set of energy chunks.
-    // replenishEnergyChunks();
+    this.replenishEnergyChunks();
 
     // Get the crank into a position where animation will start right away.
     this.setCrankToPoisedPosition();
@@ -196,8 +196,7 @@ define( function( require ) {
         if ( dOmega > 0 ) {
           // Accelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocity );
-        }
-        else {
+        } else {
           // Decelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
         }
@@ -277,6 +276,22 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
 
+    },
+
+    /**
+     * Add/restore initial number of energy chunks to biker
+     *
+     * @public
+     */
+    replenishEnergyChunks: function() {
+      var nominalInitialOffset = new Vector2( 0.019, 0.05 );
+
+      for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
+        var displacement = new Vector2( ( RAND.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
+        var position = this.position.plus( nominalInitialOffset ).plus( displacement );
+        var newEnergyChunk = new EnergyChunk( EnergyType.CHEMICAL, position, this.energyChunksVisible );
+        this.energyChunkList.add( newEnergyChunk );
+      }
     },
 
     mapAngleToImageIndex: function( angle ) {
