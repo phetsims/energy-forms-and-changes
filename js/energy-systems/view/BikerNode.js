@@ -88,18 +88,6 @@ define( function( require ) {
       spokesImage.rotateAround( wheelRotationPoint, -delta );
     } );
 
-    // final Point2D wheelRotationPoint = new Point2D.Double( spokesImage.getFullBoundsReference().getCenterX(),
-    // biker.getRearWheelAngle().addObserver( new VoidFunction1 < Double > () {
-    //   public void apply( Double angle ) {
-    //     assert angle < 2 * Math.PI; // Limit this to one rotation.
-    //     double compensatedAngle = ( 2 * Math.PI - spokesImage.getRotation() ) % ( 2 * Math.PI );
-    //     double delta = angle - compensatedAngle;
-    //     spokesImage.rotateAboutPoint( -delta, wheelRotationPoint );
-    //   }
-    // } );
-
-
-
     // Slider to control crank speed
     // TODO: these numeric literals are brittle. Ask about correct way to control positions.
     var crankSlider = new HSlider( biker.targetCrankAngularVelocityProperty, {
@@ -124,10 +112,6 @@ define( function( require ) {
     this.addChild( frontLegRootNode );
     this.addChild( upperBodyNormal );
     this.addChild( upperBodyTired );
-
-
-
-
   }
 
   energyFormsAndChanges.register( 'BikerNode', BikerNode );
