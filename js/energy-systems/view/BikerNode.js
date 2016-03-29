@@ -76,6 +76,7 @@ define( function( require ) {
     } );
 
     // Slider to control crank speed
+    // TODO: these numeric literals are brittle. Ask about correct way to control positions.
     var crankSlider = new HSlider( biker.targetCrankAngularVelocityProperty, {
       min: 0,
       max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
@@ -91,15 +92,12 @@ define( function( require ) {
       cornerRadius: 8
     } ) );
 
-
-    // debugger;
     this.addChild( spokesImage );
     this.addChild( backLegRootNode );
     this.addChild( new EFACModelImageNode( Biker.FRAME_IMAGE, modelViewTransform ) );
     this.addChild( frontLegRootNode );
     this.addChild( upperBodyNormal );
     this.addChild( upperBodyTired );
-
   }
 
   energyFormsAndChanges.register( 'BikerNode', BikerNode );
