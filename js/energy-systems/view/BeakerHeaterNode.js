@@ -48,7 +48,7 @@ define( function( require ) {
     // var dy = -modelViewTransform.modelToViewDeltaY( beakerHeater.position.y );
     // var offset = new Vector2( dx, dy );
 
-    var offset = new Vector2( -4,  -260 ); // Eyeballed. TODO: get from MVT?
+    var offset = new Vector2( -4, -260 ); // Eyeballed. TODO: get from MVT?
     var scale = modelViewTransform.matrix.scaleVector;
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
 
