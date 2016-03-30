@@ -139,12 +139,12 @@ define( function( require ) {
     this.energyChunksVisible = energyChunksVisible;
     this.mechanicalPoweredSystemIsNext = mechanicalPoweredSystemIsNext;
 
-    this.addProperty( 'crankAngle', 0. ); // rad
-    this.addProperty( 'rearWheelAngle', 0. ); // rad
+    this.addProperty( 'crankAngle', 0 ); // rad
+    this.addProperty( 'rearWheelAngle', 0 ); // rad
     this.addProperty( 'bikerHasEnergy', true );
     this.addProperty( 'targetCrankAngularVelocity', 0 );
 
-    this.crankAngularVelocity = 0.; // rad/s
+    this.crankAngularVelocity = 0; // rad/s
     this.energyChunkMovers = [];
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
     this.mechanicalChunksSinceLastThermal = 0; // unsigned int (count)
