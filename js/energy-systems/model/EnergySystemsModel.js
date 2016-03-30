@@ -13,6 +13,7 @@ define( function( require ) {
   // Modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
+  var Belt = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Belt' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
@@ -64,9 +65,13 @@ define( function( require ) {
     this.energyConvertersCarousel.add( this.solarPanel );
 
     // Energy sources
+    var wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET ).plusXY( 0.005, 0 );
+    var wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
+
     this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
     this.teaPot = new TeaPot( this.energyChunksVisible, this.generator.activeProperty );
+    this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
     this.biker = new Biker( this.energyChunksVisible, this.generator.activeProperty );
     this.energySourcesCarousel.add( this.faucet );
     this.energySourcesCarousel.add( this.sun );
@@ -86,6 +91,28 @@ define( function( require ) {
       this.energyConvertersCarousel,
       this.energyUsersCarousel
     ];
+
+
+        //     // Create the belt that interconnects the biker and the generator.
+        // // Some position tweaking was needed in order to get this to show up
+        // // in the right place.  Not entirely sure why.
+        // belt = new Belt( Biker.REAR_WHEEL_RADIUS,
+        //                  energySourcesCarousel.getSelectedElementPosition().plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET ).plus( 0.005, 0 ),
+        //                  ElectricalGenerator.WHEEL_RADIUS,
+        //                  energyConvertersCarousel.getSelectedElementPosition().plus( ElectricalGenerator.WHEEL_CENTER_OFFSET ) );
+
+        // // Add the functionality to show/hide the belt that interconnects the
+        // // biker and the generator.
+        // VoidFunction1<Boolean> beltVisibilityUpdated = new VoidFunction1<Boolean>() {
+        //     public void apply( Boolean isAnimating ) {
+        //         boolean bikerAndGeneratorSelected = !isAnimating && biker.isActive() && waterPoweredGenerator.isActive();
+        //         belt.isVisible.set( bikerAndGeneratorSelected );
+        //         waterPoweredGenerator.directCouplingMode.set( bikerAndGeneratorSelected );
+        //     }
+        // };
+        // energySourcesCarousel.getAnimationInProgressProperty().addObserver( beltVisibilityUpdated );
+        // energyConvertersCarousel.getAnimationInProgressProperty().addObserver( beltVisibilityUpdated );
+
   }
 
   return inherit( PropertySet, EnergySystemsModel, {

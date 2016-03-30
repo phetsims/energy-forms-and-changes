@@ -34,14 +34,14 @@ define( function( require ) {
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
   var RAND = new Random();
   // var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
-  // var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
+  var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
 
   // Offsets used for creating energy chunk paths.  These need to be
   // coordinated with the images.
   // var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
   // var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.007, 0.015 );
   // var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.006 );
-  // var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.01 );
+  var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.01 );
   // var BOTTOM_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.03 );
   // var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.13, -0.01 );
 
@@ -317,12 +317,14 @@ define( function( require ) {
   }, {
     // Exported variables for static access
     BACK_LEG_IMAGES: BACK_LEG_IMAGES,
+    CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
     FRAME_IMAGE: FRAME_IMAGE,
     FRONT_LEG_IMAGES: FRONT_LEG_IMAGES,
     MAX_ANGULAR_VELOCITY_OF_CRANK: MAX_ANGULAR_VELOCITY_OF_CRANK,
     NUM_LEG_IMAGES: NUM_LEG_IMAGES,
     REAR_WHEEL_SPOKES_IMAGE: REAR_WHEEL_SPOKES_IMAGE,
     RIDER_NORMAL_UPPER_BODY_IMAGE: RIDER_NORMAL_UPPER_BODY_IMAGE,
-    RIDER_TIRED_UPPER_BODY_IMAGE: RIDER_TIRED_UPPER_BODY_IMAGE
+    RIDER_TIRED_UPPER_BODY_IMAGE: RIDER_TIRED_UPPER_BODY_IMAGE,
+    REAR_WHEEL_RADIUS: REAR_WHEEL_RADIUS
   } );
 } );

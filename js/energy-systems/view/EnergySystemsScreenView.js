@@ -13,6 +13,7 @@ define( function( require ) {
 
   // Modules
   var BeakerHeaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeakerHeaterNode' );
+  var BeltNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeltNode' );
   var BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BikerNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var CheckBox = require( 'SUN/CheckBox' );
@@ -228,6 +229,9 @@ define( function( require ) {
       var beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
       thisScreenView.addChild( beakerHeaterNode );
     }
+
+    var beltNode = new BeltNode( model.belt, modelViewTransform );
+    thisScreenView.addChild( beltNode );
 
     function addBiker() {
       var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
