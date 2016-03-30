@@ -18,26 +18,31 @@ define( function( require ) {
   // Modules
   var inherit = require( 'PHET_CORE/inherit' );
   // var Image = require( 'SCENERY/nodes/Image' );
-  // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   // var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
   // This is not used, but could be used to scale image.getImageWidth() to set
   // this.width.
-  // var DEFAULT_SCALE_FACTOR = 1 / EFACConstants.ENERGY_SYSTEMS_MVT_SCALE_FACTOR;
+  var DEFAULT_SCALE_FACTOR = 1 / EFACConstants.ENERGY_SYSTEMS_MVT_SCALE_FACTOR;
 
   /**
    * @param {Image}   image
-   * @param {Number}  width
    * @param {Vector2} centerToCenterOffset
+   * @param {object} options
    * @constructor
    */
-  function EFACModelImage( image, width, centerToCenterOffset ) {
+  function EFACModelImage( image, centerToCenterOffset, options ) {
+
+    options = _.extend( {
+      width: image.width * DEFAULT_SCALE_FACTOR
+    }, options );
+
     this.image = image;
 
     // Width of the image in model units (meters).
     // Height is derived from aspect ratio of image.
-    this.width = width;
+    this.width = options.width;
 
     // Offset in model units (meters) from the center of the position of the
     // model element that owns this image to the center of the image.

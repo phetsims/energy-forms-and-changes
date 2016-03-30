@@ -17,10 +17,10 @@ define( function( require ) {
   var FLUORESCENT_ON_FRONT_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_on_front_2.png' );
 
   var IMAGE_OFFSET = new Vector2( 0, 0.04 );
-  var BACK_OFF = new EFACModelImage( FLUORESCENT_BACK_2, FLUORESCENT_BACK_2.width, IMAGE_OFFSET );
-  var BACK_ON = new EFACModelImage( FLUORESCENT_ON_BACK_2, FLUORESCENT_ON_BACK_2.width, IMAGE_OFFSET );
-  var FRONT_OFF = new EFACModelImage( FLUORESCENT_FRONT_2, FLUORESCENT_FRONT_2.width, IMAGE_OFFSET );
-  var FRONT_ON = new EFACModelImage( FLUORESCENT_ON_FRONT_2, FLUORESCENT_ON_FRONT_2.width, IMAGE_OFFSET );
+  var BACK_OFF = new EFACModelImage( FLUORESCENT_BACK_2, IMAGE_OFFSET );
+  var BACK_ON = new EFACModelImage( FLUORESCENT_ON_BACK_2, IMAGE_OFFSET );
+  var FRONT_OFF = new EFACModelImage( FLUORESCENT_FRONT_2, IMAGE_OFFSET );
+  var FRONT_ON = new EFACModelImage( FLUORESCENT_ON_FRONT_2, IMAGE_OFFSET );
 
   /**
    * @param {Property<Boolean>} energyChunksVisible

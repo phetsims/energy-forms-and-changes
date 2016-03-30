@@ -17,8 +17,8 @@ define( function( require ) {
 
   // Constants
   var IMAGE_OFFSET = new Vector2( 0, 0.055 );
-  var NON_ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_2, INCANDESCENT_2.width, IMAGE_OFFSET );
-  var ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_ON_3, INCANDESCENT_ON_3.width, IMAGE_OFFSET );
+  var NON_ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_2, IMAGE_OFFSET );
+  var ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_ON_3, IMAGE_OFFSET );
 
   /**
    * @param {Property<Boolean>} energyChunksVisible

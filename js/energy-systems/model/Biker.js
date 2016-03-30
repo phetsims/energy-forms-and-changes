@@ -111,8 +111,8 @@ define( function( require ) {
   var BACK_LEG_IMAGES = [];
 
   for ( var i = 1; i < 25; i++ ) {
-    BACK_LEG_IMAGES.push( new EFACModelImage( BACK_LEG[ i - 1 ], BACK_LEG[ i - 1 ].width, LEG_OFFSET ) );
-    FRONT_LEG_IMAGES.push( new EFACModelImage( FRONT_LEG[ i - 1 ], FRONT_LEG[ i - 1 ].width, LEG_OFFSET ) );
+    BACK_LEG_IMAGES.push( new EFACModelImage( BACK_LEG[ i - 1 ], LEG_OFFSET ) );
+    FRONT_LEG_IMAGES.push( new EFACModelImage( FRONT_LEG[ i - 1 ], LEG_OFFSET ) );
   }
 
   var NUM_LEG_IMAGES = FRONT_LEG_IMAGES.length;
@@ -127,10 +127,10 @@ define( function( require ) {
   // offsets, which are in meters, were empirically determined.  The values
   // aren't really to scale, since there are so many things in this model
   // with very different scales.
-  var FRAME_IMAGE = new EFACModelImage( BICYCLE_FRAME_3, BICYCLE_FRAME_3.width, FRAME_CENTER_OFFSET );
-  var REAR_WHEEL_SPOKES_IMAGE = new EFACModelImage( BICYCLE_SPOKES, BICYCLE_SPOKES.width, FRAME_CENTER_OFFSET.plus( new Vector2( 0.035, -0.020 ) ) );
-  var RIDER_NORMAL_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER, BICYCLE_RIDER.width, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0025, 0.062 ) ) );
-  var RIDER_TIRED_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER_TIRED, BICYCLE_RIDER_TIRED.width, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0032, 0.056 ) ) );
+  var FRAME_IMAGE = new EFACModelImage( BICYCLE_FRAME_3, FRAME_CENTER_OFFSET );
+  var REAR_WHEEL_SPOKES_IMAGE = new EFACModelImage( BICYCLE_SPOKES, FRAME_CENTER_OFFSET.plus( new Vector2( 0.035, -0.020 ) ) );
+  var RIDER_NORMAL_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0025, 0.062 ) ) );
+  var RIDER_TIRED_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER_TIRED, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0032, 0.056 ) ) );
 
   function Biker( energyChunksVisible, mechanicalPoweredSystemIsNext ) {
 
