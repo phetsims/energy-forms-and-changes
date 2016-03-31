@@ -11,8 +11,12 @@ define( function( require ) {
   'use strict';
 
   // Modules
-  // Replace with correct path
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  // var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -70,6 +74,8 @@ define( function( require ) {
     this.transferNextAvailableChunk = true;
   }
 
+  energyFormsAndChanges.register( 'FaucetAndWater', FaucetAndWater );
+
   return inherit( EnergySource, FaucetAndWater, {
 
     /**
@@ -90,6 +96,9 @@ define( function( require ) {
      */
     step: function( dt ) {
 
+      // Generate the appropriate amount of energy.
+      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
+      return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
     /**
