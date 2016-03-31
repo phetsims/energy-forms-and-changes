@@ -194,12 +194,13 @@ define( function( require ) {
     },
 
     /**
-     * [deactivate description]
+     * Deactivate the generator.
      * @public
      * @override
      */
     deactivate: function() {
-
+      EnergyConverter.prototype.deactivate.call( this );
+      this.wheelRotationalVelocity = 0;
     },
 
     /**
