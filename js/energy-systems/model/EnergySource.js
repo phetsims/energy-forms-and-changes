@@ -25,7 +25,7 @@ define( function( require ) {
 
     EnergySystemElement.call( this, iconImage );
 
-    this.outgoingEnergyChunks = new Array();
+    this.outgoingEnergyChunks = [];
   }
 
   return inherit( EnergySystemElement, EnergySource, {
