@@ -14,6 +14,7 @@ define( function( require ) {
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {Generator} generator EnergyConverter
@@ -36,6 +37,20 @@ define( function( require ) {
     this.addChild( new EFACModelImageNode( Generator.WHEEL_HUB_IMAGE, modelViewTransform ) );
     // this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, generator.getObservablePosition(), modelViewTransform ) );
     // this.addChild( new EnergyChunkLayer( generator.energyChunkList, generator.getObservablePosition(), modelViewTransform ) );
+
+    // Update the rotation of the wheel image based on model value.
+    var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );
+    generator.wheelRotationalAngleProperty.link( function( angle ) {
+      var delta = -angle - paddlesNode.getRotation();
+      paddlesNode.rotateAround( wheelRotationPoint, delta );
+      spokesNode.rotateAround( wheelRotationPoint, delta );
+    } );
+
+    // Hide the paddles and show the spokes when in direct coupling mode.
+    generator.directCouplingModeProperty.link( function( directCouplingMode ) {
+      paddlesNode.setVisible( !directCouplingMode );
+      spokesNode.setVisible( directCouplingMode );
+    } );
   }
 
   return inherit( EFACBaseNode, GeneratorNode );
