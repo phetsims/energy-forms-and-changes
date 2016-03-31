@@ -280,21 +280,26 @@ define( function( require ) {
     },
 
     /**
+     * The biker is replenished each time she is reactivated.
+     * This was a fairly arbitrary decision, and can be changed if desired.
+     *
+     * @public
+     * @override
+     */
+    activate: function() {
+      EnergySource.prototype.activate.call( this );
+      this.replenishEnergyChunks();
+    },
+
+    /**
      * [deactivate description]
      * @public
      * @override
      */
     deactivate: function() {
-
-    },
-
-    /**
-     * [activate description]
-     * @public
-     * @override
-     */
-    activate: function() {
-
+      EnergySource.prototype.deactivate.call( this );
+      this.targetCrankAngularVelocityProperty.set( 0.0 );
+      this.crankAngularVelocity =  this.targetCrankAngularVelocity;
     },
 
     /**
