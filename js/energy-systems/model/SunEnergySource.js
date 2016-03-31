@@ -124,14 +124,37 @@ define( function( require ) {
       return new Energy( EnergyType.LIGHT, energyProduced, 0 );
     },
 
-    // TODO: fill out these stubs
     updateEnergyChunkPositions: function( dt ) {},
     emitEnergyChunk: function() {},
     preLoadEnergyChunks: function() {},
     getEnergyOutputRate: function() {},
     chooseNextEmissionAngle: function() {},
-    activate: function() {},
-    deactivate: function() {},
+
+    /**
+     * Pre-populate the space around the sun with energy chunks.
+     * The number of iterations is chosen carefully such that there are chunks
+     * that are close, but not quite reaching, the solar panel.
+     * @public
+     * @override
+     */
+    activate: function() {
+      EnergySource.prototype.activate.call( this );
+
+      for ( var i = 0; i < 100; i++ ) {
+        this.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      }
+    },
+
+    /**
+     * Deactivate the sun
+     * @public
+     * @override
+     */
+    deactivate: function() {
+      EnergySource.prototype.deactivate.call( this );
+      this.cloudinessProperty.reset();
+    },
+
     getUserComponent: function() {}
 
   }, {
