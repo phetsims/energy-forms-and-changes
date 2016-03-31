@@ -129,7 +129,7 @@ define( function( require ) {
             // Prevent the wheel from moving forever.
             this.wheelRotationalVelocity = 0;
           }
-          this.wheelRotationalAngle.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
+          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
         }
 
         // Handle any incoming energy chunks.
