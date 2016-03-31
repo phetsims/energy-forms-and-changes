@@ -63,7 +63,7 @@ define( function( require ) {
      *
      */
     clearEnergyChunks: function() {
-      this.energyChunkList.clear();
+      this.energyChunkList.reset();
     }
   } );
 } );
