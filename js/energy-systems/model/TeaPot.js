@@ -14,6 +14,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -56,8 +57,8 @@ define( function( require ) {
 
     EnergySource.call( this, new Image( TEAPOT_LARGE ) );
 
-    this.addProperty( 'heatCoolAmount', 0. );
-    this.addProperty( 'energyProductionRate', 0. );
+    this.addProperty( 'heatCoolAmount', 0 );
+    this.addProperty( 'energyProductionRate', 0 );
 
     this.energyChunksVisible = energyChunksVisible;
     this.steamPowerableElementInPlace = steamPowerableElementInPlace;
@@ -73,27 +74,9 @@ define( function( require ) {
     this.transferNextAvailableChunk = true;
   }
 
-  return inherit( EnergySource, TeaPot, {
+  energyFormsAndChanges.register( 'TeaPot', TeaPot );
 
-    useUnusedVarsForLinter: function() {
-      console.log( Cloud );
-      console.log( Energy );
-      console.log( EnergyType );
-      console.log( Util );
-      console.log( TEAPOT_IMAGE );
-      console.log( SPOUT_BOTTOM_OFFSET );
-      console.log( SPOUT_TIP_OFFSET );
-      console.log( DISTANT_TARGET_OFFSET );
-      console.log( WATER_SURFACE_HEIGHT_OFFSET );
-      console.log( THERMAL_ENERGY_CHUNK_Y_ORIGIN );
-      console.log( THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE );
-      console.log( MAX_ENERGY_CHANGE_RATE );
-      console.log( COOLING_CONSTANT );
-      console.log( COOL_DOWN_COMPLETE_THRESHOLD );
-      console.log( ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE );
-      console.log( RAND );
-      console.log( ENERGY_CHUNK_WATER_TO_SPOUT_TIME );
-    },
+  return inherit( EnergySource, TeaPot, {
 
     /**
      * [moveEnergyChunks description]
@@ -152,7 +135,7 @@ define( function( require ) {
      * @override
      */
     step: function( dt ) {
-
+      return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
     },
 
     /**
@@ -192,10 +175,6 @@ define( function( require ) {
     clearEnergyChunks: function() {
 
     }
-
-    // TODO: Port this? Replace with something from PhET-iO?
-    // IUserComponent getUserComponent: function() {
-    // }
 
   }, {
     // Expose the following as public static members
