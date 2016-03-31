@@ -70,7 +70,7 @@ define( function( require ) {
     var wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET ).plusXY( 0.005, 0 );
     var wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
 
-    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.waterPowerableElementInPlace );
+    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.generator.activeProperty );
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
     this.teaPot = new TeaPot( this.energyChunksVisible, this.generator.activeProperty );
 
@@ -101,6 +101,7 @@ define( function( require ) {
       // console.log('animating, biker.active, generator.active:', isAnimating, thisModel.biker.active, thisModel.generator.active);
       var bikerAndGeneratorSelected = ( !isAnimating && thisModel.biker.active && thisModel.generator.active );
       thisModel.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
+      thisModel.generator.directCouplingModeProperty.set( bikerAndGeneratorSelected );
     }
 
     this.energySourcesCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
