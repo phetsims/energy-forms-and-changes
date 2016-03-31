@@ -231,6 +231,7 @@ define( function( require ) {
     }
 
     var beltNode = new BeltNode( model.belt, modelViewTransform );
+    addGenerator();
     thisScreenView.addChild( beltNode );
 
     function addBiker() {
@@ -251,7 +252,6 @@ define( function( require ) {
     addbeakerHeater();
     addIncandescentBulb();
     addFluorescentBulb();
-    addGenerator();
     addSolarPanel();
 
     var carousels = createCarousels();
