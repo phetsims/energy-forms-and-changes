@@ -13,7 +13,7 @@ define( function( require ) {
   // Modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
-  // var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
@@ -28,8 +28,8 @@ define( function( require ) {
   // Constants
   var MAX_ANGULAR_VELOCITY_OF_CRANK = 3 * Math.PI; // In radians/sec.
   var ANGULAR_ACCELERATION = Math.PI / 2; // In radians/(sec^2).
-  // var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
-  // var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
+  var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
+  var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
   var RAND = new Random();
@@ -209,13 +209,38 @@ define( function( require ) {
 
       this.rearWheelAngleProperty.set( ( this.rearWheelAngle + this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
 
-
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
         // Set crank to a good position where animation will start
         // right away when motion is restarted.
         this.setCrankToPoisedPosition();
       }
 
+      var fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
+
+      // Determine how much energy is produced in this time step.
+      if ( this.targetCrankAngularVelocity > 0 ) {
+
+        // Less energy is produced if not hooked up to generator.
+        var maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE;
+        if ( this.mechanicalPoweredSystemIsNext ) {
+          maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR;
+        }
+        this.energyProducedSinceLastChunkEmitted += maxEnergyProductionRate * fractionalVelocity * dt;
+      }
+
+      // Decide if new chem energy chunk should start on its way.
+      if ( this.energyProducedSinceLastChunkEmitted >= EFACConstants.ENERGY_PER_CHUNK && this.targetCrankAngularVelocity > 0 ) {
+
+        // Start a new chunk moving.
+        if ( this.bikerCanPedal() ) {
+          // EnergyChunk energyChunk = findNonMovingEnergyChunk();
+          // energyChunkMovers.add( new EnergyChunkPathMover( energyChunk, createChemicalEnergyChunkPath( getPosition() ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          this.energyProducedSinceLastChunkEmitted = 0;
+        }
+      }
+
+      var energyAmount = Math.abs( fractionalVelocity * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * dt );
+      return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
     /**
