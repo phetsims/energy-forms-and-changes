@@ -151,7 +151,8 @@ define( function( require ) {
 
     // Monitor target rotation rate for validity.
     this.targetCrankAngularVelocityProperty.link( function( omega ) {
-      assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK, 'The angular velocity was out of range: ' + omega );
+      assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
+        'Angular velocity out of range: ' + omega );
     } );
 
     // Add initial set of energy chunks.
