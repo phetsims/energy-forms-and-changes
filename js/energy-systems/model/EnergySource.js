@@ -48,10 +48,12 @@ define( function( require ) {
 
     /**
      * Clear internal list of energy chunks and outgoing energy chunks
+     * @public
+     * @override
      */
     clearEnergyChunks: function() {
-      this.clearEnergyChunks(); // Inherited
-      this.outgoingEnergyChunks.clear();
+      EnergySystemElement.prototype.clearEnergyChunks.call(this);
+      this.outgoingEnergyChunks.length = 0;
     }
 
   } );
