@@ -98,6 +98,7 @@ define( function( require ) {
     // Add the functionality to show/hide the belt that interconnects the
     // biker and the generator.
     function beltVisibilityUpdated( isAnimating ) {
+      // console.log('animating, biker.active, generator.active:', isAnimating, thisModel.biker.active, thisModel.generator.active);
       var bikerAndGeneratorSelected = ( !isAnimating && thisModel.biker.active && thisModel.generator.active );
       thisModel.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
     }
