@@ -14,11 +14,12 @@ define( function( require ) {
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
+  // var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -26,17 +27,17 @@ define( function( require ) {
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
-  var RAND = new Random();
-  var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
+  // var RAND = new Random();
+  // var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are
   // used to make emission look random yet still have a fairly steady rate
   // within each sector.  One sector is intended to point at the solar panel.
   var NUM_EMISSION_SECTORS = 10;
-  var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
+  // var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
 
   // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
-  var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
+  // var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
   var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
 
@@ -96,6 +97,8 @@ define( function( require ) {
 
   }
 
+  energyFormsAndChanges.register( 'SunEnergySource', SunEnergySource );
+
   return inherit( EnergySource, SunEnergySource, {
 
     step: function( dt ) {
@@ -118,7 +121,7 @@ define( function( require ) {
       }
 
       // Produce the energy.
-      return new Energy( EnergyType.LIGHT, energyProduced );
+      return new Energy( EnergyType.LIGHT, energyProduced, 0 );
     },
 
     // TODO: fill out these stubs
@@ -129,20 +132,8 @@ define( function( require ) {
     chooseNextEmissionAngle: function() {},
     activate: function() {},
     deactivate: function() {},
-    getUserComponent: function() {},
+    getUserComponent: function() {}
 
-    // For linter
-    temp: function() {
-      console.log(
-        RADIUS,
-        OFFSET_TO_CENTER_OF_SUN,
-        ENERGY_CHUNK_EMISSION_PERIOD,
-        RAND,
-        MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN,
-        NUM_EMISSION_SECTORS,
-        EMISSION_SECTOR_SPAN,
-        EMISSION_SECTOR_OFFSET );
-    }
   }, {
     // @public
     OFFSET_TO_CENTER_OF_SUN: OFFSET_TO_CENTER_OF_SUN
