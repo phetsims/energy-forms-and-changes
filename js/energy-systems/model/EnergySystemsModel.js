@@ -107,6 +107,11 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, EnergySystemsModel, {
+
+    /**
+     * @param  {Number} dt timestep
+     * @public
+     */
     step: function( dt ) {
 
       // Elements managed by carousels need to be scrollable/selectable regardless
@@ -116,7 +121,9 @@ define( function( require ) {
       } );
 
       if ( this.isPlaying ) {
-        var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt ); // eslint-disable-line no-unused-vars
+        var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt );
+        var energyFromConverter = this.energyConvertersCarousel.getSelectedElement().step( dt, energyFromSource ); // eslint-disable-line no-unused-vars
+        this.energyUsersCarousel.getSelectedElement().step( dt, energyFromConverter );
       }
 
     }
