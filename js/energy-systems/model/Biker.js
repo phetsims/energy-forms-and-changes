@@ -163,9 +163,9 @@ define( function( require ) {
 
     // Add a handler for the situation when energy chunks were in transit
     // to the next energy system and that system is swapped out.
-    this.mechanicalPoweredSystemIsNextProperty.link( function( isNext, wasNext ) {
-      // var hubPosition = thisBiker.position.plus( CENTER_OF_BACK_WHEEL_OFFSET );
-    } );
+    // this.mechanicalPoweredSystemIsNextProperty.link( function( isNext, wasNext ) {
+    //   // var hubPosition = thisBiker.position.plus( CENTER_OF_BACK_WHEEL_OFFSET );
+    // } );
   }
 
   energyFormsAndChanges.register( 'Biker', Biker );
