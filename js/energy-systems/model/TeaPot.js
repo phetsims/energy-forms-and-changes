@@ -159,12 +159,14 @@ define( function( require ) {
     },
 
     /**
-     * [deactivate description]
+     * Deactivate the teapot
      * @public
      * @override
      */
     deactivate: function() {
-
+      EnergySource.prototype.deactivate.call( this );
+      this.heatCoolAmountProperty.reset();
+      this.energyProductionRateProperty.reset();
     },
 
     /**
