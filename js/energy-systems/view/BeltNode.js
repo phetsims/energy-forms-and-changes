@@ -50,12 +50,12 @@ define( function( require ) {
     var arcAngle = wheel1ToOneEdge.angle() + Math.PI;
 
     // Arc around bike wheel
-    beltShape.arc( wheel1Center.x, wheel1Center.y, wheel1Radius, arcAngle, arcAngle+Math.PI, false );
+    beltShape.arc( wheel1Center.x, wheel1Center.y, wheel1Radius, arcAngle, arcAngle + Math.PI, false );
     beltShape.moveToPoint( points[ 1 ] ); // bottom of bike wheel
     beltShape.lineToPoint( points[ 2 ] ); // bottom of generator wheel
 
     // Arc around generator wheel
-    beltShape.arc( wheel2Center.x, wheel2Center.y, wheel2Radius, arcAngle, arcAngle+Math.PI, true );
+    beltShape.arc( wheel2Center.x, wheel2Center.y, wheel2Radius, arcAngle, arcAngle + Math.PI, true );
     beltShape.moveToPoint( points[ 3 ] ); // top of generator wheel
     beltShape.lineToPoint( points[ 0 ] ); // top of bike wheel
 
@@ -67,6 +67,12 @@ define( function( require ) {
     } );
 
     this.addChild( beltPath );
+
+    // Control visibility of the belt
+    var thisBeltNode = this;
+    belt.isVisibleProperty.link( function( isVisible ) {
+      thisBeltNode.setVisible( isVisible );
+    } );
   }
 
   energyFormsAndChanges.register( 'BeltNode', BeltNode );
