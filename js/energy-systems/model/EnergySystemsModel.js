@@ -52,6 +52,8 @@ define( function( require ) {
       isPlaying: true
     } );
 
+    var thisModel = this;
+
     // Carousels that control the positions of the energy sources, converters,
     // and users.
     this.energySourcesCarousel = new EnergySystemElementCarousel( new Vector2( -0.15, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
@@ -93,18 +95,15 @@ define( function( require ) {
       this.energyUsersCarousel
     ];
 
-    // // Add the functionality to show/hide the belt that interconnects the
-    // // biker and the generator.
-    // VoidFunction1<Boolean> beltVisibilityUpdated = new VoidFunction1<Boolean>() {
-    //     public void apply( Boolean isAnimating ) {
-    //         boolean bikerAndGeneratorSelected = !isAnimating && biker.isActive() && waterPoweredGenerator.isActive();
-    //         belt.isVisible.set( bikerAndGeneratorSelected );
-    //         waterPoweredGenerator.directCouplingMode.set( bikerAndGeneratorSelected );
-    //     }
-    // };
-    // energySourcesCarousel.getAnimationInProgressProperty().addObserver( beltVisibilityUpdated );
-    // energyConvertersCarousel.getAnimationInProgressProperty().addObserver( beltVisibilityUpdated );
+    // Add the functionality to show/hide the belt that interconnects the
+    // biker and the generator.
+    function beltVisibilityUpdated( isAnimating ) {
+      var bikerAndGeneratorSelected = ( !isAnimating && thisModel.biker.active && thisModel.generator.active );
+      thisModel.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
+    }
 
+    this.energySourcesCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
+    this.energyConvertersCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
   }
 
   return inherit( PropertySet, EnergySystemsModel, {
