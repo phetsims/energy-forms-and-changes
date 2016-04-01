@@ -153,9 +153,7 @@ define( function( require ) {
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
       this.cloudinessProperty.reset();
-    },
-
-    getUserComponent: function() {}
+    }
 
   }, {
     // @public
