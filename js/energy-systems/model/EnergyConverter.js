@@ -57,7 +57,7 @@ define( function( require ) {
      * Clear internal list of energy chunks and outgoing energy chunks
      */
     clearEnergyChunks: function() {
-      this.clearEnergyChunks(); // Inherited
+      EnergySystemElement.prototype.clearEnergyChunks.call( this );
       this.outgoingEnergyChunks.clear();
     }
   } );
