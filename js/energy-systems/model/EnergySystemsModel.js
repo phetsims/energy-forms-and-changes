@@ -98,7 +98,6 @@ define( function( require ) {
     // Add the functionality to show/hide the belt that interconnects the
     // biker and the generator.
     function beltVisibilityUpdated( isAnimating ) {
-      // console.log('animating, biker.active, generator.active:', isAnimating, thisModel.biker.active, thisModel.generator.active);
       var bikerAndGeneratorSelected = ( !isAnimating && thisModel.biker.active && thisModel.generator.active );
       thisModel.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
       thisModel.generator.directCouplingModeProperty.set( bikerAndGeneratorSelected );
@@ -109,6 +108,16 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, EnergySystemsModel, {
+
+    reset: function() {
+      this.energyChunksVisibleProperty.reset();
+
+      this.carousels.forEach( function( carousel ) {
+        carousel.getSelectedElement().deactivate();
+        carousel.targetIndexProperty.set( 0 );
+        carousel.getSelectedElement().activate();
+      } );
+    },
 
     /**
      * @param  {Number} dt timestep
