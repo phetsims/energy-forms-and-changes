@@ -66,11 +66,12 @@ define( function( require ) {
     var thisCarousel = this;
 
     // Monitor our own target setting and set up the variables needed for
-    // animation each time the target changes.
-    this.targetIndexProperty.link( function() {
+    // animation each time the target changes. Use lazyLink to avoid calling
+    // this during initialization.
+    this.targetIndexProperty.lazyLink( function() {
       // Check bounds
       var i = thisCarousel.targetIndex;
-      assert && assert( i === 0 || i < thisCarousel.managedElements.length );
+      assert && assert( i === 0 || i < thisCarousel.managedElements.length, 'targetIndex out of range:' + i );
 
       thisCarousel.elapsedTransitionTime = 0;
       thisCarousel.initialCarouselOffset = thisCarousel.currentCarouselOffset;
@@ -78,8 +79,8 @@ define( function( require ) {
     } );
 
     // Activate and deactivate energy system elements as they come into
-    // the center location.
-    this.animationInProgressProperty.link( function( animationInProgress ) {
+    // the center location. Use lazyLink to avoid calling this during initialization.
+    this.animationInProgressProperty.lazyLink( function( animationInProgress ) {
       if ( animationInProgress ) {
         thisCarousel.managedElements.forEach( function( element ) {
           element.deactivate();

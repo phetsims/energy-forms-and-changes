@@ -95,6 +95,11 @@ define( function( require ) {
       this.energyUsersCarousel
     ];
 
+    // Set isActive = true for the first element in each carousel.
+    this.carousels.forEach( function( carousel ) {
+      carousel.managedElements[ 0 ].activate();
+    } );
+
     // Add the functionality to show/hide the belt that interconnects the
     // biker and the generator.
     function beltVisibilityUpdated( isAnimating ) {
