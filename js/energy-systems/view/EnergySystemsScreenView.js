@@ -189,10 +189,6 @@ define( function( require ) {
       usersCarousel.leftCenter = new Vector2( convertersCarousel.rightCenter.x + spacing, centerY );
 
       return [ sourcesCarousel, convertersCarousel, usersCarousel ];
-
-      // thisScreenView.addChild( sourcesCarousel );
-      // thisScreenView.addChild( convertersCarousel );
-      // thisScreenView.addChild( usersCarousel );
     }
 
     function addTeaPot() {
@@ -258,7 +254,8 @@ define( function( require ) {
     carousels.forEach( function( carousel ) {
       thisScreenView.addChild( carousel );
     } );
-    // addCarousels();
+
+    model.reset(); // TODO: Didn't see this call in the Java sim. How are carousels initialized?
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
