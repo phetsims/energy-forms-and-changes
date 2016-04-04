@@ -31,6 +31,7 @@ define( function( require ) {
     } );
 
     var waterDropNode = new Path( dropShape, {
+      fill: EFACConstants.WATER_COLOR_OPAQUE,
       stroke: EFACConstants.WATER_COLOR_OPAQUE
     } );
 
