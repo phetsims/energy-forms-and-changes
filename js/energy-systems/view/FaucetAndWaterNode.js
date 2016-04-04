@@ -55,7 +55,7 @@ define( function( require ) {
           // Remove this listener to reclaim memory
           faucet.waterDrops.removeItemRemovedListener( itemRemovedListener );
         }
-      }
+      };
 
       // Link itemRemovedListener to the waterDrops ObservableArray
       faucet.waterDrops.addItemRemovedListener( itemRemovedListener );
