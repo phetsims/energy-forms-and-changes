@@ -17,7 +17,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 
-  function WaterDroplNode( waterDrop, modelViewTransform ) {
+  function WaterDropNode( waterDrop, modelViewTransform ) {
 
     Node.call( this );
     var thisNode = this;
@@ -46,7 +46,7 @@ define( function( require ) {
 
   }
 
-  energyFormsAndChanges.register( 'WaterDroplNode', WaterDroplNode );
+  energyFormsAndChanges.register( 'WaterDropNode', WaterDropNode );
 
-  return inherit( Node, WaterDroplNode );
+  return inherit( Node, WaterDropNode );
 } );

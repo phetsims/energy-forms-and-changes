@@ -34,7 +34,7 @@ define( function( require ) {
   var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.065, 0.08 );
   // var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
   var MAX_WATER_WIDTH = 0.015; // In meters.
-  // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
+  var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var RAND = new Random();
   // var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
 
@@ -42,7 +42,7 @@ define( function( require ) {
   // flows from the faucet.  The value used is not the actual value in
   // Earth's gravitational field - it has been tweaked for optimal visual
   // effect.
-  // var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
+  var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
   /**
    * @param {Property<boolean>} energyChunksVisible
@@ -101,10 +101,27 @@ define( function( require ) {
       // Add water droplets as needed based on flow rate.
       if ( this.flowProportion > 0 ) {
         var initialWidth = this.flowProportion * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
-        this.waterDrops.add( new WaterDrop( OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( 0, 0.01 ),
+        this.waterDrops.push( new WaterDrop( OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( 0, 0.01 ),
           new Vector2( 0, 0 ),
           new Dimension2( initialWidth, initialWidth ) ) );
       }
+
+      // Make the water droplets fall.
+      this.waterDrops.forEach( function( drop ) {
+        drop.velocityProperty.set( drop.velocity.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
+        drop.offsetFromParentProperty.set( drop.offsetFromParent.plus( drop.velocity.times( dt ) ) );
+      } );
+
+      // Remove drops that have run their course by iterating over a copy and checking for matches.
+      var self = this;
+      var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
+      waterDropsCopy.forEach( function( drop ) {
+        if ( drop.offsetFromParent.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+          if ( self.waterDrops.contains( drop ) ) {
+            self.waterDrops.remove( drop );
+          }
+        }
+      } );
 
       // Generate the appropriate amount of energy.
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
