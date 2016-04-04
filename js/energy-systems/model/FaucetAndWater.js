@@ -20,7 +20,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   // var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -31,9 +31,9 @@ define( function( require ) {
 
   var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.065, 0.08 );
   // var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
-  // var MAX_WATER_WIDTH = 0.015; // In meters.
+  var MAX_WATER_WIDTH = 0.015; // In meters.
   // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
-  // var RAND = new Random();
+  var RAND = new Random();
   // var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
 
   // The following acceleration constant defines the rate at which the water
@@ -96,6 +96,15 @@ define( function( require ) {
      */
     step: function( dt ) {
 
+      // // Add water droplets as needed based on flow rate.
+      // if ( this.flowProportion > 0 ) {
+      //   var initialWidth = this.flowProportion.get() * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
+      //   this.waterDrops.add( new WaterDrop( OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( 0, 0.01 ),
+      //     new Vector2( 0, 0 ),
+      //     new Dimension2( initialWidth, initialWidth ) ) );
+      // }
+
+
       // Generate the appropriate amount of energy.
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
@@ -118,7 +127,8 @@ define( function( require ) {
      * @override
      */
     getEnergyOutputRate: function() {
-
+      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion;
+      return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
     /**
@@ -127,7 +137,8 @@ define( function( require ) {
      * @override
      */
     deactivate: function() {
-
+      EnergySource.prototype.deactivate.call( this );
+      this.waterDrops.clear();
     },
 
     /**
@@ -136,7 +147,8 @@ define( function( require ) {
      * @override
      */
     clearEnergyChunks: function() {
-
+      EnergySource.prototype.clearEnergyChunks.call( this );
+      this.exemptFromTransferEnergyChunks.length = 0;
     }
 
   }, {
