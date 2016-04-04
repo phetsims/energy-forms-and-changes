@@ -10,10 +10,10 @@ define( function( require ) {
   'use strict';
 
   // Modules
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Dimension2 = require( 'DOT/Dimension2' );
+  var PropertySet = require( 'AXON/PropertySet' );
 
   // The following constant is used to adjust the way in which the drop
   // elongates as its velocity increases.
@@ -32,10 +32,12 @@ define( function( require ) {
       size: size
     } );
 
+    var thisDrop = this;
+
     this.velocityProperty.link( function( velocity ) {
-      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * this.size.width;
-      var newHeight = ( this.size.height * this.size.width ) / newWidth;
-      this.size.set( new Dimension2( newWidth, newHeight ) );
+      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * thisDrop.size.width;
+      var newHeight = ( thisDrop.size.height * thisDrop.size.width ) / newWidth;
+      thisDrop.size.set( new Dimension2( newWidth, newHeight ) );
     } );
   }
 
