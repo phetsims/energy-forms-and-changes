@@ -43,17 +43,25 @@ define( function( require ) {
     // Create the water, which consists of a set of water drops.
     var waterLayer = new Node();
 
-    faucet.waterDrops.addItemAddedListener( function( addedDrop ) {
-      var itemAddedListener = this;
-      var waterDropNode = new WaterDropNode( addedDrop, modelViewTransform );
+    function addDroplet( droplet ) {
+      var waterDropNode = new WaterDropNode( droplet, modelViewTransform );
       waterLayer.addChild( waterDropNode );
-      faucet.waterDrops.addItemRemovedListener( function( removedDrop ) {
-        if ( addedDrop === removedDrop ) {
-          faucet.waterDrops.removeItemAddedListener( itemAddedListener );
+
+      // When droplet is removed from the model, remove its node from the view
+      var itemRemovedListener = function( removedDroplet ) {
+        if ( removedDroplet === droplet ) {
           waterLayer.removeChild( waterDropNode );
+
+          // Remove this listener to reclaim memory
+          faucet.waterDrops.removeItemRemovedListener( itemRemovedListener );
         }
-      } );
-    } );
+      }
+
+      // Link itemRemovedListener to the waterDrops ObservableArray
+      faucet.waterDrops.addItemRemovedListener( itemRemovedListener );
+    }
+
+    faucet.waterDrops.addItemAddedListener( addDroplet );
 
     faucetNode.addChild( waterLayer );
     this.addChild( faucetNode );
