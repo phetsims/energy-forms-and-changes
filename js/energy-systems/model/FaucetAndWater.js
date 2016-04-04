@@ -100,8 +100,7 @@ define( function( require ) {
 
       // Add water droplets as needed based on flow rate.
       if ( this.flowProportion > 0 ) {
-        // var initialOffset = OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( new Vector2( 0, 0.01 ) );
-        var initialOffset = new Vector2( 0, 0.01 );
+        var initialOffset = new Vector2( 0, 0 );
         var initialWidth = this.flowProportion * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
         var initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop( initialOffset, new Vector2( 0, 0 ), initialSize ) );
@@ -117,11 +116,8 @@ define( function( require ) {
       var self = this;
       var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
       waterDropsCopy.forEach( function( drop ) {
-        // assert && assert( drop.offsetFromParent.magnitude() > 0, 'offsetFromParent is ' + drop.offsetFromParent );
-        if ( drop.offsetFromParent.magnitude() > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
-          // if ( drop.offsetFromParent.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+        if ( drop.offsetFromParent.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
           if ( self.waterDrops.contains( drop ) ) {
-            console.log( 'removing', drop );
             self.waterDrops.remove( drop );
           }
         }
