@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   // var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -23,6 +24,7 @@ define( function( require ) {
   var Random = require( 'DOT/Random' );
   // var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
+  var WaterDrop = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/WaterDrop' );
 
   // Images
   var FAUCET_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/faucet_icon.png' );
@@ -96,14 +98,13 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      // // Add water droplets as needed based on flow rate.
-      // if ( this.flowProportion > 0 ) {
-      //   var initialWidth = this.flowProportion.get() * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
-      //   this.waterDrops.add( new WaterDrop( OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( 0, 0.01 ),
-      //     new Vector2( 0, 0 ),
-      //     new Dimension2( initialWidth, initialWidth ) ) );
-      // }
-
+      // Add water droplets as needed based on flow rate.
+      if ( this.flowProportion > 0 ) {
+        var initialWidth = this.flowProportion * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
+        this.waterDrops.add( new WaterDrop( OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plus( 0, 0.01 ),
+          new Vector2( 0, 0 ),
+          new Dimension2( initialWidth, initialWidth ) ) );
+      }
 
       // Generate the appropriate amount of energy.
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
