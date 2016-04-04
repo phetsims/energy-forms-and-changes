@@ -14,12 +14,13 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   // var Range = require( 'DOT/Range' );
   // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -37,15 +38,15 @@ define( function( require ) {
   // var SPOUT_TIP_OFFSET = new Vector2( 0.25, 0.3 );
   // var DISTANT_TARGET_OFFSET = new Vector2( 1, 1 );
   // var WATER_SURFACE_HEIGHT_OFFSET = 0; // From teapot position, in meters.
-  // var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
-  // var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.015, 0.015 ); // Meters. Coordinated with heater position.
+  var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
+  var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.015, 0.015 ); // Meters. Coordinated with heater position.
 
   // Miscellaneous other constants.
-  // var MAX_ENERGY_CHANGE_RATE = EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 5; // In joules/second
-  // var COOLING_CONSTANT = 0.1; // Controls rate at which tea pot cools down, empirically determined.
-  // var COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
+  var MAX_ENERGY_CHANGE_RATE = EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 5; // In joules/second
+  var COOLING_CONSTANT = 0.1; // Controls rate at which tea pot cools down, empirically determined.
+  var COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
   // var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.12, 0.15 );
-  // var RAND = new Random();
+  var RAND = new Random();
   // var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
   /**
@@ -77,6 +78,60 @@ define( function( require ) {
   energyFormsAndChanges.register( 'TeaPot', TeaPot );
 
   return inherit( EnergySource, TeaPot, {
+
+    /**
+     * [step description]
+     *
+     * @param  {Number} dt timestep
+     *
+     * @return {Energy}
+     * @public
+     * @override
+     */
+    step: function( dt ) {
+
+      if ( this.active ) {
+        if ( this.heatCoolAmount > 0 || this.energyProductionRate > COOL_DOWN_COMPLETE_THRESHOLD ) {
+
+          // Calculate the energy production rate.
+
+          // Analogous to acceleration.
+          var increase = this.heatCoolAmount * MAX_ENERGY_CHANGE_RATE;
+
+          // Analogous to friction.
+          var decrease = this.energyProductionRate * COOLING_CONSTANT;
+
+          // Analogous to velocity.
+          var rate = this.energyProductionRate + increase * dt - decrease * dt;
+          rate = Math.min( rate, EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
+
+          this.energyProductionRateProperty.set( rate );
+        } else {
+          // Clamp the energy production rate to zero so that it doesn't
+          // trickle on forever.
+          this.energyProductionRateProperty.set( 0 );
+        }
+
+        this.heatEnergyProducedSinceLastChunk += Math.max( this.heatCoolAmount, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
+        if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          var xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
+          var x0 = this.position.x + xRange.min + RAND.nextDouble() * xRange.length;
+          var y0 = this.position.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
+          var initialPosition = new Vector2( x0, y0 );
+
+          var energyChunk = new EnergyChunk( EnergyType.THERMAL, initialPosition, this.energyChunksVisible );
+          this.energyChunkList.push( energyChunk );
+          // heatEnergyProducedSinceLastChunk -= ENERGY_PER_CHUNK;
+          // energyChunkMovers.add( new EnergyChunkPathMover( energyChunk,
+          //   createThermalEnergyChunkPath( initialPosition, getPosition() ),
+          //   EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+        }
+
+        // this.moveEnergyChunks(dt);
+      }
+      return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
+    },
 
     /**
      * [moveEnergyChunks description]
@@ -125,18 +180,6 @@ define( function( require ) {
 
     },
 
-    /**
-     * [step description]
-     *
-     * @param  {Number} dt timestep
-     *
-     * @return {Energy}
-     * @public
-     * @override
-     */
-    step: function( dt ) {
-      return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
-    },
 
     /**
      * [preLoadEnergyChunks description]
