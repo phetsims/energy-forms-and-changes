@@ -9,7 +9,7 @@ define( function( require ) {
   var FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
+  // var Path = require( 'SCENERY/nodes/Path' );
   var WaterDropNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/WaterDropNode' );
 
   // Constants
@@ -55,25 +55,7 @@ define( function( require ) {
       } );
     } );
 
-    // final PNode waterLayer = new PNode();
-    // faucet.waterDrops.addElementAddedObserver( new VoidFunction1 < WaterDrop > () {
-    //   public void apply( final WaterDrop addedWaterDrop ) {
-    //     final PNode waterDropNode = new WaterDropNode( addedWaterDrop, mvt );
-    //     waterLayer.addChild( waterDropNode );
-    //     faucet.waterDrops.addElementRemovedObserver( new VoidFunction1 < WaterDrop > () {
-    //       public void apply( WaterDrop removedWaterDrop ) {
-    //         if ( removedWaterDrop == addedWaterDrop ) {
-    //           faucet.waterDrops.removeElementAddedObserver( this );
-    //           waterLayer.removeChild( waterDropNode );
-    //         }
-    //       }
-    //     } );
-    //   }
-    // } );
-    // var waterNode = new Path();
-    // final PPath waterNode = new PhetPPath( EFACConstants.WATER_COLOR_OPAQUE );
-    // waterNode.setOffset( -mvt.modelToViewX( 0 ) + mvt.modelToViewDeltaX( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN.getX() ), -mvt.modelToViewY( 0 ) + mvt.modelToViewDeltaY( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN.getY() ) );
-    this.addChild( waterLayer );
+    faucetNode.addChild( waterLayer );
     this.addChild( faucetNode );
   }
 
