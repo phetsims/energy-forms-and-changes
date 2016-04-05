@@ -6,6 +6,7 @@ define( function( require ) {
   // Modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -93,16 +94,15 @@ define( function( require ) {
     step: function( dt, incomingEnergy ) {
       if ( this.active ) {
 
-        // Convention is positive is counter clockwise.
+        // Positive is counter clockwise.
         var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
 
-        // Handle different wheel rotation modes
+        // Handle different wheel rotation modes.
         if ( this.directCouplingMode ) {
 
           // Treat the wheel as though it is directly coupled to the
           // energy source, e.g. through a belt or drive shaft.
           if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
-
             var energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
             this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
             this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
@@ -134,7 +134,13 @@ define( function( require ) {
 
         // Handle any incoming energy chunks.
         // TODO
+
       }
+
+      // Produce the appropriate amount of energy.
+      var speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      var energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE ) * dt;
+      return new Energy( EnergyType.ELECTRICAL, energy, 0 );
     },
 
     /**
@@ -190,7 +196,9 @@ define( function( require ) {
      * @override
      */
     getEnergyOutputRate: function() {
-
+      var speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      var energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
+      return new Energy( EnergyType.ELECTRICAL, energy, 0 );
     },
 
     /**
