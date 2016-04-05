@@ -14,19 +14,19 @@ define( function( require ) {
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
+  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
-  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
   var inherit = require( 'PHET_CORE/inherit' );
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
+  var Line = require( 'KITE/segments/Line' );
+  var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Range = require( 'DOT/Range' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'DOT/Rectangle' );
-  var Line = require( 'KITE/segments/Line' );
   var Shape = require( 'KITE/Shape' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   // Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
