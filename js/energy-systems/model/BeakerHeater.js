@@ -5,13 +5,17 @@ define( function( require ) {
 
   // Modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  // var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
+  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Random = require( 'DOT/Random' );
+  // var Random = require( 'DOT/Random' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -32,23 +36,23 @@ define( function( require ) {
   var HEATER_ELEMENT_OFF_IMAGE = new EFACModelImage( HEATER_ELEMENT_DARK, HEATER_ELEMENT_OFFSET );
   var HEATER_ELEMENT_ON_IMAGE = new EFACModelImage( HEATER_ELEMENT, HEATER_ELEMENT_OFFSET );
 
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0005, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.01 );
-  var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
+  // var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
+  // var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
+  // var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
+  // var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
+  // var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0005, -0.0175 );
+  // var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.01 );
+  // var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
 
-  var RAND = new Random();
+  // var RAND = new Random();
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
-  var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
-  var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
-  var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.height;
+  // var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
+  // var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
+  // var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.height;
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
-  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // In meters.
+  // var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // In meters.
   var HEAT_ENERGY_CHANGE_RATE = 0.5; // In proportion per second.
 
   function BeakerHeater( energyChunksVisible ) {
@@ -85,25 +89,6 @@ define( function( require ) {
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
 
   return inherit( EnergyUser, BeakerHeater, {
-    passLint: function() {
-      console.log(
-        OFFSET_TO_LEFT_SIDE_OF_WIRE,
-        OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND,
-        OFFSET_TO_FIRST_WIRE_CURVE_POINT,
-        OFFSET_TO_SECOND_WIRE_CURVE_POINT,
-        OFFSET_TO_THIRD_WIRE_CURVE_POINT,
-        OFFSET_TO_BOTTOM_OF_CONNECTOR,
-        OFFSET_TO_CONVERSION_POINT,
-        RAND,
-        BEAKER_HEIGHT,
-        BEAKER_OFFSET,
-        THERMOMETER_OFFSET,
-        HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY,
-        HEATER_ELEMENT_2D_HEIGHT,
-        MAX_HEAT_GENERATION_RATE,
-        RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE,
-        HEAT_ENERGY_CHANGE_RATE );
-    },
 
     /**
      * [step description]
@@ -113,7 +98,67 @@ define( function( require ) {
      * @public
      * @override
      */
-    step: function( dt, incomingEnergy ) {},
+    step: function( dt, incomingEnergy ) {
+      if ( !this.active ) {
+        return;
+      }
+
+      // Handle any incoming energy chunks.
+      if ( this.incomingEnergyChunks.length > 0 ) {
+        this.incomingEnergyChunks.forEach( function( chunk ) {
+          if ( chunk.energyType === EnergyType.ELECTRICAL ) {
+            // Add the energy chunk to the list of those under management.
+            this.energyChunkList.push( chunk );
+
+            // And a "mover" that will move this energy chunk through
+            // the wire to the heating element.
+            // electricalEnergyChunkMovers.add( new EnergyChunkPathMover( incomingEnergyChunk,
+            //   createElectricalEnergyChunkPath( getPosition() ),
+            //   EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          } else {
+            // By design, this shouldn't happen, so warn if it does.
+            console.warn( 'Ignoring energy chunk with unexpected type ' + chunk.energyType );
+          }
+
+        } );
+
+        // Clear incoming chunks array
+        this.incomingEnergyChunks.length = 0;
+      }
+      this.moveElectricalEnergyChunks( dt );
+      this.moveThermalEnergyChunks( dt );
+
+      var energyFraction = incomingEnergy.amount / ( EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
+
+      // Set the proportion of max heat being generated by the heater element.
+      if ( ( this.energyChunksVisible && this.heatingElementEnergyChunkMovers.length > 0 ) ||
+        ( !this.energyChunksVisible && incomingEnergy.type === EnergyType.ELECTRICAL ) ) {
+        this.heatProportionProperty.set( Math.min( energyFraction, this.heatProportion + HEAT_ENERGY_CHANGE_RATE * dt ) );
+      } else {
+        this.heatProportionProperty.set( Math.max( 0, this.heatProportion - HEAT_ENERGY_CHANGE_RATE * dt ) );
+      }
+
+      // Add energy to the beaker based on heat coming from heat element.
+      this.beaker.changeEnergy( this.heatProportion * MAX_HEAT_GENERATION_RATE * dt );
+
+      // Remove energy from the beaker based on loss of heat to the
+      // surrounding air.
+      var temperatureGradient = this.beaker.getTemperature() - EFACConstants.ROOM_TEMPERATURE;
+      if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
+        var beakerRect = this.beaker.getRawOutlineRect();
+        var thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidLevel;
+        var thermalEnergyLost = temperatureGradient * HeatTransferConstants.WATER_AIR_HEAT_TRANSFER_FACTOR * thermalContactArea * dt;
+        this.beaker.changeEnergy( -thermalEnergyLost );
+
+        if ( this.beaker.getEnergyBeyondMaxTemperature() > 0 ) {
+          // Prevent the water from going beyond the boiling point.
+          this.beaker.changeEnergy( -this.beaker.getEnergyBeyondMaxTemperature() );
+        }
+      }
+
+      // TODO
+      // energy chunk stuff
+    },
 
     /**
      * [description]
@@ -148,7 +193,17 @@ define( function( require ) {
      */
     preLoadEnergyChunks: function( incomingEnergyRate ) {},
 
-    deactivate: function() {},
+    /**
+     * Reset some variables/properties when deactivated by carousel
+     * @public
+     * @override
+     */
+    deactivate: function() {
+      EnergyUser.prototype.deactivate.call( this );
+      this.heatProportionProperty.set( 0 );
+      this.beaker.reset();
+      this.beaker.positionProperty.set( this.position.plus( BEAKER_OFFSET ) );
+    },
 
     clearEnergyChunks: function() {},
 
