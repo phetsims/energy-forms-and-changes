@@ -197,7 +197,7 @@ define( function( require ) {
      * @override
      */
     getEnergyOutputRate: function() {
-
+      return new Energy( EnergyType.MECHANICAL, this.energyProductionRate, Math.PI / 2 );
     },
 
     /**
