@@ -27,7 +27,7 @@ define( function( require ) {
     waterDrop.sizeProperty.link( function( dropSize ) {
       var dropWidth = modelViewTransform.modelToViewDeltaX( dropSize.width );
       var dropHeight = -modelViewTransform.modelToViewDeltaY( dropSize.height );
-      dropShape = Shape.ellipse( 0, 0, dropWidth / 2, dropHeight / 2 );
+      dropShape = Shape.ellipse( 0, 0, dropWidth, dropHeight );
     } );
 
     var waterDropNode = new Path( dropShape, {
