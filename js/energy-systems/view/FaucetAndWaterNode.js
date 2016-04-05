@@ -64,6 +64,10 @@ define( function( require ) {
     faucet.waterDrops.addItemAddedListener( addDroplet );
 
     faucetNode.addChild( waterLayer );
+
+    // Make water appear like it is coming out from inside the faucet
+    waterLayer.moveToBack();
+
     this.addChild( faucetNode );
   }
 
