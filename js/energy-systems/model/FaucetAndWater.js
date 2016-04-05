@@ -33,8 +33,10 @@ define( function( require ) {
 
   var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.065, 0.08 );
   // var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
-  var MAX_WATER_WIDTH = 0.015; // In meters.
-  var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
+  // var MAX_WATER_WIDTH = 0.015; // In meters.
+  var MAX_WATER_WIDTH = 0.02; // In meters.
+  // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
+  var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.1531; // In meters.
   var RAND = new Random();
   // var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
 
