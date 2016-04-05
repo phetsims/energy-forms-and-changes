@@ -70,7 +70,8 @@ define( function( require ) {
 
     // Upper y-border of play/pause control panel.
     // The subtracted offset is from eyeballing a match to the mockup image.
-    var playControlYborder = stage.maxY - 75;
+    // var playControlYborder = stage.maxY - 75;
+    var playControlYborder = stage.maxY;
 
     // Node for back-most layer
     var backLayer = new Node();
@@ -237,7 +238,7 @@ define( function( require ) {
 
     addBackground();
     addPlayControls();
-    addMockupImage();
+    // addMockupImage();
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
