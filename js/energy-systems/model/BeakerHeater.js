@@ -202,7 +202,6 @@ define( function( require ) {
       EnergyUser.prototype.deactivate.call( this );
       this.heatProportionProperty.set( 0 );
       this.beaker.reset();
-      this.beaker.positionProperty.set( this.position.plus( BEAKER_OFFSET ) );
     },
 
     clearEnergyChunks: function() {},
