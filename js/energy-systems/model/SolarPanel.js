@@ -12,7 +12,10 @@ define( function( require ) {
   // Modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
@@ -35,7 +38,9 @@ define( function( require ) {
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
 
-  var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, SOLAR_PANEL_OFFSET, { width: 0.15 } );
+  var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, SOLAR_PANEL_OFFSET, {
+    width: 0.15
+  } );
   var CONVERTER_IMAGE = new EFACModelImage( SOLAR_PANEL_GEN, CONVERTER_IMAGE_OFFSET );
   var CURVED_WIRE_IMAGE = new EFACModelImage( WIRE_BLACK_LEFT, CONVERTER_IMAGE_OFFSET.plus( 0.009, 0.024 ) );
   var POST_IMAGE = new EFACModelImage( SOLAR_PANEL_POST_2, CONVERTER_IMAGE_OFFSET.plus( new Vector2( 0, 0.04 ) ) );
@@ -85,12 +90,37 @@ define( function( require ) {
     this.energyChunksVisible = energyChunksVisible;
   }
 
+  energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
+
   // TODO fill out these stubs
   return inherit( EnergyConverter, SolarPanel, {
-    step: function( dt, incomingEnergy ) {},
+
+    /**
+     * [step description]
+     * @param  {Number} dt             Time step size
+     * @param  {Energy} incomingEnergy Type, amount, direction of energy
+     */
+    step: function( dt, incomingEnergy ) {
+
+      // Produce the appropriate amount of energy.
+      var energyProduced = 0;
+      if ( this.active && incomingEnergy.type === EnergyType.LIGHT ) {
+        energyProduced = incomingEnergy.amount; // Perfectly efficient conversion. We should patent this.
+      }
+      this.energyOutputRate = energyProduced / dt;
+      return new Energy( EnergyType.ELECTRICAL, energyProduced, 0 );
+    },
+
     moveEnergyChunks: function( dt ) {},
     preLoadEnergyChunks: function( incomingEnergyRate ) {},
-    getEnergyOutputRate: function() {},
+
+    /**
+     * @return {Energy} Type, amount, direction of emitted energy
+     */
+    getEnergyOutputRate: function() {
+      return new Energy( EnergyType.ELECTRICAL, this.energyOutputRate, 0 );
+    },
+
     chooseChunkVelocityOnPanel: function() {},
     clearEnergyChunks: function() {},
     createPathToPanelBottom: function() {},
