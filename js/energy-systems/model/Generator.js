@@ -7,6 +7,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -80,6 +81,8 @@ define( function( require ) {
     // code clarity.
     this.hiddenEnergyChunks = new ObservableArray();
   }
+
+  energyFormsAndChanges.register( 'Generator', Generator );
 
   return inherit( EnergyConverter, Generator, {
 
