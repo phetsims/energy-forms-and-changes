@@ -192,10 +192,14 @@ define( function( require ) {
       return [ sourcesCarousel, convertersCarousel, usersCarousel ];
     }
 
-    function addTeaPot() {
-      var teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( teaPotNode );
-    }
+
+    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+    thisScreenView.addChild( this.teaPotNode );
+
+    // function addTeaPot() {
+    //   var teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+    //   thisScreenView.addChild( teaPotNode );
+    // }
 
     function addFaucet() {
       var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
@@ -243,7 +247,7 @@ define( function( require ) {
     addCheckBoxPanel();
     addResetButton();
     addSun();
-    addTeaPot();
+    // addTeaPot();
     addFaucet();
     addBiker();
     addbeakerHeater();
@@ -259,5 +263,9 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
 
-  return inherit( ScreenView, EnergySystemsScreenView );
+  return inherit( ScreenView, EnergySystemsScreenView, {
+    step: function( dt ) {
+      this.teaPotNode.steamNode.step( dt );
+    }
+  } );
 } );
