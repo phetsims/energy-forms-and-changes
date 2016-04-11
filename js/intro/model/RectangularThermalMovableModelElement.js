@@ -86,6 +86,7 @@ define( function( require ) {
      * @param {number} deltaEnergy
      */
     changeEnergy: function( deltaEnergy ) {
+      assert && assert( deltaEnergy === deltaEnergy, 'deltaEnergy is ' + deltaEnergy );
       this.energy += deltaEnergy;
     },
 
@@ -99,6 +100,9 @@ define( function( require ) {
      * @returns {number}
      */
     getTemperature: function() {
+      assert && assert( this.energy >= 0, 'Invalid energy: ' + this.energy );
+      assert && assert( this.mass > 0, 'Invalid mass: ' + this.mass );
+      assert && assert( this.specificHeat > 0, 'Invalid specific heat: ' + this.specificHeat );
       return this.energy / ( this.mass * this.specificHeat );
     },
 
@@ -469,3 +473,4 @@ define( function( require ) {
     }
   } );
 } );
+
