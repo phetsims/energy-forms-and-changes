@@ -158,6 +158,8 @@ define( function( require ) {
         }
       }
 
+      this.beaker.step( dt );
+
       // TODO
       // energy chunk stuff
     },
