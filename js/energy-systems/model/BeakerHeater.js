@@ -147,7 +147,9 @@ define( function( require ) {
       if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
         var beakerRect = this.beaker.getRawOutlineRect();
         var thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidLevel;
-        var thermalEnergyLost = temperatureGradient * HeatTransferConstants.WATER_AIR_HEAT_TRANSFER_FACTOR * thermalContactArea * dt;
+        var transferFactor = HeatTransferConstants.getHeatTransferFactor( 'water', 'air' );
+        var thermalEnergyLost = temperatureGradient * transferFactor * thermalContactArea * dt;
+
         this.beaker.changeEnergy( -thermalEnergyLost );
 
         if ( this.beaker.getEnergyBeyondMaxTemperature() > 0 ) {
@@ -245,3 +247,4 @@ define( function( require ) {
     ELEMENT_BASE_FRONT_IMAGE: ELEMENT_BASE_FRONT_IMAGE
   } );
 } );
+
