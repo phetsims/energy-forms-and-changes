@@ -23,6 +23,7 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var DotRectangle = require( 'DOT/Rectangle' ); // eslint-disable-line require-statement-match
   var Text = require( 'SCENERY/nodes/Text' );
@@ -43,8 +44,8 @@ define( function( require ) {
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 
   // constants for the PerspectiveWaterNode
-  var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker(  0.2 );
-  var WATER_LINE_WIDTH= 2;
+  var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker( 0.2 );
+  var WATER_LINE_WIDTH = 2;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
   var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (basically pixels) per second.
   var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (basically pixels).
@@ -62,7 +63,9 @@ define( function( require ) {
    */
   function SteamBubble( initialDiameter, initialOpacity ) {
 
-    Circle.call( this, initialDiameter / 2, { fill: 'rgba( 255, 255, 255, initialOpacity )' } );
+    Circle.call( this, initialDiameter / 2, {
+      fill: 'rgba( 255, 255, 255, initialOpacity )'
+    } );
 
   }
 
@@ -97,7 +100,7 @@ define( function( require ) {
       fill: EFACConstants.WATER_COLOR_IN_BEAKER,
       lineWidth: WATER_LINE_WIDTH,
       stroke: LIQUID_WATER_OUTLINE_COLOR
-      } );
+    } );
     this.liquidWaterBodyNode = new Path( null, {
       fill: EFACConstants.WATER_COLOR_IN_BEAKER,
       lineWidth: WATER_LINE_WIDTH,
@@ -118,10 +121,12 @@ define( function( require ) {
     //this.addChild( this.liquidWaterBottomNode );
     this.addChild( this.steamNode );
 
-    this.waterLevelProperty.link( function( waterLevel ) {
-      thisNode.updateAppearance( waterLevel, beakerOutlineRect, thisNode.temperatureProperty.value, 1 / EFACConstants.FRAMES_PER_SECOND );
+    Property.multilink( [ this.waterLevelProperty, this.temperatureProperty ], function() {
+      var waterLevel = thisNode.waterLevelProperty.get();
+      var temperature = thisNode.temperatureProperty.get();
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      thisNode.updateAppearance( waterLevel, beakerOutlineRect, temperature, dt );
     } );
-    //this.updateAppearance( this.waterLevelProperty.value, beakerOutlineRect, this.temperatureProperty.value, 1 / EFACConstants.FRAMES_PER_SECOND )
 
   }
 
@@ -160,7 +165,7 @@ define( function( require ) {
         waterHeight );
       var ellipseWidth = beakerOutlineRect.width;
       var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.centerX, liquidWaterRect.minY, ellipseWidth / 2, ellipseHeight / 2, 0, 0, Math.PI  / 2, false );
+      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.centerX, liquidWaterRect.minY, ellipseWidth / 2, ellipseHeight / 2, 0, 0, Math.PI / 2, false );
 
       //----------------------------------------------------------------
       // Update the liquid water.
@@ -183,9 +188,8 @@ define( function( require ) {
       var steamingProportion = 0;
       if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
         // Water is emitting some amount of steam.  Set the proportionate amount.
-        steamingProportion = Util.clamp( 0, 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE ), 1 );
+        steamingProportion = Util.clamp( 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE ), 0, 1 );
       }
-
       if ( steamingProportion > 0 ) {
         // Add any new steam bubbles.
         var bubblesToProduceCalc = ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
@@ -196,7 +200,7 @@ define( function( require ) {
           this.bubbleProductionRemainder -= Math.floor( this.bubbleProductionRemainder );
         }
         for ( var i = 0; i < bubblesToProduce; i++ ) {
-          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + Math.random()* STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + Math.random() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( Math.random() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
           var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
           steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
@@ -214,15 +218,13 @@ define( function( require ) {
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
           thisNode.steamBubbles.remove( steamBubble );
           thisNode.steamNode.removeChild( steamBubble );
-        }
-        else if ( steamBubble.y < beakerOutlineRect.minY ) {
-          steamBubble.setRadius( steamBubble.bounds.width * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) )  / 2 );
+        } else if ( steamBubble.y < beakerOutlineRect.minY ) {
+          steamBubble.setRadius( steamBubble.bounds.width * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) ) / 2 );
           var distanceFromCenterX = steamBubble.x - beakerOutlineRect.centerX;
           steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
           // Fade the bubble as it reaches the end of its range.
           steamBubble.opacity = ( 1 - ( beakerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT ) * MAX_STEAM_BUBBLE_OPACITY;
-        }
-        else {
+        } else {
           // Fade the bubble in.
           var distanceFromWater = liquidWaterRect.y - steamBubble.y;
           steamBubble.opacity = Util.clamp( 0, distanceFromWater / ( unfilledBeakerHeight / 4 ), 1 ) * MAX_STEAM_BUBBLE_OPACITY;
@@ -272,8 +274,8 @@ define( function( require ) {
 
     // Add the water.  It will adjust its size based on the fluid level.
     // TODO: Port PerspectiveWaterNode
-    var water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
-    this.frontNode.addChild( water );
+    this.water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
+    this.frontNode.addChild( this.water );
 
     // Create and add the shape for the body of the beaker.
     var beakerBody = new Shape()
@@ -341,7 +343,7 @@ define( function( require ) {
       energyChunkRootNode.addChild( energyChunkNode );
 
       beaker.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
-        if( removedEnergyChunk === addedEnergyChunk ) {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
           energyChunkRootNode.removeChild( energyChunkNode );
           beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
@@ -351,12 +353,19 @@ define( function( require ) {
     // Add the node that can be used to grab and move the beaker.
     var grabNodeShape = beakerBody;
     // TODO: This does NOT include the top ellipse yet.
-    this.grabNode.addChild( new Path( grabNodeShape, { fill: 'rgba( 0, 0, 0, 0 )' } ) ); // Invisible, yet pickable.
-    this.grabNode.addChild( new Path( topEllipse, { fill: 'rgba( 0, 0, 0, 0 )' } ) );
+    this.grabNode.addChild( new Path( grabNodeShape, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) ); // Invisible, yet pickable.
+    this.grabNode.addChild( new Path( topEllipse, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) );
 
     // If enabled, show the outline of the rectangle that represents the beaker's position in the model.
     if ( SHOW_MODEL_RECT ) {
-      this.frontNode.addChild( new Path( beakerViewRect, { fill: 'red', lineWidth: 2 } ) );
+      this.frontNode.addChild( new Path( beakerViewRect, {
+        fill: 'red',
+        lineWidth: 2
+      } ) );
     }
 
     // Update the offset if and when the model position changes.
@@ -371,11 +380,12 @@ define( function( require ) {
     // Adjust the transparency of the water and label based on energy chunk visibility.
     energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       label.opacity = energyChunksVisible ? 0.5 : 1;
-      water.opacity = energyChunksVisible ? EFACConstants.NOMINAL_WATER_OPACITY / 2 : EFACConstants.NOMINAL_WATER_OPACITY;
-    });
+      thisNode.water.opacity = energyChunksVisible ? EFACConstants.NOMINAL_WATER_OPACITY / 2 : EFACConstants.NOMINAL_WATER_OPACITY;
+    } );
 
   }
 
   return inherit( Node, BeakerView );
 
 } );
+
