@@ -47,11 +47,13 @@ define( function( require ) {
     var scale = modelViewTransform.matrix.scaleVector;
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
 
-    var beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisible, beakerMvt );
+    this.beakerHeater = beakerHeater;
 
-    this.addChild( beakerView.backNode );
+    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisible, beakerMvt );
+
+    this.addChild( this.beakerView.backNode );
     // addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.getObservablePosition(), mvt ) );
-    this.addChild( beakerView.frontNode );
+    this.addChild( this.beakerView.frontNode );
 
     // Update the transparency of the hot element to make the dark element
     // appear to heat up.
@@ -65,3 +67,4 @@ define( function( require ) {
 
   return inherit( EFACBaseNode, BeakerHeaterNode );
 } );
+
