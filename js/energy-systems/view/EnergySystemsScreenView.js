@@ -196,11 +196,6 @@ define( function( require ) {
     this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
     thisScreenView.addChild( this.teaPotNode );
 
-    // function addTeaPot() {
-    //   var teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
-    //   thisScreenView.addChild( teaPotNode );
-    // }
-
     function addFaucet() {
       var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
       thisScreenView.addChild( faucetNode );
@@ -226,10 +221,8 @@ define( function( require ) {
       thisScreenView.addChild( fluorescentBulbNode );
     }
 
-    function addbeakerHeater() {
-      var beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( beakerHeaterNode );
-    }
+    this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
+    thisScreenView.addChild( this.beakerHeaterNode );
 
     var beltNode = new BeltNode( model.belt, modelViewTransform );
     addGenerator();
@@ -242,15 +235,12 @@ define( function( require ) {
 
     addBackground();
     addPlayControls();
-    // addMockupImage();
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
     addSun();
-    // addTeaPot();
     addFaucet();
     addBiker();
-    addbeakerHeater();
     addIncandescentBulb();
     addFluorescentBulb();
     addSolarPanel();
@@ -269,3 +259,4 @@ define( function( require ) {
     }
   } );
 } );
+
