@@ -107,7 +107,7 @@ define( function( require ) {
 
   inherit( Node, SteamNode, {
     step: function( dt ) {
-      if ( this.activeProperty ) {
+      if ( this.activeProperty.get() ) {
 
         var proportion = this.energyOutputProperty.get() / this.maxEnergyOutput;
         var heightAndWidth = proportion * MAX_HEIGHT_AND_WIDTH;
