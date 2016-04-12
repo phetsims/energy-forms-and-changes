@@ -38,6 +38,7 @@ define( function( require ) {
 
   // constants
   //var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
+  var RAND = new Random();
   var OUTLINE_COLOR = 'lightgrey';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32 );
@@ -189,7 +190,8 @@ define( function( require ) {
       var steamingProportion = 0;
       if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
         // Water is emitting some amount of steam.  Set the proportionate amount.
-        steamingProportion = Util.clamp( 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE ), 0, 1 );
+        steamingProportion = 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE );
+        steamingProportion = Util.clamp( steamingProportion, 0, 1 );
       }
       if ( steamingProportion > 0 ) {
         // Add any new steam bubbles.
@@ -201,8 +203,8 @@ define( function( require ) {
           this.bubbleProductionRemainder -= Math.floor( this.bubbleProductionRemainder );
         }
         for ( var i = 0; i < bubblesToProduce; i++ ) {
-          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + Math.random() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
-          var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( Math.random() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
+          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+          var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
           var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
           steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
           steamBubble.setOpacity( 0 );
