@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2016, University of Colorado Boulder
 
 /**
  * Object that represents a beaker in the view.  This representation is split
@@ -25,7 +25,6 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -53,39 +52,9 @@ define( function( require ) {
   var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (~ pixels) / second
   var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (~ pixels)
   var MAX_STEAM_BUBBLE_HEIGHT = 300;
-  var STEAM_BUBBLE_PRODUCTION_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
+  var STEAM_BUBBLE_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
   var STEAM_BUBBLE_GROWTH_RATE = 0.2; // Proportion per second.
   var MAX_STEAM_BUBBLE_OPACITY = 0.7; // Proportion, 1 is max.
-
-  /**
-   * Constructor for a SteamBubble.
-   *
-   * @param {number} initialDiameter
-   * @param {number} initialOpacity
-   */
-  function SteamBubble( initialDiameter, initialOpacity ) {
-
-    Circle.call( this, initialDiameter / 2, {
-      // fill: 'rgba( 255, 255, 255, initialOpacity )'
-      fill: Color.WHITE,
-      opacity: initialOpacity
-    } );
-
-  }
-
-  inherit( Circle, SteamBubble, {
-
-    /**
-     * Set the opacity of this Steam Bubble.
-     *
-     * @param {number} opacity
-     */
-    setOpacity: function( opacity ) {
-      assert && assert( opacity <= 1.0 );
-      this.fill = 'rgba( 255, 255, 255, opacity )';
-    }
-
-  } );
 
   /**
    * Constructor for the PerspectiveWaterNode.
@@ -202,7 +171,7 @@ define( function( require ) {
       if ( steamingProportion > 0 ) {
 
         var bubblesToProduceCalc =
-          ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
+          ( STEAM_BUBBLE_RATE_RANGE.min + STEAM_BUBBLE_RATE_RANGE.getLength() * steamingProportion ) * dt;
         var bubblesToProduce = Math.floor( bubblesToProduceCalc );
 
         this.bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
@@ -217,12 +186,15 @@ define( function( require ) {
             RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           var steamBubbleCenterXPos = beakerOutlineRect.centerX +
             ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
-          var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
+
+          var steamBubble = new Circle( steamBubbleDiameter / 2, {
+            fill: 'white',
+            opacity: steamingProportion
+          } );
 
           // Bubbles are invisible to start; they will fade in.
           steamBubble.center = new Vector2( steamBubbleCenterXPos, liquidWaterRect.getMinY() );
           steamBubble.opacity = 0;
-          steamBubble.fill = Color.WHITE;
           this.steamBubbles.push( steamBubble );
           this.steamNode.addChild( steamBubble );
         }
