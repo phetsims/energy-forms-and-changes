@@ -7,6 +7,7 @@
  * directly to the canvas, and the client must add each layer separately.
  *
  * @author John Blanco
+ * @author Andrew Adare
  */
 
 define( function( require ) {
@@ -174,11 +175,13 @@ define( function( require ) {
       // Update the liquid water.
       //----------------------------------------------------------------
 
+      var halfWidth = liquidWaterRect.width / 2;
+      var halfHeight = ellipseHeight / 2;
       var liquidWaterBodyShape = new Shape()
-        .moveTo( liquidWaterRect.minX, liquidWaterRect.minY ) // Top let of the beaker body.
-        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.minY, liquidWaterRect.width / 2, ellipseHeight / 2, 0, Math.PI, 0, false )
+        .moveTo( liquidWaterRect.minX, liquidWaterRect.minY ) // Top left of the beaker body.
+        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.minY, halfWidth, halfHeight, 0, Math.PI, 0, false )
         .lineTo( liquidWaterRect.maxX, liquidWaterRect.maxY ) // Bottom right of the beaker body.
-        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.maxY, liquidWaterRect.width / 2, ellipseHeight / 2, 0, 0, Math.PI, false )
+        .ellipticalArc( liquidWaterRect.centerX, liquidWaterRect.maxY, halfWidth, halfHeight, 0, 0, Math.PI, false )
         .close();
 
       this.liquidWaterBodyNode.setShape( liquidWaterBodyShape );
@@ -194,25 +197,30 @@ define( function( require ) {
         steamingProportion = 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE );
         steamingProportion = Util.clamp( steamingProportion, 0, 1 );
       }
+
+      // Add any new steam bubbles.
       if ( steamingProportion > 0 ) {
-        // Add any new steam bubbles.
-        var bubblesToProduceCalc = ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
+
+        var bubblesToProduceCalc =
+          ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
         var bubblesToProduce = Math.floor( bubblesToProduceCalc );
 
         this.bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
+
         if ( this.bubbleProductionRemainder >= 1 ) {
           bubblesToProduce += Math.floor( this.bubbleProductionRemainder );
           this.bubbleProductionRemainder -= Math.floor( this.bubbleProductionRemainder );
         }
+
         for ( var i = 0; i < bubblesToProduce; i++ ) {
-          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
-          var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
+          var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min +
+            RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+          var steamBubbleCenterXPos = beakerOutlineRect.centerX +
+            ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
           var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
 
-          steamBubble.center = new Vector2( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
-
-          // steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
-          // steamBubble.setOpacity( 0 );
+          // Bubbles are invisible to start; they will fade in.
+          steamBubble.center = new Vector2( steamBubbleCenterXPos, liquidWaterRect.getMinY() );
           steamBubble.opacity = 0;
           steamBubble.fill = Color.WHITE;
           this.steamBubbles.push( steamBubble );
@@ -223,10 +231,11 @@ define( function( require ) {
       // Update the position and appearance of the existing steam bubbles.
       var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
       var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
+
       this.steamBubbles.forEach( function( steamBubble ) {
 
+        // Float the bubbles upward from the beaker
         steamBubble.translate( 0, -dt * steamBubbleSpeed );
-        // steamBubble.translate( steamBubble.x, steamBubble.y - dt * steamBubbleSpeed );
 
         // Remove bubbles that have floated out of view
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
@@ -239,7 +248,7 @@ define( function( require ) {
           steamBubble.setRadius( steamBubble.bounds.width * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) ) / 2 );
           var distanceFromCenterX = steamBubble.x - beakerOutlineRect.centerX;
 
-          // steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
+          // Give bubbles some lateral drift motion
           steamBubble.translate( distanceFromCenterX * 0.2 * dt, 0 );
 
           // Fade the bubble as it reaches the end of its range.
@@ -250,7 +259,8 @@ define( function( require ) {
         // Fade new bubbles in
         else {
           var distanceFromWater = liquidWaterRect.y - steamBubble.y;
-          steamBubble.opacity = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 ) * MAX_STEAM_BUBBLE_OPACITY;
+          var opacityFraction = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
+          steamBubble.opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
 
       } );
@@ -292,8 +302,10 @@ define( function( require ) {
     // Create the shapes for the top and bottom of the beaker.  These are
     // ellipses in order to create a 3D-ish look.
     var ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
-    var topEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.minY, beakerViewRect.width / 2, ellipseHeight / 2, 0 );
-    var bottomEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.maxY, beakerViewRect.width / 2, ellipseHeight / 2, 0 );
+    var halfWidth = beakerViewRect.width / 2;
+    var halfHeight = ellipseHeight / 2;
+    var topEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.minY, halfWidth, halfHeight, 0 );
+    var bottomEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.maxY, halfWidth, halfHeight, 0 );
 
     // Add the water.  It will adjust its size based on the fluid level.
     this.water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
@@ -302,9 +314,9 @@ define( function( require ) {
     // Create and add the shape for the body of the beaker.
     var beakerBody = new Shape()
       .moveTo( beakerViewRect.minX, beakerViewRect.minY ) // Top let of the beaker body.
-      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.minY, beakerViewRect.width / 2, ellipseHeight / 2, 0, Math.PI, 0, true )
+      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.minY, halfWidth, halfHeight, 0, Math.PI, 0, true )
       .lineTo( beakerViewRect.maxX, beakerViewRect.maxY ) // Bottom right of the beaker body.
-      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.maxY, beakerViewRect.width / 2, ellipseHeight / 2, 0, 0, Math.PI, false )
+      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.maxY, halfWidth, halfHeight, 0, 0, Math.PI, false )
       .close();
 
     this.frontNode.addChild( new Path( beakerBody, {
@@ -332,8 +344,8 @@ define( function( require ) {
       fill: 'rgba( 0, 0, 0, 0 )'
     } ) );
 
-    // Make the front and back nodes non-pickable so that the grab node can be used for grabbing.  This is done to make
-    // it possible to remove things from the beaker.
+    // Make the front and back nodes non-pickable so that the grab node can be used for grabbing.
+    // Makes it possible to remove things from the beaker.
     this.frontNode.pickable = false;
     this.backNode.pickable = false;
 
@@ -346,11 +358,12 @@ define( function( require ) {
     label.pickable = false;
     this.frontNode.addChild( label );
 
-    // Create the layers where the contained energy chunks will be placed.  A clipping node is used to enable occlusion
-    // when interacting with other model elements.
+    // Create the layers where the contained energy chunks will be placed.
+    // A clipping node is used to enable occlusion when interacting with other model elements.
     // TODO: Work this one out with BeakerContainerView.
     var energyChunkRootNode = new Node();
     this.backNode.addChild( energyChunkRootNode );
+
     ////energyChunkClipNode.setPathTo( beakerViewRect ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
     //energyChunkRootNode.addChild( energyChunkClipNode );
     ////energyChunkClipNode.setStroke( null );
@@ -402,7 +415,8 @@ define( function( require ) {
     // Adjust the transparency of the water and label based on energy chunk visibility.
     energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       label.opacity = energyChunksVisible ? 0.5 : 1;
-      thisNode.water.opacity = energyChunksVisible ? EFACConstants.NOMINAL_WATER_OPACITY / 2 : EFACConstants.NOMINAL_WATER_OPACITY;
+      var opacity = EFACConstants.NOMINAL_WATER_OPACITY;
+      thisNode.water.opacity = energyChunksVisible ? opacity / 2 : opacity;
     } );
 
   }
@@ -410,3 +424,4 @@ define( function( require ) {
   return inherit( Node, BeakerView );
 
 } );
+
