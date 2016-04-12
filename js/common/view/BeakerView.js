@@ -12,25 +12,26 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Circle = require( 'SCENERY/nodes/Circle' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Transform3 = require( 'DOT/Transform3' );
-  var Shape = require( 'KITE/Shape' );
-  var Util = require( 'DOT/Util' );
-  var Range = require( 'DOT/Range' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var DotRectangle = require( 'DOT/Rectangle' ); // eslint-disable-line require-statement-match
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Vector2 = require( 'DOT/Vector2' );
-  //var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
+  var Color = require( 'SCENERY/util/Color' );
+  var DotRectangle = require( 'DOT/Rectangle' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
+  var Random = require( 'DOT/Random' );
+  var Range = require( 'DOT/Range' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Transform3 = require( 'DOT/Transform3' );
+  var Util = require( 'DOT/Util' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
