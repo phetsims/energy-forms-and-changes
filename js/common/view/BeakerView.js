@@ -66,7 +66,9 @@ define( function( require ) {
   function SteamBubble( initialDiameter, initialOpacity ) {
 
     Circle.call( this, initialDiameter / 2, {
-      fill: 'rgba( 255, 255, 255, initialOpacity )'
+      // fill: 'rgba( 255, 255, 255, initialOpacity )'
+      fill: Color.WHITE,
+      opacity: initialOpacity
     } );
 
   }
@@ -207,8 +209,13 @@ define( function( require ) {
           var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min + RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           var steamBubbleCenterXPos = beakerOutlineRect.centerX + ( RAND.nextDouble() - 0.5 ) * ( beakerOutlineRect.width - steamBubbleDiameter );
           var steamBubble = new SteamBubble( steamBubbleDiameter, steamingProportion );
-          steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
-          steamBubble.setOpacity( 0 );
+
+          steamBubble.center = new Vector2( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
+
+          // steamBubble.translate( steamBubbleCenterXPos, liquidWaterRect.getMinY() ); // Invisible to start, will fade in.
+          // steamBubble.setOpacity( 0 );
+          steamBubble.opacity = 0;
+          steamBubble.fill = Color.WHITE;
           this.steamBubbles.push( steamBubble );
           this.steamNode.addChild( steamBubble );
         }
@@ -218,19 +225,31 @@ define( function( require ) {
       var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
       var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
       this.steamBubbles.forEach( function( steamBubble ) {
-        steamBubble.translate( steamBubble.x, steamBubble.y - dt * steamBubbleSpeed );
+
+        steamBubble.translate( 0, -dt * steamBubbleSpeed );
+        // steamBubble.translate( steamBubble.x, steamBubble.y - dt * steamBubbleSpeed );
+
+        // Remove bubbles that have floated out of view
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
           thisNode.steamBubbles.remove( steamBubble );
           thisNode.steamNode.removeChild( steamBubble );
-        } else if ( steamBubble.y < beakerOutlineRect.minY ) {
+        }
+
+        // Update position of floating bubbles
+        else if ( steamBubble.y < beakerOutlineRect.minY ) {
           steamBubble.setRadius( steamBubble.bounds.width * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) ) / 2 );
           var distanceFromCenterX = steamBubble.x - beakerOutlineRect.centerX;
-          steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
+
+          // steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
+          steamBubble.translate( distanceFromCenterX * 0.2 * dt, 0 );
+
           // Fade the bubble as it reaches the end of its range.
           var heightFraction = ( beakerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT;
           steamBubble.opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
-        } else {
-          // Fade the bubble in.
+        }
+
+        // Fade new bubbles in
+        else {
           var distanceFromWater = liquidWaterRect.y - steamBubble.y;
           steamBubble.opacity = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 ) * MAX_STEAM_BUBBLE_OPACITY;
         }
