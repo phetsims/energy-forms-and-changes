@@ -197,6 +197,7 @@ define( function( require ) {
         // Add any new steam bubbles.
         var bubblesToProduceCalc = ( STEAM_BUBBLE_PRODUCTION_RATE_RANGE.min + STEAM_BUBBLE_PRODUCTION_RATE_RANGE.getLength() * steamingProportion ) * dt;
         var bubblesToProduce = Math.floor( bubblesToProduceCalc );
+
         this.bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
         if ( this.bubbleProductionRemainder >= 1 ) {
           bubblesToProduce += Math.floor( this.bubbleProductionRemainder );
@@ -217,7 +218,7 @@ define( function( require ) {
       var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
       var unfilledBeakerHeight = beakerOutlineRect.height - waterHeight;
       this.steamBubbles.forEach( function( steamBubble ) {
-        steamBubble.translate( steamBubble.x, steamBubble.y + dt * ( -steamBubbleSpeed ) );
+        steamBubble.translate( steamBubble.x, steamBubble.y - dt * steamBubbleSpeed );
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
           thisNode.steamBubbles.remove( steamBubble );
           thisNode.steamNode.removeChild( steamBubble );
@@ -226,11 +227,12 @@ define( function( require ) {
           var distanceFromCenterX = steamBubble.x - beakerOutlineRect.centerX;
           steamBubble.translate( steamBubble.x + ( distanceFromCenterX * 0.2 * dt ), steamBubble.y );
           // Fade the bubble as it reaches the end of its range.
-          steamBubble.opacity = ( 1 - ( beakerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT ) * MAX_STEAM_BUBBLE_OPACITY;
+          var heightFraction = ( beakerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT;
+          steamBubble.opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
         } else {
           // Fade the bubble in.
           var distanceFromWater = liquidWaterRect.y - steamBubble.y;
-          steamBubble.opacity = Util.clamp( 0, distanceFromWater / ( unfilledBeakerHeight / 4 ), 1 ) * MAX_STEAM_BUBBLE_OPACITY;
+          steamBubble.opacity = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 ) * MAX_STEAM_BUBBLE_OPACITY;
         }
 
       } );
