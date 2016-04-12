@@ -124,8 +124,7 @@ define( function( require ) {
     //this.addChild( this.liquidWaterBottomNode );
     this.addChild( this.steamNode );
 
-    Property.multilink( [ this.waterLevelProperty, this.temperatureProperty ], function() {
-      var waterLevel = thisNode.waterLevelProperty.get();
+    this.waterLevelProperty.link( function( waterLevel ) {
       var temperature = thisNode.temperatureProperty.get();
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       thisNode.updateAppearance( waterLevel, beakerOutlineRect, temperature, dt );
@@ -297,7 +296,6 @@ define( function( require ) {
     var bottomEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.maxY, beakerViewRect.width / 2, ellipseHeight / 2, 0 );
 
     // Add the water.  It will adjust its size based on the fluid level.
-    // TODO: Port PerspectiveWaterNode
     this.water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
     this.frontNode.addChild( this.water );
 
@@ -412,4 +410,3 @@ define( function( require ) {
   return inherit( Node, BeakerView );
 
 } );
-

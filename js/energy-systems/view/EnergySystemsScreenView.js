@@ -256,6 +256,7 @@ define( function( require ) {
   return inherit( ScreenView, EnergySystemsScreenView, {
     step: function( dt ) {
       this.teaPotNode.steamNode.step( dt );
+      this.beakerHeaterNode.beakerView.water.step( dt );
     }
   } );
 } );
