@@ -1,8 +1,9 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Object that represents a beaker in the view.  This representation is split between a front node and a back node,
- * which must be separately added to the canvas.  This is done to allow a layering effect.  Hence, this cannot be added
+ * Object that represents a beaker in the view.  This representation is split
+ * between a front node and a back node, which must be separately added to the
+ * canvas.  This is done to allow a layering effect.  Hence, this cannot be added
  * directly to the canvas, and the client must add each layer separately.
  *
  * @author John Blanco
@@ -37,7 +38,6 @@ define( function( require ) {
   var waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
 
   // constants
-  //var OUTLINE_STROKE = new BasicStroke( 3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL );
   var RAND = new Random();
   var OUTLINE_COLOR = 'lightgrey';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
@@ -49,13 +49,12 @@ define( function( require ) {
   var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker( 0.2 );
   var WATER_LINE_WIDTH = 2;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
-  var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (basically pixels) per second.
-  var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (basically pixels).
+  var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (~ pixels) / second
+  var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (~ pixels)
   var MAX_STEAM_BUBBLE_HEIGHT = 300;
   var STEAM_BUBBLE_PRODUCTION_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
   var STEAM_BUBBLE_GROWTH_RATE = 0.2; // Proportion per second.
   var MAX_STEAM_BUBBLE_OPACITY = 0.7; // Proportion, 1 is max.
-
 
   /**
    * Constructor for a SteamBubble.
@@ -169,7 +168,8 @@ define( function( require ) {
         waterHeight );
       var ellipseWidth = beakerOutlineRect.width;
       var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.centerX, liquidWaterRect.minY, ellipseWidth / 2, ellipseHeight / 2, 0, 0, Math.PI / 2, false );
+      var liquidWaterTopEllipse = Shape.ellipse( liquidWaterRect.centerX, liquidWaterRect.minY,
+        ellipseWidth / 2, ellipseHeight / 2, 0, 0, Math.PI / 2, false );
 
       //----------------------------------------------------------------
       // Update the liquid water.
