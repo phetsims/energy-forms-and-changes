@@ -19,7 +19,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -27,7 +27,7 @@ define( function( require ) {
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
-  // var RAND = new Random();
+  var RAND = new Random();
   // var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are
@@ -127,7 +127,15 @@ define( function( require ) {
     updateEnergyChunkPositions: function( dt ) {},
     emitEnergyChunk: function() {},
     preLoadEnergyChunks: function() {},
-    getEnergyOutputRate: function() {},
+
+    /**
+     * Return a structure containing type, rate, and direction of emitted energy
+     * @return {Energy}
+     */
+    getEnergyOutputRate: function() {
+      return new Energy( EnergyType.LIGHT, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudiness ) );
+    },
+
     chooseNextEmissionAngle: function() {},
 
     /**
@@ -160,3 +168,4 @@ define( function( require ) {
     OFFSET_TO_CENTER_OF_SUN: OFFSET_TO_CENTER_OF_SUN
   } );
 } );
+

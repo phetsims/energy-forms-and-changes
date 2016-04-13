@@ -14,9 +14,14 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PropertySet = require( 'AXON/PropertySet' );
+  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
   // var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
@@ -24,8 +29,51 @@ define( function( require ) {
   // var EMISSION_SECTOR_LINE_LENGTH = 700;
 
   /**
-   * [SunNode description]
-   *
+   * Shape with observable light absorption coefficient.
+   * @param {Shape} shape
+   * @param {Number} initialAbsorptionCoefficient
+   * @constructor
+   */
+  // function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
+  //   PropertySet.call( this, {
+  //     absorptionCoefficient: initialAbsorptionCoefficient
+  //   } );
+  //   this.shape = shape;
+  // }
+  // inherit( PropertySet, LightAbsorbingShape );
+
+  /**
+   * Rays from the sun
+   * @param {Vector2} center      Center position of radial rays
+   * @param {Number} innerRadius Start point
+   * @param {Number} outerRadius End point
+   * @param {Number} numRays     How many rays around the sun
+   * @param {Color} color       Ray color
+   * @constructor
+   */
+  function LightRays( center, innerRadius, outerRadius, numRays, color ) {
+    Node.call( this );
+
+    for ( var i = 0; i < numRays; i++ ) {
+      var angle = ( 2 * Math.PI / numRays ) * i;
+      var start = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
+      var end = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
+      var transparent = 'rgba(255,255,255,0)';
+
+      var line = new Shape.lineSegment( start.x, start.y, end.x, end.y );
+      this.addChild( new Path( line, {
+        stroke: new LinearGradient( start.x, start.y, end.x, end.y )
+          .addColorStop( 0, 'yellow' )
+          .addColorStop( 1, transparent ),
+        lineWidth: 3
+      } ) );
+    }
+
+  }
+
+  inherit( Node, LightRays );
+
+  /**
    * @param {SunEnergySource} sun Sun model element
    * @param {Property} energyChunksVisible
    * @param {ModelViewTransform} modelViewTransform
@@ -34,50 +82,29 @@ define( function( require ) {
   function SunNode( sun, energyChunksVisible, modelViewTransform ) {
     EFACBaseNode.call( this, sun, modelViewTransform );
 
+    var sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
     var sunRadius = modelViewTransform.modelToViewDeltaX( sun.radius );
+    var lightRays = new LightRays( sunCenter, sunRadius, 1000, 40, Color.YELLOW );
 
-    // TODO
-    // final LightRays lightRays = new LightRays( mvt.modelToViewDelta( Sun.OFFSET_TO_CENTER_OF_SUN ), sunRadius, 1000, 40, Color.YELLOW );
-    // addChild( lightRays );
-    // energyChunksVisible.addObserver( new VoidFunction1 < Boolean > () {
-    //   public void apply( Boolean energyChunksVisible ) {
-    //     // Only show the rays then the energy chunks are not shown.
-    //     lightRays.setVisible( !energyChunksVisible );
-    //   }
-    // } );
-    // // Add the energy chunks, which reside on their own layer.
-    // addChild( new EnergyChunkLayer( sun.energyChunkList, sun.getObservablePosition(), mvt ) );
-    // // Add the emission sectors, if enabled.
-    // if ( SHOW_EMISSION_SECTORS ) {
-    //   for ( int i = 0; i < Sun.NUM_EMISSION_SECTORS; i++ ) {
-    //     DoubleGeneralPath path = new DoubleGeneralPath( mvt.modelToViewDelta( Sun.OFFSET_TO_CENTER_OF_SUN ) );
-    //     double angle = i * Sun.EMISSION_SECTOR_SPAN + Sun.EMISSION_SECTOR_OFFSET;
-    //     path.lineToRelative( EMISSION_SECTOR_LINE_LENGTH * Math.cos( angle ), -EMISSION_SECTOR_LINE_LENGTH * Math.sin( angle ) );
-    //     addChild( new PhetPPath( path.getGeneralPath() ) );
-    //   }
-    // }
+    this.addChild( lightRays );
 
     // Add the sun
     var sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
     var sunPath = new Path( sunShape, {
-      fill: Color.YELLOW,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
+        .addColorStop( 0, 'white' )
+        .addColorStop( 0.25, 'white' )
+        .addColorStop( 1, '#FFD700' ),
       lineWidth: 1,
-      stroke: Color.YELLOW
+      stroke: 'yellow'
     } );
 
-    sunPath.setTranslation( modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN ) );
+    sunPath.setTranslation( sunCenter );
 
-    // PNode sunNode = new PhetPPath( new Ellipse2D.Double( -sunRadius, -sunRadius, sunRadius * 2, sunRadius * 2 ) ) {
-    //   {
-    //     setOffset( mvt.modelToViewDelta( Sun.OFFSET_TO_CENTER_OF_SUN ).toPoint2D() );
-    //     setPaint( new RoundGradientPaint( 0, 0, Color.WHITE, new Point2D.Double( sunRadius * 0.7, sunRadius * 0.7 ), new Color( 255, 215, 0 ) ) );
-    //     setStroke( new BasicStroke( 1 ) );
-    //     setStrokePaint( Color.YELLOW );
-    //   }
-    // };
     this.addChild( sunPath );
 
   }
 
   return inherit( EFACBaseNode, SunNode );
 } );
+
