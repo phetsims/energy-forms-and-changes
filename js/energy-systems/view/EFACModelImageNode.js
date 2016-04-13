@@ -27,11 +27,9 @@ define( function( require ) {
     var img = new Image( modelImage.image );
     var offset = modelViewTransform.modelToViewDelta( modelImage.centerToCenterOffset );
 
-    // TODO: This scales node up x2200, but x1 looks about right.
-    // var scale = modelViewTransform.modelToViewDeltaX( modelImage.width ) / modelImage.image.width;
-    // if ( scale !== 1 ) {
-    //   img.setScaleMagnitude( scale );
-    // }
+    if ( modelImage.scale !== 1 ) {
+      img.setScaleMagnitude( modelImage.scale );
+    }
 
     img.setCenterX( offset.x );
     img.setCenterY( offset.y );
@@ -40,3 +38,4 @@ define( function( require ) {
 
   return inherit( Node, EFACModelImageNode );
 } );
+

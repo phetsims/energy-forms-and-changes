@@ -11,8 +11,10 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -34,13 +36,13 @@ define( function( require ) {
    * @param {Number} initialAbsorptionCoefficient
    * @constructor
    */
-  // function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
-  //   PropertySet.call( this, {
-  //     absorptionCoefficient: initialAbsorptionCoefficient
-  //   } );
-  //   this.shape = shape;
-  // }
-  // inherit( PropertySet, LightAbsorbingShape );
+  function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
+    PropertySet.call( this, {
+      absorptionCoefficient: initialAbsorptionCoefficient
+    } );
+    this.shape = shape;
+  }
+  inherit( PropertySet, LightAbsorbingShape );
 
   /**
    * Rays from the sun
@@ -73,6 +75,23 @@ define( function( require ) {
 
   inherit( Node, LightRays );
 
+  function CloudNode( cloud, modelViewTransform ) {
+    Node.call( this );
+    var self = this;
+
+    this.addChild( new EFACModelImageNode( Cloud.CLOUD_IMAGE, modelViewTransform ) );
+
+    var x = modelViewTransform.modelToViewDeltaX( cloud.offsetFromParent.x );
+    var y = modelViewTransform.modelToViewDeltaY( cloud.offsetFromParent.y );
+    this.center = new Vector2( x, y );
+
+    cloud.existenceStrengthProperty.link( function( opacity ) {
+      self.opacity = opacity;
+    } );
+  }
+  inherit( Node, CloudNode );
+
+
   /**
    * @param {SunEnergySource} sun Sun model element
    * @param {Property} energyChunksVisible
@@ -81,6 +100,7 @@ define( function( require ) {
    */
   function SunNode( sun, energyChunksVisible, modelViewTransform ) {
     EFACBaseNode.call( this, sun, modelViewTransform );
+    var self = this;
 
     var sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
     var sunRadius = modelViewTransform.modelToViewDeltaX( sun.radius );
@@ -102,6 +122,13 @@ define( function( require ) {
     sunPath.setTranslation( sunCenter );
 
     this.addChild( sunPath );
+
+    // Add clouds
+    sun.clouds.forEach( function( cloud ) {
+      var cloudNode = new CloudNode( cloud, modelViewTransform );
+      cloudNode.opacity = 1;
+      self.addChild( cloudNode );
+    } );
 
   }
 

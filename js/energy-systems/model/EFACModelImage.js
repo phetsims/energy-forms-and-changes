@@ -35,7 +35,8 @@ define( function( require ) {
   function EFACModelImage( image, centerToCenterOffset, options ) {
 
     options = _.extend( {
-      width: image.width * DEFAULT_SCALE_FACTOR
+      width: image.width * DEFAULT_SCALE_FACTOR,
+      scale: 1.0
     }, options );
 
     this.image = image;
@@ -43,6 +44,8 @@ define( function( require ) {
     // Width of the image in model units (meters).
     // Height is derived from aspect ratio of image.
     this.width = options.width;
+
+    this.scale = options.scale;
 
     // Offset in model units (meters) from the center of the position of the
     // model element that owns this image to the center of the image.
