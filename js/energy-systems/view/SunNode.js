@@ -14,10 +14,13 @@ define( function( require ) {
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var HSlider = require( 'SUN/HSlider' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PropertySet = require( 'AXON/PropertySet' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
@@ -129,6 +132,26 @@ define( function( require ) {
       cloudNode.opacity = 1;
       self.addChild( cloudNode );
     } );
+
+    // Add slider panel to control cloudiness
+    var slider = new HSlider( sun.cloudinessProperty, {
+      min: 0,
+      max: 1
+    }, {
+      top: 0,
+      left: 0
+    } );
+
+    slider.rotate( -Math.PI / 2 );
+
+    this.addChild( new Panel( slider, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      centerX: 0,
+      centerY: 0,
+      cornerRadius: 8,
+      resize: false
+    } ) );
+
 
   }
 
