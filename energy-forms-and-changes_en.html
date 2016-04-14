@@ -18,7 +18,7 @@
   ( function() {
     // Identify the brand (assume generated brand if not provided with query parameters)
     var brandMatch = location.search.match( /brand=([^&]+)/ );
-    var brand = brandMatch ? decodeURIComponent( brandMatch[ 1 ] ) : 'adapted-from-phet';
+    var brand = brandMatch ? decodeURIComponent( brandMatch[ 1 ] ) : 'phet';
 
     // Load the desired splash screen image
     document.getElementById( 'splash' ).src = '../brand/' + brand + '/images/splash.svg';

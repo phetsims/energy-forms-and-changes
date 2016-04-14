@@ -16,20 +16,33 @@ define( function( require ) {
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PropertySet = require( 'AXON/PropertySet' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
 
+
+  // Strings
+  var cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
+  var lotsString = require( 'string!ENERGY_FORMS_AND_CHANGES/lots' );
+  var noneString = require( 'string!ENERGY_FORMS_AND_CHANGES/none' );
+
   // Constants
-  // var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
+  var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
+  var SLIDER_LABEL_FONT = new PhetFont( 12 );
+
   // var SHOW_EMISSION_SECTORS = false; // For debug.
   // var EMISSION_SECTOR_LINE_LENGTH = 700;
 
@@ -126,10 +139,10 @@ define( function( require ) {
 
     this.addChild( sunPath );
 
-    // Add clouds
+    // Add clouds, initially transparent
     sun.clouds.forEach( function( cloud ) {
       var cloudNode = new CloudNode( cloud, modelViewTransform );
-      cloudNode.opacity = 1;
+      cloudNode.opacity = 0;
       self.addChild( cloudNode );
     } );
 
@@ -144,7 +157,36 @@ define( function( require ) {
 
     slider.rotate( -Math.PI / 2 );
 
-    this.addChild( new Panel( slider, {
+    function tickLabel( label ) {
+      var labelText = new Text( label, {
+        font: SLIDER_LABEL_FONT
+      } );
+      labelText.rotate( Math.PI / 2 );
+      return labelText;
+    }
+
+    slider.addMajorTick( 0, tickLabel( noneString ) );
+    slider.addMajorTick( 1, tickLabel( lotsString ) );
+
+    var titleText = new Text( cloudsString, {
+      font: CONTROL_PANEL_TITLE_FONT
+    } );
+
+    var iconNode = new Image( Cloud.CLOUD_1 );
+    iconNode.setScaleMagnitude( 0.25 );
+
+    var titleBox = new HBox( {
+      children: [ titleText, iconNode ],
+      spacing: 10
+    } );
+
+    var panelContent = new VBox( {
+      children: [ titleBox, slider ],
+      spacing: 10,
+      resize: false
+    } );
+
+    this.addChild( new Panel( panelContent, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       centerX: 0,
       centerY: 0,

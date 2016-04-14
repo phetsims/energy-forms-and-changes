@@ -64,6 +64,7 @@ define( function( require ) {
     }
 
   }, {
+    CLOUD_1: CLOUD_1,
     CLOUD_IMAGE: CLOUD_IMAGE
   } );
 } );
