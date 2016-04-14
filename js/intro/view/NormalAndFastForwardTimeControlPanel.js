@@ -12,7 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Text = require( 'SCENERY/nodes/Text' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
@@ -36,7 +36,7 @@ define( function( require ) {
     var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
 
     // Add the step button to manually step animation.
-    var stepButton = new StepButton( function() { model.manualStep(); }, model.playProperty,
+    var stepButton = new StepForwardButton( function() { model.manualStep(); }, model.playProperty,
       {
         radius: 15,
         centerX: playPauseButton.centerX
