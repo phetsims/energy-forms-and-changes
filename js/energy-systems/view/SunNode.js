@@ -20,6 +20,7 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Line = require( 'SCENERY/nodes/Line' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -78,13 +79,16 @@ define( function( require ) {
       var end = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
       var transparent = 'rgba(255,255,255,0)';
 
-      var line = new Shape.lineSegment( start.x, start.y, end.x, end.y );
-      this.addChild( new Path( line, {
-        stroke: new LinearGradient( start.x, start.y, end.x, end.y )
-          .addColorStop( 0, 'yellow' )
-          .addColorStop( 1, transparent ),
-        lineWidth: 3
-      } ) );
+      var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
+        .addColorStop( 0, color )
+        .addColorStop( 1, transparent );
+
+      var line = new Line( start.x, start.y, end.x, end.y, {
+        stroke: rayGradient,
+        linewidth: 3
+      } );
+
+      this.addChild( line );
     }
 
   }
