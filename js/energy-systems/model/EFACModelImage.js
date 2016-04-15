@@ -54,7 +54,7 @@ define( function( require ) {
 
   return inherit( Object, EFACModelImage, {
     getHeight: function() {
-      return ( this.width / this.image.getImageWidth() * this.image.getImageHeight() );
+      return ( this.width / this.image.width * this.image.height );
     }
   } );
 } );
