@@ -126,6 +126,7 @@ define( function( require ) {
 
     this.addChild( lightRays );
 
+    // Turn off light rays when energy chunks are visible
     energyChunksVisible.link( function( chunksVisible ) {
       lightRays.setVisible( !chunksVisible );
     } );
