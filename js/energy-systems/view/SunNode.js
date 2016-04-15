@@ -89,10 +89,9 @@ define( function( require ) {
 
       this.addChild( line );
     }
-
   }
-
   inherit( Node, LightRays );
+
 
   function CloudNode( cloud, modelViewTransform ) {
     Node.call( this );
@@ -126,6 +125,10 @@ define( function( require ) {
     var lightRays = new LightRays( sunCenter, sunRadius, 1000, 40, Color.YELLOW );
 
     this.addChild( lightRays );
+
+    energyChunksVisible.link( function( chunksVisible ) {
+      lightRays.setVisible( !chunksVisible );
+    } );
 
     // Add the sun
     var sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
