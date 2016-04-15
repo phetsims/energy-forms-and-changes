@@ -18,8 +18,9 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
-  var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
+  // var Random = require( 'DOT/Random' );
+  var Shape = require( 'KITE/Shape' );
+  // var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -29,11 +30,11 @@ define( function( require ) {
   var SOLAR_PANEL_GEN = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' );
   var SOLAR_PANEL_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' );
   var SOLAR_PANEL_POST_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
-  var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
+  // var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // Constants
-  var RAND = new Random();
+  // var RAND = new Random();
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
@@ -47,34 +48,24 @@ define( function( require ) {
   var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR_IMAGE_OFFSET );
 
   var halfWidth = SOLAR_PANEL_IMAGE.width / 2;
-  var halfHeight = SOLAR_PANEL_IMAGE.height / 2;
+  var halfHeight = SOLAR_PANEL_IMAGE.getHeight() / 2;
   var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
 
-  // TODO
-  // private static final DoubleGeneralPath ABSORPTION_SHAPE = new DoubleGeneralPath() {{
-  //     double absorptionZoneWidth = PANEL_IMAGE_BOUNDS.getWidth() * 0.2;
-  //     moveTo( PANEL_IMAGE_BOUNDS.getMinX(), PANEL_IMAGE_BOUNDS.getMinY() );
-  //     moveTo( PANEL_IMAGE_BOUNDS.getMaxX() - absorptionZoneWidth, PANEL_IMAGE_BOUNDS.getMaxY() );
-  //     lineTo( PANEL_IMAGE_BOUNDS.getMaxX(), PANEL_IMAGE_BOUNDS.getMaxY() );
-  //     lineTo( PANEL_IMAGE_BOUNDS.getMinX() + absorptionZoneWidth, PANEL_IMAGE_BOUNDS.getMinY() );
-  //     lineTo( PANEL_IMAGE_BOUNDS.getMinX(), PANEL_IMAGE_BOUNDS.getMinY() );
-  //     closePath();
-  // }};
-
+  var ABSORPTION_SHAPE = new Shape();
 
   // Constants used for creating the path followed by the energy chunks.
   // Many of these numbers were empirically determined based on the images,
   // and will need updating if the images change.
-  var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.01 );
-  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.025 );
-  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.033 );
-  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, CONNECTOR_IMAGE_OFFSET.y );
-  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
+  // var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.01 );
+  // var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.025 );
+  // var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.033 );
+  // var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, CONNECTOR_IMAGE_OFFSET.y );
+  // var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
 
   // Inter chunk spacing time for when the chunks reach the 'convergence
   // point' at the bottom of the solar panel.  It is intended to
   // approximately match the rate at which the sun emits energy chunks.
-  var MIN_INTER_CHUNK_TIME = 1 / ( SunEnergySource.ENERGY_CHUNK_EMISSION_PERIOD * SunEnergySource.NUM_EMISSION_SECTORS ); // In seconds.
+  // var MIN_INTER_CHUNK_TIME = 1 / ( SunEnergySource.ENERGY_CHUNK_EMISSION_PERIOD * SunEnergySource.NUM_EMISSION_SECTORS ); // In seconds.
 
   /**
    * Solar panel is an energy converter
@@ -88,6 +79,20 @@ define( function( require ) {
     this.latestChunkArrivalTime = 0;
     this.energyOutputRate = 0;
     this.energyChunksVisible = energyChunksVisible;
+
+    var zoneWidth = PANEL_IMAGE_BOUNDS.width / 5;
+    var minX = PANEL_IMAGE_BOUNDS.minX;
+    var minY = PANEL_IMAGE_BOUNDS.minY;
+    var maxX = PANEL_IMAGE_BOUNDS.maxX;
+    var maxY = PANEL_IMAGE_BOUNDS.maxY;
+
+    ABSORPTION_SHAPE
+      .moveTo( maxX - zoneWidth, maxY )
+      .lineTo( maxX, maxY )
+      .lineTo( minX + zoneWidth, minY )
+      .lineTo( minX, minY )
+      .close();
+
   }
 
   energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
@@ -125,20 +130,9 @@ define( function( require ) {
     clearEnergyChunks: function() {},
     createPathToPanelBottom: function() {},
     createPathThroughConverter: function() {},
-    getAbsorptionShape: function() {},
-    getUserComponent: function() {},
-    temp: function() {
-      console.log(
-        SUN_ICON,
-        RAND,
-        PANEL_IMAGE_BOUNDS,
-        OFFSET_TO_CONVERGENCE_POINT,
-        OFFSET_TO_FIRST_CURVE_POINT,
-        OFFSET_TO_SECOND_CURVE_POINT,
-        OFFSET_TO_THIRD_CURVE_POINT,
-        OFFSET_TO_CONNECTOR_CENTER,
-        MIN_INTER_CHUNK_TIME
-      );
+
+    getAbsorptionShape: function() {
+      return ABSORPTION_SHAPE;
     }
 
   }, {
