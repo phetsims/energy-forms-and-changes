@@ -44,7 +44,6 @@ define( function( require ) {
   var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
   var SLIDER_LABEL_FONT = new PhetFont( 12 );
 
-  // var SHOW_EMISSION_SECTORS = false; // For debug.
   // var EMISSION_SECTOR_LINE_LENGTH = 700;
 
   /**
@@ -149,6 +148,12 @@ define( function( require ) {
       cloudNode.opacity = 0;
       self.addChild( cloudNode );
     } );
+
+    // DEBUG: Show absorption shape
+    // this.addChild( new Path( modelViewTransform.modelToViewShape( sun.solarPanel.getAbsorptionShape() ), {
+    //   stroke: 'lime',
+    //   lineWidth: 5
+    // } ) );
 
     // Add slider panel to control cloudiness
     var slider = new HSlider( sun.cloudinessProperty, {
