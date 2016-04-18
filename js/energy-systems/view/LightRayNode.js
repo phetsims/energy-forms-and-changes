@@ -15,6 +15,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'REPO/path/to/Node' );
   var Ray2 = require( 'DOT/Ray2' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -110,26 +111,30 @@ define( function( require ) {
         }
       } );
 
+      // Sort the list of PointAndFadeValues by their distance from the origin, closest first.
+      var sorted = _.sortBy( this.pointAndFadeValues, function( p ) {
+        return p.point.distance( this.origin );
+      } );
 
-      // // Sort the list by distance from the origin.
-      // Collections.sort( pointAndFadeCoefficientList, new Comparator < PointAndFadeCoefficient > () {
-      //   public int compare( PointAndFadeCoefficient p1, PointAndFadeCoefficient p2 ) {
-      //     return Double.compare( p1.point.distance( origin ), p2.point.distance( origin ) );
-      //   }
-      // } );
+      // Add the segments that comprise the line.
+      // var opacity = 1;
+      var transparent = 'rgba(255,255,255,0)';
+      for ( var i = 0; i < sorted.length - 1; i++ ) {
 
-      // // Add the segments that comprise the line.
-      // int opacity = 255;
-      // for ( int i = 0; i < pointAndFadeCoefficientList.size() - 1; i++ ) {
-      //   final FadingLineNode fadingLineNode = new FadingLineNode( pointAndFadeCoefficientList.get( i ).point,
-      //     pointAndFadeCoefficientList.get( i + 1 ).point,
-      //     new Color( color.getRed(), color.getGreen(), color.getBlue(), opacity ),
-      //     pointAndFadeCoefficientList.get( i ).fadeCoefficient,
-      //     STROKE_THICKNESS );
-      //   addChild( fadingLineNode );
-      //   opacity = fadingLineNode.getOpacityAtEndpoint();
-      // }
+        var start = sorted[ i ].point;
+        var end = sorted[ i + 1 ].point;
 
+        var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
+          .addColorStop( 0, this.color )
+          .addColorStop( 1, transparent );
+
+        var fadingLine = new Line( start, end, {
+          stroke: rayGradient,
+          lineWidth: STROKE_THICKNESS
+        } );
+
+        this.addChild( fadingLine );
+      }
     },
 
     /**
