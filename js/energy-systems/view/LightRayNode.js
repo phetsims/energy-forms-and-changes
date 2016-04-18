@@ -12,10 +12,12 @@ define( function( require ) {
   'use strict';
 
   // Modules
-  var Node = require( 'REPO/path/to/Node' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Line = require( 'SCENERY/nodes/Line' );
+  var Node = require( 'REPO/path/to/Node' );
   var Ray2 = require( 'DOT/Ray2' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   var STROKE_THICKNESS = 2;
   var SEARCH_ITERATIONS = 10;
@@ -48,8 +50,6 @@ define( function( require ) {
 
     Node.call( this );
 
-    var self = this;
-
     this.updateLineSegments();
   }
 
@@ -64,7 +64,7 @@ define( function( require ) {
      */
     addLightAbsorbingShape: function( lightAbsorbingShape ) {
       lightAbsorbingShape.absorptionCoefficientProperty.link( function() {
-        this.updateLineSegments()
+        this.updateLineSegments();
       } );
       this.lightAbsorbingShapes.push( lightAbsorbingShape );
     },
@@ -91,16 +91,44 @@ define( function( require ) {
       this.pointAndFadeValues.push( new PointAndFadeValue( this.origin, FADE_COEFFICIENT_IN_AIR ) );
       this.pointAndFadeValues.push( new PointAndFadeValue( this.endpoint, 0 ) );
 
+      var self = this;
       this.lightAbsorbingShapes.foreach( function( absorbingShape ) {
         if ( self.lineIntersectsShapeIntersects( self.origin, self.endpoint, absorbingShape.shape ) ) {
-          var entryPoint =
+          var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
+
+          // It's conceivable that we could handle a case where the line originates
+          // in a shape, but we don't for now
+          assert && assert( entryPoint !== null, 'entryPoint is null' );
+
+          var fade = absorbingShape.absorptionCoefficientProperty.get();
+          self.pointAndFadeValues.push( new PointAndFadeValue( entryPoint, fade ) );
+
+          var exitPoint = self.getShapeExitPoint( self.origin, self.endpoint, absorbingShape.shape );
+          if ( exitPoint !== null ) {
+            self.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, FADE_COEFFICIENT_IN_AIR ) );
+          }
         }
       } );
 
 
+      // // Sort the list by distance from the origin.
+      // Collections.sort( pointAndFadeCoefficientList, new Comparator < PointAndFadeCoefficient > () {
+      //   public int compare( PointAndFadeCoefficient p1, PointAndFadeCoefficient p2 ) {
+      //     return Double.compare( p1.point.distance( origin ), p2.point.distance( origin ) );
+      //   }
+      // } );
 
-
-
+      // // Add the segments that comprise the line.
+      // int opacity = 255;
+      // for ( int i = 0; i < pointAndFadeCoefficientList.size() - 1; i++ ) {
+      //   final FadingLineNode fadingLineNode = new FadingLineNode( pointAndFadeCoefficientList.get( i ).point,
+      //     pointAndFadeCoefficientList.get( i + 1 ).point,
+      //     new Color( color.getRed(), color.getGreen(), color.getBlue(), opacity ),
+      //     pointAndFadeCoefficientList.get( i ).fadeCoefficient,
+      //     STROKE_THICKNESS );
+      //   addChild( fadingLineNode );
+      //   opacity = fadingLineNode.getOpacityAtEndpoint();
+      // }
 
     },
 
@@ -113,7 +141,7 @@ define( function( require ) {
      * @private
      */
     lineIntersectsShapeIntersects: function( startPoint, endPoint, shape ) {
-      var direction = endpoint.minus( startPoint ).normalized();
+      var direction = endPoint.minus( startPoint ).normalized();
       var ray = new Ray2( startPoint, direction );
       return shape.windingIntersection( ray );
       // Warning: This only checks the bounding rect, not the full shape.
@@ -128,7 +156,31 @@ define( function( require ) {
      * @return {Vector2}       [description]
      * @private
      */
-    getLineIntersection: function( line1, line2 ) {},
+    getLineIntersection: function( line1, line2 ) {
+      var denominator = ( ( line1.p2.x - line1.p1.x ) * ( line2.p2.y - line2.p1.y ) ) -
+        ( ( line1.p2.y - line1.p1.y ) * ( line2.p2.x - line2.p1.x ) );
+
+      // Check if the lines are parallel, and thus don't intersect.
+      if ( denominator === 0 ) {
+        return null;
+      }
+
+      var numerator = ( ( line1.p1.y - line2.p1.y ) * ( line2.p2.x - line2.p1.x ) ) -
+        ( ( line1.p1.x - line2.p1.x ) * ( line2.p2.y - line2.p1.y ) );
+      var r = numerator / denominator;
+
+      var numerator2 = ( ( line1.p1.y - line2.p1.y ) * ( line1.p2.x - line1.p1.x ) ) -
+        ( ( line1.p1.x - line2.p1.x ) * ( line1.p2.y - line1.p1.y ) );
+      var s = numerator2 / denominator;
+
+      if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
+        return null;
+      }
+
+      // Find intersection point
+      return new Vector2( line1.p1.x + ( r * ( line1.p2.x - line1.p1.x ) ),
+        line1.p1.y + ( r * ( line1.p2.y - line1.p1.y ) ) );
+    },
 
     /**
      * @param  {Vector2} origin   [description]
@@ -147,7 +199,7 @@ define( function( require ) {
           return null;
         }
         var boundsExitPoint = this.getRectangleExitPoint( origin, endpoint, shapeRect );
-        var searchEndPoint = boundsExitPoint == null ? endpoint : boundsExitPoint;
+        var searchEndPoint = boundsExitPoint === null ? endpoint : boundsExitPoint;
 
 
         // Search linearly for edge of the shape.  BIG HAIRY NOTE - This
@@ -209,7 +261,20 @@ define( function( require ) {
      * @return {Vector2}
      * @private
      */
-    getRectangleEntryPoint: function( origin, endpoint, rect ) {},
+    getRectangleEntryPoint: function( origin, endpoint, rect ) {
+      var intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new Line( origin, endpoint ) );
+
+      var closestIntersectionPoint = null;
+      intersectingPoints.forEach( function( point ) {
+        if ( closestIntersectionPoint === null ||
+          closestIntersectionPoint.distance( origin ) > point.distance( origin ) ) {
+          closestIntersectionPoint = point;
+        }
+      } );
+
+      return closestIntersectionPoint;
+    },
+
     /**
      * @param  {Vector2} origin   [description]
      * @param  {Vector2} endpoint [description]
@@ -217,7 +282,24 @@ define( function( require ) {
      * @return {Vector2}
      * @private
      */
-    getRectangleExitPoint: function( origin, endpoint, rect ) {},
+    getRectangleExitPoint: function( origin, endpoint, rect ) {
+      var intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new Line( origin, endpoint ) );
+
+      if ( intersectingPoints.length < 2 ) {
+        // Line either doesn't intersect or ends inside the rectangle.
+        return null;
+      }
+
+      var furthestIntersectionPoint = null;
+      intersectingPoints.forEach( function( point ) {
+        if ( furthestIntersectionPoint === null ||
+          furthestIntersectionPoint.distance( origin ) < point.distance( origin ) ) {
+          furthestIntersectionPoint = point;
+        }
+      } );
+
+      return furthestIntersectionPoint;
+    },
 
     /**
      * [getRectangleLineIntersectionPoints description]
@@ -225,7 +307,24 @@ define( function( require ) {
      * @param  {Line} line [description]
      * @return {Array<Vector2>}      [description]
      */
-    getRectangleLineIntersectionPoints: function( rect, line ) {}
+    getRectangleLineIntersectionPoints: function( rect, line ) {
+      var lines = []; // Lines that make up rectangle
+      lines.push( new Line( rect.minX, rect.minY, rect.minX, rect.maxY ) );
+      lines.push( new Line( rect.minX, rect.maxY, rect.maxX, rect.maxY ) );
+      lines.push( new Line( rect.maxX, rect.maxY, rect.maxX, rect.minY ) );
+      lines.push( new Line( rect.maxX, rect.minY, rect.minX, rect.minY ) );
+
+      var intersectingPoints = [];
+      var self = this;
+      lines.forEach( function( rectLine ) {
+        var intersectingPoint = self.getLineIntersection( rectLine, line );
+        if ( intersectingPoint !== null ) {
+          intersectingPoints.push( intersectingPoint );
+        }
+      } );
+
+      return intersectingPoints;
+    }
 
   } );
 } );
