@@ -50,7 +50,6 @@ define( function( require ) {
   var halfWidth = SOLAR_PANEL_IMAGE.width / 2;
   var halfHeight = SOLAR_PANEL_IMAGE.getHeight() / 2;
   var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
-
   var ABSORPTION_SHAPE = new Shape();
 
   // Constants used for creating the path followed by the energy chunks.
@@ -80,7 +79,7 @@ define( function( require ) {
     this.energyOutputRate = 0;
     this.energyChunksVisible = energyChunksVisible;
 
-    var zoneWidth = PANEL_IMAGE_BOUNDS.width / 5;
+    var zoneWidth = 0.7 * PANEL_IMAGE_BOUNDS.width;
     var minX = PANEL_IMAGE_BOUNDS.minX;
     var minY = PANEL_IMAGE_BOUNDS.minY;
     var maxX = PANEL_IMAGE_BOUNDS.maxX;
@@ -143,3 +142,4 @@ define( function( require ) {
     CONNECTOR_IMAGE: CONNECTOR_IMAGE
   } );
 } );
+
