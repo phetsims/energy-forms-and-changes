@@ -100,6 +100,10 @@ define( function( require ) {
      */
     step: function( dt ) {
 
+      if ( !this.active ) {
+        return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      }
+
       // Add water droplets as needed based on flow rate.
       if ( this.flowProportion > 0 ) {
         var initialOffset = new Vector2( 0, 0 );
@@ -175,3 +179,4 @@ define( function( require ) {
     OFFSET_FROM_CENTER_TO_WATER_ORIGIN: OFFSET_FROM_CENTER_TO_WATER_ORIGIN
   } );
 } );
+
