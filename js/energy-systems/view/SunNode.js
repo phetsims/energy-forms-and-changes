@@ -59,7 +59,7 @@ define( function( require ) {
     this.shape = shape;
   }
 
-    energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
+  energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
 
   inherit( PropertySet, LightAbsorbingShape );
 
@@ -188,12 +188,6 @@ define( function( require ) {
       self.addChild( cloudNode );
     } );
 
-    // DEBUG: Show absorption shape
-    // this.addChild( new Path( modelViewTransform.modelToViewShape( sun.solarPanel.getAbsorptionShape() ), {
-    //   stroke: 'lime',
-    //   lineWidth: 5
-    // } ) );
-
     // Add slider panel to control cloudiness
     var slider = new HSlider( sun.cloudinessProperty, {
       min: 0,
@@ -242,7 +236,22 @@ define( function( require ) {
       resize: false
     } ) );
 
+    var absorptionShape = modelViewTransform.modelToViewShape( sun.solarPanel.getAbsorptionShape() );
 
+    // DEBUG: Show absorption shape path
+    var spPath = new Path( absorptionShape, {
+      stroke: 'lime',
+      lineWidth: 5
+    } );
+
+    // TODO: what is the equivalent of the Java AffineTransform class?
+    // Translating by (-)sun.position does not put this in the right location.
+    // Should I move the shape itself? Like this??
+    // absorptionShape.bounds = absorptionShape.bounds.shifted(x,y) ?
+    // Hard-coding approximate shift for now.
+    spPath.translate( -240, -420 );
+    this.addChild( spPath );
+    var currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
   }
 
   energyFormsAndChanges.register( 'SunNode', SunNode );
