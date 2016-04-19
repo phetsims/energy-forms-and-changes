@@ -21,8 +21,7 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Line = require( 'SCENERY/nodes/Line' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  var LightRayNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightRayNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -59,6 +58,9 @@ define( function( require ) {
     } );
     this.shape = shape;
   }
+
+    energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
+
   inherit( PropertySet, LightAbsorbingShape );
 
   /**
@@ -73,26 +75,58 @@ define( function( require ) {
   function LightRays( center, innerRadius, outerRadius, numRays, color ) {
     Node.call( this );
 
+    var lightRayNodes = [];
+    var angle;
+    var startPoint;
+    var endPoint;
     for ( var i = 0; i < numRays; i++ ) {
-      var angle = ( 2 * Math.PI / numRays ) * i;
-      var start = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
-      var end = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
-      var transparent = 'rgba(255,255,255,0)';
+      angle = ( 2 * Math.PI / numRays ) * i;
+      startPoint = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
+      endPoint = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
+      // var transparent = 'rgba(255,255,255,0)';
 
-      var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
-        .addColorStop( 0, color )
-        .addColorStop( 1, transparent );
+      // var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
+      //   .addColorStop( 0, color )
+      //   .addColorStop( 1, transparent );
 
-      var line = new Line( start.x, start.y, end.x, end.y, {
-        stroke: rayGradient,
-        linewidth: 3
-      } );
+      // var line = new Line( start.x, start.y, end.x, end.y, {
+      //   stroke: rayGradient,
+      //   linewidth: 3
+      // } );
 
-      this.addChild( line );
+      // this.addChild( line );
+
+      var lightRayNode = new LightRayNode( startPoint, endPoint, color );
+      lightRayNodes.push( lightRayNode );
+      this.addChild( lightRayNode );
     }
   }
-  inherit( Node, LightRays );
 
+  energyFormsAndChanges.register( 'LightRays', LightRays );
+
+  inherit( Node, LightRays, {
+
+    /**
+     * @param {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @public
+     */
+    addLightAbsorbingShape: function( lightAbsorbingShape ) {
+      this.lightRayNodes.forEach( function( lightRayNode ) {
+        lightRayNode.addLightAbsorbingShape( lightAbsorbingShape );
+      } );
+    },
+
+    /**
+     * @param {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @public
+     */
+    removeLightAbsorbingShape: function( lightAbsorbingShape ) {
+      this.lightRayNodes.forEach( function( lightRayNode ) {
+        lightRayNode.removeLightAbsorbingShape( lightAbsorbingShape );
+      } );
+    }
+
+  } );
 
   function CloudNode( cloud, modelViewTransform ) {
     Node.call( this );
