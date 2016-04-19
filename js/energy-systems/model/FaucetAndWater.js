@@ -14,7 +14,7 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
-  // var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -32,7 +32,7 @@ define( function( require ) {
   // Constants
 
   var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.065, 0.08 );
-  // var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
+  var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
   // var MAX_WATER_WIDTH = 0.015; // In meters.
   var MAX_WATER_WIDTH = 0.02; // In meters.
   // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
@@ -84,9 +84,17 @@ define( function( require ) {
 
     /**
      * @private
+     * @return {EnergyChunk} New energy chunk
      */
     createNewChunk: function() {
 
+      var initialPosition = this.position
+        .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
+        .plus( ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2, 0 );
+
+      var velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
+
+      return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisible );
     },
 
     /**
@@ -128,6 +136,15 @@ define( function( require ) {
           }
         }
       } );
+
+      // Check if time to emit an energy chunk and, if so, do it.
+      this.energySinceLastChunk += EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
+      if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+        this.energyChunkList.push( this.createNewChunk() );
+        this.energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
+      }
+
+
 
       // Generate the appropriate amount of energy.
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
