@@ -16,7 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Node = require( 'REPO/path/to/Node' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Ray2 = require( 'DOT/Ray2' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -93,7 +93,7 @@ define( function( require ) {
       this.pointAndFadeValues.push( new PointAndFadeValue( this.endpoint, 0 ) );
 
       var self = this;
-      this.lightAbsorbingShapes.foreach( function( absorbingShape ) {
+      this.lightAbsorbingShapes.forEach( function( absorbingShape ) {
         if ( self.lineIntersectsShapeIntersects( self.origin, self.endpoint, absorbingShape.shape ) ) {
           var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
 
@@ -113,7 +113,7 @@ define( function( require ) {
 
       // Sort the list of PointAndFadeValues by their distance from the origin, closest first.
       var sorted = _.sortBy( this.pointAndFadeValues, function( p ) {
-        return p.point.distance( this.origin );
+        return p.point.distance( self.origin );
       } );
 
       // Add the segments that comprise the line.
