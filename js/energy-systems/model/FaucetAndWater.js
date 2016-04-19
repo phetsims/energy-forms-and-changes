@@ -22,7 +22,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Random = require( 'DOT/Random' );
-  // var Range = require( 'DOT/Range' );
+  var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterDrop = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/WaterDrop' );
 
@@ -38,7 +38,7 @@ define( function( require ) {
   // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.1531; // In meters.
   var RAND = new Random();
-  // var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
+  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
 
   // The following acceleration constant defines the rate at which the water
   // flows from the faucet.  The value used is not the actual value in
@@ -112,6 +112,8 @@ define( function( require ) {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
+      var self = this;
+
       // Add water droplets as needed based on flow rate.
       if ( this.flowProportion > 0 ) {
         var initialOffset = new Vector2( 0, 0 );
@@ -127,7 +129,6 @@ define( function( require ) {
       } );
 
       // Remove drops that have run their course by iterating over a copy and checking for matches.
-      var self = this;
       var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
       waterDropsCopy.forEach( function( drop ) {
         if ( drop.offsetFromParent.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
@@ -144,7 +145,50 @@ define( function( require ) {
         this.energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
       }
 
+      // Update energy chunk positions.
+      this.energyChunkList.forEach( function( chunk ) {
 
+        // Make the chunk fall.
+        chunk.translateBasedOnVelocity( dt );
+
+        // See if chunk is in the location where it can be transferred
+        // to the next energy system.
+        var position = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.position.y;
+        var chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( position );
+        // var chunkExempt = self.exemptFromTransferEnergyChunks.contains( chunk );
+        var chunkExempt = self.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
+        if ( self.waterPowerableElementInPlace && chunkInRange && !chunkExempt ) {
+
+          if ( self.transferNextAvailableChunk ) {
+            // Send this chunk to the next energy system.
+            self.outgoingEnergyChunks.push( chunk );
+
+            // Alternate sending or keeping chunks.
+            self.transferNextAvailableChunk = false;
+          } else {
+            // Don't transfer this chunk.
+            self.exemptFromTransferEnergyChunks.push( chunk );
+
+            // Set up to transfer the next one.
+            self.transferNextAvailableChunk = true;
+          }
+        }
+
+        // Remove it if it is out of visible range.
+        var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.position );
+        if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+
+          _.remove( self.energyChunkList, function( x ) {
+            return x === chunk;
+          } );
+
+          _.remove( self.exemptFromTransferEnergyChunks, function( x ) {
+            return x === chunk;
+          } );
+
+        }
+
+      } );
 
       // Generate the appropriate amount of energy.
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
