@@ -15,9 +15,11 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
+  var KiteLine = require( 'KITE/segments/Line' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Ray2 = require( 'DOT/Ray2' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Vector2 = require( 'DOT/Vector2' );
 
   var STROKE_THICKNESS = 2;
@@ -94,7 +96,7 @@ define( function( require ) {
 
       var self = this;
       this.lightAbsorbingShapes.forEach( function( absorbingShape ) {
-        if ( self.lineIntersectsShapeIntersects( self.origin, self.endpoint, absorbingShape.shape ) ) {
+        if ( self.lineIntersectsShape( self.origin, self.endpoint, absorbingShape.shape ) ) {
           var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
 
           // It's conceivable that we could handle a case where the line originates
@@ -138,17 +140,25 @@ define( function( require ) {
     },
 
     /**
-     * [lineIntersectsShapeIntersects description]
+     * [lineIntersectsShape description]
      * @param  {Vector2} startPoint [description]
      * @param  {Vector2} endPoint   [description]
      * @param  {Shape} shape      [description]
      * @return {Boolean}            [description]
      * @private
      */
-    lineIntersectsShapeIntersects: function( startPoint, endPoint, shape ) {
-      var direction = endPoint.minus( startPoint ).normalized();
-      var ray = new Ray2( startPoint, direction );
-      return shape.windingIntersection( ray );
+    lineIntersectsShape: function( startPoint, endPoint, shape ) {
+
+      var line = new KiteLine( startPoint, endPoint );
+      var path = new Path( line, {} );
+      var strokedLineShape = path.getStrokedShape();
+      return strokedLineShape.intersectsBounds( shape.bounds );
+
+      // line.intersectsBounds(shape.bounds) instead?
+
+      // var direction = endPoint.minus( startPoint ).normalized();
+      // var ray = new Ray2( startPoint, direction );
+      // return shape.windingIntersection( ray );
       // Warning: This only checks the bounding rect, not the full shape.
       // This was adequate in this case, but take care if reusing.
       // return shape.bounds.intersectsLine( startPoint.x, startPoint.y, endPoint.x, endPoint.y );
@@ -156,26 +166,32 @@ define( function( require ) {
 
     /**
      * [getLineIntersection description]
-     * @param  {Line} line1 [description]
-     * @param  {Line} line2 [description]
+     * @param  {KiteLine} line1 [description]
+     * @param  {KiteLine} line2 [description]
      * @return {Vector2}       [description]
      * @private
      */
     getLineIntersection: function( line1, line2 ) {
-      var denominator = ( ( line1.p2.x - line1.p1.x ) * ( line2.p2.y - line2.p1.y ) ) -
-        ( ( line1.p2.y - line1.p1.y ) * ( line2.p2.x - line2.p1.x ) );
+
+      var start1 = line1.start;
+      var start2 = line2.start;
+      var end1 = line1.end;
+      var end2 = line2.end;
+
+      var denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
+        ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
 
       // Check if the lines are parallel, and thus don't intersect.
       if ( denominator === 0 ) {
         return null;
       }
 
-      var numerator = ( ( line1.p1.y - line2.p1.y ) * ( line2.p2.x - line2.p1.x ) ) -
-        ( ( line1.p1.x - line2.p1.x ) * ( line2.p2.y - line2.p1.y ) );
+      var numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
+        ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
       var r = numerator / denominator;
 
-      var numerator2 = ( ( line1.p1.y - line2.p1.y ) * ( line1.p2.x - line1.p1.x ) ) -
-        ( ( line1.p1.x - line2.p1.x ) * ( line1.p2.y - line1.p1.y ) );
+      var numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
+        ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
       var s = numerator2 / denominator;
 
       if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
@@ -183,8 +199,8 @@ define( function( require ) {
       }
 
       // Find intersection point
-      return new Vector2( line1.p1.x + ( r * ( line1.p2.x - line1.p1.x ) ),
-        line1.p1.y + ( r * ( line1.p2.y - line1.p1.y ) ) );
+      return new Vector2( start1.x + ( r * ( end1.x - start1.x ) ),
+        start1.y + ( r * ( end1.y - start1.y ) ) );
     },
 
     /**
@@ -313,11 +329,21 @@ define( function( require ) {
      * @return {Array<Vector2>}      [description]
      */
     getRectangleLineIntersectionPoints: function( rect, line ) {
-      var lines = []; // Lines that make up rectangle
-      lines.push( new Line( rect.minX, rect.minY, rect.minX, rect.maxY ) );
-      lines.push( new Line( rect.minX, rect.maxY, rect.maxX, rect.maxY ) );
-      lines.push( new Line( rect.maxX, rect.maxY, rect.maxX, rect.minY ) );
-      lines.push( new Line( rect.maxX, rect.minY, rect.minX, rect.minY ) );
+
+      // Corners of rect
+      var p = [
+        new Vector2( rect.minX, rect.minY ),
+        new Vector2( rect.minX, rect.maxY ),
+        new Vector2( rect.maxX, rect.maxY ),
+        new Vector2( rect.maxX, rect.minY )
+      ];
+
+      // Perimeter lines of rect
+      var lines = [];
+      lines.push( new KiteLine( p[ 0 ], p[ 1 ] ) );
+      lines.push( new KiteLine( p[ 1 ], p[ 2 ] ) );
+      lines.push( new KiteLine( p[ 2 ], p[ 3 ] ) );
+      lines.push( new KiteLine( p[ 3 ], p[ 0 ] ) );
 
       var intersectingPoints = [];
       var self = this;
