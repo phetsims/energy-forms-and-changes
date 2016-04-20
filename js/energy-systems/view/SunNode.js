@@ -22,6 +22,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LightRayNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightRayNode' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -236,22 +237,23 @@ define( function( require ) {
       resize: false
     } ) );
 
-    var absorptionShape = modelViewTransform.modelToViewShape( sun.solarPanel.getAbsorptionShape() );
+    var absorptionShape = sun.solarPanel.getAbsorptionShape();
+    absorptionShape = modelViewTransform.modelToViewShape( absorptionShape );
 
-    // DEBUG: Show absorption shape path
+    // This line seems consistent with the Java, but doesn't seem to work.
+    // absorptionShape = absorptionShape.transformed( Matrix3.translationFromVector( modelViewTransform.modelToViewXY( 2*sun.position.x, -sun.position.y ) ) );
+    //
+    // Hard-coding an approx. shift until a better solution can be found.
+    absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
+    var currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
+
+    // DEBUG: Temporarily show absorption shape path
     var spPath = new Path( absorptionShape, {
       stroke: 'lime',
       lineWidth: 5
     } );
-
-    // TODO: what is the equivalent of the Java AffineTransform class?
-    // Translating by (-)sun.position does not put this in the right location.
-    // Should I move the shape itself? Like this??
-    // absorptionShape.bounds = absorptionShape.bounds.shifted(x,y) ?
-    // Hard-coding approximate shift for now.
-    spPath.translate( -240, -420 );
     this.addChild( spPath );
-    var currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
+
   }
 
   energyFormsAndChanges.register( 'SunNode', SunNode );
