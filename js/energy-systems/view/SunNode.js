@@ -27,6 +27,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
@@ -76,7 +77,7 @@ define( function( require ) {
   function LightRays( center, innerRadius, outerRadius, numRays, color ) {
     Node.call( this );
 
-    var lightRayNodes = [];
+    this.lightRayNodes = [];
     var angle;
     var startPoint;
     var endPoint;
@@ -98,7 +99,7 @@ define( function( require ) {
       // this.addChild( line );
 
       var lightRayNode = new LightRayNode( startPoint, endPoint, color );
-      lightRayNodes.push( lightRayNode );
+      this.lightRayNodes.push( lightRayNode );
       this.addChild( lightRayNode );
     }
   }
@@ -237,22 +238,35 @@ define( function( require ) {
       resize: false
     } ) );
 
-    var absorptionShape = sun.solarPanel.getAbsorptionShape();
-    absorptionShape = modelViewTransform.modelToViewShape( absorptionShape );
+    // Add/remove the light-absorbing shape for the solar panel
+    var currentLightAbsorbingShape = null;
+    Property.multilink( [ sun.activeProperty, sun.solarPanel.activeProperty ],
+      function( sunActive, solarPanelActive ) {
 
-    // This line seems consistent with the Java, but doesn't seem to work.
-    // absorptionShape = absorptionShape.transformed( Matrix3.translationFromVector( modelViewTransform.modelToViewXY( 2*sun.position.x, -sun.position.y ) ) );
-    //
-    // Hard-coding an approx. shift until a better solution can be found.
-    absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
-    var currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
+        if ( sunActive && solarPanelActive ) {
+          var absorptionShape = sun.solarPanel.getAbsorptionShape();
+          absorptionShape = modelViewTransform.modelToViewShape( absorptionShape );
 
-    // DEBUG: Temporarily show absorption shape path
-    var spPath = new Path( absorptionShape, {
-      stroke: 'lime',
-      lineWidth: 5
-    } );
-    this.addChild( spPath );
+          // This line seems consistent with the Java, but doesn't seem to work.
+          // absorptionShape = absorptionShape.transformed( Matrix3.translationFromVector( modelViewTransform.modelToViewXY( 2*sun.position.x, -sun.position.y ) ) );
+          //
+          // Hard-coding an approx. shift until a better solution can be found.
+          absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
+          currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
+
+          // DEBUG: Show absorption shape outline with wide line visible behind image.
+          // var path = new Path( absorptionShape, {
+          //   stroke: 'lime',
+          //   lineWidth: 50
+          // } );
+          // self.addChild( path );
+        } else if ( currentLightAbsorbingShape !== null ) {
+          lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
+          currentLightAbsorbingShape = null;
+
+          // self.removeChild(path);
+        }
+      } );
 
   }
 
