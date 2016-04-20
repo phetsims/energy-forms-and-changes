@@ -238,12 +238,12 @@ define( function( require ) {
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
+    addSolarPanel();
     addSun();
     addFaucet();
     addBiker();
     addIncandescentBulb();
     addFluorescentBulb();
-    addSolarPanel();
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {

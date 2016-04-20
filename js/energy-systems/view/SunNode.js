@@ -186,6 +186,18 @@ define( function( require ) {
     // Add clouds, initially transparent
     sun.clouds.forEach( function( cloud ) {
       var cloudNode = new CloudNode( cloud, modelViewTransform );
+
+      // Make a crude light-absorbing shape from the rectangular cloud boundary
+      var b = cloudNode.bounds;
+      var cloudShape = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
+      var lightAbsorbingShape = new LightAbsorbingShape( cloudShape, 0 );
+
+      cloud.existenceStrengthProperty.link( function( existenceStrength ) {
+        lightAbsorbingShape.absorptionCoefficientProperty.set( existenceStrength / 10 );
+      } );
+
+      lightRays.addLightAbsorbingShape( lightAbsorbingShape );
+
       cloudNode.opacity = 0;
       self.addChild( cloudNode );
     } );
@@ -254,12 +266,15 @@ define( function( require ) {
           absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
           currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
 
+          lightRays.addLightAbsorbingShape(currentLightAbsorbingShape);
+
           // DEBUG: Show absorption shape outline with wide line visible behind image.
           // var path = new Path( absorptionShape, {
           //   stroke: 'lime',
           //   lineWidth: 50
           // } );
           // self.addChild( path );
+
         } else if ( currentLightAbsorbingShape !== null ) {
           lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
           currentLightAbsorbingShape = null;
