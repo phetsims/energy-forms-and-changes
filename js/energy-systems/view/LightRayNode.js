@@ -120,27 +120,35 @@ define( function( require ) {
         return p.point.distance( self.origin );
       } );
 
-      // Add the segments that comprise the line.
-      // var opacity = 1;
-      var transparent = 'rgba(255,255,255,0)';
+
+      var rayLength = this.origin.distance( this.endpoint );
+
+      var rayGradient = new LinearGradient( this.origin.x, this.origin.y, this.endpoint.x, this.endpoint.y )
+        .addColorStop( 0, this.color );
+
+        var prevIntensity = 255;
       for ( var i = 0; i < sorted.length - 1; i++ ) {
+        var distance = this.origin.distance( sorted[ i + 1 ].point );
+        var fractionalLength = distance / rayLength;
 
-        var start = sorted[ i ].point;
-        var end = sorted[ i + 1 ].point;
+        // var opacity = Math.floor( 255 * ( 1 - fractionalLength ) );
+        // var opacity = Math.floor( 255 * ( 1 - sorted[ i + 1 ].fadeValue ) );
+        // var opacity = Math.floor( 255 * sorted[ i + 1 ].fadeValue );
 
-        var rayLength = start.distance( end );
+        var intensity = Math.round( prevIntensity * Math.pow( Math.E, -sorted[ i ].fadeValue * distance ) );
 
-        var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
-          .addColorStop( 0, this.color )
-          .addColorStop( 1, transparent );
+        rayGradient.addColorStop( fractionalLength, 'rgba(255,255,0,' + intensity + ')' );
 
-        var fadingLine = new Line( start, end, {
-          stroke: rayGradient,
-          lineWidth: STROKE_THICKNESS
-        } );
-
-        this.addChild( fadingLine );
+        prevIntensity = intensity;
       }
+      rayGradient.addColorStop( 1, 'rgba(255,255,255,0)' );
+
+      var fadingLine = new Line( this.origin, this.endpoint, {
+        stroke: rayGradient,
+        lineWidth: STROKE_THICKNESS
+      } );
+      this.addChild( fadingLine );
+
     },
 
     /**
