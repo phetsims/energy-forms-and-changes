@@ -58,7 +58,8 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
       EnergySystemElement.prototype.clearEnergyChunks.call( this );
-      this.outgoingEnergyChunks.clear();
+      this.outgoingEnergyChunks.length = 0;
     }
   } );
 } );
+

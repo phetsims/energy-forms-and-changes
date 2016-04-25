@@ -328,7 +328,10 @@ define( function( require ) {
      * @override
      */
     clearEnergyChunks: function() {
-
+      EnergyConverter.prototype.clearEnergyChunks.call( this );
+      this.electricalEnergyChunks.clear();
+      this.hiddenEnergyChunks.clear();
+      this.energyChunkMovers.length = 0;
     },
 
     /**
