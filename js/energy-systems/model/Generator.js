@@ -50,10 +50,10 @@ define( function( require ) {
   var WHEEL_RADIUS = WHEEL_HUB_IMAGE.width / 2;
 
   // Offsets used to create the paths followed by the energy chunks.
-  // var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.01, -0.05 );
-  // var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.015, -0.06 );
-  // var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.03, -0.07 );
-  // var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
+  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.01, -0.05 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.015, -0.06 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.03, -0.07 );
+  var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
 
   /**
    * @param {Property<boolean>} energyChunksVisible
@@ -267,7 +267,7 @@ define( function( require ) {
     },
 
     /**
-     * {Energy} incomingEnergy
+     * @param {Energy} incomingEnergy
      * @public
      * @override
      */
@@ -317,7 +317,11 @@ define( function( require ) {
      * @private
      */
     createMechanicalEnergyChunkPath: function( panelPosition ) {
+      var path = [];
 
+      path.push( panelPosition.plus( WHEEL_CENTER_OFFSET ) );
+
+      return path;
     },
 
     /**
@@ -325,7 +329,14 @@ define( function( require ) {
      * @private
      */
     createElectricalEnergyChunkPath: function( panelPosition ) {
+      var path = [];
 
+      path.push( panelPosition.plus( START_OF_WIRE_CURVE_OFFSET ) );
+      path.push( panelPosition.plus( WIRE_CURVE_POINT_1_OFFSET ) );
+      path.push( panelPosition.plus( WIRE_CURVE_POINT_2_OFFSET ) );
+      path.push( panelPosition.plus( CENTER_OF_CONNECTOR_OFFSET ) );
+
+      return path;
     },
 
     /**
@@ -333,7 +344,13 @@ define( function( require ) {
      * @private
      */
     createHiddenEnergyChunkPath: function( panelPosition ) {
+      var path = [];
 
+      // Overlaps with the electrical chunks until it reaches the window, then is done.
+      path.push( panelPosition.plus( START_OF_WIRE_CURVE_OFFSET ) );
+      path.push( panelPosition.plus( WIRE_CURVE_POINT_1_OFFSET ) );
+
+      return path;
     },
 
     /**
