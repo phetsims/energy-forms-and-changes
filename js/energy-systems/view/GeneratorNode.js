@@ -12,6 +12,7 @@ define( function( require ) {
   // Modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -29,14 +30,14 @@ define( function( require ) {
     var paddlesNode = new EFACModelImageNode( Generator.WHEEL_PADDLES_IMAGE, modelViewTransform );
 
     this.addChild( new EFACModelImageNode( Generator.WIRE_CURVED_IMAGE, modelViewTransform ) );
-    // this.addChild( new EnergyChunkLayer( generator.electricalEnergyChunks, generator.getObservablePosition(), modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( generator.electricalEnergyChunks, generator.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( Generator.HOUSING_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( Generator.CONNECTOR_IMAGE, modelViewTransform ) );
     this.addChild( spokesNode );
     this.addChild( paddlesNode );
     this.addChild( new EFACModelImageNode( Generator.WHEEL_HUB_IMAGE, modelViewTransform ) );
-    // this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, generator.getObservablePosition(), modelViewTransform ) );
-    // this.addChild( new EnergyChunkLayer( generator.energyChunkList, generator.getObservablePosition(), modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, generator.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( generator.energyChunkList, generator.positionProperty, modelViewTransform ) );
 
     // Update the rotation of the wheel image based on model value.
     var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );
@@ -55,3 +56,4 @@ define( function( require ) {
 
   return inherit( EFACBaseNode, GeneratorNode );
 } );
+
