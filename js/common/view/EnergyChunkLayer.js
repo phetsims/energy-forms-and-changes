@@ -16,10 +16,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkNode' );
+  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-
 
   /**
    * *
@@ -32,25 +31,29 @@ define( function( require ) {
     Node.call( this );
 
     // existence in the model.
-    var energyChunkLayer = this;
+    var self = this;
 
     energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      energyChunkLayer.addChild( energyChunkNode );
+      self.addChild( energyChunkNode );
 
       // Remove the energy chunk nodes as they are removed from the model.
       energyChunkList.removeItemAddedListener( function( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          energyChunkLayer.removeChild( energyChunkNode );
+          self.removeChild( energyChunkNode );
         }
       } );
     } );
 
+    // Since the energy chunk positions are in model coordinates, this node
+    // must maintain a position that is offset from the parent in order to
     // compensate.
     parentPositionProperty.link( function( position ) {
-      energyChunkLayer.setOffset( -modelViewTransform.modelToViewX( position.x ), -modelViewTransform.modelToViewY( position.y ) );
+      var offset = modelViewTransform.modelToViewDelta( position ).negated();
+      self.setTranslation( offset.x, offset.y );
     } );
   }
 
   return inherit( Node, EnergyChunkLayer );
 } );
+
