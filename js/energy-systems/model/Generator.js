@@ -7,6 +7,9 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
   var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyConverter' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -100,6 +103,8 @@ define( function( require ) {
         // Positive is counter clockwise.
         var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
 
+        var self = this;
+
         // Handle different wheel rotation modes.
         if ( this.directCouplingMode ) {
 
@@ -136,9 +141,37 @@ define( function( require ) {
         }
 
         // Handle any incoming energy chunks.
-        // TODO
+        if ( this.incomingEnergyChunks.length > 0 ) {
 
-      }
+          var incomingChunks = _.clone( this.incomingEnergyChunks );
+
+          incomingChunks.forEach( function( chunk ) {
+            // Validate energy type
+            assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
+              'EnergyType of incoming chunk expected to be of type MECHANICAL, but has type ' +
+              chunk.energyTypeProperty.get() );
+
+            // Transfer chunk from incoming list to current list
+            self.energyChunkList.push( chunk );
+            _.remove( self.incomingEnergyChunks, function( ec ) {
+              return ec === chunk;
+            } );
+
+            // Add a "mover" that will move this energy chunk to
+            // the center of the wheel.
+            var path = self.createMechanicalEnergyChunkPath( self.position );
+            var mover = new EnergyChunkPathMover( chunk, path, EFACConstants.ENERGY_CHUNK_VELOCITY );
+            self.energyChunkMovers.push( mover );
+          } );
+
+          assert && assert( this.incomingEnergyChunks.length === 0,
+            'this.incomingEnergyChunks should be empty: ' + this.incomingEnergyChunks );
+        }
+
+        // Move the energy chunks and update their state.
+        this.updateEnergyChunkPositions( dt );
+
+      } // this.active
 
       // Produce the appropriate amount of energy.
       var speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
@@ -155,7 +188,59 @@ define( function( require ) {
      * @private
      */
     updateEnergyChunkPositions: function( dt ) {
+      var chunkMovers = _.clone( this.energyChunkMovers );
 
+      var self = this;
+      chunkMovers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        // Nothing left to do unless chunk is at the end of its path
+        if ( !mover.pathFullyTraversed ) {
+          return;
+        }
+
+        var chunk = mover.energyChunk;
+        switch ( chunk.energyTypeProperty.get() ) {
+          case EnergyType.MECHANICAL:
+            // This mechanical energy chunk has traveled to the
+            // end of its path, so change it to electrical and
+            // send it on its way.  Also add a "hidden" chunk
+            // so that the movement through the generator can
+            // be seen by the user.
+
+            _.remove( self.energyChunkList, function( ec ) {
+              return ec === chunk;
+            } );
+
+            _.remove( self.energyChunkMovers, function( m ) {
+              return m === mover;
+            } );
+
+            chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
+
+            self.electricalEnergyChunks.add( chunk );
+
+            self.energyChunkMovers.add( new EnergyChunkPathMover( mover.energyChunk,
+              self.createElectricalEnergyChunkPath( self.position ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+            var hiddenChunk = new EnergyChunk( EnergyType.HIDDEN, chunk.positionProperty.get(),
+              self.energyChunksVisible );
+
+            hiddenChunk.zPosition.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
+
+            self.hiddenEnergyChunks.add( hiddenChunk );
+
+            self.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
+              self.createHiddenEnergyChunkPath( self.position ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+            break;
+          case EnergyType.ELECTRICAL:
+            break;
+        }
+
+      } );
     },
 
     /**
@@ -243,3 +328,4 @@ define( function( require ) {
     WHEEL_RADIUS: WHEEL_RADIUS
   } );
 } );
+
