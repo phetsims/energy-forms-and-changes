@@ -236,7 +236,30 @@ define( function( require ) {
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
             break;
+
           case EnergyType.ELECTRICAL:
+            // This electrical energy chunk has traveled to the
+            // end of its path, so transfer it to the next
+            // energy system.
+            _.remove( self.energyChunkMovers, function( m ) {
+              return m === mover;
+            } );
+
+            self.outgoingEnergyChunks.push( chunk );
+            break;
+
+          case EnergyType.HIDDEN:
+            // This hidden energy chunk has traveled to the end
+            // of its path, so just remove it, because the
+            // electrical energy chunk to which is corresponds
+            // should now be visible to the user.
+            _.remove( self.hiddenEnergyChunks, function( ec ) {
+              return ec === mover.energyChunk;
+            } );
+
+            _.remove( self.energyChunkMovers, function( m ) {
+              return m === mover;
+            } );
             break;
         }
 
