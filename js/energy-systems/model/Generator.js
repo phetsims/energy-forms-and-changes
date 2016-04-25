@@ -38,7 +38,7 @@ define( function( require ) {
   // Images used to represent this model element in the view.
   // Offsets empirically determined
   var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
-  // var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
+  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
   var CONNECTOR_OFFSET = new Vector2( 0.057, -0.04 );
 
   var HOUSING_IMAGE = new EFACModelImage( GENERATOR, new Vector2( 0, 0 ) );
@@ -267,11 +267,48 @@ define( function( require ) {
     },
 
     /**
-     * [preLoadEnergyChunks description]
+     * {Energy} incomingEnergy
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {
+    preLoadEnergyChunks: function( incomingEnergy ) {
+      this.clearEnergyChunks();
+
+      if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.MECHANICAL ) {
+        // No energy chunk pre-loading needed.
+        return;
+      }
+
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+
+      // Simulate energy chunks moving through the system.
+      var preLoadComplete = false;
+      while ( !preLoadComplete ) {
+        energySinceLastChunk += incomingEnergy.amount * dt;
+
+        // Determine if time to add a new chunk.
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          var newChunk = new EnergyChunk( EnergyType.MECHANICAL, this.position.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
+            this.energyChunksVisible );
+          this.energyChunkList.push( newChunk );
+
+          // Add a 'mover' for this energy chunk.
+          this.energyChunkMovers.push( new EnergyChunkPathMover( newChunk,
+            this.createMechanicalEnergyChunkPath( this.position ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+          // Update energy since last chunk.
+          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        this.updateEnergyChunkPositions( dt );
+
+        if ( this.outgoingEnergyChunks.length > 0 ) {
+          // An energy chunk has made it all the way through the system.
+          preLoadComplete = true;
+        }
+      }
 
     },
 
