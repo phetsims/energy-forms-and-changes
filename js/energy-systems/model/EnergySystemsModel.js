@@ -61,8 +61,8 @@ define( function( require ) {
     this.energyUsersCarousel = new EnergySystemElementCarousel( new Vector2( 0.09, 0 ), OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL );
 
     // Energy converters
-    this.generator = new Generator( this.energyChunksVisible );
-    this.solarPanel = new SolarPanel( this.energyChunksVisible );
+    this.generator = new Generator( this.energyChunksVisibleProperty );
+    this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty );
     this.energyConvertersCarousel.add( this.generator );
     this.energyConvertersCarousel.add( this.solarPanel );
 
@@ -70,9 +70,9 @@ define( function( require ) {
     var wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET ).plusXY( 0.005, 0 );
     var wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
 
-    this.faucet = new FaucetAndWater( this.energyChunksVisible, this.generator.activeProperty );
-    this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisible );
-    this.teaPot = new TeaPot( this.energyChunksVisible, this.generator.activeProperty );
+    this.faucet = new FaucetAndWater( this.energyChunksVisibleProperty, this.generator.activeProperty );
+    this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisibleProperty );
+    this.teaPot = new TeaPot( this.energyChunksVisibleProperty, this.generator.activeProperty );
 
     this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
     this.biker = new Biker( this.energyChunksVisible, this.generator.activeProperty );
@@ -82,9 +82,9 @@ define( function( require ) {
     this.energySourcesCarousel.add( this.biker );
 
     // Energy users
-    this.incandescentBulb = new IncandescentBulb( this.energyChunksVisible );
-    this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisible );
-    this.beakerHeater = new BeakerHeater( this.energyChunksVisible );
+    this.incandescentBulb = new IncandescentBulb( this.energyChunksVisibleProperty );
+    this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisibleProperty );
+    this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty );
     this.energyUsersCarousel.add( this.beakerHeater );
     this.energyUsersCarousel.add( this.incandescentBulb );
     this.energyUsersCarousel.add( this.fluorescentBulb );
