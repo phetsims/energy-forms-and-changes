@@ -60,8 +60,7 @@ define( function( require ) {
     // must maintain a position that is offset from the parent in order to
     // compensate.
     parentPositionProperty.link( function( position ) {
-      var offset = modelViewTransform.modelToViewDelta( position ).negated();
-      self.setTranslation( offset );
+      self.translate( -modelViewTransform.modelToViewX( position.x ), -modelViewTransform.modelToViewY( position.y ) );
     } );
   }
 
