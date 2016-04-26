@@ -5,11 +5,11 @@ define( function( require ) {
 
   // Modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  // var Path = require( 'SCENERY/nodes/Path' );
   var WaterDropNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/WaterDropNode' );
 
   // Constants
@@ -63,13 +63,19 @@ define( function( require ) {
 
     faucet.waterDrops.addItemAddedListener( addDroplet );
 
+    // Create the energy chunk layer.
+    var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
+
     faucetNode.addChild( waterLayer );
 
     // Make water appear like it is coming out from inside the faucet
     waterLayer.moveToBack();
+
+    this.addChild( energyChunkLayer );
 
     this.addChild( faucetNode );
   }
 
   return inherit( EFACBaseNode, FaucetAndWaterNode );
 } );
+
