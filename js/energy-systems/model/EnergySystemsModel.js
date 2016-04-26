@@ -137,11 +137,21 @@ define( function( require ) {
       } );
 
       if ( this.isPlaying ) {
-        var energyFromSource = this.energySourcesCarousel.getSelectedElement().step( dt );
-        var energyFromConverter = this.energyConvertersCarousel.getSelectedElement().step( dt, energyFromSource ); // eslint-disable-line no-unused-vars
-        this.energyUsersCarousel.getSelectedElement().step( dt, energyFromConverter );
+        var source = this.energySourcesCarousel.getSelectedElement();
+        var converter = this.energyConvertersCarousel.getSelectedElement();
+        var user = this.energyUsersCarousel.getSelectedElement();
+
+        // Step selected energy system elements
+        var energyFromSource = source.step( dt );
+        var energyFromConverter = converter.step( dt, energyFromSource );
+        user.step( dt, energyFromConverter );
+
+        // Transfer energy chunks between the elements.
+        converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
+        user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
       }
 
     }
   } );
 } );
+
