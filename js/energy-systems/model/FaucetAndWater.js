@@ -30,13 +30,10 @@ define( function( require ) {
   var FAUCET_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/faucet_icon.png' );
 
   // Constants
-
-  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.065, 0.08 );
+  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.072, 0.09 );
   var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
-  // var MAX_WATER_WIDTH = 0.015; // In meters.
-  var MAX_WATER_WIDTH = 0.02; // In meters.
-  // var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
-  var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.1531; // In meters.
+  var MAX_WATER_WIDTH = 0.01; // In meters.
+  var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var RAND = new Random();
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
 
@@ -88,9 +85,12 @@ define( function( require ) {
      */
     createNewChunk: function() {
 
+      // Random x value within water column for "watery" appearance
+      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2;
+
       var initialPosition = this.position
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
-        .plus( ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2, 0 );
+        .plus( new Vector2( x, 0 ) );
 
       var velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
 
@@ -163,8 +163,8 @@ define( function( require ) {
         // to the next energy system.
         var position = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.position.y;
         var chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( position );
-        // var chunkExempt = self.exemptFromTransferEnergyChunks.contains( chunk );
         var chunkExempt = self.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
+
         if ( self.waterPowerableElementInPlace && chunkInRange && !chunkExempt ) {
 
           if ( self.transferNextAvailableChunk ) {
@@ -185,7 +185,6 @@ define( function( require ) {
         // Remove it if it is out of visible range.
         var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.position );
         if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
-
           _.remove( self.energyChunkList, function( x ) {
             return x === chunk;
           } );
@@ -232,7 +231,7 @@ define( function( require ) {
         }
 
         // Make the chunks fall.
-        translateChunks(tempEnergyChunkList, dt);
+        translateChunks( tempEnergyChunkList, dt );
 
         preLoadTime -= dt;
       }
