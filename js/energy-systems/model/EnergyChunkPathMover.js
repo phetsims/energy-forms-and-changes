@@ -26,7 +26,7 @@ define( function( require ) {
     this.velocity = velocity;
     this.pathFullyTraversed = false;
 
-    assert && assert( path.length === 0, 'Path must have at least one point' );
+    assert && assert( path.length > 0, 'Path must have at least one point' );
 
     this.nextPoint = path[ 0 ];
 
