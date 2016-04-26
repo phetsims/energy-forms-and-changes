@@ -98,6 +98,17 @@ define( function( require ) {
     },
 
     /**
+     * @private
+     */
+    addChunkIfEnoughEnergy: function() {
+      if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+        var chunk = this.createNewChunk();
+        this.energyChunkList.push( chunk );
+        this.energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
+      }
+    },
+
+    /**
      * [step description]
      *
      * @param  {Number} dt timestep
@@ -140,10 +151,7 @@ define( function( require ) {
 
       // Check if time to emit an energy chunk and, if so, do it.
       this.energySinceLastChunk += EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
-      if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-        this.energyChunkList.push( this.createNewChunk() );
-        this.energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
-      }
+      this.addChunkIfEnoughEnergy();
 
       // Update energy chunk positions.
       this.energyChunkList.forEach( function( chunk ) {
@@ -201,6 +209,36 @@ define( function( require ) {
      * @override
      */
     preLoadEnergyChunks: function() {
+      this.clearEnergyChunks();
+
+      // Define translation function here to avoid creating anonymous function
+      // inside loop
+      function translateChunks( chunks, dt ) {
+        chunks.forEach( function( chunk ) {
+          chunk.translateBasedOnVelocity( dt );
+        } );
+      }
+
+      var preLoadTime = 3; // In seconds, empirically determined.
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var tempEnergyChunkList = [];
+
+      // Simulate energy chunks moving through the system.
+      while ( preLoadTime > 0 ) {
+        this.energySinceLastChunk += this.getEnergyOutputRate().amount * dt;
+        if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          tempEnergyChunkList.push( this.createNewChunk() );
+          this.energySinceLastChunk = this.energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        // Make the chunks fall.
+        translateChunks(tempEnergyChunkList, dt);
+
+        preLoadTime -= dt;
+      }
+
+      // Now that they are positioned, add these to the 'real' list of energy chunks.
+      this.energyChunkList.concat( tempEnergyChunkList );
 
     },
 
