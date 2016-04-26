@@ -50,7 +50,7 @@ define( function( require ) {
      * @parameter {Array<EnergyChunk>} Array of energy chunks to inject
      */
     injectEnergyChunks: function( energyChunks ) {
-      this.incomingEnergyChunks = _.union( [ this.incomingEnergyChunks, energyChunks ] );
+      this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
     },
 
     /**
