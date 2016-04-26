@@ -86,7 +86,7 @@ define( function( require ) {
     createNewChunk: function() {
 
       // Random x value within water column for "watery" appearance
-      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2;
+      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH/2 + MAX_WATER_WIDTH/2;
 
       var initialPosition = this.position
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
