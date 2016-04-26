@@ -37,11 +37,12 @@ define( function( require ) {
     // Position faucet node
     var faucetToWater = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
     var dx = -faucetNode.center.x + faucetToWater.x;
-    var dy = +3.3 * faucetNode.center.y + faucetToWater.y; // Empirically tweaked TODO
+    var dy = faucetNode.center.y + faucetToWater.y - 120; // y adjustment due to use of different FaucetNode than Java
     faucetNode.translate( dx, dy );
 
     // Create the water, which consists of a set of water drops.
     var waterLayer = new Node();
+    waterLayer.translate(faucetToWater);
 
     function addDroplet( droplet ) {
       var waterDropNode = new WaterDropNode( droplet, modelViewTransform );
@@ -66,13 +67,8 @@ define( function( require ) {
     // Create the energy chunk layer.
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
 
-    faucetNode.addChild( waterLayer );
-
-    // Make water appear like it is coming out from inside the faucet
-    waterLayer.moveToBack();
-
+    this.addChild( waterLayer );
     this.addChild( energyChunkLayer );
-
     this.addChild( faucetNode );
   }
 
