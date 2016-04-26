@@ -22,36 +22,46 @@ define( function( require ) {
 
   /**
    * *
-   * @param energyChunkList
-   * @param {Property.<Vector2>} parentPositionProperty
+   * @param {ObservableArray} energyChunkList
+   * @param {Property<Vector2>} parentPositionProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
   function EnergyChunkLayer( energyChunkList, parentPositionProperty, modelViewTransform ) {
     Node.call( this );
 
-    // existence in the model.
     var self = this;
 
-    energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
-      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+    // This "itemAddedListener" callback adds EnergyChunkNodes to the layer
+    // when chunks are produced in the model. It includes listeners for when
+    // chunks are removed from the model.
+    function chunkListObserver( chunk ) {
+      var energyChunkNode = new EnergyChunkNode( chunk, modelViewTransform );
       self.addChild( energyChunkNode );
 
-      // Remove the energy chunk nodes as they are removed from the model.
-      // energyChunkList.removeItemAddedListener( function( removedEnergyChunk ) {
-      //   if ( removedEnergyChunk === addedEnergyChunk ) {
-      //     self.removeChild( energyChunkNode );
-      //   }
-      // } );
+      // When chunk is removed from the model, remove its node from the view
+      var itemRemovedListener = function( removedChunk ) {
+        if ( removedChunk === chunk ) {
+          self.removeChild( energyChunkNode );
 
-    } );
+          // Remove this listener to reclaim memory
+          energyChunkList.removeItemRemovedListener( itemRemovedListener );
+        }
+      };
+
+      // Link itemRemovedListener to the waterDrops ObservableArray
+      energyChunkList.addItemRemovedListener( itemRemovedListener );
+    }
+
+    // Add the named observer function
+    energyChunkList.addItemAddedListener( chunkListObserver );
 
     // Since the energy chunk positions are in model coordinates, this node
     // must maintain a position that is offset from the parent in order to
     // compensate.
     parentPositionProperty.link( function( position ) {
       var offset = modelViewTransform.modelToViewDelta( position ).negated();
-      self.setTranslation( offset.x, offset.y );
+      self.setTranslation( offset );
     } );
   }
 
