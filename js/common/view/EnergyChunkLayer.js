@@ -38,11 +38,12 @@ define( function( require ) {
       self.addChild( energyChunkNode );
 
       // Remove the energy chunk nodes as they are removed from the model.
-      energyChunkList.removeItemAddedListener( function( removedEnergyChunk ) {
-        if ( removedEnergyChunk === addedEnergyChunk ) {
-          self.removeChild( energyChunkNode );
-        }
-      } );
+      // energyChunkList.removeItemAddedListener( function( removedEnergyChunk ) {
+      //   if ( removedEnergyChunk === addedEnergyChunk ) {
+      //     self.removeChild( energyChunkNode );
+      //   }
+      // } );
+
     } );
 
     // Since the energy chunk positions are in model coordinates, this node
