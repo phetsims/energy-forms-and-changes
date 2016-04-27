@@ -90,6 +90,58 @@ define( function( require ) {
   return inherit( EnergyConverter, Generator, {
 
     /**
+     * Factored from this.step
+     * @param {Number} dt timestep
+     * @param {Energy} incomingEnergy
+     *
+     * @private
+     * @override
+     */
+    spinGeneratorWheel: function( dt, incomingEnergy ) {
+      if (!this.active) {
+        return;
+      }
+
+      // Positive is counter clockwise.
+      var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
+
+      // Handle different wheel rotation modes.
+      if ( this.directCouplingMode ) {
+
+        // Treat the wheel as though it is directly coupled to the
+        // energy source, e.g. through a belt or drive shaft.
+        if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
+          var energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
+          this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
+          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
+        }
+
+      } else {
+        // Treat the wheel like it is being moved from an external
+        // energy, such as water, and has inertia.
+        var torqueFromIncomingEnergy = 0;
+
+        // Empirically determined to reach max energy after a second or two.
+        var energyToTorqueConstant = 0.5;
+
+        if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
+          torqueFromIncomingEnergy = incomingEnergy.amount * WHEEL_RADIUS * energyToTorqueConstant * sign;
+        }
+
+        var torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
+        var angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
+        var newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
+        this.wheelRotationalVelocity = Util.clamp( newAngularVelocity, -MAX_ROTATIONAL_VELOCITY, MAX_ROTATIONAL_VELOCITY );
+
+        if ( Math.abs( this.wheelRotationalVelocity ) < 1E-3 ) {
+          // Prevent the wheel from moving forever.
+          this.wheelRotationalVelocity = 0;
+        }
+        this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
+      }
+    },
+
+    /**
      * @param {Number} dt timestep
      * @param {Energy} incomingEnergy
      *
@@ -100,52 +152,16 @@ define( function( require ) {
     step: function( dt, incomingEnergy ) {
       if ( this.active ) {
 
-        // Positive is counter clockwise.
-        var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
-
         var self = this;
 
-        // Handle different wheel rotation modes.
-        if ( this.directCouplingMode ) {
-
-          // Treat the wheel as though it is directly coupled to the
-          // energy source, e.g. through a belt or drive shaft.
-          if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
-            var energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
-            this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
-            this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
-          }
-
-        } else {
-          // Treat the wheel like it is being moved from an external
-          // energy, such as water, and has inertia.
-          var torqueFromIncomingEnergy = 0;
-
-          // Empirically determined to reach max energy after a second or two.
-          var energyToTorqueConstant = 0.5;
-
-          if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
-            torqueFromIncomingEnergy = incomingEnergy.amount * WHEEL_RADIUS * energyToTorqueConstant * sign;
-          }
-
-          var torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
-          var angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
-          var newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
-          this.wheelRotationalVelocity = Util.clamp( newAngularVelocity, -MAX_ROTATIONAL_VELOCITY, MAX_ROTATIONAL_VELOCITY );
-
-          if ( Math.abs( this.wheelRotationalVelocity ) < 1E-3 ) {
-            // Prevent the wheel from moving forever.
-            this.wheelRotationalVelocity = 0;
-          }
-          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
-        }
+        this.spinGeneratorWheel( dt, incomingEnergy );
 
         // Handle any incoming energy chunks.
         if ( this.incomingEnergyChunks.length > 0 ) {
 
           var incomingChunks = _.clone( this.incomingEnergyChunks );
-
           incomingChunks.forEach( function( chunk ) {
+
             // Validate energy type
             assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
               'EnergyType of incoming chunk expected to be of type MECHANICAL, but has type ' +
