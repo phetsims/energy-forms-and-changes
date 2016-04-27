@@ -47,13 +47,13 @@ define( function( require ) {
 
         var distanceToNextPoint = this.energyChunk.positionProperty.get().distance( this.nextPoint );
 
-        if ( this.distanceToTravel < distanceToNextPoint ) {
+        if ( distanceToTravel < distanceToNextPoint ) {
           // Not arriving at destination next point yet, so just move towards it.
 
           var phi = this.nextPoint.minus( this.energyChunk.positionProperty.get() ).angle();
-          var velocity = new Vector2( this.distanceToTravel, 0 ).rotated( phi );
+          var velocity = new Vector2( distanceToTravel, 0 ).rotated( phi );
 
-          this.energyChunk.position.set( this.energyChunk.positionProperty.get().plus( velocity ) );
+          this.energyChunk.positionProperty.set( this.energyChunk.positionProperty.get().plus( velocity ) );
 
           distanceToTravel = 0; // No remaining distance.
         } else {

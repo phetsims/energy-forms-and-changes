@@ -208,6 +208,7 @@ define( function( require ) {
 
       var self = this;
       chunkMovers.forEach( function( mover ) {
+
         mover.moveAlongPath( dt );
 
         // Nothing left to do unless chunk is at the end of its path
