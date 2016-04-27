@@ -29,21 +29,21 @@ define( function( require ) {
      * injected, it is the system's responsibility to move, convert, and
      * otherwise manage them.
      *
-     * @param {Array{EnergyChunkk}} energyChunks List of energy chunks to inject.
+     * @param {Array{EnergyChunk}} energyChunks List of energy chunks to inject.
      */
     injectEnergyChunks: function( energyChunks ) {
-      // incomingEnergyChunks.addAll( energyChunks );
+      this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
     },
 
     /**
-     * [clearEnergyChunks description]
      * @public
      * @override
      */
     clearEnergyChunks: function() {
-      this.clearEnergyChunks();
-      this.incomingEnergyChunks.clear();
+      EnergySystemElement.prototype.clearEnergyChunks.call( this );
+      this.incomingEnergyChunks.length = 0;
     }
 
   } );
 } );
+
