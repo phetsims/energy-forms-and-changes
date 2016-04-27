@@ -75,7 +75,7 @@ define( function( require ) {
     this.teaPot = new TeaPot( this.energyChunksVisibleProperty, this.generator.activeProperty );
 
     this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
-    this.biker = new Biker( this.energyChunksVisible, this.generator.activeProperty );
+    this.biker = new Biker( this.energyChunksVisibleProperty, this.generator.activeProperty );
     this.energySourcesCarousel.add( this.faucet );
     this.energySourcesCarousel.add( this.sun );
     this.energySourcesCarousel.add( this.teaPot );

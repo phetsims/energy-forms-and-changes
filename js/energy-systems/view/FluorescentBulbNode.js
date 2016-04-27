@@ -16,16 +16,14 @@ define( function( require ) {
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
 
-  // constants
-
   /**
    *
    * @param {FluorescentBulb} lightBulb
-   * @param {Property<boolean>} energyChunksVisibe
+   * @param {Property<boolean>} energyChunksVisibeProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function FluorescentBulbNode( lightBulb, energyChunksVisible, modelViewTransform ) {
+  function FluorescentBulbNode( lightBulb, energyChunksVisibleProperty, modelViewTransform ) {
 
     EFACBaseNode.call( this, lightBulb, modelViewTransform );
 

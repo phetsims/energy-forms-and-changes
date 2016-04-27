@@ -21,18 +21,18 @@ define( function( require ) {
   /**
    *
    * @param {IncandescentBulb} lightBulb
-   * @param {Property<boolean>} energyChunksVisibe
+   * @param {Property<boolean>} energyChunksVisibeProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function IncandescentBulbNode( lightBulb, energyChunksVisible, modelViewTransform ) {
+  function IncandescentBulbNode( lightBulb, energyChunksVisibleProperty, modelViewTransform ) {
 
     EFACBaseNode.call( this, lightBulb, modelViewTransform );
 
     // TODO: Add light rays from Java
     // Add the images and the layer that will contain the energy chunks.
-    
-    this.addChild( new EFACModelImageNode( LightBulb.WIRE_FLAT_IMAGE, modelViewTransform ) ); 
+
+    this.addChild( new EFACModelImageNode( LightBulb.WIRE_FLAT_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( LightBulb.WIRE_CURVE_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( LightBulb.ELEMENT_BASE_BACK_IMAGE, modelViewTransform ) );
     // addChild( new EnergyChunkLayer( lightBulb.energyChunkList, lightBulb.getObservablePosition(), mvt ) );

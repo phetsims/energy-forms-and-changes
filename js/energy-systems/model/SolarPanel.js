@@ -69,15 +69,15 @@ define( function( require ) {
   /**
    * Solar panel is an energy converter
    *
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function SolarPanel( energyChunksVisible ) {
+  function SolarPanel( energyChunksVisibleProperty ) {
     EnergyConverter.call( this, new Image( SOLAR_PANEL_ICON ) );
     this.energyChunkMovers = [];
     this.latestChunkArrivalTime = 0;
     this.energyOutputRate = 0;
-    this.energyChunksVisible = energyChunksVisible;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     var zoneWidth = 0.7 * PANEL_IMAGE_BOUNDS.width;
     var minX = PANEL_IMAGE_BOUNDS.minX;

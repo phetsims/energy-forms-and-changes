@@ -29,12 +29,12 @@ define( function( require ) {
   var RAND = new Random();
 
   /**
-   * @param {TeaPot} teaPot              EnergySource
-   * @param {Property<boolean>} energyChunksVisible [description]
-   * @param {ModelViewTransform2} modelViewTransform  [description]
+   * @param {TeaPot} teaPot
+   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function TeaPotNode( teaPot, energyChunksVisible, modelViewTransform ) {
+  function TeaPotNode( teaPot, energyChunksVisibleProperty, modelViewTransform ) {
 
     EFACBaseNode.call( this, teaPot, modelViewTransform );
 

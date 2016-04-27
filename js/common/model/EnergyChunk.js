@@ -22,17 +22,17 @@ define( function( require ) {
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
-   * @param {Property.<boolean>} visibilityControlProperty
+   * @param {Property<boolean>} visibleProperty
    * @constructor
    */
-  function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibilityControlProperty ) {
+  function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
 
     PropertySet.call( this, {
       position: initialPosition,
       zPosition: 0,  // Used for some simple 3D layering effects.
       energyType: initialEnergyType
     } );
-    this.visibleProperty = visibilityControlProperty;
+    this.visibleProperty = visibleProperty;
 
     // add a unique for the hash map that will call on these slices
     this.uniqueID = instanceCount++;

@@ -23,11 +23,11 @@ define( function( require ) {
 
   /**
    * @param {BeakerHeater} beakerHeater
-   * @param {Property<boolean>} energyChunksVisibe
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function BeakerHeaterNode( beakerHeater, energyChunksVisible, modelViewTransform ) {
+  function BeakerHeaterNode( beakerHeater, energyChunksVisibleProperty, modelViewTransform ) {
 
     EFACBaseNode.call( this, beakerHeater, modelViewTransform );
 
@@ -49,7 +49,7 @@ define( function( require ) {
 
     this.beakerHeater = beakerHeater;
 
-    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisible, beakerMvt );
+    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, beakerMvt );
 
     this.addChild( this.beakerView.backNode );
     // addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.getObservablePosition(), mvt ) );

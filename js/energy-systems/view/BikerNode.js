@@ -24,11 +24,11 @@ define( function( require ) {
 
   /**
    * @param {Biker} biker EnergySource
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function BikerNode( biker, energyChunksVisible, modelViewTransform ) {
+  function BikerNode( biker, energyChunksVisibleProperty, modelViewTransform ) {
 
     // Add args to constructor as needed
     EFACBaseNode.call( this, biker, modelViewTransform );

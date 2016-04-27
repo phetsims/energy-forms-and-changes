@@ -132,11 +132,16 @@ define( function( require ) {
   var RIDER_NORMAL_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0025, 0.062 ) ) );
   var RIDER_TIRED_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER_TIRED, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0032, 0.056 ) ) );
 
-  function Biker( energyChunksVisible, mechanicalPoweredSystemIsNext ) {
+  /**
+   * @param {Property<Boolean>} energyChunksVisibleProperty
+   * @param {Boolean} mechanicalPoweredSystemIsNext
+   * @constructor
+   */
+  function Biker( energyChunksVisibleProperty, mechanicalPoweredSystemIsNext ) {
 
     EnergySource.call( this, new Image( BICYCLE_ICON ) );
 
-    this.energyChunksVisible = energyChunksVisible;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNext = mechanicalPoweredSystemIsNext;
 
     this.addProperty( 'crankAngle', 0 ); // rad
@@ -299,7 +304,7 @@ define( function( require ) {
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
       this.targetCrankAngularVelocityProperty.set( 0.0 );
-      this.crankAngularVelocity =  this.targetCrankAngularVelocity;
+      this.crankAngularVelocity = this.targetCrankAngularVelocity;
     },
 
     /**
@@ -322,7 +327,13 @@ define( function( require ) {
       for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
         var displacement = new Vector2( ( RAND.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
         var position = this.position.plus( nominalInitialOffset ).plus( displacement );
-        var newEnergyChunk = new EnergyChunk( EnergyType.CHEMICAL, position, this.energyChunksVisible );
+
+        var newEnergyChunk = new EnergyChunk(
+          EnergyType.CHEMICAL,
+          position,
+          Vector2.ZERO,
+          this.energyChunksVisibleProperty );
+
         this.energyChunkList.add( newEnergyChunk );
       }
     },
@@ -361,3 +372,4 @@ define( function( require ) {
     REAR_WHEEL_RADIUS: REAR_WHEEL_RADIUS
   } );
 } );
+

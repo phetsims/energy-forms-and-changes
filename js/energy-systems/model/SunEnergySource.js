@@ -43,16 +43,16 @@ define( function( require ) {
 
   /**
    * @param {EnergyConverter} solarPanel
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function SunEnergySource( solarPanel, energyChunksVisible ) {
+  function SunEnergySource( solarPanel, energyChunksVisibleProperty ) {
 
     var thisSun = this;
 
     EnergySource.call( this, new Image( SUN_ICON ) );
 
-    this.energyChunksVisible = energyChunksVisible;
+    this.energychunksVisibleProperty = energyChunksVisibleProperty;
 
     this.solarPanel = solarPanel;
 

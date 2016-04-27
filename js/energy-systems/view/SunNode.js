@@ -149,11 +149,11 @@ define( function( require ) {
 
   /**
    * @param {SunEnergySource} sun Sun model element
-   * @param {Property} energyChunksVisible
+   * @param {Property} energyChunksVisibleProperty
    * @param {ModelViewTransform} modelViewTransform
    * @constructor
    */
-  function SunNode( sun, energyChunksVisible, modelViewTransform ) {
+  function SunNode( sun, energyChunksVisibleProperty, modelViewTransform ) {
     EFACBaseNode.call( this, sun, modelViewTransform );
     var self = this;
 
@@ -164,7 +164,7 @@ define( function( require ) {
     this.addChild( lightRays );
 
     // Turn off light rays when energy chunks are visible
-    energyChunksVisible.link( function( chunksVisible ) {
+    energyChunksVisibleProperty.link( function( chunksVisible ) {
       lightRays.setVisible( !chunksVisible );
     } );
 

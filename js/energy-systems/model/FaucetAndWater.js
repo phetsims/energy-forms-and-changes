@@ -44,15 +44,15 @@ define( function( require ) {
   var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
   /**
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @param {Property<boolean>} waterPowerableElementInPlace
    * @constructor
    */
-  function FaucetAndWater( energyChunksVisible, waterPowerableElementInPlace ) {
+  function FaucetAndWater( energyChunksVisibleProperty, waterPowerableElementInPlace ) {
 
     EnergySource.call( this, new Image( FAUCET_ICON ) );
 
-    this.energyChunksVisible = energyChunksVisible;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     // Flag that is used to decide whether to pass energy chunks to the next
     // energy system element.
@@ -94,7 +94,7 @@ define( function( require ) {
 
       var velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
 
-      return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisible );
+      return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
     },
 
     /**

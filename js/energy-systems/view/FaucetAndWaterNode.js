@@ -17,11 +17,11 @@ define( function( require ) {
 
   /**
    * @param {FaucetAndWater} faucet EnergySource
-   * @param {Property<boolean>} energyChunksVisible [description]
-   * @param {ModelViewTransform2} modelViewTransform  [description]
+   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function FaucetAndWaterNode( faucet, energyChunksVisible, modelViewTransform ) {
+  function FaucetAndWaterNode( faucet, energyChunksVisibleProperty, modelViewTransform ) {
 
     EFACBaseNode.call( this, faucet, modelViewTransform );
 

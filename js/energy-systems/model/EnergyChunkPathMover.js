@@ -40,18 +40,28 @@ define( function( require ) {
      * @param  {Number} dt timestep
      */
     moveAlongPath: function( dt ) {
+
       var distanceToTravel = dt * this.velocity;
-      while ( this.distanceToTravel > 0 && !this.pathFullyTraversed ) {
-        if ( this.distanceToTravel < this.energyChunk.positionProperty.get().distance( this.nextPoint ) ) {
+
+      while ( distanceToTravel > 0 && !this.pathFullyTraversed ) {
+
+        var distanceToNextPoint = this.energyChunk.positionProperty.get().distance( this.nextPoint );
+
+        if ( this.distanceToTravel < distanceToNextPoint ) {
           // Not arriving at destination next point yet, so just move towards it.
+
           var phi = this.nextPoint.minus( this.energyChunk.positionProperty.get() ).angle();
           var velocity = new Vector2( this.distanceToTravel, 0 ).rotated( phi );
-          this.energyChunk.position.set( this.energyChunk.position.get().plus( velocity ) );
+
+          this.energyChunk.position.set( this.energyChunk.positionProperty.get().plus( velocity ) );
+
           distanceToTravel = 0; // No remaining distance.
         } else {
           // Arrived at next destination point.
-          distanceToTravel -= this.energyChunk.position.get().distance( this.nextPoint );
-          this.energyChunk.position.set( this.nextPoint );
+
+          distanceToTravel -= this.energyChunk.positionProperty.get().distance( this.nextPoint );
+          this.energyChunk.positionProperty.set( this.nextPoint );
+
           if ( this.nextPoint === this.path[ this.path.length - 1 ] ) {
             // At the end.
             this.pathFullyTraversed = true;

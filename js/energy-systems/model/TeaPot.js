@@ -49,18 +49,18 @@ define( function( require ) {
   // var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
   /**
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @param {Property<boolean>} steamPowerableElementInPlace
    * @constructor
    */
-  function TeaPot( energyChunksVisible, steamPowerableElementInPlace ) {
+  function TeaPot( energyChunksVisibleProperty, steamPowerableElementInPlace ) {
 
     EnergySource.call( this, new Image( TEAPOT_LARGE ) );
 
     this.addProperty( 'heatCoolAmount', 0 );
     this.addProperty( 'energyProductionRate', 0 );
 
-    this.energyChunksVisible = energyChunksVisible;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.steamPowerableElementInPlace = steamPowerableElementInPlace;
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
     this.energyChunkMovers = [];
@@ -118,8 +118,14 @@ define( function( require ) {
           var y0 = this.position.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
           var initialPosition = new Vector2( x0, y0 );
 
-          var energyChunk = new EnergyChunk( EnergyType.THERMAL, initialPosition, this.energyChunksVisible );
+          var energyChunk = new EnergyChunk(
+            EnergyType.THERMAL,
+            initialPosition,
+            Vector2.ZERO,
+            this.energyChunksVisibleProperty );
+
           this.energyChunkList.push( energyChunk );
+
           // heatEnergyProducedSinceLastChunk -= ENERGY_PER_CHUNK;
           // energyChunkMovers.add( new EnergyChunkPathMover( energyChunk,
           //   createThermalEnergyChunkPath( initialPosition, getPosition() ),
@@ -225,3 +231,4 @@ define( function( require ) {
     TEAPOT_IMAGE: TEAPOT_IMAGE
   } );
 } );
+

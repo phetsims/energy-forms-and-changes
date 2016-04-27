@@ -48,15 +48,15 @@ define( function( require ) {
   /**
    * @param {Image} iconImage
    * @param {Boolean} hasFilament
-   * @param {Property<Boolean>} energyChunksVisible
+   * @param {Property<Boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function LightBulb( iconImage, hasFilament, energyChunksVisible ) {
+  function LightBulb( iconImage, hasFilament, energyChunksVisibleProperty ) {
 
     EnergyUser.call( this, iconImage );
 
     this.hasFilament = hasFilament;
-    this.energyChunksVisible = energyChunksVisible;
+    this.energychunksVisibleProperty = energyChunksVisibleProperty;
 
     // Fewer thermal energy chunks are radiated for bulbs without a filament.
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;

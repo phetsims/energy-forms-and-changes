@@ -56,15 +56,15 @@ define( function( require ) {
   var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
 
   /**
-   * @param {Property<boolean>} energyChunksVisible
+   * @param {Property<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function Generator( energyChunksVisible ) {
+  function Generator( energyChunksVisibleProperty ) {
 
     // Add args to constructor as needed
     EnergyConverter.call( this, new Image( GENERATOR_ICON ) );
 
-    this.energyChunksVisible = energyChunksVisible;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     this.addProperty( 'wheelRotationalAngle', 0 );
 
@@ -98,7 +98,7 @@ define( function( require ) {
      * @override
      */
     spinGeneratorWheel: function( dt, incomingEnergy ) {
-      if (!this.active) {
+      if ( !this.active ) {
         return;
       }
 
@@ -234,18 +234,21 @@ define( function( require ) {
 
             chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
 
-            self.electricalEnergyChunks.add( chunk );
+            self.electricalEnergyChunks.push( chunk );
 
-            self.energyChunkMovers.add( new EnergyChunkPathMover( mover.energyChunk,
+            self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createElectricalEnergyChunkPath( self.position ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
-            var hiddenChunk = new EnergyChunk( EnergyType.HIDDEN, chunk.positionProperty.get(),
-              self.energyChunksVisible );
+            var hiddenChunk = new EnergyChunk(
+              EnergyType.HIDDEN,
+              chunk.positionProperty.get(),
+              Vector2.ZERO,
+              self.energyChunksVisibleProperty );
 
-            hiddenChunk.zPosition.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
+            hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
 
-            self.hiddenEnergyChunks.add( hiddenChunk );
+            self.hiddenEnergyChunks.push( hiddenChunk );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
               self.createHiddenEnergyChunkPath( self.position ),
@@ -305,8 +308,11 @@ define( function( require ) {
 
         // Determine if time to add a new chunk.
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-          var newChunk = new EnergyChunk( EnergyType.MECHANICAL, this.position.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
-            this.energyChunksVisible );
+          var newChunk = new EnergyChunk( EnergyType.MECHANICAL,
+            this.position.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
+            Vector2.ZERO,
+            this.energyChunksVisibleProperty );
+
           this.energyChunkList.push( newChunk );
 
           // Add a 'mover' for this energy chunk.
