@@ -150,7 +150,21 @@ define( function( require ) {
         converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
         user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
       }
+    },
 
+    /**
+     * Pre-load the currently active energy system elements with energy
+     * chunks so that the energy chunks are fully propagated into the
+     * elements.
+     */
+    preLoadEnergyChunks: function() {
+      var source = this.energySourcesCarousel.getSelectedElement();
+      var converter = this.energyConvertersCarousel.getSelectedElement();
+      var user = this.energyUsersCarousel.getSelectedElement();
+
+      source.preLoadEnergyChunks();
+      converter.preLoadEnergyChunks( source.getEnergyOutputRate() );
+      user.preLoadEnergyChunks( converter.getEnergyOutputRate() );
     }
   } );
 } );
