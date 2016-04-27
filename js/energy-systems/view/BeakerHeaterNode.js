@@ -14,6 +14,7 @@ define( function( require ) {
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -40,7 +41,7 @@ define( function( require ) {
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_BACK_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.HEATER_ELEMENT_OFF_IMAGE, modelViewTransform ) );
     this.addChild( energizedCoil );
-    // addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.getObservablePosition(), mvt ) );
+    this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
 
     // Add the beaker.
@@ -52,7 +53,7 @@ define( function( require ) {
     this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, beakerMvt );
 
     this.addChild( this.beakerView.backNode );
-    // addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.getObservablePosition(), mvt ) );
+    this.addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( this.beakerView.frontNode );
 
     // Update the transparency of the hot element to make the dark element
