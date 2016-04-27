@@ -35,11 +35,9 @@ define( function( require ) {
      * @return list of energy chunks to transfer.
      */
     extractOutgoingEnergyChunks: function() {
-      // Remove all outgoing chunks from this.energyChunkList
-      this.energyChunkList = _.difference( this.energyChunkList, this.outgoingEnergyChunks );
+      this.energyChunkList.removeAll(this.outgoingEnergyChunks );
 
       return this.outgoingEnergyChunks.splice( 0 );
-
     },
 
     /**
@@ -58,6 +56,7 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
       EnergySystemElement.prototype.clearEnergyChunks.call( this );
+      this.incomingEnergyChunks.length = 0;
       this.outgoingEnergyChunks.length = 0;
     }
   } );
