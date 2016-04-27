@@ -275,7 +275,7 @@ define( function( require ) {
      * @private
      */
     getShapeExitPoint: function( origin, endpoint, shape ) {
-      var shapeRect = shape.bounds;
+      // var shapeRect = shape.bounds;
       var exitPoint = null;
 
       if ( shape.bounds.containsPoint( endpoint ) ) {
