@@ -247,6 +247,7 @@ define( function( require ) {
               Vector2.ZERO,
               self.energyChunksVisibleProperty );
 
+            // TODO: figure out why hidden chunks are not displaying.
             hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
 
             self.hiddenEnergyChunks.push( hiddenChunk );
@@ -273,9 +274,8 @@ define( function( require ) {
             // of its path, so just remove it, because the
             // electrical energy chunk to which is corresponds
             // should now be visible to the user.
-            _.remove( self.hiddenEnergyChunks, function( ec ) {
-              return ec === mover.energyChunk;
-            } );
+
+            self.hiddenEnergyChunks.remove( chunk );
 
             _.remove( self.energyChunkMovers, function( m ) {
               return m === mover;
