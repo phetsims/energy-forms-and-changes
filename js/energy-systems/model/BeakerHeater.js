@@ -108,12 +108,14 @@ define( function( require ) {
         return;
       }
 
+      var self = this;
+
       // Handle any incoming energy chunks.
       if ( this.incomingEnergyChunks.length > 0 ) {
         this.incomingEnergyChunks.forEach( function( chunk ) {
           if ( chunk.energyType === EnergyType.ELECTRICAL ) {
             // Add the energy chunk to the list of those under management.
-            this.energyChunkList.push( chunk );
+            self.energyChunkList.push( chunk );
 
             // And a "mover" that will move this energy chunk through
             // the wire to the heating element.
@@ -165,8 +167,25 @@ define( function( require ) {
 
       this.beaker.step( dt );
 
-      // TODO
-      // energy chunk stuff
+      if ( this.beaker.getEnergyChunkBalance() > 0 ) {
+        // Remove an energy chunk from the beaker and start it floating
+        // away, a.k.a. make it "radiate".
+        var bounds = this.beaker.bounds;
+        var extractionX = bounds.minX + RAND.nextDouble() * bounds.width;
+        var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * beaker.fluidLevelProperty.get() );
+        var extractionPoint = new Vector2( extractionX, extractionY );
+
+        var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
+        if ( ec !== null ) {
+          ec.zPositionProperty.set( 0.0 ); // Move to front of z order.
+          this.radiatedEnergyChunkList.push( ec );
+          this.radiatedEnergyChunkMovers.push(
+            new EnergyChunkPathMover( ec, this.createRadiatedEnergyChunkPath( ec.positionProperty.get() ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+        }
+      }
+
+      this.moveRadiatedEnergyChunks( dt );
     },
 
     /**
