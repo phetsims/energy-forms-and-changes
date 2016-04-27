@@ -86,7 +86,6 @@ define( function( require ) {
      * @param {number} deltaEnergy
      */
     changeEnergy: function( deltaEnergy ) {
-      assert && assert( deltaEnergy === deltaEnergy, 'deltaEnergy is ' + deltaEnergy );
       this.energy += deltaEnergy;
     },
 
