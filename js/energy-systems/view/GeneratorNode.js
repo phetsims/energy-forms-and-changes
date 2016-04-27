@@ -16,6 +16,7 @@ define( function( require ) {
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
+  // var Circle = require( 'SCENERY/nodes/Circle' );
 
   /**
    * @param {Generator} generator EnergyConverter
@@ -38,6 +39,38 @@ define( function( require ) {
     this.addChild( new EFACModelImageNode( Generator.WHEEL_HUB_IMAGE, modelViewTransform ) );
     this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, generator.positionProperty, modelViewTransform ) );
     this.addChild( new EnergyChunkLayer( generator.energyChunkList, generator.positionProperty, modelViewTransform ) );
+
+    // DEBUG - Remove later
+    // var self = this;
+    // var mechPath = generator.createMechanicalEnergyChunkPath( Vector2.ZERO );
+    // var elecPath = generator.createElectricalEnergyChunkPath( Vector2.ZERO );
+    // var hiddenPath = generator.createHiddenEnergyChunkPath( Vector2.ZERO );
+    // console.log(elecPath);
+    // console.log(hiddenPath);
+    // mechPath.forEach( function( pt ) {
+    //   var c = new Circle( 10, {
+    //     fill: 'red',
+    //     centerX: modelViewTransform.modelToViewDeltaX( pt.x ),
+    //     centerY: modelViewTransform.modelToViewDeltaY( pt.y )
+    //   });
+    //   self.addChild(c);
+    // } );
+    // elecPath.forEach( function( pt ) {
+    //   var c = new Circle( 10, {
+    //     fill: 'blue',
+    //     centerX: modelViewTransform.modelToViewDeltaX( pt.x ),
+    //     centerY: modelViewTransform.modelToViewDeltaY( pt.y )
+    //   });
+    //   self.addChild(c);
+    // } );
+    // hiddenPath.forEach( function( pt ) {
+    //   var c = new Circle( 10, {
+    //     fill: 'green',
+    //     centerX: modelViewTransform.modelToViewDeltaX( pt.x ),
+    //     centerY: modelViewTransform.modelToViewDeltaY( pt.y )
+    //   });
+    //   self.addChild(c);
+    // } );
 
     // Update the rotation of the wheel image based on model value.
     var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );

@@ -50,9 +50,9 @@ define( function( require ) {
   var WHEEL_RADIUS = WHEEL_HUB_IMAGE.width / 2;
 
   // Offsets used to create the paths followed by the energy chunks.
-  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.01, -0.05 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.015, -0.06 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plus( 0.03, -0.07 );
+  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.01, -0.05 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.06 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.03, -0.07 );
   var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
 
   /**
@@ -175,7 +175,7 @@ define( function( require ) {
 
             // Add a "mover" that will move this energy chunk to
             // the center of the wheel.
-            var path = self.createMechanicalEnergyChunkPath( self.position );
+            var path = self.createMechanicalEnergyChunkPath( self.positionProperty.get() );
             var mover = new EnergyChunkPathMover( chunk, path, EFACConstants.ENERGY_CHUNK_VELOCITY );
             self.energyChunkMovers.push( mover );
           } );
