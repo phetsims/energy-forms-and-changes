@@ -39,10 +39,10 @@ define( function( require ) {
      * @return {Array<EnergyChunk>} List of energy chunks to transfer
      */
     extractOutgoingEnergyChunks: function() {
-
       // Remove all outgoing chunks from this.energyChunkList
-      this.energyChunkList = _.difference( this.energyChunkList, this.outgoingEnergyChunks );
+      this.energyChunkList.removeAll(this.outgoingEnergyChunks );
 
+      // Return a copy of the outgoing chunk list and clear it in one fell swoop
       return this.outgoingEnergyChunks.splice( 0 );
     },
 
@@ -52,7 +52,7 @@ define( function( require ) {
      * @override
      */
     clearEnergyChunks: function() {
-      EnergySystemElement.prototype.clearEnergyChunks.call(this);
+      EnergySystemElement.prototype.clearEnergyChunks.call( this );
       this.outgoingEnergyChunks.length = 0;
     }
 
