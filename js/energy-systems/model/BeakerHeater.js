@@ -114,14 +114,15 @@ define( function( require ) {
       if ( this.incomingEnergyChunks.length > 0 ) {
         this.incomingEnergyChunks.forEach( function( chunk ) {
           if ( chunk.energyType === EnergyType.ELECTRICAL ) {
+
             // Add the energy chunk to the list of those under management.
             self.energyChunkList.push( chunk );
 
-            // And a "mover" that will move this energy chunk through
+            // Add a "mover" that will move this energy chunk through
             // the wire to the heating element.
-            // electricalEnergyChunkMovers.add( new EnergyChunkPathMover( incomingEnergyChunk,
-            //   createElectricalEnergyChunkPath( getPosition() ),
-            //   EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+            self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
+              self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           } else {
             // By design, this shouldn't happen, so warn if it does.
             console.warn( 'Ignoring energy chunk with unexpected type ' + chunk.energyType );
@@ -170,11 +171,10 @@ define( function( require ) {
       if ( this.beaker.getEnergyChunkBalance() > 0 ) {
         // Remove an energy chunk from the beaker and start it floating
         // away, a.k.a. make it "radiate".
-        var bounds = this.beaker.bounds;
+        var bounds = this.beaker.getRectangleBounds();
         var extractionX = bounds.minX + RAND.nextDouble() * bounds.width;
-        var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * beaker.fluidLevelProperty.get() );
+        var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * this.beaker.fluidLevelProperty.get() );
         var extractionPoint = new Vector2( extractionX, extractionY );
-
         var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
         if ( ec !== null ) {
           ec.zPositionProperty.set( 0.0 ); // Move to front of z order.
