@@ -337,7 +337,7 @@ define( function( require ) {
     },
 
     clearEnergyChunks: function() {
-      EnergyUser.prototype.clear.call( this );
+      EnergyUser.prototype.clearEnergyChunks.call( this );
 
       this.electricalEnergyChunkMovers.length = 0;
       this.heatingElementEnergyChunkMovers.length = 0;
