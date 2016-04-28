@@ -19,6 +19,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
 
   var BEAKER_OFFSET = new Vector2( -4, -260 ); // Empirical; view coords
 
@@ -43,6 +44,25 @@ define( function( require ) {
     this.addChild( energizedCoil );
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
+
+    // var c1 = new Circle( 10, {
+    //   fill: 'lime'
+    // } );
+    // var c2 = new Circle( 10, {
+    //   fill: 'red',
+    //   centerX: BEAKER_OFFSET.x,
+    //   centerY: BEAKER_OFFSET.y
+    //     // center: modelViewTransform.modelToViewPosition( beakerHeater.positionProperty.get() )
+    // } );
+    // var c = new Circle( 10, {
+    //   fill: 'blue',
+    //   centerX: modelViewTransform.modelToViewDeltaX( beakerHeater.positionProperty.get().x ),
+    //   centerY: modelViewTransform.modelToViewDeltaY( beakerHeater.positionProperty.get().y )
+    // } );
+    // this.addChild( c );
+
+    // this.addChild( c1 );
+    // this.addChild( c2 );
 
     // Add the beaker.
     var scale = modelViewTransform.matrix.scaleVector;
