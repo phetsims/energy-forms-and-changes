@@ -186,11 +186,12 @@ define( function( require ) {
 
         // Distribute the energy chunks within the beaker.
         // TODO: Why 1000 for the loop max?
-        //for ( var i = 0; i < 1000; i++ ) {
-        //  if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-        //    break;
-        //  }
-        //}
+        // This loop massively increases load time...leaving commented for now
+        // for( var i = 0; i < 1000; i++ ) {
+        //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+        //     break;
+        //   }
+        // }
       } );
     },
 
