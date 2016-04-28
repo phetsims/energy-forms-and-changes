@@ -81,14 +81,6 @@ define( function( require ) {
     //   }
     // }, THERMOMETER_OFFSET, true );
 
-
-    // Update the position of the beaker and thermometer when the overall
-    // model element position changes.
-    this.positionProperty.link( function( position ) {
-      // self.beaker.positionProperty.set( position.plus( BEAKER_OFFSET ) );
-      // thermometer.position.set( position.plus( THERMOMETER_OFFSET ) );
-    } );
-
   }
 
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
