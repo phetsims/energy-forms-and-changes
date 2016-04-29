@@ -420,7 +420,7 @@ define( function( require ) {
       var chunks = _.clone( this.outgoingEnergyChunks );
 
       // Remove outgoing chunks from electrical energy chunks list
-      this.electricalEnergyChunks = _.difference( this.electricalEnergyChunks, chunks );
+      this.electricalEnergyChunks.removeAll( chunks );
       this.outgoingEnergyChunks.length = 0;
 
       return chunks;
