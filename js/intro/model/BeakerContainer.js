@@ -40,7 +40,7 @@ define( function( require ) {
      * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
      * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
      *
-     * @param {Array.<Rectangle>} potentiallyDisplacingRectangles
+     * @param {Array<Rectangle>} potentiallyDisplacingRectangles
      *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {

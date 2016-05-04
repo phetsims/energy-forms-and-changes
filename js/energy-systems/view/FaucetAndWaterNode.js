@@ -17,7 +17,7 @@ define( function( require ) {
 
   /**
    * @param {FaucetAndWater} faucet EnergySource
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

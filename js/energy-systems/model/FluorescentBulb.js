@@ -23,7 +23,7 @@ define( function( require ) {
   var FRONT_ON = new EFACModelImage( FLUORESCENT_ON_FRONT_2, IMAGE_OFFSET );
 
   /**
-   * @param {Property<Boolean>} energyChunksVisible
+   * @param {Property.<boolean>} energyChunksVisible
    * @constructor
    */
   function IncandescentBulb( energyChunksVisible ) {

@@ -23,7 +23,7 @@ define( function( require ) {
    *
    * @param {Shape} shape
    * @param {Vector2} zPosition
-   * @param {Property<Vector2>} anchorPointProperty
+   * @param {Property.<Vector2>} anchorPointProperty
    * @constructor
    */
   function EnergyChunkContainerSlice( shape, zPosition, anchorPointProperty ) {

@@ -24,7 +24,7 @@ define( function( require ) {
 
   /**
    * @param {BeakerHeater} beakerHeater
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

@@ -22,7 +22,7 @@ define( function( require ) {
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
-   * @param {Property<boolean>} visibleProperty
+   * @param {Property.<boolean>} visibleProperty
    * @constructor
    */
   function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {

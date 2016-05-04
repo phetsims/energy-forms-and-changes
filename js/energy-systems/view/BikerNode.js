@@ -24,7 +24,7 @@ define( function( require ) {
 
   /**
    * @param {Biker} biker EnergySource
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

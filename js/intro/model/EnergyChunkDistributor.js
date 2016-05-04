@@ -50,7 +50,7 @@ define( function( require ) {
      * set of slices interact with each other, but the container for each is
      * defined by the boundary of its containing slice.
      *
-     * @param {array<EnergyChunkContainerSlice>} energyChunkContainerSlices Set of slices,
+     * @param {Array<EnergyChunkContainerSlice>} energyChunkContainerSlices - Set of slices,
      *                                           each containing a set of energy chunks.
      * @param {number} dt change in time
      */

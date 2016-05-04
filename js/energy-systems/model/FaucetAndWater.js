@@ -44,8 +44,8 @@ define( function( require ) {
   var ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
   /**
-   * @param {Property<boolean>} energyChunksVisibleProperty
-   * @param {Property<boolean>} waterPowerableElementInPlace
+   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} waterPowerableElementInPlace
    * @constructor
    */
   function FaucetAndWater( energyChunksVisibleProperty, waterPowerableElementInPlace ) {

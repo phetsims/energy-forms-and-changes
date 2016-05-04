@@ -48,7 +48,7 @@ define( function( require ) {
   /**
    * @param {Image} iconImage
    * @param {Boolean} hasFilament
-   * @param {Property<Boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function LightBulb( iconImage, hasFilament, energyChunksVisibleProperty ) {

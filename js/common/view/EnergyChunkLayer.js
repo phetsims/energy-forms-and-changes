@@ -23,7 +23,7 @@ define( function( require ) {
   /**
    * *
    * @param {ObservableArray} energyChunkList
-   * @param {Property<Vector2>} parentPositionProperty
+   * @param {Property.<Vector2>} parentPositionProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

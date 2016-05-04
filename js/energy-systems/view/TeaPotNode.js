@@ -30,7 +30,7 @@ define( function( require ) {
 
   /**
    * @param {TeaPot} teaPot
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

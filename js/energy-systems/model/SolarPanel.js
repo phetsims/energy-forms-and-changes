@@ -69,7 +69,7 @@ define( function( require ) {
   /**
    * Solar panel is an energy converter
    *
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function SolarPanel( energyChunksVisibleProperty ) {

@@ -56,7 +56,7 @@ define( function( require ) {
   var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
 
   /**
-   * @param {Property<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function Generator( energyChunksVisibleProperty ) {

@@ -57,7 +57,7 @@ define( function( require ) {
   var HEAT_ENERGY_CHANGE_RATE = 0.5; // In proportion per second.
 
   /**
-   * @param {Property<Boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
   function BeakerHeater( energyChunksVisibleProperty ) {

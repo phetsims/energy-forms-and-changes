@@ -49,8 +49,8 @@ define( function( require ) {
   // var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
   /**
-   * @param {Property<boolean>} energyChunksVisibleProperty
-   * @param {Property<boolean>} steamPowerableElementInPlace
+   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} steamPowerableElementInPlace
    * @constructor
    */
   function TeaPot( energyChunksVisibleProperty, steamPowerableElementInPlace ) {

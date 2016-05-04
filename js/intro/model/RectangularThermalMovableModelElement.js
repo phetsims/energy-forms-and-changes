@@ -394,7 +394,7 @@ define( function( require ) {
 
     /**
      *
-     * @returns {Array.<EnergyChunkContainerSlice>}
+     * @returns {Array<EnergyChunkContainerSlice>}
      */
     getSlices: function() {
       return this.slices;

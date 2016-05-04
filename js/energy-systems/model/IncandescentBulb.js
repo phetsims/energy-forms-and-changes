@@ -21,13 +21,13 @@ define( function( require ) {
   var ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_ON_3, IMAGE_OFFSET );
 
   /**
-   * @param {Property<Boolean>} energyChunksVisible
+   * @param {Property.<boolean>} energyChunksVisible
    * @constructor
    */
   function IncandescentBulb( energyChunksVisible ) {
 
     LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisible );
-    
+
   }
 
   return inherit( LightBulb, IncandescentBulb, {}, {

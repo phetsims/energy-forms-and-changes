@@ -21,7 +21,7 @@ define( function( require ) {
   /**
    *
    * @param {IncandescentBulb} lightBulb
-   * @param {Property<boolean>} energyChunksVisibeProperty
+   * @param {Property.<boolean>} energyChunksVisibeProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */

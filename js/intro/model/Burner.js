@@ -44,8 +44,8 @@ define( function( require ) {
   /**
    * Burner class
    *
-   * @param {Vector2} position   The position in model space where this burner exists.
-   * @param {Property<boolean>} energyChunksVisibleProperty Controls whether the energy chunks are visible
+   * @param {Vector2} position - The position in model space where this burner exists.
+   * @param {Property.<boolean>} energyChunksVisibleProperty - Controls whether the energy chunks are visible
    * @constructor
    */
   function Burner( position, energyChunksVisibleProperty ) {

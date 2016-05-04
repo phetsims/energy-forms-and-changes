@@ -133,7 +133,7 @@ define( function( require ) {
   var RIDER_TIRED_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER_TIRED, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0032, 0.056 ) ) );
 
   /**
-   * @param {Property<Boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {Boolean} mechanicalPoweredSystemIsNext
    * @constructor
    */
