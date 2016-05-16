@@ -9,6 +9,8 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+
   /**
    * @param {number} temperature
    * @param {Color} color
@@ -19,6 +21,8 @@ define( function( require ) {
     this.color = color;
   }
 
-  return TemperatureAndColor;
+  energyFormsAndChanges.register( 'TemperatureAndColor', TemperatureAndColor );
 
+  return TemperatureAndColor;
 } );
+

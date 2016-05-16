@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
 
@@ -29,7 +30,7 @@ define( function( require ) {
 
     PropertySet.call( this, {
       position: initialPosition,
-      zPosition: 0,  // Used for some simple 3D layering effects.
+      zPosition: 0, // Used for some simple 3D layering effects.
       energyType: initialEnergyType
     } );
     this.visibleProperty = visibleProperty;
@@ -39,6 +40,8 @@ define( function( require ) {
 
     this.velocity = initialVelocity;
   }
+
+  energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 
   return inherit( PropertySet, EnergyChunk, {
     /**
@@ -84,3 +87,4 @@ define( function( require ) {
 
   } );
 } );
+

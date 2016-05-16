@@ -6,8 +6,10 @@
  * @author John Blanco
  */
 
-define( function() {
+define( function( require ) {
   'use strict';
+
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   var EnergyType = Object.freeze( {
     THERMAL: 0,
@@ -18,5 +20,8 @@ define( function() {
     HIDDEN: 5
   } );
 
+  energyFormsAndChanges.register( 'EnergyType', EnergyType );
+
   return EnergyType;
 } );
+
