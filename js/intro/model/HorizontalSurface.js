@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   /**
    * @param {Range} xRange
@@ -27,6 +28,8 @@ define( function( require ) {
     this.owner = owner; // @private {ModelElement}
     this.elementOnSurface = null; // {ModelElement}
   }
+
+  energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
 
   return inherit( Object, HorizontalSurface, {
 

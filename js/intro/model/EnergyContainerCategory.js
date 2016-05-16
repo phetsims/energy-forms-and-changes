@@ -7,9 +7,10 @@
  * @author John Blanco
  */
 
-
 define( function() {
   'use strict';
+
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   var EnergyContainerCategory = {
     IRON: 'iron',
@@ -20,6 +21,8 @@ define( function() {
 
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( EnergyContainerCategory ); }
+
+  energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
 
   return EnergyContainerCategory;
 } );

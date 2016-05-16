@@ -8,6 +8,7 @@
 define( function( require ) {
   'use strict';
   var inherit = require( 'PHET_CORE/inherit' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   /**
    * Basic constructor for ThermalEnergyContainer.
@@ -18,6 +19,8 @@ define( function( require ) {
   function ThermalEnergyContainer() {
 
   }
+
+  energyFormsAndChanges.register( 'ThermalEnergyContainer', ThermalEnergyContainer );
 
   return inherit( Object, ThermalEnergyContainer, {
 
@@ -84,3 +87,4 @@ define( function( require ) {
     getEnergyBeyondMaxTemperature: function() {}
   } );
 } );
+
