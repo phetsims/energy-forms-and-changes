@@ -10,6 +10,7 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   /**
@@ -25,5 +26,7 @@ define( function( require ) {
     this.direction = direction;
   }
 
+  energyFormsAndChanges.register( 'Energy', Energy );
   return inherit( Object, Energy );
 } );
+

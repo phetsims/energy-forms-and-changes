@@ -21,6 +21,8 @@ define( function( require ) {
   var WATER_AIR_HEAT_TRANSFER_FACTOR = 50.0;
   var AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+
   // Map to obtain heat transfer constants for given thermal elements.
   var heatTransferConstantsMap = {
     'iron': {
@@ -45,7 +47,7 @@ define( function( require ) {
     }
   };
 
-  return {
+  var HeatTransferConstants = {
 
     /**
      * Get the heat transfer constants for two given model elements that can contain heat.
@@ -65,4 +67,7 @@ define( function( require ) {
       return AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
     }
   };
+  energyFormsAndChanges.register( 'HeatTransferConstants', HeatTransferConstants );
+  return HeatTransferConstants;
 } );
+
