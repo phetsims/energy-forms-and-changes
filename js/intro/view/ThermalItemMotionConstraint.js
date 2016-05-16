@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -49,6 +50,8 @@ define( function( require ) {
     this.modelBounds = new Bounds2( boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY );
 
   }
+
+  energyFormsAndChanges.register( 'ThermalItemMotionConstraint', ThermalItemMotionConstraint );
 
   return inherit( Object, ThermalItemMotionConstraint, {
 

@@ -1,7 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 // Note: This file is a mashup of two ported Java files: Carousel and
-// EnergySytemElementCarousel. Carousel.java was not ported to avoid confusion
+// EnergySystemElementCarousel. Carousel.java was not ported to avoid confusion
 // with the PhET Sun Carousel.js UI component.
 
 /**
@@ -18,6 +18,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -90,6 +91,8 @@ define( function( require ) {
       }
     } );
   }
+
+  energyFormsAndChanges.register( 'EnergySystemElementCarousel', EnergySystemElementCarousel );
 
   return inherit( PropertySet, EnergySystemElementCarousel, {
     /**

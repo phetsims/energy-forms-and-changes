@@ -16,6 +16,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -67,6 +68,8 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
 
   }
+
+  energyFormsAndChanges.register( 'Air', Air );
 
   return inherit( ThermalEnergyContainer, Air, {
 
@@ -149,8 +152,7 @@ define( function( require ) {
             energyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
           }
-        }
-        else {
+        } else {
           // Item is at max temperature.  Shed all excess energy into the air.
           energyContainer.changeEnergy( -excessEnergy );
           this.changeEnergy( excessEnergy );
@@ -221,5 +223,5 @@ define( function( require ) {
       return 0;
     }
   } );
-} )
-;
+} );
+

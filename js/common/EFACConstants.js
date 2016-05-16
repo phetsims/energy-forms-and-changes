@@ -9,8 +9,9 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+
   // modules
-//  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Color = require( 'SCENERY/util/Color' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -62,7 +63,7 @@ define( function( require ) {
     LOW_ENERGY_FOR_MAP_FUNCTION,
     HIGH_ENERGY_FOR_MAP_FUNCTION );
 
-  return {
+  var EFACConstants = {
 
     // Physical temperature constants.
     ROOM_TEMPERATURE: 296, // In Kelvin.
@@ -124,7 +125,7 @@ define( function( require ) {
     BRICK_SPECIFIC_HEAT: 840, // In J/kg-K, source = design document.
     BLOCK_SURFACE_WIDTH: 0.045,
     BLOCK_PERSPECTIVE_EDGE_PROPORTION: Math.sqrt( Math.pow( Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
-                                                  Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
+      Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
     BLOCK_PERSPECTIVE_ANGLE: Math.atan2( -Z_TO_Y_OFFSET_MULTIPLIER, -Z_TO_X_OFFSET_MULTIPLIER ),
 
     // constants for the burners.
@@ -136,4 +137,9 @@ define( function( require ) {
     Z_TO_X_OFFSET_MULTIPLIER: Z_TO_X_OFFSET_MULTIPLIER,
     Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER
   };
+
+  energyFormsAndChanges.register( 'EFACConstants', EFACConstants );
+
+  return EFACConstants;
 } );
+

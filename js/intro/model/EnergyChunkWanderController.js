@@ -13,6 +13,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -47,6 +48,8 @@ define( function( require ) {
     this.changeVelocityVector();
 
   }
+
+  energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
 
   return inherit( Object, EnergyChunkWanderController, {
 
