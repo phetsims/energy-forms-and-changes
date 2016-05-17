@@ -11,12 +11,13 @@ define( function( require ) {
 
   // modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
 
   /**
    *
@@ -33,6 +34,8 @@ define( function( require ) {
     this.potentiallyContainedElements = potentiallyContainedElements;
 
   }
+
+  energyFormsAndChanges.register( 'BeakerContainer', BeakerContainer );
 
   return inherit( Beaker, BeakerContainer, {
 
@@ -96,11 +99,10 @@ define( function( require ) {
         var energyChunk = energyChunkWanderController.getEnergyChunk();
         if ( this.isEnergyChunkObscured( energyChunk ) ) {
           // beaker to the fluid, so move it sideways.
-          var xVel = 0.05 * dt * ( this.getCenterPoint().getX() > energyChunk.position.x ? -1 : 1);
+          var xVel = 0.05 * dt * ( this.getCenterPoint().getX() > energyChunk.position.x ? -1 : 1 );
           var motionVector = new Vector2( xVel, 0 );
           energyChunk.translate( motionVector );
-        }
-        else {
+        } else {
           energyChunkWanderController.updatePosition( dt );
         }
         if ( !this.isEnergyChunkObscured( energyChunk ) && this.getSliceBounds().contains( energyChunk.position ) ) {
@@ -120,10 +122,10 @@ define( function( require ) {
         energyChunk.zPosition.set( 0.0 );
         this.approachingEnergyChunks.add( energyChunk );
         this.energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
-      }
-      else {
+      } else {
         this.addEnergyChunk( energyChunk );
       }
     }
   } );
 } );
+

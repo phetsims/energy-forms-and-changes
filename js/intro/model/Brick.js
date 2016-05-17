@@ -15,6 +15,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   // constants
@@ -27,7 +28,7 @@ define( function( require ) {
   var brickTextureTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_top.png' );
 
   // strings
-  var brickString =  require( 'string!ENERGY_FORMS_AND_CHANGES/brick' );
+  var brickString = require( 'string!ENERGY_FORMS_AND_CHANGES/brick' );
 
   /**
    *
@@ -36,60 +37,60 @@ define( function( require ) {
    * @constructor
    */
   function Brick( initialPosition, energyChunksVisibleProperty ) {
-
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
-
   }
 
+  energyFormsAndChanges.register( 'Brick', Brick );
+
   return inherit( Block, Brick, {
-      /**
-       * @public read-only
-       * @returns {exports.BRICK_TEXTURE_FRONT|*}
-       */
-      getFrontTextureImage: function() {
-        return brickTextureFrontImage;
-      },
-
-      /**
-       * @public read-only
-       * @returns {exports.BRICK_TEXTURE_TOP|*}
-       */
-      getTopTextureImage: function() {
-        return brickTextureTopImage;
-      },
-
-      getSideTextureImage: function() {
-        return brickTextureRightImage;
-      },
-
-      /**
-       * @public read-only
-       * @returns {Color}
-       */
-      getColor: function() {
-        return new Color( 200, 22, 11 );
-      },
-
-      /**
-       * @public read-only
-       * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
-       */
-      getLabel: function() {
-        return brickString;
-      },
-
-      /**
-       *
-       * @returns {exports.BRICK|*}
-       */
-      getEnergyContainerCategory: function() {
-        return EnergyContainerCategory.BRICK;
-      }
+    /**
+     * @public read-only
+     * @returns {exports.BRICK_TEXTURE_FRONT|*}
+     */
+    getFrontTextureImage: function() {
+      return brickTextureFrontImage;
     },
-    {
-        // Some constants needed for energy chunk mapping.
-      ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE,
-      // In joules.
-      ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE // In joules.} );
-    } );
+
+    /**
+     * @public read-only
+     * @returns {exports.BRICK_TEXTURE_TOP|*}
+     */
+    getTopTextureImage: function() {
+      return brickTextureTopImage;
+    },
+
+    getSideTextureImage: function() {
+      return brickTextureRightImage;
+    },
+
+    /**
+     * @public read-only
+     * @returns {Color}
+     */
+    getColor: function() {
+      return new Color( 200, 22, 11 );
+    },
+
+    /**
+     * @public read-only
+     * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
+     */
+    getLabel: function() {
+      return brickString;
+    },
+
+    /**
+     *
+     * @returns {exports.BRICK|*}
+     */
+    getEnergyContainerCategory: function() {
+      return EnergyContainerCategory.BRICK;
+    }
+  }, {
+    // Some constants needed for energy chunk mapping.
+    ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE,
+    // In joules.
+    ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE // In joules.} );
+  } );
 } );
+

@@ -11,6 +11,7 @@ define( function( require ) {
 
   // Modules
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Shape = require( 'KITE/Shape' );
@@ -18,7 +19,7 @@ define( function( require ) {
 
   // Constants
   var CLOUD_WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
-  var CLOUD_HEIGHT = CLOUD_WIDTH; // TODO: Java code uses ModelElementImage. Equivalent in JS?
+  var CLOUD_HEIGHT = CLOUD_WIDTH;
 
   // Cloud image
   var CLOUD_1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
@@ -40,6 +41,8 @@ define( function( require ) {
     this.offsetFromParent = offsetFromParent;
     this.parentPosition = parentPosition;
   }
+
+  energyFormsAndChanges.register( 'Cloud', Cloud );
 
   return inherit( PropertySet, Cloud, {
 

@@ -12,12 +12,11 @@ define( function( require ) {
 
   //modules
   var Dimension2 = require( 'DOT/Dimension2' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  //var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'DOT/Rectangle' );
   var SensingThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SensingThermometerNode' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  //var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -38,7 +37,7 @@ define( function( require ) {
     thermometer.positionProperty.link( function( position ) {
       thisNode.translation = new Vector2(
         modelViewTransform.modelToViewX( position.x ),
-        modelViewTransform.modelToViewY( position.y ) - ( thisNode.height / 2 + thisNode.triangleTipOffset.height) );
+        modelViewTransform.modelToViewY( position.y ) - ( thisNode.height / 2 + thisNode.triangleTipOffset.height ) );
     } );
 
     // Add the drag handler.
@@ -72,6 +71,8 @@ define( function( require ) {
       return new Vector2( constrainedXPos, constrainedYPos );
     }
   } );
+
+  energyFormsAndChanges.register( 'MovableThermometerNode', MovableThermometerNode );
 
   return inherit( SensingThermometerNode, MovableThermometerNode );
 } );

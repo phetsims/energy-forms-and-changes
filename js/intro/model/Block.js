@@ -15,6 +15,7 @@ define( function( require ) {
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkContainerSlice' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
@@ -25,7 +26,7 @@ define( function( require ) {
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
 
   // constants
-  var NUM_ENERGY_CHUNK_SLICES = 4;  // Number of slices where energy chunks may be placed.
+  var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
   var MAX_TEMPERATURE = 450; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
 
   /**
@@ -49,8 +50,10 @@ define( function( require ) {
     } );
   }
 
+  energyFormsAndChanges.register( 'Block', Block );
+
   return inherit( RectangularThermalMovableModelElement, Block, {
-    // TODO: ask about getcolor and abstract class
+
     getColor: function() {
       assert && assert( true, 'This function should not be called, getColor() needs to be implemented in a subclass' );
       return 'pink';
@@ -107,8 +110,7 @@ define( function( require ) {
 
         var transform = Matrix3.translation( projectionToFront.x + projectionOffsetVector.x, projectionToFront.y + projectionOffsetVector.y );
         this.slices.push( new EnergyChunkContainerSlice(
-          this.getRectangleShape().transformed( transform ),
-          -i * ( EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ),
+          this.getRectangleShape().transformed( transform ), -i * ( EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 ) ),
           this.positionProperty ) );
       }
     },

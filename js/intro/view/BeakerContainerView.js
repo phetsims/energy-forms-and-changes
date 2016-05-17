@@ -16,11 +16,8 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  //var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
-  //var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  //var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
-  //var Vector2 = require( 'DOT/Vector2' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   /**
    * Constructor for a BeakerContainerView.
@@ -54,6 +51,8 @@ define( function( require ) {
 
   }
 
+  energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
+
   return inherit( BeakerView, BeakerContainerView, {
 
     // Update the clipping mask that hides energy chunks behind blocks that are in the beaker.
@@ -67,26 +66,6 @@ define( function( require ) {
       //var clippingMask
 
     }
-    //  protected void updateEnergyChunkClipMask( EFACIntroModel model, PClip clip ) {
-    //  Vector2D forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( Block.SURFACE_WIDTH / 2 );
-    //  Vector2D backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( -Block.SURFACE_WIDTH / 2 );
-    //
-    //  Area clippingMask = new Area( frontNode.getFullBoundsReference() );
-    //  for ( Block block : model.getBlockList() ) {
-    //    if ( model.getBeaker().getRect().contains( block.getRect() ) ) {
-    //      DoubleGeneralPath path = new DoubleGeneralPath();
-    //      Rectangle2D rect = block.getRect();
-    //      path.moveTo( new Vector2D( rect.getX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-    //      path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( forwardPerspectiveOffset ) );
-    //      path.lineTo( new Vector2D( rect.getMaxX(), rect.getY() ).plus( backwardPerspectiveOffset ) );
-    //      path.lineTo( new Vector2D( rect.getMaxX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-    //      path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( backwardPerspectiveOffset ) );
-    //      path.lineTo( new Vector2D( rect.getMinX(), rect.getMaxY() ).plus( forwardPerspectiveOffset ) );
-    //      path.closePath();
-    //      clippingMask.subtract( new Area( mvt.modelToView( path.getGeneralPath() ) ) );
-    //    }
-    //  }
-    //  clip.setPathTo( clippingMask );
-    //}
   } );
 } );
+

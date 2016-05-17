@@ -14,6 +14,7 @@ define( function( require ) {
   var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   var Color = require( 'SCENERY/util/Color' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   // constants
@@ -31,6 +32,8 @@ define( function( require ) {
   function IronBlock( initialPosition, energyChunksVisibleProperty ) {
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
   }
+
+  energyFormsAndChanges.register( 'IronBlock', IronBlock );
 
   return inherit( Block, IronBlock, {
 

@@ -18,6 +18,7 @@ define( function( require ) {
   var DotRectangle = require( 'DOT/Rectangle' ); // eslint-disable-line require-statement-match
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -391,6 +392,8 @@ define( function( require ) {
     } );
 
   }
+
+  energyFormsAndChanges.register( 'BeakerView', BeakerView );
 
   return inherit( Node, BeakerView );
 

@@ -17,6 +17,7 @@ define( function( require ) {
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var Line = require( 'KITE/segments/Line' );
@@ -137,6 +138,8 @@ define( function( require ) {
     } );
 
   }
+
+  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroModel', EnergyFormsAndChangesIntroModel );
 
   return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
 
@@ -750,3 +753,4 @@ define( function( require ) {
     }
   } );
 } );
+
