@@ -75,14 +75,14 @@ define( function( require ) {
      * [step description]
      *
      * @param  {Number} dt timestep
-     * @param  {Energy} incomingEnergy [description]
+     * @param  {Energy} incomingEnergy
      * @public
      * @override
      */
     step: function( dt, incomingEnergy ) {},
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -90,7 +90,7 @@ define( function( require ) {
     moveRadiatedEnergyChunks: function( dt ) {},
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -98,7 +98,7 @@ define( function( require ) {
     moveFilamentEnergyChunks: function( dt ) {},
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -108,16 +108,16 @@ define( function( require ) {
     /**
      * [preLoadEnergyChunks description]
      *
-     * @param  {Energy} incomingEnergyRate [description]
+     * @param  {Energy} incomingEnergyRate
      * @public
      * @override
      */
     preLoadEnergyChunks: function( incomingEnergyRate ) {},
 
     /**
-     * [description]
      *
-     * @param  {EnergyChunk} energyChunk [description]
+     *
+     * @param  {EnergyChunk} energyChunk
      * @private
      */
     radiateEnergyChunk: function( energyChunk ) {},
@@ -125,19 +125,19 @@ define( function( require ) {
     /**
      * [createThermalEnergyChunkPath description]
      *
-     * @param  {Vector2} startingPoint [description]
+     * @param  {Vector2} startingPoint
      *
-     * @return {Vector2[]} [description]
+     * @return {Vector2[]}
      * @private
      */
     createThermalEnergyChunkPath: function( startingPoint ) {},
 
     /**
-     * [description]
      *
-     * @param  {Vector2} center [description]
      *
-     * @return {Vector2[]} [description]
+     * @param  {Vector2} center
+     *
+     * @return {Vector2[]}
      * @private
      */
     createElectricalEnergyChunkPath: function( center ) {},
@@ -145,7 +145,7 @@ define( function( require ) {
     /**
      * [generateThermalChunkTimeOnFilament description]
      *
-     * @return {Number} [description]
+     * @return {Number}
      * @private
      */
     generateThermalChunkTimeOnFilament: function() {},
@@ -153,7 +153,7 @@ define( function( require ) {
     /**
      * [getTotalPathLength description]
      *
-     * @return {Number} [description]
+     * @return {Number}
      * @private
      */
     getTotalPathLength: function() {},

@@ -91,7 +91,7 @@ define( function( require ) {
      * [step description]
      *
      * @param  {Number} dt timestep
-     * @param  {Energy} incomingEnergy [description]
+     * @param  {Energy} incomingEnergy
      * @public
      * @override
      */
@@ -181,7 +181,7 @@ define( function( require ) {
     },
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -206,7 +206,7 @@ define( function( require ) {
     },
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -236,7 +236,7 @@ define( function( require ) {
     },
 
     /**
-     * [description]
+     *
      *
      * @param  {Number} dt timestep
      * @private
@@ -267,7 +267,7 @@ define( function( require ) {
     /**
      * [preLoadEnergyChunks description]
      *
-     * @param  {Energy} incomingEnergyRate [description]
+     * @param  {Energy} incomingEnergyRate
      * @public
      * @override
      */
@@ -339,11 +339,11 @@ define( function( require ) {
     },
 
     /**
-     * [description]
      *
-     * @param  {Vector2} startingPoint [description]
      *
-     * @return {Vector2[]} [description]
+     * @param  {Vector2} startingPoint
+     *
+     * @return {Vector2[]}
      * @private
      */
     createHeaterElementEnergyChunkPath: function( startingPoint ) {
@@ -359,11 +359,11 @@ define( function( require ) {
     },
 
     /**
-     * [description]
      *
-     * @param  {Vector2} center [description]
      *
-     * @return {Vector2[]} [description]
+     * @param  {Vector2} center
+     *
+     * @return {Vector2[]}
      * @private
      */
     createElectricalEnergyChunkPath: function( center ) {
@@ -382,8 +382,8 @@ define( function( require ) {
     /**
      * Path for chunks to take when radiated from the beaker
      *
-     * @param  {Vector2} startingPoint [description]
-     * @return {Vector2[]} [description]
+     * @param  {Vector2} startingPoint
+     * @return {Vector2[]}
      * @private
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {

@@ -17,8 +17,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
 
   /**
-   * @param {EFACModelImage} modelImage     [description]
-   * @param {ModelViewTransform} modelViewTransform [description]
+   * @param {EFACModelImage} modelImage
+   * @param {ModelViewTransform} modelViewTransform
    * @constructor
    */
   function EFACModelImageNode( modelImage, modelViewTransform ) {

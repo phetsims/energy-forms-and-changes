@@ -196,7 +196,7 @@ define( function( require ) {
     },
 
     /**
-     * [description]
+     *
      *
      * @param {Number} dt timestep
      *
@@ -336,7 +336,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Vector2} panelPosition [description]
+     * @param {Vector2} panelPosition
      * @private
      */
     createMechanicalEnergyChunkPath: function( panelPosition ) {
@@ -348,7 +348,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Vector2} panelPosition [description]
+     * @param {Vector2} panelPosition
      * @private
      */
     createElectricalEnergyChunkPath: function( panelPosition ) {
@@ -363,7 +363,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Vector2} panelPosition [description]
+     * @param {Vector2} panelPosition
      * @private
      */
     createHiddenEnergyChunkPath: function( panelPosition ) {
@@ -379,7 +379,7 @@ define( function( require ) {
     /**
      * [getEnergyOutputRate description]
      *
-     * @return {Energy} [description]
+     * @return {Energy}
      * @public
      * @override
      */
@@ -412,7 +412,7 @@ define( function( require ) {
     },
 
     /**
-     * [description]
+     *
      * @public
      * @override
      */

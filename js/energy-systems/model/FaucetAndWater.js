@@ -244,7 +244,7 @@ define( function( require ) {
     /**
      * [getEnergyOutputRate description]
      *
-     * @return {Energy} [description]
+     * @return {Energy}
      * @public
      * @override
      */

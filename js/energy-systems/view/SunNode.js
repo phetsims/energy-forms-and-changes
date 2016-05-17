@@ -109,7 +109,7 @@ define( function( require ) {
   inherit( Node, LightRays, {
 
     /**
-     * @param {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
     addLightAbsorbingShape: function( lightAbsorbingShape ) {
@@ -119,7 +119,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
     removeLightAbsorbingShape: function( lightAbsorbingShape ) {

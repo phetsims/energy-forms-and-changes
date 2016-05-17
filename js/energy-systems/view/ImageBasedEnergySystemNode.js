@@ -29,7 +29,7 @@ define( function( require ) {
     /**
      * [addImageNode description]
      *
-     * @param {EFACModelImage} modelElementImage [description]
+     * @param {EFACModelImage} modelElementImage
      */
     addImageNode: function( modelElementImage ) {
       var imageNode = new Image( modelElementImage.image );

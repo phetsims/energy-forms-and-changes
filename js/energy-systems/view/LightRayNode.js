@@ -62,7 +62,7 @@ define( function( require ) {
 
     /**
      * [addLightAbsorbingShape description]
-     * @param {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
     addLightAbsorbingShape: function( lightAbsorbingShape ) {
@@ -75,7 +75,7 @@ define( function( require ) {
 
     /**
      * [removeLightAbsorbingShape description]
-     * @param  {LightAbsorbingShape} lightAbsorbingShape [description]
+     * @param  {LightAbsorbingShape} lightAbsorbingShape
      * @return {[type]}
      * @public
      */
@@ -153,10 +153,10 @@ define( function( require ) {
 
     /**
      * [lineIntersectsShape description]
-     * @param  {Vector2} startPoint [description]
-     * @param  {Vector2} endPoint   [description]
-     * @param  {Shape} shape      [description]
-     * @return {Boolean}            [description]
+     * @param  {Vector2} startPoint
+     * @param  {Vector2} endPoint
+     * @param  {Shape} shape
+     * @return {Boolean}
      * @private
      */
     lineIntersectsShape: function( startPoint, endPoint, shape ) {
@@ -180,9 +180,9 @@ define( function( require ) {
 
     /**
      * [getLineIntersection description]
-     * @param  {KiteLine} line1 [description]
-     * @param  {KiteLine} line2 [description]
-     * @return {Vector2}       [description]
+     * @param  {KiteLine} line1
+     * @param  {KiteLine} line2
+     * @return {Vector2}
      * @private
      */
     getLineIntersection: function( line1, line2 ) {
@@ -218,9 +218,9 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Vector2} origin   [description]
-     * @param  {Vector2} endpoint [description]
-     * @param  {Shape} shape    [description]
+     * @param  {Vector2} origin
+     * @param  {Vector2} endpoint
+     * @param  {Shape} shape
      * @return {Vector2}
      * @private
      */
@@ -268,9 +268,9 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Vector2} origin   [description]
-     * @param  {Vector2} endpoint [description]
-     * @param  {Shape} shape    [description]
+     * @param  {Vector2} origin
+     * @param  {Vector2} endpoint
+     * @param  {Shape} shape
      * @return {Vector2}
      * @private
      */
@@ -303,9 +303,9 @@ define( function( require ) {
 
 
     /**
-     * @param  {Vector2} origin   [description]
-     * @param  {Vector2} endpoint [description]
-     * @param  {Rectangle} shape    [description]
+     * @param  {Vector2} origin
+     * @param  {Vector2} endpoint
+     * @param  {Rectangle} shape
      * @return {Vector2}
      * @private
      */
@@ -323,9 +323,9 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Vector2} origin   [description]
-     * @param  {Vector2} endpoint [description]
-     * @param  {Rectangle} shape    [description]
+     * @param  {Vector2} origin
+     * @param  {Vector2} endpoint
+     * @param  {Rectangle} shape
      * @return {Vector2}
      * @private
      */
@@ -350,9 +350,9 @@ define( function( require ) {
 
     /**
      * [getRectangleLineIntersectionPoints description]
-     * @param  {Rectangle} rect [description]
-     * @param  {Line} line [description]
-     * @return {Vector2[]}      [description]
+     * @param  {Rectangle} rect
+     * @param  {Line} line
+     * @return {Vector2[]}
      */
     getRectangleLineIntersectionPoints: function( rect, line ) {
 
