@@ -10,6 +10,7 @@ define( function( require ) {
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -159,6 +160,8 @@ define( function( require ) {
       }
     }
   } );
+
+  energyFormsAndChanges.register( 'TeaPotNode', TeaPotNode );
 
   return inherit( EFACBaseNode, TeaPotNode );
 } );

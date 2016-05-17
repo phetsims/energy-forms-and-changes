@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElement' );
 
   /**
@@ -26,6 +27,8 @@ define( function( require ) {
     EnergySystemElement.call( this, iconImage );
   }
 
+  energyFormsAndChanges.register( 'EnergyConverter', EnergyConverter );
+
   return inherit( EnergySystemElement, EnergyConverter, {
 
     /**
@@ -35,7 +38,7 @@ define( function( require ) {
      * @return list of energy chunks to transfer.
      */
     extractOutgoingEnergyChunks: function() {
-      this.energyChunkList.removeAll(this.outgoingEnergyChunks );
+      this.energyChunkList.removeAll( this.outgoingEnergyChunks );
 
       return this.outgoingEnergyChunks.splice( 0 );
     },

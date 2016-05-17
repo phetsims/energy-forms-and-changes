@@ -9,6 +9,7 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableModelElement' );
@@ -26,5 +27,8 @@ define( function( require ) {
     this.addProperty( 'opacity', initialOpacity );
   }
 
+  energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
+
   return inherit( PropertySet, PositionableFadableModelElement );
 } );
+

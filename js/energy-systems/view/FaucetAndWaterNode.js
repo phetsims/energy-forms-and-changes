@@ -6,6 +6,7 @@ define( function( require ) {
   // Modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -42,7 +43,7 @@ define( function( require ) {
 
     // Create the water, which consists of a set of water drops.
     var waterLayer = new Node();
-    waterLayer.translate(faucetToWater);
+    waterLayer.translate( faucetToWater );
 
     function addDroplet( droplet ) {
       var waterDropNode = new WaterDropNode( droplet, modelViewTransform );
@@ -71,6 +72,8 @@ define( function( require ) {
     this.addChild( energyChunkLayer );
     this.addChild( faucetNode );
   }
+
+  energyFormsAndChanges.register( 'FaucetAndWaterNode', FaucetAndWaterNode );
 
   return inherit( EFACBaseNode, FaucetAndWaterNode );
 } );

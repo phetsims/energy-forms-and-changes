@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
@@ -66,6 +67,8 @@ define( function( require ) {
     this.filamentEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
   }
+
+  energyFormsAndChanges.register( 'LightBulb', LightBulb );
 
   return inherit( EnergyUser, LightBulb, {
     /**
@@ -172,3 +175,4 @@ define( function( require ) {
     ELEMENT_BASE_BACK_IMAGE: ELEMENT_BASE_BACK_IMAGE
   } );
 } );
+

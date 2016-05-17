@@ -12,6 +12,7 @@ define( function( require ) {
   // Modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
 
@@ -35,5 +36,8 @@ define( function( require ) {
     this.addChild( new EFACModelImageNode( SolarPanel.CONNECTOR_IMAGE, modelViewTransform ) );
   }
 
+  energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );
+
   return inherit( EFACBaseNode, SolarPanelNode );
 } );
+

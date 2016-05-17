@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemsModel' );
   var EnergySystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemsScreenView' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -53,5 +54,8 @@ define( function( require ) {
     );
   }
 
+  energyFormsAndChanges.register( 'EnergySystemsScreen', EnergySystemsScreen );
+
   return inherit( Screen, EnergySystemsScreen );
 } );
+

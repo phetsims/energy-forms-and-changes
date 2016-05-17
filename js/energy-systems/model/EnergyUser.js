@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElement' );
   var inherit = require( 'PHET_CORE/inherit' );
 
@@ -21,6 +22,8 @@ define( function( require ) {
 
     this.incomingEnergyChunks = [];
   }
+
+  energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
 
   return inherit( EnergySystemElement, EnergyUser, {
 

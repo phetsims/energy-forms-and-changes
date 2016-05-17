@@ -14,6 +14,7 @@ define( function( require ) {
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
   var Belt = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Belt' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
@@ -111,6 +112,8 @@ define( function( require ) {
     this.energySourcesCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
     this.energyConvertersCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
   }
+
+  energyFormsAndChanges.register( 'EnergySystemsModel', EnergySystemsModel );
 
   return inherit( PropertySet, EnergySystemsModel, {
 

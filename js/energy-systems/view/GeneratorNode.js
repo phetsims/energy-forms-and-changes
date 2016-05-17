@@ -13,6 +13,7 @@ define( function( require ) {
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -86,6 +87,8 @@ define( function( require ) {
       spokesNode.setVisible( directCouplingMode );
     } );
   }
+
+  energyFormsAndChanges.register( 'GeneratorNode', GeneratorNode );
 
   return inherit( EFACBaseNode, GeneratorNode );
 } );

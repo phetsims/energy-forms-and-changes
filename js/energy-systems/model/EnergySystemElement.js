@@ -9,8 +9,8 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var PropertySet = require( 'AXON/PropertySet' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableFadableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -40,6 +40,8 @@ define( function( require ) {
     } );
   }
 
+  energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
+
   return inherit( PositionableFadableModelElement, EnergySystemElement, {
     /**
      * Activate this element
@@ -67,3 +69,4 @@ define( function( require ) {
     }
   } );
 } );
+

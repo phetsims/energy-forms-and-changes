@@ -14,6 +14,7 @@ define( function( require ) {
 
   var inherit = require( 'PHET_CORE/inherit' );
   var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElement' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   /**
    * EnergySource constructor
@@ -28,6 +29,8 @@ define( function( require ) {
     this.outgoingEnergyChunks = [];
   }
 
+  energyFormsAndChanges.register( 'EnergySource', EnergySource );
+
   return inherit( EnergySystemElement, EnergySource, {
 
     /**
@@ -40,7 +43,7 @@ define( function( require ) {
      */
     extractOutgoingEnergyChunks: function() {
       // Remove all outgoing chunks from this.energyChunkList
-      this.energyChunkList.removeAll(this.outgoingEnergyChunks );
+      this.energyChunkList.removeAll( this.outgoingEnergyChunks );
 
       // Return a copy of the outgoing chunk list and clear it in one fell swoop
       return this.outgoingEnergyChunks.splice( 0 );
@@ -58,3 +61,4 @@ define( function( require ) {
 
   } );
 } );
+

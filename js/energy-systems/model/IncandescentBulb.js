@@ -5,6 +5,7 @@ define( function( require ) {
 
   // Modules
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var LightBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/LightBulb' );
@@ -25,10 +26,10 @@ define( function( require ) {
    * @constructor
    */
   function IncandescentBulb( energyChunksVisible ) {
-
     LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisible );
-
   }
+
+  energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );
 
   return inherit( LightBulb, IncandescentBulb, {}, {
     // Exported for static access
@@ -36,3 +37,4 @@ define( function( require ) {
     ENERGIZED_BULB: ENERGIZED_BULB
   } );
 } );
+
