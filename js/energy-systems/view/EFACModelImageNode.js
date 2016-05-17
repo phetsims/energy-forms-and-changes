@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -36,6 +37,7 @@ define( function( require ) {
     this.addChild( img );
   }
 
+  energyFormsAndChanges.register( 'EFACModelImageNode', EFACModelImageNode );
+
   return inherit( Node, EFACModelImageNode );
 } );
-

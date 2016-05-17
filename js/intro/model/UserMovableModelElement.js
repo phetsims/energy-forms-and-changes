@@ -6,11 +6,11 @@
  * @author John Blanco
  */
 
-
 define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -48,6 +48,8 @@ define( function( require ) {
     } );
   }
 
+  energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
+
   return inherit( ModelElement, UserMovableModelElement, {
 
     reset: function() {
@@ -58,7 +60,6 @@ define( function( require ) {
       this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
       ModelElement.prototype.reset.call( this );
-
     },
 
     /**
@@ -81,3 +82,4 @@ define( function( require ) {
     }
   } );
 } );
+

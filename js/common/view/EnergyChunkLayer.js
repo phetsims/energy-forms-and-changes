@@ -17,6 +17,7 @@ define( function( require ) {
 
   // modules
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
 
@@ -63,6 +64,8 @@ define( function( require ) {
       self.translate( -modelViewTransform.modelToViewX( position.x ), -modelViewTransform.modelToViewY( position.y ) );
     } );
   }
+
+  energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );
 
   return inherit( Node, EnergyChunkLayer );
 } );

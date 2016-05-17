@@ -6,6 +6,7 @@
 define( function( require ) {
   'use strict';
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -46,6 +47,8 @@ define( function( require ) {
       } );
     } );
   }
+
+  energyFormsAndChanges.register( 'AirNode', AirNode );
 
   return inherit( Node, AirNode );
 } );

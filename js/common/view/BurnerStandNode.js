@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  //var Color = require( 'SCENERY/util/Color' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LineStyles = require( 'KITE/util/LineStyles' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -18,11 +18,11 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
-// constants
+  // constants
   var BURNER_STAND_STROKE_LINEWIDTH = 2;
   var BURNER_STAND_STROKE_COLOR = 'black';
   var PERSPECTIVE_ANGLE = Math.PI / 4; // Positive is counterclockwise, a value of 0 produces a non-skewed rectangle.
-//
+  //
   /**
    *
    * @param {Rectangle} rect
@@ -115,7 +115,8 @@ define( function( require ) {
     this.addChild( new BurnerStandTop( new Vector2( rect.x, rect.y ), rect.width, projectedEdgeLength ) );
   }
 
+  energyFormsAndChanges.register( 'BurnerStandNode', BurnerStandNode );
+
   return inherit( Node, BurnerStandNode );
 } );
-
 

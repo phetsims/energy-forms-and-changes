@@ -9,6 +9,7 @@
 define( function( require ) {
   'use strict';
 
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
 
@@ -40,6 +41,8 @@ define( function( require ) {
       thisNode.setOpacity( opacity );
     } );
   }
+
+  energyFormsAndChanges.register( 'EFACBaseNode', EFACBaseNode );
 
   return inherit( Node, EFACBaseNode );
 } );

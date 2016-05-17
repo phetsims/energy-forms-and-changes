@@ -14,6 +14,7 @@ define( function( require ) {
   // modules
 
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -56,6 +57,8 @@ define( function( require ) {
       } ) );
     }
   }
+
+  energyFormsAndChanges.register( 'EnergyChunkContainerSliceNode', EnergyChunkContainerSliceNode );
 
   return inherit( Node, EnergyChunkContainerSliceNode, {
 

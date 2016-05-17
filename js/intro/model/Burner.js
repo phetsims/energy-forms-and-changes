@@ -17,6 +17,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -80,6 +81,8 @@ define( function( require ) {
       new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
         thisBurner.getOutlineRect().maxX + perspectiveCompensation ), thisBurner.getOutlineRect().maxY, this ) );
   }
+
+  energyFormsAndChanges.register( 'Burner', Burner );
 
   return inherit( ModelElement, Burner, {
 
@@ -347,3 +350,4 @@ define( function( require ) {
     }
   } );
 } );
+

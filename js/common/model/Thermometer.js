@@ -13,6 +13,7 @@ define( function( require ) {
   // modules
   //var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   //var PropertySet = require( 'AXON/PropertySet' );
@@ -39,13 +40,15 @@ define( function( require ) {
     this.addProperty( 'active', initiallyActive );
   }
 
+  energyFormsAndChanges.register( 'Thermometer', Thermometer );
+
   return inherit( UserMovableModelElement, Thermometer, {
 
     step: function( dt ) {
       //TODO comment back in
-//      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
-//      this.sensedTemperature = temperatureAndColor.temperature;
-//      this.sensedElementColor = temperatureAndColor.color;
+      //      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
+      //      this.sensedTemperature = temperatureAndColor.temperature;
+      //      this.sensedElementColor = temperatureAndColor.color;
     },
 
     reset: function() {
@@ -58,3 +61,4 @@ define( function( require ) {
   } );
 
 } );
+

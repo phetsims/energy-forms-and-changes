@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -86,8 +87,7 @@ define( function( require ) {
       if ( userControlled ) {
         // stop following anything.
         thisElementFollowingThermometer.elementFollower.stopFollowing();
-      }
-      else {
+      } else {
         // The user has dropped this thermometer. See if it was dropped over something that it should follow.
         for ( var block in model.getBlockList() ) {
           if ( model.getBlockList.hasOwnProperty( block ) ) {
@@ -105,6 +105,8 @@ define( function( require ) {
     } );
   }
 
+  energyFormsAndChanges.register( 'ElementFollowingThermometer', ElementFollowingThermometer );
+
   return inherit( Thermometer, ElementFollowingThermometer, {
 
     reset: function() {
@@ -115,3 +117,4 @@ define( function( require ) {
     }
   } );
 } );
+

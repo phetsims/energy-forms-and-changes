@@ -16,6 +16,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -187,6 +188,8 @@ define( function( require ) {
     this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
       new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }
+
+  energyFormsAndChanges.register( 'BlockNode', BlockNode );
 
   return inherit( Node, BlockNode, {
 

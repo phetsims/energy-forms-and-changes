@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
 
@@ -28,6 +29,8 @@ define( function( require ) {
       bottomSurface: null // {HorizontalSurface}
     } );
   }
+
+  energyFormsAndChanges.register( 'ModelElement', ModelElement );
 
   return inherit( PropertySet, ModelElement, {
 
@@ -78,8 +81,8 @@ define( function( require ) {
     isStackedUpon: function( element ) {
 
       return ( this.supportingSurface !== null ) &&
-             ( this.supportingSurface.getOwner() === element ||
-               this.supportingSurface.getOwner().isStackedUpon( element ) );
+        ( this.supportingSurface.getOwner() === element ||
+          this.supportingSurface.getOwner().isStackedUpon( element ) );
     },
 
     /**
@@ -98,5 +101,4 @@ define( function( require ) {
     }
   } );
 } );
-
 

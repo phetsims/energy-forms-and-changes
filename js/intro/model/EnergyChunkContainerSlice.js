@@ -15,9 +15,10 @@ define( function( require ) {
   'use strict';
 
   //modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
   var Matrix3 = require( 'DOT/Matrix3' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
 
   /**
    *
@@ -48,6 +49,8 @@ define( function( require ) {
       }
     } );
   }
+
+  energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 
   return inherit( Object, EnergyChunkContainerSlice, {
 
@@ -85,3 +88,4 @@ define( function( require ) {
     }
   } );
 } );
+

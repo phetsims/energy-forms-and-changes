@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -94,6 +95,8 @@ define( function( require ) {
       energyChunkNode.translation = modelViewTransform.modelToViewPosition( position );
     } );
   }
+
+  energyFormsAndChanges.register( 'EnergyChunkNode', EnergyChunkNode );
 
   return inherit( Node, EnergyChunkNode, {
 

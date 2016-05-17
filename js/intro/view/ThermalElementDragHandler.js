@@ -6,9 +6,11 @@
  */
 define( function( require ) {
   'use strict';
+
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
-  var Bounds2 = require( 'DOT/Bounds2' );
 
   /**
    * Constructor for the ThermalElementDragHandler.  The node must be property positioned before calling this, or it
@@ -64,5 +66,8 @@ define( function( require ) {
     } );
   }
 
+  energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
+
   return inherit( MovableDragHandler, ThermalElementDragHandler );
 } );
+

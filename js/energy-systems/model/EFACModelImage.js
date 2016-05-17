@@ -1,11 +1,6 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * NOTE (AA): ModelElementImage is an EFAC Java class, but I have my doubts about
- * whether it really belongs here. It appears to be completely general.
- * TODO: Check with other devs about this. For now, rename to EFACModelImage and
- * tentatively make use of it.
- *
  * Class that provides information about an image that is used in the view
  * representation of a model element.
  *
@@ -16,10 +11,9 @@ define( function( require ) {
   'use strict';
 
   // Modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  // var Image = require( 'SCENERY/nodes/Image' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  // var Vector2 = require( 'DOT/Vector2' );
+  var inherit = require( 'PHET_CORE/inherit' );
 
   // Constants
   // This is not used, but could be used to scale image.getImageWidth() to set
@@ -51,6 +45,8 @@ define( function( require ) {
     // model element that owns this image to the center of the image.
     this.centerToCenterOffset = centerToCenterOffset;
   }
+
+  energyFormsAndChanges.register( 'EFACModelImage', EFACModelImage );
 
   return inherit( Object, EFACModelImage, {
     getHeight: function() {
