@@ -282,7 +282,43 @@ define( function( require ) {
      * @override
      */
     preLoadEnergyChunks: function() {
+      this.clearEnergyChunks();
 
+      // Return if no chunks to add.
+      if ( this.energyProductionRateProperty.get() === 0 ) {
+        return;
+      }
+
+      var preLoadComplete = false;
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+
+      // Simulate energy chunks moving through the system.
+      while ( !preLoadComplete ) {
+        energySinceLastChunk += this.energyProductionRateProperty.get() * dt;
+
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+
+          // Create a chunk inside the teapot (at the water surface).
+          var initialPosition = new Vector2( this.position.x, this.position.y + WATER_SURFACE_HEIGHT_OFFSET );
+          var energyType = RAND.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
+          var newEnergyChunk = new EnergyChunk( energyType, initialPosition, this.energyChunksVisibleProperty );
+          this.energyChunkList.push( newEnergyChunk );
+          var travelDistance = newEnergyChunk.positionProperty.get().distance( this.position.plus( SPOUT_BOTTOM_OFFSET ) );
+          this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
+            this.createPathToSpoutBottom( this.position ),
+            travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
+          energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        // Update energy chunk positions.
+        this.moveEnergyChunks( dt );
+
+        if ( this.outgoingEnergyChunks.length > 0 ) {
+          // An energy chunk has traversed to the output of this system, completing the preload.
+          preLoadComplete = true;
+        }
+      }
     },
 
     /**
