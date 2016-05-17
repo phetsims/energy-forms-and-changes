@@ -6,10 +6,10 @@ define( function( require ) {
   // Modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
-  // var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
@@ -59,17 +59,26 @@ define( function( require ) {
     heaterCoolerBack.centerTop = teaPotImageNode.centerBottom.plus( new Vector2( 0, teaPotImageNode.height / 4 ) );
     heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
 
-    this.addChild( heaterCoolerBack );
-    this.addChild( heaterCoolerFront );
-    this.addChild( burnerStandNode );
+    // Make the tea pot & stand transparent when the energy chunks are visible.
+    energyChunksVisibleProperty.link( function( chunksVisible ) {
+      var opacity = chunksVisible ? 0.7 : 1;
+      teaPotImageNode.setOpacity( opacity );
+      burnerStandNode.setOpacity( opacity );
+    } );
 
-    this.addChild( teaPotImageNode );
+    var energyChunkLayer = new EnergyChunkLayer( teaPot.energyChunkList, teaPot.positionProperty, modelViewTransform );
 
     var spoutXY = new Vector2( teaPotImageNode.bounds.maxX - 5, teaPotImageNode.bounds.minY + 16 );
     this.steamNode = new SteamNode( spoutXY,
       teaPot.energyProductionRateProperty,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE,
       teaPot.activeProperty );
+
+    this.addChild( heaterCoolerBack );
+    this.addChild( heaterCoolerFront );
+    this.addChild( burnerStandNode );
+    this.addChild( energyChunkLayer );
+    this.addChild( teaPotImageNode );
     this.addChild( this.steamNode );
   }
 
@@ -107,6 +116,15 @@ define( function( require ) {
   }
 
   inherit( Node, SteamNode, {
+
+    /**
+     * Step function for steam.
+     * step() for view components is not typical for this simulation, but this
+     * is most consistent with the original Java implementation.
+     *
+     * @param  {number} dt - timestep
+     * @public
+     */
     step: function( dt ) {
       if ( this.activeProperty.get() ) {
 

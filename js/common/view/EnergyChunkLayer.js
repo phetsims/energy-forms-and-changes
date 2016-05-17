@@ -5,7 +5,6 @@
  * chunks on a observable list and adds/removes them from this node.  This is
  * intended to be used in other Nodes that represent model elements that
  * contain energy chunks.
- * <p/>
  * This was done as a separate class so that it could be used in composition
  * rather than inheritance, because composition allows better control over the
  * layering within the parent PNode.
@@ -22,7 +21,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
 
   /**
-   * *
    * @param {ObservableArray} energyChunkList
    * @param {Property.<Vector2>} parentPositionProperty
    * @param {ModelViewTransform2} modelViewTransform

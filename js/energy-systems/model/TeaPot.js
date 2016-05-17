@@ -22,7 +22,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
   var Range = require( 'DOT/Range' );
-  // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -140,8 +139,6 @@ define( function( require ) {
     },
 
     /**
-     * [moveEnergyChunks description]
-     *
      * @param  {Number} dt time step
      * @private
      */
@@ -226,8 +223,6 @@ define( function( require ) {
     },
 
     /**
-     * [createThermalEnergyChunkPath description]
-     *
      * @param  {Vector2}  startPosition
      * @param  {Vector2}  teapotPosition
      *
@@ -243,8 +238,6 @@ define( function( require ) {
     },
 
     /**
-     * [createPathToSpoutBottom description]
-     *
      * @param  {Vector2} parentElementPosition
      *
      * @return {Vector2[]}
@@ -259,8 +252,6 @@ define( function( require ) {
     },
 
     /**
-     * [createSpoutExitPath description]
-     *
      * @param  {Vector2} parentElementPosition
      *
      * @return {Vector2[]}
@@ -277,7 +268,6 @@ define( function( require ) {
 
 
     /**
-     * [preLoadEnergyChunks description]
      * @public
      * @override
      */
@@ -322,8 +312,6 @@ define( function( require ) {
     },
 
     /**
-     * [getEnergyOutputRate description]
-     *
      * @return {Energy}
      * @public
      * @override
@@ -344,7 +332,6 @@ define( function( require ) {
     },
 
     /**
-     * [clearEnergyChunks description]
      * @public
      * @override
      */
