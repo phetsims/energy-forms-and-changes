@@ -48,7 +48,7 @@ define( function( require ) {
      * injected, it is the system's responsibility to move, convert, and
      * otherwise manage them.
      *
-     * @parameter {Array<EnergyChunk>} Array of energy chunks to inject
+     * @parameter {EnergyChunk[]} Array of energy chunks to inject
      */
     injectEnergyChunks: function( energyChunks ) {
       this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );

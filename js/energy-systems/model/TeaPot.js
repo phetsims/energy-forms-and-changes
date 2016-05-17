@@ -231,7 +231,7 @@ define( function( require ) {
      * @param  {Vector2}  startPosition
      * @param  {Vector2}  teapotPosition
      *
-     * @return {Array<Vector2>}
+     * @return {Vector2[]}
      * @private
      */
     createThermalEnergyChunkPath: function( startPosition, teapotPosition ) {
@@ -247,7 +247,7 @@ define( function( require ) {
      *
      * @param  {Vector2} parentElementPosition
      *
-     * @return {Array<Vector2>}
+     * @return {Vector2[]}
      * @private
      */
     createPathToSpoutBottom: function( parentElementPosition ) {
@@ -263,7 +263,7 @@ define( function( require ) {
      *
      * @param  {Vector2} parentElementPosition
      *
-     * @return {Array<Vector2>}
+     * @return {Vector2[]}
      * @private
      */
     createSpoutExitPath: function( parentElementPosition ) {

@@ -16,7 +16,7 @@ define( function( require ) {
 
   /**
    * @param {EnergyChunk} energyChunk - chunk to be moved
-   * @param {Array<Vector2>} path - points along energy chunk path
+   * @param {Vector2[]} path - points along energy chunk path
    * @param {Number} speed - velocity magnitude
    * @constructor
    */

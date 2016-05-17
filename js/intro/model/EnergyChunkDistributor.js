@@ -52,7 +52,7 @@ define( function( require ) {
      * set of slices interact with each other, but the container for each is
      * defined by the boundary of its containing slice.
      *
-     * @param {Array<EnergyChunkContainerSlice>} energyChunkContainerSlices - Set of slices,
+     * @param {EnergyChunkContainerSlice[]} energyChunkContainerSlices - Set of slices,
      *                                           each containing a set of energy chunks.
      * @param {number} dt change in time
      */
@@ -236,7 +236,7 @@ define( function( require ) {
      * all energy chunks in center of slide. This is useful for debugging.
      * Rename it to substitute if for the 'real' algorithm.
      *
-     * @param {array<EnergyChunkContainerSlice>} energyChunkContainerSlices
+     * @param {EnergyChunkContainerSlice[]} energyChunkContainerSlices
      * @param {number} dt
      */
     updatePositionsDbg: function( energyChunkContainerSlices, dt ) {

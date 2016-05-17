@@ -352,7 +352,7 @@ define( function( require ) {
      * [getRectangleLineIntersectionPoints description]
      * @param  {Rectangle} rect [description]
      * @param  {Line} line [description]
-     * @return {Array<Vector2>}      [description]
+     * @return {Vector2[]}      [description]
      */
     getRectangleLineIntersectionPoints: function( rect, line ) {
 

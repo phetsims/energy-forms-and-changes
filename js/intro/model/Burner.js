@@ -227,7 +227,7 @@ define( function( require ) {
     },
 
     /**
-     *
+     * @public
      */
     reset: function() {
       ModelElement.prototype.reset.call( this );
@@ -239,7 +239,7 @@ define( function( require ) {
 
     /**
      * *
-     * @param {Array<ThermalEnergyContainer>} thermalEnergyContainers
+     * @param {ThermalEnergyContainer[]} thermalEnergyContainers
      * @returns {boolean}
      */
     areAnyOnTop: function( thermalEnergyContainers ) {

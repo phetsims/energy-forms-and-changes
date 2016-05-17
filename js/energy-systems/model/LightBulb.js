@@ -127,7 +127,7 @@ define( function( require ) {
      *
      * @param  {Vector2} startingPoint [description]
      *
-     * @return {Array<Vector2>} [description]
+     * @return {Vector2[]} [description]
      * @private
      */
     createThermalEnergyChunkPath: function( startingPoint ) {},
@@ -137,7 +137,7 @@ define( function( require ) {
      *
      * @param  {Vector2} center [description]
      *
-     * @return {Array<Vector2>} [description]
+     * @return {Vector2[]} [description]
      * @private
      */
     createElectricalEnergyChunkPath: function( center ) {},

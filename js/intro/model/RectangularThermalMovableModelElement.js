@@ -34,8 +34,8 @@ define( function( require ) {
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {number} height
-   * @param {number} mass // In kg
-   * @param {number} specificHeat // In J/kg-K
+   * @param {number} mass - In kg
+   * @param {number} specificHeat - In J/kg-K
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
@@ -396,7 +396,7 @@ define( function( require ) {
 
     /**
      *
-     * @returns {Array<EnergyChunkContainerSlice>}
+     * @returns {EnergyChunkContainerSlice[]}
      */
     getSlices: function() {
       return this.slices;

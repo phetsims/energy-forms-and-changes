@@ -39,7 +39,7 @@ define( function( require ) {
      * outgoing chunks from both this.energyChunkList and
      * this.outgoingEnergyChunks.
      *
-     * @return {Array<EnergyChunk>} List of energy chunks to transfer
+     * @return {EnergyChunk[]} List of energy chunks to transfer
      */
     extractOutgoingEnergyChunks: function() {
       // Remove all outgoing chunks from this.energyChunkList
