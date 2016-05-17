@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -20,7 +21,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
-  // var Range = require( 'DOT/Range' );
+  var Range = require( 'DOT/Range' );
   // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -36,7 +37,7 @@ define( function( require ) {
   // var SPOUT_BOTTOM_OFFSET = new Vector2( 0.03, 0.02 );
   // var SPOUT_TIP_OFFSET = new Vector2( 0.25, 0.3 );
   // var DISTANT_TARGET_OFFSET = new Vector2( 1, 1 );
-  // var WATER_SURFACE_HEIGHT_OFFSET = 0; // From teapot position, in meters.
+  var WATER_SURFACE_HEIGHT_OFFSET = 0; // From teapot position, in meters.
   var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
   var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.015, 0.015 ); // Meters. Coordinated with heater position.
 
@@ -79,7 +80,7 @@ define( function( require ) {
   return inherit( EnergySource, TeaPot, {
 
     /**
-     * [step description]
+     * Animation for teapot and energy chunks
      *
      * @param  {Number} dt timestep
      *
@@ -114,7 +115,7 @@ define( function( require ) {
         this.heatEnergyProducedSinceLastChunk += Math.max( this.heatCoolAmount, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
         if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
-          var x0 = this.position.x + xRange.min + RAND.nextDouble() * xRange.length;
+          var x0 = this.position.x + xRange.min + RAND.nextDouble() * xRange.getLength();
           var y0 = this.position.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
           var initialPosition = new Vector2( x0, y0 );
 
@@ -126,14 +127,14 @@ define( function( require ) {
 
           this.energyChunkList.push( energyChunk );
 
-          // heatEnergyProducedSinceLastChunk -= ENERGY_PER_CHUNK;
-          // energyChunkMovers.add( new EnergyChunkPathMover( energyChunk,
-          //   createThermalEnergyChunkPath( initialPosition, getPosition() ),
-          //   EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
+          this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
+            this.createThermalEnergyChunkPath( initialPosition, this.position ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
 
-        // this.moveEnergyChunks(dt);
+        this.moveEnergyChunks( dt );
       }
       return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
     },
@@ -158,7 +159,11 @@ define( function( require ) {
      * @private
      */
     createThermalEnergyChunkPath: function( startPosition, teapotPosition ) {
+      var path = [];
 
+      path.push( new Vector2( startPosition.x, teapotPosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );
+
+      return path;
     },
 
     /**

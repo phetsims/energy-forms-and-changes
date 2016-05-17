@@ -15,21 +15,23 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * @param {EnergyChunk} energyChunk [description]
-   * @param {Array<Vector2>} path        [description]
-   * @param {Number} velocity    [description]
+   * @param {EnergyChunk} energyChunk - chunk to be moved
+   * @param {Array<Vector2>} path - points along energy chunk path
+   * @param {Number} speed - velocity magnitude
    * @constructor
    */
-  function EnergyChunkPathMover( energyChunk, path, velocity ) {
+  function EnergyChunkPathMover( energyChunk, path, speed ) {
+
+    // Validate args
+    assert && assert( path.length > 0, 'Path must have at least one point' );
+    assert && assert( speed >= 0, 'speed must be a non-negative scalar. Received: ' + speed );
+
     this.energyChunk = energyChunk;
     this.path = path;
-    this.velocity = velocity;
+    this.speed = speed;
     this.pathFullyTraversed = false;
 
-    assert && assert( path.length > 0, 'Path must have at least one point' );
-
     this.nextPoint = path[ 0 ];
-
   }
 
   energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
@@ -41,7 +43,7 @@ define( function( require ) {
      */
     moveAlongPath: function( dt ) {
 
-      var distanceToTravel = dt * this.velocity;
+      var distanceToTravel = dt * this.speed;
 
       while ( distanceToTravel > 0 && !this.pathFullyTraversed ) {
 
