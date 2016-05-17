@@ -9,13 +9,16 @@
  */
 define( function( require ) {
   'use strict';
+
+  // Modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
 
   // strings
   var normalString = require( 'string!ENERGY_FORMS_AND_CHANGES/normal' );
@@ -36,20 +39,18 @@ define( function( require ) {
     var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
 
     // Add the step button to manually step animation.
-    var stepButton = new StepForwardButton( function() { model.manualStep(); }, model.playProperty,
-      {
-        radius: 15,
-        centerX: playPauseButton.centerX
-      } );
+    var stepButton = new StepForwardButton( function() { model.manualStep(); }, model.playProperty, {
+      radius: 15,
+      centerX: playPauseButton.centerX
+    } );
 
     // Group the play and pause buttons into their own panel for correct layout in the LayoutBox.
     var playPauseButtonGroup = new LayoutBox( {
-      children: [playPauseButton, stepButton],
+      children: [ playPauseButton, stepButton ],
       spacing: 10,
       orientation: 'horizontal'
-    });
+    } );
 
-    // TODO: Scale the text to make it translatable.
     var radioButtonContent = [
       { value: true, node: new Text( normalString, { font: RADIO_BUTTON_FONT } ) },
       { value: false, node: new Text( fastForwardString, { font: RADIO_BUTTON_FONT } ) }
@@ -57,17 +58,19 @@ define( function( require ) {
     var radioButtonGroup = new RadioButtonGroup( model.normalSimSpeedProperty, radioButtonContent, {
       orientation: 'horizontal',
       selectedLineWidth: 4
-    });
-    //this.addChild( radioButtonGroup );
+    } );
 
     LayoutBox.call( this, {
-      children: [radioButtonGroup, playPauseButtonGroup ],
+      children: [ radioButtonGroup, playPauseButtonGroup ],
       orientation: 'horizontal',
       spacing: 35
     } );
 
   }
 
+  energyFormsAndChanges.register( 'NormalAndFastForwardTimeControlPanel', NormalAndFastForwardTimeControlPanel );
+
   return inherit( LayoutBox, NormalAndFastForwardTimeControlPanel );
 
 } );
+

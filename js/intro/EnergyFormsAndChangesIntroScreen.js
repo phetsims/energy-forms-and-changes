@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyFormsAndChangesIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyFormsAndChangesIntroModel' );
   var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -30,8 +31,8 @@ define( function( require ) {
    */
   function EnergyFormsAndChangesIntroScreen( tandem ) {
 
-    //If this is a single-screen sim, then no icon is necessary.
-    //If there are multiple screens, then the icon must be provided here.
+    // If this is a single-screen sim, then no icon is necessary.
+    // If there are multiple screens, then the icon must be provided here.
     var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {
       fill: 'white'
     } );
@@ -50,5 +51,7 @@ define( function( require ) {
     );
   }
 
+  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreen', EnergyFormsAndChangesIntroScreen );
   return inherit( Screen, EnergyFormsAndChangesIntroScreen );
 } );
+

@@ -11,44 +11,36 @@ define( function( require ) {
   'use strict';
 
   // modules
-  //var Circle = require( 'SCENERY/nodes/Circle' );
+  var AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
+  var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
+  var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
+  var CheckBox = require( 'SUN/CheckBox' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
+  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var CheckBox = require( 'SUN/CheckBox' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
-  var Panel = require( 'SUN/Panel' );
-  //var Panel = require( 'SUN/Panel' );
-  var Property = require( 'AXON/Property' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  //var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
-  var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
-  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
-  var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
-  var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
-//  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
-//  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
-  var AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
-  var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  //var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  //var PropertySet = require( 'AXON/PropertySet' );
-  //var VBox = require( 'SCENERY/nodes/VBox' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
-  var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
+  var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var ScreenView = require( 'JOIST/ScreenView' );
+  var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
@@ -228,17 +220,17 @@ define( function( require ) {
       var thermometerNode = new MovableThermometerNode( thermometer, thisScreenView.layoutBounds, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
-//      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
-//        mouseReleased: function( event ) {
-//          if ( thermometerNode.bounds.intersects( thermometerToolBox.bounds ) ) {
-//            // Released over tool box, so deactivate.
-//            thermometer.active.set( false );
-//          }
-//        }
-//      } ) );
+      //      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
+      //        mouseReleased: function( event ) {
+      //          if ( thermometerNode.bounds.intersects( thermometerToolBox.bounds ) ) {
+      //            // Released over tool box, so deactivate.
+      //            thermometer.active.set( false );
+      //          }
+      //        }
+      //      } ) );
       movableThermometerNodes.push( thermometerNode );
     } );
-//    // Add the tool box for the thermometers.
+    //    // Add the tool box for the thermometers.
     var thermometerBox = new HBox();
     var thermometerToolBoxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
@@ -247,8 +239,8 @@ define( function( require ) {
       thermometerToolBoxNodes.push( thermometerToolBoxNode );
     } );
     //var thermometerToolBox = new Node();
-//    var thermometerToolBox = new ControlPanelNode( thermometerBox, CONTROL_PANEL_BACKGROUND_COLOR, CONTROL_PANEL_OUTLINE_STROKE, CONTROL_PANEL_OUTLINE_COLOR );
-//    thermometerToolBox.translation({x: EDGE_INSET, y:EDGE_INSET} );
+    //    var thermometerToolBox = new ControlPanelNode( thermometerBox, CONTROL_PANEL_BACKGROUND_COLOR, CONTROL_PANEL_OUTLINE_STROKE, CONTROL_PANEL_OUTLINE_COLOR );
+    //    thermometerToolBox.translation({x: EDGE_INSET, y:EDGE_INSET} );
     backLayer.addChild( thermometerBox );
     //   backLayer.addChild( thermometerToolBox );
     thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
@@ -261,16 +253,13 @@ define( function( require ) {
 
       if ( model.ironBlock.isStackedUpon( model.brick ) ) {
         brickNode.moveToBack();
-      }
-      else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
+      } else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
         ironBlockNode.moveToBack();
-      }
-      else if ( model.ironBlock.getRectangleBounds().minX >= model.brick.getRectangleBounds().maxX ||
-                model.ironBlock.getRectangleBounds().minY >= model.brick.getRectangleBounds().maxY ) {
+      } else if ( model.ironBlock.getRectangleBounds().minX >= model.brick.getRectangleBounds().maxX ||
+        model.ironBlock.getRectangleBounds().minY >= model.brick.getRectangleBounds().maxY ) {
         ironBlockNode.moveToFront();
-      }
-      else if ( model.brick.getRectangleBounds().minX >= model.ironBlock.getRectangleBounds().maxX ||
-                model.brick.getRectangleBounds().minY >= model.ironBlock.getRectangleBounds().maxY ) {
+      } else if ( model.brick.getRectangleBounds().minX >= model.ironBlock.getRectangleBounds().maxX ||
+        model.brick.getRectangleBounds().minY >= model.ironBlock.getRectangleBounds().maxY ) {
         brickNode.moveToFront();
       }
 
@@ -281,6 +270,9 @@ define( function( require ) {
     model.ironBlock.positionProperty.link( blockChangeObserver );
   }
 
+  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreenView', EnergyFormsAndChangesIntroScreenView );
+
   return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView );
 
 } );
+
