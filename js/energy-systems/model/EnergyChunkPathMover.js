@@ -26,6 +26,7 @@ define( function( require ) {
     assert && assert( path.length > 0, 'Path must have at least one point' );
     assert && assert( speed >= 0, 'speed must be a non-negative scalar. Received: ' + speed );
 
+    // @public
     this.energyChunk = energyChunk;
     this.path = path;
     this.speed = speed;
