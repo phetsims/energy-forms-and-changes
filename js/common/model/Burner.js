@@ -16,7 +16,7 @@ define( function( require ) {
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyChunkWanderController' );
+  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
@@ -26,7 +26,7 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
-  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
+  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
 
   // constants
   var WIDTH = 0.075; // In meters.

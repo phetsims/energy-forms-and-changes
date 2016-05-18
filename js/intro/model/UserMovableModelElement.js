@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
+  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**

@@ -14,7 +14,7 @@ define( function( require ) {
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
-  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Burner' );
+  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
