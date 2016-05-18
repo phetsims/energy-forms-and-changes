@@ -13,13 +13,12 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/HorizontalSurface' );
+  var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
@@ -111,8 +110,7 @@ define( function( require ) {
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
       // This shouldn't be used for air - there is a specific method for that.
       var deltaEnergy = 0;
-      assert && assert( !( thermalEnergyContainer instanceof Air ),
-        'This function should not be used with air - there is a specific method for that.' );
+
       if ( this.inContactWith( thermalEnergyContainer ) ) {
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevel * dt;
