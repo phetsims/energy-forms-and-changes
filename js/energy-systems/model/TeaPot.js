@@ -111,8 +111,13 @@ define( function( require ) {
           this.energyProductionRateProperty.set( 0 );
         }
 
-        this.heatEnergyProducedSinceLastChunk += Math.max( this.heatCoolAmount, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
+        // See if it's time to emit a new energy chunk from the heater.
+        this.heatEnergyProducedSinceLastChunk +=
+          Math.max( this.heatCoolAmount, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
+
         if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+
+          // Emit a new thermal energy chunk.
           var xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
           var x0 = this.position.x + xRange.min + RAND.nextDouble() * xRange.getLength();
           var y0 = this.position.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
@@ -133,6 +138,7 @@ define( function( require ) {
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
 
+        // Move all energy chunks that are under this element's control.
         this.moveEnergyChunks( dt );
       }
       return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
