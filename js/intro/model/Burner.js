@@ -26,7 +26,6 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
-  var IntroConstants = require( 'ENERGY_FORMS_AND_CHANGES/intro/IntroConstants' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ModelElement' );
 
   // constants
@@ -74,8 +73,8 @@ define( function( require ) {
     // necessary in order to avoid problems with edge overlap when dropping
     // objects on top of burner.
     var perspectiveCompensation =
-      thisBurner.getOutlineRect().height * IntroConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
-      Math.cos( IntroConstants.PERSPECTIVE_ANGLE );
+      thisBurner.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+      Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
 
     this.addProperty( 'topSurface',
       new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
