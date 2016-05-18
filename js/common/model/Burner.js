@@ -20,12 +20,12 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
-  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
 
   // constants
   var WIDTH = 0.075; // In meters.
@@ -280,15 +280,17 @@ define( function( require ) {
      * @param {number} dt
      */
     step: function( dt ) {
-      var thisBurner = this;
-      this.energyChunkWanderControllers.forEach( function( energyChunkWanderController ) {
-        energyChunkWanderController.updatePosition( dt );
-        if ( energyChunkWanderController.destinationReached() ) {
-          thisBurner.energyChunkList.remove( energyChunkWanderController.energyChunk );
-          var index = thisBurner.energyChunkWanderControllers.indexOf( energyChunkWanderController );
-          if ( index > -1 ) {
-            thisBurner.energyChunkWanderControllers.splice( index, 1 );
-          }
+      var self = this;
+      this.energyChunkWanderControllers.forEach( function( controller ) {
+
+        controller.updatePosition( dt );
+
+        if ( controller.destinationReached() ) {
+          self.energyChunkList.remove( controller.energyChunk );
+
+          _.remove( self.energyChunkWanderControllers, function( wc ) {
+            return wc === controller;
+          } );
         }
       } );
     },
