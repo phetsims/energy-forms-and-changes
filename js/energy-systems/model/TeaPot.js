@@ -119,9 +119,11 @@ define( function( require ) {
 
           // Emit a new thermal energy chunk.
           var xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
-          var x0 = this.position.x + xRange.min + RAND.nextDouble() * xRange.getLength();
-          var y0 = this.position.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
+          var x0 = this.positionProperty.value.x + xRange.min + RAND.nextDouble() * xRange.getLength();
+          var y0 = this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
           var initialPosition = new Vector2( x0, y0 );
+
+          // initialPosition = initialPosition.plus( new Vector2( 0, 0.5 ) );
 
           var energyChunk = new EnergyChunk(
             EnergyType.THERMAL,
@@ -134,7 +136,7 @@ define( function( require ) {
           this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
           this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
-            this.createThermalEnergyChunkPath( initialPosition, this.position ),
+            this.createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
 
@@ -296,13 +298,13 @@ define( function( require ) {
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
           // Create a chunk inside the teapot (at the water surface).
-          var initialPosition = new Vector2( this.position.x, this.position.y + WATER_SURFACE_HEIGHT_OFFSET );
+          var initialPosition = new Vector2( this.positionProperty.value.x, this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
           var energyType = RAND.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
           var newEnergyChunk = new EnergyChunk( energyType, initialPosition, this.energyChunksVisibleProperty );
           this.energyChunkList.push( newEnergyChunk );
-          var travelDistance = newEnergyChunk.positionProperty.get().distance( this.position.plus( SPOUT_BOTTOM_OFFSET ) );
+          var travelDistance = newEnergyChunk.positionProperty.get().distance( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
           this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            this.createPathToSpoutBottom( this.position ),
+            this.createPathToSpoutBottom( this.positionProperty.value ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
           energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
         }

@@ -22,6 +22,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
 
   var BURNER_MODEL_BOUNDS = new Bounds2( -0.0375, 0, 0.0375, 0.075 ); // From Burner.getBoundingRect()
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
@@ -73,6 +74,8 @@ define( function( require ) {
       teaPot.energyProductionRateProperty,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE,
       teaPot.activeProperty );
+
+    energyChunkLayer.translate( -174, -323 );
 
     this.addChild( heaterCoolerBack );
     this.addChild( heaterCoolerFront );
