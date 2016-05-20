@@ -205,7 +205,7 @@ define( function( require ) {
           // next energy system.
           if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
             self.steamPowerableElementInPlaceProperty.get() &&
-            _.contains( ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE, self.position.distance( chunk.positionProperty.get() ) ) &&
+            ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( self.position.distance( chunk.positionProperty.get() ) ) &&
             !_.contains( self.exemptFromTransferEnergyChunks, chunk ) ) {
 
             // Send this chunk to the next energy system.
