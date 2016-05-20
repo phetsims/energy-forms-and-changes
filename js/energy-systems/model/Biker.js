@@ -34,7 +34,7 @@ define( function( require ) {
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
   var RAND = new Random();
-  // var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
+  var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
 
   // Offsets used for creating energy chunk paths.  These need to be
@@ -183,24 +183,18 @@ define( function( require ) {
           if ( ec.positionProperty.get().x > hubPosition.x ) {
 
             // Just remove this energy chunk.
-            _.remove( self.energyChunkMovers, function( m ) {
-              return m === mover;
-            } );
-
+            self.removeEnergyChunkMover( mover );
             self.energyChunkList.remove( ec );
 
           } else {
 
             // Make sure that this energy chunk turns into thermal energy.
-            _.remove( self.energyChunkMovers, function( m ) {
-              return m === mover;
-            } );
+            self.removeEnergyChunkMover( mover );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( ec,
               self.createMechanicalToThermalEnergyChunkPath( self.position, ec.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
-
         }
       } );
     } );
@@ -209,9 +203,8 @@ define( function( require ) {
   energyFormsAndChanges.register( 'Biker', Biker );
 
   return inherit( EnergySource, Biker, {
+
     /**
-     * [step description]
-     *
      * @param  {Number} dt timestep
      *
      * @return {Energy}
@@ -219,6 +212,10 @@ define( function( require ) {
      * @override
      */
     step: function( dt ) {
+
+      if ( !this.active ) {
+        return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      }
 
       // Update energy state
       this.bikerHasEnergyProperty.set( this.bikerCanPedal() );
@@ -247,7 +244,8 @@ define( function( require ) {
 
       this.crankAngleProperty.set( newAngle );
 
-      this.rearWheelAngleProperty.set( ( this.rearWheelAngle + this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
+      this.rearWheelAngleProperty.set( ( this.rearWheelAngle +
+        this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
         // Set crank to a good position where animation will start
@@ -269,18 +267,111 @@ define( function( require ) {
       }
 
       // Decide if new chem energy chunk should start on its way.
-      if ( this.energyProducedSinceLastChunkEmitted >= EFACConstants.ENERGY_PER_CHUNK && this.targetCrankAngularVelocity > 0 ) {
+      if ( this.energyProducedSinceLastChunkEmitted >= EFACConstants.ENERGY_PER_CHUNK &&
+        this.targetCrankAngularVelocity > 0 ) {
 
         // Start a new chunk moving.
         if ( this.bikerCanPedal() ) {
-          // EnergyChunk energyChunk = findNonMovingEnergyChunk();
-          // energyChunkMovers.add( new EnergyChunkPathMover( energyChunk, createChemicalEnergyChunkPath( getPosition() ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          var energyChunk = this.findNonMovingEnergyChunk();
+          this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
+            this.createChemicalEnergyChunkPath( this.position ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           this.energyProducedSinceLastChunkEmitted = 0;
         }
       }
 
+      this.moveEnergyChunks( dt );
+
       var energyAmount = Math.abs( fractionalVelocity * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * dt );
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
+    },
+
+    moveEnergyChunks: function( dt ) {
+
+      // Iterate through this copy while the original is mutated
+      var movers = _.clone( this.energyChunkMovers );
+
+      var self = this;
+      movers.forEach( function( mover ) {
+
+        mover.moveAlongPath( dt );
+
+        if ( !mover.pathFullyTraversed ) {
+          return;
+        }
+
+        var chunk = mover.energyChunk;
+
+        // CHEMICAL
+        if ( chunk.energyTypeProperty.get() === EnergyType.CHEMICAL ) {
+
+          // Turn this into mechanical energy.
+          chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+          self.removeEnergyChunkMover( mover );
+
+          // Add new mover for the mechanical energy chunk.
+          if ( self.mechanicalChunksSinceLastThermal >= MECHANICAL_TO_THERMAL_CHUNK_RATIO ||
+            !self.mechanicalPoweredSystemIsNextProperty.get() ) {
+
+            // Make this chunk travel to the rear hub, where it
+            // will become a chunk of thermal energy.
+            self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+              self.createMechanicalToThermalEnergyChunkPath( self.position, chunk.positionProperty.get() ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+            self.mechanicalChunksSinceLastThermal = 0;
+          } else {
+
+            // Send this chunk to the next energy system.
+            self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+              self.createMechanicalEnergyChunkPath( self.positionProperty.get() ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+            self.mechanicalChunksSinceLastThermal++;
+          }
+        }
+
+        // MECHANICAL (TO THERMAL)
+        else if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
+          chunk.positionProperty.get().distance( self.position.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
+
+          // This is a mechanical energy chunk that has traveled
+          // to the hub and should now become thermal energy.
+          self.removeEnergyChunkMover( mover );
+
+          chunk.energyType.set( EnergyType.THERMAL );
+          self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+            self.createThermalEnergyChunkPath( self.position ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+        }
+
+        // THERMAL
+        else if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL ) {
+          // This is a radiating thermal energy chunk that has
+          // reached the end of its route.  Delete it.
+          self.removeEnergyChunkMover( mover );
+          self.energyChunkList.remove( chunk );
+        }
+
+        // MECHANICAL
+        else {
+          // Must be mechanical energy that is being passed to
+          // the next energy system.
+          self.outgoingEnergyChunks.push( chunk );
+          self.removeEnergyChunkMover( mover );
+        }
+      } );
+    },
+
+    /**
+     * Utility method to remove EnergyChunkMover from array.
+     *
+     * @param  {EnergyChunkMover} mover
+     * @private
+     */
+    removeEnergyChunkMover: function( mover ) {
+      _.remove( this.energyChunkMovers, function( m ) {
+        return m === mover;
+      } );
     },
 
     /**
@@ -471,7 +562,7 @@ define( function( require ) {
         movingEnergyChunks.push( mover.energyChunk );
       } );
 
-      this.energyChunkList.foreach( function( ec ) {
+      this.energyChunkList.forEach( function( ec ) {
         if ( !_.contains( movingEnergyChunks, function( chunk ) {
             return chunk === ec;
           } ) ) {
