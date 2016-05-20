@@ -90,7 +90,7 @@ define( function( require ) {
     step: function( dt ) {
 
       if ( this.active ) {
-        console.log( this.energyProductionRateProperty.value );
+
         if ( this.heatCoolAmountProperty.value > 0 || this.energyProductionRate > COOL_DOWN_COMPLETE_THRESHOLD ) {
 
           // Calculate the energy production rate.
@@ -215,6 +215,9 @@ define( function( require ) {
               _.remove( self.energyChunkMovers, function( m ) {
                 return m === mover;
               } );
+
+              // Alternate sending or keeping chunks.
+              self.transferNextAvailableChunk = false;
             }
 
             // Don't transfer this chunk.
@@ -299,14 +302,21 @@ define( function( require ) {
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
           // Create a chunk inside the teapot (at the water surface).
-          var initialPosition = new Vector2( this.positionProperty.value.x, this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
+          var initialPosition = new Vector2( this.positionProperty.value.x,
+            this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
+
           var energyType = RAND.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
+
           var newEnergyChunk = new EnergyChunk( energyType, initialPosition, this.energyChunksVisibleProperty );
           this.energyChunkList.push( newEnergyChunk );
-          var travelDistance = newEnergyChunk.positionProperty.get().distance( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
+
+          var travelDistance = newEnergyChunk.positionProperty.get().distance(
+            this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
+
           this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
             this.createPathToSpoutBottom( this.positionProperty.value ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
+
           energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
         }
 
