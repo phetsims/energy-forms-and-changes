@@ -15,6 +15,7 @@ define( function( require ) {
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HSlider = require( 'SUN/HSlider' );
   // var Image = require( 'SCENERY/nodes/Image' );
@@ -112,9 +113,13 @@ define( function( require ) {
     this.addChild( frontLegRootNode );
     this.addChild( upperBodyNormal );
     this.addChild( upperBodyTired );
+
+    // Add the energy chunk layer.
+    this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
   }
 
   energyFormsAndChanges.register( 'BikerNode', BikerNode );
 
   return inherit( EFACBaseNode, BikerNode );
 } );
+

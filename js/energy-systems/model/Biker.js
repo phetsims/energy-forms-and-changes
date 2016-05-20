@@ -330,7 +330,7 @@ define( function( require ) {
           }
         }
 
-        // MECHANICAL (TO THERMAL)
+        // MECHANICAL --> THERMAL
         else if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
           chunk.positionProperty.get().distance( self.position.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
 
@@ -338,7 +338,7 @@ define( function( require ) {
           // to the hub and should now become thermal energy.
           self.removeEnergyChunkMover( mover );
 
-          chunk.energyType.set( EnergyType.THERMAL );
+          chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
             self.createThermalEnergyChunkPath( self.position ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
