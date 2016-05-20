@@ -59,15 +59,8 @@ define( function( require ) {
     // must maintain a position that is offset from the parent in order to
     // compensate.
     parentPositionProperty.link( function( position ) {
-      // self.translate( -modelViewTransform.modelToViewX( position.x ), -modelViewTransform.modelToViewY( position.y ) );
-      // console.log(self.translation);
-      // self.setCenterX( modelViewTransform.modelToViewX( position.x ) );
-      // self.setCenterY( modelViewTransform.modelToViewY( position.y ) );
-
-      // self.x = modelViewTransform.modelToViewDeltaX( position.x );
-      // self.y = modelViewTransform.modelToViewDeltaY( position.y );
-
-      self.center = modelViewTransform.modelToViewPosition( position );
+      self.x = -modelViewTransform.modelToViewX( position.x );
+      self.y = -modelViewTransform.modelToViewY( position.y );
     } );
   }
 

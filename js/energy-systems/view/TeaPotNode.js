@@ -75,8 +75,6 @@ define( function( require ) {
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE,
       teaPot.activeProperty );
 
-    energyChunkLayer.translate( -174, -323 );
-
     this.addChild( heaterCoolerBack );
     this.addChild( heaterCoolerFront );
     this.addChild( burnerStandNode );
