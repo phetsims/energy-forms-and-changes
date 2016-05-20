@@ -14,6 +14,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   //static data
   var instanceCount = 0; // Base count for the unique ID of this slice.
@@ -27,6 +28,9 @@ define( function( require ) {
    * @constructor
    */
   function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
+
+    assert && assert( initialPosition instanceof Vector2,
+      'Expected a Vector2, got this: ' + initialPosition );
 
     PropertySet.call( this, {
       position: initialPosition,

@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -23,6 +24,7 @@ define( function( require ) {
   function EnergyChunkPathMover( energyChunk, path, speed ) {
 
     // Validate args
+    assert && assert( energyChunk instanceof EnergyChunk, 'energyChunk is not of correct type: ' + energyChunk );
     assert && assert( path.length > 0, 'Path must have at least one point' );
     assert && assert( speed >= 0, 'speed must be a non-negative scalar. Received: ' + speed );
 
@@ -48,7 +50,12 @@ define( function( require ) {
 
       while ( distanceToTravel > 0 && !this.pathFullyTraversed ) {
 
-        var distanceToNextPoint = this.energyChunk.positionProperty.get().distance( this.nextPoint );
+        var chunkPosition = this.energyChunk.positionProperty.get();
+
+        assert && assert( chunkPosition instanceof Vector2,
+          'Expected a Vector2, got this: ' + chunkPosition );
+
+        var distanceToNextPoint = chunkPosition.distance( this.nextPoint );
 
         if ( distanceToTravel < distanceToNextPoint ) {
           // Not arriving at destination next point yet, so just move towards it.

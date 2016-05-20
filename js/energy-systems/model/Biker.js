@@ -172,7 +172,8 @@ define( function( require ) {
     var self = this;
     this.mechanicalPoweredSystemIsNextProperty.link( function( isNext ) {
 
-      var movers = _.clone( self.energyChunkMovers );
+      var movers = self.energyChunkMovers.slice();
+      // var movers = _.clone( self.energyChunkMovers );
       var hubPosition = self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET );
 
       movers.forEach( function( mover ) {
@@ -285,10 +286,24 @@ define( function( require ) {
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
+    /**
+     * Factored from step(dt)
+     *
+     * @param  {Number} dt timestep
+     * @private
+     */
     moveEnergyChunks: function( dt ) {
 
+      if ( this.energyChunkMovers.length > 0 ) {
+        var mover0 = this.energyChunkMovers[ 0 ];
+        if ( mover0.path.length > 0 ) {
+          var point0 = mover0.path[ 0 ];
+          assert && assert( point0 instanceof Vector2, 'Expected Vector2, got this: ', point0 );
+        }
+      }
+
       // Iterate through this copy while the original is mutated
-      var movers = _.clone( this.energyChunkMovers );
+      var movers = this.energyChunkMovers.slice();
 
       var self = this;
       movers.forEach( function( mover ) {
@@ -317,7 +332,6 @@ define( function( require ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
               self.createMechanicalToThermalEnergyChunkPath( self.position, chunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
-
             self.mechanicalChunksSinceLastThermal = 0;
           } else {
 
@@ -533,17 +547,17 @@ define( function( require ) {
       var numSegments = 3;
 
       var offset = centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET );
-      path.push( new Vector2( offset ) );
+      path.push( offset );
 
       // The chuck needs to move up and to the right to avoid overlapping with the biker.
       offset = offset.plus( new Vector2( segmentLength, 0 ).rotated( Math.PI * 0.4 ) );
 
       // Add a set of path segments that make the chunk move up in a somewhat random path.
-      path.push( new Vector2( offset ) );
+      path.push( offset );
 
       for ( var i = 0; i < numSegments; i++ ) {
         offset = offset.plus( new Vector2( 0, segmentLength ).rotated( ( RAND.nextDouble() - 0.5 ) * maxAngle ) );
-        path.push( new Vector2( offset ) );
+        path.push( offset );
       }
 
       return path;
