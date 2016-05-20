@@ -90,12 +90,13 @@ define( function( require ) {
     step: function( dt ) {
 
       if ( this.active ) {
-        if ( this.heatCoolAmount > 0 || this.energyProductionRate > COOL_DOWN_COMPLETE_THRESHOLD ) {
+        console.log( this.energyProductionRateProperty.value );
+        if ( this.heatCoolAmountProperty.value > 0 || this.energyProductionRate > COOL_DOWN_COMPLETE_THRESHOLD ) {
 
           // Calculate the energy production rate.
 
           // Analogous to acceleration.
-          var increase = this.heatCoolAmount * MAX_ENERGY_CHANGE_RATE;
+          var increase = this.heatCoolAmountProperty.value * MAX_ENERGY_CHANGE_RATE;
 
           // Analogous to friction.
           var decrease = this.energyProductionRate * COOLING_CONSTANT;
@@ -113,7 +114,7 @@ define( function( require ) {
 
         // See if it's time to emit a new energy chunk from the heater.
         this.heatEnergyProducedSinceLastChunk +=
-          Math.max( this.heatCoolAmount, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt );
+          Math.max( this.heatCoolAmountProperty.value, 0 ) * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
 
         if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
