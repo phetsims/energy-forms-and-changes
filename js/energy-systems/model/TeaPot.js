@@ -186,7 +186,7 @@ define( function( require ) {
           // This chunk is moving out of the spout.
           else if ( chunk.positionProperty.get().equals( self.position.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createPathToSpoutBottom( self.position ),
+              self.createSpoutExitPath( self.position ),
               EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
           }
 
