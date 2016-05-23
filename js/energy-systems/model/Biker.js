@@ -330,7 +330,6 @@ define( function( require ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
               self.createMechanicalEnergyChunkPath( self.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
-
             self.mechanicalChunksSinceLastThermal++;
           }
         }
@@ -384,7 +383,9 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {},
+    preLoadEnergyChunks: function() {
+      // No-op for Biker
+    },
 
     /**
      * @return {Energy}

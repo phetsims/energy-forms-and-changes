@@ -115,19 +115,20 @@ define( function( require ) {
     this.addChild( upperBodyTired );
 
     // DEBUG
-    var Shape = require( 'KITE/Shape' );
-    var Path = require( 'SCENERY/nodes/Path' );
-    var Vector2 = require( 'DOT/Vector2' );
-    var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2(-0.23, 0.15) );
-    var shape = new Shape();
-    for ( i = 0; i < 3; i++ ) {
-      var p = modelViewTransform.modelToViewPosition( mechPath[ i ] );
-      i === 0 ? shape.moveTo( p.x, p.y ) : shape.lineTo( p.x, p.y );
-    }
-    this.addChild( new Path( shape, {
-      stroke: 'lime',
-      lineWidth: 25
-    } ) );
+    // Remove when #21 is solved
+    // var Shape = require( 'KITE/Shape' );
+    // var Path = require( 'SCENERY/nodes/Path' );
+    // var Vector2 = require( 'DOT/Vector2' );
+    // var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2(-0.23, 0.15) );
+    // var shape = new Shape();
+    // for ( i = 0; i < 3; i++ ) {
+    //   var p = modelViewTransform.modelToViewPosition( mechPath[ i ] );
+    //   i === 0 ? shape.moveTo( p.x, p.y ) : shape.lineTo( p.x, p.y );
+    // }
+    // this.addChild( new Path( shape, {
+    //   stroke: 'lime',
+    //   lineWidth: 25
+    // } ) );
 
     // Add the energy chunk layer.
     this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
