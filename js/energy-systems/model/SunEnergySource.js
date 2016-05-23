@@ -14,12 +14,13 @@ define( function( require ) {
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySource' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -27,17 +28,17 @@ define( function( require ) {
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
-  // var RAND = new Random();
+  var RAND = new Random();
   // var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are
   // used to make emission look random yet still have a fairly steady rate
   // within each sector.  One sector is intended to point at the solar panel.
   var NUM_EMISSION_SECTORS = 10;
-  // var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
+  var EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
 
   // Used to tweak sector positions to make sure solar panel gets consistent flow of E's.
-  // var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
+  var EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
   var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
 
@@ -52,7 +53,7 @@ define( function( require ) {
 
     EnergySource.call( this, new Image( SUN_ICON ) );
 
-    this.energychunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     this.solarPanel = solarPanel;
 
@@ -125,8 +126,39 @@ define( function( require ) {
     },
 
     updateEnergyChunkPositions: function( dt ) {},
-    emitEnergyChunk: function() {},
-    preLoadEnergyChunks: function() {},
+
+    // @private
+    emitEnergyChunk: function() {
+      var emissionAngle = this.chooseNextEmissionAngle();
+      var velocity = new Vector2( EFACConstants.ENERGY_CHUNK_VELOCITY, 0 ).rotated( emissionAngle );
+      var startPoint = this.sunPosition.plus( new Vector2( RADIUS / 2, 0 ).rotated( emissionAngle ) );
+      var chunk = new EnergyChunk( EnergyType.LIGHT, startPoint, velocity, this.energyChunksVisibleProperty );
+
+      this.energyChunkList.add( chunk );
+    },
+
+    // @public
+    // @override
+    preLoadEnergyChunks: function() {
+      this.clearEnergyChunks();
+      var preLoadTime = 6; // In simulated seconds, empirically determined.
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      this.energyChunkEmissionCountdownTimer = 0;
+
+      // Simulate energy chunks moving through the system.
+      while ( preLoadTime > 0 ) {
+        this.energyChunkEmissionCountdownTimer -= dt;
+        if ( this.energyChunkEmissionCountdownTimer <= 0 ) {
+          this.emitEnergyChunk();
+          this.energyChunkEmissionCountdownTimer += ENERGY_CHUNK_EMISSION_PERIOD;
+        }
+        this.updateEnergyChunkPositions( dt );
+        preLoadTime -= dt;
+      }
+
+      // Remove any chunks that actually made it to the solar panel.
+      this.outgoingEnergyChunks.clear();
+    },
 
     /**
      * Return a structure containing type, rate, and direction of emitted energy
@@ -136,7 +168,22 @@ define( function( require ) {
       return new Energy( EnergyType.LIGHT, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudiness ) );
     },
 
-    chooseNextEmissionAngle: function() {},
+    /**
+     * @return {number} emission angle
+     * @private
+     */
+    chooseNextEmissionAngle: function() {
+      var sector = this.sectorList[ this.currentSectorIndex ];
+      this.currentSectorIndex++;
+
+      if ( this.currentSectorIndex >= NUM_EMISSION_SECTORS ) {
+        this.currentSectorIndex = 0;
+      }
+
+      // Angle is a function of the selected sector and a random offset
+      // within the sector.
+      return sector * EMISSION_SECTOR_SPAN + ( RAND.nextDouble() * EMISSION_SECTOR_SPAN ) + EMISSION_SECTOR_OFFSET;
+    },
 
     /**
      * Pre-populate the space around the sun with energy chunks.
