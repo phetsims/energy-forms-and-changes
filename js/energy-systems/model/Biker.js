@@ -153,7 +153,7 @@ define( function( require ) {
     this.crankAngularVelocity = 0; // rad/s
     this.energyChunkMovers = [];
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
-    this.mechanicalChunksSinceLastThermal = 0; // unsigned int (count)
+    this.mechanicalChunksSinceLastThermal = 0; // Number of chunks
 
     // Monitor target rotation rate for validity.
     this.targetCrankAngularVelocityProperty.link( function( omega ) {
@@ -173,7 +173,6 @@ define( function( require ) {
     this.mechanicalPoweredSystemIsNextProperty.link( function( isNext ) {
 
       var movers = self.energyChunkMovers.slice();
-      // var movers = _.clone( self.energyChunkMovers );
       var hubPosition = self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET );
 
       movers.forEach( function( mover ) {
@@ -293,14 +292,6 @@ define( function( require ) {
      * @private
      */
     moveEnergyChunks: function( dt ) {
-
-      if ( this.energyChunkMovers.length > 0 ) {
-        var mover0 = this.energyChunkMovers[ 0 ];
-        if ( mover0.path.length > 0 ) {
-          var point0 = mover0.path[ 0 ];
-          assert && assert( point0 instanceof Vector2, 'Expected Vector2, got this: ', point0 );
-        }
-      }
 
       // Iterate through this copy while the original is mutated
       var movers = this.energyChunkMovers.slice();
