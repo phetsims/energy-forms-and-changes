@@ -145,27 +145,29 @@ define( function( require ) {
         else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ) {
           self.energyChunkList.remove( chunk );
           _.remove( self.energyChunksPassingThroughClouds, function( c ) {
-            return c === chunk; } );
+            return c === chunk;
+          } );
         }
 
         // Chunks encountering clouds
         else {
           self.clouds.forEach( function( cloud ) {
 
-            var passingThroughClouds = _.contains( self.energyChunksPassingThroughClouds, chunk );
+            var inClouds = cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.position );
+            var inList = _.contains( self.energyChunksPassingThroughClouds, chunk );
+            var deltaPhi = chunk.velocity.angle() - chunk.position.minus( self.sunPosition ).angle();
 
-            if ( cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.position ) &&
-              !passingThroughClouds &&
-              Math.abs( chunk.velocity.angle - chunk.position.minus( self.sunPosition ).angle() ) < Math.PI / 10 ) {
+            if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {
 
               // Decide whether this energy chunk should pass
               // through the clouds or be reflected.
-              if ( RAND.nextDouble() < cloud.existenceStrength.get() ) {
+              if ( RAND.nextDouble() < cloud.existenceStrengthProperty.get() ) {
 
                 // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the
                 // code below tries to avoid that.
                 var angleTowardsSun = chunk.velocity.angle() + Math.PI;
-                var reflectionAngle = new Vector2( cloud.getCenterPosition(), chunk.position.get() ).angle();
+                var reflectionAngle = chunk.position.minus(cloud.getCenterPosition()).angle();
+
                 if ( reflectionAngle < angleTowardsSun ) {
                   chunk.setVelocity( chunk.velocity.rotated( 0.7 * Math.PI + RAND.nextDouble() * Math.PI / 8 ) );
                 } else {
