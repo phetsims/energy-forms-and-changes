@@ -342,7 +342,6 @@ define( function( require ) {
           // This is a mechanical energy chunk that has traveled
           // to the hub and should now become thermal energy.
           self.removeEnergyChunkMover( mover );
-
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
             self.createThermalEnergyChunkPath( self.position ),
@@ -426,7 +425,6 @@ define( function( require ) {
     },
 
     /**
-     * [deactivate description]
      * @public
      * @override
      */
@@ -437,7 +435,6 @@ define( function( require ) {
     },
 
     /**
-     * [clearEnergyChunks description]
      * @public
      * @override
      */
@@ -468,6 +465,14 @@ define( function( require ) {
       }
     },
 
+    /**
+     * Find the image index corresponding to this angle in radians
+     *
+     * @param  {number} angle
+     *
+     * @return {number} - image index
+     * @private
+     */
     mapAngleToImageIndex: function( angle ) {
       var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_LEG_IMAGES ) );
 
@@ -501,7 +506,6 @@ define( function( require ) {
       path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
       path.push( centerPosition.plus( BOTTOM_OF_BACK_WHEEL_OFFSET ) );
       path.push( centerPosition.plus( NEXT_ENERGY_SYSTEM_OFFSET ) );
-
       return path;
     },
 

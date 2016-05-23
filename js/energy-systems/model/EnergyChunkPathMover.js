@@ -78,6 +78,7 @@ define( function( require ) {
           } else {
             // Set the next destination point.
             this.nextPoint = this.path[ this.path.indexOf( this.nextPoint ) + 1 ];
+            console.log(this.nextPoint);
           }
         }
       }
