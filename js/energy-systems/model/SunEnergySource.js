@@ -138,7 +138,7 @@ define( function( require ) {
         // This energy chunk was absorbed by the solar panel, so
         // put it on the list of outgoing chunks.
         if ( self.solarPanel.active && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.position ) ) {
-          self.outgoingEnergyChunks.add( chunk );
+          self.outgoingEnergyChunks.push( chunk );
         }
 
         // This energy chunk is out of visible range, so remove it.
