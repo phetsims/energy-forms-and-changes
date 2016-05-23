@@ -16,6 +16,7 @@ define( function( require ) {
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
@@ -35,7 +36,6 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
-
 
   // Strings
   var cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
@@ -250,6 +250,9 @@ define( function( require ) {
       resize: false
     } ) );
 
+    // Add the energy chunks, which reside on their own layer.
+    this.addChild( new EnergyChunkLayer( sun.energyChunkList, sun.positionProperty, modelViewTransform ) );
+
     // Add/remove the light-absorbing shape for the solar panel
     var currentLightAbsorbingShape = null;
     Property.multilink( [ sun.activeProperty, sun.solarPanel.activeProperty ],
@@ -266,7 +269,7 @@ define( function( require ) {
           absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
           currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
 
-          lightRays.addLightAbsorbingShape(currentLightAbsorbingShape);
+          lightRays.addLightAbsorbingShape( currentLightAbsorbingShape );
 
           // DEBUG: Show absorption shape outline with wide line visible behind image.
           // var path = new Path( absorptionShape, {
