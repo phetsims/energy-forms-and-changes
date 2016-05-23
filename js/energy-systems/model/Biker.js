@@ -580,7 +580,6 @@ define( function( require ) {
           return;
         }
       } );
-
       return nonMovingEnergyChunk;
     },
 

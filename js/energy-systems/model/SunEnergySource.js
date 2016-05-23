@@ -29,7 +29,7 @@ define( function( require ) {
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
   var RAND = new Random();
-  // var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
+  var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are
   // used to make emission look random yet still have a fairly steady rate
@@ -125,7 +125,66 @@ define( function( require ) {
       return new Energy( EnergyType.LIGHT, energyProduced, 0 );
     },
 
-    updateEnergyChunkPositions: function( dt ) {},
+    // @private
+    updateEnergyChunkPositions: function( dt ) {
+
+      var self = this;
+
+      // Check for bouncing and absorption of the energy chunks.
+      this.energyChunkList.forEach( function( chunk ) {
+
+        var distanceFromSun = chunk.position.distance( self.sunPosition.plus( OFFSET_TO_CENTER_OF_SUN ) );
+
+        // This energy chunk was absorbed by the solar panel, so
+        // put it on the list of outgoing chunks.
+        if ( self.solarPanel.active && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.position ) ) {
+          self.outgoingEnergyChunks.add( chunk );
+        }
+
+        // This energy chunk is out of visible range, so remove it.
+        else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ) {
+          self.energyChunkList.remove( chunk );
+          _.remove( self.energyChunksPassingThroughClouds, function( c ) {
+            return c === chunk; } );
+        }
+
+        // Chunks encountering clouds
+        else {
+          self.clouds.forEach( function( cloud ) {
+
+            var passingThroughClouds = _.contains( self.energyChunksPassingThroughClouds, chunk );
+
+            if ( cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.position ) &&
+              !passingThroughClouds &&
+              Math.abs( chunk.velocity.angle - chunk.position.minus( self.sunPosition ).angle() ) < Math.PI / 10 ) {
+
+              // Decide whether this energy chunk should pass
+              // through the clouds or be reflected.
+              if ( RAND.nextDouble() < cloud.existenceStrength.get() ) {
+
+                // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the
+                // code below tries to avoid that.
+                var angleTowardsSun = chunk.velocity.angle() + Math.PI;
+                var reflectionAngle = new Vector2( cloud.getCenterPosition(), chunk.position.get() ).angle();
+                if ( reflectionAngle < angleTowardsSun ) {
+                  chunk.setVelocity( chunk.velocity.rotated( 0.7 * Math.PI + RAND.nextDouble() * Math.PI / 8 ) );
+                } else {
+                  chunk.setVelocity( chunk.velocity.rotated( -0.7 * Math.PI - RAND.nextDouble() * Math.PI / 8 ) );
+                }
+
+              } else {
+                // Let it pass through the cloud.
+                self.energyChunksPassingThroughClouds.push( chunk );
+              }
+            }
+          } );
+        }
+      } );
+
+      this.energyChunkList.forEach( function( chunk ) {
+        chunk.translateBasedOnVelocity( dt );
+      } );
+    },
 
     // @private
     emitEnergyChunk: function() {
