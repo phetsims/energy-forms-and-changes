@@ -31,15 +31,15 @@ define( function( require ) {
 
   /**
    * @param {Vector2} offsetFromParent
-   * @param {Vector2} parentPosition
+   * @param {Property.<Vector2>} parentPositionProperty
    * @constructor
    */
-  function Cloud( offsetFromParent, parentPosition ) {
+  function Cloud( offsetFromParent, parentPositionProperty ) {
     PropertySet.call( this, {
       existenceStrength: 1.0
     } );
     this.offsetFromParent = offsetFromParent;
-    this.parentPosition = parentPosition;
+    this.parentPositionProperty = parentPositionProperty;
   }
 
   energyFormsAndChanges.register( 'Cloud', Cloud );
@@ -52,9 +52,8 @@ define( function( require ) {
      * @return {Shape.ellipse} Ellipse with axes sized to width and height of cloud
      */
     getCloudAbsorptionReflectionShape: function() {
-      var x = this.parentPosition.x + this.offsetFromParent.x - CLOUD_WIDTH / 2;
-      var y = this.parentPosition.y + this.offsetFromParent.y - CLOUD_HEIGHT / 2;
-      return Shape.ellipse( x, y, CLOUD_WIDTH, CLOUD_HEIGHT, 0, 0, 0, false );
+      var center = this.getCenterPosition().minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
+      return Shape.ellipse( center.x, center.y, CLOUD_WIDTH/2, CLOUD_HEIGHT/2, 0, 0, 0, false );
     },
 
     /**
@@ -63,7 +62,7 @@ define( function( require ) {
      * @return {Vector2} Center position of cloud
      */
     getCenterPosition: function() {
-      return this.parentPosition.plus( this.offsetFromParent );
+      return this.parentPositionProperty.get().plus( this.offsetFromParent );
     }
 
   }, {
