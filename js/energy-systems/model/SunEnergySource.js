@@ -75,9 +75,9 @@ define( function( require ) {
     // set so that they appear between the sun and the solar panel, and must
     // not overlap with one another.
     this.clouds = [
-      new Cloud( new Vector2( -0.01, 0.08 ), this.position ),
-      new Cloud( new Vector2( 0.017, 0.0875 ), this.position ),
-      new Cloud( new Vector2( 0.02, 0.105 ), this.position )
+      new Cloud( new Vector2( -0.01, 0.08 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.017, 0.0875 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.02, 0.105 ), this.positionProperty )
     ];
 
     this.addProperty( 'cloudiness', 0 );
