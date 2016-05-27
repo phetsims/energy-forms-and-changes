@@ -101,7 +101,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
 
-  // TODO fill out these stubs
   return inherit( EnergyConverter, SolarPanel, {
 
     /**
@@ -123,7 +122,58 @@ define( function( require ) {
       return new Energy( EnergyType.ELECTRICAL, energyProduced, 0 );
     },
 
-    moveEnergyChunks: function( dt ) {},
+    /**
+     * Utility method to remove EnergyChunkMover from array.
+     *
+     * @param  {EnergyChunkMover} mover
+     * @private
+     */
+    removeEnergyChunkMover: function( mover ) {
+      _.remove( this.energyChunkMovers, function( m ) {
+        return m === mover;
+      } );
+    },
+
+    /**
+     * Update energy chunk positions at each step
+     *
+     * @param  {Number} dt timestep
+     * @private
+     */
+    moveEnergyChunks: function( dt ) {
+
+      // Iterate over a copy to mutate original without problems
+      var movers = _.clone( this.energyChunkMovers );
+
+      var self = this;
+
+      movers.forEach( function( mover ) {
+
+        mover.moveAlongPath( dt );
+
+        if ( mover.isPathFullyTraversed() ) {
+
+          self.removeEnergyChunkMover( mover );
+
+          // Energy chunk has reached the bottom of the panel and now needs to move through the converter.
+          if ( mover.energyChunk.position.get().equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+            self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+              self.createPathThroughConverter( self.position ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          }
+
+          // The energy chunk has traveled across the panel and through
+          // the converter, so pass it off to the next element in the system.
+          else {
+            self.outgoingEnergyChunks.push( mover.energyChunk );
+
+            _.remove( self.energyChunkList, function( chunk ) {
+              return chunk === mover.energyChunk;
+            } );
+          }
+        }
+      } );
+    },
 
     /**
      * @param {Energy} incomingEnergy
