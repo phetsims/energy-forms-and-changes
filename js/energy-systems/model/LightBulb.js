@@ -130,9 +130,7 @@ define( function( require ) {
           // dependent upon whether light energy chunks are present.
           var lightChunksInLitRadius = 0;
 
-          var movers = _.clone( this.radiatedEnergyChunkMovers );
-
-          movers.forEach( function( mover ) {
+          this.radiatedEnergyChunkMovers.forEach( function( mover ) {
             var distance = mover.energyChunk.position.distance( self.position.plus( OFFSET_TO_RADIATE_POINT ) );
             if ( distance < LIGHT_CHUNK_LIT_BULB_RADIUS ) {
               lightChunksInLitRadius++;
@@ -146,9 +144,12 @@ define( function( require ) {
             // Light is off.
             this.litProportionProperty.set( Math.max( 0, this.litProportionProperty.get() - LIGHT_CHANGE_RATE * dt ) );
           }
-        } else {
+        }
+
+        // Energy chunks not currently visible
+        else {
           if ( this.active && incomingEnergy.type === EnergyType.ELECTRICAL ) {
-            this.litProportionProperty.set( Util.clamp( 0, incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 1 ) );
+            this.litProportionProperty.set( Util.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
           } else {
             this.litProportionProperty.set( 0.0 );
           }
