@@ -99,7 +99,7 @@ define( function( require ) {
               // Add the energy chunk to the list of those under management.
               self.energyChunkList.push( incomingChunk );
 
-              // And a "mover" that will move this energy chunk through
+              // Add a "mover" that will move this energy chunk through
               // the wire to the bulb.
               self.electricalEnergyChunkMovers.push(
                 new EnergyChunkPathMover(
@@ -341,7 +341,7 @@ define( function( require ) {
       var filamentWidth = 0.03;
       var x = ( 0.5 + RAND.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
 
-      path.push( new Vector2( x, 0 ) );
+      path.push( startingPoint.plus( new Vector2( x, 0 ) ) );
       this.goRightNextTime = !this.goRightNextTime;
 
       return path;
