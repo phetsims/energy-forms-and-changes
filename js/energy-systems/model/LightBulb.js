@@ -13,6 +13,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
@@ -110,15 +111,58 @@ define( function( require ) {
     /**
      * [preLoadEnergyChunks description]
      *
-     * @param  {Energy} incomingEnergyRate
+     * @param  {Energy} incomingEnergy
      * @public
      * @override
      */
-    preLoadEnergyChunks: function( incomingEnergyRate ) {},
+    preLoadEnergyChunks: function( incomingEnergy ) {
+
+      this.clearEnergyChunks();
+
+      if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
+        incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+        // No energy chunk pre-loading needed.
+        return;
+      }
+
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+
+      // Simulate energy chunks moving through the system.
+      var preLoadComplete = false;
+      while ( !preLoadComplete ) {
+        this.energySinceLastChunk += incomingEnergy.amount * dt;
+
+        // Determine if time to add a new chunk.
+        if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          var newEnergyChunk = new EnergyChunk(
+            EnergyType.ELECTRICAL,
+            this.position.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
+            this.energyChunksVisibleProperty );
+
+          this.energyChunkList.push( newEnergyChunk );
+          // Add a 'mover' for this energy chunk.
+          // And a "mover" that will move this energy chunk through
+          // the wire to the heating element.
+          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
+            this.createElectricalEnergyChunkPath( this.position ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+          // Update energy since last chunk.
+          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        this.moveElectricalEnergyChunks( dt );
+        this.moveFilamentEnergyChunks( dt );
+
+        if ( this.radiatedEnergyChunkMovers.length > 1 ) {
+          // A couple of chunks are radiating, which completes the pre-load.
+          preLoadComplete = true;
+        }
+      }
+    },
 
     /**
-     *
-     *
      * @param  {EnergyChunk} energyChunk
      * @private
      */
@@ -144,8 +188,6 @@ define( function( require ) {
     },
 
     /**
-     * [createThermalEnergyChunkPath description]
-     *
      * @param  {Vector2} startingPoint
      *
      * @return {Vector2[]}
