@@ -11,12 +11,13 @@ define( function( require ) {
 
   // Modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  // var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
+  var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
+  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Image = require( 'SCENERY/nodes/Image' );
-  // var Random = require( 'DOT/Random' );
+  var Random = require( 'DOT/Random' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -31,20 +32,20 @@ define( function( require ) {
   var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, new Vector2( 0, 0.0 ) );
   var ELEMENT_BASE_BACK_IMAGE = new EFACModelImage( ELEMENT_BASE_BACK, new Vector2( 0, 0.0 ) );
 
-  // var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
-  // var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
-  // var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  // var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  // var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0005, -0.0175 );
-  // var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.01 );
-  // var OFFSET_TO_RADIATE_POINT = new Vector2( 0, 0.066 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0005, -0.0175 );
+  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.01 );
+  var OFFSET_TO_RADIATE_POINT = new Vector2( 0, 0.066 );
 
-  // var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
-  // var RAND = new Random();
-  // var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
-  // var ENERGY_TO_FULLY_LIGHT = EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
-  // var LIGHT_CHUNK_LIT_BULB_RADIUS = 0.1; // In meters.
-  // var LIGHT_CHANGE_RATE = 0.5; // In proportion per second.
+  var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
+  var RAND = new Random();
+  var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
+  var ENERGY_TO_FULLY_LIGHT = EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
+  var LIGHT_CHUNK_LIT_BULB_RADIUS = 0.1; // In meters.
+  var LIGHT_CHANGE_RATE = 0.5; // In proportion per second.
 
   /**
    * @param {Image} iconImage
@@ -66,6 +67,7 @@ define( function( require ) {
     this.electricalEnergyChunkMovers = [];
     this.filamentEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
+    this.goRightNextTime = true; // @private
   }
 
   energyFormsAndChanges.register( 'LightBulb', LightBulb );
@@ -120,7 +122,26 @@ define( function( require ) {
      * @param  {EnergyChunk} energyChunk
      * @private
      */
-    radiateEnergyChunk: function( energyChunk ) {},
+    radiateEnergyChunk: function( energyChunk ) {
+      if ( RAND.nextDouble() > this.proportionOfThermalChunksRadiated ) {
+        energyChunk.energyType.set( EnergyType.LIGHT );
+      } else {
+        energyChunk.energyType.set( EnergyType.THERMAL );
+      }
+
+      // Path of radiated light chunks
+      var path = [];
+
+      path.push( this.position
+        .plus( OFFSET_TO_RADIATE_POINT )
+        .plus( new Vector2( 0, RADIATED_ENERGY_CHUNK_MAX_DISTANCE )
+          .rotated( ( RAND.nextDouble() - 0.5 ) * ( Math.PI / 2 ) ) ) );
+
+      this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
+        energyChunk,
+        path,
+        EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+    },
 
     /**
      * [createThermalEnergyChunkPath description]
@@ -130,37 +151,84 @@ define( function( require ) {
      * @return {Vector2[]}
      * @private
      */
-    createThermalEnergyChunkPath: function( startingPoint ) {},
+    createThermalEnergyChunkPath: function( startingPoint ) {
+      var path = [];
+      var filamentWidth = 0.03;
+      var x = ( 0.5 + RAND.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
+
+      path.push( new Vector2( x, 0 ) );
+      this.goRightNextTime = !this.goRightNextTime;
+
+      return path;
+    },
 
     /**
-     *
-     *
      * @param  {Vector2} center
      *
      * @return {Vector2[]}
      * @private
      */
-    createElectricalEnergyChunkPath: function( center ) {},
+    createElectricalEnergyChunkPath: function( center ) {
+      var path = [];
+
+      path.push( center.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND ) );
+      path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
+      path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
+      path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
+      path.push( center.plus( OFFSET_TO_BOTTOM_OF_CONNECTOR ) );
+      path.push( center.plus( OFFSET_TO_RADIATE_POINT ) );
+
+      return path;
+    },
 
     /**
-     * [generateThermalChunkTimeOnFilament description]
-     *
+     * @return {Number} time
+     * @private
+     */
+    generateThermalChunkTimeOnFilament: function() {
+      return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
+        RAND.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
+    },
+
+    /**
+     * @param {Vector2} startingLocation
+     * @param {Vector2[]} pathPoints
      * @return {Number}
      * @private
      */
-    generateThermalChunkTimeOnFilament: function() {},
+    getTotalPathLength: function( startingLocation, pathPoints ) {
+      if ( pathPoints.length === 0 ) {
+        return 0;
+      }
+
+      var pathLength = startingLocation.distance( pathPoints[ 0 ] );
+      for ( var i = 0; i < pathPoints.length - 1; i++ ) {
+        pathLength += pathPoints[ i ].distance( pathPoints[ i + 1 ] );
+      }
+
+      return pathLength;
+    },
 
     /**
-     * [getTotalPathLength description]
-     *
-     * @return {Number}
-     * @private
+     * Deactivate the light bulb.
+     * @public
+     * @override
      */
-    getTotalPathLength: function() {},
+    deactivate: function() {
+      EnergyUser.prototype.deactivate.call( this );
+      this.litProportionProperty.set( 0 );
+    },
 
-    deactivate: function() {},
-
-    clearEnergyChunks: function() {}
+    /**
+     * @public
+     * @override
+     */
+    clearEnergyChunks: function() {
+      EnergyUser.prototype.clearEnergyChunks.call( this );
+      this.electricalEnergyChunkMovers.length = 0;
+      this.filamentEnergyChunkMovers.length = 0;
+      this.radiatedEnergyChunkMovers.length = 0;
+    }
 
   }, {
     // Export module-scope consts for static access
