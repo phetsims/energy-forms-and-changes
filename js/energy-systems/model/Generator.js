@@ -400,7 +400,6 @@ define( function( require ) {
     },
 
     /**
-     * [clearEnergyChunks description]
      * @public
      * @override
      */
