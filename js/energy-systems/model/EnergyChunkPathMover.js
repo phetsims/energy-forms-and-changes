@@ -85,7 +85,7 @@ define( function( require ) {
     },
 
     getFinalDestination: function() {
-      return this.path.get[ this.path.length - 1 ];
+      return this.path[ this.path.length - 1 ];
     }
 
   } );

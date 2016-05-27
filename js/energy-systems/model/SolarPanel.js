@@ -104,11 +104,48 @@ define( function( require ) {
   return inherit( EnergyConverter, SolarPanel, {
 
     /**
-     * [step description]
-     * @param  {Number} dt             Time step size
-     * @param  {Energy} incomingEnergy Type, amount, direction of energy
+     * @param  {Number} dt - time step size
+     * @param  {Energy} incomingEnergy - type, amount, direction of energy
      */
     step: function( dt, incomingEnergy ) {
+
+      var self = this;
+
+      if ( this.active ) {
+
+        // Handle any incoming energy chunks.
+        if ( this.incomingEnergyChunks.length > 0 ) {
+
+          this.incomingEnergyChunks.forEach( function( incomingChunk ) {
+
+            if ( incomingChunk.energyTypeProperty.get() === EnergyType.LIGHT ) {
+
+              // Convert this chunk to electrical energy and add it to
+              // the list of energy chunks being managed.
+              incomingChunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
+              self.energyChunkList.push( incomingChunk );
+
+              // And a "mover" that will move this energy chunk
+              // to the bottom of the solar panel.
+              self.energyChunkMovers.push( new EnergyChunkPathMover( incomingChunk,
+                self.createPathToPanelBottom( self.positionProperty.get() ),
+                self.chooseChunkSpeedOnPanel( incomingChunk ) ) );
+            }
+
+            // By design, this shouldn't happen, so raise an error if it does.
+            else {
+              assert && assert( false,
+                'Encountered energy chunk with unexpected type: ' + incomingChunk.energyTypeProperty.get() );
+            }
+
+          } );
+
+          this.incomingEnergyChunks.length = 0;
+        }
+
+        // Move the energy chunks that are currently under management.
+        this.moveEnergyChunks( dt );
+      }
 
       // Produce the appropriate amount of energy.
       var energyProduced = 0;
@@ -151,12 +188,12 @@ define( function( require ) {
 
         mover.moveAlongPath( dt );
 
-        if ( mover.isPathFullyTraversed() ) {
+        if ( mover.pathFullyTraversed ) {
 
           self.removeEnergyChunkMover( mover );
 
           // Energy chunk has reached the bottom of the panel and now needs to move through the converter.
-          if ( mover.energyChunk.position.get().equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+          if ( mover.energyChunk.position.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createPathThroughConverter( self.position ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -265,8 +302,10 @@ define( function( require ) {
       // Count the number of chunks currently on the panel.
       var numChunksOnPanel = 0;
 
+      var self = this;
+
       this.energyChunkMovers.forEach( function( mover ) {
-        if ( mover.getFinalDestination().equals( this.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+        if ( mover.getFinalDestination().equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
           numChunksOnPanel++;
         }
       } );
