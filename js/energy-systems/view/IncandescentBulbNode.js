@@ -50,7 +50,7 @@ define( function( require ) {
     this.addChild( energizedBulb );
 
     // Center the light rays on the bulb image.
-    lightRays.centerY = -energizedBulb.bounds.height * 0.18;
+    lightRays.y = energizedBulb.bounds.center.y - energizedBulb.bounds.height * 0.1;
 
     // Update the transparency of the lit bulb based on model element.
     lightBulb.litProportionProperty.link( function( litProportion ) {
