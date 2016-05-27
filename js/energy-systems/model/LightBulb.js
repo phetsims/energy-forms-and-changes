@@ -74,10 +74,9 @@ define( function( require ) {
   energyFormsAndChanges.register( 'LightBulb', LightBulb );
 
   return inherit( EnergyUser, LightBulb, {
+
     /**
-     * [step description]
-     *
-     * @param  {Number} dt timestep
+     * @param  {Number} dt - timestep
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -85,28 +84,98 @@ define( function( require ) {
     step: function( dt, incomingEnergy ) {},
 
     /**
+     * Utility method to remove object from array.
      *
-     *
-     * @param  {Number} dt timestep
+     * @param  {*[]} list
+     * @param  {*} element
      * @private
      */
-    moveRadiatedEnergyChunks: function( dt ) {},
+    removeElement: function( list, element ) {
+      _.remove( list, function( e ) {
+        return e === element;
+      } );
+    },
 
     /**
      *
      *
-     * @param  {Number} dt timestep
+     * @param  {Number} dt - timestep
      * @private
      */
-    moveFilamentEnergyChunks: function( dt ) {},
+    moveRadiatedEnergyChunks: function( dt ) {
+      // Iterate over a copy to mutate original without problems
+      var movers = _.clone( this.radiatedEnergyChunkMovers );
+
+      var self = this;
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        // Remove the chunk and its mover.
+        if ( mover.pathFullyTraversed ) {
+          self.removeElement( self.energyChunkList, mover.energyChunk );
+          self.removeElement( self.radiatedEnergyChunkMovers, mover );
+        }
+      } );
+    },
 
     /**
      *
      *
-     * @param  {Number} dt timestep
+     * @param  {Number} dt - timestep
      * @private
      */
-    moveElectricalEnergyChunks: function( dt ) {},
+    moveFilamentEnergyChunks: function( dt ) {
+      // Iterate over a copy to mutate original without problems
+      var movers = _.clone( this.filamentEnergyChunkMovers );
+
+      var self = this;
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        // Cause this energy chunk to be radiated from the bulb.
+        if ( mover.pathFullyTraversed ) {
+          self.removeElement( self.filamentEnergyChunkMovers, mover );
+          self.radiateEnergyChunk( mover.energyChunk );
+        }
+      } );
+    },
+
+    /**
+     *
+     *
+     * @param  {Number} dt - timestep
+     * @private
+     */
+    moveElectricalEnergyChunks: function( dt ) {
+
+      // Iterate over a copy to mutate original without problems
+      var movers = _.clone( this.electricalEnergyChunkMovers );
+
+      var self = this;
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        if ( mover.pathFullyTraversed ) {
+          self.removeElement( self.electricalEnergyChunkMovers, mover );
+
+          // Turn this energy chunk into thermal energy on the filament.
+          if ( self.hasFilament ) {
+            mover.energyChunk.energyType.set( EnergyType.THERMAL );
+            var path = self.createThermalEnergyChunkPath( mover.energyChunk.position );
+            var speed = self.getTotalPathLength( mover.energyChunk.position, path ) /
+              self.generateThermalChunkTimeOnFilament();
+
+            self.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
+          } else {
+            // There is no filament, so just radiate the chunk.
+            self.radiateEnergyChunk( mover.energyChunk );
+          }
+        }
+      } );
+    },
 
     /**
      * [preLoadEnergyChunks description]
