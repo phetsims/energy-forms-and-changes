@@ -24,12 +24,12 @@ define( function( require ) {
   var FRONT_ON = new EFACModelImage( FLUORESCENT_ON_FRONT_2, IMAGE_OFFSET );
 
   /**
-   * @param {Property.<boolean>} energyChunksVisible
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function FluorescentBulb( energyChunksVisible ) {
+  function FluorescentBulb( energyChunksVisibleProperty ) {
 
-    LightBulb.call( this, new Image( FLUORESCENT_ICON ), false, energyChunksVisible );
+    LightBulb.call( this, new Image( FLUORESCENT_ICON ), false, energyChunksVisibleProperty );
   }
 
   energyFormsAndChanges.register( 'FluorescentBulb', FluorescentBulb );

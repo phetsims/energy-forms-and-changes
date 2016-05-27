@@ -22,11 +22,11 @@ define( function( require ) {
   var ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_ON_3, IMAGE_OFFSET );
 
   /**
-   * @param {Property.<boolean>} energyChunksVisible
+   * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function IncandescentBulb( energyChunksVisible ) {
-    LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisible );
+  function IncandescentBulb( energyChunksVisibleProperty ) {
+    LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty );
   }
 
   energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );
