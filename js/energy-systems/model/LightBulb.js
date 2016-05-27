@@ -94,7 +94,7 @@ define( function( require ) {
 
           incomingChunks.forEach( function( incomingChunk ) {
 
-            if ( incomingChunk.energyTypeProperty.get() == EnergyType.ELECTRICAL ) {
+            if ( incomingChunk.energyTypeProperty.get() === EnergyType.ELECTRICAL ) {
 
               // Add the energy chunk to the list of those under management.
               self.energyChunkList.push( incomingChunk );
