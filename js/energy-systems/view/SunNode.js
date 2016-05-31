@@ -116,7 +116,6 @@ define( function( require ) {
 
     sunPath.setTranslation( sunCenter );
 
-    this.addChild( sunPath );
 
     // Add clouds, initially transparent
     sun.clouds.forEach( function( cloud ) {
@@ -187,6 +186,7 @@ define( function( require ) {
 
     // Add the energy chunks, which reside on their own layer.
     this.addChild( new EnergyChunkLayer( sun.energyChunkList, sun.positionProperty, modelViewTransform ) );
+    this.addChild( sunPath );
 
     // Add/remove the light-absorbing shape for the solar panel
     var currentLightAbsorbingShape = null;
