@@ -43,6 +43,7 @@ define( function( require ) {
         // TODO: Check this ported transform, Java code left in for now.
         thisContainerSlice.shape = thisContainerSlice.shape.transformed( Matrix3.translationFromVector( translation ) );
         //EnergyChunkContainerSlice.this.shape = AffineTransform.getTranslateInstance( translation.getX(), translation.getY() ).createTransformedShape( EnergyChunkContainerSlice.this.shape );
+
         thisContainerSlice.energyChunkList.forEach( function( energyChunk ) {
           energyChunk.translate( translation );
         } );

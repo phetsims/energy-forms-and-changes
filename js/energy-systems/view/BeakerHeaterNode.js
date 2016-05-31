@@ -59,6 +59,15 @@ define( function( require ) {
       modelViewTransform ) );
     this.addChild( this.beakerView.frontNode );
 
+    // DEBUG - temp
+    var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+    var sb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getSliceBounds() );
+    var rb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getRectangleBounds() );
+    var sbr = new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } );
+    var rbr = new Rectangle( rb.x, rb.y, rb.width, rb.height, { stroke: 'red' } );
+    this.addChild( sbr );
+    this.addChild( rbr );
+
     // Update the transparency of the hot element to make the dark element
     // appear to heat up.
     beakerHeater.heatProportionProperty.link( function( litProportion ) {

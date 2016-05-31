@@ -17,6 +17,7 @@ define( function( require ) {
   var Circle = require( 'SCENERY/nodes/Circle' );
   var DotRectangle = require( 'DOT/Rectangle' ); // eslint-disable-line require-statement-match
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -339,9 +340,10 @@ define( function( require ) {
     ////energyChunkClipNode.setPathTo( beakerViewRect ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
     //energyChunkRootNode.addChild( energyChunkClipNode );
     ////energyChunkClipNode.setStroke( null );
-    //for( var i = beaker.slices.length - 1; i >= 0; i-- ) {
-    //  energyChunkClipNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[i], modelViewTransform ) )
-    //}
+    for ( var i = beaker.slices.length - 1; i >= 0; i-- ) {
+      // TODO (AMA): I added the slices to the root node, but they should be added to the clip node when available.
+      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[ i ], modelViewTransform ) );
+    }
 
     // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
     // needed.

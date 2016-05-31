@@ -179,20 +179,20 @@ define( function( require ) {
       var thisBeaker = this;
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
-        var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( thisBeaker.energy );
-        var initialChunkBounds = thisBeaker.getSliceBounds();
-        while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
-          // Add a chunk at a random location in the beaker.
-          thisBeaker.addEnergyChunkToNextSlice(
-            new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
-              new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty ) );
-        }
       } );
+      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( thisBeaker.energy );
+      var initialChunkBounds = thisBeaker.getSliceBounds();
+      while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
+        // Add a chunk at a random location in the beaker.
+        thisBeaker.addEnergyChunkToNextSlice(
+          new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
+            new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty ) );
+      }
 
       // Distribute the energy chunks within the beaker.
       // TODO: Why 1000 for the loop max?
       // This loop massively increases load time...leaving commented for now
-      // for ( var i = 0; i < 100; i++ ) {
+      // for ( var i = 0; i < 1000; i++ ) {
       //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
       //     break;
       //   }
