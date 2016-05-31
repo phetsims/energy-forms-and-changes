@@ -51,7 +51,7 @@ define( function( require ) {
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
   // var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
-  var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.height;
+  var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.getHeight();
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
   var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // In meters.
   var HEAT_ENERGY_CHANGE_RATE = 0.5; // In proportion per second.
@@ -219,9 +219,7 @@ define( function( require ) {
           // chunk.
           self.beaker.addEnergyChunk( mover.energyChunk );
 
-          _.remove( self.energyChunkList, function( chunk ) {
-            return chunk === mover.energyChunk;
-          } );
+          self.energyChunkList.remove( mover.energyChunk );
 
           _.remove( self.heatingElementEnergyChunkMovers, function( m ) {
             return m === mover;
@@ -246,9 +244,7 @@ define( function( require ) {
 
           // The electrical energy chunk has reached the burner, so
           // it needs to change into thermal energy.
-          _.remove( self.electricalEnergyChunkMovers, function( m ) {
-            return m === mover;
-          } );
+          _.remove( self.electricalEnergyChunkMovers, mover );
           mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
           // Have the thermal energy move a little on the element
@@ -346,7 +342,6 @@ define( function( require ) {
       // coordinated with the burner element image.
       var angle = RAND.nextBoolean() ? RAND.nextDouble() * Math.PI * 0.45 : -RAND.nextDouble() * Math.PI * 0.3;
       path.push( startingPoint.plus( new Vector2( 0, HEATER_ELEMENT_2D_HEIGHT ).rotated( angle ) ) );
-
       return path;
     },
 
