@@ -44,7 +44,9 @@ define( function( require ) {
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
 
-    // Add the beaker.
+    // Add the beaker.  A compensating MVT is needed because the beaker
+    // node is being added as a child of this node, but wants to set its
+    // own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
 

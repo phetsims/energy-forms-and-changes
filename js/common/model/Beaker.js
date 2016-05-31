@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkDistributor' );
@@ -25,16 +26,17 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
+  var Random = require( 'DOT/Random' );
   var Shape = require( 'KITE/Shape' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
-  var Bounds2 = require( 'DOT/Bounds2' );
 
   // constants
   var MATERIAL_THICKNESS = 0.001; // In meters.
   var NUM_SLICES = 6;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
+  var RAND = new Random();
 
   // constants that control the nature of the fluid in the beaker.
   var WATER_SPECIFIC_HEAT = 3000; // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
@@ -208,7 +210,7 @@ define( function( require ) {
         totalSliceArea += slice.shape.bounds.width * slice.shape.bounds.height;
       } );
 
-      var sliceSelectionValue = Math.random();
+      var sliceSelectionValue = RAND.nextDouble();
       var chosenSlice = this.slices[ 0 ];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
