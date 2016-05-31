@@ -88,9 +88,7 @@ define( function( require ) {
   return inherit( EnergyUser, BeakerHeater, {
 
     /**
-     * [step description]
-     *
-     * @param  {Number} dt timestep
+     * @param  {Number} dt - timestep
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -181,8 +179,6 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
      * @param  {Number} dt timestep
      * @private
      */
@@ -196,9 +192,7 @@ define( function( require ) {
         if ( mover.pathFullyTraversed ) {
 
           // Remove this energy chunk entirely.
-          _.remove( self.radiatedEnergyChunkList, function( chunk ) {
-            return chunk === mover.energyChunk;
-          } );
+          self.radiatedEnergyChunkList.remove( mover.energyChunk );
 
           _.remove( self.radiatedEnergyChunkMovers, function( m ) {
             return m === mover;
@@ -208,8 +202,6 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
      * @param  {Number} dt timestep
      * @private
      */
@@ -240,14 +232,12 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
      * @param  {Number} dt timestep
      * @private
      */
     moveElectricalEnergyChunks: function( dt ) {
       var self = this;
-      var movers = _.clone(this.electricalEnergyChunkMovers);
+      var movers = _.clone( this.electricalEnergyChunkMovers );
 
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
@@ -271,8 +261,6 @@ define( function( require ) {
     },
 
     /**
-     * [preLoadEnergyChunks description]
-     *
      * @param  {Energy} incomingEnergyRate
      * @public
      * @override
@@ -345,8 +333,6 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
      * @param  {Vector2} startingPoint
      *
      * @return {Vector2[]}
@@ -365,8 +351,6 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
      * @param  {Vector2} center
      *
      * @return {Vector2[]}
