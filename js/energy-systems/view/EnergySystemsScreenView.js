@@ -168,11 +168,6 @@ define( function( require ) {
       thisScreenView.addChild( resetAllButton );
     }
 
-    function addSun() {
-      var sun = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( sun );
-    }
-
     // Create the carousel control nodes.
     function createCarousels() {
 
@@ -192,58 +187,40 @@ define( function( require ) {
       return [ sourcesCarousel, convertersCarousel, usersCarousel ];
     }
 
-
-    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
-    thisScreenView.addChild( this.teaPotNode );
-
-    function addFaucet() {
-      var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( faucetNode );
-    }
-
-    function addGenerator() {
-      var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
-      thisScreenView.addChild( generatorNode );
-    }
-
-    function addSolarPanel() {
-      var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
-      thisScreenView.addChild( solarPanelNode );
-    }
-
-    function addIncandescentBulb() {
-      var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( incandescentBulbNode );
-    }
-
-    function addFluorescentBulb() {
-      var fluorescentBulbNode = new FluorescentBulbNode( model.fluorescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( fluorescentBulbNode );
-    }
-
-    this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
-    thisScreenView.addChild( this.beakerHeaterNode );
-
-    var beltNode = new BeltNode( model.belt, modelViewTransform );
-    addGenerator();
-    thisScreenView.addChild( beltNode );
-
-    function addBiker() {
-      var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
-      thisScreenView.addChild( bikerNode );
-    }
-
     addBackground();
     addPlayControls();
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
-    addSolarPanel();
-    addSun();
-    addFaucet();
-    addBiker();
-    addIncandescentBulb();
-    addFluorescentBulb();
+
+    // Energy sources
+    var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
+    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+    var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
+
+    this.addChild( sunNode );
+    this.addChild( faucetNode );
+    this.addChild( bikerNode );
+    this.addChild( this.teaPotNode );
+
+    // Energy users
+    this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
+    var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
+    var fluorescentBulbNode = new FluorescentBulbNode( model.fluorescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
+
+    this.addChild( this.beakerHeaterNode );
+    this.addChild( incandescentBulbNode );
+    this.addChild( fluorescentBulbNode );
+
+    // Energy converters
+    var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
+    var beltNode = new BeltNode( model.belt, modelViewTransform );
+    var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
+
+    this.addChild( generatorNode );
+    this.addChild( beltNode );
+    this.addChild( solarPanelNode );
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {
