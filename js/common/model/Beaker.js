@@ -185,16 +185,16 @@ define( function( require ) {
             new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
               new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty ) );
         }
-
-        // Distribute the energy chunks within the beaker.
-        // TODO: Why 1000 for the loop max?
-        // This loop massively increases load time...leaving commented for now
-        // for( var i = 0; i < 1000; i++ ) {
-        //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
-        //     break;
-        //   }
-        // }
       } );
+
+      // Distribute the energy chunks within the beaker.
+      // TODO: Why 1000 for the loop max?
+      // This loop massively increases load time...leaving commented for now
+      // for ( var i = 0; i < 100; i++ ) {
+      //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+      //     break;
+      //   }
+      // }
     },
 
     /**

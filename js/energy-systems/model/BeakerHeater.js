@@ -188,7 +188,9 @@ define( function( require ) {
      */
     moveRadiatedEnergyChunks: function( dt ) {
       var self = this;
-      this.radiatedEnergyChunkMovers.forEach( function( mover ) {
+      var movers = _.clone( this.radiatedEnergyChunkMovers );
+
+      movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
         if ( mover.pathFullyTraversed ) {
@@ -213,7 +215,9 @@ define( function( require ) {
      */
     moveThermalEnergyChunks: function( dt ) {
       var self = this;
-      this.heatingElementEnergyChunkMovers.forEach( function( mover ) {
+      var movers = _.clone( this.heatingElementEnergyChunkMovers );
+
+      movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
         if ( mover.pathFullyTraversed ) {
@@ -243,7 +247,9 @@ define( function( require ) {
      */
     moveElectricalEnergyChunks: function( dt ) {
       var self = this;
-      this.electricalEnergyChunkMovers.forEach( function( mover ) {
+      var movers = _.clone(this.electricalEnergyChunkMovers);
+
+      movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
         if ( mover.pathFullyTraversed ) {
