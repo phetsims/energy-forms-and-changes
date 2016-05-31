@@ -59,8 +59,8 @@ define( function( require ) {
     // must maintain a position that is offset from the parent in order to
     // compensate.
     parentPositionProperty.link( function( position ) {
-      self.x = -modelViewTransform.modelToViewX( position.x );
-      self.y = -modelViewTransform.modelToViewY( position.y );
+      self.x = -modelViewTransform.modelToViewX( position.x ) + 12; // energyChunkNode.bounds.width/2
+      self.y = -modelViewTransform.modelToViewY( position.y ) + 12; // energyChunkNode.bounds.height/2
     } );
   }
 
