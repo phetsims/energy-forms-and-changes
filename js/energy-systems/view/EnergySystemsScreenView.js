@@ -193,17 +193,6 @@ define( function( require ) {
     addCheckBoxPanel();
     addResetButton();
 
-    // Energy sources
-    var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
-    var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
-    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
-    var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
-
-    this.addChild( sunNode );
-    this.addChild( faucetNode );
-    this.addChild( bikerNode );
-    this.addChild( this.teaPotNode );
-
     // Energy users
     this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
     var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
@@ -221,6 +210,17 @@ define( function( require ) {
     this.addChild( generatorNode );
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
+
+    // Energy sources
+    var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
+    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+    var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
+
+    this.addChild( sunNode );
+    this.addChild( faucetNode );
+    this.addChild( bikerNode );
+    this.addChild( this.teaPotNode );
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {
