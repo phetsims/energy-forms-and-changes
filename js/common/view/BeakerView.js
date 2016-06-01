@@ -266,12 +266,9 @@ define( function( require ) {
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
     var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
-    //var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
 
-    // Get a version of the rectangle that defines the beaker size and location in the view.
+    // Get a Bounds2 object defining the beaker size and location in the view.
     var beakerBounds = scaleTransform.transformShape( beaker.getRawOutlineRect() );
-
-    // var beakerBounds = modelViewTransform.modelToViewBounds( beaker.getRawOutlineRect() );
 
     // Create the shapes for the top and bottom of the beaker.  These are
     // ellipses in order to create a 3D-ish look.

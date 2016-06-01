@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkDistributor' );
@@ -142,10 +143,14 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
-      if ( this.getSliceBounds().containsPoint( energyChunk.position ) ) {
+      // var bounds = this.getSliceBounds().shifted(this.position.x, this.position.y);
+      var bounds = this.getSliceBounds();
+      if ( bounds.containsPoint( energyChunk.position ) ) {
+
         // Energy chunk is positioned within container bounds, so add it directly to a slice.
         this.addEnergyChunkToNextSlice( energyChunk );
       } else {
+
         // Chunk is out of the bounds of this element, so make it wander towards it.
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
@@ -166,7 +171,7 @@ define( function( require ) {
     /**
      * Returns the bounds of all the slices.
      *
-     * @returns {Rectangle}
+     * @returns {Bounds2}
      */
     getSliceBounds: function() {
       var minX = Number.POSITIVE_INFINITY;
@@ -188,7 +193,7 @@ define( function( require ) {
           maxY = sliceBounds.maxY;
         }
       } );
-      return new Rectangle( minX, minY, maxX - minX, maxY - minY );
+      return new Bounds2( minX, minY, maxX, maxY );
     },
 
     /**
