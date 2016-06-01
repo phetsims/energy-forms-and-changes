@@ -48,7 +48,9 @@ define( function( require ) {
     // node is being added as a child of this node, but wants to set its
     // own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
-    var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
+    var offset = modelViewTransform.modelToViewDelta(beakerHeater.position).negated();
+    var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
+    // var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
 
     this.beakerHeater = beakerHeater;
 
@@ -62,7 +64,7 @@ define( function( require ) {
     // DEBUG - temp
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var sb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getSliceBounds() );
-    var rb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getRectangleBounds() );
+    var rb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getBounds() );
     var sbr = new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } );
     var rbr = new Rectangle( rb.x, rb.y, rb.width, rb.height, { stroke: 'red' } );
     this.addChild( sbr );

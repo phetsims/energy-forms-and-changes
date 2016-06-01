@@ -84,7 +84,7 @@ define( function( require ) {
      * Function that updates the bottom and top surfaces
      */
     function updateSurfaces() {
-      var rectangle = thisBeaker.getRectangleBounds();
+      var rectangle = thisBeaker.getBounds();
       thisBeaker.topSurface = new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
       thisBeaker.bottomSurface = new HorizontalSurface(
         new Range( rectangle.minX, rectangle.maxX ),
@@ -103,26 +103,40 @@ define( function( require ) {
 
     /**
      * Get the untranslated rectangle that defines the shape of the beaker.
-     * @returns {Rectangle}
+     * @returns {Dot.Rectangle}
      */
     getRawOutlineRect: function() {
       return new Rectangle( -this.width / 2, 0, this.width, this.height );
     },
 
     /**
+     * Get a rectangle defining the current boundaries in model space.  By
+     * convention for this simulation, the position is the middle of the
+     * bottom of the block's defining rectangle.
      *
-     * @returns {Rectangle}
+     * @returns {Dot.Rectangle} - rectangle that defines this item's 2D shape
      */
-    getRectangleShape: function() {
-      return Shape.rectangle(
+    getRect: function() {
+      return new Rectangle(
         this.position.x - this.width / 2,
         this.position.y,
         this.width,
         this.height );
     },
 
-    getRectangleBounds: function() {
-      return this.getRectangleShape().bounds;
+    /**
+     * Get a Bounds2 object defining the current boundaries in model space.  By
+     * convention for this simulation, the position is the middle of the
+     * bottom of the block's defining rectangle.
+     *
+     * @returns {Bounds2} - boundaries this item's 2D shape
+     */
+    getBounds: function() {
+      return new Bounds2(
+        this.position.x - this.width / 2,
+        this.position.y,
+        this.position.x + this.width / 2,
+        this.position.y + this.height );
     },
 
     /**

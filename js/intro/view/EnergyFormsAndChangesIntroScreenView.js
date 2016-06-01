@@ -255,11 +255,11 @@ define( function( require ) {
         brickNode.moveToBack();
       } else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
         ironBlockNode.moveToBack();
-      } else if ( model.ironBlock.getRectangleBounds().minX >= model.brick.getRectangleBounds().maxX ||
-        model.ironBlock.getRectangleBounds().minY >= model.brick.getRectangleBounds().maxY ) {
+      } else if ( model.ironBlock.getBounds().minX >= model.brick.getBounds().maxX ||
+        model.ironBlock.getBounds().minY >= model.brick.getBounds().maxY ) {
         ironBlockNode.moveToFront();
-      } else if ( model.brick.getRectangleBounds().minX >= model.ironBlock.getRectangleBounds().maxX ||
-        model.brick.getRectangleBounds().minY >= model.ironBlock.getRectangleBounds().maxY ) {
+      } else if ( model.brick.getBounds().minX >= model.ironBlock.getBounds().maxX ||
+        model.brick.getBounds().minY >= model.ironBlock.getBounds().maxY ) {
         brickNode.moveToFront();
       }
 

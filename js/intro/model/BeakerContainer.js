@@ -49,7 +49,7 @@ define( function( require ) {
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
 
       // Calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles.
-      var fluidRectangle = new Rectangle( this.getRectangleBounds().minX, this.getRectangleBounds().minY, this.width, this.height * this.fluidLevel );
+      var fluidRectangle = new Rectangle( this.getBounds().minX, this.getBounds().minY, this.width, this.height * this.fluidLevel );
       var overlappingArea = 0;
       potentiallyDisplacingRectangles.forEach( function( rectangle ) {
         if ( rectangle.intersectsBounds( fluidRectangle ) ) {
@@ -83,7 +83,7 @@ define( function( require ) {
      */
     isEnergyChunkObscured: function( energyChunk ) {
       this.potentiallyContainedElements.forEach( function( element ) {
-        if ( this.getThermalContactArea().containsBounds( element.getRectangleBounds() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
+        if ( this.getThermalContactArea().containsBounds( element.getBounds() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
           return true;
         }
       } );

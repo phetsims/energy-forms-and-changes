@@ -65,7 +65,7 @@ define( function( require ) {
 
     // Create the shape for the front of the block.
     var blockRectInViewCoords = scaleTransform.transformShape( block.getRawShape() );
-    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getRectangleBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );

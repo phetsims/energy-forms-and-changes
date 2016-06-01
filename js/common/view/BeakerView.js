@@ -265,12 +265,13 @@ define( function( require ) {
     this.addChild( this.grabNode );
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
-    // TODO: dis legit?
-    var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
+    // var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
     //var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
 
     // Get a version of the rectangle that defines the beaker size and location in the view.
-    var beakerViewRect = scaleTransform.transformShape( beaker.getRawOutlineRect() );
+    // var beakerViewRect = scaleTransform.transformShape( beaker.getRawOutlineRect() );
+
+    var beakerViewRect = modelViewTransform.modelToViewShape( beaker.getRawOutlineRect() );
 
     // Create the shapes for the top and bottom of the beaker.  These are
     // ellipses in order to create a 3D-ish look.
@@ -383,7 +384,7 @@ define( function( require ) {
       thisNode.backNode.translate( modelViewTransform.modelToViewPosition( position ) );
       thisNode.grabNode.translate( modelViewTransform.modelToViewPosition( position ) );
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+      // energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
     } );
 
     // Adjust the transparency of the water and label based on energy chunk visibility.

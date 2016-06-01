@@ -117,8 +117,8 @@ define( function( require ) {
         var blockWidthIncludingPerspective = thisModel.ironBlock.getProjectedShape().bounds.width;
 
         var xRange = new Range(
-          thisModel.beaker.getRectangleBounds().centerX - blockWidthIncludingPerspective / 2,
-          thisModel.beaker.getRectangleBounds().centerX + blockWidthIncludingPerspective / 2
+          thisModel.beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
+          thisModel.beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
         );
 
         if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER &&
@@ -126,8 +126,8 @@ define( function( require ) {
           xRange.contains( thermometer.position.x ) ) {
           thermometer.userControlled = true; // Must toggle userControlled to enable element following.
           thermometer.position = new Vector2(
-            thisModel.beaker.getRectangleBounds().maxX - 0.01,
-            thisModel.beaker.getRectangleBounds().minY + thisModel.beaker.getRectangleBounds().height * 0.33 );
+            thisModel.beaker.getBounds().maxX - 0.01,
+            thisModel.beaker.getBounds().minY + thisModel.beaker.getBounds().height * 0.33 );
           thermometer.userControlled = false; // Must toggle userControlled to enable element following.
         }
       } );
@@ -218,7 +218,7 @@ define( function( require ) {
       } );
 
       // Update the fluid level in the beaker, which could be displaced by one or more of the blocks.
-      this.beaker.updateFluidLevel( [ this.brick.getRectangleBounds(), this.ironBlock.getRectangleBounds() ] );
+      this.beaker.updateFluidLevel( [ this.brick.getBounds(), this.ironBlock.getBounds() ] );
 
       //=====================================================================
       // Energy and Energy Chunk Exchange
@@ -306,7 +306,7 @@ define( function( require ) {
           }
         } );
 
-        if ( thisModel.beaker.getThermalContactArea().containsPoint( movableEnergyContainer.getRectangleBounds() ) ) {
+        if ( thisModel.beaker.getThermalContactArea().containsPoint( movableEnergyContainer.getBounds() ) ) {
           // This model element is immersed in the beaker.
           immersedInBeaker = true;
         }
@@ -317,8 +317,8 @@ define( function( require ) {
             movableEnergyContainer.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
           thisModel.air.exchangeEnergyWith( movableEnergyContainer, dt );
           if ( movableEnergyContainer.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getRectangleBounds().width + movableEnergyContainer.getRectangleBounds().minX,
-              movableEnergyContainer.getRectangleBounds().maxY );
+            var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getBounds().width + movableEnergyContainer.getBounds().minX,
+              movableEnergyContainer.getBounds().maxY );
             var energyChunk = movableEnergyContainer.extractClosestEnergyChunkToPoint( pointAbove );
             if ( energyChunk !== null ) {
               var energyChunkMotionConstraints = null;
@@ -326,10 +326,10 @@ define( function( require ) {
                 // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is a bit of a fudge
                 // factor in here to make sure that the sides of the energy chunk, and not just the center, stay in bounds.
                 var energyChunkWidth = 0.01;
-                energyChunkMotionConstraints = new Rectangle( movableEnergyContainer.getRectangleBounds().minX + energyChunkWidth / 2,
-                  movableEnergyContainer.getRectangleBounds().minY,
-                  movableEnergyContainer.getRectangleBounds().width - energyChunkWidth,
-                  movableEnergyContainer.getRectangleBounds().height );
+                energyChunkMotionConstraints = new Rectangle( movableEnergyContainer.getBounds().minX + energyChunkWidth / 2,
+                  movableEnergyContainer.getBounds().minY,
+                  movableEnergyContainer.getBounds().width - energyChunkWidth,
+                  movableEnergyContainer.getBounds().height );
               }
               thisModel.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
@@ -455,32 +455,32 @@ define( function( require ) {
         this.leftBurner.getOutlineRect().minY,
         this.rightBurner.getOutlineRect().maxX - burnerRectX,
         this.leftBurner.getOutlineRect().height );
-      translation = this.determineAllowedTranslation( modelElement.getRectangleBounds(), burnerBlockingRect, translation, false );
+      translation = this.determineAllowedTranslation( modelElement.getBounds(), burnerBlockingRect, translation, false );
 
       // Validate against the sides of the beaker.
       if ( modelElement !== this.beaker ) {
 
         // Create three rectangles to represent the two sides and the top of the beaker.
         var testRectThickness = 1E-3; // 1 mm thick walls.
-        var beakerRect = this.beaker.getRectangleBounds();
+        var beakerRect = this.beaker.getBounds();
         var beakerLeftSide = new Rectangle( beakerRect.minX - blockPerspectiveExtension,
-          this.beaker.getRectangleBounds().minY,
+          this.beaker.getBounds().minY,
           testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getRectangleBounds().height + blockPerspectiveExtension );
-        var beakerRightSide = new Rectangle( this.beaker.getRectangleBounds().maxX - testRectThickness - blockPerspectiveExtension,
-          this.beaker.getRectangleBounds().minY,
+          this.beaker.getBounds().height + blockPerspectiveExtension );
+        var beakerRightSide = new Rectangle( this.beaker.getBounds().maxX - testRectThickness - blockPerspectiveExtension,
+          this.beaker.getBounds().minY,
           testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getRectangleBounds().height + blockPerspectiveExtension );
-        var beakerBottom = new Rectangle( this.beaker.getRectangleBounds().minX, this.beaker.getRectangleBounds().minY, this.beaker.getRectangleBounds().width, testRectThickness );
+          this.beaker.getBounds().height + blockPerspectiveExtension );
+        var beakerBottom = new Rectangle( this.beaker.getBounds().minX, this.beaker.getBounds().minY, this.beaker.getBounds().width, testRectThickness );
 
         // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the model element - the beaker will
         // simply be lifted up.
         var restrictPositiveY = !this.beaker.isStackedUpon( modelElement );
 
         // Clamp the translation based on the beaker position.
-        translation = this.determineAllowedTranslation( modelElement.getRectangleBounds(), beakerLeftSide, translation, restrictPositiveY );
-        translation = this.determineAllowedTranslation( modelElement.getRectangleBounds(), beakerRightSide, translation, restrictPositiveY );
-        translation = this.determineAllowedTranslation( modelElement.getRectangleBounds(), beakerBottom, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerLeftSide, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerRightSide, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerBottom, translation, restrictPositiveY );
       }
 
       // Now check the model element's motion against each of the blocks.
@@ -494,7 +494,7 @@ define( function( require ) {
         // will simply be lifted up.
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
-        var testRect = modelElement.getRectangleBounds();
+        var testRect = modelElement.getBounds();
         if ( modelElement === thisModel.beaker ) {
           // Special handling for the beaker - block it at the outer edge of the block instead of the center in order to simplify z-order handling.
           testRect = new Rectangle( testRect.minX - blockPerspectiveExtension,
@@ -504,8 +504,8 @@ define( function( require ) {
         }
 
         // Clamp the translation based on the test block's position, but handle the case where the block is immersed in the beaker.
-        if ( modelElement !== thisModel.beaker || !thisModel.beaker.getRectangleBounds().containsBounds( block.getRectangleBounds() ) ) {
-          translation = thisModel.determineAllowedTranslation( testRect, block.getRectangleBounds(), translation, restrictPositiveY );
+        if ( modelElement !== thisModel.beaker || !thisModel.beaker.getBounds().containsBounds( block.getBounds() ) ) {
+          translation = thisModel.determineAllowedTranslation( testRect, block.getBounds(), translation, restrictPositiveY );
         }
 
       } );

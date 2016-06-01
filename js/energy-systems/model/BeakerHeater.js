@@ -161,7 +161,7 @@ define( function( require ) {
       if ( this.beaker.getEnergyChunkBalance() > 0 ) {
         // Remove an energy chunk from the beaker and start it floating
         // away, a.k.a. make it "radiate".
-        var bounds = this.beaker.getRectangleBounds();
+        var bounds = this.beaker.getBounds();
         var extractionX = bounds.minX + RAND.nextDouble() * bounds.width;
         var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * this.beaker.fluidLevelProperty.get() );
         var extractionPoint = new Vector2( extractionX, extractionY );

@@ -73,13 +73,8 @@ define( function( require ) {
      * Get the rectangle that defines this elements position and shape in
      * model space.
      */
-    getRectangleBounds: function() {
-      console.error( 'getRectangleBounds must be implemented in descendant classes.' );
-    },
-
-    // TODO: This should probably replace getRect entirely.
-    getRectangleShape: function() {
-      console.error( 'getRectangleShape must be implemented in descendant classes' );
+    getBounds: function() {
+      console.error( 'getBounds must be implemented in descendant classes.' );
     },
 
     /**
@@ -346,9 +341,12 @@ define( function( require ) {
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // Make sure this method isn't being misused.
 
+      var rect = this.getRect();
+      var rectShape = Shape.rect( rect.x, rect.y, rect.width, rect.height );
+
       // Defaults to a single slice matching the outline rectangle, override
       // for more sophisticated behavior.
-      this.slices.push( new EnergyChunkContainerSlice( this.getRectangleShape(), 0, this.position ) );
+      this.slices.push( new EnergyChunkContainerSlice( rectShape, 0, this.position ) );
     },
 
     /**
@@ -441,13 +439,13 @@ define( function( require ) {
 
       var shape = new Shape();
 
-      var rect = this.getRectangleBounds();
-      shape.moveToPoint( new Vector2( rect.minX, rect.minY ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.minY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.maxX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( rect.minX, rect.maxY ).plus( forwardPerspectiveOffset ) )
+      var b = this.getBounds();
+      shape.moveToPoint( new Vector2( b.minX, b.minY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( b.maxX, b.minY ).plus( forwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( b.maxX, b.minY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( b.maxX, b.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( b.minX, b.maxY ).plus( backwardPerspectiveOffset ) )
+        .lineToPoint( new Vector2( b.minX, b.maxY ).plus( forwardPerspectiveOffset ) )
         .close();
       return shape;
     },
