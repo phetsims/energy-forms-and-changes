@@ -18,9 +18,6 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Vector2 = require( 'DOT/Vector2' );
-
-  var BEAKER_OFFSET = new Vector2( -4, -260 ); // Empirical; view coords
 
   /**
    * @param {BeakerHeater} beakerHeater
@@ -49,8 +46,7 @@ define( function( require ) {
     // own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
     var offset = modelViewTransform.modelToViewDelta( beakerHeater.position ).negated();
-    var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
-    // var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
+    var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, -scale.y );
 
     this.beakerHeater = beakerHeater;
 
