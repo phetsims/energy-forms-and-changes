@@ -195,9 +195,8 @@ define( function( require ) {
           // Remove this energy chunk entirely.
           self.radiatedEnergyChunkList.remove( mover.energyChunk );
 
-          _.remove( self.radiatedEnergyChunkMovers, function( m ) {
-            return m === mover;
-          } );
+          _.remove( self.radiatedEnergyChunkMovers, mover );
+
         }
       } );
     },
@@ -222,10 +221,7 @@ define( function( require ) {
 
           self.energyChunkList.remove( mover.energyChunk );
 
-          _.remove( self.heatingElementEnergyChunkMovers, function( m ) {
-            return m === mover;
-          } );
-
+          _.remove( self.heatingElementEnergyChunkMovers, mover );
         }
       } );
     },
