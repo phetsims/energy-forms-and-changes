@@ -19,6 +19,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
 
+  var DEBUG = false;
+
   /**
    * @param {BeakerHeater} beakerHeater
    * @param {Property.<boolean>} energyChunksVisibleProperty
@@ -57,23 +59,24 @@ define( function( require ) {
       modelViewTransform ) );
     this.addChild( this.beakerView.frontNode );
 
-    // DEBUG - temp
-    var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    var sb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getSliceBounds() );
-    var bb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getBounds() );
-    var rect = beakerMvt.modelToViewShape( beakerHeater.beaker.getRect());
-    this.addChild( new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } ) ); // slice bounds
-    this.addChild( new Rectangle( bb.x, bb.y, bb.width, bb.height, { stroke: 'red', lineWidth: 4 } ) );  // beaker bounds
-    this.addChild( new Rectangle( rect.x, rect.y, rect.width, rect.height, { stroke: 'lime' } ) );  // from getRect()
+    if ( DEBUG ) {
+      var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+      var sb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getSliceBounds() );
+      var bb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getBounds() );
+      var rect = beakerMvt.modelToViewShape( beakerHeater.beaker.getRect() );
+      this.addChild( new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } ) ); // slice bounds
+      this.addChild( new Rectangle( bb.x, bb.y, bb.width, bb.height, { stroke: 'red', lineWidth: 4 } ) ); // beaker bounds
+      this.addChild( new Rectangle( rect.x, rect.y, rect.width, rect.height, { stroke: 'lime' } ) ); // from getRect()
 
-    // var beakerXY = modelViewTransform.modelToViewPosition(beakerHeater.beaker.position);
-    var beakerXY = beakerMvt.modelToViewPosition(beakerHeater.beaker.position);
-    var Circle = require( 'SCENERY/nodes/Circle' );
-    this.addChild( new Circle( 10, {
-      centerX: beakerXY.x,
-      centerY: beakerXY.y,
-      fill: 'lime' } ) );
-
+      // var beakerXY = modelViewTransform.modelToViewPosition(beakerHeater.beaker.position);
+      var beakerXY = beakerMvt.modelToViewPosition( beakerHeater.beaker.position );
+      var Circle = require( 'SCENERY/nodes/Circle' );
+      this.addChild( new Circle( 10, {
+        centerX: beakerXY.x,
+        centerY: beakerXY.y,
+        fill: 'lime'
+      } ) );
+    }
     // Update the transparency of the hot element to make the dark element
     // appear to heat up.
     beakerHeater.heatProportionProperty.link( function( litProportion ) {
