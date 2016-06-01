@@ -284,7 +284,7 @@ define( function( require ) {
       assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
       var fluidRect = new Rectangle(
         this.position.x - this.width / 2,
-        this.position.y,
+        this.position.y + this.height / 2,
         this.width,
         this.height * EFACConstants.INITIAL_FLUID_LEVEL );
 

@@ -48,7 +48,7 @@ define( function( require ) {
     // node is being added as a child of this node, but wants to set its
     // own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
-    var offset = modelViewTransform.modelToViewDelta(beakerHeater.position).negated();
+    var offset = modelViewTransform.modelToViewDelta( beakerHeater.position ).negated();
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, scale.y );
     // var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( BEAKER_OFFSET, scale.x, scale.y );
 
@@ -64,11 +64,19 @@ define( function( require ) {
     // DEBUG - temp
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var sb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getSliceBounds() );
-    var rb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getBounds() );
-    var sbr = new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } );
-    var rbr = new Rectangle( rb.x, rb.y, rb.width, rb.height, { stroke: 'red' } );
-    this.addChild( sbr );
-    this.addChild( rbr );
+    var bb = beakerMvt.modelToViewBounds( beakerHeater.beaker.getBounds() );
+    var rect = beakerMvt.modelToViewShape( beakerHeater.beaker.getRect());
+    this.addChild( new Rectangle( sb.x, sb.y, sb.width, sb.height, { stroke: 'blue' } ) ); // slice bounds
+    this.addChild( new Rectangle( bb.x, bb.y, bb.width, bb.height, { stroke: 'red', lineWidth: 4 } ) );  // beaker bounds
+    this.addChild( new Rectangle( rect.x, rect.y, rect.width, rect.height, { stroke: 'lime' } ) );  // from getRect()
+
+    // var beakerXY = modelViewTransform.modelToViewPosition(beakerHeater.beaker.position);
+    var beakerXY = beakerMvt.modelToViewPosition(beakerHeater.beaker.position);
+    var Circle = require( 'SCENERY/nodes/Circle' );
+    this.addChild( new Circle( 10, {
+      centerX: beakerXY.x,
+      centerY: beakerXY.y,
+      fill: 'lime' } ) );
 
     // Update the transparency of the hot element to make the dark element
     // appear to heat up.

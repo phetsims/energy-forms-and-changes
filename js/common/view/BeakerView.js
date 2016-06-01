@@ -265,32 +265,32 @@ define( function( require ) {
     this.addChild( this.grabNode );
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
-    // var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
+    var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
     //var scaleTransform = AffineTransform.getScaleInstance( mvt.getTransform().getScaleX(), mvt.getTransform().getScaleY() );
 
     // Get a version of the rectangle that defines the beaker size and location in the view.
-    // var beakerViewRect = scaleTransform.transformShape( beaker.getRawOutlineRect() );
+    var beakerBounds = scaleTransform.transformShape( beaker.getRawOutlineRect() );
 
-    var beakerViewRect = modelViewTransform.modelToViewShape( beaker.getRawOutlineRect() );
+    // var beakerBounds = modelViewTransform.modelToViewBounds( beaker.getRawOutlineRect() );
 
     // Create the shapes for the top and bottom of the beaker.  These are
     // ellipses in order to create a 3D-ish look.
-    var ellipseHeight = beakerViewRect.getWidth() * PERSPECTIVE_PROPORTION;
-    var halfWidth = beakerViewRect.width / 2;
+    var ellipseHeight = beakerBounds.getWidth() * PERSPECTIVE_PROPORTION;
+    var halfWidth = beakerBounds.width / 2;
     var halfHeight = ellipseHeight / 2;
-    var topEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.minY, halfWidth, halfHeight, 0 );
-    var bottomEllipse = new Shape().ellipse( beakerViewRect.centerX, beakerViewRect.maxY, halfWidth, halfHeight, 0 );
+    var topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, halfWidth, halfHeight, 0 );
+    var bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0 );
 
     // Add the water.  It will adjust its size based on the fluid level.
-    this.water = new PerspectiveWaterNode( beakerViewRect, beaker.fluidLevelProperty, beaker.temperatureProperty );
+    this.water = new PerspectiveWaterNode( beakerBounds, beaker.fluidLevelProperty, beaker.temperatureProperty );
     this.frontNode.addChild( this.water );
 
     // Create and add the shape for the body of the beaker.
     var beakerBody = new Shape()
-      .moveTo( beakerViewRect.minX, beakerViewRect.minY ) // Top let of the beaker body.
-      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.minY, halfWidth, halfHeight, 0, Math.PI, 0, true )
-      .lineTo( beakerViewRect.maxX, beakerViewRect.maxY ) // Bottom right of the beaker body.
-      .ellipticalArc( beakerViewRect.centerX, beakerViewRect.maxY, halfWidth, halfHeight, 0, 0, Math.PI, false )
+      .moveTo( beakerBounds.minX, beakerBounds.minY ) // Top let of the beaker body.
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.minY, halfWidth, halfHeight, 0, Math.PI, 0, true )
+      .lineTo( beakerBounds.maxX, beakerBounds.maxY ) // Bottom right of the beaker body.
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0, 0, Math.PI, false )
       .close();
 
     this.frontNode.addChild( new Path( beakerBody, {
@@ -314,7 +314,7 @@ define( function( require ) {
     } ) );
 
     // Add a rectangle to the back that is invisible but allows the user to grab the beaker.
-    this.backNode.addChild( new Rectangle( beakerViewRect, {
+    this.backNode.addChild( new Rectangle( beakerBounds, {
       fill: 'rgba( 0, 0, 0, 0 )'
     } ) );
 
@@ -327,8 +327,8 @@ define( function( require ) {
     var label = new Text( waterString, {
       font: LABEL_FONT
     } );
-    label.translation = new Vector2( beakerViewRect.centerX - label.bounds.width / 2,
-      beakerViewRect.maxY - beakerViewRect.height * beaker.fluidLevel + topEllipse.bounds.height );
+    label.translation = new Vector2( beakerBounds.centerX - label.bounds.width / 2,
+      beakerBounds.maxY - beakerBounds.height * beaker.fluidLevel + topEllipse.bounds.height );
     label.pickable = false;
     this.frontNode.addChild( label );
 
@@ -338,7 +338,7 @@ define( function( require ) {
     var energyChunkRootNode = new Node();
     this.backNode.addChild( energyChunkRootNode );
 
-    ////energyChunkClipNode.setPathTo( beakerViewRect ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
+    ////energyChunkClipNode.setPathTo( beakerBounds ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
     //energyChunkRootNode.addChild( energyChunkClipNode );
     ////energyChunkClipNode.setStroke( null );
     for ( var i = beaker.slices.length - 1; i >= 0; i-- ) {
@@ -372,7 +372,7 @@ define( function( require ) {
 
     // If enabled, show the outline of the rectangle that represents the beaker's position in the model.
     if ( SHOW_MODEL_RECT ) {
-      this.frontNode.addChild( new Path( beakerViewRect, {
+      this.frontNode.addChild( new Path( beakerBounds, {
         fill: 'red',
         lineWidth: 2
       } ) );
@@ -384,7 +384,7 @@ define( function( require ) {
       thisNode.backNode.translate( modelViewTransform.modelToViewPosition( position ) );
       thisNode.grabNode.translate( modelViewTransform.modelToViewPosition( position ) );
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      // energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+      energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
     } );
 
     // Adjust the transparency of the water and label based on energy chunk visibility.
