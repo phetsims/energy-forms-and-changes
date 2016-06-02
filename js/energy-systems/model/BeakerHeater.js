@@ -17,6 +17,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Random = require( 'DOT/Random' );
+  var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -50,7 +51,7 @@ define( function( require ) {
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   // var BEAKER_OFFSET = new Vector2( 0, 0.025 ); // Original Java coords
   var BEAKER_OFFSET = new Vector2( 0.089, 0.025 );
-  // var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
+  var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
   var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.getHeight();
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
@@ -76,12 +77,7 @@ define( function( require ) {
 
     this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisibleProperty );
 
-    // this.thermometer = new Thermometer( clock, new ITemperatureModel() {
-    //   public TemperatureAndColor getTemperatureAndColorAtLocation( Vector2D location ) {
-    //     return new TemperatureAndColor( beaker.getTemperature(), EFACConstants.WATER_COLOR_OPAQUE );
-    //   }
-    // }, THERMOMETER_OFFSET, true );
-
+    this.thermometer = new Thermometer( this, THERMOMETER_OFFSET, true );
   }
 
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );

@@ -18,6 +18,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var ThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/ThermometerNode' );
 
   var DEBUG = false;
 
@@ -42,6 +43,10 @@ define( function( require ) {
     this.addChild( energizedCoil );
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
+
+    var thermometerNode = new ThermometerNode();
+    thermometerNode.translate(110, -250);
+    this.addChild( thermometerNode );
 
     // Add the beaker.  A compensating MVT is needed because the beaker
     // node is being added as a child of this node, but wants to set its
