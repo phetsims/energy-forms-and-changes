@@ -560,7 +560,7 @@ define( function( require ) {
     },
 
     /**
-     *Choose a non-moving energy chunk, returns null if all chunks are moving.
+     * Find a non-moving CHEMICAL energy chunk. Returns null if none is found.
      *
      * @return {EnergyChunk}
      */
@@ -573,6 +573,12 @@ define( function( require ) {
       } );
 
       this.energyChunkList.forEach( function( ec ) {
+
+        // Only interested in CHEMICAL energy chunks
+        if (ec.energyTypeProperty.value !== EnergyType.CHEMICAL){
+          return;
+        }
+
         if ( !_.contains( movingEnergyChunks, function( chunk ) {
             return chunk === ec;
           } ) ) {
