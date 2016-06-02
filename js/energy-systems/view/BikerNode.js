@@ -18,10 +18,15 @@ define( function( require ) {
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HSlider = require( 'SUN/HSlider' );
-  // var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var Text = require( 'SCENERY/nodes/Text' );
+
+  // Strings
+  var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
 
   /**
    * @param {Biker} biker EnergySource
@@ -69,10 +74,20 @@ define( function( require ) {
       visibleBackLeg.setVisible( true );
     } );
 
-    // TODO "feed me" button
+    // Add button to replenish the biker's energy
+    var feedMeButton = new RectangularPushButton( {
+      content: new Text( feedMeString, { font: new PhetFont( 18 ), maxWidth: 100 } ),
+      listener: function() {
+        biker.replenishEnergyChunks();
+      },
+      baseColor: 'rgba(0,220,0,1)',
+      centerX: upperBodyNormal.centerTop.x,
+      centerY: upperBodyNormal.centerTop.y - 40
+    } );
+    this.addChild( feedMeButton );
 
     biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
-      // feedMeButton.setVisible(!hasEnergy);
+      feedMeButton.setVisible( !hasEnergy );
       upperBodyNormal.setVisible( hasEnergy );
       upperBodyTired.setVisible( !hasEnergy );
     } );
@@ -90,7 +105,6 @@ define( function( require ) {
     } );
 
     // Slider to control crank speed
-    // TODO: these numeric literals are brittle. Ask about correct way to control positions.
     var crankSlider = new HSlider( biker.targetCrankAngularVelocityProperty, {
       min: 0,
       max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
@@ -119,7 +133,7 @@ define( function( require ) {
     // var Shape = require( 'KITE/Shape' );
     // var Path = require( 'SCENERY/nodes/Path' );
     // var Vector2 = require( 'DOT/Vector2' );
-    // var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2(-0.23, 0.15) );
+    // var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2( -0.23, 0.15 ) );
     // var shape = new Shape();
     // for ( i = 0; i < 3; i++ ) {
     //   var p = modelViewTransform.modelToViewPosition( mechPath[ i ] );
