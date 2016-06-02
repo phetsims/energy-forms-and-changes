@@ -17,7 +17,6 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Random = require( 'DOT/Random' );
-  var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -77,7 +76,6 @@ define( function( require ) {
 
     this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisibleProperty );
 
-    this.thermometer = new Thermometer( this, THERMOMETER_OFFSET, true );
   }
 
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
