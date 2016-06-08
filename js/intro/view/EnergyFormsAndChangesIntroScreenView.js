@@ -67,8 +67,6 @@ define( function( require ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
 
-    this.addChild( new Rectangle( this.layoutBounds, { fill: 'rgba( 255, 0, 0, 0.14 )' } ) );
-
     var thisScreenView = this;
     this.model = model;
 
@@ -193,6 +191,8 @@ define( function( require ) {
 
     // Add the air.
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
+
+    this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
 
     // Add the movable objects.
     var brickNode = new BlockNode( model, model.brick, this.layoutBounds, modelViewTransform );

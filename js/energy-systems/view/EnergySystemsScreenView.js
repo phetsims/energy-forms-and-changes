@@ -92,7 +92,11 @@ define( function( require ) {
 
     // Add beige background rectangle
     function addBackground() {
-      backLayer.addChild( new Rectangle( stage, {
+      var x = stage.centerX - stage.width;
+      var y = stage.centerY - stage.height;
+      var width = 2 * stage.width;
+      var height = 2 * stage.height;
+      backLayer.addChild( new Rectangle( x, y, width, height, {
         fill: EFACConstants.SECOND_TAB_BACKGROUND_COLOR
       } ) );
     }
@@ -192,6 +196,9 @@ define( function( require ) {
     addEnergyChunkLegend();
     addCheckBoxPanel();
     addResetButton();
+
+    // Debug - Layout boundary rectangle
+    // this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
 
     // Energy users
     this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );

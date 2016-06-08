@@ -166,7 +166,7 @@ define( function( require ) {
                 // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the
                 // code below tries to avoid that.
                 var angleTowardsSun = chunk.velocity.angle() + Math.PI;
-                var reflectionAngle = chunk.position.minus(cloud.getCenterPosition()).angle();
+                var reflectionAngle = chunk.position.minus( cloud.getCenterPosition() ).angle();
 
                 if ( reflectionAngle < angleTowardsSun ) {
                   chunk.setVelocity( chunk.velocity.rotated( 0.7 * Math.PI + RAND.nextDouble() * Math.PI / 8 ) );
