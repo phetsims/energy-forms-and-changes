@@ -50,7 +50,6 @@ define( function( require ) {
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   // var BEAKER_OFFSET = new Vector2( 0, 0.025 ); // Original Java coords
   var BEAKER_OFFSET = new Vector2( 0.089, 0.025 );
-  var THERMOMETER_OFFSET = new Vector2( 0.033, 0.035 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
   var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.getHeight();
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.

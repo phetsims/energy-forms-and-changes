@@ -348,14 +348,15 @@ define( function( require ) {
      * @param {Vector2} point
      */
     extractClosestEnergyChunk: function( point ) {
-      var pointIsAboveWaterSurface = true;
-      for ( var i = 0; i < this.slices.length; i++ ) {
-        if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
-          pointIsAboveWaterSurface = false;
-          break;
-        }
-      }
+      // var pointIsAboveWaterSurface = true;
+      // for ( var i = 0; i < this.slices.length; i++ ) {
+      //   if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
+      //     pointIsAboveWaterSurface = false;
+      //     break;
+      //   }
+      // }
 
+      // TODO: this causes infinite recursion
       // if ( !pointIsAboveWaterSurface ) {
       //   return this.extractClosestEnergyChunk( point );
       // }
