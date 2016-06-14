@@ -169,9 +169,7 @@ define( function( require ) {
 
             // Transfer chunk from incoming list to current list
             self.energyChunkList.push( chunk );
-            _.remove( self.incomingEnergyChunks, function( ec ) {
-              return ec === chunk;
-            } );
+            _.pull( self.incomingEnergyChunks, chunk );
 
             // Add a "mover" that will move this energy chunk to
             // the center of the wheel.
@@ -225,13 +223,9 @@ define( function( require ) {
             // so that the movement through the generator can
             // be seen by the user.
 
-            _.remove( self.energyChunkList, function( ec ) {
-              return ec === chunk;
-            } );
+            _.pull( self.energyChunkList, chunk );
 
-            _.remove( self.energyChunkMovers, function( m ) {
-              return m === mover;
-            } );
+            _.pull( self.energyChunkMovers, mover );
 
             chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
 
@@ -262,9 +256,7 @@ define( function( require ) {
             // This electrical energy chunk has traveled to the
             // end of its path, so transfer it to the next
             // energy system.
-            _.remove( self.energyChunkMovers, function( m ) {
-              return m === mover;
-            } );
+            _.pull( self.energyChunkMovers, mover );
 
             self.outgoingEnergyChunks.push( chunk );
             break;
@@ -277,9 +269,7 @@ define( function( require ) {
 
             self.hiddenEnergyChunks.remove( chunk );
 
-            _.remove( self.energyChunkMovers, function( m ) {
-              return m === mover;
-            } );
+            _.pull( self.energyChunkMovers, mover );
             break;
         }
 

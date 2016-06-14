@@ -158,19 +158,6 @@ define( function( require ) {
     },
 
     /**
-     * Utility method to remove object from array.
-     *
-     * @param  {*[]} list
-     * @param  {*} element
-     * @private
-     */
-    removeElement: function( list, element ) {
-      _.remove( list, function( e ) {
-        return e === element;
-      } );
-    },
-
-    /**
      *
      *
      * @param  {Number} dt - timestep
@@ -187,8 +174,8 @@ define( function( require ) {
 
         // Remove the chunk and its mover.
         if ( mover.pathFullyTraversed ) {
-          self.removeElement( self.energyChunkList, mover.energyChunk );
-          self.removeElement( self.radiatedEnergyChunkMovers, mover );
+          _.pull( self.energyChunkList, mover.energyChunk );
+          _.pull( self.radiatedEnergyChunkMovers, mover );
         }
       } );
     },
@@ -210,7 +197,7 @@ define( function( require ) {
 
         // Cause this energy chunk to be radiated from the bulb.
         if ( mover.pathFullyTraversed ) {
-          self.removeElement( self.filamentEnergyChunkMovers, mover );
+          _.pull( self.filamentEnergyChunkMovers, mover );
           self.radiateEnergyChunk( mover.energyChunk );
         }
       } );
@@ -233,7 +220,7 @@ define( function( require ) {
         mover.moveAlongPath( dt );
 
         if ( mover.pathFullyTraversed ) {
-          self.removeElement( self.electricalEnergyChunkMovers, mover );
+          _.pull( self.electricalEnergyChunkMovers, mover );
 
           // Turn this energy chunk into thermal energy on the filament.
           if ( self.hasFilament ) {

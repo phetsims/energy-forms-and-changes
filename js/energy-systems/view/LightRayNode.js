@@ -81,7 +81,7 @@ define( function( require ) {
      */
     removeLightAbsorbingShape: function( lightAbsorbingShape ) {
       lightAbsorbingShape.absorptionCoefficientProperty.unlinkAll();
-      _.remove( this.lightAbsorbingShapes, lightAbsorbingShape );
+      _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
       this.updateRays();
     },
 
@@ -126,7 +126,7 @@ define( function( require ) {
       var rayGradient = new LinearGradient( this.origin.x, this.origin.y, this.endpoint.x, this.endpoint.y )
         .addColorStop( 0, this.color );
 
-        var prevIntensity = 255;
+      var prevIntensity = 255;
       for ( var i = 0; i < sorted.length - 1; i++ ) {
         var distance = this.origin.distance( sorted[ i + 1 ].point );
         var fractionalLength = distance / rayLength;

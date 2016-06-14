@@ -144,9 +144,7 @@ define( function( require ) {
         // This energy chunk is out of visible range, so remove it.
         else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ) {
           self.energyChunkList.remove( chunk );
-          _.remove( self.energyChunksPassingThroughClouds, function( c ) {
-            return c === chunk;
-          } );
+          _.pull( self.energyChunksPassingThroughClouds, chunk );
         }
 
         // Chunks encountering clouds

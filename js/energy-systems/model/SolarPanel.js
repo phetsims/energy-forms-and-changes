@@ -160,18 +160,6 @@ define( function( require ) {
     },
 
     /**
-     * Utility method to remove EnergyChunkMover from array.
-     *
-     * @param  {EnergyChunkMover} mover
-     * @private
-     */
-    removeEnergyChunkMover: function( mover ) {
-      _.remove( this.energyChunkMovers, function( m ) {
-        return m === mover;
-      } );
-    },
-
-    /**
      * Update energy chunk positions at each step
      *
      * @param  {Number} dt timestep
@@ -190,7 +178,7 @@ define( function( require ) {
 
         if ( mover.pathFullyTraversed ) {
 
-          self.removeEnergyChunkMover( mover );
+          _.pull( this.energyChunkMovers, mover );
 
           // Energy chunk has reached the bottom of the panel and now needs to move through the converter.
           if ( mover.energyChunk.position.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
@@ -203,10 +191,7 @@ define( function( require ) {
           // the converter, so pass it off to the next element in the system.
           else {
             self.outgoingEnergyChunks.push( mover.energyChunk );
-
-            _.remove( self.energyChunkList, function( chunk ) {
-              return chunk === mover.energyChunk;
-            } );
+            self.energyChunkList.remove( chunk );
           }
         }
       } );

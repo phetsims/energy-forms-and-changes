@@ -183,13 +183,13 @@ define( function( require ) {
           if ( ec.positionProperty.get().x > hubPosition.x ) {
 
             // Just remove this energy chunk.
-            self.removeEnergyChunkMover( mover );
+            _.pull( self.energyChunkMovers, mover );
             self.energyChunkList.remove( ec );
 
           } else {
 
             // Make sure that this energy chunk turns into thermal energy.
-            self.removeEnergyChunkMover( mover );
+            _.pull( self.energyChunkMovers, mover );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( ec,
               self.createMechanicalToThermalEnergyChunkPath( self.position, ec.positionProperty.get() ),
@@ -312,7 +312,7 @@ define( function( require ) {
 
           // Turn this into mechanical energy.
           chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
-          self.removeEnergyChunkMover( mover );
+          _.pull( self.energyChunkMovers, mover );
 
           // Add new mover for the mechanical energy chunk.
           if ( self.mechanicalChunksSinceLastThermal >= MECHANICAL_TO_THERMAL_CHUNK_RATIO ||
@@ -340,7 +340,7 @@ define( function( require ) {
 
           // This is a mechanical energy chunk that has traveled
           // to the hub and should now become thermal energy.
-          self.removeEnergyChunkMover( mover );
+          _.pull( self.energyChunkMovers, mover );
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
             self.createThermalEnergyChunkPath( self.position ),
@@ -351,7 +351,7 @@ define( function( require ) {
         else if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL ) {
           // This is a radiating thermal energy chunk that has
           // reached the end of its route.  Delete it.
-          self.removeEnergyChunkMover( mover );
+          _.pull( self.energyChunkMovers, mover );
           self.energyChunkList.remove( chunk );
         }
 
@@ -360,20 +360,8 @@ define( function( require ) {
           // Must be mechanical energy that is being passed to
           // the next energy system.
           self.outgoingEnergyChunks.push( chunk );
-          self.removeEnergyChunkMover( mover );
+          _.pull( self.energyChunkMovers, mover );
         }
-      } );
-    },
-
-    /**
-     * Utility method to remove EnergyChunkMover from array.
-     *
-     * @param  {EnergyChunkMover} mover
-     * @private
-     */
-    removeEnergyChunkMover: function( mover ) {
-      _.remove( this.energyChunkMovers, function( m ) {
-        return m === mover;
       } );
     },
 

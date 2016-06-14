@@ -86,7 +86,7 @@ define( function( require ) {
     createNewChunk: function() {
 
       // Random x value within water column for "watery" appearance
-      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH/2 + MAX_WATER_WIDTH/2;
+      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2 + MAX_WATER_WIDTH / 2;
 
       var initialPosition = this.position
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
@@ -185,14 +185,8 @@ define( function( require ) {
         // Remove it if it is out of visible range.
         var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.position );
         if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
-          _.remove( self.energyChunkList, function( x ) {
-            return x === chunk;
-          } );
-
-          _.remove( self.exemptFromTransferEnergyChunks, function( x ) {
-            return x === chunk;
-          } );
-
+          self.energyChunkList.remove( chunk );
+          _.pull( self.exemptFromTransferEnergyChunks, chunk );
         }
 
       } );

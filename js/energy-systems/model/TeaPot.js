@@ -161,9 +161,7 @@ define( function( require ) {
 
         if ( mover.pathFullyTraversed ) {
 
-          _.remove( self.energyChunkMovers, function( m ) {
-            return m === mover;
-          } );
+          _.pull( self.energyChunkMovers, mover );
 
           // This is a thermal chunk that is coming out of the water.
           if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
@@ -192,9 +190,7 @@ define( function( require ) {
 
           // This chunk is out of view, and we are done with it.
           else {
-            _.remove( self.energyChunkList, function( ec ) {
-              return ec === chunk;
-            } );
+            self.energyChunkList.remove( chunk );
           }
         }
 
@@ -212,9 +208,7 @@ define( function( require ) {
             if ( self.transferNextAvailableChunk ) {
               self.outgoingEnergyChunks.push( chunk );
 
-              _.remove( self.energyChunkMovers, function( m ) {
-                return m === mover;
-              } );
+              _.pull( self.energyChunkMovers, mover );
 
               // Alternate sending or keeping chunks.
               self.transferNextAvailableChunk = false;

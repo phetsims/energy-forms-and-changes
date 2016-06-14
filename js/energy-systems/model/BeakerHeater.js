@@ -178,7 +178,7 @@ define( function( require ) {
      */
     moveRadiatedEnergyChunks: function( dt ) {
       var self = this;
-      var movers = _.clone( this.radiatedEnergyChunkMovers );
+      var movers = this.radiatedEnergyChunkMovers.slice();
 
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
@@ -188,8 +188,7 @@ define( function( require ) {
           // Remove this energy chunk entirely.
           self.radiatedEnergyChunkList.remove( mover.energyChunk );
 
-          _.remove( self.radiatedEnergyChunkMovers, mover );
-
+          _.pull( self.radiatedEnergyChunkMovers, mover );
         }
       } );
     },
@@ -214,7 +213,7 @@ define( function( require ) {
 
           self.energyChunkList.remove( mover.energyChunk );
 
-          _.remove( self.heatingElementEnergyChunkMovers, mover );
+          _.pull( self.heatingElementEnergyChunkMovers, mover );
         }
       } );
     },
@@ -234,7 +233,7 @@ define( function( require ) {
 
           // The electrical energy chunk has reached the burner, so
           // it needs to change into thermal energy.
-          _.remove( self.electricalEnergyChunkMovers, mover );
+          _.pull( self.electricalEnergyChunkMovers, mover );
           mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
           // Have the thermal energy move a little on the element

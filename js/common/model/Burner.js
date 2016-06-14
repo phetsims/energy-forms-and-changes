@@ -281,16 +281,16 @@ define( function( require ) {
      */
     step: function( dt ) {
       var self = this;
-      this.energyChunkWanderControllers.forEach( function( controller ) {
+      var controllers = this.energyChunkWanderControllers.splice();
+
+      controllers.forEach( function( controller ) {
 
         controller.updatePosition( dt );
 
         if ( controller.destinationReached() ) {
           self.energyChunkList.remove( controller.energyChunk );
 
-          _.remove( self.energyChunkWanderControllers, function( wc ) {
-            return wc === controller;
-          } );
+          _.pull( self.energyChunkWanderControllers, controller );
         }
       } );
     },
