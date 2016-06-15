@@ -241,7 +241,6 @@ define( function( require ) {
               Vector2.ZERO,
               self.energyChunksVisibleProperty );
 
-            // TODO: figure out why hidden chunks are not displaying.
             hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
 
             self.hiddenEnergyChunks.push( hiddenChunk );
