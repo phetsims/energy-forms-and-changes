@@ -227,7 +227,8 @@ define( function( require ) {
      */
     removeEnergyChunk: function( energyChunk ) {
       this.slices.forEach( function( slice ) {
-        if ( slice.energyChunkList.remove( energyChunk ) ) {
+        if ( slice.energyChunkList.indexOf( energyChunk ) >= 0 ) {
+          slice.energyChunkList.remove( energyChunk );
           return true;
         }
       } );
