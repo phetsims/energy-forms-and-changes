@@ -65,7 +65,7 @@ define( function( require ) {
      *
      */
     clearEnergyChunks: function() {
-      this.energyChunkList.reset();
+      this.energyChunkList.clear();
     }
   } );
 } );

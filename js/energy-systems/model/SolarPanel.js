@@ -178,7 +178,7 @@ define( function( require ) {
 
         if ( mover.pathFullyTraversed ) {
 
-          _.pull( this.energyChunkMovers, mover );
+          _.pull( self.energyChunkMovers, mover );
 
           // Energy chunk has reached the bottom of the panel and now needs to move through the converter.
           if ( mover.energyChunk.position.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
@@ -191,7 +191,7 @@ define( function( require ) {
           // the converter, so pass it off to the next element in the system.
           else {
             self.outgoingEnergyChunks.push( mover.energyChunk );
-            self.energyChunkList.remove( chunk );
+            self.energyChunkList.remove( mover.energyChunk );
           }
         }
       } );

@@ -400,6 +400,8 @@ define( function( require ) {
       this.electricalEnergyChunkMovers.length = 0;
       this.filamentEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;
+      this.incomingEnergyChunks.length = 0;
+
     }
 
   }, {
