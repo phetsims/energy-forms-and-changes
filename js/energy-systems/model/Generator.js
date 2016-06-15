@@ -223,7 +223,7 @@ define( function( require ) {
             // so that the movement through the generator can
             // be seen by the user.
 
-            _.pull( self.energyChunkList, chunk );
+            self.energyChunkList.remove( chunk );
 
             _.pull( self.energyChunkMovers, mover );
 
