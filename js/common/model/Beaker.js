@@ -343,25 +343,26 @@ define( function( require ) {
     },
 
     /**
-     * This override handles the case where the point is above the beaker.  In this case, we want to pull from all
-     * slices evenly, and not favor the slices the bump up at the top in order to match the 3D look of the water
+     * This override handles the case where the point is above the beaker.  In
+     * this case, we want to pull from all slices evenly, and not favor the
+     * slices that bump up at the top in order to match the 3D look of the water
      * surface.
      *
      * @param {Vector2} point
      */
     extractClosestEnergyChunk: function( point ) {
-      // var pointIsAboveWaterSurface = true;
-      // for ( var i = 0; i < this.slices.length; i++ ) {
-      //   if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
-      //     pointIsAboveWaterSurface = false;
-      //     break;
-      //   }
-      // }
+      var pointIsAboveWaterSurface = true;
+      for ( var i = 0; i < this.slices.length; i++ ) {
+        if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
+          pointIsAboveWaterSurface = false;
+          break;
+        }
+      }
 
-      // TODO: this causes infinite recursion
-      // if ( !pointIsAboveWaterSurface ) {
-      //   return this.extractClosestEnergyChunk( point );
-      // }
+      // If point is below water surface, call the superclass version.
+      if ( !pointIsAboveWaterSurface ) {
+        return this.extractClosestEnergyChunkToPoint( point );
+      }
 
       // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the
       // energy chunk.

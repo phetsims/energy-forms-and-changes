@@ -253,7 +253,7 @@ define( function( require ) {
         slice.energyChunkList.forEach( function( energyChunk ) {
           // Compensate for the Z offset.  Otherwise front chunk will almost always be chosen.
           var compensatedEnergyChunkPosition =
-            energyChunk.position.minus( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
+            energyChunk.position.minusXY( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
           var compensatedDistance = compensatedEnergyChunkPosition.distance( point );
           if ( compensatedDistance < closestCompensatedDistance ) {
             closestEnergyChunk = energyChunk;
