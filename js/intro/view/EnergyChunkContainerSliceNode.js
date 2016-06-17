@@ -20,7 +20,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
 
   // constants
-  var ALWAYS_SHOW_OUTLINE = false; // DEBUG
+  var ALWAYS_SHOW_OUTLINE = true; // DEBUG
 
   /**
    * *

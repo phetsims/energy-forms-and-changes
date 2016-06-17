@@ -292,23 +292,25 @@ define( function( require ) {
       for ( var i = 0; i < NUM_SLICES; i++ ) {
         var proportion = ( i + 1 ) * ( 1 / ( NUM_SLICES + 1 ) );
 
-        // The slice width is calculated to fit into the 3D projection. It uses an exponential function that is shifted
-        // in order to yield width value proportional to position in Z-space.
+        // The slice width is calculated to fit into the 3D projection. It uses
+        // an exponential function that is shifted in order to yield width value
+        // proportional to position in Z-space.
         var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
-
         var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
 
-        var topY = bottomY + fluidRect.height;
+        // TODO: this code is broken. It produces skewed parallelogram-looking shapes.
+        // TODO: Using Shape.rect instead for now.
+        // var topY = bottomY + fluidRect.height;
+        // var centerX = fluidRect.centerX;
+        // var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
+        // var sliceShape = new Shape();
+        // sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
+        //   .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
+        //   .lineTo( centerX + sliceWidth / 2, topY )
+        //   .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
+        //   .lineTo( centerX - sliceWidth / 2, bottomY );
 
-        var centerX = fluidRect.centerX;
-
-        var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
-        var sliceShape = new Shape();
-        sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
-          .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
-          .lineTo( centerX + sliceWidth / 2, topY )
-          .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
-          .lineTo( centerX - sliceWidth / 2, bottomY );
+        var sliceShape = Shape.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
         this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.positionProperty ) );
       }
     },
@@ -379,6 +381,7 @@ define( function( require ) {
       }
 
       var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
+      assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
       densestSlice.energyChunkList.forEach( function( energyChunk ) {
         if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
           highestEnergyChunk = energyChunk;

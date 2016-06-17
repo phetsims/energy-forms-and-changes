@@ -335,14 +335,16 @@ define( function( require ) {
     var energyChunkRootNode = new Node();
     this.backNode.addChild( energyChunkRootNode );
 
+    // TODO (AMA): I added the slices to the root node, but this apparently duplicated the radiatedEnergyChunkList chunks with an offset, and they don't get removed.
+    // they should be added to the clip node when available.
     ////energyChunkClipNode.setPathTo( beakerBounds ); // Not sure that this is what is needed here. Bigger for chunks that are leaving? Needs thought.
     //energyChunkRootNode.addChild( energyChunkClipNode );
     ////energyChunkClipNode.setStroke( null );
-    // for ( var i = beaker.slices.length - 1; i >= 0; i-- ) {
-      // TODO (AMA): I added the slices to the root node, but this apparently duplicated the radiatedEnergyChunkList chunks with an offset, and they don't get removed.
-      // they should be added to the clip node when available.
-      // energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[ i ], modelViewTransform ) );
-    // }
+
+    // The original Java code used a PClip. Not clear what that was for, so adding the sliceNodes directly to the root node instead.
+    for ( var i = beaker.slices.length - 1; i >= 0; i-- ) {
+      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[ i ], modelViewTransform ) );
+    }
 
     // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
     // needed.
