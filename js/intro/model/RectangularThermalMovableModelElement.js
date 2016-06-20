@@ -118,16 +118,17 @@ define( function( require ) {
     },
 
     /**
-     *
+     * This function is called when a chunk is drifting towards the container, e.g. from the burner.
+     * It is not called during "evaporation", even though the chunks are "non-contained".
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
       var self = this;
-      var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
-      energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
-        energyChunkWanderController.updatePosition( dt );
-        if ( self.getSliceBounds().containsPoint( energyChunkWanderController.energyChunk.position ) ) {
-          self.moveEnergyChunkToSlices( energyChunkWanderController.energyChunk );
+      var controllers = this.energyChunkWanderControllers.slice( 0 );
+      controllers.forEach( function( controller ) {
+        controller.updatePosition( dt );
+        if ( self.getSliceBounds().containsPoint( controller.energyChunk.position ) ) {
+          self.moveEnergyChunkToSlices( controller.energyChunk );
         }
       } );
     },
