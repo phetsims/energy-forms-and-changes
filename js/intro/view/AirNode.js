@@ -31,6 +31,10 @@ define( function( require ) {
         lineWidth: 1
       } ) );
     }
+
+    // var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
+    // this.addChild( new EnergyChunkLayer( air.energyChunkList, air.positionProperty, modelViewTransform ) );
+
     // Create a layer where energy chunks will be placed.
     var energyChunkLayer = new Node();
     this.addChild( energyChunkLayer );
@@ -52,3 +56,4 @@ define( function( require ) {
 
   return inherit( Node, AirNode );
 } );
+

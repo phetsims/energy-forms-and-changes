@@ -22,7 +22,6 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
-  var ThermalEnergyContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalEnergyContainer' );
   var Vector2 = require( 'DOT/Vector2' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -59,33 +58,44 @@ define( function( require ) {
    */
   function Air( energyChunksVisibleProperty ) {
 
-    ThermalEnergyContainer.call( this );
+    Object.call( this );
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // Energy chunks that are approaching this model element.
+    // Energy chunks that are wandering outside this model element.
     this.energyChunkWanderControllers = [];
     this.energyChunkList = new ObservableArray();
 
+    // this.positionProperty = new Property( new Vector2( SIZE.x, SIZE.y ) );
+    // this.positionProperty = new Property( this.getCenterPoint() );
+    // this.positionProperty = new Property( Vector2.ZERO );
   }
 
   energyFormsAndChanges.register( 'Air', Air );
 
-  return inherit( ThermalEnergyContainer, Air, {
+  return inherit( Object, Air, {
 
     /**
      * *
      * @param dt
      */
     step: function( dt ) {
-      var thisModel = this;
-      // Update the position of any energy chunks.
-      this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
-        energyChunkWanderController.updatePosition( dt );
-        if ( !( thisModel.getThermalContactArea().containsPoint( energyChunkWanderController.energyChunk.position ) ) ) {
+
+      var self = this;
+      var controllers = this.energyChunkWanderControllers.slice();
+
+      controllers.forEach( function( controller ) {
+        controller.updatePosition( dt );
+
+        if ( controller.destinationReached() ) {
+          console.log( 'done in air' );
+        }
+
+        if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.position ) ) ) {
+
           // Remove this energy chunk.
-          thisModel.energyChunkList.remove( energyChunkWanderController.energyChunk );
-          thisModel.energyChunkWanderControllers.splice( index, 1 );
+          self.energyChunkList.remove( controller.energyChunk );
+          _.pull( self.energyChunkWanderControllers, controller );
         }
       } );
     },
