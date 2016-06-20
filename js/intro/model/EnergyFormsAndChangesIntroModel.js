@@ -134,7 +134,9 @@ define( function( require ) {
     }
 
     this.normalSimSpeedProperty.link( function() {
-      self.timePerTick = self.normalSimSpeed ? EFACConstants.SIM_TIME_PER_TICK_NORMAL : EFACConstants.SIM_TIME_PER_TICK_FAST_FORWARD;
+      self.timePerTick = self.normalSimSpeed ?
+        EFACConstants.SIM_TIME_PER_TICK_NORMAL :
+        EFACConstants.SIM_TIME_PER_TICK_FAST_FORWARD;
     } );
 
   }
@@ -289,24 +291,25 @@ define( function( require ) {
       } );
 
       // Exchange energy and energy chunks between the movable thermal energy containers and the air.
-      this.thermalContainers.forEach( function( movableEnergyContainer ) {
+      this.thermalContainers.forEach( function( container1 ) {
         // Set up some variables that are used to decide whether or not energy should be exchanged with air.
         var contactWithOtherMovableElement = false;
         var immersedInBeaker = false;
         var maxTemperatureDifference = 0;
 
         // Figure out the max temperature difference between touching energy containers.
-        self.thermalContainers.forEach( function( otherMovableEnergyContainer ) {
-          if ( otherMovableEnergyContainer === movableEnergyContainer ) {
+        self.thermalContainers.forEach( function( container2 ) {
+          if ( container2 === container1 ) {
             return;
           }
-          if ( movableEnergyContainer.getThermalContactArea().getThermalContactLength( otherMovableEnergyContainer.getThermalContactArea() ) > 0 ) {
+          if ( container1.getThermalContactArea().getThermalContactLength( container2.getThermalContactArea() ) > 0 ) {
             contactWithOtherMovableElement = true;
-            maxTemperatureDifference = Math.max( Math.abs( movableEnergyContainer.getTemperature() - otherMovableEnergyContainer.getTemperature() ), maxTemperatureDifference );
+            maxTemperatureDifference = Math.max( Math.abs( container1.getTemperature() - container2.getTemperature() ),
+              maxTemperatureDifference );
           }
         } );
 
-        if ( self.beaker.getThermalContactArea().containsPoint( movableEnergyContainer.getBounds() ) ) {
+        if ( self.beaker.getThermalContactArea().containsPoint( container1.getBounds() ) ) {
           // This model element is immersed in the beaker.
           immersedInBeaker = true;
         }
@@ -314,28 +317,29 @@ define( function( require ) {
         // Exchange energy and energy chunks with the air if appropriate conditions are met.
         if ( !contactWithOtherMovableElement ||
           ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
-            movableEnergyContainer.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
-          self.air.exchangeEnergyWith( movableEnergyContainer, dt );
-          if ( movableEnergyContainer.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2( Math.random() * movableEnergyContainer.getBounds().width + movableEnergyContainer.getBounds().minX,
-              movableEnergyContainer.getBounds().maxY );
-            var energyChunk = movableEnergyContainer.extractClosestEnergyChunkToPoint( pointAbove );
+            container1.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
+          self.air.exchangeEnergyWith( container1, dt );
+          if ( container1.getEnergyChunkBalance() > 0 ) {
+            var pointAbove = new Vector2( Math.random() * container1.getBounds().width + container1.getBounds().minX,
+              container1.getBounds().maxY );
+            var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
             if ( energyChunk !== null ) {
               var energyChunkMotionConstraints = null;
-              if ( movableEnergyContainer instanceof Beaker ) {
-                // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is a bit of a fudge
-                // factor in here to make sure that the sides of the energy chunk, and not just the center, stay in bounds.
+              if ( container1 instanceof Beaker ) {
+                // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker.
+                // There is a bit of a fudge factor in here to make sure that the sides of the energy chunk,
+                // and not just the center, stay in bounds.
                 var energyChunkWidth = 0.01;
-                energyChunkMotionConstraints = new Rectangle( movableEnergyContainer.getBounds().minX + energyChunkWidth / 2,
-                  movableEnergyContainer.getBounds().minY,
-                  movableEnergyContainer.getBounds().width - energyChunkWidth,
-                  movableEnergyContainer.getBounds().height );
+                energyChunkMotionConstraints = new Rectangle( container1.getBounds().minX + energyChunkWidth / 2,
+                  container1.getBounds().minY,
+                  container1.getBounds().width - energyChunkWidth,
+                  container1.getBounds().height );
               }
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
-          } else if ( movableEnergyContainer.getEnergyChunkBalance < 0 &&
-            movableEnergyContainer.getTemperature() < self.air.getTemperature() ) {
-            movableEnergyContainer.addEnergyChunk( self.air.requestEnergyChunk( movableEnergyContainer.getCenterPoint() ) );
+          } else if ( container1.getEnergyChunkBalance < 0 &&
+            container1.getTemperature() < self.air.getTemperature() ) {
+            container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
           }
         }
       } );
@@ -408,8 +412,10 @@ define( function( require ) {
       return [ this.ironBlock, this.brick ];
     },
 
-    /** Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by the code that detects potential
-     *  collisions between the 2D objects in model space.
+    /**
+     * Project a line into a 2D shape based on the provided projection vector.
+     * This is a convenience function used by the code that detects potential
+     * collisions between the 2D objects in model space.
      *
      * @param {Line} edge
      * @param {Vector2} projection
@@ -444,12 +450,15 @@ define( function( require ) {
       var translation = proposedPosition.copy().minus( modelElement.position );
 
       // Figure out how far the block's right edge appears to protrude to the side due to perspective.
-      var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
+      var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH *
+        EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
       // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't
       // drag things between them.  Also, compensate for perspective so that we can avoid difficult z-order issues.
-      var standPerspectiveExtension = this.leftBurner.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
-      var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension - ( modelElement !== this.beaker ? blockPerspectiveExtension : 0 );
+      var standPerspectiveExtension = this.leftBurner.getOutlineRect().height *
+        EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+      var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension -
+        ( modelElement !== this.beaker ? blockPerspectiveExtension : 0 );
       var burnerBlockingRect = new Rectangle(
         burnerRectX,
         this.leftBurner.getOutlineRect().minY,
@@ -471,7 +480,11 @@ define( function( require ) {
           this.beaker.getBounds().minY,
           testRectThickness + blockPerspectiveExtension * 2,
           this.beaker.getBounds().height + blockPerspectiveExtension );
-        var beakerBottom = new Rectangle( this.beaker.getBounds().minX, this.beaker.getBounds().minY, this.beaker.getBounds().width, testRectThickness );
+        var beakerBottom = new Rectangle(
+          this.beaker.getBounds().minX,
+          this.beaker.getBounds().minY,
+          this.beaker.getBounds().width,
+          testRectThickness );
 
         // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the model element - the beaker will
         // simply be lifted up.
@@ -490,20 +503,23 @@ define( function( require ) {
           return; // continue to next iteration.
         }
 
-        // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of the model element - the block
+        // Do not restrict the model element's motion in positive Y direction if
+        // the tested block is sitting on top of the model element - the block
         // will simply be lifted up.
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
         var testRect = modelElement.getBounds();
         if ( modelElement === self.beaker ) {
-          // Special handling for the beaker - block it at the outer edge of the block instead of the center in order to simplify z-order handling.
+          // Special handling for the beaker - block it at the outer edge of the
+          // block instead of the center in order to simplify z-order handling.
           testRect = new Rectangle( testRect.minX - blockPerspectiveExtension,
             testRect.minY,
             testRect.width + blockPerspectiveExtension * 2,
             testRect.height );
         }
 
-        // Clamp the translation based on the test block's position, but handle the case where the block is immersed in the beaker.
+        // Clamp the translation based on the test block's position, but handle
+        // the case where the block is immersed in the beaker.
         if ( modelElement !== self.beaker || !self.beaker.getBounds().containsBounds( block.getBounds() ) ) {
           translation = self.determineAllowedTranslation( testRect, block.getBounds(), translation, restrictPositiveY );
         }
@@ -555,22 +571,6 @@ define( function( require ) {
         } else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
           yOverlapCure = stationaryRect.maxY - movingRect.minY;
         }
-
-        //// Determine the motion in the X & Y directions that will "cure" the overlap.
-        //var xOverlapCure = 0;
-        //if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
-        //  xOverlapCure = stationaryRect.minX - movingRect.maxX;
-        //}
-        //else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
-        //  xOverlapCure = stationaryRect.maxX - movingRect.minX;
-        //}
-        //var yOverlapCure = 0;
-        //if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
-        //  yOverlapCure = stationaryRect.minY - movingRect.maxY;
-        //}
-        //else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
-        //  yOverlapCure = stationaryRect.maxY - movingRect.minY;
-        //}
 
         // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
         // method.
