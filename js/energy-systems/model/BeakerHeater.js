@@ -160,7 +160,7 @@ define( function( require ) {
         var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * this.beaker.fluidLevelProperty.get() );
         var extractionPoint = new Vector2( extractionX, extractionY );
         var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
-        if ( ec !== null ) {
+        if ( ec ) {
           ec.zPositionProperty.set( 0.0 ); // Move to front of z order.
           this.radiatedEnergyChunkList.push( ec );
           this.radiatedEnergyChunkMovers.push(
