@@ -282,7 +282,7 @@ define( function( require ) {
         self.thermalContainers.slice( index + 1,
           self.thermalContainers.length ).forEach( function( container2 ) {
           if ( container1.getThermalContactArea().getThermalContactLength( container2.getThermalContactArea() ) > 0 ) {
-            // Exchange chunks if approperiate.
+            // Exchange chunks if appropriate.
             if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance < 0 ) {
               container2.addEnergyChunk( container1.extractClosestEnergyChunk( container2.getThermalContactArea() ) );
             } else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
@@ -325,7 +325,8 @@ define( function( require ) {
             var pointAbove = new Vector2( Math.random() * container1.getBounds().width + container1.getBounds().minX,
               container1.getBounds().maxY );
             var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
-            if ( energyChunk !== null ) {
+
+            if ( energyChunk ) {
               var energyChunkMotionConstraints = null;
               if ( container1 instanceof Beaker ) {
                 // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker.
@@ -337,8 +338,10 @@ define( function( require ) {
                   container1.getBounds().width - energyChunkWidth,
                   container1.getBounds().height );
               }
+              console.log( 'IM: air.add from movable el' );
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
+
           } else if ( container1.getEnergyChunkBalance < 0 &&
             container1.getTemperature() < self.air.getTemperature() ) {
             container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
@@ -349,6 +352,7 @@ define( function( require ) {
       // Exchange energy chunks between the air and the burners.
       this.burners.forEach( function( burner ) {
         if ( burner.getEnergyChunkCountForAir() > 0 ) {
+          console.log( 'IM: air.add from burner' );
           self.air.addEnergyChunk( burner.extractClosestEnergyChunk( burner.getCenterPoint() ), null );
         } else if ( burner.getEnergyChunkCountForAir() < 0 ) {
           burner.addEnergyChunk( self.air.requestEnergyChunk( burner.getCenterPoint() ) );

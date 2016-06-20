@@ -43,6 +43,7 @@ define( function( require ) {
       self.addChild( energyChunkNode );
       energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
+          console.log('ECCSN: Removing chunk node');
           self.removeChild( energyChunkNode );
           energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( removalListener );
         }

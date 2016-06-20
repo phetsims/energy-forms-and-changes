@@ -87,17 +87,16 @@ define( function( require ) {
       controllers.forEach( function( controller ) {
         controller.updatePosition( dt );
 
+        // if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.position ) ) ) {
         if ( controller.destinationReached() ) {
-          console.log( 'done in air' );
-        }
-
-        if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.position ) ) ) {
-
+          // }
           // Remove this energy chunk.
+          console.log( 'Air: removing chunk' );
           self.energyChunkList.remove( controller.energyChunk );
           _.pull( self.energyChunkWanderControllers, controller );
         }
       } );
+
     },
 
     /**

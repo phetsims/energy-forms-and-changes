@@ -148,10 +148,16 @@ define( function( require ) {
     // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed.
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ? thisNode.approachingEnergyChunkParentNode : thisNode.approachingEnergyChunkParentNode;
+
+      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ?
+        thisNode.energyChunkRootNode :
+        thisNode.approachingEnergyChunkParentNode;
+
       parentNode.addChild( energyChunkNode );
+
       block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
+          console.log( 'BN: Removing chunk node' );
           parentNode.removeChild( energyChunkNode );
           block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
@@ -174,7 +180,8 @@ define( function( require ) {
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
       // TODO: Not sure why this is not working yet.
-      thisNode.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
+      thisNode.energyChunkRootNode.translation =
+        modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
 
     // testing rectangle to figure out location bug.
@@ -256,3 +263,4 @@ define( function( require ) {
     }
   } );
 } );
+

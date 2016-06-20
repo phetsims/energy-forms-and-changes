@@ -262,6 +262,7 @@ define( function( require ) {
         } );
       } );
 
+      console.log( 'RTMME: removing chunk (ECECTP)' );
       this.removeEnergyChunk( closestEnergyChunk );
       return closestEnergyChunk;
     },
@@ -334,7 +335,7 @@ define( function( require ) {
           console.log( ' - Warning: No chunks available for extraction.' );
         }
       }
-
+      console.log( 'RTMME: removing chunk (ECEC)' );
       this.removeEnergyChunk( chunkToExtract );
 
       return chunkToExtract;
