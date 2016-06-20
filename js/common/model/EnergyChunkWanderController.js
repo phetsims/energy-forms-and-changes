@@ -61,20 +61,23 @@ define( function( require ) {
     updatePosition: function( dt ) {
 
       var distanceToDestination = this.energyChunk.position.distance( this.destinationProperty.value );
-      if ( distanceToDestination < this.velocity.magnitude() * dt && !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
-        // Destination reached.
-        this.energyChunk.position = this.destinationProperty.value;
+
+      // Destination reached.
+      if ( distanceToDestination < this.velocity.magnitude() * dt &&
+        !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
+        this.energyChunk.positionProperty.set( this.destinationProperty.value );
         this.velocity.setMagnitude( 0 );
       }
+
+      // Prevent overshoot.
       else if ( this.energyChunk.position.distance( this.destinationProperty.value ) < dt * this.velocity.magnitude() ) {
-        // Prevent overshoot.
         this.velocity.times( this.energyChunk.position.distance( this.destinationProperty.value ) * dt );
       }
 
       // Stay within the horizontal confines of the initial bounds.
       if ( this.initialWanderConstraint !== null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
-        var proposedPosition = this.energyChunk.position.plus( this.velocity.times( dt ) );
-        if ( proposedPosition.x < this.initialWanderConstraint.minX || proposedPosition.x > this.initialWanderConstraint.maxX ) {
+        var proposedX = this.energyChunk.position.plus( this.velocity.times( dt ) ).x;
+        if ( proposedX < this.initialWanderConstraint.minX || proposedX > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
           this.velocity.setComponents( -this.velocity.x, this.velocity.y );
         }
@@ -87,6 +90,7 @@ define( function( require ) {
         this.resetCountdownTimer();
       }
     },
+
     /**
      *
      */
@@ -126,3 +130,4 @@ define( function( require ) {
   } );
 } );
 //
+
