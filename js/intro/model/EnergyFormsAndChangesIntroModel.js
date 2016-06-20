@@ -42,7 +42,8 @@ define( function( require ) {
   // Minimum distance allowed between two objects.  The basically prevents floating point issues.
   var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // In meters.
 
-  // Threshold of temperature difference between the bodies in a multi-body system below which energy can be exchanged with air.
+  // Threshold of temperature difference between the bodies in a multi-body
+  // system below which energy can be exchanged with air.
   var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // In degrees K, empirically determined.
 
   var BEAKER_WIDTH = 0.085; // In meters.
@@ -58,7 +59,8 @@ define( function( require ) {
   var countUnderMin = 0;
 
   /**
-   * Main constructor for EnergyFormsAndChangesIntroModel, which contains all of the model logic for the entire sim screen.
+   * Main constructor for EnergyFormsAndChangesIntroModel, which contains all of
+   * the model logic for the entire sim screen.
    *
    * @constructor
    */
@@ -486,7 +488,8 @@ define( function( require ) {
           this.beaker.getBounds().width,
           testRectThickness );
 
-        // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the model element - the beaker will
+        // Do not restrict the model element's motion in positive Y direction if
+        // the beaker is sitting on top of the model element - the beaker will
         // simply be lifted up.
         var restrictPositiveY = !this.beaker.isStackedUpon( modelElement );
 
@@ -592,7 +595,9 @@ define( function( require ) {
       if ( proposedTranslation.x > 0 ) {
 
         // Check for collisions moving right.
-        var rightEdge = new Line( new Vector2( movingRect.maxX, movingRect.minY ), new Vector2( movingRect.maxX, movingRect.maxY ) );
+        var rightEdge = new Line(
+          new Vector2( movingRect.maxX, movingRect.minY ),
+          new Vector2( movingRect.maxX, movingRect.maxY ) );
         var rightEdgeSmear = this.projectShapeFromLine( rightEdge, proposedTranslation );
 
         if ( rightEdge.start.x <= stationaryRect.minX && rightEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -602,7 +607,9 @@ define( function( require ) {
       } else if ( proposedTranslation.x < 0 ) {
 
         // Check for collisions moving left.
-        var leftEdge = new Line( new Vector2( movingRect.minX, movingRect.minY ), new Vector2( movingRect.minX, movingRect.maxY ) );
+        var leftEdge = new Line(
+          new Vector2( movingRect.minX, movingRect.minY ),
+          new Vector2( movingRect.minX, movingRect.maxY ) );
         var leftEdgeSmear = this.projectShapeFromLine( leftEdge, proposedTranslation );
 
         if ( leftEdge.start.x >= stationaryRect.maxX && leftEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -615,7 +622,9 @@ define( function( require ) {
       if ( proposedTranslation.y > 0 && restrictPosY ) {
 
         // Check for collisions moving up.
-        var movingTopEdge = new Line( new Vector2( movingRect.minX, movingRect.maxY ), new Vector2( movingRect.maxX, movingRect.maxY ) );
+        var movingTopEdge = new Line(
+          new Vector2( movingRect.minX, movingRect.maxY ),
+          new Vector2( movingRect.maxX, movingRect.maxY ) );
         var topEdgeSmear = this.projectShapeFromLine( movingTopEdge, proposedTranslation );
 
         if ( movingTopEdge.start.y <= stationaryRect.minY && topEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -626,7 +635,9 @@ define( function( require ) {
       if ( proposedTranslation.y < 0 ) {
 
         // Check for collisions moving down.
-        var movingBottomEdge = new Line( new Vector2( movingRect.minX, movingRect.minY ), new Vector2( movingRect.maxX, movingRect.minY ) );
+        var movingBottomEdge = new Line(
+          new Vector2( movingRect.minX, movingRect.minY ),
+          new Vector2( movingRect.maxX, movingRect.minY ) );
         var bottomEdgeSmear = this.projectShapeFromLine( movingBottomEdge, proposedTranslation );
 
         if ( movingBottomEdge.start.y >= stationaryRect.maxY && bottomEdgeSmear.intersectsBounds( stationaryRect ) ) {
@@ -738,7 +749,8 @@ define( function( require ) {
       if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
         return new TemperatureAndColor( this.beaker.temperature, EFACConstants.WATER_COLOR_IN_BEAKER );
       } else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
-        return new TemperatureAndColor( this.beaker.getSteamTemperature( locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
+        return new TemperatureAndColor( this.beaker.getSteamTemperature(
+          locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
       }
 
       // Test if the point is a burner.
