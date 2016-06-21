@@ -179,7 +179,6 @@ define( function( require ) {
       thisNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) );
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      // TODO: Not sure why this is not working yet.
       thisNode.energyChunkRootNode.translation =
         modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
@@ -188,7 +187,6 @@ define( function( require ) {
     //this.addChild( new Rectangle( this.bounds, { fill: 'rgba( 1, 0, 0, 0.75 )', bottomCenter: this.bottomCenter } ) );
 
     // Add the drag handler.
-    // TODO: Resolve some buggy layout issues before this is added.
     var offsetPosToCenter = new Vector2(
       this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
       this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
