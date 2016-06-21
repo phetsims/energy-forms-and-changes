@@ -160,7 +160,11 @@ define( function( require ) {
         var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * this.beaker.fluidLevelProperty.get() );
         var extractionPoint = new Vector2( extractionX, extractionY );
         var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
-        if ( ec ) {
+
+        // Due to a strange bug, chunks originally belonging to the beaker are
+        // not properly deleted. To avoid this, only evaporate chunks that are
+        // initially mechanical (thus initially from outside the beaker).
+        if ( ec && ec.energyTypeProperty.initialValue === EnergyType.MECHANICAL ) {
           ec.zPositionProperty.set( 0.0 ); // Move to front of z order.
           this.radiatedEnergyChunkList.push( ec );
           this.radiatedEnergyChunkMovers.push(
