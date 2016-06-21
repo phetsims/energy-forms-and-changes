@@ -260,9 +260,9 @@ define( function( require ) {
     this.backNode = new Node(); // @public
     this.grabNode = new Node(); // @public
 
-    this.addChild( this.backNode );
-    this.addChild( this.frontNode );
-    this.addChild( this.grabNode );
+    this.addChild(this.frontNode);
+    this.addChild(this.backNode);
+    this.addChild(this.grabNode);
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
     var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
@@ -362,7 +362,6 @@ define( function( require ) {
 
     // Add the node that can be used to grab and move the beaker.
     var grabNodeShape = beakerBody;
-    // TODO: This does NOT include the top ellipse yet.
     this.grabNode.addChild( new Path( grabNodeShape, {
       fill: 'rgba( 0, 0, 0, 0 )'
     } ) ); // Invisible, yet pickable.
@@ -380,11 +379,19 @@ define( function( require ) {
 
     // Update the offset if and when the model position changes.
     beaker.positionProperty.link( function( position ) {
-      thisNode.frontNode.translate( modelViewTransform.modelToViewPosition( position ) );
-      thisNode.backNode.translate( modelViewTransform.modelToViewPosition( position ) );
-      thisNode.grabNode.translate( modelViewTransform.modelToViewPosition( position ) );
+
+      var offset = modelViewTransform.modelToViewPosition( position );
+      thisNode.frontNode.setCenter( offset );
+      thisNode.backNode.setCenter( offset );
+      thisNode.grabNode.setCenter( offset );
+
+      // thisNode.frontNode.translate( offset );
+      // thisNode.backNode.translate( offset );
+      // thisNode.grabNode.translate( offset );
+
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+      // energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+      energyChunkRootNode.setCenter( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
     } );
 
     // Adjust the transparency of the water and label based on energy chunk visibility.

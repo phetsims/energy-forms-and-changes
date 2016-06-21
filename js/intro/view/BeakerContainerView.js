@@ -1,16 +1,17 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
- * which other objects can be placed, generally displacing the fluid.
+ * Node that represents a "beaker container" in the view.  A beaker container
+ * is a beaker that contains fluid, and in which other objects can be placed,
+ * generally displacing the fluid.
  *
- * See the header comments in the super class for some important information about how this node is used on the
- * canvas.
+ * See the header comments in the parent class for some important information
+ * about how this class is used on the canvas.
  *
  * @author John Blanco
  * @author Jesse Greenberg
+ * @author Andrew Adare
  */
-
 define( function( require ) {
   'use strict';
 
@@ -18,6 +19,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * Constructor for a BeakerContainerView.
@@ -31,8 +35,8 @@ define( function( require ) {
     var thisNode = this; // Extend scope for nested callbacks.
     BeakerView.call( this, model.beaker, model.energyChunksVisibleProperty, modelViewTransform );
 
-    // Update the clipping mask when any of the blocks move.  The clipping mask hides energy chunks that overlap with
-    // blocks.
+    // Update the clipping mask when any of the blocks move.  The clipping
+    // mask hides energy chunks that overlap with blocks.
     model.getBlockList().forEach( function( block ) {
       block.positionProperty.link( function() {
         thisNode.updateEnergyChunkClipMask( model, thisNode.energyChunkClipNode );
@@ -40,15 +44,20 @@ define( function( require ) {
     } );
 
     // Update the clipping mask when the position of the beaker moves.
-    //var beaker = model.beaker; // TODO: This necessary?
     model.beaker.positionProperty.link( function( position ) {
       thisNode.updateEnergyChunkClipMask( model, thisNode.energyChunkClipNode );
     } );
 
-    // TODO: Remove offsetPosToCenter input - this is calculated in MovableDragHandler.
-    //this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,
-    //  new ThermalItemMotionConstraint( model, model.beaker, this.grabNode, stageBounds, modelViewTransform, new Vector2( 0, 0 ) ) ) );
+    this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,
+      new ThermalItemMotionConstraint( model, model.beaker, this.grabNode, stageBounds, modelViewTransform,
+        Vector2.ZERO ) ) );
 
+    // Add the drag handler.
+    var offsetPosToCenter = new Vector2(
+      this.bounds.centerX - modelViewTransform.modelToViewX( model.beaker.position.x ),
+      this.bounds.centerY - modelViewTransform.modelToViewY( model.beaker.position.y ) );
+    this.addInputListener( new ThermalElementDragHandler( model.beaker, this, modelViewTransform,
+      new ThermalItemMotionConstraint( model, model.beaker, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }
 
   energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );

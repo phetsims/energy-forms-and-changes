@@ -183,9 +183,6 @@ define( function( require ) {
         modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
 
-    // testing rectangle to figure out location bug.
-    //this.addChild( new Rectangle( this.bounds, { fill: 'rgba( 1, 0, 0, 0.75 )', bottomCenter: this.bottomCenter } ) );
-
     // Add the drag handler.
     var offsetPosToCenter = new Vector2(
       this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),

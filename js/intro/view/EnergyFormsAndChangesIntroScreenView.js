@@ -202,9 +202,10 @@ define( function( require ) {
     ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
-    beakerFrontLayer.addChild( beakerView.frontNode );
-    beakerBackLayer.addChild( beakerView.backNode );
-    beakerGrabLayer.addChild( beakerView.grabNode );
+    this.addChild(beakerView);
+    // beakerFrontLayer.addChild( beakerView.frontNode );
+    // beakerBackLayer.addChild( beakerView.backNode );
+    // beakerGrabLayer.addChild( beakerView.grabNode );
 
     //Show the mock-up and a slider to change its transparency
     var mockupOpacityProperty = new Property( 0.02 );
