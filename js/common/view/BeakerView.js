@@ -371,7 +371,7 @@ define( function( require ) {
 
     // If enabled, show the outline of the rectangle that represents the beaker's position in the model.
     if ( SHOW_MODEL_RECT ) {
-      this.frontNode.addChild( new Path( beakerBounds, {
+      this.frontNode.addChild( new Rectangle( beakerBounds, {
         fill: 'red',
         lineWidth: 2
       } ) );
@@ -381,17 +381,13 @@ define( function( require ) {
     beaker.positionProperty.link( function( position ) {
 
       var offset = modelViewTransform.modelToViewPosition( position );
-      thisNode.frontNode.setCenter( offset );
-      thisNode.backNode.setCenter( offset );
-      thisNode.grabNode.setCenter( offset );
 
-      // thisNode.frontNode.translate( offset );
-      // thisNode.backNode.translate( offset );
-      // thisNode.grabNode.translate( offset );
+      thisNode.frontNode.translation = offset;
+      thisNode.backNode.translation = offset;
+      thisNode.grabNode.translation = offset;
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      // energyChunkRootNode.translate( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
-      energyChunkRootNode.setCenter( modelViewTransform.modelToViewPosition( position ).rotated( Math.PI ) );
+      energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
     } );
 
     // Adjust the transparency of the water and label based on energy chunk visibility.
