@@ -321,12 +321,18 @@ define( function( require ) {
           ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
             container1.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
           self.air.exchangeEnergyWith( container1, dt );
+
           if ( container1.getEnergyChunkBalance() > 0 ) {
             var pointAbove = new Vector2( Math.random() * container1.getBounds().width + container1.getBounds().minX,
               container1.getBounds().maxY );
             var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
 
-            if ( energyChunk ) {
+            // There is a bug causing chunks added via RTMME.addInitialEnergyChunks() not to be deleted from the air
+            // when they are done evaporating. This check avoids adding those chunks to the air. If that bug is
+            // fixed, this check is no longer necessary.
+            var isInitialChunk = container1.initialBounds.containsPoint( energyChunk.positionProperty.initialValue );
+
+            if ( energyChunk && !isInitialChunk ) {
               var energyChunkMotionConstraints = null;
               if ( container1 instanceof Beaker ) {
                 // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker.
