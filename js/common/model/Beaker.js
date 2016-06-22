@@ -252,7 +252,12 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      */
     getThermalContactArea: function() {
-      return new ThermalContactArea( new Bounds2( this.position.x - this.width / 2, this.position.y, this.width, this.height * this.fluidLevel ), true );
+
+      return new ThermalContactArea( new Bounds2(
+        this.position.x - this.width / 2,
+        this.position.y,
+        this.width,
+        this.height * this.fluidLevel ), true );
     },
 
     /**
