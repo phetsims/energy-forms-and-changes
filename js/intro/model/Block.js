@@ -43,6 +43,8 @@ define( function( require ) {
 
     var thisBlock = this;
 
+    this.initialBounds = this.getBounds();
+
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
       //console.log( 'block position changing' );
