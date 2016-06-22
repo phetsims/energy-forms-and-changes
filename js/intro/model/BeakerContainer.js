@@ -76,14 +76,15 @@ define( function( require ) {
     },
 
     /**
-     * *
      * @private
      * @param {EnergyChunk} energyChunk
      * @returns {boolean}
      */
     isEnergyChunkObscured: function( energyChunk ) {
+      var self = this;
       this.potentiallyContainedElements.forEach( function( element ) {
-        if ( this.getThermalContactArea().containsBounds( element.getBounds() ) && element.getProjectedShape().contains( energyChunk.position ) ) {
+        if ( self.getThermalContactArea().containsBounds( element.getBounds() ) &&
+          element.getProjectedShape().contains( energyChunk.position ) ) {
           return true;
         }
       } );
