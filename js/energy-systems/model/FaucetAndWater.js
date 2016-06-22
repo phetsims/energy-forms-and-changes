@@ -48,7 +48,7 @@ define( function( require ) {
    * @param {Property.<boolean>} waterPowerableElementInPlace
    * @constructor
    */
-  function FaucetAndWater( energyChunksVisibleProperty, waterPowerableElementInPlace ) {
+  function FaucetAndWater( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty ) {
 
     EnergySource.call( this, new Image( FAUCET_ICON ) );
 
@@ -56,7 +56,7 @@ define( function( require ) {
 
     // Flag that is used to decide whether to pass energy chunks to the next
     // energy system element.
-    this.waterPowerableElementInPlace = waterPowerableElementInPlace;
+    this.waterPowerableElementInPlaceProperty = waterPowerableElementInPlaceProperty;
 
     // Proportion of full available flow that is occurring.
     this.addProperty( 'flowProportion', 0 );
@@ -165,7 +165,7 @@ define( function( require ) {
         var chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( position );
         var chunkExempt = self.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
 
-        if ( self.waterPowerableElementInPlace && chunkInRange && !chunkExempt ) {
+        if ( self.waterPowerableElementInPlaceProperty.value && chunkInRange && !chunkExempt ) {
 
           if ( self.transferNextAvailableChunk ) {
             // Send this chunk to the next energy system.
