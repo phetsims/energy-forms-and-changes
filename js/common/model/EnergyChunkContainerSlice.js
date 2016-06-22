@@ -60,6 +60,7 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
+      console.log('ECCS: adding to slice');
       energyChunk.zPosition = this.zPosition;
       this.energyChunkList.push( energyChunk );
     },

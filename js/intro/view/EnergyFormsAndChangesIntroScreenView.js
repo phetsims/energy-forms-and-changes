@@ -269,6 +269,9 @@ define( function( require ) {
     // Update the Z-order of the blocks whenever the "userControlled" state of either changes.
     model.brick.positionProperty.link( blockChangeObserver );
     model.ironBlock.positionProperty.link( blockChangeObserver );
+
+    // This is a hack to deal with issue #23.
+    model.reset();
   }
 
   energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreenView', EnergyFormsAndChangesIntroScreenView );

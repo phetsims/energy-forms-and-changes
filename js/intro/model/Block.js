@@ -39,7 +39,14 @@ define( function( require ) {
    * @constructor
    */
   function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
-    RectangularThermalMovableModelElement.call( this, initialPosition, EFACConstants.BLOCK_SURFACE_WIDTH, EFACConstants.BLOCK_SURFACE_WIDTH, Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * density, specificHeat, energyChunksVisibleProperty );
+    RectangularThermalMovableModelElement.call(
+      this,
+      initialPosition,
+      EFACConstants.BLOCK_SURFACE_WIDTH,
+      EFACConstants.BLOCK_SURFACE_WIDTH,
+      Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * density,
+      specificHeat,
+      energyChunksVisibleProperty );
 
     var thisBlock = this;
 

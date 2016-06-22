@@ -233,6 +233,9 @@ define( function( require ) {
     carousels.forEach( function( carousel ) {
       thisScreenView.addChild( carousel );
     } );
+
+    // This is a hack to deal with issue #23.
+    model.reset();
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );

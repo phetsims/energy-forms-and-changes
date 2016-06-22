@@ -62,7 +62,6 @@ define( function( require ) {
 
     // Add the initial energy chunks.
     this.addInitialEnergyChunks();
-
   }
 
   energyFormsAndChanges.register( 'RectangularThermalMovableModelElement', RectangularThermalMovableModelElement );
@@ -369,6 +368,7 @@ define( function( require ) {
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
+        console.log( 'RTMME: adding chunk' );
         this.addEnergyChunk( new EnergyChunk(
           EnergyType.THERMAL,
           EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
@@ -397,16 +397,6 @@ define( function( require ) {
       } );
       return numChunks + this.approachingEnergyChunks.length;
     },
-
-
-    /**
-     *
-     * @returns {EnergyChunkContainerSlice[]}
-     */
-    getSlices: function() {
-      return this.slices;
-    },
-
 
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 

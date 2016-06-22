@@ -36,13 +36,15 @@ define( function( require ) {
     Node.call( this );
 
     // Add the initial energy chunks.
-    this.addInitialEnergyChunks();
+    // this.addInitialEnergyChunks(); // AA: No!
 
     energyChunkContainerSlice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+      console.log( 'ECCSN: Adding energyChunkNode' );
       self.addChild( energyChunkNode );
       energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
+          console.log( 'ECCSN: Removing energyChunkNode' );
           self.removeChild( energyChunkNode );
           energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( removalListener );
         }
@@ -62,6 +64,8 @@ define( function( require ) {
 
   return inherit( Node, EnergyChunkContainerSliceNode, {
 
+    // Note (AA): this function does not belong here. See #23. Leaving intact until more progress
+    // is made on that issue.
     addInitialEnergyChunks: function() {
       var thisNode = this;
       this.energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
@@ -71,3 +75,4 @@ define( function( require ) {
   } );
 
 } );
+
