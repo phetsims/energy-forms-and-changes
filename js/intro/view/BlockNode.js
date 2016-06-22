@@ -164,26 +164,6 @@ define( function( require ) {
       } );
     } );
 
-    // block.slices.forEach( function( slice ) {
-    //   slice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
-    //     var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-
-    //     var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ?
-    //       thisNode.energyChunkRootNode :
-    //       thisNode.approachingEnergyChunkParentNode;
-
-    //     parentNode.addChild( energyChunkNode );
-
-    //     block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
-    //       if ( removedEnergyChunk === addedEnergyChunk ) {
-    //         console.log( 'BN: Removing chunk node' );
-    //         parentNode.removeChild( energyChunkNode );
-    //         block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
-    //       }
-    //     } );
-    //   } );
-    // } );
-
     // Make the block be transparent when the energy chunks are visible so that it looks like they are in the block.
     block.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       var opaqueness = energyChunksVisible ? 0.5 : 1.0;
