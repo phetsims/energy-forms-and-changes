@@ -63,13 +63,17 @@ define( function( require ) {
       var minY = Number.POSITIVE_INFINITY;
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
+
       energyChunkContainerSlices.forEach( function( slice ) {
         minX = Math.min( slice.shape.bounds.minX, minX );
         maxX = Math.max( slice.shape.bounds.maxX, maxX );
         minY = Math.min( slice.shape.bounds.minY, minY );
         maxY = Math.max( slice.shape.bounds.maxY, maxY );
       } );
-      var boundingRect = new Rectangle( minX, minY, maxX - minX, maxY - minY );
+
+      var width = maxX - minX;
+      var height = maxY - minY;
+      var boundingRect = new Rectangle( minX, minY, width, height );
 
       // Create a map that tracks the force applied to each energy chunk and a
       // map that tracks each energyChunk with a unique ID.
@@ -146,7 +150,8 @@ define( function( require ) {
                 }
 
                 // Apply the force due to this edge.
-                var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+                var edgeForce = new Vector2( forceConstant /
+                  Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
                 mapEnergyChunkToForceVector[ energyChunk.uniqueID ] =
                   mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( edgeForce );
               }
@@ -186,7 +191,6 @@ define( function( require ) {
           } );
         } );
 
-
         // Update energy chunk velocities, drag force, and position.
         var maxEnergy = 0;
         for ( var energyChunkID in mapIDToEnergyChunk ) {
@@ -208,7 +212,8 @@ define( function( require ) {
             mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
 
             // Update max energy.
-            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() + forceOnThisChunk.magnitude() * Math.PI / 2;
+            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() +
+              forceOnThisChunk.magnitude() * Math.PI / 2;
             if ( totalParticleEnergy > maxEnergy ) {
               maxEnergy = totalParticleEnergy;
             }
@@ -229,7 +234,6 @@ define( function( require ) {
       }
       return particlesRedistributed;
     },
-
 
     /**
      * Super simple alternative energy chunk distribution algorithm - just puts

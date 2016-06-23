@@ -43,7 +43,7 @@ define( function( require ) {
   var OUTLINE_COLOR = 'lightgrey';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32 );
-  var SHOW_MODEL_RECT = false;
+  var SHOW_MODEL_RECT = true;
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 
   // constants for the PerspectiveWaterNode
@@ -260,9 +260,9 @@ define( function( require ) {
     this.backNode = new Node(); // @public
     this.grabNode = new Node(); // @public
 
-    this.addChild(this.frontNode);
-    this.addChild(this.backNode);
-    this.addChild(this.grabNode);
+    this.addChild( this.frontNode );
+    this.addChild( this.backNode );
+    this.addChild( this.grabNode );
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
     var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
@@ -372,7 +372,15 @@ define( function( require ) {
     // If enabled, show the outline of the rectangle that represents the beaker's position in the model.
     if ( SHOW_MODEL_RECT ) {
       this.frontNode.addChild( new Rectangle( beakerBounds, {
-        fill: 'red',
+        fill: 'none',
+        stroke: 'lime',
+        lineWidth: 2
+      } ) );
+
+      this.frontNode.addChild( new Rectangle( modelViewTransform.modelToViewBounds( beaker.getSliceBounds() ), {
+      // this.frontNode.addChild( new Rectangle( scaleTransform.transformShape( beaker.getSliceBounds() ), {
+        fill: 'none',
+        stroke: 'magenta',
         lineWidth: 2
       } ) );
     }

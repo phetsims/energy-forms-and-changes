@@ -372,7 +372,7 @@ define( function( require ) {
         this.addEnergyChunk( new EnergyChunk(
           EnergyType.THERMAL,
           EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
-          new Vector2( 0, 0 ),
+          Vector2.ZERO,
           this.energyChunksVisibleProperty ) );
       }
 
@@ -400,12 +400,18 @@ define( function( require ) {
 
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 
-      var thermalContactLength = this.getThermalContactArea().getThermalContactLength( otherEnergyContainer.getThermalContactArea() );
-      if ( thermalContactLength > 0 ) {
-        if ( Math.abs( otherEnergyContainer.getTemperature() - this.getTemperature() ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
-          // Exchange energy between this and the other energy container.
+      var thermalContactLength = this
+        .getThermalContactArea()
+        .getThermalContactLength( otherEnergyContainer.getThermalContactArea() );
 
-          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), otherEnergyContainer.getEnergyContainerCategory() );
+      if ( thermalContactLength > 0 ) {
+        var deltaT = otherEnergyContainer.getTemperature() - this.getTemperature();
+
+        // Exchange energy between this and the other energy container.
+        if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
+
+          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(),
+            otherEnergyContainer.getEnergyContainerCategory() );
 
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 
@@ -414,7 +420,8 @@ define( function( require ) {
           for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
             var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
 
-            var thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) * thermalContactLength * heatTransferConstant * timeStep;
+            var thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) *
+              thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
           }

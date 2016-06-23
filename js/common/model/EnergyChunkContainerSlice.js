@@ -29,7 +29,7 @@ define( function( require ) {
    */
   function EnergyChunkContainerSlice( shape, zPosition, anchorPointProperty ) {
 
-    var thisContainerSlice = this;
+    var self = this;
     this.shape = shape;
     this.zPosition = zPosition;
     this.energyChunkList = new ObservableArray();
@@ -41,10 +41,11 @@ define( function( require ) {
         // Translation vector is new position minus the old position.
         var translation = newPosition.minus( oldPosition );
         // TODO: Check this ported transform, Java code left in for now.
-        thisContainerSlice.shape = thisContainerSlice.shape.transformed( Matrix3.translationFromVector( translation ) );
+
+        // self.shape = self.shape.transformed( Matrix3.translationFromVector( translation ) );
         //EnergyChunkContainerSlice.this.shape = AffineTransform.getTranslateInstance( translation.getX(), translation.getY() ).createTransformedShape( EnergyChunkContainerSlice.this.shape );
 
-        thisContainerSlice.energyChunkList.forEach( function( energyChunk ) {
+        self.energyChunkList.forEach( function( energyChunk ) {
           energyChunk.translate( translation );
         } );
       }
@@ -71,23 +72,8 @@ define( function( require ) {
      */
     getNumEnergyChunks: function() {
       return this.energyChunkList.length;
-    },
-
-    /**
-     * *
-     * @param {Shape} shape
-     */
-    setShape: function( shape ) {
-      this.shape = shape;
-    },
-
-    /**
-     * *
-     * @returns {Shape}
-     */
-    getShape: function() {
-      return this.shape;
     }
+
   } );
 } );
 

@@ -85,16 +85,18 @@ define( function( require ) {
      */
     function updateSurfaces() {
       var rectangle = thisBeaker.getBounds();
-      thisBeaker.topSurface = new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
+
+      thisBeaker.topSurface = new HorizontalSurface(
+        new Range( rectangle.minX, rectangle.maxX ),
+        rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
+
       thisBeaker.bottomSurface = new HorizontalSurface(
         new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.minY,
-        thisBeaker );
+        rectangle.minY, thisBeaker );
     }
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( updateSurfaces );
-
   }
 
   energyFormsAndChanges.register( 'Beaker', Beaker );
@@ -155,38 +157,6 @@ define( function( require ) {
 
     /**
      * *
-     * @returns {RectangularThermalMovableModelElement.width|*}
-     */
-    getWidth: function() {
-      return this.width;
-    },
-
-    /**
-     * *
-     * @returns {RectangularThermalMovableModelElement.height|*}
-     */
-    getHeight: function() {
-      return this.height;
-    },
-
-    /**
-     * *
-     * @returns {*}
-     */
-    getTopSurfaceProperty: function() {
-      return this.topSurfaceProperty;
-    },
-
-    /**
-     * *
-     * @returns {*}
-     */
-    getBottomSurfaceProperty: function() {
-      return this.bottomSurfaceProperty;
-    },
-
-    /**
-     * *
      */
     addInitialEnergyChunks: function() {
       // extend scope for nested functions
@@ -195,7 +165,10 @@ define( function( require ) {
         slice.energyChunkList.clear();
       } );
       var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( thisBeaker.energy );
-      var initialChunkBounds = thisBeaker.getSliceBounds();
+
+      // var initialChunkBounds = thisBeaker.getSliceBounds();
+      var initialChunkBounds = thisBeaker.getSliceBounds().shiftedX( thisBeaker.getBounds().width / 8 );
+
       while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the beaker.
         thisBeaker.addEnergyChunkToNextSlice(
@@ -204,13 +177,16 @@ define( function( require ) {
       }
 
       // Distribute the energy chunks within the beaker.
-      // TODO: Why 1000 for the loop max?
-      // This loop massively increases load time...leaving commented for now
+      // TODO: ECD needs work.
+      // TODO: This loop massively increases load time...leaving commented for now
       // for ( var i = 0; i < 1000; i++ ) {
       //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
       //     break;
       //   }
       // }
+      for ( var i = 0; i < 50; i++ ) {
+        EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      }
     },
 
     /**
@@ -228,7 +204,7 @@ define( function( require ) {
       var chosenSlice = this.slices[ 0 ];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
-        accumulatedArea += this.slices[ i ].getShape().bounds.width * this.slices[ i ].getShape().bounds.height;
+        accumulatedArea += this.slices[ i ].shape.bounds.width * this.slices[ i ].shape.bounds.height;
         if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
           chosenSlice = this.slices[ i ];
           break;
@@ -287,6 +263,7 @@ define( function( require ) {
      */
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
+
       var fluidRect = new Rectangle(
         this.position.x - this.width / 2,
         this.position.y,
