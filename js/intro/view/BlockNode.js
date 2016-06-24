@@ -63,16 +63,20 @@ define( function( require ) {
     var scaleVector = modelViewTransform.matrix.getScaleVector();
     var scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
 
+    // Note that blockRect is in view coordinates.
+    // The shift by the block height is not in the original Java, but without it, the blocks sit too low.
+    var blockShape = block.getRawShape();
+    var blockRect = scaleTransform.transformShape( blockShape.shiftedY( -blockShape.height ) );
+
     // Create the shape for the front of the block.
-    var blockRectInViewCoords = scaleTransform.transformShape( block.getRawShape() );
     var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
-    var lowerLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-    var lowerRightFrontCorner = new Vector2( blockRectInViewCoords.maxX, blockRectInViewCoords.getMaxY() ).plus( blockFaceOffset );
-    var upperRightFrontCorner = new Vector2( blockRectInViewCoords.maxX, blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-    var upperLeftFrontCorner = new Vector2( blockRectInViewCoords.minX, blockRectInViewCoords.getMinY() ).plus( blockFaceOffset );
-    var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.x, upperLeftFrontCorner.y, blockRectInViewCoords.width, blockRectInViewCoords.height );
+    var lowerLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMaxY() ).plus( blockFaceOffset );
+    var lowerRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMaxY() ).plus( blockFaceOffset );
+    var upperRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMinY() ).plus( blockFaceOffset );
+    var upperLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMinY() ).plus( blockFaceOffset );
+    var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.x, upperLeftFrontCorner.y, blockRect.width, blockRect.height );
 
     // Create the shape of the top of the block.
     var upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
@@ -175,12 +179,18 @@ define( function( require ) {
 
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
-      var offset = block.getRawShape().height;
-      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) );
+
+      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition );
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
       thisNode.energyChunkRootNode.translation =
-        modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
+        modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
+      // var offset = block.getRawShape().height;
+      // thisNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) );
+
+      // // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
+      // thisNode.energyChunkRootNode.translation =
+      //   modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
 
     // Add the drag handler.
