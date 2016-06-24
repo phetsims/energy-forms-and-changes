@@ -88,13 +88,17 @@ define( function( require ) {
      */
     isEnergyChunkObscured: function( energyChunk ) {
       var self = this;
+      var isObscured = false;
+
       this.potentiallyContainedElements.forEach( function( element ) {
         if ( self.getThermalContactArea().containsBounds( element.getBounds() ) &&
           element.getProjectedShape().contains( energyChunk.position ) ) {
-          return true;
+          isObscured = true;
+          return;
         }
       } );
-      return false;
+
+      return isObscured;
     },
 
     /**
@@ -131,7 +135,7 @@ define( function( require ) {
         this.energyChunkWanderControllers.add(
           new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
       } else {
-        this.addEnergyChunk( energyChunk );
+        Beaker.prototype.addEnergyChunk.call(this, energyChunk );
       }
     }
   } );
