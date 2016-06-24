@@ -146,6 +146,7 @@ define( function( require ) {
      * @param {number} dt
      */
     step: function( dt ) {
+      RectangularThermalMovableModelElement.prototype.step.call( this, dt );
       this.temperature = this.getTemperature();
       this.steamingProportion = 0;
       var steamFraction = 1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature ) / STEAMING_RANGE;
