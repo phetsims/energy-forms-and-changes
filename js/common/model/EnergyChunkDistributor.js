@@ -20,6 +20,7 @@ define( function( require ) {
 
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -43,8 +44,13 @@ define( function( require ) {
   // all movement.
   var REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // In joules, I think.
 
-  // TODO: this was a returned anonymous object. I named it for namespace purposes, but it should be a class (see #19).
-  var EnergyChunkDistributor = {
+  function EnergyChunkDistributor() {
+    Object.call( this );
+  }
+
+  energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
+
+  return inherit( Object, EnergyChunkDistributor, {}, {
 
     /**
      * Redistribute a set of energy chunks that are contained in energy chunk
@@ -261,10 +267,6 @@ define( function( require ) {
     generateRandomLocation: function( rect ) {
       return new Vector2( rect.x + ( Math.random() * rect.width ), rect.y + ( Math.random() * rect.height ) );
     }
-  };
-
-  energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
-
-  return EnergyChunkDistributor;
+  } );
 } );
 
