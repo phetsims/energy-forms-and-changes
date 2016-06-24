@@ -106,19 +106,30 @@ define( function( require ) {
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
-      this.energyChunkWanderControllers.slice( 0 ).forEach( function( energyChunkWanderController ) {
-        var energyChunk = energyChunkWanderController.getEnergyChunk();
-        if ( this.isEnergyChunkObscured( energyChunk ) ) {
-          // beaker to the fluid, so move it sideways.
-          var xVel = 0.05 * dt * ( this.getCenterPoint().getX() > energyChunk.position.x ? -1 : 1 );
+
+      var self = this;
+      var controllers = this.energyChunkWanderControllers.slice( 0 );
+
+      controllers.forEach( function( controller ) {
+        var ec = controller.getEnergyChunk();
+
+        // This chunk is being transferred from a container in the
+        // beaker to the fluid, so move it sideways.
+        if ( self.isEnergyChunkObscured( ec ) ) {
+          var xVel = 0.05 * dt * ( self.getCenterPoint().getX() > ec.position.x ? -1 : 1 );
           var motionVector = new Vector2( xVel, 0 );
-          energyChunk.translate( motionVector );
-        } else {
-          energyChunkWanderController.updatePosition( dt );
+          ec.translate( motionVector );
         }
-        if ( !this.isEnergyChunkObscured( energyChunk ) && this.getSliceBounds().contains( energyChunk.position ) ) {
-          // stop moving.
-          this.moveEnergyChunkToSlices( energyChunkWanderController.getEnergyChunk() );
+
+        // Wander chunk towards the container
+        else {
+          controller.updatePosition( dt );
+        }
+
+        // Chunk is in a place where it can migrate to the slices and
+        // stop moving.
+        if ( !self.isEnergyChunkObscured( ec ) && self.getSliceBounds().containsPoint( ec.position ) ) {
+          self.moveEnergyChunkToSlices( controller.getEnergyChunk() );
         }
       } );
     },
@@ -135,7 +146,7 @@ define( function( require ) {
         this.energyChunkWanderControllers.add(
           new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
       } else {
-        Beaker.prototype.addEnergyChunk.call(this, energyChunk );
+        Beaker.prototype.addEnergyChunk.call( this, energyChunk );
       }
     }
   } );
