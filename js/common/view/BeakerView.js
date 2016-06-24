@@ -81,7 +81,7 @@ define( function( require ) {
       stroke: LIQUID_WATER_OUTLINE_COLOR
     } );
 
-    this.steamBubbles = new ObservableArray(); // TODO: Perhaps an array is sufficient.
+    this.steamBubbles = new ObservableArray();
     this.steamNode = new Node();
     this.waterLevelProperty = waterLevelProperty;
     this.temperatureProperty = temperatureProperty;
@@ -265,7 +265,8 @@ define( function( require ) {
     this.addChild( this.grabNode );
 
     // Extract the scale transform from the MVT so that we can separate the shape from the position.
-    var scaleTransform = new Transform3( Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
+    var scaleTransform = new Transform3(
+      Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() ) );
 
     // Get a Bounds2 object defining the beaker size and location in the view.
     var beakerBounds = scaleTransform.transformShape( beaker.getRawOutlineRect() );
@@ -378,7 +379,7 @@ define( function( require ) {
       } ) );
 
       this.frontNode.addChild( new Rectangle( modelViewTransform.modelToViewBounds( beaker.getSliceBounds() ), {
-      // this.frontNode.addChild( new Rectangle( scaleTransform.transformShape( beaker.getSliceBounds() ), {
+        // this.frontNode.addChild( new Rectangle( scaleTransform.transformShape( beaker.getSliceBounds() ), {
         fill: 'none',
         stroke: 'magenta',
         lineWidth: 2
