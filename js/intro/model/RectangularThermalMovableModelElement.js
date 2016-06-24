@@ -261,7 +261,7 @@ define( function( require ) {
         } );
       } );
 
-      console.log( 'RTMME: removing chunk (ECECTP)' );
+      // console.log( 'RTMME: removing chunk (ECECTP)' );
       this.removeEnergyChunk( closestEnergyChunk );
       return closestEnergyChunk;
     },
@@ -334,7 +334,7 @@ define( function( require ) {
           console.log( ' - Warning: No chunks available for extraction.' );
         }
       }
-      console.log( 'RTMME: removing chunk (ECEC)' );
+      // console.log( 'RTMME: removing chunk (ECEC)' );
       this.removeEnergyChunk( chunkToExtract );
 
       return chunkToExtract;
@@ -368,7 +368,7 @@ define( function( require ) {
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
-        console.log( 'RTMME: adding chunk' );
+        // console.log( 'RTMME: adding chunk' );
         this.addEnergyChunk( new EnergyChunk(
           EnergyType.THERMAL,
           EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
