@@ -49,7 +49,7 @@ define( function( require ) {
    */
   function BlockNode( model, block, stageBounds, modelViewTransform ) {
 
-    var thisNode = this;
+    var self = this;
 
     Node.call( this, {
       cursor: 'pointer'
@@ -69,14 +69,19 @@ define( function( require ) {
     var blockRect = scaleTransform.transformShape( blockShape.shiftedY( -blockShape.height ) );
 
     // Create the shape for the front of the block.
-    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX( block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
+    var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX(
+      block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMaxY() ).plus( blockFaceOffset );
     var lowerRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMaxY() ).plus( blockFaceOffset );
     var upperRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMinY() ).plus( blockFaceOffset );
     var upperLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMinY() ).plus( blockFaceOffset );
-    var blockFaceShape = Shape.rectangle( lowerLeftFrontCorner.x, upperLeftFrontCorner.y, blockRect.width, blockRect.height );
+    var blockFaceShape = Shape.rectangle(
+      lowerLeftFrontCorner.x,
+      upperLeftFrontCorner.y,
+      blockRect.width,
+      blockRect.height );
 
     // Create the shape of the top of the block.
     var upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
@@ -116,7 +121,7 @@ define( function( require ) {
 
     // Create the layers where the energy chunks will be placed.
     this.energyChunkRootNode = new Node();
-    this.addChild( this.energyChunkRootNode ); // TODO: Adding this later.  There seems to be some layout issue with this.
+    this.addChild( this.energyChunkRootNode );
     for ( var i = block.slices.length - 1; i >= 0; i-- ) {
       this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
     }
@@ -141,21 +146,23 @@ define( function( require ) {
     label.setFont( LABEL_FONT );
     if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) ) {
       // Scale the label to fit on the face of the block.  This also supports translations.
-      var scale = ( modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width );
+      var scale = modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width;
       label.setScale( scale );
     }
     var labelCenterX = ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2;
-    var labelCenterY = ( upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2 );
+    var labelCenterY =
+      ( upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2 );
     label.center = new Vector2( labelCenterX, labelCenterY );
     this.addChild( label );
 
-    // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed.
+    // Watch for coming and going of energy chunks that are approaching
+    // this model element and add/remove them as needed.
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 
-      var parentNode = ( thisNode.approachingEnergyChunkParentNode === null ) ?
-        thisNode.energyChunkRootNode :
-        thisNode.approachingEnergyChunkParentNode;
+      var parentNode = ( self.approachingEnergyChunkParentNode === null ) ?
+        self.energyChunkRootNode :
+        self.approachingEnergyChunkParentNode;
 
       parentNode.addChild( energyChunkNode );
 
@@ -180,17 +187,11 @@ define( function( require ) {
     // Update the offset if and when the model position changes.
     block.positionProperty.link( function( newPosition ) {
 
-      thisNode.translation = modelViewTransform.modelToViewPosition( newPosition );
+      self.translation = modelViewTransform.modelToViewPosition( newPosition );
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      thisNode.energyChunkRootNode.translation =
+      self.energyChunkRootNode.translation =
         modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
-      // var offset = block.getRawShape().height;
-      // thisNode.translation = modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) );
-
-      // // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
-      // thisNode.energyChunkRootNode.translation =
-      //   modelViewTransform.modelToViewPosition( newPosition.plusXY( 0, offset ) ).rotated( Math.PI );
     } );
 
     // Add the drag handler.
