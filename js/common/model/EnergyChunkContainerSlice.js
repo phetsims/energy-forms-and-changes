@@ -35,20 +35,14 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
 
     // Monitor the anchor position and move the contained energy chunks to match.
-    anchorPointProperty.link( function( newPosition, oldPosition ) {
-      // null check for first set of position.
-      if ( oldPosition !== null ) {
-        // Translation vector is new position minus the old position.
-        var translation = newPosition.minus( oldPosition );
-        // TODO: Check this ported transform, Java code left in for now.
+    anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+      var translation = newPosition.minus( oldPosition );
 
-        // self.shape = self.shape.transformed( Matrix3.translationFromVector( translation ) );
-        //EnergyChunkContainerSlice.this.shape = AffineTransform.getTranslateInstance( translation.getX(), translation.getY() ).createTransformedShape( EnergyChunkContainerSlice.this.shape );
+      self.shape = self.shape.transformed( Matrix3.translationFromVector( translation ) );
 
-        self.energyChunkList.forEach( function( energyChunk ) {
-          energyChunk.translate( translation );
-        } );
-      }
+      self.energyChunkList.forEach( function( energyChunk ) {
+        energyChunk.translate( translation );
+      } );
     } );
   }
 
@@ -61,7 +55,7 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
-      console.log('ECCS: adding to slice');
+      console.log( 'ECCS: adding to slice' );
       energyChunk.zPosition = this.zPosition;
       this.energyChunkList.push( energyChunk );
     },
