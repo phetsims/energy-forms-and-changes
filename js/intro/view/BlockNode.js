@@ -168,7 +168,7 @@ define( function( require ) {
 
       block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          console.log( 'BN: Removing chunk node (approaching chunks)' );
+          // console.log( 'BN: Removing chunk node (approaching chunks)' );
           parentNode.removeChild( energyChunkNode );
           block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
