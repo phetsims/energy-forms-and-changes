@@ -142,18 +142,20 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
-      // var bounds = this.getSliceBounds().shifted(this.position.x, this.position.y);
       var bounds = this.getSliceBounds();
+
+      // Energy chunk is positioned within container bounds, so add it directly to a slice.
       if ( bounds.containsPoint( energyChunk.position ) ) {
-
-        // Energy chunk is positioned within container bounds, so add it directly to a slice.
         this.addEnergyChunkToNextSlice( energyChunk );
-      } else {
+      }
 
-        // Chunk is out of the bounds of this element, so make it wander towards it.
+      // Chunk is out of the bounds of this element, so make it wander towards it.
+      else {
+        // console.log( 'RTMME: adding controller' );
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
-        this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk, this.positionProperty, null ) );
+        this.energyChunkWanderControllers.push(
+          new EnergyChunkWanderController( energyChunk, this.positionProperty, null ) );
       }
     },
 

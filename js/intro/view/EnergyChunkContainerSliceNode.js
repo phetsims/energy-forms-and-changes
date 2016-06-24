@@ -40,11 +40,11 @@ define( function( require ) {
 
     energyChunkContainerSlice.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      console.log( 'ECCSN: Adding energyChunkNode' );
+      // console.log( 'ECCSN: Adding energyChunkNode' );
       self.addChild( energyChunkNode );
       energyChunkContainerSlice.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          console.log( 'ECCSN: Removing energyChunkNode' );
+          // console.log( 'ECCSN: Removing energyChunkNode' );
           self.removeChild( energyChunkNode );
           energyChunkContainerSlice.energyChunkList.removeItemRemovedListener( removalListener );
         }
