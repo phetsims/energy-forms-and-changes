@@ -237,7 +237,7 @@ define( function( require ) {
 
     /**
      * Super simple alternative energy chunk distribution algorithm - just puts
-     * all energy chunks in center of slide. This is useful for debugging.
+     * all energy chunks in center of slice. This is useful for debugging.
      * Rename it to substitute if for the 'real' algorithm.
      *
      * @param {EnergyChunkContainerSlice[]} energyChunkContainerSlices
