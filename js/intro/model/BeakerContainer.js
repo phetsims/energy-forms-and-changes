@@ -29,10 +29,8 @@ define( function( require ) {
    * @constructor
    */
   function BeakerContainer( initialPosition, width, height, potentiallyContainedElements, energyChunksVisibleProperty ) {
-
     Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty );
     this.potentiallyContainedElements = potentiallyContainedElements;
-
   }
 
   energyFormsAndChanges.register( 'BeakerContainer', BeakerContainer );
@@ -40,16 +38,23 @@ define( function( require ) {
   return inherit( Beaker, BeakerContainer, {
 
     /**
-     * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
-     * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
+     * Update the fluid level in the beaker based upon any displacement that
+     * could be caused by the given rectangles. This algorithm is strictly
+     * two dimensional, even though displacement is more of the 3D concept.
      *
      * @param {Rectangle[]} potentiallyDisplacingRectangles
      *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
 
-      // Calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles.
-      var fluidRectangle = new Rectangle( this.getBounds().minX, this.getBounds().minY, this.width, this.height * this.fluidLevel );
+      // Calculate the amount of overlap between the rectangle that
+      // represents the fluid and the displacing rectangles.
+      var fluidRectangle = new Rectangle(
+        this.getBounds().minX,
+        this.getBounds().minY,
+        this.width,
+        this.height * this.fluidLevel );
+
       var overlappingArea = 0;
       potentiallyDisplacingRectangles.forEach( function( rectangle ) {
         if ( rectangle.intersectsBounds( fluidRectangle ) ) {
@@ -68,7 +73,8 @@ define( function( require ) {
 
         var originalShape = slice.shape;
         var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, proportionateIncrease ) );
-        var translationTransform = Matrix3.translation( originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
+        var translationTransform = Matrix3.translation(
+          originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
           originalShape.bounds.y - expandedOrCompressedShape.bounds.y );
         slice.shape = expandedOrCompressedShape.transformed( translationTransform );
 
@@ -122,7 +128,8 @@ define( function( require ) {
         // because the chunk just came from the model element.
         energyChunk.zPosition.set( 0.0 );
         this.approachingEnergyChunks.add( energyChunk );
-        this.energyChunkWanderControllers.add( new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
+        this.energyChunkWanderControllers.add(
+          new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
       } else {
         this.addEnergyChunk( energyChunk );
       }
