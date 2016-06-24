@@ -327,12 +327,7 @@ define( function( require ) {
               container1.getBounds().maxY );
             var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
 
-            // There is a bug causing chunks added via RTMME.addInitialEnergyChunks() not to be deleted from the air
-            // when they are done evaporating. This check avoids adding those chunks to the air. If that bug is
-            // fixed, this check is no longer necessary.
-            var isInitialChunk = container1.initialBounds.containsPoint( energyChunk.positionProperty.initialValue );
-
-            if ( energyChunk && !isInitialChunk ) {
+            if ( energyChunk ) {
               var energyChunkMotionConstraints = null;
               if ( container1 instanceof Beaker ) {
                 // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker.
