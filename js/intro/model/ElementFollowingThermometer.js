@@ -30,29 +30,32 @@ define( function( require ) {
     Thermometer.call( this, model, initialPosition, initiallyActive );
 
     // extend the scope of this
-    var thisElementFollowingThermometer = this;
+    var self = this;
 
     this.elementFollower = new ElementFollower( this.position );
 
-    // Monitor 'userControlled' in order to see when the user drops this thermometer and determine whether or not it was dropped over anything that
-    // it should stick to.
+    // Monitor 'userControlled' in order to see when the user drops this
+    // thermometer and determine whether or not it was dropped over anything
+    // that it should stick to.
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // stop following anything.
-        thisElementFollowingThermometer.elementFollower.stopFollowing();
+        self.elementFollower.stopFollowing();
       } else {
-        // The user has dropped this thermometer. See if it was dropped over something that it should follow.
+        // The user has dropped this thermometer. See if it was
+        // dropped over something that it should follow.
         for ( var block in model.getBlockList() ) {
           if ( model.getBlockList.hasOwnProperty( block ) ) {
-            if ( block.getProjectedShape().containsPoint( thisElementFollowingThermometer.position ) ) {
+            if ( block.getProjectedShape().containsPoint( self.position ) ) {
               // stick to this block.
-              thisElementFollowingThermometer.elementFollower.follow( block.positionProperty );
+              self.elementFollower.follow( block.positionProperty );
             }
           }
         }
-        if ( !thisElementFollowingThermometer.elementFollower.isFollowing() && model.beaker.getThermalContactArea().containsPoint( thisElementFollowingThermometer.position ) ) {
+        if ( !self.elementFollower.isFollowing() &&
+          model.beaker.getThermalContactArea().containsPoint( self.position ) ) {
           // Stick to the beaker.
-          thisElementFollowingThermometer.elementFollower.follow( model.beaker.positionProperty );
+          self.elementFollower.follow( model.beaker.positionProperty );
         }
       }
     } );
