@@ -16,7 +16,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
-  //var PropertySet = require( 'AXON/PropertySet' );
+  var PropertySet = require( 'AXON/PropertySet' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
 
   /**
@@ -45,10 +45,9 @@ define( function( require ) {
   return inherit( UserMovableModelElement, Thermometer, {
 
     step: function( dt ) {
-      //TODO comment back in
-      //      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
-      //      this.sensedTemperature = temperatureAndColor.temperature;
-      //      this.sensedElementColor = temperatureAndColor.color;
+      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
+      this.sensedTemperature = temperatureAndColor.temperature;
+      this.sensedElementColor = temperatureAndColor.color;
     },
 
     reset: function() {
