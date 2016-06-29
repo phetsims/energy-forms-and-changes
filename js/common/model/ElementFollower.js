@@ -20,21 +20,21 @@ define( function( require ) {
   /**
    * Convenience class for sticking to model elements.
    *
-   * @param {Vector2 || null} follower
+   * @param {Vector2 || null} initialPositionToTrack
    * @constructor
    */
-  function ElementFollower( follower ) {
+  function ElementFollower( initialPositionToTrack ) {
 
     PropertySet.call( this, {
-      follower: follower === null ? new Vector2( 0, 0 ) : follower,
+      follower: initialPositionToTrack === null ? new Vector2( 0, 0 ) : initialPositionToTrack,
       locationBeingFollowed: null
     } );
     this.offset = new Vector2( 0, 0 );
 
-    var thisThermometer = this;
+    var self = this;
     // @private - function that gets linked/unlinked when the thermometer is following/unfollwing.
     this.followerFunction = function( location ) {
-      thisThermometer.follower = location.plus( thisThermometer.offset );
+      self.followerProperty.set( location.plus( self.offset ) );
     };
   }
 
@@ -43,19 +43,17 @@ define( function( require ) {
   return inherit( PropertySet, ElementFollower, {
 
     follow: function( locationToFollowProperty ) {
-      var thisThermometer = this;
-      if ( this.locationBeingFollowed !== null ) {
-        this.locationBeingFollowed.unlink( thisThermometer.followerFunction );
+      if ( this.locationBeingFollowedProperty.get() !== null ) {
+        this.locationBeingFollowedProperty.unlink( this.followerFunction );
       }
-      this.offset = this.follower.minus( locationToFollowProperty.get() );
-      locationToFollowProperty.link( thisThermometer.followerFunction );
-      this.locationBeingFollowed = locationToFollowProperty.get();
+      this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
+      locationToFollowProperty.link( this.followerFunction );
+      this.locationBeingFollowedProperty.set( locationToFollowProperty.get() );
     },
 
     stopFollowing: function() {
-      var thisThermometer = this;
       if ( this.locationBeingFollowed !== null ) {
-        this.locationBeingFollowedProperty.unlink( thisThermometer.followerFunction );
+        this.locationBeingFollowedProperty.unlink( this.followerFunction );
         this.locationBeingFollowed = null;
       }
     },
