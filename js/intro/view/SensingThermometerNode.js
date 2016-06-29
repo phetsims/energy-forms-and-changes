@@ -37,14 +37,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'SensingThermometerNode', SensingThermometerNode );
 
-  return inherit( ThermometerNode, SensingThermometerNode, {
-
-    /**
-     * @public
-     * @returns {ThermometerNode}
-     */
-    getThermometer: function() {
-      return this.thermometer;
-    }
-  } );
+  return inherit( ThermometerNode, SensingThermometerNode );
 } );

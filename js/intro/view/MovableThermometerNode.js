@@ -31,7 +31,6 @@ define( function( require ) {
   function MovableThermometerNode( thermometer, stageSize, modelViewTransform ) {
 
     var thisNode = this;
-    //this.stageSize = stageSize;
     SensingThermometerNode.call( this, thermometer );
     // Update the offset if and when the model position changes.
     thermometer.positionProperty.link( function( position ) {

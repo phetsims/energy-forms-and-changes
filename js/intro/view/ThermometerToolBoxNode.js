@@ -28,7 +28,7 @@ define( function( require ) {
     ThermometerNode.call( this );
     var self = this;
     this.modelViewTransform = modelViewTransform;
-    var thermometer = thermometerNode.getThermometer();
+    var thermometer = thermometerNode.thermometer;
     //var positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
     this.setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
     this.setSensedColor( 'white' );
