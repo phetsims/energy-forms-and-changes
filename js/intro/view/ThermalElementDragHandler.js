@@ -47,22 +47,6 @@ define( function( require ) {
         modelElement.position = constraint.apply( modelElement.position );
       }
 
-      //// Handler that moves the particle in model space.
-      //translate: function( translationParams ) {
-      //  modelElement.position = constraint.apply( modelElement.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) ) );
-      //  //modelElement.position = modelElement.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
-      //  return translationParams.position;
-      //},
-
-      //start: function( event, trail ) {
-      //  MovableDragHandler.prototype.start.call( this );
-      //  modelElement.userControlledProperty.set(true);
-      //},
-      //
-      //end: function( event, trail ) {
-      //  SimpleDragHandler.prototype.end.call( this );
-      //modelElement.userControlledProperty.set(fals)e;
-
     } );
   }
 
