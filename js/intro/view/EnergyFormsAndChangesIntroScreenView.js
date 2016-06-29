@@ -6,6 +6,7 @@
  * @author John Blanco
  * @author Martin Veillette (Berea College)
  * @author Jesse Greenberg
+ * @author Andrew Adare
  */
 define( function( require ) {
   'use strict';
@@ -58,7 +59,6 @@ define( function( require ) {
   // Boolean property for showing/hiding developer control for dumping energy levels.
   // var showDumpEnergiesButton = new Property( false );
 
-
   /**
    * Constructor for the Energy Forms and Changes Intro Screen.
    *
@@ -72,14 +72,16 @@ define( function( require ) {
     var thisScreenView = this;
     this.model = model;
 
-    //var STAGE_SIZE = this.layoutBounds;
-
-    // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.  The multipliers for the 2nd
-    // parameter can be used to adjust where the point (0, 0) in the model, which is on the middle of the screen above the counter as located in the
+    // Create the model-view transform.  The primary units used in the model are
+    // meters, so significant zoom is used.  The multipliers for the 2nd
+    // parameter can be used to adjust where the point (0, 0) in the model,
+    // which is on the middle of the screen above the counter as located in the
     // view.
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
-      new Vector2( Math.round( thisScreenView.layoutBounds.width * 0.5 ), Math.round( thisScreenView.layoutBounds.height * 0.85 ) ),
+      new Vector2(
+        Math.round( thisScreenView.layoutBounds.width * 0.5 ),
+        Math.round( thisScreenView.layoutBounds.height * 0.85 ) ),
       2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
 
     // Create some nodes that will act as layers in order to create the needed Z-order behavior.
@@ -103,22 +105,27 @@ define( function( require ) {
     // Create the lab bench surface image.
     var labBenchSurfaceImage = new Image( shelfImage );
     labBenchSurfaceImage.leftTop = ( new Vector2(
-        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
-        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) // Slight tweak factor here due to nature of image.
-    );
+      modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
 
-    // Create a rectangle that will act as the background below the lab bench surface, basically like the side of the bench.
+      // Slight tweak factor here due to nature of image.
+      modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) );
+
+    // Create a rectangle that will act as the background below the lab bench
+    // surface, basically like the side of the bench.
     var benchWidth = labBenchSurfaceImage.width * 0.95;
     var benchHeight = 1000; // Arbitrary large number, user should never see the bottom of this.
-    var labBenchSide = new Rectangle( labBenchSurfaceImage.centerX - benchWidth / 2, labBenchSurfaceImage.centerY, benchWidth, benchHeight, {
-      fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
-    } );
+    var labBenchSide = new Rectangle(
+      labBenchSurfaceImage.centerX - benchWidth / 2,
+      labBenchSurfaceImage.centerY,
+      benchWidth,
+      benchHeight, { fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR } );
 
     // Add the bench side and top to the scene.  The lab bench side must be behind the bench top.
     backLayer.addChild( labBenchSide );
     backLayer.addChild( labBenchSurfaceImage );
 
-    // Calculate the vertical center between the lower edge of the top of the bench and the bottom of the canvas.  This is for layout.
+    // Calculate the vertical center between the lower edge of the top of the
+    // bench and the bottom of the canvas.  This is for layout.
     var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
     // Add the clock controls.
@@ -136,8 +143,8 @@ define( function( require ) {
     resetAllButton.center = new Vector2( this.layoutBounds.width - 2 * resetAllButton.width, centerYBelowSurface );
     this.addChild( resetAllButton );
 
-    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
-    // each to be independently scaled.
+    // Add the control for showing/hiding energy chunks.  The elements of this
+    // control are created separately to allow each to be independently scaled.
     var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
     energyChunkNode.scale( 1.0 );
     energyChunkNode.pickable = false;
@@ -157,10 +164,8 @@ define( function( require ) {
 
 
     // Add the burners.
-    var burnerProjectionAmount = modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
-    //var burnerWidth = modelViewTransform.modelToViewDeltaX( model.leftBurner.getOutlineRect().width ) * 0.7;
-    //var burnerHeight = burnerWidth * 0.8;
-    //var burnerOpeningHeight = burnerHeight * 0.2;
+    var burnerProjectionAmount =
+      modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
     var burnerYPosTweak = -10; // Empirically determined for best look.
 
     // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
@@ -170,12 +175,17 @@ define( function( require ) {
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
     } );
-    leftHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) - leftHeaterCoolerBack.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) - leftHeaterCoolerBack.bounds.union( leftHeaterCoolerFront.bounds ).height - burnerYPosTweak );
+    leftHeaterCoolerBack.leftTop = new Vector2(
+      modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) -
+      leftHeaterCoolerBack.bounds.width / 2,
+      modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) -
+      leftHeaterCoolerBack.bounds.union( leftHeaterCoolerFront.bounds ).height - burnerYPosTweak );
     leftHeaterCoolerFront.leftTop = leftHeaterCoolerBack.getHeaterFrontPosition();
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
-    backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ), burnerProjectionAmount ) );
+    backLayer.addChild( new BurnerStandNode(
+      modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ),
+      burnerProjectionAmount ) );
 
     // Set up right heater-cooler node.
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
@@ -184,12 +194,17 @@ define( function( require ) {
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
     } );
-    rightHeaterCoolerBack.leftTop = new Vector2( modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) - rightHeaterCoolerBack.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) - rightHeaterCoolerBack.bounds.union( rightHeaterCoolerFront.bounds ).height - burnerYPosTweak );
+    rightHeaterCoolerBack.leftTop = new Vector2(
+      modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) -
+      rightHeaterCoolerBack.bounds.width / 2,
+      modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) -
+      rightHeaterCoolerBack.bounds.union( rightHeaterCoolerFront.bounds ).height - burnerYPosTweak );
     rightHeaterCoolerFront.leftTop = rightHeaterCoolerBack.getHeaterFrontPosition();
     heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
-    backLayer.addChild( new BurnerStandNode( modelViewTransform.modelToViewShape( model.rightBurner.getOutlineRect() ), burnerProjectionAmount ) );
+    backLayer.addChild( new BurnerStandNode(
+      modelViewTransform.modelToViewShape( model.rightBurner.getOutlineRect() ),
+      burnerProjectionAmount ) );
 
     // Add the air.
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
@@ -253,7 +268,6 @@ define( function( require ) {
     thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
       thermometerToolBoxNode.setReturnRect( thermometerBox.bounds );
     } );
-
 
     // Create a function that updates the Z-order of the blocks when the user controlled state changes.
     var blockChangeObserver = function() {

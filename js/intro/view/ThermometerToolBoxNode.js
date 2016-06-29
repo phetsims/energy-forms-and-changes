@@ -6,6 +6,7 @@
  * box.
  *
  * @author John Blanco
+ * @author Andrew Adare
  */
 define( function( require ) {
   'use strict';
@@ -27,7 +28,6 @@ define( function( require ) {
     ThermometerNode.call( this );
     var self = this;
     this.modelViewTransform = modelViewTransform;
-    // getThermometer is defined in  sensing Thermometer Node
     var thermometer = thermometerNode.getThermometer();
     //var positioningOffset = modelViewTransform.viewToModelDelta( thermometerNode.getOffsetCenterShaftToTriangleTip() );
     this.setSensedTemperature( EFACConstants.ROOM_TEMPERATURE );
