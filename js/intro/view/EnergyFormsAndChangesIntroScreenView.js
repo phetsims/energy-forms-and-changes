@@ -39,6 +39,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -222,9 +223,6 @@ define( function( require ) {
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
     this.addChild( beakerView );
-    // beakerFrontLayer.addChild( beakerView.frontNode );
-    // beakerBackLayer.addChild( beakerView.backNode );
-    // beakerGrabLayer.addChild( beakerView.grabNode );
 
     //Show the mock-up and a slider to change its transparency
     if ( SHOW_MOCKUP ) {
@@ -242,6 +240,19 @@ define( function( require ) {
       var thermometerNode = new MovableThermometerNode( thermometer, thisScreenView.layoutBounds, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
+      // TODO: this is not working - why?
+      thermometerNode.addInputListener( new SimpleDragHandler( {
+        up: function( event ) {
+
+          console.log( 'up' );
+
+          // Released over tool box, so deactivate.
+          if ( thermometerNode.intersectsBounds( thermometerToolBox.bounds ) ) {
+            thermometer.activeProperty.set( false );
+          }
+        }
+      } ) );
+
       //      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
       //        mouseReleased: function( event ) {
       //          if ( thermometerNode.bounds.intersects( thermometerToolBox.bounds ) ) {
@@ -252,7 +263,8 @@ define( function( require ) {
       //      } ) );
       movableThermometerNodes.push( thermometerNode );
     } );
-    //    // Add the tool box for the thermometers.
+
+    // Add the tool box for the thermometers.
     var thermometerBox = new HBox();
     var thermometerToolBoxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
@@ -260,11 +272,14 @@ define( function( require ) {
       thermometerBox.addChild( thermometerToolBoxNode );
       thermometerToolBoxNodes.push( thermometerToolBoxNode );
     } );
-    //var thermometerToolBox = new Node();
-    //    var thermometerToolBox = new ControlPanelNode( thermometerBox, CONTROL_PANEL_BACKGROUND_COLOR, CONTROL_PANEL_OUTLINE_STROKE, CONTROL_PANEL_OUTLINE_COLOR );
-    //    thermometerToolBox.translation({x: EDGE_INSET, y:EDGE_INSET} );
-    backLayer.addChild( thermometerBox );
-    //   backLayer.addChild( thermometerToolBox );
+
+    var thermometerToolBox = new Panel( thermometerBox, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+    } );
+
+    thermometerToolBox.translation = new Vector2( EDGE_INSET, EDGE_INSET );
+    // backLayer.addChild( thermometerBox );
+    backLayer.addChild( thermometerToolBox );
     thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
       thermometerToolBoxNode.setReturnRect( thermometerBox.bounds );
     } );
