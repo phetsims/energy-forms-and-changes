@@ -47,25 +47,34 @@ define( function( require ) {
     rootNode.addChild( middleLayer );
     var frontLayer = new Node();
     rootNode.addChild( frontLayer );
+
     // Add the back of the thermometer.
     var thermometerBack = new Image( thermometerMediumBackImage );
     backLayer.addChild( thermometerBack );
+
     // clip will prevent the liquid from ever appearing to pop out the top.
     var liquidShaftClipNode = new Node();
     //    liquidShaftClipNode.setStroke( null );
     backLayer.addChild( liquidShaftClipNode );
+
     // Set up reference values for layout.
-    this.centerOfBulb = new Vector2( thermometerBack.centerX, thermometerBack.bounds.maxY - thermometerBack.height * 0.1 );
+    this.centerOfBulb = new Vector2(
+      thermometerBack.centerX,
+      thermometerBack.bounds.maxY - thermometerBack.height * 0.1 );
+
     // Add the liquid shaft, the shape of which will indicate the temperature.
-
-
     // There are some tweak factors in here for setting the shape of the thermometer liquid.
     this.liquidShaftWidth = thermometerBack.getImageWidth() * 0.45;
     // Tweak multiplier to align with desired tick mark at 100 degrees C.
     var boilingPointLiquidHeight = ( this.centerOfBulb.y - thermometerBack.bounds.minY ) * 0.84;
     // Tweak multiplier to align with desired tick mark at 0 degrees C.
     var freezingPointLiquidHeight = thermometerBack.getImageHeight() * 0.21;
-    this.liquidHeightMapFunction = new LinearFunction( EFACConstants.FREEZING_POINT_TEMPERATURE, EFACConstants.BOILING_POINT_TEMPERATURE, freezingPointLiquidHeight, boilingPointLiquidHeight, true );
+    this.liquidHeightMapFunction = new LinearFunction(
+      EFACConstants.FREEZING_POINT_TEMPERATURE,
+      EFACConstants.BOILING_POINT_TEMPERATURE,
+      freezingPointLiquidHeight,
+      boilingPointLiquidHeight,
+      true );
 
     // manually coordinated with the image used for the thermometer.
     var clipShape = new Shape();
@@ -77,16 +86,22 @@ define( function( require ) {
 
     clipShape.moveTo( centerX - clipWidth / 2, this.centerOfBulb.y )
       .lineTo( centerX - clipWidth / 2, thermometerTopY + curveStartOffset )
-      .cubicCurveTo( centerX - clipWidth / 4, thermometerTopY - curveStartOffset / 4, centerX + clipWidth / 4, thermometerTopY - curveStartOffset / 4, centerX + clipWidth / 2, thermometerTopY + curveStartOffset )
+      .cubicCurveTo(
+        centerX - clipWidth / 4,
+        thermometerTopY - curveStartOffset / 4,
+        centerX + clipWidth / 4,
+        thermometerTopY - curveStartOffset / 4,
+        centerX + clipWidth / 2,
+        thermometerTopY + curveStartOffset )
       .lineTo( centerX + clipWidth / 2, this.centerOfBulb.y )
       .close();
 
     this.liquidShaft = new Path( clipShape, { 'fill': new Color( 237, 28, 36 ) } );
     liquidShaftClipNode.addChild( this.liquidShaft );
 
-
     // Add the image for the front of the thermometer.
     frontLayer.addChild( new Image( thermometerMediumFrontImage ) );
+
     // Add the tick marks.  There are some tweak factors here.
     var tickMarkXOffset = thermometerBack.width * 0.3;
     var shortTickMarkWidth = thermometerBack.width * 0.1;
@@ -107,17 +122,25 @@ define( function( require ) {
     }
 
     // on the left side of this triangle.
-    this.triangleTipOffset = new Dimension2( -thermometerBack.getImageWidth() / 2 - TRIANGLE_SIDE_SIZE * Math.cos( Math.PI / 6 ) - 2, thermometerBack.getImageHeight() / 2 - thermometerBack.getImageWidth() / 2 );
-    var triangleLeftmostPoint = new Vector2( backLayer.centerX + this.triangleTipOffset.width, backLayer.centerY + this.triangleTipOffset.height );
-    var triangleUpperRightPoint = triangleLeftmostPoint.plus( new Vector2( TRIANGLE_SIDE_SIZE, 0 ).rotate( Math.PI / 5 ) );
-    var triangleLowerRightPoint = triangleLeftmostPoint.plus( new Vector2( TRIANGLE_SIDE_SIZE, 0 ).rotate( -Math.PI / 5 ) );
-    var triangleShape = new Shape();
+    this.triangleTipOffset = new Dimension2( //
+      -thermometerBack.getImageWidth() / 2 - TRIANGLE_SIDE_SIZE * Math.cos( Math.PI / 6 ) - 2,
+      thermometerBack.getImageHeight() / 2 - thermometerBack.getImageWidth() / 2 );
 
+    var triangleLeftmostPoint = new Vector2(
+      backLayer.centerX + this.triangleTipOffset.width,
+      backLayer.centerY + this.triangleTipOffset.height );
+
+    var triangleUpperRightPoint = triangleLeftmostPoint
+      .plus( new Vector2( TRIANGLE_SIDE_SIZE, 0 ).rotate( Math.PI / 5 ) );
+
+    var triangleLowerRightPoint = triangleLeftmostPoint
+      .plus( new Vector2( TRIANGLE_SIDE_SIZE, 0 ).rotate( -Math.PI / 5 ) );
+
+    var triangleShape = new Shape();
     triangleShape.moveToPoint( triangleLeftmostPoint )
       .lineToPoint( triangleUpperRightPoint )
       .lineToPoint( triangleLowerRightPoint )
       .close();
-
 
     this.triangle = new Path( triangleShape, {
       fill: new Color( 0, 0, 0, 0 ),
@@ -157,7 +180,11 @@ define( function( require ) {
     setSensedTemperature: function( temperature ) {
 
       var liquidShaftHeight = this.liquidHeightMapFunction( temperature );
-      this.liquidShaft.shape = Shape.rectangle( this.centerOfBulb.x - this.liquidShaftWidth / 2 + 0.75, this.centerOfBulb.y - liquidShaftHeight, this.liquidShaftWidth, liquidShaftHeight );
+      this.liquidShaft.shape = Shape.rectangle(
+        this.centerOfBulb.x - this.liquidShaftWidth / 2 + 0.75,
+        this.centerOfBulb.y - liquidShaftHeight,
+        this.liquidShaftWidth,
+        liquidShaftHeight );
     }
   } );
 } );
