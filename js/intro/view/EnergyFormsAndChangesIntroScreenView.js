@@ -52,6 +52,8 @@ define( function( require ) {
   // constants
   var EDGE_INSET = 10;
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
+  var SHOW_LAYOUT_BOUNDS = false;
+  var SHOW_MOCKUP = false;
 
   // Boolean property for showing/hiding developer control for dumping energy levels.
   // var showDumpEnergiesButton = new Property( false );
@@ -192,7 +194,9 @@ define( function( require ) {
     // Add the air.
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
 
-    this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
+    if ( SHOW_LAYOUT_BOUNDS ) {
+      this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
+    }
 
     // Add the movable objects.
     var brickNode = new BlockNode( model, model.brick, this.layoutBounds, modelViewTransform );
@@ -202,18 +206,20 @@ define( function( require ) {
     ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
-    this.addChild(beakerView);
+    this.addChild( beakerView );
     // beakerFrontLayer.addChild( beakerView.frontNode );
     // beakerBackLayer.addChild( beakerView.backNode );
     // beakerGrabLayer.addChild( beakerView.grabNode );
 
     //Show the mock-up and a slider to change its transparency
-    var mockupOpacityProperty = new Property( 0.02 );
-    var image = new Image( mockupImage, { pickable: false } );
-    image.scale( this.layoutBounds.width / image.width, this.layoutBounds.height / image.height );
-    mockupOpacityProperty.linkAttribute( image, 'opacity' );
-    this.addChild( image );
-    this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
+    if ( SHOW_MOCKUP ) {
+      var mockupOpacityProperty = new Property( 0.02 );
+      var image = new Image( mockupImage, { pickable: false } );
+      image.scale( this.layoutBounds.width / image.width, this.layoutBounds.height / image.height );
+      mockupOpacityProperty.linkAttribute( image, 'opacity' );
+      this.addChild( image );
+      this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
+    }
 
     // Add the thermometer nodes.
     var movableThermometerNodes = [];

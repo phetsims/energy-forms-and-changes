@@ -43,7 +43,7 @@ define( function( require ) {
   var OUTLINE_COLOR = 'lightgrey';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32 );
-  var SHOW_MODEL_RECT = true;
+  var SHOW_MODEL_RECT = false;
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 
   // constants for the PerspectiveWaterNode
