@@ -45,8 +45,8 @@ define( function( require ) {
 
     step: function( dt ) {
       var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
-      this.sensedTemperature = temperatureAndColor.temperature;
-      this.sensedElementColor = temperatureAndColor.color;
+      this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
+      this.sensedElementColorProperty.set( temperatureAndColor.color );
     },
 
     reset: function() {

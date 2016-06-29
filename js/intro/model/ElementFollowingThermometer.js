@@ -32,7 +32,7 @@ define( function( require ) {
     // extend the scope of this
     var self = this;
 
-    this.elementFollower = new ElementFollower( this.position );
+    this.elementFollower = new ElementFollower( this.positionProperty.get() );
 
     // Monitor 'userControlled' in order to see when the user drops this
     // thermometer and determine whether or not it was dropped over anything
@@ -40,18 +40,18 @@ define( function( require ) {
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // stop following anything.
+        console.log('stop following');
         self.elementFollower.stopFollowing();
       } else {
         // The user has dropped this thermometer. See if it was
         // dropped over something that it should follow.
-        for ( var block in model.getBlockList() ) {
-          if ( model.getBlockList.hasOwnProperty( block ) ) {
-            if ( block.getProjectedShape().containsPoint( self.position ) ) {
-              // stick to this block.
-              self.elementFollower.follow( block.positionProperty );
-            }
+        model.getBlockList().forEach( function( block ) {
+          if ( block.getProjectedShape().containsPoint( self.position ) ) {
+            // stick to this block.
+            console.log( 'sticking?' );
+            self.elementFollower.follow( block.positionProperty );
           }
-        }
+        } );
         if ( !self.elementFollower.isFollowing() &&
           model.beaker.getThermalContactArea().containsPoint( self.position ) ) {
           // Stick to the beaker.

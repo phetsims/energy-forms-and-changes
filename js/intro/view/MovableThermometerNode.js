@@ -63,6 +63,7 @@ define( function( require ) {
 
   inherit( Object, ThermometerLocationConstraint, {
 
+    // Gets applied as a constraint in ThermalElementDragHandler
     apply: function( proposedModelPosition ) {
       // TODO: These bounds calculations for the constraint should be handled by MovableDragHandler.
       var constrainedXPos = Util.clamp( this.modelBounds.minX, proposedModelPosition.x, this.modelBounds.maxX );

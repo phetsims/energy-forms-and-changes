@@ -45,8 +45,8 @@ define( function( require ) {
       allowTouchSnag: true,
 
       start: function( event, trail ) {
-        thermometer.userControlled = true;
-        thermometer.active = true;
+        thermometer.userControlledProperty.set( true );
+        thermometer.activeProperty.set( true );
 
         if ( !parentScreenView ) {
 
@@ -62,23 +62,26 @@ define( function( require ) {
           assert && assert( parentScreenView, 'unable to find parent screen view' );
         }
 
-        // Determine the initial position of the new element as a function of the event position and this node's bounds.
-        var triangleTipGlobal = self.parentToGlobalPoint( self.rightCenter.plus( thermometerNode.getOffsetCenterShaftToTriangleTip() ) );
+        // Determine the initial position of the new element as a function of
+        // the event position and this node's bounds.
+        var triangleTipGlobal = self.parentToGlobalPoint(
+          self.rightCenter.plus( thermometerNode.getOffsetCenterShaftToTriangleTip() ) );
         var initialPosition = parentScreenView.globalToLocalPoint( triangleTipGlobal );
 
-        thermometer.position = modelViewTransform.viewToModelPosition( initialPosition );
+        thermometer.positionProperty.set( modelViewTransform.viewToModelPosition( initialPosition ) );
       },
 
       // Handler that moves the shape in model space.
       translate: function( translationParams ) {
-        thermometer.position = thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) );
+        thermometer.positionProperty.set(
+          thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) ) );
       },
 
       end: function( event, trail ) {
-        thermometer.userControlled = false;
+        thermometer.userControlledProperty.set( false );
         if ( self.returnRect !== null && thermometerNode.bounds.intersectsBounds( self.returnRect ) ) {
           // Released over tool box, so return it.
-          thermometer.active = false;
+          thermometer.activeProperty.set( false );
         }
       }
     } ) );
@@ -87,13 +90,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ThermometerToolBoxNode', ThermometerToolBoxNode );
 
-  return inherit( ThermometerNode, ThermometerToolBoxNode, {
-    /**
-     * @public
-     * @param {Rectangle} returnRect
-     */
-    setReturnRect: function( returnRect ) {
-      this.returnRect = returnRect;
-    }
-  } );
+  return inherit( ThermometerNode, ThermometerToolBoxNode );
 } );
+

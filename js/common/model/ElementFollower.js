@@ -34,7 +34,9 @@ define( function( require ) {
     var self = this;
     // @private - function that gets linked/unlinked when the thermometer is following/unfollwing.
     this.followerFunction = function( location ) {
-      self.followerProperty.set( location.plus( self.offset ) );
+      // self.followerProperty.set( location.plus( self.offset ) );
+      self.followerProperty.set( location );
+      console.log(location, self.followerProperty.get());
     };
   }
 
@@ -52,14 +54,14 @@ define( function( require ) {
     },
 
     stopFollowing: function() {
-      if ( this.locationBeingFollowed !== null ) {
+      if ( this.locationBeingFollowedProperty.get() !== null ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
-        this.locationBeingFollowed = null;
+        this.locationBeingFollowedProperty.set( null );
       }
     },
 
     isFollowing: function() {
-      return this.locationBeingFollowed !== null;
+      return this.locationBeingFollowedProperty.get() !== null;
     }
 
   } );

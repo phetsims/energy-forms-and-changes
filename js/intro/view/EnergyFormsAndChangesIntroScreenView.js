@@ -281,7 +281,7 @@ define( function( require ) {
     // backLayer.addChild( thermometerBox );
     backLayer.addChild( thermometerToolBox );
     thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
-      thermometerToolBoxNode.setReturnRect( thermometerBox.bounds );
+      thermometerToolBoxNode.returnRect = thermometerBox.bounds;
     } );
 
     // Create a function that updates the Z-order of the blocks when the user controlled state changes.

@@ -412,7 +412,7 @@ define( function( require ) {
         modelElement.verticalVelocity = velocity;
       }
 
-      modelElement.position = new Vector2( modelElement.position.x, proposedYPos );
+      modelElement.positionProperty.set( new Vector2( modelElement.position.x, proposedYPos ) );
     },
 
     getBlockList: function() {
