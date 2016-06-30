@@ -28,9 +28,8 @@ define( function( require ) {
       leadDesign: 'Noah Podolefsky',
       softwareDevelopment: 'John Blanco',
       team: 'Ariel Paul, Emily Moore, Katherine Perkins, Trish Loeblein',
-      qualityAssurance: '',
-      interviews: 'Noah Podolefsky',
-      graphicArts: 'Noah Podolefsky',
+      qualityAssurance: '', //TODO
+      graphicArts: '', //TODO
       thanks: ''
     },
     tandem: tandem
