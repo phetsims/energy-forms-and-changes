@@ -39,7 +39,8 @@ define( function( require ) {
     var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
 
     // Add the step button to manually step animation.
-    var stepButton = new StepForwardButton( model.playProperty, {
+    var stepButton = new StepForwardButton( {
+      playingProperty: model.playProperty,
       listener: function() { model.manualStep(); },
       radius: 15,
       centerX: playPauseButton.centerX
