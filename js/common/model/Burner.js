@@ -23,7 +23,7 @@ define( function( require ) {
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -66,7 +66,7 @@ define( function( require ) {
     // Track build up of energy for transferring chunks to/from the air.
     this.energyExchangedWithAirSinceLastChunkTransfer = 0; // @private
 
-    //this.heatCoolLevelProperty = new Property( new Range( -1, 1, 0 ) );
+    //this.heatCoolLevelProperty = new Property( new RangeWithValue( -1, 1, 0 ) );
 
     // Create and add the top surface.  Some compensation for perspective is
     // necessary in order to avoid problems with edge overlap when dropping
@@ -76,7 +76,7 @@ define( function( require ) {
       Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
 
     this.addProperty( 'topSurface',
-      new HorizontalSurface( new Range( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
+      new HorizontalSurface( new RangeWithValue( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
         thisBurner.getOutlineRect().maxX + perspectiveCompensation ), thisBurner.getOutlineRect().maxY, this ) );
   }
 

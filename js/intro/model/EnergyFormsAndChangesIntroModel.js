@@ -23,7 +23,7 @@ define( function( require ) {
   var Line = require( 'KITE/segments/Line' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
@@ -118,7 +118,7 @@ define( function( require ) {
 
         var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
 
-        var xRange = new Range(
+        var xRange = new RangeWithValue(
           self.beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
           self.beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
         );

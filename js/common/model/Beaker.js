@@ -23,7 +23,7 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var Random = require( 'DOT/Random' );
@@ -87,11 +87,11 @@ define( function( require ) {
       var rectangle = thisBeaker.getBounds();
 
       thisBeaker.topSurface = new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
+        new RangeWithValue( rectangle.minX, rectangle.maxX ),
         rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
 
       thisBeaker.bottomSurface = new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
+        new RangeWithValue( rectangle.minX, rectangle.maxX ),
         rectangle.minY, thisBeaker );
     }
 

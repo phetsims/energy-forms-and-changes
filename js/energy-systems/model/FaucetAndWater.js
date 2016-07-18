@@ -22,7 +22,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Random = require( 'DOT/Random' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterDrop = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/WaterDrop' );
 
@@ -35,7 +35,7 @@ define( function( require ) {
   var MAX_WATER_WIDTH = 0.01; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var RAND = new Random();
-  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
+  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new RangeWithValue( 0.05, 0.06 );
 
   // The following acceleration constant defines the rate at which the water
   // flows from the faucet.  The value used is not the actual value in

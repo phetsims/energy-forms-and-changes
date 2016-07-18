@@ -21,7 +21,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -140,19 +140,19 @@ define( function( require ) {
               // Loop on several angles, calculating the forces from the edges at the given angle.
               for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
                 var edgeDetectSteps = 8;
-                var lengthRange = new Range( 0, maxDistanceToEdge );
+                var lengthRange = new RangeWithValue( 0, maxDistanceToEdge );
                 for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
                   var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
                   if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
-                    lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
+                    lengthRange = new RangeWithValue( lengthRange.getCenter(), lengthRange.max );
                   } else {
-                    lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
+                    lengthRange = new RangeWithValue( lengthRange.min, lengthRange.getCenter() );
                   }
                 }
 
                 // Handle case where point is too close to the container's edge.
                 if ( lengthRange.getCenter() < minDistance ) {
-                  lengthRange = new Range( minDistance, minDistance );
+                  lengthRange = new RangeWithValue( minDistance, minDistance );
                 }
 
                 // Apply the force due to this edge.

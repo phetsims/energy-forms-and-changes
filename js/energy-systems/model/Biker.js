@@ -22,7 +22,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
-  // var Range = require( 'DOT/Range' );
+  // var RangeWithValue = require( 'DOT/RangeWithValue' );
   // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 

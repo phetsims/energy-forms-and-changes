@@ -27,7 +27,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Random = require( 'DOT/Random' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -50,10 +50,10 @@ define( function( require ) {
   var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker( 0.2 );
   var WATER_LINE_WIDTH = 2;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is visible.
-  var STEAM_BUBBLE_SPEED_RANGE = new Range( 100, 125 ); // In screen coords (~ pixels) / second
-  var STEAM_BUBBLE_DIAMETER_RANGE = new Range( 20, 50 ); // In screen coords (~ pixels)
+  var STEAM_BUBBLE_SPEED_RANGE = new RangeWithValue( 100, 125 ); // In screen coords (~ pixels) / second
+  var STEAM_BUBBLE_DIAMETER_RANGE = new RangeWithValue( 20, 50 ); // In screen coords (~ pixels)
   var MAX_STEAM_BUBBLE_HEIGHT = 300;
-  var STEAM_BUBBLE_RATE_RANGE = new Range( 20, 40 ); // Bubbles per second.
+  var STEAM_BUBBLE_RATE_RANGE = new RangeWithValue( 20, 40 ); // Bubbles per second.
   var STEAM_BUBBLE_GROWTH_RATE = 0.2; // Proportion per second.
   var MAX_STEAM_BUBBLE_OPACITY = 0.7; // Proportion, 1 is max.
 

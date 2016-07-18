@@ -21,7 +21,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
-  var Range = require( 'DOT/Range' );
+  var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -38,13 +38,13 @@ define( function( require ) {
   var DISTANT_TARGET_OFFSET = new Vector2( 1, 1 );
   var WATER_SURFACE_HEIGHT_OFFSET = 0; // From teapot position, in meters.
   var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
-  var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.015, 0.015 ); // Meters. Coordinated with heater position.
+  var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new RangeWithValue( -0.015, 0.015 ); // Meters. Coordinated with heater position.
 
   // Miscellaneous other constants.
   var MAX_ENERGY_CHANGE_RATE = EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 5; // In joules/second
   var COOLING_CONSTANT = 0.1; // Controls rate at which tea pot cools down, empirically determined.
   var COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
-  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.12, 0.15 );
+  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new RangeWithValue( 0.12, 0.15 );
   var RAND = new Random();
   var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
