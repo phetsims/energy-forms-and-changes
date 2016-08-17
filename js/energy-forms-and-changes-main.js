@@ -31,8 +31,7 @@ define( function( require ) {
       qualityAssurance: '', //TODO
       graphicArts: '', //TODO
       thanks: ''
-    },
-    tandem: tandem
+    }
   };
 
   SimLauncher.launch( function() {
