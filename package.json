@@ -14,11 +14,6 @@
     "requirejs": "~2.1.8"
   },
   "phet": {
-    "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
-    "phet-io": {
-      "preload": [
-        "../phet-io/js/api/energy-forms-and-changes-api.js"
-      ]
-    }
+    "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES"
   }
 }
