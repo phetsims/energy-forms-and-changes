@@ -36,7 +36,7 @@ define( function( require ) {
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
 
-    var icon = new Rectangle( 0, 0, 147, 100, 0, 0, {
+    var icon = new Rectangle( 0, 0, Screen.HOME_SCREEN_ICON_SIZE.width, Screen.HOME_SCREEN_ICON_SIZE.height, {
       fill: 'white'
     } );
 
