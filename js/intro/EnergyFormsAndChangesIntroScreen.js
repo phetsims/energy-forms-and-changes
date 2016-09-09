@@ -14,16 +14,11 @@ define( function( require ) {
   var EnergyFormsAndChangesIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyFormsAndChangesIntroModel' );
   var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
 
   // strings
   var introString = require( 'string!ENERGY_FORMS_AND_CHANGES/intro' );
-
-  //TODO : put real icon in here
-  // images
-  // var introIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/intro-icon.png' );
 
   /**
    * @param {Tandem} tandem
@@ -31,24 +26,21 @@ define( function( require ) {
    */
   function EnergyFormsAndChangesIntroScreen( tandem ) {
 
-    // If this is a single-screen sim, then no icon is necessary.
-    // If there are multiple screens, then the icon must be provided here.
-    var icon = new Rectangle( 0, 0, Screen.HOME_SCREEN_ICON_SIZE.width, Screen.HOME_SCREEN_ICON_SIZE.height, {
-      fill: 'white'
-    } );
+    var options = {
+      name: introString,
+      backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR,
+      //TODO add homeScreenIcon
+      tandem: tandem
+    };
 
-    Screen.call( this, introString,
-      icon,
+    Screen.call( this,
       function() {
         return new EnergyFormsAndChangesIntroModel();
       },
       function( model ) {
         return new EnergyFormsAndChangesIntroScreenView( model );
-      }, {
-        backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR,
-        tandem: tandem
-      }
-    );
+      },
+      options );
   }
 
   energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreen', EnergyFormsAndChangesIntroScreen );
