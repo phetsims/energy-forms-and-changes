@@ -31,7 +31,6 @@ define( function( require ) {
       self.setSensedColor( sensedColor );
     } );
     thermometer.activeProperty.link( function( active ) {
-      console.log('active? ', active);
       self.setVisible( active );
     } );
   }
