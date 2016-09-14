@@ -110,7 +110,9 @@ define( function( require ) {
       max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
     }, {
       trackSize: new Dimension2( 200, 5 ),
-      thumbSize: new Dimension2( 20, 40 ) // Default: ( 22, 45 )
+      thumbSize: new Dimension2( 20, 40 ), // Default: ( 22, 45 )
+      thumbTouchAreaXDilation: 11,
+      thumbTouchAreaYDilation: 11
     } );
 
     this.addChild( new Panel( crankSlider, {
@@ -152,4 +154,3 @@ define( function( require ) {
 
   return inherit( EFACBaseNode, BikerNode );
 } );
-
