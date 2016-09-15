@@ -270,6 +270,8 @@ define( function( require ) {
 
             _.pull( self.energyChunkMovers, mover );
             break;
+          default:
+            assert && assert( false, 'Unrecognized EnergyType: ', chunk.energyTypeProperty.get() );
         }
 
       } );
@@ -425,4 +427,3 @@ define( function( require ) {
     WHEEL_RADIUS: WHEEL_RADIUS
   } );
 } );
-
