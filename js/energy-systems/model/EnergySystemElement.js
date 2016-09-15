@@ -30,11 +30,11 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
     this.addProperty( 'active', false );
 
-    var thisElement = this;
+    var self = this;
     // At initialization, oldPosition is null, so skip that case with lazyLink
     this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
       var deltaPosition = newPosition.minus( oldPosition );
-      thisElement.energyChunkList.forEach( function( chunk ) {
+      self.energyChunkList.forEach( function( chunk ) {
         chunk.translate( deltaPosition );
       } );
     } );

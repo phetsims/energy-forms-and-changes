@@ -32,20 +32,20 @@ define( function( require ) {
    */
   function BeakerContainerView( model, stageBounds, modelViewTransform ) {
 
-    var thisNode = this; // Extend scope for nested callbacks.
+    var self = this; // Extend scope for nested callbacks.
     BeakerView.call( this, model.beaker, model.energyChunksVisibleProperty, modelViewTransform );
 
     // Update the clipping mask when any of the blocks move.  The clipping
     // mask hides energy chunks that overlap with blocks.
     model.getBlockList().forEach( function( block ) {
       block.positionProperty.link( function() {
-        thisNode.updateEnergyChunkClipMask( model, thisNode.energyChunkClipNode );
+        self.updateEnergyChunkClipMask( model, self.energyChunkClipNode );
       } );
     } );
 
     // Update the clipping mask when the position of the beaker moves.
     model.beaker.positionProperty.link( function( position ) {
-      thisNode.updateEnergyChunkClipMask( model, thisNode.energyChunkClipNode );
+      self.updateEnergyChunkClipMask( model, self.energyChunkClipNode );
     } );
 
     this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,

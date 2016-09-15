@@ -20,7 +20,7 @@ define( function( require ) {
   function WaterDropNode( waterDrop, modelViewTransform ) {
 
     Node.call( this );
-    var thisNode = this;
+    var self = this;
 
     // Create and maintain the initial shape.
     var dropShape = new Shape();
@@ -42,7 +42,7 @@ define( function( require ) {
       var x = modelViewTransform.modelToViewDeltaX( offset.x );
       var y = modelViewTransform.modelToViewDeltaY( offset.y );
 
-      thisNode.translate( x, y );
+      self.translate( x, y );
     } );
 
   }

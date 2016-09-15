@@ -64,30 +64,30 @@ define( function( require ) {
     this.initialCarouselOffset = new Vector2( 0, 0 );
 
     // Create a handle for use inside callbacks
-    var thisCarousel = this;
+    var self = this;
 
     // Monitor our own target setting and set up the variables needed for
     // animation each time the target changes. Use lazyLink to avoid calling
     // this during initialization.
     this.targetIndexProperty.lazyLink( function() {
       // Check bounds
-      var i = thisCarousel.targetIndex;
-      assert && assert( i === 0 || i < thisCarousel.managedElements.length, 'targetIndex out of range:' + i );
+      var i = self.targetIndex;
+      assert && assert( i === 0 || i < self.managedElements.length, 'targetIndex out of range:' + i );
 
-      thisCarousel.elapsedTransitionTime = 0;
-      thisCarousel.initialCarouselOffset = thisCarousel.currentCarouselOffset;
-      thisCarousel.animationInProgressProperty.set( true );
+      self.elapsedTransitionTime = 0;
+      self.initialCarouselOffset = self.currentCarouselOffset;
+      self.animationInProgressProperty.set( true );
     } );
 
     // Activate and deactivate energy system elements as they come into
     // the center location. Use lazyLink to avoid calling this during initialization.
     this.animationInProgressProperty.lazyLink( function( animationInProgress ) {
       if ( animationInProgress ) {
-        thisCarousel.managedElements.forEach( function( element ) {
+        self.managedElements.forEach( function( element ) {
           element.deactivate();
         } );
       } else {
-        thisCarousel.getElement( thisCarousel.targetIndex ).activate();
+        self.getElement( self.targetIndex ).activate();
       }
     } );
   }
@@ -176,10 +176,10 @@ define( function( require ) {
     },
 
     updateManagedElementOpacities: function() {
-      var thisCarousel = this;
+      var self = this;
       this.managedElements.forEach( function( managedElement ) {
-        var distanceToSelection = managedElement.position.distance( thisCarousel.selectedElementPosition );
-        var opacity = Util.clamp( 1 - ( distanceToSelection / thisCarousel.offsetBetweenElements.magnitude() ), 0, 1 );
+        var distanceToSelection = managedElement.position.distance( self.selectedElementPosition );
+        var opacity = Util.clamp( 1 - ( distanceToSelection / self.offsetBetweenElements.magnitude() ), 0, 1 );
         managedElement.opacityProperty.set( opacity );
       } );
     },

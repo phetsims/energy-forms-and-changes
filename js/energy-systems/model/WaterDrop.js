@@ -32,12 +32,12 @@ define( function( require ) {
       size: size
     } );
 
-    var thisDrop = this;
+    var self = this;
 
     this.velocityProperty.link( function( velocity ) {
-      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * thisDrop.size.width;
-      var newHeight = ( thisDrop.size.height * thisDrop.size.width ) / newWidth;
-      thisDrop.size.set( new Dimension2( newWidth, newHeight ) );
+      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * self.size.width;
+      var newHeight = ( self.size.height * self.size.width ) / newWidth;
+      self.size.set( new Dimension2( newWidth, newHeight ) );
     } );
   }
 

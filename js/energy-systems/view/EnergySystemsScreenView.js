@@ -78,7 +78,7 @@ define( function( require ) {
     this.addChild( backLayer );
 
     // ScreenView handle for use inside functions
-    var thisScreenView = this;
+    var self = this;
 
     // Create the model-view transform.  The primary units used in the model are
     // meters, so significant zoom is used. The multipliers for the 2nd parameter
@@ -118,8 +118,8 @@ define( function( require ) {
     //   } );
     //   image.scale( stage.width / image.width );
     //   opacity.linkAttribute( image, 'opacity' );
-    //   thisScreenView.addChild( image );
-    //   thisScreenView.addChild( new HSlider( opacity, {
+    //   self.addChild( image );
+    //   self.addChild( new HSlider( opacity, {
     //     min: 0,
     //     max: 1
     //   }, {
@@ -132,7 +132,7 @@ define( function( require ) {
     function addEnergyChunkLegend() {
       var legend = new EnergyChunkLegend();
       legend.center = new Vector2( 0.9 * stage.width, 0.5 * stage.height );
-      thisScreenView.addChild( legend );
+      self.addChild( legend );
     }
 
     // Check box panel to display energy chunks
@@ -157,7 +157,7 @@ define( function( require ) {
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
       } );
       panel.rightTop = new Vector2( stage.width - EDGE_INSET, EDGE_INSET );
-      thisScreenView.addChild( panel );
+      self.addChild( panel );
     }
 
     // Create and add the Reset All Button in the bottom right, which resets the model
@@ -169,7 +169,7 @@ define( function( require ) {
         right: stage.maxX - 10,
         bottom: stage.maxY - 10
       } );
-      thisScreenView.addChild( resetAllButton );
+      self.addChild( resetAllButton );
     }
 
     // Create the carousel control nodes.
@@ -231,7 +231,7 @@ define( function( require ) {
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {
-      thisScreenView.addChild( carousel );
+      self.addChild( carousel );
     } );
 
     // This is a hack to deal with issue #23.

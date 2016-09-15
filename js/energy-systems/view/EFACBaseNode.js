@@ -21,7 +21,7 @@ define( function( require ) {
   function EFACBaseNode( modelElement, modelViewTransform ) {
     Node.call( this );
 
-    var thisNode = this;
+    var self = this;
 
     /**
      * Update the overall offset based on the model position.
@@ -29,7 +29,7 @@ define( function( require ) {
      * @param  {Vector2} offset
      */
     modelElement.positionProperty.link( function( offset ) {
-      thisNode.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
+      self.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
     } );
 
     /**
@@ -38,7 +38,7 @@ define( function( require ) {
      * @param  {Number} opacity
      */
     modelElement.opacityProperty.link( function( opacity ) {
-      thisNode.setOpacity( opacity );
+      self.setOpacity( opacity );
     } );
   }
 

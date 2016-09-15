@@ -49,7 +49,7 @@ define( function( require ) {
    */
   function SunEnergySource( solarPanel, energyChunksVisibleProperty ) {
 
-    var thisSun = this;
+    var self = this;
 
     EnergySource.call( this, new Image( SUN_ICON ) );
 
@@ -84,16 +84,16 @@ define( function( require ) {
 
     // Add/remove clouds based on the value of the cloudiness property.
     this.cloudinessProperty.link( function( cloudiness ) {
-      var nClouds = thisSun.clouds.length;
+      var nClouds = self.clouds.length;
       for ( var i = 0; i < nClouds; i++ ) {
         // Stagger the existence strength of the clouds.
         var value = Util.clamp( cloudiness * ( nClouds - i ), 0, 1 );
-        thisSun.clouds[ i ].existenceStrengthProperty.set( value );
+        self.clouds[ i ].existenceStrengthProperty.set( value );
       }
     } );
 
     this.positionProperty.link( function( position ) {
-      thisSun.sunPosition = position.plus( OFFSET_TO_CENTER_OF_SUN );
+      self.sunPosition = position.plus( OFFSET_TO_CENTER_OF_SUN );
     } );
 
   }

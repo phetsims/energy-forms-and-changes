@@ -48,15 +48,14 @@ define( function( require ) {
       specificHeat,
       energyChunksVisibleProperty );
 
-    var thisBlock = this;
+    var self = this;
 
     this.initialBounds = this.getBounds();
 
     // Update the top and bottom surfaces whenever the position changes.
     this.positionProperty.link( function() {
-      //console.log( 'block position changing' );
-      thisBlock.updateTopSurfaceProperty();
-      thisBlock.updateBottomSurfaceProperty();
+      self.updateTopSurfaceProperty();
+      self.updateBottomSurfaceProperty();
     } );
   }
 
@@ -184,4 +183,3 @@ define( function( require ) {
   } );
 
 } );
-

@@ -67,9 +67,9 @@ define( function( require ) {
     // Note (AA): this function does not belong here. See #23. Leaving intact until more progress
     // is made on that issue.
     addInitialEnergyChunks: function() {
-      var thisNode = this;
+      var self = this;
       this.energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
-        thisNode.addChild( new EnergyChunkNode( energyChunk, thisNode.modelViewTransform ) );
+        self.addChild( new EnergyChunkNode( energyChunk, self.modelViewTransform ) );
       } );
     }
   } );

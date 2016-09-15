@@ -62,7 +62,7 @@ define( function( require ) {
       WATER_SPECIFIC_HEAT,
       energyChunksVisibleProperty );
 
-    var thisBeaker = this;
+    var self = this;
     this.width = width;
     this.height = height;
 
@@ -84,15 +84,15 @@ define( function( require ) {
      * Function that updates the bottom and top surfaces
      */
     function updateSurfaces() {
-      var rectangle = thisBeaker.getBounds();
+      var rectangle = self.getBounds();
 
-      thisBeaker.topSurface = new HorizontalSurface(
+      self.topSurface = new HorizontalSurface(
         new RangeWithValue( rectangle.minX, rectangle.maxX ),
-        rectangle.minY + MATERIAL_THICKNESS, thisBeaker );
+        rectangle.minY + MATERIAL_THICKNESS, self );
 
-      thisBeaker.bottomSurface = new HorizontalSurface(
+      self.bottomSurface = new HorizontalSurface(
         new RangeWithValue( rectangle.minX, rectangle.maxX ),
-        rectangle.minY, thisBeaker );
+        rectangle.minY, self );
     }
 
     // Update the top and bottom surfaces whenever the position changes.
@@ -161,32 +161,32 @@ define( function( require ) {
      */
     addInitialEnergyChunks: function() {
       // extend scope for nested functions
-      var thisBeaker = this;
+      var self = this;
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
       } );
-      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( thisBeaker.energy );
+      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( self.energy );
 
-      // var initialChunkBounds = thisBeaker.getSliceBounds();
-      var initialChunkBounds = thisBeaker.getSliceBounds().shiftedX( thisBeaker.getBounds().width / 8 );
+      // var initialChunkBounds = self.getSliceBounds();
+      var initialChunkBounds = self.getSliceBounds().shiftedX( self.getBounds().width / 8 );
 
-      while ( thisBeaker.getNumEnergyChunks() < targetNumChunks ) {
+      while ( self.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the beaker.
-        thisBeaker.addEnergyChunkToNextSlice(
+        self.addEnergyChunkToNextSlice(
           new EnergyChunk( EnergyType.THERMAL, EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
-            new Vector2( 0, 0 ), thisBeaker.energyChunksVisibleProperty ) );
+            new Vector2( 0, 0 ), self.energyChunksVisibleProperty ) );
       }
 
       // Distribute the energy chunks within the beaker.
       // TODO: ECD needs work.
       // TODO: This loop massively increases load time...leaving commented for now
       // for ( var i = 0; i < 1000; i++ ) {
-      //   if ( !EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+      //   if ( !EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
       //     break;
       //   }
       // }
       for ( var i = 0; i < 50; i++ ) {
-        EnergyChunkDistributor.updatePositions( thisBeaker.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       }
     },
 

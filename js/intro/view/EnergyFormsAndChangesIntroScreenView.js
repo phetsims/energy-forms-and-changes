@@ -70,7 +70,7 @@ define( function( require ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
 
-    var thisScreenView = this;
+    var self = this;
     this.model = model;
 
     // Create the model-view transform.  The primary units used in the model are
@@ -81,8 +81,8 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2(
-        Math.round( thisScreenView.layoutBounds.width * 0.5 ),
-        Math.round( thisScreenView.layoutBounds.height * 0.85 ) ),
+        Math.round( self.layoutBounds.width * 0.5 ),
+        Math.round( self.layoutBounds.height * 0.85 ) ),
       2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
 
     // Create some nodes that will act as layers in order to create the needed Z-order behavior.
@@ -237,7 +237,7 @@ define( function( require ) {
     // Add the thermometer nodes.
     var movableThermometerNodes = [];
     model.thermometers.forEach( function( thermometer ) {
-      var thermometerNode = new MovableThermometerNode( thermometer, thisScreenView.layoutBounds, modelViewTransform );
+      var thermometerNode = new MovableThermometerNode( thermometer, self.layoutBounds, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
       // TODO: this is not working - why?

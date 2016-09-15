@@ -72,27 +72,27 @@ define( function( require ) {
   function EnergyChunkNode( energyChunk, modelViewTransform ) {
 
     Node.call( this );
-    var energyChunkNode = this;
+    var self = this;
 
     // Control the overall visibility of this node.
     energyChunk.visibleProperty.link( function( visible ) {
-      energyChunkNode.setVisible( visible );
+      self.setVisible( visible );
     } );
 
     // Set up updating of transparency based on Z position.
     energyChunk.zPositionProperty.link( function( zPosition ) {
-      energyChunkNode.updateTransparency( zPosition );
+      self.updateTransparency( zPosition );
     } );
 
     // Monitor the energy type and make the image match it.
     energyChunk.energyTypeProperty.link( function( energyType ) {
-      energyChunkNode.removeAllChildren();
-      energyChunkNode.addChild( energyChunkNode.createEnergyChunkNode( energyType ) );
+      self.removeAllChildren();
+      self.addChild( self.createEnergyChunkNode( energyType ) );
     } );
 
     // Set this node's position when the corresponding model element moves.
     energyChunk.positionProperty.link( function( position ) {
-      energyChunkNode.translation = modelViewTransform.modelToViewPosition( position );
+      self.translation = modelViewTransform.modelToViewPosition( position );
     } );
   }
 
@@ -142,4 +142,3 @@ define( function( require ) {
 
   } );
 } );
-

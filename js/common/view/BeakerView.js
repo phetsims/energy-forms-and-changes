@@ -67,7 +67,7 @@ define( function( require ) {
   function PerspectiveWaterNode( beakerOutlineRect, waterLevelProperty, temperatureProperty ) {
 
     Node.call( this );
-    var thisNode = this; // Extend scope for nested callbacks.
+    var self = this; // Extend scope for nested callbacks.
 
     // Nodes that comprise this node.
     this.liquidWaterTopNode = new Path( null, {
@@ -96,9 +96,9 @@ define( function( require ) {
     this.addChild( this.steamNode );
 
     this.waterLevelProperty.link( function( waterLevel ) {
-      var temperature = thisNode.temperatureProperty.get();
+      var temperature = self.temperatureProperty.get();
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
-      thisNode.updateAppearance( waterLevel, beakerOutlineRect, temperature, dt );
+      self.updateAppearance( waterLevel, beakerOutlineRect, temperature, dt );
     } );
 
   }
@@ -128,7 +128,7 @@ define( function( require ) {
      */
     updateAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
 
-      var thisNode = this; // extend scope for nested callbacks.
+      var self = this; // extend scope for nested callbacks.
 
       var waterHeight = beakerOutlineRect.height * fluidLevel;
 
@@ -212,8 +212,8 @@ define( function( require ) {
 
         // Remove bubbles that have floated out of view
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
-          thisNode.steamBubbles.remove( steamBubble );
-          thisNode.steamNode.removeChild( steamBubble );
+          self.steamBubbles.remove( steamBubble );
+          self.steamNode.removeChild( steamBubble );
         }
 
         // Update position of floating bubbles
@@ -251,7 +251,7 @@ define( function( require ) {
   function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform ) {
 
     Node.call( this );
-    var thisNode = this; // Extend scope for nested callbacks.
+    var self = this; // Extend scope for nested callbacks.
     this.modelViewTransform = modelViewTransform;
     this.energyChunkClipNode = new Node();
 
@@ -391,9 +391,9 @@ define( function( require ) {
 
       var offset = modelViewTransform.modelToViewPosition( position );
 
-      thisNode.frontNode.translation = offset;
-      thisNode.backNode.translation = offset;
-      thisNode.grabNode.translation = offset;
+      self.frontNode.translation = offset;
+      self.backNode.translation = offset;
+      self.grabNode.translation = offset;
 
       // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
       energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
@@ -403,7 +403,7 @@ define( function( require ) {
     energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       label.opacity = energyChunksVisible ? 0.5 : 1;
       var opacity = EFACConstants.NOMINAL_WATER_OPACITY;
-      thisNode.water.opacity = energyChunksVisible ? opacity / 2 : opacity;
+      self.water.opacity = energyChunksVisible ? opacity / 2 : opacity;
     } );
 
   }

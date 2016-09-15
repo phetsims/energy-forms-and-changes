@@ -53,7 +53,7 @@ define( function( require ) {
       isPlaying: true
     } );
 
-    var thisModel = this;
+    var self = this;
 
     // Carousels that control the positions of the energy sources, converters,
     // and users.
@@ -104,9 +104,9 @@ define( function( require ) {
     // Add the functionality to show/hide the belt that interconnects the
     // biker and the generator.
     function beltVisibilityUpdated( isAnimating ) {
-      var bikerAndGeneratorSelected = ( !isAnimating && thisModel.biker.active && thisModel.generator.active );
-      thisModel.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
-      thisModel.generator.directCouplingModeProperty.set( bikerAndGeneratorSelected );
+      var bikerAndGeneratorSelected = ( !isAnimating && self.biker.active && self.generator.active );
+      self.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
+      self.generator.directCouplingModeProperty.set( bikerAndGeneratorSelected );
     }
 
     this.energySourcesCarousel.animationInProgressProperty.link( beltVisibilityUpdated );

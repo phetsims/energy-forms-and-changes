@@ -69,9 +69,9 @@ define( function( require ) {
     this.addChild( beltPath );
 
     // Control visibility of the belt
-    var thisBeltNode = this;
+    var self = this;
     belt.isVisibleProperty.link( function( isVisible ) {
-      thisBeltNode.setVisible( isVisible );
+      self.setVisible( isVisible );
     } );
   }
 

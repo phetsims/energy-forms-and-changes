@@ -53,7 +53,7 @@ define( function( require ) {
 
     this.addProperty( 'heatCoolLevel', 0 );
 
-    var thisBurner = this;
+    var self = this;
 
     this.position = position;
     this.energyChunkList = new ObservableArray();
@@ -72,12 +72,12 @@ define( function( require ) {
     // necessary in order to avoid problems with edge overlap when dropping
     // objects on top of burner.
     var perspectiveCompensation =
-      thisBurner.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+      self.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
       Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
 
     this.addProperty( 'topSurface',
-      new HorizontalSurface( new RangeWithValue( thisBurner.getOutlineRect().getMinX() - perspectiveCompensation,
-        thisBurner.getOutlineRect().maxX + perspectiveCompensation ), thisBurner.getOutlineRect().maxY, this ) );
+      new HorizontalSurface( new RangeWithValue( self.getOutlineRect().getMinX() - perspectiveCompensation,
+        self.getOutlineRect().maxX + perspectiveCompensation ), self.getOutlineRect().maxY, this ) );
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );
@@ -181,11 +181,11 @@ define( function( require ) {
      */
     extractClosestEnergyChunk: function( point ) {
       // Extend the scope for callbacks.
-      var thisBurner = this;
+      var self = this;
       var closestEnergyChunk = null;
       if ( this.energyChunkList.length > 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
-          if ( energyChunk.position.distance( thisBurner.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+          if ( energyChunk.position.distance( self.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
             ( closestEnergyChunk === null ||
               energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
             // Found a closer chunk.
@@ -196,7 +196,7 @@ define( function( require ) {
         this.energyChunkList.remove( closestEnergyChunk );
         this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
           if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
-            thisBurner.energyChunkWanderControllers.splice( index, 1 );
+            self.energyChunkWanderControllers.splice( index, 1 );
           }
         } );
       }
@@ -240,10 +240,10 @@ define( function( require ) {
      * @returns {boolean}
      */
     areAnyOnTop: function( thermalEnergyContainers ) {
-      var thisBurner = this; // Provide a handle for use in nested callback
+      var self = this; // Provide a handle for use in nested callback
       var onTop = false;
       thermalEnergyContainers.forEach( function( thermalEnergyContainer ) {
-        if ( thisBurner.inContactWith( thermalEnergyContainer ) ) {
+        if ( self.inContactWith( thermalEnergyContainer ) ) {
           onTop = true;
         }
       } );
@@ -255,13 +255,13 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyChunkCountForAir: function() {
-      var thisModel = this; // extend scope for nested loop function.
+      var self = this; // extend scope for nested loop function.
       var count = 0;
       // If there are approaching chunks, and the mode has switched to off or to heating,
       // the chunks should go back to the air (if they're not almost to the burner).
       if ( this.energyChunkList.length > 0 && this.heatCoolLevel >= 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
-          if ( thisModel.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+          if ( self.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
         } );
