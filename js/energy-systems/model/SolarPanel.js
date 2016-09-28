@@ -224,10 +224,10 @@ define( function( require ) {
       while ( !preLoadComplete ) {
 
         // Full energy rate generates too many chunks, so an adjustment factor is used.
-        this.energySinceLastChunk += incomingEnergy.amount * dt * 0.4;
+        energySinceLastChunk += incomingEnergy.amount * dt * 0.4;
 
         // Determine if time to add a new chunk.
-        if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var initialPosition;
           if ( this.energyChunkList.length === 0 ) {
             // For predictability of the algorithm, add the first chunk to the center of the panel.
