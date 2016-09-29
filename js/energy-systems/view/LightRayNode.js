@@ -97,7 +97,7 @@ define( function( require ) {
 
       var self = this;
       this.lightAbsorbingShapes.forEach( function( absorbingShape ) {
-        if ( self.lineIntersectsShape( self.origin, self.endpoint, absorbingShape.shape ) ) {
+        if ( absorbingShape.shape.interiorIntersectsLineSegment( self.origin, self.endpoint ) ) {
 
           var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
 
@@ -151,32 +151,32 @@ define( function( require ) {
 
     },
 
-    /**
-     * [lineIntersectsShape description]
-     * @param  {Vector2} startPoint
-     * @param  {Vector2} endPoint
-     * @param  {Shape} shape
-     * @return {Boolean}
-     * @private
-     */
-    lineIntersectsShape: function( startPoint, endPoint, shape ) {
-      var line = new Line( startPoint, endPoint );
-      var kiteLine = new KiteLine( startPoint, endPoint );
-      var path = new Path( line, {} );
-      var strokedLineShape = path.getStrokedShape();
+    // /**
+    //  * [lineIntersectsShape description]
+    //  * @param  {Vector2} startPoint
+    //  * @param  {Vector2} endPoint
+    //  * @param  {Shape} shape
+    //  * @return {Boolean}
+    //  * @private
+    //  */
+    // lineIntersectsShape: function( startPoint, endPoint, shape ) {
+    //   var line = new Line( startPoint, endPoint );
+    //   var kiteLine = new KiteLine( startPoint, endPoint );
+    //   var path = new Path( line, {} );
+    //   var strokedLineShape = path.getStrokedShape();
 
-      var b = shape.bounds;
-      var shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
+    //   var b = shape.bounds;
+    //   var shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
 
-      var ips = this.getRectangleLineIntersectionPoints( shapeRect, kiteLine );
-      if ( ips.length === 0 ) {
-        return false;
-      }
+    //   var ips = this.getRectangleLineIntersectionPoints( shapeRect, kiteLine );
+    //   if ( ips.length === 0 ) {
+    //     return false;
+    //   }
 
-      // Warning: This only checks the bounding rect, not the full shape.
-      // This was adequate in this case, but take care if reusing.
-      return strokedLineShape.intersectsBounds( shape.bounds );
-    },
+    //   // Warning: This only checks the bounding rect, not the full shape.
+    //   // This was adequate in this case, but take care if reusing.
+    //   return strokedLineShape.intersectsBounds( shape.bounds );
+    // },
 
     /**
      * [getLineIntersection description]
@@ -229,7 +229,7 @@ define( function( require ) {
       var shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
       var entryPoint = null;
 
-      if ( this.lineIntersectsShape( origin, endpoint, shape ) ) {
+      if ( shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
         var boundsEntryPoint = this.getRectangleEntryPoint( origin, endpoint, shapeRect );
         if ( boundsEntryPoint === null ) {
 
@@ -283,7 +283,7 @@ define( function( require ) {
         return null;
       }
 
-      if ( !shape.bounds.containsPoint( endpoint ) && this.lineIntersectsShape( origin, endpoint, shape ) ) {
+      if ( !shape.bounds.containsPoint( endpoint ) && shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
         // Phase I - Do a binary search to locate the edge of the
         // rectangle that encloses the shape.
         var angle = endpoint.minus( origin ).angle();
@@ -291,9 +291,7 @@ define( function( require ) {
         var lengthChange = length / 2;
         for ( var i = 0; i < SEARCH_ITERATIONS; i++ ) {
           var start = origin.plus( new Vector2( length, 0 ).rotated( angle ) );
-          // var testLine = new Line( start.x, start.y, endpoint.x, endpoint.y );
-          // length += lengthChange * ( testLine.intersects( shapeRect ) ? 1 : -1 );
-          length += lengthChange * ( this.lineIntersectsShape( start, endpoint, shape ) ? 1 : -1 );
+          length += lengthChange * ( shape.interiorIntersectsLineSegment( start, endpoint ) ? 1 : -1 );
           lengthChange = lengthChange / 2;
         }
         exitPoint = origin.plus( new Vector2( length, 0 ).rotated( angle ) );
