@@ -22,7 +22,6 @@ define( function( require ) {
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var Line = require( 'KITE/segments/Line' );
   var Property = require( 'AXON/Property' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
@@ -66,11 +65,13 @@ define( function( require ) {
    */
   function EnergyFormsAndChangesIntroModel() {
 
-    PropertySet.call( this, {
-      energyChunksVisible: false,
-      play: true, // is the sim running or paused
-      normalSimSpeed: true // is the sim running at normal speed or fast forward
-    } );
+    this.energyChunksVisibleProperty = new Property( false );
+
+    // is the sim running or paused
+    this.playProperty = new Property( true );
+
+    // is the sim running at normal speed or fast forward
+    this.normalSimSpeedProperty = new Property( true );
 
     // Extend the scope of this.
     var self = this;
@@ -136,7 +137,7 @@ define( function( require ) {
     }
 
     this.normalSimSpeedProperty.link( function() {
-      self.timePerTick = self.normalSimSpeed ?
+      self.timePerTick = self.normalSimSpeedProperty.value ?
         EFACConstants.SIM_TIME_PER_TICK_NORMAL :
         EFACConstants.SIM_TIME_PER_TICK_FAST_FORWARD;
     } );
@@ -145,7 +146,7 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroModel', EnergyFormsAndChangesIntroModel );
 
-  return inherit( PropertySet, EnergyFormsAndChangesIntroModel, {
+  return inherit( Object, EnergyFormsAndChangesIntroModel, {
 
     /**
      * Restore the initial conditions of the model.
@@ -153,6 +154,8 @@ define( function( require ) {
     reset: function() {
 
       this.energyChunksVisibleProperty.reset();
+      this.playProperty.reset();
+      this.normalSimSpeedProperty.reset();
       this.air.reset();
       this.leftBurner.reset();
       this.rightBurner.reset();
@@ -182,7 +185,7 @@ define( function( require ) {
      * @param {number} dt Time step.
      */
     step: function( dt ) {
-      if ( this.play ) {
+      if ( this.playProperty.value ) {
         this.stepModel( this.timePerTick );
       }
     },
