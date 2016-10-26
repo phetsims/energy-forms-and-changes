@@ -23,6 +23,7 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var Property = require( 'AXON/Property' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
@@ -67,11 +68,10 @@ define( function( require ) {
     this.height = height;
 
     // Add the Beaker Properties.
-    // TODO: Can this get added directly to the supertype constructor if its most base class is PropertySet? Would be cleaner.
-    this.addProperty( 'fluidLevel', EFACConstants.INITIAL_FLUID_LEVEL );
-    this.addProperty( 'topSurface', null );
-    this.addProperty( 'bottomSurface', null );
-    this.addProperty( 'temperature', EFACConstants.ROOM_TEMPERATURE );
+    this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
+    this.topSurfaceProperty = new Property( null );
+    this.bottomSurfaceProperty = new Property( null );
+    this.temperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
 
     // Indicator of how much steam is being emitted.  Ranges from 0 to 1, where 0 is no steam, 1 is the max amount
     // (full boil).
@@ -120,8 +120,8 @@ define( function( require ) {
      */
     getRect: function() {
       return new Rectangle(
-        this.position.x - this.width / 2,
-        this.position.y,
+        this.positionProperty.value.x - this.width / 2,
+        this.positionProperty.value.y,
         this.width,
         this.height );
     },
@@ -135,10 +135,10 @@ define( function( require ) {
      */
     getBounds: function() {
       return new Bounds2(
-        this.position.x - this.width / 2,
-        this.position.y,
-        this.position.x + this.width / 2,
-        this.position.y + this.height );
+        this.positionProperty.value.x - this.width / 2,
+        this.positionProperty.value.y,
+        this.positionProperty.value.x + this.width / 2,
+        this.positionProperty.value.y + this.height );
     },
 
     /**
@@ -231,8 +231,8 @@ define( function( require ) {
     getThermalContactArea: function() {
 
       return new ThermalContactArea( new Bounds2(
-        this.position.x - this.width / 2,
-        this.position.y,
+        this.positionProperty.value.x - this.width / 2,
+        this.positionProperty.value.y,
         this.width,
         this.height * this.fluidLevel ), true );
     },
@@ -266,8 +266,8 @@ define( function( require ) {
       assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
 
       var fluidRect = new Rectangle(
-        this.position.x - this.width / 2,
-        this.position.y,
+        this.positionProperty.value.x - this.width / 2,
+        this.positionProperty.value.y,
         this.width,
         this.height * EFACConstants.INITIAL_FLUID_LEVEL );
 
@@ -293,8 +293,9 @@ define( function( require ) {
         //   .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
         //   .lineTo( centerX - sliceWidth / 2, bottomY );
 
+        var zPosition = -proportion * this.width;
         var sliceShape = Shape.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
-        this.slices.push( new EnergyChunkContainerSlice( sliceShape, -proportion * this.width, this.positionProperty ) );
+        this.slices.push( new EnergyChunkContainerSlice( sliceShape, zPosition, this.positionProperty ) );
       }
     },
 
@@ -367,13 +368,20 @@ define( function( require ) {
       var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
       assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
       densestSlice.energyChunkList.forEach( function( energyChunk ) {
-        if ( energyChunk.positionProperty.value.y > highestenergyChunk.positionProperty.value.y ) {
+        if ( energyChunk.positionProperty.value.y > highestEnergyChunk.positionProperty.value.y ) {
           highestEnergyChunk = energyChunk;
         }
       } );
 
       this.removeEnergyChunk( highestEnergyChunk );
       return highestEnergyChunk;
+    },
+
+    reset: function() {
+      this.fluidLevelProperty.reset();
+      this.topSurfaceProperty.reset();
+      this.bottomSurfaceProperty.reset();
+      this.temperatureProperty.reset();
     }
 
   } );

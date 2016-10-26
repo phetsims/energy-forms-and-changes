@@ -132,8 +132,8 @@ define( function( require ) {
      */
     getRect: function() {
       return new Rectangle(
-        this.position.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
-        this.position.y,
+        this.positionProperty.value.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
+        this.positionProperty.value.y,
         EFACConstants.BLOCK_SURFACE_WIDTH,
         EFACConstants.BLOCK_SURFACE_WIDTH ); // Height = width
     },

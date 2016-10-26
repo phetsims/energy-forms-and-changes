@@ -126,7 +126,7 @@ define( function( require ) {
 
         if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER &&
           !thermometer.userControlled &&
-          xRange.contains( thermometer.position.x ) ) {
+          xRange.contains( thermometer.positionProperty.value.x ) ) {
           thermometer.userControlled = true; // Must toggle userControlled to enable element following.
           thermometer.position = new Vector2(
             self.beaker.getBounds().maxX - 0.01,
@@ -217,9 +217,13 @@ define( function( require ) {
       var unsupported;
       var raised;
       this.thermalContainers.forEach( function( movableModelElement ) {
-        unsupported = ( movableModelElement.supportingSurface === null );
-        raised = ( movableModelElement.position.y !== 0 );
-        if ( !movableModelElement.userControlled && unsupported && raised ) {
+        var y = movableModelElement.positionProperty.value.y;
+        if ( y !== 0 && !y ) {
+          assert && assert( false, 'NaN value in position' );
+        }
+        unsupported = ( movableModelElement.supportingSurfaceProperty.value === null );
+        raised = ( movableModelElement.positionProperty.value.y !== 0 );
+        if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
           self.fallToSurface( movableModelElement, dt );
         }
       } );
@@ -390,32 +394,32 @@ define( function( require ) {
       var acceleration = -9.8; // meters/s/s
 
       //Determine whether there is something below this element that it can land upon.
-      var potentialSupportingSurface = self.findBestSupportSurface( modelElement );
+      var potentialSupportingSurface = self.findBestSupportSurface( modelElement ); // HorizontalSurface
 
       // If so, center the modelElement above its new parent.
-      if ( potentialSupportingSurface.value !== null ) {
-        minYPos = potentialSupportingSurface.value.yPos;
-        targetX = potentialSupportingSurface.value.getCenterX();
+      if ( potentialSupportingSurface !== null ) {
+        minYPos = potentialSupportingSurface.yPos;
+        targetX = potentialSupportingSurface.getCenterX();
         targetY = modelElement.positionProperty.value.y;
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
 
       // Calculate a proposed Y position based on gravitational falling.
-      var velocity = modelElement.verticalVelocity + acceleration * dt;
-      var proposedYPos = modelElement.position.y + velocity * dt;
+      var velocity = modelElement.verticalVelocityProperty.value + acceleration * dt;
+      var proposedYPos = modelElement.positionProperty.value.y + velocity * dt;
       if ( proposedYPos < minYPos ) {
         // The element has landed on the ground or some other surface.
         proposedYPos = minYPos;
-        modelElement.verticalVelocity = 0;
+        modelElement.verticalVelocityProperty.set( 0 );
         if ( potentialSupportingSurface.value !== null ) {
-          modelElement.supportingSurface = potentialSupportingSurface.value;
-          potentialSupportingSurface.value.addElementToSurface( modelElement );
+          modelElement.supportingSurfaceProperty.set( potentialSupportingSurface );
+          potentialSupportingSurface.addElementToSurface( modelElement );
         }
       } else {
-        modelElement.verticalVelocity = velocity;
+        modelElement.verticalVelocityProperty.set( velocity );
       }
 
-      modelElement.positionProperty.set( new Vector2( modelElement.position.x, proposedYPos ) );
+      modelElement.positionProperty.set( new Vector2( modelElement.positionProperty.value.x, proposedYPos ) );
     },
 
     getBlockList: function() {
@@ -457,7 +461,7 @@ define( function( require ) {
       var self = this;
 
       // Compensate for the model element's center X position.
-      var translation = proposedPosition.copy().minus( modelElement.position );
+      var translation = proposedPosition.copy().minus( modelElement.positionProperty.value );
 
       // Figure out how far the block's right edge appears to protrude to the side due to perspective.
       var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH *
@@ -538,7 +542,7 @@ define( function( require ) {
       } );
 
       // Determine the new position based on the resultant translation.
-      var newPosition = modelElement.position.plus( translation ).copy();
+      var newPosition = modelElement.positionProperty.value.plus( translation ).copy();
 
       // Clamp Y position to be positive to prevent dragging below table.
       newPosition.setY( Math.max( newPosition.y, 0 ) );
@@ -670,7 +674,7 @@ define( function( require ) {
     /**
      *
      * @param {UserMovableModelElement} element
-     * @returns {Property} bestOverlappingSurfaceProperty
+     * @returns {HorizontalSurface}
      */
     findBestSupportSurface: function( element ) {
       var self = this; // Extend scope for nested functions.
@@ -685,19 +689,22 @@ define( function( require ) {
           return;
         }
 
-        if ( element.bottomSurface.overlapsWith( potentialSupportingElement.topSurface ) ) {
+        var bottom = element.bottomSurfaceProperty.value;
+        var top = potentialSupportingElement.topSurfaceProperty.value;
+
+        if ( top && bottom.overlapsWith( top ) ) {
 
           // There is at least some overlap.  Determine if this surface is the best one so far.
-          var surfaceOverlap = self.getHorizontalOverlap( potentialSupportingElement.topSurface, element.bottomSurface );
+          var surfaceOverlap = self.getHorizontalOverlap( top, bottom );
 
           // The following nasty 'if' clause determines if the potential supporting surface is a better one than we
           // currently have based on whether we have one at all, or has more overlap than the previous best choice, or
           // is directly above the current one.
-          if ( bestOverlappingSurfaceProperty.value === null ||
-            ( surfaceOverlap > self.getHorizontalOverlap( bestOverlappingSurfaceProperty.value, element.bottomSurface ) &&
-              !self.isDirectlyAbove( bestOverlappingSurfaceProperty.get(), potentialSupportingElement.topSurface ) ) ||
-            ( self.isDirectlyAbove( potentialSupportingElement.topSurface, bestOverlappingSurfaceProperty.get() ) ) ) {
-            bestOverlappingSurfaceProperty.set( potentialSupportingElement.topSurface );
+          var best = bestOverlappingSurfaceProperty.value;
+          if ( best === null ||
+            ( surfaceOverlap > self.getHorizontalOverlap( best, element.bottomSurface ) &&
+              !self.isDirectlyAbove( best, top ) ) || ( self.isDirectlyAbove( top, best ) ) ) {
+            bestOverlappingSurfaceProperty.set( top );
           }
         }
       } );
@@ -706,10 +713,11 @@ define( function( require ) {
       // model element being tested isn't directly above the best surface's center.
       if ( bestOverlappingSurfaceProperty.get() !== null ) {
         while ( bestOverlappingSurfaceProperty.value.getElementOnSurface() !== null ) {
-          bestOverlappingSurfaceProperty.set( bestOverlappingSurfaceProperty.value.getElementOnSurface().topSurface );
+          bestOverlappingSurfaceProperty.set(
+            bestOverlappingSurfaceProperty.value.getElementOnSurface().topSurfaceProperty.value );
         }
       }
-      return bestOverlappingSurfaceProperty;
+      return bestOverlappingSurfaceProperty.value;
     },
 
     /**
@@ -741,7 +749,7 @@ define( function( require ) {
         if ( block1.position === block2.position ) {
           return 0;
         }
-        if ( block2.position.x > block1.position.x || block2.position.y > block1.position.y ) {
+        if ( block2.positionProperty.value.x > block1.positionProperty.value.x || block2.positionProperty.value.y > block1.positionProperty.value.y ) {
           return 1;
         }
         return -1;

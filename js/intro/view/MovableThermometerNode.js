@@ -41,8 +41,8 @@ define( function( require ) {
 
     // Add the drag handler.
     var offsetPosToCenter = new Vector2(
-      this.centerX - modelViewTransform.modelToViewX( thermometer.position.x ),
-      this.centerY - modelViewTransform.modelToViewY( thermometer.position.y ) );
+      this.centerX - modelViewTransform.modelToViewX( thermometer.positionProperty.value.x ),
+      this.centerY - modelViewTransform.modelToViewY( thermometer.positionProperty.value.y ) );
     this.addInputListener( new ThermalElementDragHandler( thermometer, this, modelViewTransform,
       new ThermometerLocationConstraint( modelViewTransform, this, stageSize, offsetPosToCenter ) ) );
 

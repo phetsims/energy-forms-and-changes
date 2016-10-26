@@ -46,14 +46,14 @@ define( function( require ) {
         // The user has dropped this thermometer. See if it was
         // dropped over something that it should follow.
         model.getBlockList().forEach( function( block ) {
-          if ( block.getProjectedShape().containsPoint( self.position ) ) {
+          if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             // stick to this block.
             console.log( 'sticking?' );
             self.elementFollower.follow( block.positionProperty );
           }
         } );
         if ( !self.elementFollower.isFollowing() &&
-          model.beaker.getThermalContactArea().containsPoint( self.position ) ) {
+          model.beaker.getThermalContactArea().containsPoint( self.positionProperty.value ) ) {
           // Stick to the beaker.
           self.elementFollower.follow( model.beaker.positionProperty );
         }

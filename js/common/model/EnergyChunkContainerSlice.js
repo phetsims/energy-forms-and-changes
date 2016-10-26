@@ -23,7 +23,7 @@ define( function( require ) {
   /**
    *
    * @param {Shape} shape
-   * @param {Vector2} zPosition
+   * @param {number} zPosition - used to give appearance of depth
    * @param {Property.<Vector2>} anchorPointProperty
    * @constructor
    */
@@ -55,8 +55,7 @@ define( function( require ) {
      * @param {EnergyChunk} energyChunk
      */
     addEnergyChunk: function( energyChunk ) {
-      // console.log( 'ECCS: adding to slice' );
-      energyChunk.zPosition = this.zPosition;
+      energyChunk.zPositionProperty.set( this.zPosition );
       this.energyChunkList.push( energyChunk );
     },
 

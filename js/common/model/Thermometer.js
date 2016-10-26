@@ -16,6 +16,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+  var Property = require( 'AXON/Property' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
 
   /**
@@ -32,11 +33,9 @@ define( function( require ) {
 
     this.model = model;
 
-    this.addProperty( 'sensedTemperature', EFACConstants.ROOM_TEMPERATURE );
-    this.addProperty( 'sensedElementColor', PhetColorScheme.RED_COLORBLIND );
-
-    // Property that is used primarily to control visibility in the view.
-    this.addProperty( 'active', initiallyActive );
+    this.sensedTemperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
+    this.sensedElementColorProperty = new Property( PhetColorScheme.RED_COLORBLIND );
+    this.activeProperty = new Property( initiallyActive ); // controls visibility
   }
 
   energyFormsAndChanges.register( 'Thermometer', Thermometer );
@@ -50,6 +49,8 @@ define( function( require ) {
     },
 
     reset: function() {
+      this.sensedTemperatureProperty.reset();
+      this.sensedElementColorProperty.reset();
       this.activeProperty.reset();
     },
 

@@ -44,7 +44,7 @@ define( function( require ) {
 
       onDrag: function( event ) {
         // MovableDragHandler has set the proposed model position.
-        modelElement.position = constraint.apply( modelElement.position );
+        modelElement.positionProperty.value = constraint.apply( modelElement.positionProperty.value );
       }
 
     } );

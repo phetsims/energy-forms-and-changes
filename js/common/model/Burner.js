@@ -51,7 +51,7 @@ define( function( require ) {
 
     ModelElement.call( this );
 
-    this.addProperty( 'heatCoolLevel', 0 );
+    this.heatCoolLevelProperty = new Property( 0 );
 
     var self = this;
 
@@ -66,8 +66,6 @@ define( function( require ) {
     // Track build up of energy for transferring chunks to/from the air.
     this.energyExchangedWithAirSinceLastChunkTransfer = 0; // @private
 
-    //this.heatCoolLevelProperty = new Property( new RangeWithValue( -1, 1, 0 ) );
-
     // Create and add the top surface.  Some compensation for perspective is
     // necessary in order to avoid problems with edge overlap when dropping
     // objects on top of burner.
@@ -75,7 +73,7 @@ define( function( require ) {
       self.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
       Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
 
-    this.addProperty( 'topSurface',
+    this.topSurfaceProperty = new Property(
       new HorizontalSurface( new RangeWithValue( self.getOutlineRect().getMinX() - perspectiveCompensation,
         self.getOutlineRect().maxX + perspectiveCompensation ), self.getOutlineRect().maxY, this ) );
   }
@@ -128,7 +126,7 @@ define( function( require ) {
      * @param dt - amount of time (delta time)
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
-      var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevel * dt;
+      var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevelProperty.value * dt;
       if ( deltaEnergy > 0 ) {
         // TODO: is this a special case?
       }

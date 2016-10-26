@@ -326,7 +326,7 @@ define( function( require ) {
       font: LABEL_FONT
     } );
     label.translation = new Vector2( beakerBounds.centerX - label.bounds.width / 2,
-      beakerBounds.maxY - beakerBounds.height * beaker.fluidLevel + topEllipse.bounds.height );
+      beakerBounds.maxY - beakerBounds.height * beaker.fluidLevelProperty.value + topEllipse.bounds.height );
     label.pickable = false;
     this.frontNode.addChild( label );
 

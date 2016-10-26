@@ -196,8 +196,8 @@ define( function( require ) {
 
     // Add the drag handler.
     var offsetPosToCenter = new Vector2(
-      this.bounds.centerX - modelViewTransform.modelToViewX( block.position.x ),
-      this.bounds.centerY - modelViewTransform.modelToViewY( block.position.y ) );
+      this.bounds.centerX - modelViewTransform.modelToViewX( block.positionProperty.value.x ),
+      this.bounds.centerY - modelViewTransform.modelToViewY( block.positionProperty.value.y ) );
     this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
       new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
   }

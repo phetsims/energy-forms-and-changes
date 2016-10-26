@@ -13,6 +13,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
+  var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -25,14 +26,14 @@ define( function( require ) {
 
     ModelElement.call( this );
 
-    this.addProperty( 'userControlled', false );
-    this.addProperty( 'position', initialPosition ); // Position of the center of the bottom of the block.
-    this.addProperty( 'verticalVelocity', 0 ); //Velocity in the up/down direction.
+    this.userControlledProperty = new Property( false );
+    this.positionProperty = new Property( initialPosition ); // Position of the center of the bottom of the block.
+    this.verticalVelocityProperty = new Property( 0 ); //Velocity in the up/down direction.
 
     // Observer that moves this model element if and when the surface that is
     // supporting it moves.
     this.surfaceMotionObserver = function( horizontalSurface ) {
-      self.position = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
+      self.positionProperty.value = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
 
     this.userControlledProperty.link( function( userControlled ) {
@@ -78,7 +79,7 @@ define( function( require ) {
      * @param {number} x
      */
     setX: function( x ) {
-      this.position = new Vector2( x, this.position.y );
+      this.positionProperty.value = new Vector2( x, this.position.y );
     }
   } );
 } );

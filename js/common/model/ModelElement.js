@@ -13,7 +13,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
 
   /**
    *
@@ -21,18 +21,24 @@ define( function( require ) {
    */
   function ModelElement() {
 
-    PropertySet.call( this, {
-      // Surface upon which this model element is resting.  Null if the element
-      // is floating in the air (which is perfectly legitimate for some Model Element)
-      supportingSurface: null, // {HorizontalSurface}
-      topSurface: null, //  {HorizontalSurface}
-      bottomSurface: null // {HorizontalSurface}
-    } );
+    // Surface upon which this model element is resting.  Null if the element
+    // is floating in the air (which is perfectly legitimate for some Model Element)
+
+    // These properties will have a HorizontalSurface type parameter
+    this.supportingSurfaceProperty = new Property( null );
+    this.topSurfaceProperty = new Property( null );
+    this.bottomSurfaceProperty = new Property( null );
+
+    // PropertySet.call( this, {
+    //   supportingSurface: null, // {HorizontalSurface}
+    //   topSurface: null, //  {HorizontalSurface}
+    //   bottomSurface: null // {HorizontalSurface}
+    // } );
   }
 
   energyFormsAndChanges.register( 'ModelElement', ModelElement );
 
-  return inherit( PropertySet, ModelElement, {
+  return inherit( Object, ModelElement, {
 
     /**
      * Set the surface upon which this model element is resting.
@@ -79,10 +85,9 @@ define( function( require ) {
      * one or more elements are in between.
      */
     isStackedUpon: function( element ) {
-
-      return ( this.supportingSurface !== null ) &&
-        ( this.supportingSurface.getOwner() === element ||
-          this.supportingSurface.getOwner().isStackedUpon( element ) );
+      var surface = this.supportingSurfaceProperty.value;
+      return ( surface !== null ) &&
+        ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
     },
 
     /**
@@ -98,7 +103,12 @@ define( function( require ) {
         //this.supportingSurface.clearSurface();
         this.supportingSurfaceProperty.reset();
       }
+      if ( this.topSurfaceProperty !== null ) {
+        this.topSurfaceProperty.reset();
+      }
+      if ( this.bottomSurfaceProperty !== null ) {
+        this.bottomSurfaceProperty.reset();
+      }
     }
   } );
 } );
-

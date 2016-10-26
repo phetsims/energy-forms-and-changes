@@ -175,7 +175,7 @@ define( function( require ) {
      * @param initialWanderConstraint
      */
     addEnergyChunk: function( energyChunk, initialWanderConstraint ) {
-      energyChunk.zPosition = 0;
+      energyChunk.zPositionProperty.value = 0;
       this.energyChunkList.push( energyChunk );
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk,
         new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
@@ -192,7 +192,11 @@ define( function( require ) {
 
     requestEnergyChunk: function( point ) {
       // Create a new chunk at the top of the air above the specified point.
-      return new EnergyChunk( EnergyType.THERMAL, new Vector2( point.x, SIZE.height ), new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
+      return new EnergyChunk(
+        EnergyType.THERMAL,
+        new Vector2( point.x, SIZE.height ),
+        new Vector2( 0, 0 ),
+        this.energyChunksVisibleProperty );
     },
 
     /**

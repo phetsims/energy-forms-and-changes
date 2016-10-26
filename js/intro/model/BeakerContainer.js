@@ -65,7 +65,7 @@ define( function( require ) {
 
       // Map the overlap to a new fluid height.  The scaling factor was empirically determined to look good.
       var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
-      var proportionateIncrease = newFluidLevel / this.fluidLevel;
+      var proportionateIncrease = newFluidLevel / this.fluidLevelProperty.value;
       this.fluidLevel = newFluidLevel;
 
       // Update the shapes of the energy chunk slices.
