@@ -367,7 +367,7 @@ define( function( require ) {
       var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
       assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
       densestSlice.energyChunkList.forEach( function( energyChunk ) {
-        if ( energyChunk.position.y > highestEnergyChunk.position.y ) {
+        if ( energyChunk.positionProperty.value.y > highestenergyChunk.positionProperty.value.y ) {
           highestEnergyChunk = energyChunk;
         }
       } );

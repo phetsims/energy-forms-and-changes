@@ -131,7 +131,7 @@ define( function( require ) {
           var lightChunksInLitRadius = 0;
 
           this.radiatedEnergyChunkMovers.forEach( function( mover ) {
-            var distance = mover.energyChunk.position.distance( self.position.plus( OFFSET_TO_RADIATE_POINT ) );
+            var distance = mover.energyChunk.positionProperty.value.distance( self.position.plus( OFFSET_TO_RADIATE_POINT ) );
             if ( distance < LIGHT_CHUNK_LIT_BULB_RADIUS ) {
               lightChunksInLitRadius++;
             }
@@ -225,7 +225,7 @@ define( function( require ) {
           // Turn this energy chunk into thermal energy on the filament.
           if ( self.hasFilament ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
-            var path = self.createThermalEnergyChunkPath( mover.energyChunk.position );
+            var path = self.createThermalEnergyChunkPath( mover.energyChunk.positionProperty.value );
             var speed = self.getTotalPathLength( mover.energyChunk.position, path ) /
               self.generateThermalChunkTimeOnFilament();
 

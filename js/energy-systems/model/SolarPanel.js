@@ -181,7 +181,7 @@ define( function( require ) {
           _.pull( self.energyChunkMovers, mover );
 
           // Energy chunk has reached the bottom of the panel and now needs to move through the converter.
-          if ( mover.energyChunk.position.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+          if ( mover.energyChunk.positionProperty.value.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createPathThroughConverter( self.position ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );

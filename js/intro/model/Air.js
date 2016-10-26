@@ -87,7 +87,7 @@ define( function( require ) {
       controllers.forEach( function( controller ) {
         controller.updatePosition( dt );
 
-        // if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.position ) ) ) {
+        // if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.positionProperty.value ) ) ) {
         if ( controller.destinationReached() ) {
           // }
           // Remove this energy chunk.
@@ -178,7 +178,7 @@ define( function( require ) {
       energyChunk.zPosition = 0;
       this.energyChunkList.push( energyChunk );
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk,
-        new Property( new Vector2( energyChunk.position.x, SIZE.height ) ),
+        new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
         initialWanderConstraint ) );
     },
 

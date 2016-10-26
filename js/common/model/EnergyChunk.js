@@ -13,7 +13,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
   //static data
@@ -32,11 +32,9 @@ define( function( require ) {
     assert && assert( initialPosition instanceof Vector2,
       'Expected a Vector2, got this: ' + initialPosition );
 
-    PropertySet.call( this, {
-      position: initialPosition,
-      zPosition: 0, // Used for some simple 3D layering effects.
-      energyType: initialEnergyType
-    } );
+    this.positionProperty = new Property( initialPosition );
+    this.zPositionProperty = new Property( 0 );   // For simple 3D layering effects
+    this.energyTypeProperty = new Property( initialEnergyType );
     this.visibleProperty = visibleProperty;
 
     // add a unique for the hash map that will call on these slices
@@ -47,13 +45,13 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 
-  return inherit( PropertySet, EnergyChunk, {
+  return inherit( Object, EnergyChunk, {
     /**
      * Function that translate the energy chunk by a vector movement
      * @param {Vector2} movement
      */
     translate: function( movement ) {
-      this.position = this.position.plus( movement );
+      this.positionProperty.value = this.positionProperty.value.plus( movement );
     },
 
     /**
@@ -87,6 +85,13 @@ define( function( require ) {
      */
     setVelocity: function( newVelocity ) {
       this.velocity.set( newVelocity );
+    },
+
+    reset: function() {
+      this.positionProperty.reset();
+      this.zPositionProperty.reset();
+      this.energyTypeProperty.reset();
+      this.visibleProperty.reset();
     }
 
   } );

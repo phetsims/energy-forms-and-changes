@@ -60,30 +60,30 @@ define( function( require ) {
      */
     updatePosition: function( dt ) {
 
-      var distanceToDestination = this.energyChunk.position.distance( this.destinationProperty.value );
+      var distanceToDestination = this.energyChunk.positionProperty.value.distance( this.destinationProperty.value );
 
       // Destination reached.
       if ( distanceToDestination < this.velocity.magnitude() * dt &&
-        !this.energyChunk.position.equals( this.destinationProperty.value ) ) {
+        !this.energyChunk.positionProperty.value.equals( this.destinationProperty.value ) ) {
         this.energyChunk.positionProperty.set( this.destinationProperty.value );
         this.velocity.setMagnitude( 0 );
       }
 
       // Prevent overshoot.
-      else if ( this.energyChunk.position.distance( this.destinationProperty.value ) < dt * this.velocity.magnitude() ) {
-        this.velocity.times( this.energyChunk.position.distance( this.destinationProperty.value ) * dt );
+      else if ( this.energyChunk.positionProperty.value.distance( this.destinationProperty.value ) < dt * this.velocity.magnitude() ) {
+        this.velocity.times( this.energyChunk.positionProperty.value.distance( this.destinationProperty.value ) * dt );
       }
 
       // Stay within the horizontal confines of the initial bounds.
-      if ( this.initialWanderConstraint !== null && this.energyChunk.position.y < this.initialWanderConstraint.maxY ) {
-        var proposedX = this.energyChunk.position.plus( this.velocity.times( dt ) ).x;
+      if ( this.initialWanderConstraint !== null && this.energyChunk.positionProperty.value.y < this.initialWanderConstraint.maxY ) {
+        var proposedX = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) ).x;
         if ( proposedX < this.initialWanderConstraint.minX || proposedX > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
           this.velocity.setComponents( -this.velocity.x, this.velocity.y );
         }
       }
 
-      this.energyChunk.position = this.energyChunk.position.plus( this.velocity.times( dt ) );
+      this.energyChunk.positionProperty.value = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) );
       this.countdownTimer -= dt;
       if ( this.countdownTimer <= 0 ) {
         this.changeVelocityVector();
@@ -95,7 +95,7 @@ define( function( require ) {
      *
      */
     changeVelocityVector: function() {
-      var vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.position );
+      var vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
       var angle = vectorToDestination.angle();
       if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
         // Add some randomness to the direction of travel.
@@ -125,7 +125,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     destinationReached: function() {
-      return this.destinationProperty.value.distance( this.energyChunk.position ) < 1E-7;
+      return this.destinationProperty.value.distance( this.energyChunk.positionProperty.value ) < 1E-7;
     }
   } );
 } );

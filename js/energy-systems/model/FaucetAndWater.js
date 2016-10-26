@@ -161,7 +161,7 @@ define( function( require ) {
 
         // See if chunk is in the location where it can be transferred
         // to the next energy system.
-        var position = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.position.y;
+        var position = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.positionProperty.value.y;
         var chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( position );
         var chunkExempt = self.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
 
@@ -183,7 +183,7 @@ define( function( require ) {
         }
 
         // Remove it if it is out of visible range.
-        var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.position );
+        var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.positionProperty.value );
         if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
           self.energyChunkList.remove( chunk );
           _.pull( self.exemptFromTransferEnergyChunks, chunk );

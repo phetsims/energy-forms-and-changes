@@ -126,7 +126,7 @@ define( function( require ) {
       var controllers = this.energyChunkWanderControllers.slice( 0 );
       controllers.forEach( function( controller ) {
         controller.updatePosition( dt );
-        if ( self.getSliceBounds().containsPoint( controller.energyChunk.position ) ) {
+        if ( self.getSliceBounds().containsPoint( controller.energyChunk.positionProperty.value ) ) {
           self.moveEnergyChunkToSlices( controller.energyChunk );
         }
       } );
@@ -145,7 +145,7 @@ define( function( require ) {
       var bounds = this.getSliceBounds();
 
       // Energy chunk is positioned within container bounds, so add it directly to a slice.
-      if ( bounds.containsPoint( energyChunk.position ) ) {
+      if ( bounds.containsPoint( energyChunk.positionProperty.value ) ) {
         this.addEnergyChunkToNextSlice( energyChunk );
       }
 
@@ -255,7 +255,7 @@ define( function( require ) {
         slice.energyChunkList.forEach( function( energyChunk ) {
           // Compensate for the Z offset.  Otherwise front chunk will almost always be chosen.
           var compensatedEnergyChunkPosition =
-            energyChunk.position.minusXY( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
+            energyChunk.positionProperty.value.minusXY( 0, EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER * energyChunk.zPosition );
           var compensatedDistance = compensatedEnergyChunkPosition.distance( point );
           if ( compensatedDistance < closestCompensatedDistance ) {
             closestEnergyChunk = energyChunk;
@@ -289,8 +289,8 @@ define( function( require ) {
         var closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
-            var distanceToVerticalEdge = Math.min( Math.abs( myBounds.minX - energyChunk.position.x ),
-              Math.abs( myBounds.x - energyChunk.position.x ) );
+            var distanceToVerticalEdge = Math.min( Math.abs( myBounds.minX - energyChunk.positionProperty.value.x ),
+              Math.abs( myBounds.x - energyChunk.positionProperty.value.x ) );
 
             if ( distanceToVerticalEdge < closestDistanceToVerticalEdge ) {
               chunkToExtract = energyChunk;
@@ -307,9 +307,9 @@ define( function( require ) {
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
             var distanceToDestinationEdge =
-              Math.min( Math.abs( destinationBounds.minX - energyChunk.position.x ),
-                Math.abs( destinationBounds.maxX - energyChunk.position.x ) );
-            if ( !destinationShape.containsPoint( energyChunk.position ) &&
+              Math.min( Math.abs( destinationBounds.minX - energyChunk.positionProperty.value.x ),
+                Math.abs( destinationBounds.maxX - energyChunk.positionProperty.value.x ) );
+            if ( !destinationShape.containsPoint( energyChunk.positionProperty.value ) &&
               distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;

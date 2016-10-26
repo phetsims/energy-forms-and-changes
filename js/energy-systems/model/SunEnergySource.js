@@ -133,7 +133,7 @@ define( function( require ) {
       // Check for bouncing and absorption of the energy chunks.
       this.energyChunkList.forEach( function( chunk ) {
 
-        var distanceFromSun = chunk.position.distance( self.sunPosition.plus( OFFSET_TO_CENTER_OF_SUN ) );
+        var distanceFromSun = chunk.positionProperty.value.distance( self.sunPosition.plus( OFFSET_TO_CENTER_OF_SUN ) );
 
         // This energy chunk was absorbed by the solar panel, so
         // put it on the list of outgoing chunks.

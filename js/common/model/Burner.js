@@ -185,9 +185,9 @@ define( function( require ) {
       var closestEnergyChunk = null;
       if ( this.energyChunkList.length > 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
-          if ( energyChunk.position.distance( self.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
+          if ( energyChunk.positionProperty.value.distance( self.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
             ( closestEnergyChunk === null ||
-              energyChunk.position.distance( point ) < closestEnergyChunk.position.distance( point ) ) ) {
+              energyChunk.positionProperty.value.distance( point ) < closestenergyChunk.positionProperty.value.distance( point ) ) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
           }
@@ -261,7 +261,7 @@ define( function( require ) {
       // the chunks should go back to the air (if they're not almost to the burner).
       if ( this.energyChunkList.length > 0 && this.heatCoolLevel >= 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
-          if ( self.position.distance( energyChunk.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
+          if ( self.position.distance( energyChunk.positionProperty.value ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
           }
         } );

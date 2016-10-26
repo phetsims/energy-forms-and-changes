@@ -136,14 +136,14 @@ define( function( require ) {
           energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
             // Reset accumulated forces.
             mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
-            if ( containerShape.containsPoint( energyChunk.position ) ) {
+            if ( containerShape.containsPoint( energyChunk.positionProperty.value ) ) {
               // Loop on several angles, calculating the forces from the edges at the given angle.
               for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
                 var edgeDetectSteps = 8;
                 var lengthRange = new RangeWithValue( 0, maxDistanceToEdge );
                 for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
                   var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
-                  if ( containerShape.containsPoint( energyChunk.position.plus( vectorToEdge ) ) ) {
+                  if ( containerShape.containsPoint( energyChunk.positionProperty.value.plus( vectorToEdge ) ) ) {
                     lengthRange = new RangeWithValue( lengthRange.getCenter(), lengthRange.max );
                   } else {
                     lengthRange = new RangeWithValue( lengthRange.min, lengthRange.getCenter() );
@@ -170,7 +170,7 @@ define( function( require ) {
                     continue;
                   }
                   // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = energyChunk.position.minus( mapIDToEnergyChunk[ otherEnergyChunkID ].position );
+                  var vectorToOther = energyChunk.positionProperty.value.minus( mapIDToEnergyChunk[ otherEnergyChunkID ].positionProperty.value );
                   if ( vectorToOther.magnitude() < minDistance ) {
                     if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
@@ -191,7 +191,7 @@ define( function( require ) {
               }
             } else {
               // Point is outside container, move it towards center of shape.
-              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.position );
+              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.positionProperty.value );
               mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
@@ -231,8 +231,8 @@ define( function( require ) {
         if ( particlesRedistributed ) {
           for ( var newEnergyChunkID in mapIDToEnergyChunk ) {
             if ( mapIDToEnergyChunk.hasOwnProperty( newEnergyChunkID ) ) {
-              mapIDToEnergyChunk[ newEnergyChunkID ].position =
-                mapIDToEnergyChunk[ newEnergyChunkID ].position.plus(
+              mapIDToEnergyChunk[ newEnergyChunkID ].positionProperty.value =
+                mapIDToEnergyChunk[ newEnergyChunkID ].positionProperty.value.plus(
                   mapIDToEnergyChunk[ newEnergyChunkID ].velocity.times( timeStep ) );
             }
           }
@@ -254,7 +254,7 @@ define( function( require ) {
       energyChunkContainerSlices.forEach( function( slice ) {
         var sliceCenter = new Vector2( slice.shape.bounds.centerX, slice.shape.bounds.centerY );
         slice.energyChunkList.forEach( function( energyChunk ) {
-          energyChunk.position = sliceCenter;
+          energyChunk.positionProperty.value = sliceCenter;
         } );
       } );
     },

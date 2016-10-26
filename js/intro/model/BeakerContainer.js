@@ -92,7 +92,7 @@ define( function( require ) {
 
       this.potentiallyContainedElements.forEach( function( element ) {
         if ( self.getThermalContactArea().containsBounds( element.getBounds() ) &&
-          element.getProjectedShape().contains( energyChunk.position ) ) {
+          element.getProjectedShape().contains( energyChunk.positionProperty.value ) ) {
           isObscured = true;
           return;
         }
