@@ -26,8 +26,6 @@ define( function( require ) {
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var FluorescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FluorescentBulbNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
-  // var HSlider = require( 'SUN/HSlider' );
-  // var Image = require( 'SCENERY/nodes/Image' );
   var IncandescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/IncandescentBulbNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
@@ -35,7 +33,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  // var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -44,9 +41,6 @@ define( function( require ) {
   var TeaPotNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaPotNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
-
-  // Images
-  // var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_energy_systems.png' );
 
   // Strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
@@ -109,24 +103,6 @@ define( function( require ) {
       } );
       backLayer.addChild( bottomPanel );
     }
-
-    // //Show the mock-up and a slider to change its transparency
-    // function addMockupImage() {
-    //   var opacity = new Property( 0.0 );
-    //   var image = new Image( mockupImage, {
-    //     pickable: false
-    //   } );
-    //   image.scale( stage.width / image.width );
-    //   opacity.linkAttribute( image, 'opacity' );
-    //   self.addChild( image );
-    //   self.addChild( new HSlider( opacity, {
-    //     min: 0,
-    //     max: 1
-    //   }, {
-    //     top: 100,
-    //     left: stage.width - 150
-    //   } ) );
-    // }
 
     // Create the legend for energy chunk types
     function addEnergyChunkLegend() {
@@ -198,7 +174,7 @@ define( function( require ) {
     addResetButton();
 
     // Debug - Layout boundary rectangle
-    // this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
+    this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
 
     // Energy users
     this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
@@ -235,7 +211,7 @@ define( function( require ) {
     } );
 
     // This is a hack to deal with issue #23.
-    model.reset();
+    // model.reset();
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
