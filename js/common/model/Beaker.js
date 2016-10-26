@@ -86,13 +86,13 @@ define( function( require ) {
     function updateSurfaces() {
       var rectangle = self.getBounds();
 
-      self.topSurface = new HorizontalSurface(
+      self.topSurfaceProperty.set( new HorizontalSurface(
         new RangeWithValue( rectangle.minX, rectangle.maxX ),
-        rectangle.minY + MATERIAL_THICKNESS, self );
+        rectangle.minY + MATERIAL_THICKNESS, self ) );
 
-      self.bottomSurface = new HorizontalSurface(
+      self.bottomSurfaceProperty.set( new HorizontalSurface(
         new RangeWithValue( rectangle.minX, rectangle.maxX ),
-        rectangle.minY, self );
+        rectangle.minY, self ) );
     }
 
     // Update the top and bottom surfaces whenever the position changes.

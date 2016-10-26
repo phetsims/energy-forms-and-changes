@@ -411,7 +411,7 @@ define( function( require ) {
         // The element has landed on the ground or some other surface.
         proposedYPos = minYPos;
         modelElement.verticalVelocityProperty.set( 0 );
-        if ( potentialSupportingSurface.value !== null ) {
+        if ( potentialSupportingSurface !== null ) {
           modelElement.supportingSurfaceProperty.set( potentialSupportingSurface );
           potentialSupportingSurface.addElementToSurface( modelElement );
         }
