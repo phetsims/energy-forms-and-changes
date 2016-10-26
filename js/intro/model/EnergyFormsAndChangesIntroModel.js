@@ -702,7 +702,7 @@ define( function( require ) {
           // is directly above the current one.
           var best = bestOverlappingSurfaceProperty.value;
           if ( best === null ||
-            ( surfaceOverlap > self.getHorizontalOverlap( best, element.bottomSurface ) &&
+            ( surfaceOverlap > self.getHorizontalOverlap( best, bottom ) &&
               !self.isDirectlyAbove( best, top ) ) || ( self.isDirectlyAbove( top, best ) ) ) {
             bestOverlappingSurfaceProperty.set( top );
           }

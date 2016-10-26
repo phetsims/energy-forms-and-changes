@@ -64,12 +64,12 @@ define( function( require ) {
   return inherit( RectangularThermalMovableModelElement, Block, {
 
     getColor: function() {
-      assert && assert( true, 'This function should not be called, getColor() needs to be implemented in a subclass' );
+      assert && assert( false, 'This function should not be called, getColor() needs to be implemented in a subclass' );
       return 'pink';
     },
 
     getLabel: function() {
-      assert && assert( true, 'Get label should be implemented in subclasses.' );
+      assert && assert( false, 'Get label should be implemented in subclasses.' );
     },
 
     getFrontTextureImage: function() {

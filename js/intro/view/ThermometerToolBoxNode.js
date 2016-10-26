@@ -74,7 +74,7 @@ define( function( require ) {
       // Handler that moves the shape in model space.
       translate: function( translationParams ) {
         thermometer.positionProperty.set(
-          thermometer.position.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) ) );
+          thermometer.positionProperty.value.plus( modelViewTransform.viewToModelDelta( translationParams.delta ) ) );
       },
 
       end: function( event, trail ) {

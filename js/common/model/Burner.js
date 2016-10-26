@@ -111,7 +111,7 @@ define( function( require ) {
 
       if ( this.inContactWith( thermalEnergyContainer ) ) {
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
-          deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevel * dt;
+          deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevelProperty.value * dt;
         }
         thermalEnergyContainer.changeEnergy( deltaEnergy );
         this.energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;
