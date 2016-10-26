@@ -15,7 +15,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
 
   /**
    * Convenience class for sticking to model elements.
@@ -25,11 +25,10 @@ define( function( require ) {
    */
   function ElementFollower( initialPositionToTrack ) {
 
-    PropertySet.call( this, {
-      follower: initialPositionToTrack === null ? new Vector2( 0, 0 ) : initialPositionToTrack,
-      locationBeingFollowed: null
-    } );
-    this.offset = new Vector2( 0, 0 );
+    this.followerProperty = new Property( initialPositionToTrack === null ? Vector2.ZERO : initialPositionToTrack );
+    this.locationBeingFollowedProperty = new Property( null );
+
+    this.offset = Vector2.ZERO;
 
     var self = this;
     // @private - function that gets linked/unlinked when the thermometer is following/unfollwing.
@@ -42,7 +41,7 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ElementFollower', ElementFollower );
 
-  return inherit( PropertySet, ElementFollower, {
+  return inherit( Object, ElementFollower, {
 
     follow: function( locationToFollowProperty ) {
       if ( this.locationBeingFollowedProperty.get() !== null ) {
@@ -62,6 +61,11 @@ define( function( require ) {
 
     isFollowing: function() {
       return this.locationBeingFollowedProperty.get() !== null;
+    },
+
+    reset: function() {
+      this.followerProperty.reset();
+      this.locationBeingFollowedProperty.reset();
     }
 
   } );
