@@ -20,7 +20,7 @@ define( function( require ) {
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
   var IncandescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/IncandescentBulb' );
@@ -40,18 +40,10 @@ define( function( require ) {
    */
   function EnergySystemsModel() {
 
-    PropertySet.call( this, {
-
-      // Boolean property that controls whether the energy chunks are visible to the user.
-      energyChunksVisible: false,
-
-      steamPowerableElementInPlace: false,
-
-      waterPowerableElementInPlace: false,
-
-      // Play/pause state
-      isPlaying: true
-    } );
+    this.energyChunksVisibleProperty = new Property( false );
+    this.steamPowerableElementInPlaceProperty = new Property( false );
+    this.waterPowerableElementInPlaceProperty = new Property( false );
+    this.isPlayingProperty = new Property( true );
 
     var self = this;
 
@@ -115,10 +107,13 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergySystemsModel', EnergySystemsModel );
 
-  return inherit( PropertySet, EnergySystemsModel, {
+  return inherit( Object, EnergySystemsModel, {
 
     reset: function() {
       this.energyChunksVisibleProperty.reset();
+      this.steamPowerableElementInPlaceProperty.reset();
+      this.waterPowerableElementInPlaceProperty.reset();
+      this.isPlayingProperty.reset();
 
       this.carousels.forEach( function( carousel ) {
         carousel.getSelectedElement().deactivate();
@@ -139,7 +134,7 @@ define( function( require ) {
         carousel.step( dt );
       } );
 
-      if ( this.isPlaying ) {
+      if ( this.isPlayingProperty.value ) {
         var source = this.energySourcesCarousel.getSelectedElement();
         var converter = this.energyConvertersCarousel.getSelectedElement();
         var user = this.energyUsersCarousel.getSelectedElement();
