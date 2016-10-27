@@ -135,14 +135,15 @@ define( function( require ) {
 
       // Make the water droplets fall.
       this.waterDrops.forEach( function( drop ) {
-        drop.velocityProperty.set( drop.velocity.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
-        drop.offsetFromParentProperty.set( drop.offsetFromParent.plus( drop.velocity.times( dt ) ) );
+        var v = drop.velocityProperty.value;
+        drop.velocityProperty.set( v.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
+        drop.offsetFromParentProperty.set( drop.offsetFromParentProperty.value.plus( v.times( dt ) ) );
       } );
 
       // Remove drops that have run their course by iterating over a copy and checking for matches.
       var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
       waterDropsCopy.forEach( function( drop ) {
-        if ( drop.offsetFromParent.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+        if ( drop.offsetFromParentProperty.value.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
           if ( self.waterDrops.contains( drop ) ) {
             self.waterDrops.remove( drop );
           }

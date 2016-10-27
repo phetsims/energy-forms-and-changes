@@ -13,7 +13,7 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
 
   // The following constant is used to adjust the way in which the drop
   // elongates as its velocity increases.
@@ -26,22 +26,29 @@ define( function( require ) {
    */
   function WaterDrop( initialOffsetFromParent, initialVelocity, size ) {
 
-    PropertySet.call( this, {
-      offsetFromParent: initialOffsetFromParent,
-      velocity: initialVelocity,
-      size: size
-    } );
+    this.offsetFromParentProperty = new Property( initialOffsetFromParent );
+    this.velocityProperty = new Property( initialVelocity );
+    this.sizeProperty = new Property( size );
 
     var self = this;
 
     this.velocityProperty.link( function( velocity ) {
-      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * self.size.width;
-      var newHeight = ( self.size.height * self.size.width ) / newWidth;
-      self.size.set( new Dimension2( newWidth, newHeight ) );
+      var size = self.sizeProperty.value;
+      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * size.width;
+      var newHeight = ( size.height * size.width ) / newWidth;
+      self.sizeProperty.set( new Dimension2( newWidth, newHeight ) );
     } );
   }
 
   energyFormsAndChanges.register( 'WaterDrop', WaterDrop );
 
-  return inherit( PropertySet, WaterDrop );
+  return inherit( Object, WaterDrop, {
+
+    reset: function() {
+      this.offsetFromParentProperty.reset();
+      this.velocityProperty.reset();
+      this.sizeProperty.reset();
+    }
+
+  } );
 } );

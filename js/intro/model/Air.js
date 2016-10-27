@@ -58,17 +58,11 @@ define( function( require ) {
    */
   function Air( energyChunksVisibleProperty ) {
 
-    Object.call( this );
-
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     // Energy chunks that are wandering outside this model element.
     this.energyChunkWanderControllers = [];
     this.energyChunkList = new ObservableArray();
-
-    // this.positionProperty = new Property( new Vector2( SIZE.x, SIZE.y ) );
-    // this.positionProperty = new Property( this.getCenterPoint() );
-    // this.positionProperty = new Property( Vector2.ZERO );
   }
 
   energyFormsAndChanges.register( 'Air', Air );
@@ -221,7 +215,7 @@ define( function( require ) {
 
     /**
      * *
-     * @returns {EnergyContainerCategory.AIR|*|PropertySet.AIR}
+     * @returns {EnergyContainerCategory.AIR}
      */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.AIR;
