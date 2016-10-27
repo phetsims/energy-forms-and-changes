@@ -28,12 +28,6 @@ define( function( require ) {
     this.supportingSurfaceProperty = new Property( null );
     this.topSurfaceProperty = new Property( null );
     this.bottomSurfaceProperty = new Property( null );
-
-    // PropertySet.call( this, {
-    //   supportingSurface: null, // {HorizontalSurface}
-    //   topSurface: null, //  {HorizontalSurface}
-    //   bottomSurface: null // {HorizontalSurface}
-    // } );
   }
 
   energyFormsAndChanges.register( 'ModelElement', ModelElement );
