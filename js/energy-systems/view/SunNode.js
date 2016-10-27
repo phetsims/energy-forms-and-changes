@@ -29,7 +29,6 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
-  var PropertySet = require( 'AXON/PropertySet' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
@@ -55,15 +54,17 @@ define( function( require ) {
    * @constructor
    */
   function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
-    PropertySet.call( this, {
-      absorptionCoefficient: initialAbsorptionCoefficient
-    } );
+    this.absorptionCoefficientProperty = new Property( initialAbsorptionCoefficient );
     this.shape = shape;
   }
 
   energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
 
-  inherit( PropertySet, LightAbsorbingShape );
+  inherit( Object, LightAbsorbingShape, {
+    reset: function() {
+      this.absorptionCoefficientProperty.reset();
+    }
+  } );
 
   function CloudNode( cloud, modelViewTransform ) {
     Node.call( this );
