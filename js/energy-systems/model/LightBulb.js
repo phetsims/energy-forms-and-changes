@@ -105,7 +105,7 @@ define( function( require ) {
               self.electricalEnergyChunkMovers.push(
                 new EnergyChunkPathMover(
                   incomingChunk,
-                  self.createElectricalEnergyChunkPath( self.position ),
+                  self.createElectricalEnergyChunkPath( self.positionProperty.value ),
                   EFACConstants.ENERGY_CHUNK_VELOCITY ) );
             }
 
@@ -132,7 +132,7 @@ define( function( require ) {
           var lightChunksInLitRadius = 0;
 
           this.radiatedEnergyChunkMovers.forEach( function( mover ) {
-            var distance = mover.energyChunk.positionProperty.value.distance( self.position.plus( OFFSET_TO_RADIATE_POINT ) );
+            var distance = mover.energyChunk.positionProperty.value.distance( self.positionProperty.value.plus( OFFSET_TO_RADIATE_POINT ) );
             if ( distance < LIGHT_CHUNK_LIT_BULB_RADIUS ) {
               lightChunksInLitRadius++;
             }
@@ -227,7 +227,7 @@ define( function( require ) {
           if ( self.hasFilament ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
             var path = self.createThermalEnergyChunkPath( mover.energyChunk.positionProperty.value );
-            var speed = self.getTotalPathLength( mover.energyChunk.position, path ) /
+            var speed = self.getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
               self.generateThermalChunkTimeOnFilament();
 
             self.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
@@ -268,7 +268,7 @@ define( function( require ) {
         if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
-            this.position.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
+            this.positionProperty.value.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
             this.energyChunksVisibleProperty );
 
           this.energyChunkList.push( newEnergyChunk );
@@ -276,7 +276,7 @@ define( function( require ) {
           // And a "mover" that will move this energy chunk through
           // the wire to the heating element.
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            this.createElectricalEnergyChunkPath( this.position ),
+            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
           // Update energy since last chunk.
@@ -307,7 +307,7 @@ define( function( require ) {
       // Path of radiated light chunks
       var path = [];
 
-      path.push( this.position
+      path.push( this.positionProperty.value
         .plus( OFFSET_TO_RADIATE_POINT )
         .plus( new Vector2( 0, RADIATED_ENERGY_CHUNK_MAX_DISTANCE )
           .rotated( ( RAND.nextDouble() - 0.5 ) * ( Math.PI / 2 ) ) ) );
