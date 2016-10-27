@@ -97,21 +97,18 @@ define( function( require ) {
       // Handle any incoming energy chunks.
       if ( this.incomingEnergyChunks.length > 0 ) {
         this.incomingEnergyChunks.forEach( function( chunk ) {
-          if ( chunk.energyType === EnergyType.ELECTRICAL ) {
 
-            // Add the energy chunk to the list of those under management.
-            self.energyChunkList.push( chunk );
+          assert && assert( chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
+            'Energy chunk type should be ELECTRICAL but is ' + chunk.energyTypeProperty.value );
 
-            // Add a "mover" that will move this energy chunk through
-            // the wire to the heating element.
-            self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
-          } else {
-            // By design, this shouldn't happen, so warn if it does.
-            console.warn( 'Ignoring energy chunk with unexpected type ' + chunk.energyType );
-          }
+          // Add the energy chunk to the list of those under management.
+          self.energyChunkList.push( chunk );
 
+          // Add a "mover" that will move this energy chunk through
+          // the wire to the heating element.
+          self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
+            self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         } );
 
         // Clear incoming chunks array
@@ -126,7 +123,8 @@ define( function( require ) {
       if ( ( this.energyChunksVisibleProperty.get() && this.heatingElementEnergyChunkMovers.length > 0 ) ||
         ( !this.energyChunksVisibleProperty.get() && incomingEnergy.type === EnergyType.ELECTRICAL ) ) {
         this.heatProportionProperty.set( Math.min( energyFraction, this.heatProportion + HEAT_ENERGY_CHANGE_RATE * dt ) );
-      } else {
+      }
+      else {
         this.heatProportionProperty.set( Math.max( 0, this.heatProportion - HEAT_ENERGY_CHANGE_RATE * dt ) );
       }
 
@@ -138,7 +136,7 @@ define( function( require ) {
       var temperatureGradient = this.beaker.getTemperature() - EFACConstants.ROOM_TEMPERATURE;
       if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
         var beakerRect = this.beaker.getRawOutlineRect();
-        var thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidLevel;
+        var thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidLevelProperty.value;
         var transferFactor = HeatTransferConstants.getHeatTransferFactor( 'water', 'air' );
         var thermalEnergyLost = temperatureGradient * transferFactor * thermalContactArea * dt;
 
@@ -390,4 +388,3 @@ define( function( require ) {
     ELEMENT_BASE_FRONT_IMAGE: ELEMENT_BASE_FRONT_IMAGE
   } );
 } );
-
