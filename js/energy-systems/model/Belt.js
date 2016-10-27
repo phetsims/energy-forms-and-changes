@@ -13,7 +13,7 @@ define( function( require ) {
   // Modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
 
   /**
    * @param {Number} wheel1Radius
@@ -29,12 +29,16 @@ define( function( require ) {
     this.wheel2Radius = wheel2Radius;
     this.wheel2Center = wheel2Center;
 
-    PropertySet.call( this, {
-      isVisible: false
-    } );
+    this.isVisibleProperty = new Property( false );
   }
 
   energyFormsAndChanges.register( 'Belt', Belt );
 
-  return inherit( PropertySet, Belt );
+  return inherit( Object, Belt, {
+
+    reset: function() {
+      this.isVisibleProperty.reset();
+    }
+
+  } );
 } );
