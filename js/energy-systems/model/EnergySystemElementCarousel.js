@@ -86,7 +86,8 @@ define( function( require ) {
         self.managedElements.forEach( function( element ) {
           element.deactivate();
         } );
-      } else {
+      }
+      else {
         self.getElement( self.targetIndex ).activate();
       }
     } );
@@ -105,7 +106,8 @@ define( function( require ) {
       // Set the element's position to be at the end of the carousel.
       if ( this.managedElements.length === 0 ) {
         element.positionProperty.set( this.selectedElementPosition );
-      } else {
+      }
+      else {
         var lastElement = this.managedElements[ this.managedElements.length - 1 ];
         element.positionProperty.set( lastElement.position.plus( this.offsetBetweenElements ) );
       }
@@ -125,12 +127,8 @@ define( function( require ) {
      * @return {EnergySystemElement}
      */
     getElement: function( index ) {
-      if ( index <= this.managedElements.length ) {
-        return this.managedElements[ index ];
-      } else {
-        console.error( 'Requesting out of range element from carousel, index = ' + index );
-        return null;
-      }
+      assert && assert( index < this.managedElements.length, 'Carousel index out of range: ' + index );
+      return this.managedElements[ index ];
     },
 
     /**
@@ -192,7 +190,8 @@ define( function( require ) {
     computeSlowInSlowOut: function( zeroToOne ) {
       if ( zeroToOne < 0.5 ) {
         return 2.0 * zeroToOne * zeroToOne;
-      } else {
+      }
+      else {
         var complement = 1.0 - zeroToOne;
         return 1.0 - 2.0 * complement * complement;
       }
