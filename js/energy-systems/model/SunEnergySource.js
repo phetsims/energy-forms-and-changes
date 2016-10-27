@@ -137,7 +137,7 @@ define( function( require ) {
 
         // This energy chunk was absorbed by the solar panel, so
         // put it on the list of outgoing chunks.
-        if ( self.solarPanel.active && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.position ) ) {
+        if ( self.solarPanel.active && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.positionProperty.value ) ) {
           self.outgoingEnergyChunks.push( chunk );
         }
 
@@ -151,9 +151,9 @@ define( function( require ) {
         else {
           self.clouds.forEach( function( cloud ) {
 
-            var inClouds = cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.position );
+            var inClouds = cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.positionProperty.value );
             var inList = _.contains( self.energyChunksPassingThroughClouds, chunk );
-            var deltaPhi = chunk.velocity.angle() - chunk.position.minus( self.sunPosition ).angle();
+            var deltaPhi = chunk.velocity.angle() - chunk.positionProperty.value.minus( self.sunPosition ).angle();
 
             if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {
 
@@ -164,7 +164,7 @@ define( function( require ) {
                 // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the
                 // code below tries to avoid that.
                 var angleTowardsSun = chunk.velocity.angle() + Math.PI;
-                var reflectionAngle = chunk.position.minus( cloud.getCenterPosition() ).angle();
+                var reflectionAngle = chunk.positionProperty.value.minus( cloud.getCenterPosition() ).angle();
 
                 if ( reflectionAngle < angleTowardsSun ) {
                   chunk.setVelocity( chunk.velocity.rotated( 0.7 * Math.PI + RAND.nextDouble() * Math.PI / 8 ) );
