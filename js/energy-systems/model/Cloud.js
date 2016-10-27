@@ -13,7 +13,7 @@ define( function( require ) {
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -35,16 +35,16 @@ define( function( require ) {
    * @constructor
    */
   function Cloud( offsetFromParent, parentPositionProperty ) {
-    PropertySet.call( this, {
-      existenceStrength: 1.0
-    } );
+
+    this.existenceStrengthProperty = new Property( 1.0 );
+
     this.offsetFromParent = offsetFromParent;
     this.parentPositionProperty = parentPositionProperty;
   }
 
   energyFormsAndChanges.register( 'Cloud', Cloud );
 
-  return inherit( PropertySet, Cloud, {
+  return inherit( Object, Cloud, {
 
     /**
      * Return ellipse with size of Cloud
@@ -63,6 +63,10 @@ define( function( require ) {
      */
     getCenterPosition: function() {
       return this.parentPositionProperty.get().plus( this.offsetFromParent );
+    },
+
+    reset: function() {
+      this.existenceStrengthProperty.reset();
     }
 
   }, {
