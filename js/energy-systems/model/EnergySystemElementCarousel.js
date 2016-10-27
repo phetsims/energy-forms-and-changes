@@ -20,7 +20,7 @@ define( function( require ) {
   // Modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
   var Util = require( 'DOT/Util' );
 
@@ -37,16 +37,14 @@ define( function( require ) {
    */
   function EnergySystemElementCarousel( selectedElementPosition, offsetBetweenElements ) {
 
-    PropertySet.call( this, {
       // Target selected element.  Will be the same as the current selection
       // except when animating to a new selection.  This property is the API for
       // selecting elements in the carousel.
-      targetIndex: 0,
+    this.targetIndexProperty = new Property( 0 );
 
       // Indicator for when animations are in progress, meant to be monitored by
       // clients that need to be aware of this.
-      animationInProgress: false
-    } );
+    this.animationInProgressProperty = new Property( false );
 
     // The position in model space where the currently selected element should be.
     this.selectedElementPosition = selectedElementPosition;
@@ -71,7 +69,7 @@ define( function( require ) {
     // this during initialization.
     this.targetIndexProperty.lazyLink( function() {
       // Check bounds
-      var i = self.targetIndex;
+      var i = self.targetIndexProperty.value;
       assert && assert( i === 0 || i < self.managedElements.length, 'targetIndex out of range:' + i );
 
       self.elapsedTransitionTime = 0;
@@ -88,14 +86,14 @@ define( function( require ) {
         } );
       }
       else {
-        self.getElement( self.targetIndex ).activate();
+        self.getElement( self.targetIndexProperty.value ).activate();
       }
     } );
   }
 
   energyFormsAndChanges.register( 'EnergySystemElementCarousel', EnergySystemElementCarousel );
 
-  return inherit( PropertySet, EnergySystemElementCarousel, {
+  return inherit( Object, EnergySystemElementCarousel, {
     /**
      * Add element to list of managed elements
      *
@@ -183,7 +181,7 @@ define( function( require ) {
     },
 
     atTargetPosition: function() {
-      var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndex );
+      var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.value );
       return this.currentCarouselOffset.equals( targetCarouselOffset );
     },
 
@@ -195,6 +193,12 @@ define( function( require ) {
         var complement = 1.0 - zeroToOne;
         return 1.0 - 2.0 * complement * complement;
       }
+    },
+
+    reset: function() {
+      this.targetIndexProperty.reset();
+      this.animationInProgressProperty.reset();
     }
+
   } );
 } );
