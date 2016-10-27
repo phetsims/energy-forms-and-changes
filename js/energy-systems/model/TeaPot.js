@@ -20,6 +20,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -57,8 +58,8 @@ define( function( require ) {
 
     EnergySource.call( this, new Image( TEAPOT_LARGE ) );
 
-    this.addProperty( 'heatCoolAmount', 0 );
-    this.addProperty( 'energyProductionRate', 0 );
+    this.heatCoolAmountProperty = new Property( 0 );
+    this.energyProductionRateProperty = new Property( 0 );
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
@@ -89,9 +90,9 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      if ( this.active ) {
+      if ( this.activeProperty.value ) {
 
-        if ( this.heatCoolAmountProperty.value > 0 || this.energyProductionRate > COOL_DOWN_COMPLETE_THRESHOLD ) {
+        if ( this.heatCoolAmountProperty.value > 0 || this.energyProductionRateProperty.value > COOL_DOWN_COMPLETE_THRESHOLD ) {
 
           // Calculate the energy production rate.
 
@@ -99,10 +100,10 @@ define( function( require ) {
           var increase = this.heatCoolAmountProperty.value * MAX_ENERGY_CHANGE_RATE;
 
           // Analogous to friction.
-          var decrease = this.energyProductionRate * COOLING_CONSTANT;
+          var decrease = this.energyProductionRateProperty.value * COOLING_CONSTANT;
 
           // Analogous to velocity.
-          var rate = this.energyProductionRate + increase * dt - decrease * dt;
+          var rate = this.energyProductionRateProperty.value + increase * dt - decrease * dt;
           rate = Math.min( rate, EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
 
           this.energyProductionRateProperty.set( rate );
@@ -124,8 +125,6 @@ define( function( require ) {
           var y0 = this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
           var initialPosition = new Vector2( x0, y0 );
 
-          // initialPosition = initialPosition.plus( new Vector2( 0, 0.5 ) );
-
           var energyChunk = new EnergyChunk(
             EnergyType.THERMAL,
             initialPosition,
@@ -144,7 +143,7 @@ define( function( require ) {
         // Move all energy chunks that are under this element's control.
         this.moveEnergyChunks( dt );
       }
-      return new Energy( EnergyType.MECHANICAL, this.energyProductionRate * dt, Math.PI / 2 );
+      return new Energy( EnergyType.MECHANICAL, this.energyProductionRateProperty.value * dt, Math.PI / 2 );
     },
 
     /**
@@ -165,7 +164,7 @@ define( function( require ) {
 
           // This is a thermal chunk that is coming out of the water.
           if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
-            chunk.positionProperty.get().y === self.position.y + WATER_SURFACE_HEIGHT_OFFSET ) {
+            chunk.positionProperty.get().y === self.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
 
             if ( RAND.nextDouble() > 0.2 ) {
 
@@ -174,17 +173,17 @@ define( function( require ) {
             }
 
             // Set this chunk on a path to the base of the spout.
-            var travelDistance = chunk.positionProperty.get().distance( self.position.plus( SPOUT_BOTTOM_OFFSET ) );
+            var travelDistance = chunk.positionProperty.get().distance( self.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createPathToSpoutBottom( self.position ),
+              self.createPathToSpoutBottom( self.positionProperty.value ),
               travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
           }
 
           // This chunk is moving out of the spout.
-          else if ( chunk.positionProperty.get().equals( self.position.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
+          else if ( chunk.positionProperty.get().equals( self.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createSpoutExitPath( self.position ),
+              self.createSpoutExitPath( self.positionProperty.value ),
               EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
           }
 
@@ -201,7 +200,7 @@ define( function( require ) {
           // next energy system.
           if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
             self.steamPowerableElementInPlaceProperty.get() &&
-            ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( self.position.distance( chunk.positionProperty.get() ) ) &&
+            ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( self.positionProperty.value.distance( chunk.positionProperty.get() ) ) &&
             !_.contains( self.exemptFromTransferEnergyChunks, chunk ) ) {
 
             // Send this chunk to the next energy system.
@@ -352,6 +351,11 @@ define( function( require ) {
       EnergySource.prototype.clearEnergyChunks.call( this );
       this.exemptFromTransferEnergyChunks.length = 0;
       this.energyChunkMovers.length = 0;
+    },
+
+    reset: function() {
+      this.heatCoolAmountProperty.reset();
+      this.energyProductionRateProperty.reset();
     }
 
   }, {

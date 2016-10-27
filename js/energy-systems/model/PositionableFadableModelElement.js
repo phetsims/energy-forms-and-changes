@@ -11,7 +11,7 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableModelElement' );
 
   /**
@@ -21,14 +21,16 @@ define( function( require ) {
    * @constructor
    */
   function PositionableFadableModelElement( initialPosition, initialOpacity ) {
-
     PositionableModelElement.call( this, initialPosition );
-
-    this.addProperty( 'opacity', initialOpacity );
+    this.opacityProperty = new Property( initialOpacity );
   }
 
   energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
 
-  return inherit( PropertySet, PositionableFadableModelElement );
+  return inherit( Object, PositionableFadableModelElement, {
+    reset: function() {
+      this.opacityProperty.reset();
+    }
+  } );
 } );
 

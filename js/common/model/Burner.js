@@ -185,7 +185,7 @@ define( function( require ) {
         this.energyChunkList.forEach( function( energyChunk ) {
           if ( energyChunk.positionProperty.value.distance( self.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
             ( closestEnergyChunk === null ||
-              energyChunk.positionProperty.value.distance( point ) < closestenergyChunk.positionProperty.value.distance( point ) ) ) {
+              energyChunk.positionProperty.value.distance( point ) < closestEnergyChunk.positionProperty.value.distance( point ) ) ) {
             // Found a closer chunk.
             closestEnergyChunk = energyChunk;
           }

@@ -20,6 +20,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -80,7 +81,7 @@ define( function( require ) {
       new Cloud( new Vector2( 0.02, 0.105 ), this.positionProperty )
     ];
 
-    this.addProperty( 'cloudiness', 0 );
+    this.cloudinessProperty = new Property( 0 );
 
     // Add/remove clouds based on the value of the cloudiness property.
     this.cloudinessProperty.link( function( cloudiness ) {
@@ -104,7 +105,7 @@ define( function( require ) {
 
     step: function( dt ) {
       var energyProduced = 0;
-      if ( this.active === true ) {
+      if ( this.activeProperty.value === true ) {
 
         // See if it is time to emit a new energy chunk.
         this.energyChunkEmissionCountdownTimer -= dt;
@@ -118,7 +119,7 @@ define( function( require ) {
         this.updateEnergyChunkPositions( dt );
 
         // Calculate the amount of energy produced.
-        energyProduced = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudiness ) * dt;
+        energyProduced = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProperty.value ) * dt;
       }
 
       // Produce the energy.
@@ -224,7 +225,7 @@ define( function( require ) {
      * @return {Energy}
      */
     getEnergyOutputRate: function() {
-      return new Energy( EnergyType.LIGHT, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudiness ) );
+      return new Energy( EnergyType.LIGHT, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProperty.value ) );
     },
 
     /**
@@ -266,6 +267,10 @@ define( function( require ) {
      */
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
+      this.cloudinessProperty.reset();
+    },
+
+    reset: function() {
       this.cloudinessProperty.reset();
     }
 

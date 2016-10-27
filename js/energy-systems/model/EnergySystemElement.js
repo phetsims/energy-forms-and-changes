@@ -13,6 +13,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableFadableModelElement' );
+  var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -28,7 +29,7 @@ define( function( require ) {
     // @public
     this.iconImage = iconImage;
     this.energyChunkList = new ObservableArray();
-    this.addProperty( 'active', false );
+    this.activeProperty = new Property( false );
 
     var self = this;
     // At initialization, oldPosition is null, so skip that case with lazyLink
@@ -66,6 +67,10 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
       this.energyChunkList.clear();
+    },
+
+    reset: function() {
+      this.activeProperty.reset();
     }
   } );
 } );

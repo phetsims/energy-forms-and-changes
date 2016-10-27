@@ -111,7 +111,7 @@ define( function( require ) {
 
       var self = this;
 
-      if ( this.active ) {
+      if ( this.activeProperty.value ) {
 
         // Handle any incoming energy chunks.
         if ( this.incomingEnergyChunks.length > 0 ) {
@@ -149,7 +149,7 @@ define( function( require ) {
 
       // Produce the appropriate amount of energy.
       var energyProduced = 0;
-      if ( this.active && incomingEnergy.type === EnergyType.LIGHT ) {
+      if ( this.activeProperty.value && incomingEnergy.type === EnergyType.LIGHT ) {
         energyProduced = incomingEnergy.amount; // Perfectly efficient conversion. We should patent this.
       }
       this.energyOutputRate = energyProduced / dt;

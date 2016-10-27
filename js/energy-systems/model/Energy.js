@@ -29,4 +29,3 @@ define( function( require ) {
   energyFormsAndChanges.register( 'Energy', Energy );
   return inherit( Object, Energy );
 } );
-

@@ -21,9 +21,8 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
-  // var RangeWithValue = require( 'DOT/RangeWithValue' );
-  // var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
@@ -145,10 +144,10 @@ define( function( require ) {
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
 
-    this.addProperty( 'crankAngle', 0 ); // rad
-    this.addProperty( 'rearWheelAngle', 0 ); // rad
-    this.addProperty( 'bikerHasEnergy', true );
-    this.addProperty( 'targetCrankAngularVelocity', 0 );
+    this.crankAngleProperty = new Property( 0 ); // rad
+    this.rearWheelAngleProperty = new Property( 0 ); // rad
+    this.bikerHasEnergyProperty = new Property( true );
+    this.targetCrankAngularVelocityProperty = new Property( 0 );
 
     this.crankAngularVelocity = 0; // rad/s
     this.energyChunkMovers = [];
@@ -185,14 +184,14 @@ define( function( require ) {
             // Just remove this energy chunk.
             _.pull( self.energyChunkMovers, mover );
             self.energyChunkList.remove( ec );
-
-          } else {
+          }
+          else {
 
             // Make sure that this energy chunk turns into thermal energy.
             _.pull( self.energyChunkMovers, mover );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( ec,
-              self.createMechanicalToThermalEnergyChunkPath( self.position, ec.positionProperty.get() ),
+              self.createMechanicalToThermalEnergyChunkPath( self.positionProperty.value, ec.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
         }
@@ -213,7 +212,7 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      if ( !this.active ) {
+      if ( !this.activeProperty.value ) {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
@@ -222,7 +221,7 @@ define( function( require ) {
 
       // If there is no energy, the target speed is 0, otherwise it is
       // the current set point.
-      var target = this.bikerHasEnergy ? this.targetCrankAngularVelocity : 0;
+      var target = this.bikerHasEnergyProperty.value ? this.targetCrankAngularVelocityProperty.value : 0;
 
       // Speed up or slow down the angular velocity of the crank.
       var previousAngularVelocity = this.crankAngularVelocity;
@@ -233,18 +232,19 @@ define( function( require ) {
         var change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
           // Accelerate
-          this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocity );
-        } else {
+          this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocityProperty.value );
+        }
+        else {
           // Decelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
         }
       }
 
-      var newAngle = ( this.crankAngle + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
+      var newAngle = ( this.crankAngleProperty.value + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
 
       this.crankAngleProperty.set( newAngle );
 
-      this.rearWheelAngleProperty.set( ( this.rearWheelAngle +
+      this.rearWheelAngleProperty.set( ( this.rearWheelAngleProperty.value +
         this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
@@ -254,9 +254,8 @@ define( function( require ) {
       }
 
       var fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
-
       // Determine how much energy is produced in this time step.
-      if ( this.targetCrankAngularVelocity > 0 ) {
+      if ( this.targetCrankAngularVelocityProperty.value > 0 ) {
 
         // Less energy is produced if not hooked up to generator.
         var maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE;
@@ -268,13 +267,13 @@ define( function( require ) {
 
       // Decide if new chem energy chunk should start on its way.
       if ( this.energyProducedSinceLastChunkEmitted >= EFACConstants.ENERGY_PER_CHUNK &&
-        this.targetCrankAngularVelocity > 0 ) {
+        this.targetCrankAngularVelocityProperty.value > 0 ) {
 
         // Start a new chunk moving.
         if ( this.bikerCanPedal() ) {
           var energyChunk = this.findNonMovingEnergyChunk();
           this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
-            this.createChemicalEnergyChunkPath( this.position ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+            this.createChemicalEnergyChunkPath( this.positionProperty.value ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           this.energyProducedSinceLastChunkEmitted = 0;
         }
       }
@@ -282,6 +281,9 @@ define( function( require ) {
       this.moveEnergyChunks( dt );
 
       var energyAmount = Math.abs( fractionalVelocity * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * dt );
+
+      assert && assert( energyAmount >= 0, 'energyAmount is ' + energyAmount );
+
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
@@ -321,10 +323,11 @@ define( function( require ) {
             // Make this chunk travel to the rear hub, where it
             // will become a chunk of thermal energy.
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createMechanicalToThermalEnergyChunkPath( self.position, chunk.positionProperty.get() ),
+              self.createMechanicalToThermalEnergyChunkPath( self.positionProperty.value, chunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
             self.mechanicalChunksSinceLastThermal = 0;
-          } else {
+          }
+          else {
 
             // Send this chunk to the next energy system.
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
@@ -336,14 +339,14 @@ define( function( require ) {
 
         // MECHANICAL --> THERMAL
         else if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
-          chunk.positionProperty.get().distance( self.position.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
+          chunk.positionProperty.get().distance( self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
 
           // This is a mechanical energy chunk that has traveled
           // to the hub and should now become thermal energy.
           _.pull( self.energyChunkMovers, mover );
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-            self.createThermalEnergyChunkPath( self.position ),
+            self.createThermalEnergyChunkPath( self.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
 
@@ -395,10 +398,10 @@ define( function( require ) {
      * @private
      */
     setCrankToPoisedPosition: function() {
-      var currentIndex = this.mapAngleToImageIndex( this.crankAngle );
+      var currentIndex = this.mapAngleToImageIndex( this.crankAngleProperty.value );
       var radiansPerImage = 2 * Math.PI / NUM_LEG_IMAGES;
       this.crankAngleProperty.set( ( currentIndex % NUM_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
-      assert && assert( this.crankAngle >= 0 && this.crankAngle <= 2 * Math.PI );
+      assert && assert( this.crankAngleProperty.value >= 0 && this.crankAngleProperty.value <= 2 * Math.PI );
     },
 
     /**
@@ -420,7 +423,7 @@ define( function( require ) {
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
       this.targetCrankAngularVelocityProperty.set( 0.0 );
-      this.crankAngularVelocity = this.targetCrankAngularVelocity;
+      this.crankAngularVelocity = this.targetCrankAngularVelocityProperty.value;
     },
 
     /**
@@ -442,7 +445,7 @@ define( function( require ) {
 
       for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
         var displacement = new Vector2( ( RAND.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
-        var position = this.position.plus( nominalInitialOffset ).plus( displacement );
+        var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
         var newEnergyChunk = new EnergyChunk(
           EnergyType.CHEMICAL,
@@ -563,7 +566,7 @@ define( function( require ) {
       this.energyChunkList.forEach( function( ec ) {
 
         // Only interested in CHEMICAL energy chunks
-        if (ec.energyTypeProperty.value !== EnergyType.CHEMICAL){
+        if ( ec.energyTypeProperty.value !== EnergyType.CHEMICAL ) {
           return;
         }
 
@@ -587,6 +590,13 @@ define( function( require ) {
     bikerCanPedal: function() {
       var nChunks = this.energyChunkList.length;
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
+    },
+
+    reset: function() {
+      this.crankAngleProperty.reset();
+      this.rearWheelAngleProperty.reset();
+      this.bikerHasEnergyProperty.reset();
+      this.targetCrankAngularVelocityProperty.reset();
     }
 
   }, {
@@ -603,4 +613,3 @@ define( function( require ) {
     REAR_WHEEL_RADIUS: REAR_WHEEL_RADIUS
   } );
 } );
-

@@ -52,7 +52,7 @@ define( function( require ) {
     // node is being added as a child of this node, but wants to set its
     // own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
-    var offset = modelViewTransform.modelToViewDelta( beakerHeater.position ).negated();
+    var offset = modelViewTransform.modelToViewDelta( beakerHeater.positionProperty.value ).negated();
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, -scale.y );
 
     this.beakerHeater = beakerHeater;

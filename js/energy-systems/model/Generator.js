@@ -16,6 +16,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Property = require( 'AXON/Property' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -66,12 +67,12 @@ define( function( require ) {
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    this.addProperty( 'wheelRotationalAngle', 0 );
+    this.wheelRotationalAngleProperty = new Property( 0 );
 
     // Flag that controls "direct coupling mode", which means that the
     // generator wheel turns at a rate that is directly proportionate to the
     // incoming energy, with no rotational inertia.
-    this.addProperty( 'directCouplingMode', false );
+    this.directCouplingModeProperty = new Property( false );
 
     this.wheelRotationalVelocity = 0;
     this.energyChunkMovers = [];
@@ -98,7 +99,7 @@ define( function( require ) {
      * @override
      */
     spinGeneratorWheel: function( dt, incomingEnergy ) {
-      if ( !this.active ) {
+      if ( !this.activeProperty.value ) {
         return;
       }
 
@@ -106,14 +107,14 @@ define( function( require ) {
       var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
 
       // Handle different wheel rotation modes.
-      if ( this.directCouplingMode ) {
+      if ( this.directCouplingModeProperty.value ) {
 
         // Treat the wheel as though it is directly coupled to the
         // energy source, e.g. through a belt or drive shaft.
         if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
           var energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
           this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
-          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
+          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
         }
 
       } else {
@@ -137,7 +138,7 @@ define( function( require ) {
           // Prevent the wheel from moving forever.
           this.wheelRotationalVelocity = 0;
         }
-        this.wheelRotationalAngleProperty.set( this.wheelRotationalAngle + this.wheelRotationalVelocity * dt );
+        this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
       }
     },
 
@@ -150,7 +151,7 @@ define( function( require ) {
      * @override
      */
     step: function( dt, incomingEnergy ) {
-      if ( this.active ) {
+      if ( this.activeProperty.value ) {
 
         var self = this;
 
@@ -232,7 +233,7 @@ define( function( require ) {
             self.electricalEnergyChunks.push( chunk );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              self.createElectricalEnergyChunkPath( self.position ),
+              self.createElectricalEnergyChunkPath( self.positionProperty.value ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
             var hiddenChunk = new EnergyChunk(
@@ -246,7 +247,7 @@ define( function( require ) {
             self.hiddenEnergyChunks.push( hiddenChunk );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
-              self.createHiddenEnergyChunkPath( self.position ),
+              self.createHiddenEnergyChunkPath( self.positionProperty.value ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
             break;
@@ -301,7 +302,7 @@ define( function( require ) {
         // Determine if time to add a new chunk.
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var newChunk = new EnergyChunk( EnergyType.MECHANICAL,
-            this.position.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
+            this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
             Vector2.ZERO,
             this.energyChunksVisibleProperty );
 
@@ -309,7 +310,7 @@ define( function( require ) {
 
           // Add a 'mover' for this energy chunk.
           this.energyChunkMovers.push( new EnergyChunkPathMover( newChunk,
-            this.createMechanicalEnergyChunkPath( this.position ),
+            this.createMechanicalEnergyChunkPath( this.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
           // Update energy since last chunk.
@@ -414,6 +415,11 @@ define( function( require ) {
       this.outgoingEnergyChunks.length = 0;
 
       return chunks;
+    },
+
+    reset: function() {
+      this.wheelRotationalAngleProperty.reset();
+      this.directCouplingModeProperty.reset();
     }
 
   }, {

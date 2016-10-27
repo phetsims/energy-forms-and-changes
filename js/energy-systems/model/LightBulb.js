@@ -18,6 +18,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Util = require( 'DOT/Util' );
@@ -66,7 +67,7 @@ define( function( require ) {
     // Fewer thermal energy chunks are radiated for bulbs without a filament.
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
 
-    this.addProperty( 'litProportion', 0 );
+    this.litProportionProperty = new Property( 0 );
     this.electricalEnergyChunkMovers = [];
     this.filamentEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
@@ -85,7 +86,7 @@ define( function( require ) {
      */
     step: function( dt, incomingEnergy ) {
       var self = this;
-      if ( this.active ) {
+      if ( this.activeProperty.value ) {
 
         // Handle any incoming energy chunks.
         if ( this.incomingEnergyChunks.length > 0 ) {
@@ -148,7 +149,7 @@ define( function( require ) {
 
         // Energy chunks not currently visible
         else {
-          if ( this.active && incomingEnergy.type === EnergyType.ELECTRICAL ) {
+          if ( this.activeProperty.value && incomingEnergy.type === EnergyType.ELECTRICAL ) {
             this.litProportionProperty.set( Util.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
           } else {
             this.litProportionProperty.set( 0.0 );
@@ -402,6 +403,10 @@ define( function( require ) {
       this.radiatedEnergyChunkMovers.length = 0;
       this.incomingEnergyChunks.length = 0;
 
+    },
+
+    reset: function() {
+      this.litProportionProperty.reset();
     }
 
   }, {

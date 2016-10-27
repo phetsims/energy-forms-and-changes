@@ -21,6 +21,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -59,7 +60,7 @@ define( function( require ) {
     this.waterPowerableElementInPlaceProperty = waterPowerableElementInPlaceProperty;
 
     // Proportion of full available flow that is occurring.
-    this.addProperty( 'flowProportion', 0 );
+    this.flowProportionProperty = new Property( 0 );
 
     // Water drops that comprise the stream of water.
     this.waterDrops = new ObservableArray();
@@ -86,9 +87,9 @@ define( function( require ) {
     createNewChunk: function() {
 
       // Random x value within water column for "watery" appearance
-      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportion * MAX_WATER_WIDTH / 2 + MAX_WATER_WIDTH / 2;
+      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2 + MAX_WATER_WIDTH / 2;
 
-      var initialPosition = this.position
+      var initialPosition = this.positionProperty.value
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
         .plus( new Vector2( x, 0 ) );
 
@@ -119,16 +120,16 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      if ( !this.active ) {
+      if ( !this.activeProperty.value ) {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
       var self = this;
 
       // Add water droplets as needed based on flow rate.
-      if ( this.flowProportion > 0 ) {
+      if ( this.flowProportionProperty.value > 0 ) {
         var initialOffset = new Vector2( 0, 0 );
-        var initialWidth = this.flowProportion * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
+        var initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
         var initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop( initialOffset, new Vector2( 0, 0 ), initialSize ) );
       }
@@ -143,7 +144,7 @@ define( function( require ) {
       // Remove drops that have run their course by iterating over a copy and checking for matches.
       var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
       waterDropsCopy.forEach( function( drop ) {
-        if ( drop.offsetFromParentProperty.value.distance( self.position ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+        if ( drop.offsetFromParentProperty.value.distance( self.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
           if ( self.waterDrops.contains( drop ) ) {
             self.waterDrops.remove( drop );
           }
@@ -151,7 +152,7 @@ define( function( require ) {
       } );
 
       // Check if time to emit an energy chunk and, if so, do it.
-      this.energySinceLastChunk += EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
+      this.energySinceLastChunk += EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value * dt;
       this.addChunkIfEnoughEnergy();
 
       // Update energy chunk positions.
@@ -162,7 +163,8 @@ define( function( require ) {
 
         // See if chunk is in the location where it can be transferred
         // to the next energy system.
-        var position = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.positionProperty.value.y;
+        var position = self.positionProperty.value
+          .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y - chunk.positionProperty.value.y;
         var chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( position );
         var chunkExempt = self.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
 
@@ -174,7 +176,8 @@ define( function( require ) {
 
             // Alternate sending or keeping chunks.
             self.transferNextAvailableChunk = false;
-          } else {
+          }
+          else {
             // Don't transfer this chunk.
             self.exemptFromTransferEnergyChunks.push( chunk );
 
@@ -184,7 +187,8 @@ define( function( require ) {
         }
 
         // Remove it if it is out of visible range.
-        var chunkDistance = self.position.plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.positionProperty.value );
+        var chunkDistance = self.positionProperty.value
+          .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.positionProperty.value );
         if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
           self.energyChunkList.remove( chunk );
           _.pull( self.exemptFromTransferEnergyChunks, chunk );
@@ -193,7 +197,7 @@ define( function( require ) {
       } );
 
       // Generate the appropriate amount of energy.
-      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion * dt;
+      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value * dt;
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
@@ -244,7 +248,8 @@ define( function( require ) {
      * @override
      */
     getEnergyOutputRate: function() {
-      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportion;
+      var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
+      assert && assert( energyAmount > 0, 'EnergyAmount is ' + energyAmount );
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 
@@ -266,10 +271,13 @@ define( function( require ) {
     clearEnergyChunks: function() {
       EnergySource.prototype.clearEnergyChunks.call( this );
       this.exemptFromTransferEnergyChunks.length = 0;
+    },
+
+    reset: function() {
+      this.flowProportionProperty.reset();
     }
 
   }, {
     OFFSET_FROM_CENTER_TO_WATER_ORIGIN: OFFSET_FROM_CENTER_TO_WATER_ORIGIN
   } );
 } );
-

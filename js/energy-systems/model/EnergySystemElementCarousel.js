@@ -37,13 +37,13 @@ define( function( require ) {
    */
   function EnergySystemElementCarousel( selectedElementPosition, offsetBetweenElements ) {
 
-      // Target selected element.  Will be the same as the current selection
-      // except when animating to a new selection.  This property is the API for
-      // selecting elements in the carousel.
+    // Target selected element.  Will be the same as the current selection
+    // except when animating to a new selection.  This property is the API for
+    // selecting elements in the carousel.
     this.targetIndexProperty = new Property( 0 );
 
-      // Indicator for when animations are in progress, meant to be monitored by
-      // clients that need to be aware of this.
+    // Indicator for when animations are in progress, meant to be monitored by
+    // clients that need to be aware of this.
     this.animationInProgressProperty = new Property( false );
 
     // The position in model space where the currently selected element should be.
@@ -107,7 +107,7 @@ define( function( require ) {
       }
       else {
         var lastElement = this.managedElements[ this.managedElements.length - 1 ];
-        element.positionProperty.set( lastElement.position.plus( this.offsetBetweenElements ) );
+        element.positionProperty.set( lastElement.positionProperty.value.plus( this.offsetBetweenElements ) );
       }
 
       // Add element to the list of managed elements.
@@ -167,14 +167,14 @@ define( function( require ) {
       for ( var i = 0; i < this.managedElements.length; i++ ) {
         var position = this.selectedElementPosition.plus( this.offsetBetweenElements.times( i ) );
         position = position.plus( this.currentCarouselOffset );
-        this.managedElements[ i ].position = position;
+        this.managedElements[ i ].positionProperty.set( position );
       }
     },
 
     updateManagedElementOpacities: function() {
       var self = this;
       this.managedElements.forEach( function( managedElement ) {
-        var distanceToSelection = managedElement.position.distance( self.selectedElementPosition );
+        var distanceToSelection = managedElement.positionProperty.value.distance( self.selectedElementPosition );
         var opacity = Util.clamp( 1 - ( distanceToSelection / self.offsetBetweenElements.magnitude() ), 0, 1 );
         managedElement.opacityProperty.set( opacity );
       } );

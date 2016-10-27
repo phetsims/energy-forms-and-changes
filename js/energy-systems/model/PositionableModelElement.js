@@ -13,7 +13,7 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
 
   /**
    * Abstract positionable model element class
@@ -22,13 +22,17 @@ define( function( require ) {
    * @constructor
    */
   function PositionableModelElement( initialPosition ) {
-    PropertySet.call( this, {
-      position: initialPosition
-    } );
+    this.positionProperty = new Property( initialPosition );
   }
 
   energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
 
-  return inherit( PropertySet, PositionableModelElement );
+  return inherit( Object, PositionableModelElement, {
+
+    reset: function() {
+      this.positionProperty.reset();
+    }
+
+  } );
 } );
 
