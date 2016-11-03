@@ -23,7 +23,7 @@ define( function( require ) {
   /**
    * @param {Image}   image
    * @param {Vector2} centerToCenterOffset
-   * @param {object} options
+   * @param {Object} options
    * @constructor
    */
   function EFACModelImage( image, centerToCenterOffset, options ) {

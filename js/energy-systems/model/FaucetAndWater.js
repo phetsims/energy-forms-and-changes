@@ -112,7 +112,7 @@ define( function( require ) {
     /**
      * [step description]
      *
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      *
      * @return {Energy}
      * @public

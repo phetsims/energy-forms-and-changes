@@ -204,7 +204,7 @@ define( function( require ) {
   return inherit( EnergySource, Biker, {
 
     /**
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      *
      * @return {Energy}
      * @public
@@ -290,7 +290,7 @@ define( function( require ) {
     /**
      * Factored from step(dt)
      *
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @private
      */
     moveEnergyChunks: function( dt ) {

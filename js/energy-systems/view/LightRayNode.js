@@ -28,7 +28,7 @@ define( function( require ) {
 
   /**
    * @param {Vector2} point     position
-   * @param {Number} fadeValue Fade coefficient
+   * @param {number} fadeValue Fade coefficient
    * @constructor
    * @private
    */

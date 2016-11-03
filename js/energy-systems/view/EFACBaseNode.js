@@ -35,7 +35,7 @@ define( function( require ) {
     /**
      * Update the overall opacity base on model element opacity.
      *
-     * @param  {Number} opacity
+     * @param  {number} opacity
      */
     modelElement.opacityProperty.link( function( opacity ) {
       self.setOpacity( opacity );

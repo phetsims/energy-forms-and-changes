@@ -15,8 +15,8 @@ define( function( require ) {
 
   /**
    * @param {EnergyType} type      Energy type.
-   * @param {Number}     amount    Amount of energy, in joules.
-   * @param {Number}     direction Direction of energy, in radians.  Not meaningful for
+   * @param {number}     amount    Amount of energy, in joules.
+   * @param {number}     direction Direction of energy, in radians.  Not meaningful for
    *                               all energy types.  Zero indicates to the right, PI/2
    *                               is up, and so forth.
    */

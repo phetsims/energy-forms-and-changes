@@ -18,7 +18,7 @@ define( function( require ) {
   /**
    * @param {EnergyChunk} energyChunk - chunk to be moved
    * @param {Vector2[]} path - points along energy chunk path
-   * @param {Number} speed - velocity magnitude
+   * @param {number} speed - velocity magnitude
    * @constructor
    */
   function EnergyChunkPathMover( energyChunk, path, speed ) {
@@ -42,7 +42,7 @@ define( function( require ) {
   return inherit( Object, EnergyChunkPathMover, {
     /**
      * Advance chunk position on path
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      */
     moveAlongPath: function( dt ) {
 

@@ -79,7 +79,7 @@ define( function( require ) {
   return inherit( EnergyUser, LightBulb, {
 
     /**
-     * @param  {Number} dt - timestep
+     * @param  {number} dt - timestep
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -161,7 +161,7 @@ define( function( require ) {
     /**
      *
      *
-     * @param  {Number} dt - timestep
+     * @param  {number} dt - timestep
      * @private
      */
     moveRadiatedEnergyChunks: function( dt ) {
@@ -184,7 +184,7 @@ define( function( require ) {
     /**
      *
      *
-     * @param  {Number} dt - timestep
+     * @param  {number} dt - timestep
      * @private
      */
     moveFilamentEnergyChunks: function( dt ) {
@@ -207,7 +207,7 @@ define( function( require ) {
     /**
      *
      *
-     * @param  {Number} dt - timestep
+     * @param  {number} dt - timestep
      * @private
      */
     moveElectricalEnergyChunks: function( dt ) {
@@ -355,7 +355,7 @@ define( function( require ) {
     },
 
     /**
-     * @return {Number} time
+     * @return {number} time
      * @private
      */
     generateThermalChunkTimeOnFilament: function() {
@@ -366,7 +366,7 @@ define( function( require ) {
     /**
      * @param {Vector2} startingLocation
      * @param {Vector2[]} pathPoints
-     * @return {Number}
+     * @return {number}
      * @private
      */
     getTotalPathLength: function( startingLocation, pathPoints ) {

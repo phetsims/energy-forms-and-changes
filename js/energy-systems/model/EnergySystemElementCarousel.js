@@ -120,7 +120,7 @@ define( function( require ) {
     /**
      * Get element from carousel by index.
      *
-     * @param  {Number} index Requested position in array of EnergySystemElements
+     * @param  {number} index Requested position in array of EnergySystemElements
      *
      * @return {EnergySystemElement}
      */

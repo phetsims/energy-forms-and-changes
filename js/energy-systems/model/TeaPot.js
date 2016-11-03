@@ -82,7 +82,7 @@ define( function( require ) {
     /**
      * Animation for teapot and energy chunks
      *
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      *
      * @return {Energy}
      * @public
@@ -147,7 +147,7 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Number} dt time step
+     * @param  {number} dt time step
      * @private
      */
     moveEnergyChunks: function( dt ) {

@@ -104,7 +104,7 @@ define( function( require ) {
   return inherit( EnergyConverter, SolarPanel, {
 
     /**
-     * @param  {Number} dt - time step size
+     * @param  {number} dt - time step size
      * @param  {Energy} incomingEnergy - type, amount, direction of energy
      */
     step: function( dt, incomingEnergy ) {
@@ -162,7 +162,7 @@ define( function( require ) {
     /**
      * Update energy chunk positions at each step
      *
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @private
      */
     moveEnergyChunks: function( dt ) {

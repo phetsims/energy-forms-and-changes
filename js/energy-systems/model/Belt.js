@@ -16,9 +16,9 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   /**
-   * @param {Number} wheel1Radius
+   * @param {number} wheel1Radius
    * @param {Vector2} wheel1Center
-   * @param {Number} wheel2Radius
+   * @param {number} wheel2Radius
    * @param {Vector2} wheel2Center
    *
    * @constructor

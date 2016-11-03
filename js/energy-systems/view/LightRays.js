@@ -14,9 +14,9 @@ define( function( require ) {
    * Light rays from the sun and from the light bulb
    *
    * @param {Vector2} center - Center position of radial rays
-   * @param {Number} innerRadius - Start point
-   * @param {Number} outerRadius - End point
-   * @param {Number} numRays - How many rays around the sun
+   * @param {number} innerRadius - Start point
+   * @param {number} outerRadius - End point
+   * @param {number} numRays - How many rays around the sun
    * @param {Color} color - Ray color
    * @constructor
    */

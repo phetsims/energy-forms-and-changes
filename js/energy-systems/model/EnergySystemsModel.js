@@ -123,7 +123,7 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @public
      */
     step: function( dt ) {

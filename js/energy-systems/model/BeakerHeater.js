@@ -82,7 +82,7 @@ define( function( require ) {
   return inherit( EnergyUser, BeakerHeater, {
 
     /**
-     * @param  {Number} dt - timestep
+     * @param  {number} dt - timestep
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -172,7 +172,7 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @private
      */
     moveRadiatedEnergyChunks: function( dt ) {
@@ -193,7 +193,7 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @private
      */
     moveThermalEnergyChunks: function( dt ) {
@@ -218,7 +218,7 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Number} dt timestep
+     * @param  {number} dt timestep
      * @private
      */
     moveElectricalEnergyChunks: function( dt ) {

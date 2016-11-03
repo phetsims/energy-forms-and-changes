@@ -92,7 +92,7 @@ define( function( require ) {
 
     /**
      * Factored from this.step
-     * @param {Number} dt timestep
+     * @param {number} dt timestep
      * @param {Energy} incomingEnergy
      *
      * @private
@@ -143,7 +143,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Number} dt timestep
+     * @param {number} dt timestep
      * @param {Energy} incomingEnergy
      *
      * @return {Energy}
@@ -197,7 +197,7 @@ define( function( require ) {
     /**
      *
      *
-     * @param {Number} dt timestep
+     * @param {number} dt timestep
      *
      * @return {Energy}
      * @private

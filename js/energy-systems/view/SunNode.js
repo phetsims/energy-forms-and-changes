@@ -50,7 +50,7 @@ define( function( require ) {
   /**
    * Shape with observable light absorption coefficient.
    * @param {Shape} shape
-   * @param {Number} initialAbsorptionCoefficient
+   * @param {number} initialAbsorptionCoefficient
    * @constructor
    */
   function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
