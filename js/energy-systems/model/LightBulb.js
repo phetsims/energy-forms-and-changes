@@ -53,7 +53,7 @@ define( function( require ) {
 
   /**
    * @param {Image} iconImage
-   * @param {Boolean} hasFilament
+   * @param {boolean} hasFilament
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */

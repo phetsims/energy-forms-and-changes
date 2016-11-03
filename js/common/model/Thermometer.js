@@ -24,7 +24,7 @@ define( function( require ) {
    *
    * @param {model} model
    * @param {Vector2} initialPosition
-   * @param {Boolean} initiallyActive
+   * @param {boolean} initiallyActive
    * @constructor
    */
   function Thermometer( model, initialPosition, initiallyActive ) {

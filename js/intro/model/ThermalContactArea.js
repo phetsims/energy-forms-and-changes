@@ -22,7 +22,7 @@ define( function( require ) {
    *  Constructor for a ThermalContactArea.
    *
    * @param {Bounds2} bounds
-   * @param {Boolean} supportsImmersion
+   * @param {boolean} supportsImmersion
    * @constructor
    */
   function ThermalContactArea( bounds, supportsImmersion ) {

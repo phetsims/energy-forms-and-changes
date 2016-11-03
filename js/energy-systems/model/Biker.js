@@ -585,7 +585,7 @@ define( function( require ) {
      * Renamed from bikerHasEnergy() to avoid collision with the identically-
      * named property.
      *
-     * @return {Boolean}
+     * @return {boolean}
      */
     bikerCanPedal: function() {
       var nChunks = this.energyChunkList.length;

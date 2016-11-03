@@ -156,7 +156,7 @@ define( function( require ) {
     //  * @param  {Vector2} startPoint
     //  * @param  {Vector2} endPoint
     //  * @param  {Shape} shape
-    //  * @return {Boolean}
+    //  * @return {boolean}
     //  * @private
     //  */
     // lineIntersectsShape: function( startPoint, endPoint, shape ) {
