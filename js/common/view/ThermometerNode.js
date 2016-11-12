@@ -116,7 +116,7 @@ define( function( require ) {
         stroke: 'black',
         lineWidth: TICK_MARK_STROKE_LINEWIDTH
       } );
-      tickMark.translation = { x: tickMarkXOffset, y: tickMarkMinY - i * tickMarkSpacing };
+      tickMark.translation = new Vector2( tickMarkXOffset, tickMarkMinY - i * tickMarkSpacing );
 
       frontLayer.addChild( tickMark );
     }
