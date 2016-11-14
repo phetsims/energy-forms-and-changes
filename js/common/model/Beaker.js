@@ -378,6 +378,7 @@ define( function( require ) {
     },
 
     reset: function() {
+      RectangularThermalMovableModelElement.prototype.reset.call( this );
       this.fluidLevelProperty.reset();
       this.topSurfaceProperty.reset();
       this.bottomSurfaceProperty.reset();
