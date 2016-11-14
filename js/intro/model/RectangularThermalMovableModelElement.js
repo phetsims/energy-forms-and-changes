@@ -39,7 +39,13 @@ define( function( require ) {
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function RectangularThermalMovableModelElement( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty ) {
+  function RectangularThermalMovableModelElement(
+    initialPosition,
+    width,
+    height,
+    mass,
+    specificHeat,
+    energyChunksVisibleProperty ) {
     UserMovableModelElement.call( this, initialPosition );
     this.mass = mass;
     this.width = width;
@@ -106,6 +112,8 @@ define( function( require ) {
       UserMovableModelElement.prototype.reset.call( this );
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
       this.addInitialEnergyChunks();
+      this.energyChunksVisibleProperty.reset();
+      this.approachingEnergyChunks.reset();
     },
 
     step: function( dt ) {
@@ -299,7 +307,8 @@ define( function( require ) {
             }
           } );
         } );
-      } else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
+      }
+      else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
         // Our shape encloses the destination shape.  Choose a chunk that
         // is close but doesn't overlap with the destination shape.
 
@@ -317,7 +326,8 @@ define( function( require ) {
             }
           } );
         } );
-      } else {
+      }
+      else {
         // There is no or limited overlap, so use center points.
         chunkToExtract = this.extractClosestEnergyChunkToPoint(
           new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
@@ -371,12 +381,10 @@ define( function( require ) {
       var energyChunkBounds = this.getThermalContactArea();
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
-        // console.log( 'RTMME: adding chunk' );
-        this.addEnergyChunk( new EnergyChunk(
-          EnergyType.THERMAL,
-          EnergyChunkDistributor.generateRandomLocation( energyChunkBounds ),
-          Vector2.ZERO,
-          this.energyChunksVisibleProperty ) );
+        var location = EnergyChunkDistributor.generateRandomLocation( energyChunkBounds );
+        var chunk = new EnergyChunk( EnergyType.THERMAL, location, Vector2.ZERO, this.energyChunksVisibleProperty );
+        // console.log( 'RTMME: adding chunk at ', location );
+        this.addEnergyChunk( chunk );
       }
 
       // Distribute the energy chunks within the container.
@@ -479,4 +487,3 @@ define( function( require ) {
     }
   } );
 } );
-
