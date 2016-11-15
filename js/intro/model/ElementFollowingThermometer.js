@@ -40,7 +40,7 @@ define( function( require ) {
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // stop following anything.
-        console.log('stop following');
+        // console.log('stop following');
         self.elementFollower.stopFollowing();
       } else {
         // The user has dropped this thermometer. See if it was
@@ -48,7 +48,7 @@ define( function( require ) {
         model.getBlockList().forEach( function( block ) {
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             // stick to this block.
-            console.log( 'sticking?' );
+            // console.log( 'sticking?' );
             self.elementFollower.follow( block.positionProperty );
           }
         } );

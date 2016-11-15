@@ -35,7 +35,7 @@ define( function( require ) {
     this.followerFunction = function( location ) {
       // self.followerProperty.set( location.plus( self.offset ) );
       self.followerProperty.set( location );
-      console.log(location, self.followerProperty.get());
+      // console.log(location, self.followerProperty.get());
     };
   }
 
