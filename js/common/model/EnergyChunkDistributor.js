@@ -204,34 +204,7 @@ define( function( require ) {
           } );
         } );
 
-        // Update energy chunk velocities, drag force, and position.
-        var maxEnergy = 0;
-        for ( var energyChunkID in chunkMap ) {
-          if ( chunkMap.hasOwnProperty( energyChunkID ) ) {
-
-            // Calculate the energy chunk's velocity as a result of forces acting on it.
-            var forceOnThisChunk = chunkForces[ energyChunkID ];
-            var newVelocity = chunkMap[ energyChunkID ].velocity.plus(
-              forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
-
-            // Calculate drag force.  Uses standard drag equation.
-            var dragMagnitude =
-              0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * newVelocity.magnitudeSquared();
-            var dragForceVector =
-              dragMagnitude > 0 ? newVelocity.rotated( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
-
-            // Update velocity based on drag force.
-            newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
-            chunkMap[ energyChunkID ].velocity = newVelocity;
-
-            // Update max energy.
-            var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() +
-              forceOnThisChunk.magnitude() * Math.PI / 2;
-            if ( totalParticleEnergy > maxEnergy ) {
-              maxEnergy = totalParticleEnergy;
-            }
-          }
-        }
+        var maxEnergy = this.updateVelocities( chunkMap, chunkForces, timeStep );
 
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
 
@@ -242,6 +215,64 @@ define( function( require ) {
       return particlesRedistributed;
     },
 
+    /**
+     * Update energy chunk velocities and drag force, returning max total energy of chunks.
+     *
+     * @param  {Object} chunkMap - Id => EnergyChunk pairs
+     * @param  {Object} chunkForces - Id => Vector2 pairs
+     * @param  {number} dt - timestep
+     *
+     * @return {number} maxEnergy - max total energy of all provided chunks
+     */
+    updateVelocities: function( chunkMap, chunkForces, dt ) {
+      // Update energy chunk velocities, drag force, and position.
+      var maxEnergy = 0;
+      for ( var id in chunkMap ) {
+        if ( chunkMap.hasOwnProperty( id ) ) {
+
+          // Calculate the energy chunk's velocity as a result of forces acting on it.
+
+          // Force on this chunk
+          var force = chunkForces[ id ];
+          assert && assert( !_.isNaN( force.x ) && !_.isNaN( force.y ), 'force contains NaN value' );
+
+          // Current velocity
+          var v = chunkMap[ id ].velocity;
+          assert && assert( v.x !== Infinity && !_.isNaN(v.x) && typeof v.x === 'number', 'v.x is ' + v.x );
+          assert && assert( v.y !== Infinity && !_.isNaN(v.y) && typeof v.y === 'number', 'v.y is ' + v.y );
+
+          // New velocity
+          v = v.plus( force.times( dt / ENERGY_CHUNK_MASS ) );
+          assert && assert( !_.isNaN( v.x ) && !_.isNaN( v.y ), 'New v contains NaN value' );
+
+          var v2 = v.magnitudeSquared();
+          assert && assert( v2 !== Infinity && !_.isNaN(v2) && typeof v2 === 'number', 'v^2 is ' + v2 );
+
+          // Calculate drag force using standard drag equation.
+          var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * v2;
+          var dragForce = dragMagnitude > 0 ? v.rotated( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
+          assert && assert( !_.isNaN( dragForce.x ) && !_.isNaN( dragForce.y ), 'dragForce contains NaN value' );
+
+          // Update velocity based on drag force.
+          chunkMap[ id ].velocity = v.plus( dragForce.times( dt / ENERGY_CHUNK_MASS ) );
+
+          // Update max energy.
+          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * v2 + force.magnitude() * Math.PI / 2;
+          if ( totalParticleEnergy > maxEnergy ) {
+            maxEnergy = totalParticleEnergy;
+          }
+        }
+      }
+      return maxEnergy;
+    },
+
+    /**
+     * Update chunk positions. Mutates energy chunks in chunkMap.
+     *
+     * @param  {Object} chunkMap - Id => EnergyChunk pairs
+     * @param  {number} dt - timestep in seconds
+     *
+     */
     stepChunks: function( chunkMap, dt ) {
       for ( var id in chunkMap ) {
         if ( chunkMap.hasOwnProperty( id ) ) {
