@@ -92,6 +92,8 @@ define( function( require ) {
 
     // Set this node's position when the corresponding model element moves.
     energyChunk.positionProperty.link( function( position ) {
+      assert && assert( !_.isNaN( position.x ), 'position.x = ' + position.x );
+      assert && assert( !_.isNaN( position.y ), 'position.y = ' + position.y );
       self.translation = modelViewTransform.modelToViewPosition( position );
     } );
   }
