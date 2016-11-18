@@ -21,7 +21,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -58,11 +58,11 @@ define( function( require ) {
      * set of slices interact with each other, but the container for each is
      * defined by the boundary of its containing slice.
      *
-     * @param {EnergyChunkContainerSlice[]} energyChunkContainerSlices - Set of slices,
+     * @param {EnergyChunkContainerSlice[]} slices - Set of slices,
      *                                           each containing a set of energy chunks.
      * @param {number} dt change in time
      */
-    updatePositions: function( energyChunkContainerSlices, dt ) {
+    updatePositions: function( slices, dt ) {
 
       // Determine a rectangle that bounds all of the slices.
       var minX = Number.POSITIVE_INFINITY;
@@ -70,7 +70,7 @@ define( function( require ) {
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
 
-      energyChunkContainerSlices.forEach( function( slice ) {
+      slices.forEach( function( slice ) {
         minX = Math.min( slice.shape.bounds.minX, minX );
         maxX = Math.max( slice.shape.bounds.maxX, maxX );
         minY = Math.min( slice.shape.bounds.minY, minY );
@@ -83,19 +83,19 @@ define( function( require ) {
 
       // Create a map that tracks the force applied to each energy chunk and a
       // map that tracks each energyChunk with a unique ID.
-      var mapEnergyChunkToForceVector = {};
-      var mapIDToEnergyChunk = {};
-      energyChunkContainerSlices.forEach( function( energyChunkContainerSlice ) {
-        energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
-          mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
-          mapIDToEnergyChunk[ energyChunk.uniqueID ] = energyChunk;
+      var chunkForces = {}; // Map of chunkID (number) => force (Vector2)
+      var chunkMap = {}; // Map of chunkID (number) => chunk (EnergyChunk)
+      slices.forEach( function( slice ) {
+        slice.energyChunkList.forEach( function( chunk ) {
+          chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
+          chunkMap[ chunk.uniqueID ] = chunk;
         } );
       } );
 
       // Get the size of the map above.
       var mapSize = 0;
-      for ( var force in mapEnergyChunkToForceVector ) {
-        if ( mapEnergyChunkToForceVector.hasOwnProperty( force ) ) {
+      for ( var force in chunkForces ) {
+        if ( chunkForces.hasOwnProperty( force ) ) {
           mapSize++;
         }
       }
@@ -125,59 +125,61 @@ define( function( require ) {
 
         // Update the forces acting on the particle due to its bounding container,
         // other particles, and drag.
-        energyChunkContainerSlices.forEach( function( energyChunkContainerSlice ) {
-          var containerShape = energyChunkContainerSlice.shape;
+        slices.forEach( function( slice ) {
+          var containerShape = slice.shape;
 
           // Determine the max possible distance to an edge.
           var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) +
             Math.pow( containerShape.bounds.height, 2 ) );
 
           // Determine forces on each energy chunk.
-          energyChunkContainerSlice.energyChunkList.forEach( function( energyChunk ) {
+          slice.energyChunkList.forEach( function( chunk ) {
             // Reset accumulated forces.
-            mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = ZERO_VECTOR;
-            if ( containerShape.containsPoint( energyChunk.positionProperty.value ) ) {
+            chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
+            if ( containerShape.containsPoint( chunk.positionProperty.value ) ) {
               // Loop on several angles, calculating the forces from the edges at the given angle.
               for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
                 var edgeDetectSteps = 8;
-                var lengthRange = new RangeWithValue( 0, maxDistanceToEdge );
+                var lengthRange = new Range( 0, maxDistanceToEdge );
                 for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
                   var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
-                  if ( containerShape.containsPoint( energyChunk.positionProperty.value.plus( vectorToEdge ) ) ) {
-                    lengthRange = new RangeWithValue( lengthRange.getCenter(), lengthRange.max );
-                  } else {
-                    lengthRange = new RangeWithValue( lengthRange.min, lengthRange.getCenter() );
+                  if ( containerShape.containsPoint( chunk.positionProperty.value.plus( vectorToEdge ) ) ) {
+                    lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
+                  }
+                  else {
+                    lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
                   }
                 }
 
                 // Handle case where point is too close to the container's edge.
                 if ( lengthRange.getCenter() < minDistance ) {
-                  lengthRange = new RangeWithValue( minDistance, minDistance );
+                  lengthRange = new Range( minDistance, minDistance );
                 }
 
                 // Apply the force due to this edge.
                 var edgeForce = new Vector2( forceConstant /
                   Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
-                mapEnergyChunkToForceVector[ energyChunk.uniqueID ] =
-                  mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( edgeForce );
+                chunkForces[ chunk.uniqueID ] =
+                  chunkForces[ chunk.uniqueID ].plus( edgeForce );
               }
 
               // Now apply the force from each of the other particles, but set some limits on the max force that can be
               // applied.
-              for ( var otherEnergyChunkID in mapEnergyChunkToForceVector ) {
-                if ( mapEnergyChunkToForceVector.hasOwnProperty( otherEnergyChunkID ) ) {
-                  if ( energyChunk === mapIDToEnergyChunk[ otherEnergyChunkID ] ) {
+              for ( var otherEnergyChunkID in chunkForces ) {
+                if ( chunkForces.hasOwnProperty( otherEnergyChunkID ) ) {
+                  if ( chunk === chunkMap[ otherEnergyChunkID ] ) {
                     continue;
                   }
                   // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = energyChunk.positionProperty.value.minus( mapIDToEnergyChunk[ otherEnergyChunkID ].positionProperty.value );
+                  var vectorToOther = chunk.positionProperty.value.minus( chunkMap[ otherEnergyChunkID ].positionProperty.value );
                   if ( vectorToOther.magnitude() < minDistance ) {
                     if ( vectorToOther.magnitude() === 0 ) {
                       // Create a random vector of min distance.
                       var randomAngle = Math.random() * Math.PI * 2;
                       vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ),
                         minDistance * Math.sin( randomAngle ) );
-                    } else {
+                    }
+                    else {
                       vectorToOther = vectorToOther.setMagnitude( minDistance );
                     }
                   }
@@ -185,26 +187,27 @@ define( function( require ) {
                   var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
 
                   // Add the force to the accumulated forces on this energy chunk.
-                  mapEnergyChunkToForceVector[ energyChunk.uniqueID ] =
-                    mapEnergyChunkToForceVector[ energyChunk.uniqueID ].plus( forceToOther );
+                  chunkForces[ chunk.uniqueID ] =
+                    chunkForces[ chunk.uniqueID ].plus( forceToOther );
                 }
               }
-            } else {
+            }
+            else {
               // Point is outside container, move it towards center of shape.
-              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( energyChunk.positionProperty.value );
-              mapEnergyChunkToForceVector[ energyChunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
+              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( chunk.positionProperty.value );
+              chunkForces[ chunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
         } );
 
         // Update energy chunk velocities, drag force, and position.
         var maxEnergy = 0;
-        for ( var energyChunkID in mapIDToEnergyChunk ) {
-          if ( mapIDToEnergyChunk.hasOwnProperty( energyChunkID ) ) {
+        for ( var energyChunkID in chunkMap ) {
+          if ( chunkMap.hasOwnProperty( energyChunkID ) ) {
 
             // Calculate the energy chunk's velocity as a result of forces acting on it.
-            var forceOnThisChunk = mapEnergyChunkToForceVector[ energyChunkID ];
-            var newVelocity = mapIDToEnergyChunk[ energyChunkID ].velocity.plus(
+            var forceOnThisChunk = chunkForces[ energyChunkID ];
+            var newVelocity = chunkMap[ energyChunkID ].velocity.plus(
               forceOnThisChunk.times( timeStep / ENERGY_CHUNK_MASS ) );
 
             // Calculate drag force.  Uses standard drag equation.
@@ -215,7 +218,7 @@ define( function( require ) {
 
             // Update velocity based on drag force.
             newVelocity = newVelocity.plus( dragForceVector.times( timeStep / ENERGY_CHUNK_MASS ) );
-            mapIDToEnergyChunk[ energyChunkID ].velocity = newVelocity;
+            chunkMap[ energyChunkID ].velocity = newVelocity;
 
             // Update max energy.
             var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * newVelocity.magnitudeSquared() +
@@ -229,11 +232,11 @@ define( function( require ) {
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
 
         if ( particlesRedistributed ) {
-          for ( var newEnergyChunkID in mapIDToEnergyChunk ) {
-            if ( mapIDToEnergyChunk.hasOwnProperty( newEnergyChunkID ) ) {
-              mapIDToEnergyChunk[ newEnergyChunkID ].positionProperty.value =
-                mapIDToEnergyChunk[ newEnergyChunkID ].positionProperty.value.plus(
-                  mapIDToEnergyChunk[ newEnergyChunkID ].velocity.times( timeStep ) );
+          for ( var newEnergyChunkID in chunkMap ) {
+            if ( chunkMap.hasOwnProperty( newEnergyChunkID ) ) {
+              chunkMap[ newEnergyChunkID ].positionProperty.value =
+                chunkMap[ newEnergyChunkID ].positionProperty.value.plus(
+                  chunkMap[ newEnergyChunkID ].velocity.times( timeStep ) );
             }
           }
         }
@@ -246,12 +249,12 @@ define( function( require ) {
      * all energy chunks in center of slice. This is useful for debugging.
      * Rename it to substitute if for the 'real' algorithm.
      *
-     * @param {EnergyChunkContainerSlice[]} energyChunkContainerSlices
+     * @param {EnergyChunkContainerSlice[]} slices
      * @param {number} dt
      */
-    updatePositionsDbg: function( energyChunkContainerSlices, dt ) {
+    updatePositionsDbg: function( slices, dt ) {
       // Update the positions of the energy chunks.
-      energyChunkContainerSlices.forEach( function( slice ) {
+      slices.forEach( function( slice ) {
         var sliceCenter = new Vector2( slice.shape.bounds.centerX, slice.shape.bounds.centerY );
         slice.energyChunkList.forEach( function( energyChunk ) {
           energyChunk.positionProperty.value = sliceCenter;
@@ -269,4 +272,3 @@ define( function( require ) {
     }
   } );
 } );
-
