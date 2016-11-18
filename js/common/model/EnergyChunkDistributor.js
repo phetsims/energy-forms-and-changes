@@ -67,6 +67,8 @@ define( function( require ) {
      */
     updatePositions: function( slices, dt ) {
 
+      var self = this;
+
       // Determine a rectangle that bounds all of the slices.
       var minX = Number.POSITIVE_INFINITY;
       var minY = Number.POSITIVE_INFINITY;
@@ -140,61 +142,7 @@ define( function( require ) {
             // Reset accumulated forces.
             chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
             if ( containerShape.containsPoint( chunk.positionProperty.value ) ) {
-              // Loop on several angles, calculating the forces from the edges at the given angle.
-              for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-                var edgeDetectSteps = 8;
-                var lengthRange = new Range( 0, maxDistanceToEdge );
-                for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-                  var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
-                  if ( containerShape.containsPoint( chunk.positionProperty.value.plus( vectorToEdge ) ) ) {
-                    lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
-                  }
-                  else {
-                    lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
-                  }
-                }
-
-                // Handle case where point is too close to the container's edge.
-                if ( lengthRange.getCenter() < minDistance ) {
-                  lengthRange = new Range( minDistance, minDistance );
-                }
-
-                // Apply the force due to this edge.
-                var edgeForce = new Vector2( forceConstant /
-                  Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
-
-                chunkForces[ chunk.uniqueID ] =
-                  chunkForces[ chunk.uniqueID ].plus( edgeForce );
-              }
-
-              // Now apply the force from each of the other particles, but set some limits on the max force that can be
-              // applied.
-              for ( var otherEnergyChunkID in chunkForces ) {
-                if ( chunkForces.hasOwnProperty( otherEnergyChunkID ) ) {
-                  if ( chunk === chunkMap[ otherEnergyChunkID ] ) {
-                    continue;
-                  }
-                  // Calculate force vector, but handle cases where too close.
-                  var vectorToOther = chunk.positionProperty.value.minus( chunkMap[ otherEnergyChunkID ].positionProperty.value );
-                  if ( vectorToOther.magnitude() < minDistance ) {
-                    if ( vectorToOther.magnitude() === 0 ) {
-                      // Create a random vector of min distance.
-                      var randomAngle = Math.random() * Math.PI * 2;
-                      vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ),
-                        minDistance * Math.sin( randomAngle ) );
-                    }
-                    else {
-                      vectorToOther = vectorToOther.setMagnitude( minDistance );
-                    }
-                  }
-
-                  var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
-
-                  // Add the force to the accumulated forces on this energy chunk.
-                  chunkForces[ chunk.uniqueID ] =
-                    chunkForces[ chunk.uniqueID ].plus( forceToOther );
-                }
-              }
+              self.updateForces( chunk, chunkMap, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
             }
             else {
               // Point is outside container, move it towards center of shape.
@@ -213,6 +161,63 @@ define( function( require ) {
         }
       }
       return particlesRedistributed;
+    },
+
+    // TODO: This was factored from updatePositions and requires further cleanup, probably more refactoring, bug fixes, and docs.
+    updateForces: function( chunk, chunkMap, chunkForces, forceConstant, minDistance, maxDistance, containerShape ) {
+
+      // Loop on several angles, calculating the forces from the edges at the given angle.
+      for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
+        var edgeDetectSteps = 8;
+        var lengthRange = new Range( 0, maxDistance );
+        for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
+          var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
+          if ( containerShape.containsPoint( chunk.positionProperty.value.plus( vectorToEdge ) ) ) {
+            lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
+          }
+          else {
+            lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
+          }
+        }
+
+        // Handle case where point is too close to the container's edge.
+        if ( lengthRange.getCenter() < minDistance ) {
+          lengthRange = new Range( minDistance, minDistance );
+        }
+
+        // Apply the force due to this edge.
+        var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+
+        chunkForces[ chunk.uniqueID ] = chunkForces[ chunk.uniqueID ].plus( edgeForce );
+      }
+
+      // Now apply the force from each of the other particles, but set some limits on the max force that can be
+      // applied.
+      for ( var otherEnergyChunkID in chunkForces ) {
+        if ( chunkForces.hasOwnProperty( otherEnergyChunkID ) ) {
+          if ( chunk === chunkMap[ otherEnergyChunkID ] ) {
+            continue;
+          }
+          // Calculate force vector, but handle cases where too close.
+          var vectorToOther = chunk.positionProperty.value.minus( chunkMap[ otherEnergyChunkID ].positionProperty.value );
+          if ( vectorToOther.magnitude() < minDistance ) {
+            if ( vectorToOther.magnitude() === 0 ) {
+              // Create a random vector of min distance.
+              var randomAngle = Math.random() * Math.PI * 2;
+              vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ),
+                minDistance * Math.sin( randomAngle ) );
+            }
+            else {
+              vectorToOther = vectorToOther.setMagnitude( minDistance );
+            }
+          }
+
+          var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
+
+          // Add the force to the accumulated forces on this energy chunk.
+          chunkForces[ chunk.uniqueID ] = chunkForces[ chunk.uniqueID ].plus( forceToOther );
+        }
+      }
     },
 
     /**
@@ -238,15 +243,15 @@ define( function( require ) {
 
           // Current velocity
           var v = chunkMap[ id ].velocity;
-          assert && assert( v.x !== Infinity && !_.isNaN(v.x) && typeof v.x === 'number', 'v.x is ' + v.x );
-          assert && assert( v.y !== Infinity && !_.isNaN(v.y) && typeof v.y === 'number', 'v.y is ' + v.y );
+          assert && assert( v.x !== Infinity && !_.isNaN( v.x ) && typeof v.x === 'number', 'v.x is ' + v.x );
+          assert && assert( v.y !== Infinity && !_.isNaN( v.y ) && typeof v.y === 'number', 'v.y is ' + v.y );
 
           // New velocity
           v = v.plus( force.times( dt / ENERGY_CHUNK_MASS ) );
           assert && assert( !_.isNaN( v.x ) && !_.isNaN( v.y ), 'New v contains NaN value' );
 
           var v2 = v.magnitudeSquared();
-          assert && assert( v2 !== Infinity && !_.isNaN(v2) && typeof v2 === 'number', 'v^2 is ' + v2 );
+          assert && assert( v2 !== Infinity && !_.isNaN( v2 ) && typeof v2 === 'number', 'v^2 is ' + v2 );
 
           // Calculate drag force using standard drag equation.
           var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * v2;
