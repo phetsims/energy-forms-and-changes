@@ -142,7 +142,8 @@ define( function( require ) {
             // Reset accumulated forces.
             chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
             if ( containerShape.containsPoint( chunk.positionProperty.value ) ) {
-              self.updateForces( chunk, chunkMap, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
+              self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
+              self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
             }
             else {
               // Point is outside container, move it towards center of shape.
@@ -163,9 +164,7 @@ define( function( require ) {
       return particlesRedistributed;
     },
 
-    // TODO: This was factored from updatePositions and requires further cleanup, probably more refactoring, bug fixes, and docs.
-    updateForces: function( chunk, chunkMap, chunkForces, forceConstant, minDistance, maxDistance, containerShape ) {
-
+    computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerShape ) {
       // Loop on several angles, calculating the forces from the edges at the given angle.
       for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
         var edgeDetectSteps = 8;
@@ -190,6 +189,10 @@ define( function( require ) {
 
         chunkForces[ chunk.uniqueID ] = chunkForces[ chunk.uniqueID ].plus( edgeForce );
       }
+    },
+
+    // TODO: This was factored from updatePositions and requires further cleanup, probably more refactoring, bug fixes, and docs.
+    updateForces: function( chunk, chunkMap, chunkForces, minDistance, forceConstant ) {
 
       // Now apply the force from each of the other particles, but set some limits on the max force that can be
       // applied.
