@@ -44,6 +44,9 @@ define( function( require ) {
   // all movement.
   var REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // In joules, I think.
 
+  /**
+   * @constructor
+   */
   function EnergyChunkDistributor() {
     Object.call( this );
   }
@@ -159,6 +162,7 @@ define( function( require ) {
                 // Apply the force due to this edge.
                 var edgeForce = new Vector2( forceConstant /
                   Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
+
                 chunkForces[ chunk.uniqueID ] =
                   chunkForces[ chunk.uniqueID ].plus( edgeForce );
               }
@@ -232,16 +236,25 @@ define( function( require ) {
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
 
         if ( particlesRedistributed ) {
-          for ( var newEnergyChunkID in chunkMap ) {
-            if ( chunkMap.hasOwnProperty( newEnergyChunkID ) ) {
-              chunkMap[ newEnergyChunkID ].positionProperty.value =
-                chunkMap[ newEnergyChunkID ].positionProperty.value.plus(
-                  chunkMap[ newEnergyChunkID ].velocity.times( timeStep ) );
-            }
-          }
+          this.stepChunks( chunkMap, dt );
         }
       }
       return particlesRedistributed;
+    },
+
+    stepChunks: function( chunkMap, dt ) {
+      for ( var id in chunkMap ) {
+        if ( chunkMap.hasOwnProperty( id ) ) {
+
+          var v = chunkMap[ id ].velocity;
+          assert && assert( !_.isNaN( v.x ) && !_.isNaN( v.y ), 'v contains NaN value' );
+
+          var position = chunkMap[ id ].positionProperty.value;
+          assert && assert( !_.isNaN( position.x ) && !_.isNaN( position.y ), 'position contains NaN value' );
+
+          chunkMap[ id ].positionProperty.set( position.plus( v.times( dt ) ) );
+        }
+      }
     },
 
     /**
