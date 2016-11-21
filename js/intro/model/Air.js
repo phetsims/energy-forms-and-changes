@@ -85,7 +85,6 @@ define( function( require ) {
         if ( controller.destinationReached() ) {
           // }
           // Remove this energy chunk.
-          console.log( 'Air: removing chunk' );
           self.energyChunkList.remove( controller.energyChunk );
           _.pull( self.energyChunkWanderControllers, controller );
         }

@@ -346,7 +346,7 @@ define( function( require ) {
                   container1.getBounds().width - energyChunkWidth,
                   container1.getBounds().height );
               }
-              console.log( 'IM: air.add from movable el' );
+
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
 
@@ -360,7 +360,7 @@ define( function( require ) {
       // Exchange energy chunks between the air and the burners.
       this.burners.forEach( function( burner ) {
         if ( burner.getEnergyChunkCountForAir() > 0 ) {
-          console.log( 'IM: air.add from burner' );
+
           self.air.addEnergyChunk( burner.extractClosestEnergyChunk( burner.getCenterPoint() ), null );
         } else if ( burner.getEnergyChunkCountForAir() < 0 ) {
           burner.addEnergyChunk( self.air.requestEnergyChunk( burner.getCenterPoint() ) );
