@@ -199,7 +199,7 @@ define( function( require ) {
         } );
       }
 
-      if ( closestEnergyChunk === null && this.heatCoolLevel > 0 ) {
+      if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
         // Create an energy chunk.
         closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(),
           new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
@@ -257,7 +257,7 @@ define( function( require ) {
       var count = 0;
       // If there are approaching chunks, and the mode has switched to off or to heating,
       // the chunks should go back to the air (if they're not almost to the burner).
-      if ( this.energyChunkList.length > 0 && this.heatCoolLevel >= 0 ) {
+      if ( this.energyChunkList.length > 0 && this.heatCoolLevelProperty.value >= 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
           if ( self.position.distance( energyChunk.positionProperty.value ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
             count++;
@@ -311,7 +311,7 @@ define( function( require ) {
      * @returns {number}
      */
     getTemperature: function() {
-      var temperature = EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevel * 100;
+      var temperature = EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevelProperty.value * 100;
       return Math.max( temperature, EFACConstants.FREEZING_POINT_TEMPERATURE );
     },
 
@@ -334,7 +334,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     canSupplyEnergyChunk: function() {
-      return this.heatCoolLevel > 0;
+      return this.heatCoolLevelProperty.value > 0;
     },
 
     /**
@@ -343,7 +343,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     canAcceptEnergyChunk: function() {
-      return this.heatCoolLevel < 0;
+      return this.heatCoolLevelProperty.value < 0;
     }
   } );
 } );
