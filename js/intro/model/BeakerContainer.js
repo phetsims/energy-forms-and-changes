@@ -53,7 +53,7 @@ define( function( require ) {
         this.getBounds().minX,
         this.getBounds().minY,
         this.width,
-        this.height * this.fluidLevel );
+        this.height * this.fluidLevelProperty.value );
 
       var overlappingArea = 0;
       potentiallyDisplacingRectangles.forEach( function( rectangle ) {
@@ -66,7 +66,7 @@ define( function( require ) {
       // Map the overlap to a new fluid height.  The scaling factor was empirically determined to look good.
       var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
       var proportionateIncrease = newFluidLevel / this.fluidLevelProperty.value;
-      this.fluidLevel = newFluidLevel;
+      this.fluidLevelProperty.set( newFluidLevel );
 
       // Update the shapes of the energy chunk slices.
       this.slices.forEach( function( slice ) {
