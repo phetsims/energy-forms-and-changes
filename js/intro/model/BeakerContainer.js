@@ -116,7 +116,7 @@ define( function( require ) {
         // This chunk is being transferred from a container in the
         // beaker to the fluid, so move it sideways.
         if ( self.isEnergyChunkObscured( ec ) ) {
-          var xVel = 0.05 * dt * ( self.getCenterPoint().getX() > ec.position.x ? -1 : 1 );
+          var xVel = 0.05 * dt * ( self.getCenterPoint().getX() > ec.positionProperty.value.x ? -1 : 1 );
           var motionVector = new Vector2( xVel, 0 );
           ec.translate( motionVector );
         }
@@ -128,7 +128,7 @@ define( function( require ) {
 
         // Chunk is in a place where it can migrate to the slices and
         // stop moving.
-        if ( !self.isEnergyChunkObscured( ec ) && self.getSliceBounds().containsPoint( ec.position ) ) {
+        if ( !self.isEnergyChunkObscured( ec ) && self.getSliceBounds().containsPoint( ec.positionProperty.value ) ) {
           self.moveEnergyChunkToSlices( controller.getEnergyChunk() );
         }
       } );
@@ -141,7 +141,7 @@ define( function( require ) {
     addEnergyChunk: function( energyChunk ) {
       if ( this.isEnergyChunkObscured( energyChunk ) ) {
         // because the chunk just came from the model element.
-        energyChunk.zPosition.set( 0.0 );
+        energyChunk.zPositionProperty.set( 0.0 );
         this.approachingEnergyChunks.add( energyChunk );
         this.energyChunkWanderControllers.add(
           new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ ) );
