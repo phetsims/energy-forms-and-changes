@@ -470,9 +470,9 @@ define( function( require ) {
      * @returns {Vector2}
      */
     getCenterPoint: function() {
-      return new Vector2( this.position.x, this.position.y + this.height / 2 );
+      var position = this.positionProperty.value;
+      return new Vector2( position.x, position.y + this.height / 2 );
     },
-
 
     /**
      * Get a number indicating the balance between the energy level and the
