@@ -45,7 +45,6 @@ define( function( require ) {
       energyChunkLayer.addChild( energyChunkNode );
       air.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          console.log( 'AN: removing chunk node' );
           energyChunkLayer.removeChild( energyChunkNode );
           air.energyChunkList.removeItemRemovedListener( removalListener );
         }
