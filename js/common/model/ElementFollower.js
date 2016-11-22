@@ -35,7 +35,7 @@ define( function( require ) {
     this.followerFunction = function( location ) {
       // self.followerProperty.set( location.plus( self.offset ) );
       self.followerProperty.set( location );
-      // console.log(location, self.followerProperty.get());
+      console.log(location, self.followerProperty.get());
     };
   }
 
@@ -48,6 +48,7 @@ define( function( require ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
       }
       this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
+      console.log(this.offset);
       locationToFollowProperty.link( this.followerFunction );
       this.locationBeingFollowedProperty.set( locationToFollowProperty.get() );
     },

@@ -29,7 +29,6 @@ define( function( require ) {
     // call the supertype
     Thermometer.call( this, model, initialPosition, initiallyActive );
 
-    // extend the scope of this
     var self = this;
 
     this.elementFollower = new ElementFollower( this.positionProperty.get() );
@@ -40,15 +39,16 @@ define( function( require ) {
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // stop following anything.
-        // console.log('stop following');
+        console.log( 'userControlled - stop following' );
         self.elementFollower.stopFollowing();
-      } else {
+      }
+      else {
         // The user has dropped this thermometer. See if it was
         // dropped over something that it should follow.
         model.getBlockList().forEach( function( block ) {
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             // stick to this block.
-            // console.log( 'sticking?' );
+            console.log( 'dropped - sticking?' );
             self.elementFollower.follow( block.positionProperty );
           }
         } );
@@ -73,4 +73,3 @@ define( function( require ) {
     }
   } );
 } );
-
