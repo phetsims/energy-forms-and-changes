@@ -16,6 +16,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Property = require( 'AXON/Property' );
+  var Color = require( 'SCENERY/util/Color' );
 
   // strings
   var introString = require( 'string!ENERGY_FORMS_AND_CHANGES/intro' );
@@ -28,7 +30,7 @@ define( function( require ) {
 
     var options = {
       name: introString,
-      backgroundColor: EFACConstants.FIRST_TAB_BACKGROUND_COLOR,
+      backgroundColorProperty: new Property( Color.toColor( EFACConstants.FIRST_TAB_BACKGROUND_COLOR ) ),
       //TODO add homeScreenIcon
       tandem: tandem
     };
