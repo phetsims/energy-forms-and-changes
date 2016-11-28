@@ -234,7 +234,7 @@ define( function( require ) {
         this.positionProperty.value.x - this.width / 2,
         this.positionProperty.value.y,
         this.width,
-        this.height * this.fluidLevel ), true );
+        this.height * this.fluidLevelProperty.value ), true );
     },
 
     /**
