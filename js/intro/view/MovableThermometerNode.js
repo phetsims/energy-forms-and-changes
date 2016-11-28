@@ -32,11 +32,13 @@ define( function( require ) {
 
     var self = this;
     SensingThermometerNode.call( this, thermometer );
+
     // Update the offset if and when the model position changes.
     thermometer.positionProperty.link( function( position ) {
-      self.translation = new Vector2(
-        modelViewTransform.modelToViewX( position.x ),
-        modelViewTransform.modelToViewY( position.y ) - ( self.height / 2 + self.triangleTipOffset.height ) );
+      var x = modelViewTransform.modelToViewX( position.x );
+      var y = modelViewTransform.modelToViewY( position.y ) - ( self.height / 2 + self.triangleTipOffset.height );
+      console.log(x,y); // when therm dragged
+      self.translation = new Vector2( x, y );
     } );
 
     // Add the drag handler.

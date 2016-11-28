@@ -15,27 +15,25 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
-  var Property = require( 'AXON/Property' );
 
   /**
    * Convenience class for sticking to model elements.
    *
-   * @param {Vector2 || null} initialPositionToTrack
+   * @param {Property<Vector2>} trackedPositionProperty
    * @constructor
    */
-  function ElementFollower( initialPositionToTrack ) {
+  function ElementFollower( trackedPositionProperty ) {
 
-    this.followerProperty = new Property( initialPositionToTrack === null ? Vector2.ZERO : initialPositionToTrack );
-    this.locationBeingFollowedProperty = new Property( null );
+    // Position of element-following object
+    this.followerProperty = trackedPositionProperty;
+    this.locationBeingFollowedProperty = null; // Property<Vector2> when following something; otherwise null
 
     this.offset = Vector2.ZERO;
 
     var self = this;
-    // @private - function that gets linked/unlinked when the thermometer is following/unfollwing.
+    // @private - function that gets linked/unlinked when the thermometer is following/unfollowing.
     this.followerFunction = function( location ) {
-      // self.followerProperty.set( location.plus( self.offset ) );
-      self.followerProperty.set( location );
-      console.log(location, self.followerProperty.get());
+      self.followerProperty.set( location.plus( self.offset ) );
     };
   }
 
@@ -43,25 +41,24 @@ define( function( require ) {
 
   return inherit( Object, ElementFollower, {
 
-    follow: function( locationToFollowProperty ) {
-      if ( this.locationBeingFollowedProperty.get() !== null ) {
+    startFollowing: function( locationToFollowProperty ) {
+      if ( this.locationBeingFollowedProperty ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
       }
       this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
-      console.log(this.offset);
       locationToFollowProperty.link( this.followerFunction );
-      this.locationBeingFollowedProperty.set( locationToFollowProperty.get() );
+      this.locationBeingFollowedProperty = locationToFollowProperty;
     },
 
     stopFollowing: function() {
-      if ( this.locationBeingFollowedProperty.get() !== null ) {
+      if ( this.locationBeingFollowedProperty ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
-        this.locationBeingFollowedProperty.set( null );
+        this.locationBeingFollowed = null;
       }
     },
 
     isFollowing: function() {
-      return this.locationBeingFollowedProperty.get() !== null;
+      return this.locationBeingFollowed !== null;
     },
 
     reset: function() {

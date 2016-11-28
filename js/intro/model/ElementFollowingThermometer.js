@@ -31,7 +31,7 @@ define( function( require ) {
 
     var self = this;
 
-    this.elementFollower = new ElementFollower( this.positionProperty.get() );
+    this.elementFollower = new ElementFollower( this.positionProperty );
 
     // Monitor 'userControlled' in order to see when the user drops this
     // thermometer and determine whether or not it was dropped over anything
@@ -48,14 +48,14 @@ define( function( require ) {
         model.getBlockList().forEach( function( block ) {
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             // stick to this block.
-            console.log( 'dropped - sticking?' );
-            self.elementFollower.follow( block.positionProperty );
+            console.log( 'startFollowing' );
+            self.elementFollower.startFollowing( block.positionProperty );
           }
         } );
         if ( !self.elementFollower.isFollowing() &&
           model.beaker.getThermalContactArea().containsPoint( self.positionProperty.value ) ) {
           // Stick to the beaker.
-          self.elementFollower.follow( model.beaker.positionProperty );
+          self.elementFollower.startFollowing( model.beaker.positionProperty );
         }
       }
     } );
