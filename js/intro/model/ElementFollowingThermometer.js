@@ -39,7 +39,6 @@ define( function( require ) {
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
         // stop following anything.
-        console.log( 'userControlled - stop following' );
         self.elementFollower.stopFollowing();
       }
       else {
@@ -48,7 +47,6 @@ define( function( require ) {
         model.getBlockList().forEach( function( block ) {
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             // stick to this block.
-            console.log( 'startFollowing' );
             self.elementFollower.startFollowing( block.positionProperty );
           }
         } );

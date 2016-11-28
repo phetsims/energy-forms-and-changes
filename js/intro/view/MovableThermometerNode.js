@@ -37,7 +37,6 @@ define( function( require ) {
     thermometer.positionProperty.link( function( position ) {
       var x = modelViewTransform.modelToViewX( position.x );
       var y = modelViewTransform.modelToViewY( position.y ) - ( self.height / 2 + self.triangleTipOffset.height );
-      console.log(x,y); // when therm dragged
       self.translation = new Vector2( x, y );
     } );
 
