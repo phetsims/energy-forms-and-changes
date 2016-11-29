@@ -229,11 +229,9 @@ define( function( require ) {
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
 
-    // TODO: the following three lines are the correct implementation, but on drag, an assertion fails with "globalToParentPoint unable to work for DAG"
-    // beakerFrontLayer.addChild( beakerView.frontNode );
-    // beakerBackLayer.addChild( beakerView.backNode );
-    // beakerGrabLayer.addChild( beakerView.grabNode );
-    this.addChild( beakerView );
+    beakerFrontLayer.addChild( beakerView.frontNode );
+    beakerBackLayer.addChild( beakerView.backNode );
+    beakerGrabLayer.addChild( beakerView.grabNode );
 
     // Thermometer layer should be above the movable objects
     var thermometerLayer = new Node();
