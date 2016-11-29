@@ -68,7 +68,9 @@ define( function( require ) {
    */
   function EnergyFormsAndChangesIntroScreenView( model ) {
 
-    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 1024, 618 ) } );
+    ScreenView.call( this, {
+      layoutBounds: new Bounds2( 0, 0, 1024, 618 )
+    } );
 
     var self = this;
     this.model = model;
@@ -98,8 +100,6 @@ define( function( require ) {
     this.addChild( airLayer );
     var heaterCoolerFrontLayer = new Node();
     this.addChild( heaterCoolerFrontLayer );
-    var thermometerLayer = new Node();
-    this.addChild( thermometerLayer );
     var beakerFrontLayer = new Node();
     this.addChild( beakerFrontLayer );
 
@@ -119,7 +119,9 @@ define( function( require ) {
       labBenchSurfaceImage.centerX - benchWidth / 2,
       labBenchSurfaceImage.centerY,
       benchWidth,
-      benchHeight, { fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR } );
+      benchHeight, {
+        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
+      } );
 
     // Add the bench side and top to the scene.  The lab bench side must be behind the bench top.
     backLayer.addChild( labBenchSide );
@@ -149,7 +151,9 @@ define( function( require ) {
     var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
     energyChunkNode.scale( 1.0 );
     energyChunkNode.pickable = false;
-    var label = new Text( energySymbolsString, { font: new PhetFont( 20 ) } );
+    var label = new Text( energySymbolsString, {
+      font: new PhetFont( 20 )
+    } );
     var showEnergyCheckBox = new CheckBox( new LayoutBox( {
       children: [ label, energyChunkNode ],
       orientation: 'horizontal',
@@ -211,7 +215,9 @@ define( function( require ) {
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
 
     if ( SHOW_LAYOUT_BOUNDS ) {
-      this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
+      this.addChild( new Rectangle( this.layoutBounds, {
+        stroke: 'rgba( 255, 0, 0, 0.9 )'
+      } ) );
     }
 
     // Add the movable objects.
@@ -224,14 +230,26 @@ define( function( require ) {
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
     this.addChild( beakerView );
 
+    // Thermometer layer should be above the movable objects
+    var thermometerLayer = new Node();
+    this.addChild( thermometerLayer );
+
     //Show the mock-up and a slider to change its transparency
     if ( SHOW_MOCKUP ) {
       var mockupOpacityProperty = new Property( 0.02 );
-      var image = new Image( mockupImage, { pickable: false } );
+      var image = new Image( mockupImage, {
+        pickable: false
+      } );
       image.scale( this.layoutBounds.width / image.width, this.layoutBounds.height / image.height );
       mockupOpacityProperty.linkAttribute( image, 'opacity' );
       this.addChild( image );
-      this.addChild( new HSlider( mockupOpacityProperty, { min: 0, max: 1 }, { top: 10, left: 10 } ) );
+      this.addChild( new HSlider( mockupOpacityProperty, {
+        min: 0,
+        max: 1
+      }, {
+        top: 10,
+        left: 10
+      } ) );
     }
 
     // Add the thermometer nodes.
@@ -253,14 +271,6 @@ define( function( require ) {
         }
       } ) );
 
-      //      thermometerNode.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
-      //        mouseReleased: function( event ) {
-      //          if ( thermometerNode.bounds.intersects( thermometerToolBox.bounds ) ) {
-      //            // Released over tool box, so deactivate.
-      //            thermometer.active.set( false );
-      //          }
-      //        }
-      //      } ) );
       movableThermometerNodes.push( thermometerNode );
     } );
 
@@ -289,12 +299,15 @@ define( function( require ) {
 
       if ( model.ironBlock.isStackedUpon( model.brick ) ) {
         brickNode.moveToBack();
-      } else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
+      }
+      else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
         ironBlockNode.moveToBack();
-      } else if ( model.ironBlock.getBounds().minX >= model.brick.getBounds().maxX ||
+      }
+      else if ( model.ironBlock.getBounds().minX >= model.brick.getBounds().maxX ||
         model.ironBlock.getBounds().minY >= model.brick.getBounds().maxY ) {
         ironBlockNode.moveToFront();
-      } else if ( model.brick.getBounds().minX >= model.ironBlock.getBounds().maxX ||
+      }
+      else if ( model.brick.getBounds().minX >= model.ironBlock.getBounds().maxX ||
         model.brick.getBounds().minY >= model.ironBlock.getBounds().maxY ) {
         brickNode.moveToFront();
       }
@@ -311,4 +324,3 @@ define( function( require ) {
   return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView );
 
 } );
-
