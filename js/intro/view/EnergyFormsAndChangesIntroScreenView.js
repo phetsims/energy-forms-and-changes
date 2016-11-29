@@ -228,7 +228,9 @@ define( function( require ) {
     ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
-    this.addChild( beakerView );
+    beakerFrontLayer.addChild( beakerView.frontNode );
+    beakerBackLayer.addChild( beakerView.backNode );
+    beakerGrabLayer.addChild( beakerView.grabNode );
 
     // Thermometer layer should be above the movable objects
     var thermometerLayer = new Node();
