@@ -299,7 +299,7 @@ define( function( require ) {
         //   .lineTo( centerX - sliceWidth / 2, bottomY );
 
         var zPosition = -proportion * this.width;
-        var sliceShape = Shape.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
+        var sliceShape = Shape.rect( fluidRect.centerX - 0.44 * sliceWidth, bottomY, sliceWidth, fluidRect.height );
         this.slices.push( new EnergyChunkContainerSlice( sliceShape, zPosition, this.positionProperty ) );
       }
     },
