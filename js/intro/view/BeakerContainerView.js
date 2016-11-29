@@ -20,8 +20,6 @@ define( function( require ) {
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * Constructor for a BeakerContainerView.
@@ -48,16 +46,10 @@ define( function( require ) {
       self.updateEnergyChunkClipMask( model, self.energyChunkClipNode );
     } );
 
-    this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform,
-      new ThermalItemMotionConstraint( model, model.beaker, this.grabNode, stageBounds, modelViewTransform,
-        Vector2.ZERO ) ) );
+    this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform ) );
 
     // Add the drag handler.
-    var offsetPosToCenter = new Vector2(
-      this.bounds.centerX - modelViewTransform.modelToViewX( model.beaker.positionProperty.value.x ),
-      this.bounds.centerY - modelViewTransform.modelToViewY( model.beaker.positionProperty.value.y ) );
-    this.addInputListener( new ThermalElementDragHandler( model.beaker, this, modelViewTransform,
-      new ThermalItemMotionConstraint( model, model.beaker, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
+    this.addInputListener( new ThermalElementDragHandler( model.beaker, this, modelViewTransform ) );
   }
 
   energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );

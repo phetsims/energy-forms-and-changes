@@ -1,8 +1,7 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Drag handler for objects that can be moved by the user.  This is constructed with a constraint boundary that defines
- * where the model object can go.
+ * Drag handler for objects that can be moved by the user.
  */
 define( function( require ) {
   'use strict';
@@ -19,9 +18,8 @@ define( function( require ) {
    * @param {UserMovableModelElement} modelElement
    * @param {Node} node
    * @param {ModelViewTransform2} modelViewTransform
-   * @param {ThermalItemMotionConstraint} constraint
    */
-  function ThermalElementDragHandler( modelElement, node, modelViewTransform, constraint ) {
+  function ThermalElementDragHandler( modelElement, node, modelViewTransform ) {
     this.modelElement = modelElement;
 
     MovableDragHandler.call( this, modelElement.positionProperty, {
@@ -31,7 +29,6 @@ define( function( require ) {
 
       modelViewTransform: modelViewTransform,
 
-      //dragBounds: constraint.modelBounds,
       dragBounds: modelViewTransform.viewToModelBounds( new Bounds2( 0, 0, 1024, 618 ) ),
 
       startDrag: function( event ) {
@@ -43,8 +40,6 @@ define( function( require ) {
       },
 
       onDrag: function( event ) {
-        // MovableDragHandler has set the proposed model position.
-        modelElement.positionProperty.value = constraint.apply( modelElement.positionProperty.value );
       }
 
     } );
@@ -54,4 +49,3 @@ define( function( require ) {
 
   return inherit( MovableDragHandler, ThermalElementDragHandler );
 } );
-

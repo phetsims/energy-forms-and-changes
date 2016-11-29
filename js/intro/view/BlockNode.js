@@ -25,7 +25,6 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  var ThermalItemMotionConstraint = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalItemMotionConstraint' );
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Transform3 = require( 'DOT/Transform3' );
@@ -194,12 +193,8 @@ define( function( require ) {
         modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
     } );
 
-    // Add the drag handler.
-    var offsetPosToCenter = new Vector2(
-      this.bounds.centerX - modelViewTransform.modelToViewX( block.positionProperty.value.x ),
-      this.bounds.centerY - modelViewTransform.modelToViewY( block.positionProperty.value.y ) );
-    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform,
-      new ThermalItemMotionConstraint( model, block, this, stageBounds, modelViewTransform, offsetPosToCenter ) ) );
+    // Add the drag handler
+    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform ) );
   }
 
   energyFormsAndChanges.register( 'BlockNode', BlockNode );
