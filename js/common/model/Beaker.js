@@ -242,9 +242,10 @@ define( function( require ) {
      */
     getSteamArea: function() {
       // Height of steam rectangle is based on beaker height and steamingProportion.
-      var liquidWaterHeight = this.height * this.fluidLevel;
-      return new Rectangle( this.position.x - this.getWidth() / 2,
-        this.position.y + liquidWaterHeight,
+      var liquidWaterHeight = this.height * this.fluidLevelProperty.value;
+      var position = this.positionProperty.value;
+      return new Rectangle( position.x - this.width / 2,
+        position.y + liquidWaterHeight,
         this.width,
         this.maxSteamHeight );
     },
