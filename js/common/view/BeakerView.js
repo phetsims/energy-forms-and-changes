@@ -67,7 +67,7 @@ define( function( require ) {
   function PerspectiveWaterNode( beakerOutlineRect, waterLevelProperty, temperatureProperty ) {
 
     Node.call( this );
-    var self = this; // Extend scope for nested callbacks.
+    var self = this;
 
     // Nodes that comprise this node.
     this.liquidWaterTopNode = new Path( null, {

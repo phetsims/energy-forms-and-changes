@@ -147,10 +147,11 @@ define( function( require ) {
      */
     step: function( dt ) {
       RectangularThermalMovableModelElement.prototype.step.call( this, dt );
-      this.temperature = this.getTemperature();
+      this.temperatureProperty.set( this.getTemperature() );
       this.steamingProportion = 0;
-      var steamFraction = 1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature ) / STEAMING_RANGE;
-      if ( EFACConstants.BOILING_POINT_TEMPERATURE - this.temperature < STEAMING_RANGE ) {
+      var temperature = this.temperatureProperty.value;
+      var steamFraction = 1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE;
+      if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
         // Water is emitting some amount of steam.  Set the proportionate amount.
         this.steamingProportion = Util.clamp( steamFraction, 0, 1 );
       }
@@ -178,7 +179,6 @@ define( function( require ) {
       }
 
       // Distribute the energy chunks within the beaker.
-      // TODO: ECD needs work.
       // TODO: This loop massively increases load time...leaving commented for now
       // for ( var i = 0; i < 1000; i++ ) {
       //   if ( !EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
@@ -256,7 +256,11 @@ define( function( require ) {
      * @returns {number}
      */
     getSteamTemperature: function( heightAboveWater ) {
-      var mappingFunction = new LinearFunction( 0, this.maxSteamHeight * this.steamingProportion, this.temperature, EFACConstants.ROOM_TEMPERATURE );
+      var mappingFunction = new LinearFunction(
+        0,
+        this.maxSteamHeight * this.steamingProportion,
+        this.temperatureProperty.value,
+        EFACConstants.ROOM_TEMPERATURE );
       return Math.max( mappingFunction.evaluate( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
     },
 
@@ -388,4 +392,3 @@ define( function( require ) {
 
   } );
 } );
-
