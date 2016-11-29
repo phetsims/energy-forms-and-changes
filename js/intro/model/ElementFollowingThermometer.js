@@ -37,21 +37,24 @@ define( function( require ) {
     // thermometer and determine whether or not it was dropped over anything
     // that it should stick to.
     this.userControlledProperty.link( function( userControlled ) {
+
+      // If being dragged, stop following any objects
       if ( userControlled ) {
-        // stop following anything.
         self.elementFollower.stopFollowing();
       }
+
+      // If thermometer was dropped, see if it was dropped over something that it should follow.
       else {
-        // The user has dropped this thermometer. See if it was
-        // dropped over something that it should follow.
         model.getBlockList().forEach( function( block ) {
+
+          // Stick to this block
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
-            // stick to this block.
             self.elementFollower.startFollowing( block.positionProperty );
           }
         } );
+
+        // Stick to the beaker
         if ( model.beaker.getThermalContactArea().containsPoint( self.positionProperty.value ) ) {
-          // Stick to the beaker.
           self.elementFollower.startFollowing( model.beaker.positionProperty );
         }
       }
@@ -63,10 +66,8 @@ define( function( require ) {
   return inherit( Thermometer, ElementFollowingThermometer, {
 
     reset: function() {
-
       this.elementFollower.stopFollowing();
       Thermometer.prototype.reset.call( this );
-
     }
   } );
 } );
