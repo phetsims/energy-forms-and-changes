@@ -42,7 +42,7 @@ define( function( require ) {
   return inherit( UserMovableModelElement, Thermometer, {
 
     step: function( dt ) {
-      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.position );
+      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.positionProperty.value );
       this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
       this.sensedElementColorProperty.set( temperatureAndColor.color );
     },
