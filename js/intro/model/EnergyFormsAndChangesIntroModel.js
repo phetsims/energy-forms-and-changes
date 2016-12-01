@@ -456,16 +456,16 @@ define( function( require ) {
     },
 
     /**
-     * Validate the position being proposed for the given model element.  This evaluates whether the proposed position
-     * would cause the model element to move through another solid element, or the side of the beaker, or something that
-     * would look weird to the user and, if so, prevent the odd behavior from happening by returning a location that
-     * works better.
+     * Evaluate whether the proposed position would cause the model element to
+     * move through another solid element, or the side of the beaker, or something
+     * that would look weird to the user and, if so, prevent the odd behavior from
+     * happening by returning a location that works better.
      *
      * @param {RectangularThermalMovableModelElement} modelElement Element whose position is being validated.
      * @param {Vector2} proposedPosition Proposed new position for element
      * @returns The original proposed position if valid, or alternative position if not.
      */
-    validatePosition: function( modelElement, proposedPosition ) {
+    constrainedPosition: function( modelElement, proposedPosition ) {
       // Carry this model through scope of nested callbacks.
       var self = this;
 
