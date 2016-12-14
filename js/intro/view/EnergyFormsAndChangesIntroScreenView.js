@@ -175,10 +175,10 @@ define( function( require ) {
 
     // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
     var leftHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty
     } );
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolLevelProperty: model.leftBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty
     } );
     leftHeaterCoolerBack.leftTop = new Vector2(
       modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) -
@@ -194,10 +194,10 @@ define( function( require ) {
 
     // Set up right heater-cooler node.
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty
     } );
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolLevelProperty: model.rightBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty
     } );
     rightHeaterCoolerBack.leftTop = new Vector2(
       modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) -
