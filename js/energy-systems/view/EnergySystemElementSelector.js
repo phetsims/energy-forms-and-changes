@@ -59,7 +59,7 @@ define( function( require ) {
     var buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
       baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       orientation: 'horizontal',
-      selectedStroke: 'none',
+      selectedStroke: null,
       deselectedStroke: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
     } );
 
