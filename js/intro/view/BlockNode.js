@@ -31,7 +31,7 @@ define( function( require ) {
   var Matrix3 = require( 'DOT/Matrix3' );
 
   // constants
-  var LABEL_FONT = new PhetFont( 32, false );
+  var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINEWIDTH = 3;
   var OUTLINE_STROKE = Color.DARK_GRAY;
 

@@ -42,7 +42,7 @@ define( function( require ) {
   var noneString = require( 'string!ENERGY_FORMS_AND_CHANGES/none' );
 
   // Constants
-  var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16, true );
+  var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
   var SLIDER_LABEL_FONT = new PhetFont( 12 );
 
   // var EMISSION_SECTOR_LINE_LENGTH = 700;

@@ -776,7 +776,7 @@ define( function( require ) {
 
       // Test if this point is in the water or steam associated with the beaker.
       if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
-        return new TemperatureAndColor( this.beaker.temperature, EFACConstants.WATER_COLOR_IN_BEAKER );
+        return new TemperatureAndColor( this.beaker.temperatureProperty.get(), EFACConstants.WATER_COLOR_IN_BEAKER );
       }
       else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
         return new TemperatureAndColor( this.beaker.getSteamTemperature(
