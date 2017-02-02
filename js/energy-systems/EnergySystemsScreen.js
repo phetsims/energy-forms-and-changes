@@ -17,7 +17,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var Property = require( 'AXON/Property' );
-  var Color = require( 'SCENERY/util/Color' );
 
   // strings
   var energySystemsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySystems' );
@@ -36,7 +35,7 @@ define( function( require ) {
 
     var options = {
       name: energySystemsString,
-      backgroundColorProperty: new Property( Color.toColor( 'white' ) ),
+      backgroundColorProperty: new Property( 'white' ),
       //TODO add homeScreenIcon
       tandem: tandem
     };
