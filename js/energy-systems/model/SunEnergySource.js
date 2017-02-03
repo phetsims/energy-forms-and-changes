@@ -153,7 +153,7 @@ define( function( require ) {
           self.clouds.forEach( function( cloud ) {
 
             var inClouds = cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.positionProperty.value );
-            var inList = _.contains( self.energyChunksPassingThroughClouds, chunk );
+            var inList = _.includes( self.energyChunksPassingThroughClouds, chunk );
             var deltaPhi = chunk.velocity.angle() - chunk.positionProperty.value.minus( self.sunPosition ).angle();
 
             if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {

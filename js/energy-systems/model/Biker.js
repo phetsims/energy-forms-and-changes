@@ -570,7 +570,7 @@ define( function( require ) {
           return;
         }
 
-        if ( !_.contains( movingEnergyChunks, function( chunk ) {
+        if ( !_.includes( movingEnergyChunks, function( chunk ) {
             return chunk === ec;
           } ) ) {
           nonMovingEnergyChunk = ec;
