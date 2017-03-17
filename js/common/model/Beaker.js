@@ -45,7 +45,7 @@ define( function( require ) {
   var WATER_DENSITY = 1000.0; // In kg/m^3, source = design document (and common knowledge).
 
   /**
-   * Constructor for Beaker.  Initial posiition is the center bottom of the beaker rectangle.
+   * Constructor for Beaker.  Initial position is the center bottom of the beaker rectangle.
    *
    * @param {Vector2} initialPosition
    * @param {number} width
@@ -61,16 +61,15 @@ define( function( require ) {
       height,
       this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL ),
       WATER_SPECIFIC_HEAT,
-      energyChunksVisibleProperty );
+      energyChunksVisibleProperty
+    );
 
     var self = this;
     this.width = width;
     this.height = height;
 
-    // Add the Beaker Properties.
+    // Add the additional properties needed for the beaker.
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
-    this.topSurfaceProperty = new Property( null );
-    this.bottomSurfaceProperty = new Property( null );
     this.temperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
 
     // Indicator of how much steam is being emitted.  Ranges from 0 to 1, where 0 is no steam, 1 is the max amount

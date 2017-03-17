@@ -46,7 +46,8 @@ define( function( require ) {
       EFACConstants.BLOCK_SURFACE_WIDTH,
       Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * density,
       specificHeat,
-      energyChunksVisibleProperty );
+      energyChunksVisibleProperty
+    );
 
     var self = this;
 

@@ -40,6 +40,9 @@ define( function( require ) {
   // Units: joules/sec, multiplier empirically chosen.
   var MAX_ENERGY_GENERATION_RATE_INTO_AIR = MAX_ENERGY_GENERATION_RATE * 0.3;
 
+  // counter used by constructor to create unique IDs
+  var idCounter = 0;
+
   /**
    * Burner class
    *
@@ -50,6 +53,7 @@ define( function( require ) {
   function Burner( position, energyChunksVisibleProperty ) {
 
     ModelElement.call( this );
+    this.id = 'burner-' + idCounter++;
 
     this.heatCoolLevelProperty = new Property( 0 );
 

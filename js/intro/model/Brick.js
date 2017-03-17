@@ -30,6 +30,9 @@ define( function( require ) {
   // strings
   var brickString = require( 'string!ENERGY_FORMS_AND_CHANGES/brick' );
 
+  // counter used by constructor to create unique IDs
+  var idCounter = 0;
+
   /**
    *
    * @param {Vector2} initialPosition
@@ -38,6 +41,7 @@ define( function( require ) {
    */
   function Brick( initialPosition, energyChunksVisibleProperty ) {
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
+    this.id = 'brick-' + idCounter++;
   }
 
   energyFormsAndChanges.register( 'Brick', Brick );

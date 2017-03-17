@@ -21,7 +21,11 @@ define( function( require ) {
   var SPECIFIC_HEAT = 450; // In J/kg-K
   var DENSITY = 7800; // In kg/m^3, source = design document.
 
+  // strings
   var ironString = require( 'string!ENERGY_FORMS_AND_CHANGES/iron' );
+
+  // counter used by constructor to create unique IDs
+  var idCounter = 0;
 
   /**
    *
@@ -31,6 +35,7 @@ define( function( require ) {
    */
   function IronBlock( initialPosition, energyChunksVisibleProperty ) {
     Block.call( this, initialPosition, DENSITY, SPECIFIC_HEAT, energyChunksVisibleProperty );
+    this.id = 'iron-block-' + idCounter++;
   }
 
   energyFormsAndChanges.register( 'IronBlock', IronBlock );

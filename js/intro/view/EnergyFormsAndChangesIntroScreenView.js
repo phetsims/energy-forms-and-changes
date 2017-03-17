@@ -297,7 +297,7 @@ define( function( require ) {
       thermometerToolBoxNode.returnRect = thermometerBox.bounds;
     } );
 
-    // Create a function that updates the Z-order of the blocks when the user controlled state changes.
+    // Create a function that updates the Z-order of the blocks when the user-controlled state changes.
     var blockChangeObserver = function() {
 
       if ( model.ironBlock.isStackedUpon( model.brick ) ) {

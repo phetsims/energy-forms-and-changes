@@ -22,10 +22,10 @@ define( function( require ) {
   function ModelElement() {
 
     // Surface upon which this model element is resting.  Null if the element
-    // is floating in the air (which is perfectly legitimate for some Model Element)
+    // is floating in the air (which is perfectly legitimate in some cases for some model elements)
+    this.supportingSurfaceProperty = new Property( null );
 
     // These properties will have a HorizontalSurface type parameter
-    this.supportingSurfaceProperty = new Property( null );
     this.topSurfaceProperty = new Property( null );
     this.bottomSurfaceProperty = new Property( null );
   }
@@ -40,7 +40,7 @@ define( function( require ) {
      * @param {HorizontalSurface} surface
      */
     setSupportingSurfaceProperty: function( surface ) {
-      this.supportingSurface = surface;
+      this.supportingSurfaceProperty.set( surface );
     },
 
     /**
@@ -75,11 +75,11 @@ define( function( require ) {
      *
      * @public
      * @param {ModelElement} element -  Model element to be checked.
-     * @returns {boolean}  true if the given element is stacked anywhere on top of this one, which includes cases where
-     * one or more elements are in between.
+     * @returns {boolean}  true if this model element is stacked anywhere on top of the provided on one, which includes
+     * cases where one or more elements are in between.
      */
     isStackedUpon: function( element ) {
-      var surface = this.supportingSurfaceProperty.value;
+      var surface = this.supportingSurfaceProperty.get();
       return ( surface !== null ) &&
         ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
     },

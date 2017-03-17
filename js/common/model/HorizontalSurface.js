@@ -72,6 +72,7 @@ define( function( require ) {
      */
     addElementToSurface: function( modelElement ) {
       assert && assert( this.elementOnSurface === null, 'Only one thing on surface allowed at a time' );
+      assert && assert( modelElement !== this.owner, 'an element cannot sit upon its own surface' );
       this.elementOnSurface = modelElement;
     },
 

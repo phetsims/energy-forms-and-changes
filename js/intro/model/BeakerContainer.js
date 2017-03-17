@@ -19,6 +19,9 @@ define( function( require ) {
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // counter used by constructor to create unique IDs
+  var idCounter = 0;
+
   /**
    *
    * @param {Vector2} initialPosition
@@ -30,6 +33,7 @@ define( function( require ) {
    */
   function BeakerContainer( initialPosition, width, height, potentiallyContainedElements, energyChunksVisibleProperty ) {
     Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty );
+    this.id = 'beaker-container-' + idCounter++;
     this.potentiallyContainedElements = potentiallyContainedElements;
   }
 
