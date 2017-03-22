@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-define( function() {
+define( function( require ) {
   'use strict';
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
