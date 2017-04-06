@@ -266,7 +266,7 @@ define( function( require ) {
     },
 
     /**
-     * @return {Energy} Type, amount, direction of emitted energy
+     * @returns {Energy} Type, amount, direction of emitted energy
      */
     getEnergyOutputRate: function() {
       return new Energy( EnergyType.ELECTRICAL, this.energyOutputRate, 0 );
@@ -277,7 +277,7 @@ define( function( require ) {
      *
      * @param  {EnergyChunk} incomingEnergyChunk
      *
-     * @return {number} speed
+     * @returns {number} speed
      * @private
      */
     chooseChunkSpeedOnPanel: function( incomingEnergyChunk ) {

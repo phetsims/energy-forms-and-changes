@@ -84,7 +84,7 @@ define( function( require ) {
      *
      * @param  {number} dt timestep
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
@@ -231,7 +231,7 @@ define( function( require ) {
      * @param  {Vector2}  startPosition
      * @param  {Vector2}  teapotPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createThermalEnergyChunkPath: function( startPosition, teapotPosition ) {
@@ -245,7 +245,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} parentElementPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createPathToSpoutBottom: function( parentElementPosition ) {
@@ -259,7 +259,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} parentElementPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createSpoutExitPath: function( parentElementPosition ) {
@@ -324,7 +324,7 @@ define( function( require ) {
     },
 
     /**
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */

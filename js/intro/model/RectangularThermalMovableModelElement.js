@@ -252,7 +252,7 @@ define( function( require ) {
      * since the provided point is only 2D.
      *
      * @param {Vector2} point - Comparison point.
-     * @return {EnergyChunk||null} closestEnergyChunk, null if there are none available.
+     * @returns {EnergyChunk||null} closestEnergyChunk, null if there are none available.
      */
     extractClosestEnergyChunkToPoint: function( point ) {
 

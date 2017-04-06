@@ -230,7 +230,7 @@ define( function( require ) {
      * @param  {Object} chunkForces - Id => Vector2 pairs
      * @param  {number} dt - timestep
      *
-     * @return {number} maxEnergy - max total energy of all provided chunks
+     * @returns {number} maxEnergy - max total energy of all provided chunks
      */
     updateVelocities: function( chunkMap, chunkForces, dt ) {
       // Update energy chunk velocities, drag force, and position.

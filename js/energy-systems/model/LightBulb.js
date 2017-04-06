@@ -321,7 +321,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} startingPoint
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createThermalEnergyChunkPath: function( startingPoint ) {
@@ -338,7 +338,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} center
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createElectricalEnergyChunkPath: function( center ) {
@@ -355,7 +355,7 @@ define( function( require ) {
     },
 
     /**
-     * @return {number} time
+     * @returns {number} time
      * @private
      */
     generateThermalChunkTimeOnFilament: function() {
@@ -366,7 +366,7 @@ define( function( require ) {
     /**
      * @param {Vector2} startingLocation
      * @param {Vector2[]} pathPoints
-     * @return {number}
+     * @returns {number}
      * @private
      */
     getTotalPathLength: function( startingLocation, pathPoints ) {

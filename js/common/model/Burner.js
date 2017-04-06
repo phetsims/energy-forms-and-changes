@@ -89,7 +89,7 @@ define( function( require ) {
     /**
      * Get a rectangle that defines the outline of the burner.  In the model the burner is essentially a 2D rectangle.
      *
-     * @return {Rectangle} Rectangle that defines the outline in model space.
+     * @returns {Rectangle} Rectangle that defines the outline in model space.
      */
     getOutlineRect: function() {
       return new Rectangle( this.position.x - WIDTH / 2, this.position.y, WIDTH, HEIGHT );
@@ -179,7 +179,7 @@ define( function( require ) {
      * Request an energy chunk from the burner.
      *
      * @param {Vector2} point - Point from which to search for closest chunk.
-     * @return {EnergyChunk} Closest energy chunk, null if none are contained.
+     * @returns {EnergyChunk} Closest energy chunk, null if none are contained.
      */
     extractClosestEnergyChunk: function( point ) {
       // Extend the scope for callbacks.

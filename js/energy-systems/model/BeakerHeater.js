@@ -323,7 +323,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} startingPoint
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createHeaterElementEnergyChunkPath: function( startingPoint ) {
@@ -340,7 +340,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} center
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createElectricalEnergyChunkPath: function( center ) {
@@ -360,7 +360,7 @@ define( function( require ) {
      * Path for chunks to take when radiated from the beaker
      *
      * @param  {Vector2} startingPoint
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      * @private
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {

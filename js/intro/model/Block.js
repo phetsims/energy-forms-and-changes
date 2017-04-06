@@ -129,7 +129,7 @@ define( function( require ) {
      * Get a rectangle the defines the current shape in model space.  By convention for this simulation, the position
      * is the middle of the bottom of the block's defining rectangle.
      *
-     * @return {Dot.Rectangle} rectangle that defines this item's 2D shape
+     * @returns {Dot.Rectangle} rectangle that defines this item's 2D shape
      */
     getRect: function() {
       return new Rectangle(

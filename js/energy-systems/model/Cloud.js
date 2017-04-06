@@ -49,7 +49,7 @@ define( function( require ) {
     /**
      * Return ellipse with size of Cloud
      *
-     * @return {Shape.ellipse} Ellipse with axes sized to width and height of cloud
+     * @returns {Shape.ellipse} Ellipse with axes sized to width and height of cloud
      */
     getCloudAbsorptionReflectionShape: function() {
       var center = this.getCenterPosition().minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
@@ -59,7 +59,7 @@ define( function( require ) {
     /**
      * Return (x,y) position of center of cloud
      *
-     * @return {Vector2} Center position of cloud
+     * @returns {Vector2} Center position of cloud
      */
     getCenterPosition: function() {
       return this.parentPositionProperty.get().plus( this.offsetFromParent );

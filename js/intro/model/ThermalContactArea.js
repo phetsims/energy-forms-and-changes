@@ -42,7 +42,7 @@ define( function( require ) {
      * another that is the same width, the contact length is the width of the shared edge.
      *
      * @param {ThermalContactArea} that -  Other thermal contact area.
-     * @return {number} Length of contact
+     * @returns {number} Length of contact
      */
     getThermalContactLength: function( that ) {
 

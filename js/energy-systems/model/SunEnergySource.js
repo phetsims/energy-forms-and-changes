@@ -222,14 +222,14 @@ define( function( require ) {
 
     /**
      * Return a structure containing type, rate, and direction of emitted energy
-     * @return {Energy}
+     * @returns {Energy}
      */
     getEnergyOutputRate: function() {
       return new Energy( EnergyType.LIGHT, EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProperty.value ) );
     },
 
     /**
-     * @return {number} emission angle
+     * @returns {number} emission angle
      * @private
      */
     chooseNextEmissionAngle: function() {

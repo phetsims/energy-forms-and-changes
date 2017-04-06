@@ -770,7 +770,7 @@ define( function( require ) {
      * the provided location.
      *
      * @param {Vector2} location - location to be sensed.
-     * @return {TemperatureAndColor} object with temperature and color at the provided location.
+     * @returns {TemperatureAndColor} object with temperature and color at the provided location.
      */
     getTemperatureAndColorAtLocation: function( position ) {
       var locationAsPoint = position;

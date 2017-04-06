@@ -122,7 +122,7 @@ define( function( require ) {
      *
      * @param  {number} index Requested position in array of EnergySystemElements
      *
-     * @return {EnergySystemElement}
+     * @returns {EnergySystemElement}
      */
     getElement: function( index ) {
       assert && assert( index < this.managedElements.length, 'Carousel index out of range: ' + index );
@@ -132,7 +132,7 @@ define( function( require ) {
     /**
      * Get selected element from carousel
      *
-     * @return {[type]} Selected element
+     * @returns {[type]} Selected element
      */
     getSelectedElement: function() {
       var i = this.targetIndexProperty.get();

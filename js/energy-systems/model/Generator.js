@@ -146,7 +146,7 @@ define( function( require ) {
      * @param {number} dt timestep
      * @param {Energy} incomingEnergy
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
@@ -199,7 +199,7 @@ define( function( require ) {
      *
      * @param {number} dt timestep
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @private
      */
     updateEnergyChunkPositions: function( dt ) {
@@ -371,7 +371,7 @@ define( function( require ) {
     /**
      * [getEnergyOutputRate description]
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */

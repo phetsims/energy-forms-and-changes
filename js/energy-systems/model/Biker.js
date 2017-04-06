@@ -206,7 +206,7 @@ define( function( require ) {
     /**
      * @param  {number} dt timestep
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
@@ -379,7 +379,7 @@ define( function( require ) {
     },
 
     /**
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
@@ -462,7 +462,7 @@ define( function( require ) {
      *
      * @param  {number} angle
      *
-     * @return {number} - image index
+     * @returns {number} - image index
      * @private
      */
     mapAngleToImageIndex: function( angle ) {
@@ -476,7 +476,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} centerPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      */
     createChemicalEnergyChunkPath: function( centerPosition ) {
       var path = [];
@@ -490,7 +490,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} centerPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      */
     createMechanicalEnergyChunkPath: function( centerPosition ) {
       var path = [];
@@ -506,7 +506,7 @@ define( function( require ) {
      * @param  {Vector2} centerPosition
      * @param  {Vector2} currentPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      */
     createMechanicalToThermalEnergyChunkPath: function( centerPosition, currentPosition ) {
       var path = [];
@@ -525,7 +525,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} centerPosition
      *
-     * @return {Vector2[]}
+     * @returns {Vector2[]}
      */
     createThermalEnergyChunkPath: function( centerPosition ) {
       var path = [];
@@ -553,7 +553,7 @@ define( function( require ) {
     /**
      * Find a non-moving CHEMICAL energy chunk. Returns null if none is found.
      *
-     * @return {EnergyChunk}
+     * @returns {EnergyChunk}
      */
     findNonMovingEnergyChunk: function() {
       var movingEnergyChunks = [];
@@ -585,7 +585,7 @@ define( function( require ) {
      * Renamed from bikerHasEnergy() to avoid collision with the identically-
      * named property.
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     bikerCanPedal: function() {
       var nChunks = this.energyChunkList.length;

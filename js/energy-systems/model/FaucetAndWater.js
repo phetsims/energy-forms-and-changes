@@ -82,7 +82,7 @@ define( function( require ) {
 
     /**
      * @private
-     * @return {EnergyChunk} New energy chunk
+     * @returns {EnergyChunk} New energy chunk
      */
     createNewChunk: function() {
 
@@ -114,7 +114,7 @@ define( function( require ) {
      *
      * @param  {number} dt timestep
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
@@ -243,7 +243,7 @@ define( function( require ) {
     /**
      * [getEnergyOutputRate description]
      *
-     * @return {Energy}
+     * @returns {Energy}
      * @public
      * @override
      */
