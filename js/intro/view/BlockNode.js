@@ -146,7 +146,7 @@ define( function( require ) {
     if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) ) {
       // Scale the label to fit on the face of the block.  This also supports translations.
       var scale = modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width;
-      label.setScale( scale );
+      label.setScaleMagnitude( scale );
     }
     var labelCenterX = ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2;
     var labelCenterY =
