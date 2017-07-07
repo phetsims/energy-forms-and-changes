@@ -53,7 +53,7 @@ define( function( require ) {
    */
   function createEnergyChunkNode( energyType ) {
     var background = new Image( mapEnergyTypeToImage[ energyType ] );
-    var energyText = new Text( energyChunkLabelString, new PhetFont( 16 ) );
+    var energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
     energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.95 );
     energyText.center = background.center;
     background.addChild( energyText );
