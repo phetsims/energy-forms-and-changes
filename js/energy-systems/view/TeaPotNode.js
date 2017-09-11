@@ -11,15 +11,15 @@ define( function( require ) {
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
+  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
   var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  var Node = require( 'SCENERY/nodes/Node' );
   var Color = require( 'SCENERY/util/Color' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 

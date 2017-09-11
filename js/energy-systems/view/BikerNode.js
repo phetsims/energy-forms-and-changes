@@ -132,8 +132,8 @@ define( function( require ) {
 
     // DEBUG
     // Remove when #21 is solved
-    // var Shape = require( 'KITE/Shape' );
     // var Path = require( 'SCENERY/nodes/Path' );
+    // var Shape = require( 'KITE/Shape' );
     // var Vector2 = require( 'DOT/Vector2' );
     // var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2( -0.23, 0.15 ) );
     // var shape = new Shape();

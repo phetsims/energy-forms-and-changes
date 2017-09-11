@@ -11,9 +11,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Bounds2 = require( 'DOT/Bounds2' );
 
   // Threshold of distance for determining whether two areas are in contact.
   var TOUCH_DISTANCE_THRESHOLD = 0.001; // In meters.

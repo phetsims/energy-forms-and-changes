@@ -21,9 +21,9 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
-  var GENERATOR_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_icon.png' );
   var CONNECTOR = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
   var GENERATOR = require( 'image!ENERGY_FORMS_AND_CHANGES/generator.png' );
+  var GENERATOR_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_icon.png' );
   var GENERATOR_WHEEL_HUB_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_hub_2.png' );
   var GENERATOR_WHEEL_PADDLES_SHORT = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_paddles_short.png' );
   var GENERATOR_WHEEL_SPOKES = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );

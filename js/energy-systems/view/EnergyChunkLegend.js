@@ -19,12 +19,12 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var formsOfEnergyString = require( 'string!ENERGY_FORMS_AND_CHANGES/formsOfEnergy' );
   var chemicalString = require( 'string!ENERGY_FORMS_AND_CHANGES/chemical' );
   var electricalString = require( 'string!ENERGY_FORMS_AND_CHANGES/electrical' );
+  var formsOfEnergyString = require( 'string!ENERGY_FORMS_AND_CHANGES/formsOfEnergy' );
+  var lightString = require( 'string!ENERGY_FORMS_AND_CHANGES/light' );
   var mechanicalString = require( 'string!ENERGY_FORMS_AND_CHANGES/mechanical' );
   var thermalString = require( 'string!ENERGY_FORMS_AND_CHANGES/thermal' );
-  var lightString = require( 'string!ENERGY_FORMS_AND_CHANGES/light' );
 
   // constants
   var LEGEND_ENTRY_FONT = new PhetFont( 14 );

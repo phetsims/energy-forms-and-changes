@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // Modules
+  // var Circle = require( 'SCENERY/nodes/Circle' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -17,7 +18,6 @@ define( function( require ) {
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
-  // var Circle = require( 'SCENERY/nodes/Circle' );
 
   /**
    * @param {Generator} generator EnergyConverter

@@ -12,11 +12,11 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   // modules
+  //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Color = require( 'SCENERY/util/Color' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Vector2 = require( 'DOT/Vector2' );
   var Util = require( 'DOT/Util' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants used for creating projections that have a 3D-ish look.
   var Z_TO_X_OFFSET_MULTIPLIER = -0.25;

@@ -16,13 +16,13 @@ define( function( require ) {
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var normalString = require( 'string!ENERGY_FORMS_AND_CHANGES/normal' );
   var fastForwardString = require( 'string!ENERGY_FORMS_AND_CHANGES/fastForward' );
+  var normalString = require( 'string!ENERGY_FORMS_AND_CHANGES/normal' );
 
   // static data
   var RADIO_BUTTON_FONT = new PhetFont( 16 );

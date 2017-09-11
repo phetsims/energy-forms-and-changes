@@ -12,8 +12,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var inherit = require( 'PHET_CORE/inherit' );
 
   /**
    * @param {Range} xRange

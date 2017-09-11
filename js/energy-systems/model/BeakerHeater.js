@@ -13,21 +13,21 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Random = require( 'DOT/Random' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
-  var WATER_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/water_icon.png' );
-  var WIRE_BLACK_62 = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
-  var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
   var ELEMENT_BASE_BACK = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
   var ELEMENT_BASE_FRONT = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
   var HEATER_ELEMENT = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element.png' );
   var HEATER_ELEMENT_DARK = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element_dark.png' );
+  var WATER_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/water_icon.png' );
+  var WIRE_BLACK_62 = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
+  var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
 
   var HEATER_ELEMENT_OFFSET = new Vector2( -0.002, 0.022 );
 
