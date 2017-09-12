@@ -42,7 +42,7 @@ define( function( require ) {
   return inherit( Object, ElementFollower, {
 
     startFollowing: function( locationToFollowProperty ) {
-      if ( this.locationBeingFollowedProperty ) {
+      if ( this.locationBeingFollowedProperty && this.locationBeingFollowedProperty.hasListener( this.followerFunction ) ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
       }
       this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
@@ -52,7 +52,9 @@ define( function( require ) {
 
     stopFollowing: function() {
       if ( this.locationBeingFollowedProperty ) {
-        this.locationBeingFollowedProperty.unlink( this.followerFunction );
+        if ( this.locationBeingFollowedProperty.hasListener( this.followerFunction ) ) {
+          this.locationBeingFollowedProperty.unlink( this.followerFunction );
+        }
         this.locationBeingFollowed = null;
       }
     },

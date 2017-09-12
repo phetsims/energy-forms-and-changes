@@ -41,7 +41,9 @@ define( function( require ) {
         // The user has grabbed this model element, so it is no
         // longer sitting on any surface.
         if ( self.supportingSurfaceProperty.value !== null ) {
-          self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
+          if ( self.supportingSurfaceProperty.hasListener( self.surfaceMotionObserver ) ) {
+            self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
+          }
           self.getSupportingSurfaceProperty().value.clearSurface();
           self.setSupportingSurfaceProperty( null );
         }
@@ -54,7 +56,8 @@ define( function( require ) {
   return inherit( ModelElement, UserMovableModelElement, {
 
     reset: function() {
-      if ( this.supportingSurfaceProperty !== null ) {
+      if ( this.supportingSurfaceProperty !== null &&
+           this.supportingSurfaceProperty.hasListener( this.surfaceMotionObserver ) ) {
         this.supportingSurfaceProperty.unlink( this.surfaceMotionObserver );
       }
       this.userControlledProperty.reset();
