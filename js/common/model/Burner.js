@@ -25,6 +25,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -328,7 +329,7 @@ define( function( require ) {
      */
     getEnergyChunkBalanceWithObjects: function() {
       var deltaE = this.energyExchangedWithObjectSinceLastChunkTransfer;
-      var sign = Math.sign( deltaE );
+      var sign = Util.sign( deltaE );
       return ( Math.floor( Math.abs( deltaE ) / EFACConstants.ENERGY_PER_CHUNK ) * sign );
     },
 
