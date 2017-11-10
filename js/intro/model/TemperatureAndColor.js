@@ -1,4 +1,4 @@
-// Copyright 2014-2016, University of Colorado Boulder
+// Copyright 2014-2017, University of Colorado Boulder
 
 /**
  * Convenience model that combines values for temperature and color.  Used primarily by the thermometer to obtain information from the model.
