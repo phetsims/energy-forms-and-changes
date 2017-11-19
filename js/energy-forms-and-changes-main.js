@@ -21,7 +21,7 @@ define( function( require ) {
   var energyFormsAndChangesTitleString = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.title' );
 
   // Constants
-  var tandem = Tandem.createRootTandem();
+  var tandem = Tandem.rootTandem;
 
   var simOptions = {
     credits: {
