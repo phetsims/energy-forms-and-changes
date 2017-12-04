@@ -10,6 +10,11 @@
     "grunt": "~1.0.0"
   },
   "phet": {
-    "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES"
+    "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
+    "runnable": true,
+    "supportedBrands": [
+      "phet"
+    ],
+    "simulation": true
   }
 }
