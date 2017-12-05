@@ -13,7 +13,8 @@
     "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
     "runnable": true,
     "supportedBrands": [
-      "phet"
+      "phet",
+      "adapted-from-phet"
     ],
     "simulation": true
   }
