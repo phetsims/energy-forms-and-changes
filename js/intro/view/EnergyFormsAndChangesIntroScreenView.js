@@ -41,7 +41,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var ThermometerToolBoxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolBoxNode' );
+  var ThermometerToolboxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolboxNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
@@ -267,8 +267,8 @@ define( function( require ) {
 
           console.log( 'up' );
 
-          // Released over tool box, so deactivate.
-          if ( thermometerNode.intersectsBounds( thermometerToolBox.bounds ) ) {
+          // Released over toolbox, so deactivate.
+          if ( thermometerNode.intersectsBounds( thermometerToolbox.bounds ) ) {
             thermometer.activeProperty.set( false );
           }
         }
@@ -279,22 +279,22 @@ define( function( require ) {
 
     // Add the tool box for the thermometers.
     var thermometerBox = new HBox();
-    var thermometerToolBoxNodes = [];
+    var thermometerToolboxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
-      var thermometerToolBoxNode = new ThermometerToolBoxNode( movableThermometerNode, modelViewTransform );
-      thermometerBox.addChild( thermometerToolBoxNode );
-      thermometerToolBoxNodes.push( thermometerToolBoxNode );
+      var thermometerToolboxNode = new ThermometerToolboxNode( movableThermometerNode, modelViewTransform );
+      thermometerBox.addChild( thermometerToolboxNode );
+      thermometerToolboxNodes.push( thermometerToolboxNode );
     } );
 
-    var thermometerToolBox = new Panel( thermometerBox, {
+    var thermometerToolbox = new Panel( thermometerBox, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
     } );
 
-    thermometerToolBox.translation = new Vector2( EDGE_INSET, EDGE_INSET );
+    thermometerToolbox.translation = new Vector2( EDGE_INSET, EDGE_INSET );
     // backLayer.addChild( thermometerBox );
-    backLayer.addChild( thermometerToolBox );
-    thermometerToolBoxNodes.forEach( function( thermometerToolBoxNode ) {
-      thermometerToolBoxNode.returnRect = thermometerBox.bounds;
+    backLayer.addChild( thermometerToolbox );
+    thermometerToolboxNodes.forEach( function( thermometerToolboxNode ) {
+      thermometerToolboxNode.returnRect = thermometerBox.bounds;
     } );
 
     // Create a function that updates the Z-order of the blocks when the user-controlled state changes.

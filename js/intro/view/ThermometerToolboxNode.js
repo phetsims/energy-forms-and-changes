@@ -24,7 +24,7 @@ define( function( require ) {
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function ThermometerToolBoxNode( thermometerNode, modelViewTransform ) {
+  function ThermometerToolboxNode( thermometerNode, modelViewTransform ) {
     ThermometerNode.call( this );
     var self = this;
     this.modelViewTransform = modelViewTransform;
@@ -88,8 +88,8 @@ define( function( require ) {
 
   }
 
-  energyFormsAndChanges.register( 'ThermometerToolBoxNode', ThermometerToolBoxNode );
+  energyFormsAndChanges.register( 'ThermometerToolboxNode', ThermometerToolboxNode );
 
-  return inherit( ThermometerNode, ThermometerToolBoxNode );
+  return inherit( ThermometerNode, ThermometerToolboxNode );
 } );
 
