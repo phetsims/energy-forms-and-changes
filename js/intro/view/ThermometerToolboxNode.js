@@ -1,7 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Scenery Node that is used to represent thermometers in the tool box and that
+ * Scenery Node that is used to represent thermometers in the toolbox and that
  * controls the initial movement of thermometers in and out of the tool
  * box.
  *
@@ -80,7 +80,8 @@ define( function( require ) {
       end: function( event, trail ) {
         thermometer.userControlledProperty.set( false );
         if ( self.returnRect !== null && thermometerNode.bounds.intersectsBounds( self.returnRect ) ) {
-          // Released over tool box, so return it.
+
+          // Released over toolbox, so return it.
           thermometer.activeProperty.set( false );
         }
       }

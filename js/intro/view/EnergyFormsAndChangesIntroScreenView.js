@@ -277,7 +277,7 @@ define( function( require ) {
       movableThermometerNodes.push( thermometerNode );
     } );
 
-    // Add the tool box for the thermometers.
+    // Add the toolbox for the thermometers.
     var thermometerBox = new HBox();
     var thermometerToolboxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
