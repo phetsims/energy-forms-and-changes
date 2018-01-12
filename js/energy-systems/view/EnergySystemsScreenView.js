@@ -16,7 +16,7 @@ define( function( require ) {
   var BeltNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeltNode' );
   var BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BikerNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
-  var CheckBox = require( 'SUN/CheckBox' );
+  var Checkbox = require( 'SUN/Checkbox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -112,7 +112,7 @@ define( function( require ) {
     }
 
     // Check box panel to display energy chunks
-    function addCheckBoxPanel() {
+    function addCheckboxPanel() {
       var label = new Text( energySymbolsString, {
         font: new PhetFont( 20 )
       } );
@@ -121,13 +121,13 @@ define( function( require ) {
       energyChunkNode.scale( 1.0 );
       energyChunkNode.pickable = false;
 
-      var checkBox = new CheckBox( new LayoutBox( {
+      var checkbox = new Checkbox( new LayoutBox( {
         children: [ label, energyChunkNode ],
         orientation: 'horizontal',
         spacing: 5
       } ), model.energyChunksVisibleProperty );
 
-      var panel = new Panel( checkBox, {
+      var panel = new Panel( checkbox, {
         fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
@@ -170,7 +170,7 @@ define( function( require ) {
     addBackground();
     addPlayControls();
     addEnergyChunkLegend();
-    addCheckBoxPanel();
+    addCheckboxPanel();
     addResetButton();
 
     // Debug - Layout boundary rectangle

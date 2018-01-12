@@ -17,7 +17,7 @@ define( function( require ) {
   var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
-  var CheckBox = require( 'SUN/CheckBox' );
+  var Checkbox = require( 'SUN/Checkbox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -154,12 +154,12 @@ define( function( require ) {
     var label = new Text( energySymbolsString, {
       font: new PhetFont( 20 )
     } );
-    var showEnergyCheckBox = new CheckBox( new LayoutBox( {
+    var showEnergyCheckbox = new Checkbox( new LayoutBox( {
       children: [ label, energyChunkNode ],
       orientation: 'horizontal',
       spacing: 5
     } ), model.energyChunksVisibleProperty );
-    var controlPanel = new Panel( showEnergyCheckBox, {
+    var controlPanel = new Panel( showEnergyCheckbox, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
