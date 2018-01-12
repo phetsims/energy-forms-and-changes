@@ -111,7 +111,7 @@ define( function( require ) {
       self.addChild( legend );
     }
 
-    // Check box panel to display energy chunks
+    // Checkbox panel to display energy chunks
     function addCheckboxPanel() {
       var label = new Text( energySymbolsString, {
         font: new PhetFont( 20 )
