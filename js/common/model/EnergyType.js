@@ -12,12 +12,12 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   var EnergyType = Object.freeze( {
-    THERMAL: 0,
-    ELECTRICAL: 1,
-    MECHANICAL: 2,
-    LIGHT: 3,
-    CHEMICAL: 4,
-    HIDDEN: 5
+    THERMAL: 'THERMAL',
+    ELECTRICAL: 'ELECTRICAL',
+    MECHANICAL: 'MECHANICAL',
+    LIGHT: 'LIGHT',
+    CHEMICAL: 'CHEMICAL',
+    HIDDEN: 'HIDDEN'
   } );
 
   energyFormsAndChanges.register( 'EnergyType', EnergyType );

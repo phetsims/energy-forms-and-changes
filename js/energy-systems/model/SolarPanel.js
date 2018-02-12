@@ -120,22 +120,24 @@ define( function( require ) {
 
             if ( incomingChunk.energyTypeProperty.get() === EnergyType.LIGHT ) {
 
-              // Convert this chunk to electrical energy and add it to
-              // the list of energy chunks being managed.
+              // convert this chunk to electrical energy and add it to the list of energy chunks being managed
               incomingChunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
               self.energyChunkList.push( incomingChunk );
 
-              // And a "mover" that will move this energy chunk
-              // to the bottom of the solar panel.
-              self.energyChunkMovers.push( new EnergyChunkPathMover( incomingChunk,
+              // add a "mover" that will move this energy chunk to the bottom of the solar panel
+              self.energyChunkMovers.push( new EnergyChunkPathMover(
+                incomingChunk,
                 self.createPathToPanelBottom( self.positionProperty.get() ),
-                self.chooseChunkSpeedOnPanel( incomingChunk ) ) );
+                self.chooseChunkSpeedOnPanel( incomingChunk ) )
+              );
             }
 
             // By design, this shouldn't happen, so raise an error if it does.
             else {
-              assert && assert( false,
-                'Encountered energy chunk with unexpected type: ' + incomingChunk.energyTypeProperty.get() );
+              assert && assert(
+                false,
+                'Encountered energy chunk with unexpected type: ' + incomingChunk.energyTypeProperty.get()
+              );
             }
 
           } );
