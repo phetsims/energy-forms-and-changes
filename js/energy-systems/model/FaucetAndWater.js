@@ -259,8 +259,9 @@ define( function( require ) {
      * @override
      */
     deactivate: function() {
-      EnergySource.prototype.deactivate.call( this );
+      this.flowProportionProperty.reset();
       this.waterDrops.clear();
+      EnergySource.prototype.deactivate.call( this );
     },
 
     /**

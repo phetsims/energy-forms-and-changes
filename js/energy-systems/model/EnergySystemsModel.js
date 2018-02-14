@@ -128,8 +128,7 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      // Elements managed by carousels need to be scrollable/selectable regardless
-      // of play/pause state.
+      // Elements managed by carousels need to be scrollable/selectable regardless of play/pause state.
       this.carousels.forEach( function( carousel ) {
         carousel.step( dt );
       } );
