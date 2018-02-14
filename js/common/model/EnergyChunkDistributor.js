@@ -206,7 +206,7 @@ define( function( require ) {
           if ( vectorToOther.magnitude() < minDistance ) {
             if ( vectorToOther.magnitude() === 0 ) {
               // Create a random vector of min distance.
-              var randomAngle = Math.random() * Math.PI * 2;
+              var randomAngle = phet.joist.random.nextDouble() * Math.PI * 2;
               vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ),
                 minDistance * Math.sin( randomAngle ) );
             }
@@ -297,10 +297,8 @@ define( function( require ) {
     },
 
     /**
-     * Super simple alternative energy chunk distribution algorithm - just puts
-     * all energy chunks in center of slice. This is useful for debugging.
-     * Rename it to substitute if for the 'real' algorithm.
-     *
+     * Super simple alternative energy chunk distribution algorithm - just puts all energy chunks in center of slice.
+     * This is useful for debugging. Rename it to substitute if for the 'real' algorithm.
      * @param {EnergyChunkContainerSlice[]} slices
      * @param {number} dt
      */
@@ -320,7 +318,10 @@ define( function( require ) {
      * @param {Rectangle} rect
      */
     generateRandomLocation: function( rect ) {
-      return new Vector2( rect.x + ( Math.random() * rect.width ), rect.y + ( Math.random() * rect.height ) );
+      return new Vector2(
+        rect.x + ( phet.joist.random.nextDouble() * rect.width ),
+        rect.y + ( phet.joist.random.nextDouble() * rect.height )
+      );
     }
   } );
 } );

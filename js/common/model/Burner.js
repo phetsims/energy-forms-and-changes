@@ -290,7 +290,7 @@ define( function( require ) {
 
         controller.updatePosition( dt );
 
-        if ( controller.destinationReached() ) {
+        if ( controller.isDestinationReached() ) {
           self.energyChunkList.remove( controller.energyChunk );
 
           _.pull( self.energyChunkWanderControllers, controller );

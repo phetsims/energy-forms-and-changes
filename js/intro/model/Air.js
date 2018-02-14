@@ -82,7 +82,7 @@ define( function( require ) {
         controller.updatePosition( dt );
 
         // if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.positionProperty.value ) ) ) {
-        if ( controller.destinationReached() ) {
+        if ( controller.isDestinationReached() ) {
           // }
           // Remove this energy chunk.
           self.energyChunkList.remove( controller.energyChunk );
