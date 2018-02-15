@@ -2,8 +2,8 @@
 
 
 /**
- * Class that represents a ray of light in the view.  Rays of light can have
- * shapes that reduce or block the amount of light passing through.
+ * Type that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the amount of
+ * light passing through.
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -27,17 +27,6 @@ define( function( require ) {
   var FADE_COEFFICIENT_IN_AIR = 0.005;
 
   /**
-   * @param {Vector2} point     position
-   * @param {number} fadeValue Fade coefficient
-   * @constructor
-   * @private
-   */
-  function PointAndFadeValue( point, fadeValue ) {
-    this.point = point;
-    this.fadeValue = fadeValue;
-  }
-
-  /**
    * @param {Vector2} origin
    * @param {Vector2} endpoint
    * @param {Color} color
@@ -45,6 +34,7 @@ define( function( require ) {
    */
   function LightRayNode( origin, endpoint, color ) {
 
+    // @private - data that defines this ray
     this.lightAbsorbingShapes = [];
     this.pointAndFadeValues = [];
     this.origin = origin;
@@ -56,12 +46,24 @@ define( function( require ) {
     this.updateRays();
   }
 
+  /**
+   * helper type that consolidates a point and a fade value
+   * @param {Vector2} point - position
+   * @param {number} fadeValue - Fade coefficient
+   * @constructor
+   * @private
+   */
+  function PointAndFadeValue( point, fadeValue ) {
+    this.point = point;
+    this.fadeValue = fadeValue;
+  }
+
   energyFormsAndChanges.register( 'LightRayNode', LightRayNode );
 
   return inherit( Node, LightRayNode, {
 
     /**
-     * [addLightAbsorbingShape description]
+     * add a shape that will potentially interact with this light ray
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
@@ -97,17 +99,12 @@ define( function( require ) {
 
       var self = this;
       this.lightAbsorbingShapes.forEach( function( absorbingShape ) {
-        if ( absorbingShape.shape.interiorIntersectsLineSegment( self.origin, self.endpoint ) ) {
 
-          var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
+        var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
 
-          // It's conceivable that we could handle a case where the line originates
-          // in a shape, but we don't for now
-          assert && assert( entryPoint !== null, 'entryPoint is null' );
-
+        if ( entryPoint !== null ) {
           var fade = absorbingShape.absorptionCoefficientProperty.get();
           self.pointAndFadeValues.push( new PointAndFadeValue( entryPoint, fade ) );
-
           var exitPoint = self.getShapeExitPoint( self.origin, self.endpoint, absorbingShape.shape );
           if ( exitPoint !== null ) {
             self.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, FADE_COEFFICIENT_IN_AIR ) );
@@ -119,7 +116,6 @@ define( function( require ) {
       var sorted = _.sortBy( this.pointAndFadeValues, function( p ) {
         return p.point.distance( self.origin );
       } );
-
 
       var rayLength = this.origin.distance( this.endpoint );
 
@@ -148,7 +144,6 @@ define( function( require ) {
         lineWidth: STROKE_THICKNESS
       } );
       this.addChild( fadingLine );
-
     },
 
     // /**
@@ -193,7 +188,7 @@ define( function( require ) {
       var end2 = line2.end;
 
       var denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
-        ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
+                        ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
 
       // Check if the lines are parallel, and thus don't intersect.
       if ( denominator === 0 ) {
@@ -201,11 +196,11 @@ define( function( require ) {
       }
 
       var numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
-        ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
+                      ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
       var r = numerator / denominator;
 
       var numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
-        ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
+                       ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
       var s = numerator2 / denominator;
 
       if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
@@ -221,7 +216,7 @@ define( function( require ) {
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
      * @param  {Shape} shape
-     * @returns {Vector2}
+     * @returns {Vector2|null}
      * @private
      */
     getShapeEntryPoint: function( origin, endpoint, shape ) {
@@ -312,7 +307,7 @@ define( function( require ) {
       var closestIntersectionPoint = null;
       intersectingPoints.forEach( function( point ) {
         if ( closestIntersectionPoint === null ||
-          closestIntersectionPoint.distance( origin ) > point.distance( origin ) ) {
+             closestIntersectionPoint.distance( origin ) > point.distance( origin ) ) {
           closestIntersectionPoint = point;
         }
       } );
@@ -338,7 +333,7 @@ define( function( require ) {
       var furthestIntersectionPoint = null;
       intersectingPoints.forEach( function( point ) {
         if ( furthestIntersectionPoint === null ||
-          furthestIntersectionPoint.distance( origin ) < point.distance( origin ) ) {
+             furthestIntersectionPoint.distance( origin ) < point.distance( origin ) ) {
           furthestIntersectionPoint = point;
         }
       } );
