@@ -1,10 +1,9 @@
 // Copyright 2015-2017, University of Colorado Boulder
 
 /**
- * Class containing the constants that control the rate of heat transfer between the various model elements that can
- * contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are capable
- * of exchanging heat.
- *
+ * Static object containing the constants that control the rate of heat transfer between the various model elements that
+ * can contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are
+ * capable of exchanging heat with one another.
  * @author John Blanco
  * @author Jesse Greenberg
  */
@@ -23,7 +22,7 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  // Map to obtain heat transfer constants for given thermal elements.
+  // map of inter-object heat transfer constants
   var heatTransferConstantsMap = {
     'iron': {
       'brick': BRICK_IRON_HEAT_TRANSFER_FACTOR,
@@ -50,7 +49,7 @@ define( function( require ) {
   var HeatTransferConstants = {
 
     /**
-     * Get the heat transfer constants for two given model elements that can contain heat.
+     * get the heat transfer constants for two model elements that can contain heat
      * @param {string} element1
      * @param {string} element2
      * @returns {number}
@@ -60,7 +59,6 @@ define( function( require ) {
     },
 
     /**
-     * *
      * @returns {number}
      */
     getAirToSurroundingAirHeatTransferFactor: function() {
