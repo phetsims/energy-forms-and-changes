@@ -1,9 +1,8 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Base class for all model elements in this module.  At the time of this
- * writing, this includes blocks, beakers, burners, and thermometers.
- *
+ * Base class for all model elements in the Energy Forms and Changes simulation that can be moved around by the user.
+ * At the time of this writing, this includes blocks, beakers, burners, and thermometers.
  * @author John Blanco
  */
 
@@ -16,17 +15,20 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   /**
-   *
    * @constructor
    */
   function ModelElement() {
 
-    // Surface upon which this model element is resting.  Null if the element
-    // is floating in the air (which is perfectly legitimate in some cases for some model elements)
+    // @public {Property<HorizontalSurface>} - The surface upon which this model element is resting.  This is null if
+    // the element is floating in the air, which is perfectly legitimate in some cases for some model elements.
     this.supportingSurfaceProperty = new Property( null );
 
-    // These properties will have a HorizontalSurface type parameter
+    // @protected {Property<HorizontalSurface>} - The top surface of this model element, the value will be null if other
+    // elements can't rest upon the surface.  This is updated with a new value when the model element is moved.
     this.topSurfaceProperty = new Property( null );
+
+    // @protected {Property<HorizontalSurface>} - The bottom surface of this model element, the value will be null if
+    // this model element can't rest on another surface.
     this.bottomSurfaceProperty = new Property( null );
   }
 
@@ -34,12 +36,14 @@ define( function( require ) {
 
   return inherit( Object, ModelElement, {
 
+    // TODO: Consider making these properties set directly instead of through methods when the port is nearly complete.
+
     /**
-     * Set the surface upon which this model element is resting.
+     * set the surface upon which this model element is resting
      * @public
      * @param {HorizontalSurface} surface
      */
-    setSupportingSurfaceProperty: function( surface ) {
+    setSupportingSurface: function( surface ) {
       this.supportingSurfaceProperty.set( surface );
     },
 
@@ -52,31 +56,30 @@ define( function( require ) {
     },
 
     /**
-     * Get the bottom surface of this model element.  Only model elements that
-     * can rest on top of other model elements have bottom surfaces.
-     *
+     * Get the bottom surface of this model element.  Only model elements that can rest on top of other model elements
+     * have bottom surfaces.
      * @public read-only
-     * @returns {Property.<HorizontalSurface>} The bottom surface of this model element, null if this element never rests upon other model elements.
+     * @returns {Property.<HorizontalSurface|null>} The bottom surface of this model element, null if this element never
+     * rests upon other model elements.
      */
     getBottomSurfaceProperty: function() {
       return this.bottomSurfaceProperty;
     },
 
     /**
-     * @public read-only
-     * @returns {Property.<HorizontalSurface>} Surface upon which this element is resting, null if there is none.
+     * @returns {Property.<HorizontalSurface|null>} Surface upon which this element is resting, null if there is none.
+     * @public
      */
     getTopSurfaceProperty: function() {
       return this.topSurfaceProperty;
     },
 
     /**
-     * Get a value that indicates whether this element is stacked upon the given model element.
-     *
+     * get a value that indicates whether this element is stacked upon the given model element
+     * @param {ModelElement} element - model element to be checked
+     * @returns {boolean} - true if this model element is stacked anywhere on top of the provided element, which
+     * includes cases where one or more elements are in between.
      * @public
-     * @param {ModelElement} element -  Model element to be checked.
-     * @returns {boolean}  true if this model element is stacked anywhere on top of the provided on one, which includes
-     * cases where one or more elements are in between.
      */
     isStackedUpon: function( element ) {
       var surface = this.supportingSurfaceProperty.get();
@@ -85,13 +88,13 @@ define( function( require ) {
     },
 
     /**
-     * Reset the model element to its original state.  Subclasses must add
-     * reset functionality for any state that they add.
+     * Reset the model element to its original state.  Subclasses must add reset functionality for any state that they
+     * add.
      * @public
      */
     reset: function() {
       if ( this.supportingSurfaceProperty !== null ) {
-        // TODO: the next line was in the java code but we dont' think it is needed (JB)
+        // TODO: the next line was in the java code but I (jbphet) am not sure what if anyting is needed here
         //        this.supportingSurfaceProperty.removeAllObservers();
         // TODO: Re-test this once supporting surfaces have been added to the model elements!
         //this.supportingSurface.clearSurface();

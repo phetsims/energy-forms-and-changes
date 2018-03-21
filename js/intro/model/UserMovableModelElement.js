@@ -45,7 +45,7 @@ define( function( require ) {
             self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
           }
           self.getSupportingSurfaceProperty().value.clearSurface();
-          self.setSupportingSurfaceProperty( null );
+          self.setSupportingSurface( null );
         }
       }
     } );
@@ -70,7 +70,7 @@ define( function( require ) {
      * Assign the surface property (as an object, not a value)
      * @param {Property.<HorizontalSurface>} supportingSurface
      */
-    setSupportingSurfaceProperty: function( supportingSurface ) {
+    setSupportingSurface: function( supportingSurface ) {
       this.supportingSurfaceProperty.value = supportingSurface;
       if ( supportingSurface !== null ) {
         supportingSurface.link( this.surfaceMotionObserver );
