@@ -29,8 +29,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var WIDTH = 0.075; // In meters.
-  var HEIGHT = WIDTH * 1;
+  var SIDE_LENGTH = 0.075; // In meters.
   var MAX_ENERGY_GENERATION_RATE = 5000; // joules/sec, empirically chosen.
   var CONTACT_DISTANCE = 0.001; // In meters.
   var ENERGY_CHUNK_CAPTURE_DISTANCE = 0.2; // In meters, empirically chosen.
@@ -93,7 +92,7 @@ define( function( require ) {
      * @returns {Rectangle} Rectangle that defines the outline in model space.
      */
     getOutlineRect: function() {
-      return new Rectangle( this.position.x - WIDTH / 2, this.position.y, WIDTH, HEIGHT );
+      return new Rectangle( this.position.x - SIDE_LENGTH / 2, this.position.y, SIDE_LENGTH, SIDE_LENGTH );
     },
 
     /**
@@ -223,7 +222,7 @@ define( function( require ) {
      * @returns {Vector2}
      */
     getCenterPoint: function() {
-      return new Vector2( this.position.x, this.position.y + HEIGHT / 2 );
+      return new Vector2( this.position.x, this.position.y + SIDE_LENGTH / 2 );
     },
 
     /**
