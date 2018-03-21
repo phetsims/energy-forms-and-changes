@@ -368,6 +368,7 @@ define( function( require ) {
     /**
      * whether burner can receive an energy chunk from another element
      * @returns {boolean}
+     * @public
      */
     canAcceptEnergyChunk: function() {
       return this.heatCoolLevelProperty.value < 0;
