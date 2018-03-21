@@ -1,11 +1,9 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Class that represents a chunk of energy in the view.
- *
+ * type that represents a chunk of energy in the view
  * @author John Blanco
  */
-
 
 define( function( require ) {
   'use strict';
@@ -16,11 +14,10 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  //static data
-  var instanceCount = 0; // Base count for the unique ID of this slice.
+  // static data
+  var instanceCount = 0; // counter for creating unique IDs
 
   /**
-   *
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
@@ -29,64 +26,71 @@ define( function( require ) {
    */
   function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
 
-    assert && assert( initialPosition instanceof Vector2,
-      'Expected a Vector2, got this: ' + initialPosition );
-
+    // @public - properties of this energy chunk
     this.positionProperty = new Property( initialPosition );
-    this.zPositionProperty = new Property( 0 );   // For simple 3D layering effects
+    this.zPositionProperty = new Property( 0 );   // for simple 3D layering effects
     this.energyTypeProperty = new Property( initialEnergyType );
     this.visibleProperty = visibleProperty;
 
-    // add a unique for the hash map that will call on these slices
-    this.uniqueID = instanceCount++;
+    // @public (read-only) {number} - an ID that will be used to track this energy chunk
+    this.id = instanceCount++;
 
+    // @public {Vector2}
     this.velocity = initialVelocity;
   }
 
   energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 
   return inherit( Object, EnergyChunk, {
+
     /**
-     * Function that translate the energy chunk by a vector movement
+     * translate the energy chunk by amount specified in movement vector
      * @param {Vector2} movement
+     * @public
      */
     translate: function( movement ) {
       this.positionProperty.value = this.positionProperty.value.plus( movement );
     },
 
     /**
-     * Function that translates the energy chunk based on its velocity
-     * @param {number} time
+     * translate the energy chunk based on its velocity
+     * @param {number} dt - delta time
      */
-    translateBasedOnVelocity: function( time ) {
-      this.translate( this.velocity.times( time ) );
+    translateBasedOnVelocity: function( dt ) {
+      this.translate( this.velocity.times( dt ) );
     },
 
     /**
      * Function that returns the velocity of the energy chunk
      * @returns {Vector2}
+     * @public
      */
     getVelocity: function() {
       return this.velocity.copy();
     },
 
     /**
-     * Function that sets the X and Y velocity of the energy chunk
+     * set the X and Y velocity of the energy chunk
      * @param {number} x
      * @param {number} y
+     * @public
      */
     setVelocityXY: function( x, y ) {
       this.velocity.setXY( x, y );
     },
 
     /**
-     * Function that sets the velocity of the energy chunk (using a vector)
+     * set the velocity of the energy chunk (using a vector)
      * @param {Vector2} newVelocity
+     * @public
      */
     setVelocity: function( newVelocity ) {
       this.velocity.set( newVelocity );
     },
 
+    /**
+     * @public
+     */
     reset: function() {
       this.positionProperty.reset();
       this.zPositionProperty.reset();

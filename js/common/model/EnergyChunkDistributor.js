@@ -92,8 +92,8 @@ define( function( require ) {
       var chunkMap = {}; // Map of chunkID (number) => chunk (EnergyChunk)
       slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( chunk ) {
-          chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
-          chunkMap[ chunk.uniqueID ] = chunk;
+          chunkForces[ chunk.id ] = ZERO_VECTOR;
+          chunkMap[ chunk.id ] = chunk;
         } );
       } );
 
@@ -140,7 +140,7 @@ define( function( require ) {
           // Determine forces on each energy chunk.
           slice.energyChunkList.forEach( function( chunk ) {
             // Reset accumulated forces.
-            chunkForces[ chunk.uniqueID ] = ZERO_VECTOR;
+            chunkForces[ chunk.id ] = ZERO_VECTOR;
             if ( containerShape.containsPoint( chunk.positionProperty.value ) ) {
               self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
               self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
@@ -148,7 +148,7 @@ define( function( require ) {
             else {
               // Point is outside container, move it towards center of shape.
               var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( chunk.positionProperty.value );
-              chunkForces[ chunk.uniqueID ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
+              chunkForces[ chunk.id ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
         } );
@@ -187,7 +187,7 @@ define( function( require ) {
         // Apply the force due to this edge.
         var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
 
-        chunkForces[ chunk.uniqueID ] = chunkForces[ chunk.uniqueID ].plus( edgeForce );
+        chunkForces[ chunk.id ] = chunkForces[ chunk.id ].plus( edgeForce );
       }
     },
 
@@ -218,7 +218,7 @@ define( function( require ) {
           var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
 
           // Add the force to the accumulated forces on this energy chunk.
-          chunkForces[ chunk.uniqueID ] = chunkForces[ chunk.uniqueID ].plus( forceToOther );
+          chunkForces[ chunk.id ] = chunkForces[ chunk.id ].plus( forceToOther );
         }
       }
     },
