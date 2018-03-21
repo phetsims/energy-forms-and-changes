@@ -1,11 +1,9 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * This class is used to make an energy chunk wander, i.e. to perform somewhat
- * of a random walk while moving towards a destination.
- *
+ * This class is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
+ * destination.
  * @author John Blanco
- *
  */
 
 define( function( require ) {
@@ -32,11 +30,11 @@ define( function( require ) {
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {
 
+    // @private
     this.energyChunk = energyChunk;
     this.initialWanderConstraint = initialWanderConstraint;
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, MAX_VELOCITY );
-
     this.resetCountdownTimer();
     this.changeVelocityVector();
   }
@@ -109,15 +107,7 @@ define( function( require ) {
     },
 
     /**
-     *
-     * @returns {EnergyChunk}
-     */
-    getEnergyChunk: function() {
-      return this.energyChunk;
-    },
-
-    /**
-     * returns true if this energy chunk's destination has been reached, false if not
+     * returns true if the energy chunk has reached its destination, false if not
      * @returns {boolean}
      * @public
      */
@@ -126,4 +116,3 @@ define( function( require ) {
     }
   } );
 } );
-
