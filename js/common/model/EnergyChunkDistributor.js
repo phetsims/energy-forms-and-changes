@@ -1,26 +1,22 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * A class that contains  methods for redistributing a set of energy chunks within
- * a shape.  The basic approach is to simulate a set of particles embedded in a
- * fluid, and each particle repels all others as well as the edges of the
- * containers.
+ * A static object that contains  methods for redistributing a set of energy chunks within a shape in order to make them
+ * look somewhat dynamic and real.  The basic approach is to simulate a set of particles embedded in a fluid, and each
+ * particle repels all others as well as the edges of the containers.
  *
- * Reuse Notes: This could probably be generalized fairly easily to distribute
- * any number items within a container of arbitrary size in a way that looks
- * pretty random.  Either that, or the code itself could be copied and the various
+ * Reuse Notes: This could probably be generalized fairly easily to distribute any number items within a container of
+ * arbitrary size in a way that looks pretty random.  Either that, or the code itself could be copied and the various
  * parameters changed as needed.
  *
  * @author John Blanco
  * @author Jesse Greenberg
  */
-
 define( function( require ) {
   'use strict';
 
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -29,31 +25,21 @@ define( function( require ) {
   var OUTSIDE_CONTAINER_FORCE = 0.01; // In Newtons, empirically determined.
   var ZERO_VECTOR = Vector2.ZERO;
 
-  // Parameters that can be adjusted to change they nature of the redistribution.
-  var MAX_TIME_STEP = 5E-3; // In seconds, for algorithm that moves the points.
-  var ENERGY_CHUNK_MASS = 1E-3; // In kilograms, chosen arbitrarily.
-  var FLUID_DENSITY = 1000; // In kg / m ^ 3, same as water, used for drag.
-  var ENERGY_CHUNK_DIAMETER = 1E-3; // In meters, chosen empirically.
+  // parameters that can be adjusted to change the nature of the redistribution
+  var MAX_TIME_STEP = 5E-3; // in seconds, for algorithm that moves the points
+  var ENERGY_CHUNK_MASS = 1E-3; // in kilograms, chosen arbitrarily
+  var FLUID_DENSITY = 1000; // in kg / m ^ 3, same as water, used for drag
+  var ENERGY_CHUNK_DIAMETER = 1E-3; // in meters, chosen empirically
 
-  // Treat energy chunk as if it is shaped like a sphere.
+  // treat energy chunk as if it is shaped like a sphere
   var ENERGY_CHUNK_CROSS_SECTIONAL_AREA = Math.PI * Math.pow( ENERGY_CHUNK_DIAMETER, 2 );
-  var DRAG_COEFFICIENT = 500; // Unitless, empirically chosen.
+  var DRAG_COEFFICIENT = 500; // unitless, empirically chosen
 
-  // Thresholds for deciding whether or not to perform redistribution.
-  // These value should be chosen such that particles spread out, then stop
-  // all movement.
-  var REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // In joules, I think.
+  // Thresholds for deciding whether or not to perform redistribution. These value should be chosen such that particles
+  // spread out, then stop all movement.
+  var REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // in joules (I think)
 
-  /**
-   * @constructor
-   */
-  function EnergyChunkDistributor() {
-    Object.call( this );
-  }
-
-  energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
-
-  return inherit( Object, EnergyChunkDistributor, {}, {
+  var EnergyChunkDistributor = {
 
     /**
      * Redistribute a set of energy chunks that are contained in energy chunk
@@ -323,5 +309,9 @@ define( function( require ) {
         rect.y + ( phet.joist.random.nextDouble() * rect.height )
       );
     }
-  } );
+  };
+
+  energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
+
+  return EnergyChunkDistributor;
 } );
