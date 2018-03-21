@@ -1,9 +1,8 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Basic thermometer that senses temperature, has a position. The thermometer has only a point and a temperature in the model.  Its visual
- * representation is left entirely to the view.
- *
+ * Basic thermometer model that has a position and senses temperature at that position. It has only a point and a
+ * temperature in the model.  The visual representation is left entirely to the view.
  * @author John Blanco
  */
 
@@ -19,42 +18,47 @@ define( function( require ) {
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
 
   /**
-   * Constructor for a Thermometer.
-   *
-   * @param {model} model
+   * @param {EnergyFormsAndChangesIntroModel} model
    * @param {Vector2} initialPosition
    * @param {boolean} initiallyActive
    * @constructor
    */
   function Thermometer( model, initialPosition, initiallyActive ) {
-
     UserMovableModelElement.call( this, initialPosition );
 
+    // @private
     this.model = model;
 
+    // @public (read-only) {Property.<number>}
     this.sensedTemperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
+
+    // @public (read-only) {Property.<Color>}
     this.sensedElementColorProperty = new Property( PhetColorScheme.RED_COLORBLIND );
-    this.activeProperty = new Property( initiallyActive ); // controls visibility
+
+    // @public (read-only) {Property.<boolean>} - used to control visibility in the view
+    this.activeProperty = new Property( initiallyActive );
   }
 
   energyFormsAndChanges.register( 'Thermometer', Thermometer );
 
   return inherit( UserMovableModelElement, Thermometer, {
 
-    step: function( dt ) {
+    /**
+     * @public
+     */
+    step: function() {
       var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.positionProperty.value );
       this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
       this.sensedElementColorProperty.set( temperatureAndColor.color );
     },
 
+    /**
+     * @public
+     */
     reset: function() {
       this.sensedTemperatureProperty.reset();
       this.sensedElementColorProperty.reset();
       this.activeProperty.reset();
-    },
-
-    getBottomSurfaceProperty: function() {
-      return null;
     }
   } );
 

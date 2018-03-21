@@ -94,7 +94,7 @@ define( function( require ) {
      */
     reset: function() {
       if ( this.supportingSurfaceProperty !== null ) {
-        // TODO: the next line was in the java code but I (jbphet) am not sure what if anyting is needed here
+        // TODO: the next line was in the java code but I (jbphet) am not sure what if anything is needed here
         //        this.supportingSurfaceProperty.removeAllObservers();
         // TODO: Re-test this once supporting surfaces have been added to the model elements!
         //this.supportingSurface.clearSurface();
