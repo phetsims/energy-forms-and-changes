@@ -21,7 +21,6 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -29,7 +28,6 @@ define( function( require ) {
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
-  var RAND = new Random();
   var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are
@@ -160,7 +158,7 @@ define( function( require ) {
 
               // Decide whether this energy chunk should pass
               // through the clouds or be reflected.
-              if ( RAND.nextDouble() < cloud.existenceStrengthProperty.get() ) {
+              if ( phet.joist.random.nextDouble() < cloud.existenceStrengthProperty.get() ) {
 
                 // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the
                 // code below tries to avoid that.
@@ -168,9 +166,13 @@ define( function( require ) {
                 var reflectionAngle = chunk.positionProperty.value.minus( cloud.getCenterPosition() ).angle();
 
                 if ( reflectionAngle < angleTowardsSun ) {
-                  chunk.setVelocity( chunk.velocity.rotated( 0.7 * Math.PI + RAND.nextDouble() * Math.PI / 8 ) );
+                  chunk.setVelocity( chunk.velocity.rotated(
+                    0.7 * Math.PI + phet.joist.random.nextDouble() * Math.PI / 8 )
+                  );
                 } else {
-                  chunk.setVelocity( chunk.velocity.rotated( -0.7 * Math.PI - RAND.nextDouble() * Math.PI / 8 ) );
+                  chunk.setVelocity(
+                    chunk.velocity.rotated( -0.7 * Math.PI - phet.joist.random.nextDouble() * Math.PI / 8 )
+                  );
                 }
 
               } else {
@@ -242,7 +244,9 @@ define( function( require ) {
 
       // Angle is a function of the selected sector and a random offset
       // within the sector.
-      return sector * EMISSION_SECTOR_SPAN + ( RAND.nextDouble() * EMISSION_SECTOR_SPAN ) + EMISSION_SECTOR_OFFSET;
+      return sector * EMISSION_SECTOR_SPAN +
+             (phet.joist.random.nextDouble() * EMISSION_SECTOR_SPAN) +
+             EMISSION_SECTOR_OFFSET;
     },
 
     /**

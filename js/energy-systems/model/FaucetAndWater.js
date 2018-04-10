@@ -22,7 +22,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterDrop = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/WaterDrop' );
@@ -35,7 +34,6 @@ define( function( require ) {
   var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
   var MAX_WATER_WIDTH = 0.01; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
-  var RAND = new Random();
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new RangeWithValue( 0.05, 0.06 );
 
   // The following acceleration constant defines the rate at which the water
@@ -87,7 +85,7 @@ define( function( require ) {
     createNewChunk: function() {
 
       // Random x value within water column for "watery" appearance
-      var x = ( RAND.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2 + MAX_WATER_WIDTH / 2;
+      var x = (phet.joist.random.nextDouble() - 0.5) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2 + MAX_WATER_WIDTH / 2;
 
       var initialPosition = this.positionProperty.value
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
@@ -129,7 +127,8 @@ define( function( require ) {
       // Add water droplets as needed based on flow rate.
       if ( this.flowProportionProperty.value > 0 ) {
         var initialOffset = new Vector2( 0, 0 );
-        var initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH * ( 1 + ( RAND.nextDouble() - 0.5 ) * 0.2 );
+        var initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
+                           (1 + (phet.joist.random.nextDouble() - 0.5) * 0.2);
         var initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop( initialOffset, new Vector2( 0, 0 ), initialSize ) );
       }

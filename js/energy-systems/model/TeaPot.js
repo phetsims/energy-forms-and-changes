@@ -21,7 +21,6 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -46,7 +45,6 @@ define( function( require ) {
   var COOLING_CONSTANT = 0.1; // Controls rate at which tea pot cools down, empirically determined.
   var COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new RangeWithValue( 0.12, 0.15 );
-  var RAND = new Random();
   var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
   /**
@@ -121,7 +119,7 @@ define( function( require ) {
 
           // Emit a new thermal energy chunk.
           var xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
-          var x0 = this.positionProperty.value.x + xRange.min + RAND.nextDouble() * xRange.getLength();
+          var x0 = this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength();
           var y0 = this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
           var initialPosition = new Vector2( x0, y0 );
 
@@ -166,7 +164,7 @@ define( function( require ) {
           if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
             chunk.positionProperty.get().y === self.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
 
-            if ( RAND.nextDouble() > 0.2 ) {
+            if ( phet.joist.random.nextDouble() > 0.2 ) {
 
               // Turn the chunk into mechanical energy.
               chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
@@ -298,7 +296,7 @@ define( function( require ) {
           var initialPosition = new Vector2( this.positionProperty.value.x,
             this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
 
-          var energyType = RAND.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
+          var energyType = phet.joist.random.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
 
           var newEnergyChunk = new EnergyChunk( energyType, initialPosition, this.energyChunksVisibleProperty );
           this.energyChunkList.push( newEnergyChunk );

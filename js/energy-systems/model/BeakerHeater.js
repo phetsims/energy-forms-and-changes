@@ -17,7 +17,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
@@ -46,7 +45,6 @@ define( function( require ) {
   var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.01 );
   var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
 
-  var RAND = new Random();
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   // var BEAKER_OFFSET = new Vector2( 0, 0.025 ); // Original Java coords
@@ -75,6 +73,8 @@ define( function( require ) {
 
     this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisibleProperty );
 
+    // @private, for convenience
+    this.random = phet.joist.random;
   }
 
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
@@ -154,8 +154,9 @@ define( function( require ) {
         // Remove an energy chunk from the beaker and start it floating
         // away, a.k.a. make it "radiate".
         var bounds = this.beaker.getBounds();
-        var extractionX = bounds.minX + RAND.nextDouble() * bounds.width;
-        var extractionY = bounds.minY + RAND.nextDouble() * ( bounds.height * this.beaker.fluidLevelProperty.get() );
+        var extractionX = bounds.minX + phet.joist.random.nextDouble() * bounds.width;
+        var extractionY = bounds.minY +
+                          phet.joist.random.nextDouble() * (bounds.height * this.beaker.fluidLevelProperty.get());
         var extractionPoint = new Vector2( extractionX, extractionY );
         var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
 
@@ -332,7 +333,8 @@ define( function( require ) {
       // The path for the thermal energy chunks is meant to look like it
       // is moving on the burner element.  This must be manually
       // coordinated with the burner element image.
-      var angle = RAND.nextBoolean() ? RAND.nextDouble() * Math.PI * 0.45 : -RAND.nextDouble() * Math.PI * 0.3;
+      var angle = this.random.nextBoolean() ? this.random.nextDouble() * Math.PI * 0.45 :
+                  -this.random.nextDouble() * Math.PI * 0.3;
       path.push( startingPoint.plus( new Vector2( 0, HEATER_ELEMENT_2D_HEIGHT ).rotated( angle ) ) );
       return path;
     },
@@ -375,7 +377,7 @@ define( function( require ) {
 
       // Add the remaining points in the path.
       for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
-        var movement = nominalTravelVector.rotated( ( RAND.nextDouble() - 0.5 ) * Math.PI / 4 );
+        var movement = nominalTravelVector.rotated( (phet.joist.random.nextDouble() - 0.5) * Math.PI / 4 );
         currentPosition = currentPosition.plus( movement );
         path.push( currentPosition );
       }

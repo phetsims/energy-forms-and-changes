@@ -21,7 +21,6 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
   var Shape = require( 'KITE/Shape' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -36,7 +35,6 @@ define( function( require ) {
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // Constants
-  var RAND = new Random();
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
@@ -238,7 +236,7 @@ define( function( require ) {
           } else {
             // Choose a random location along the center portion of the cross line.
             initialPosition = lowerLeftOfPanel.plus(
-              new Vector2( crossLineLength * ( 0.5 * RAND.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle ) );
+              new Vector2( crossLineLength * (0.5 * phet.joist.random.nextDouble() + 0.25), 0 ).rotated( crossLineAngle ) );
           }
 
           var newEnergyChunk = new EnergyChunk(

@@ -24,7 +24,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
@@ -37,7 +36,6 @@ define( function( require ) {
   var MATERIAL_THICKNESS = 0.001; // In meters.
   var NUM_SLICES = 6;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
-  var RAND = new Random();
 
   // constants that control the nature of the fluid in the beaker.
   var WATER_SPECIFIC_HEAT = 3000; // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
@@ -210,7 +208,7 @@ define( function( require ) {
         totalSliceArea += slice.shape.bounds.width * slice.shape.bounds.height;
       } );
 
-      var sliceSelectionValue = RAND.nextDouble();
+      var sliceSelectionValue = phet.joist.random.nextDouble();
       var chosenSlice = this.slices[ 0 ];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {

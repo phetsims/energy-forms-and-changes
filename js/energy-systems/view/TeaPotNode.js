@@ -14,7 +14,6 @@ define( function( require ) {
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
   var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -27,7 +26,6 @@ define( function( require ) {
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
   var MAX_HEIGHT_AND_WIDTH = 200; // For teapot steam node
-  var RAND = new Random();
 
   /**
    * @param {TeaPot} teaPot
@@ -141,7 +139,7 @@ define( function( require ) {
         var startPoint = new Vector2( -stemBaseWidth / 2, 0 ).rotated( Math.PI / 4 );
 
         // Opening angle of steam stream (/2)
-        var stemHalfAngle = 0.5 * Math.PI / 4 * ( 1 + 0.3 * ( RAND.nextDouble() - 0.5 ) );
+        var stemHalfAngle = 0.5 * Math.PI / 4 * (1 + 0.3 * (phet.joist.random.nextDouble() - 0.5));
 
         var stemEdge = new Vector2( heightAndWidth / 2, -heightAndWidth / 2 );
 
@@ -161,7 +159,7 @@ define( function( require ) {
         var cloudCenter = new Vector2( heightAndWidth - cloudSize / 2, -cloudSize / 2 );
         var nPoints = 16;
         for ( var i = 0; i < nPoints; i++ ) {
-          var radiusVector = new Vector2( cloudSize / 2 * ( 1 + 0.1 * ( RAND.nextDouble() - 0.5 ) ), 0 );
+          var radiusVector = new Vector2( cloudSize / 2 * (1 + 0.1 * (phet.joist.random.nextDouble() - 0.5)), 0 );
           var point = cloudCenter.plus( radiusVector.rotated( i * Math.PI * 2 / nPoints ) );
           i ? cloudBody.lineToPoint( point ) : cloudBody.moveToPoint( point );
         }

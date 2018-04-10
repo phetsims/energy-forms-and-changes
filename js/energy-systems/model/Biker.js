@@ -22,7 +22,6 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Constants
@@ -32,7 +31,6 @@ define( function( require ) {
   var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
-  var RAND = new Random();
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
 
@@ -444,7 +442,7 @@ define( function( require ) {
       var nominalInitialOffset = new Vector2( 0.019, 0.05 );
 
       for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
-        var displacement = new Vector2( ( RAND.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
+        var displacement = new Vector2( (phet.joist.random.nextDouble() - 0.5) * 0.02, 0 ).rotated( Math.PI * 0.7 );
         var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
         var newEnergyChunk = new EnergyChunk(
@@ -543,7 +541,7 @@ define( function( require ) {
       path.push( offset );
 
       for ( var i = 0; i < numSegments; i++ ) {
-        offset = offset.plus( new Vector2( 0, segmentLength ).rotated( ( RAND.nextDouble() - 0.5 ) * maxAngle ) );
+        offset = offset.plus( new Vector2( 0, segmentLength ).rotated( (phet.joist.random.nextDouble() - 0.5) * maxAngle ) );
         path.push( offset );
       }
 

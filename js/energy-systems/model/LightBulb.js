@@ -19,7 +19,6 @@ define( function( require ) {
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -45,7 +44,6 @@ define( function( require ) {
   var OFFSET_TO_RADIATE_POINT = new Vector2( 0, 0.066 );
 
   var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
-  var RAND = new Random();
   var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new RangeWithValue( 2, 2.5 );
   var ENERGY_TO_FULLY_LIGHT = EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
   var LIGHT_CHUNK_LIT_BULB_RADIUS = 0.1; // In meters.
@@ -298,7 +296,7 @@ define( function( require ) {
      * @private
      */
     radiateEnergyChunk: function( energyChunk ) {
-      if ( RAND.nextDouble() > this.proportionOfThermalChunksRadiated ) {
+      if ( phet.joist.random.nextDouble() > this.proportionOfThermalChunksRadiated ) {
         energyChunk.energyTypeProperty.set( EnergyType.LIGHT );
       } else {
         energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
@@ -310,7 +308,7 @@ define( function( require ) {
       path.push( this.positionProperty.value
         .plus( OFFSET_TO_RADIATE_POINT )
         .plus( new Vector2( 0, RADIATED_ENERGY_CHUNK_MAX_DISTANCE )
-          .rotated( ( RAND.nextDouble() - 0.5 ) * ( Math.PI / 2 ) ) ) );
+          .rotated( (phet.joist.random.nextDouble() - 0.5) * (Math.PI / 2) ) ) );
 
       this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
         energyChunk,
@@ -327,7 +325,7 @@ define( function( require ) {
     createThermalEnergyChunkPath: function( startingPoint ) {
       var path = [];
       var filamentWidth = 0.03;
-      var x = ( 0.5 + RAND.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
+      var x = (0.5 + phet.joist.random.nextDouble() / 2) * filamentWidth / 2 * (this.goRightNextTime ? 1 : -1);
 
       path.push( startingPoint.plus( new Vector2( x, 0 ) ) );
       this.goRightNextTime = !this.goRightNextTime;
@@ -360,7 +358,7 @@ define( function( require ) {
      */
     generateThermalChunkTimeOnFilament: function() {
       return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
-        RAND.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
+             phet.joist.random.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
     },
 
     /**

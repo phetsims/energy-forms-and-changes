@@ -17,14 +17,12 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Random = require( 'DOT/Random' );
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Shape = require( 'KITE/Shape' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var RAND = new Random();
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
 
   // constants for the PerspectiveWaterNode
@@ -181,9 +179,10 @@ define( function( require ) {
 
         for ( var i = 0; i < bubblesToProduce; i++ ) {
           var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min +
-                                    RAND.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+                                    phet.joist.random.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           var steamBubbleCenterXPos = beakerOutlineRect.centerX +
-                                      (RAND.nextDouble() - 0.5) * (beakerOutlineRect.width - steamBubbleDiameter);
+                                      (phet.joist.random.nextDouble() - 0.5) *
+                                      (beakerOutlineRect.width - steamBubbleDiameter);
 
           var steamBubble = new Circle( steamBubbleDiameter / 2, {
             fill: 'white',
