@@ -1,13 +1,12 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * This node monitors the comings and goings of energy
- * chunks on a observable list and adds/removes them from this node.  This is
- * intended to be used in other Nodes that represent model elements that
- * contain energy chunks.
- * This was done as a separate class so that it could be used in composition
- * rather than inheritance, because composition allows better control over the
- * layering within the parent PNode.
+ * This node monitors the comings and goings of energy chunks on a observable list and adds/removes nodes that
+ * correspond to each.  This is intended to be used in other view nodes that represent model elements that contain
+ * energy chunks.
+ *
+ * This was done as a separate class so that it could be used in composition rather than inheritance, because
+ * composition allows better control over the layering within the parent view node.
  *
  * @author John Blanco
  */
@@ -31,36 +30,36 @@ define( function( require ) {
 
     var self = this;
 
-    // This "itemAddedListener" callback adds EnergyChunkNodes to the layer
-    // when chunks are produced in the model. It includes listeners for when
-    // chunks are removed from the model.
-    function chunkListObserver( chunk ) {
-      var energyChunkNode = new EnergyChunkNode( chunk, modelViewTransform );
+    // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
+    // when chunks are removed from the model.
+    function chunkListObserver( energyChunk ) {
+
+      // create and add a node to represent the energy chunk
+      var energyChunkNode = new EnergyChunkNode( energyChunk, modelViewTransform );
       self.addChild( energyChunkNode );
 
-      // When chunk is removed from the model, remove its node from the view
+      // when chunk is removed from the model, remove its node from the view
       var itemRemovedListener = function( removedChunk ) {
-        if ( removedChunk === chunk ) {
+        if ( removedChunk === energyChunk ) {
           self.removeChild( energyChunkNode );
 
-          // Remove this listener to reclaim memory
+          // remove this listener to avoid leaking memory
           energyChunkList.removeItemRemovedListener( itemRemovedListener );
         }
       };
 
-      // Link itemRemovedListener to the waterDrops ObservableArray
+      // link itemRemovedListener to the provided ObservableArray
       energyChunkList.addItemRemovedListener( itemRemovedListener );
     }
 
-    // Add the named observer function
+    // add the named observer function
     energyChunkList.addItemAddedListener( chunkListObserver );
 
-    // Since the energy chunk positions are in model coordinates, this node
-    // must maintain a position that is offset from the parent in order to
-    // compensate.
+    // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position that
+    // is offset from the parent in order to be in the correct location in the view.
     parentPositionProperty.link( function( position ) {
-      self.x = -modelViewTransform.modelToViewX( position.x ) + 12; // energyChunkNode.bounds.width/2
-      self.y = -modelViewTransform.modelToViewY( position.y ) + 12; // energyChunkNode.bounds.height/2
+      self.x = -modelViewTransform.modelToViewX( position.x ) + EnergyChunkNode.WIDTH / 2;
+      self.y = -modelViewTransform.modelToViewY( position.y ) + EnergyChunkNode.WIDTH / 2;
     } );
   }
 
@@ -68,4 +67,3 @@ define( function( require ) {
 
   return inherit( Node, EnergyChunkLayer );
 } );
-

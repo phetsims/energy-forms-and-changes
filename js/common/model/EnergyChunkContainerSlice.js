@@ -4,6 +4,7 @@
  * This class represents a "slice" within a 2D container that can contain a set of energy chunks, and can be used to add
  * some limited 3D capabilities by having some z-dimension information.  The slice consists of a 2D shape and a Z value
  * representing its position in Z space.
+ *
  * @author John Blanco
  * @author Jesse Greenberg
  * @author Martin Veillette

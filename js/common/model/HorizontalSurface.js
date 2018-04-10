@@ -4,6 +4,7 @@
 /**
  * A simple, level horizontal surface in a 2D model space.  This is represented by a range of x values and a single y
  * value.
+ *
  * @author John Blanco
  */
 define( function( require ) {

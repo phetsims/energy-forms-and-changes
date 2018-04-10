@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * a scenery node that looks like water in a container as seen from slightly above the horizon
+ * a scenery node that looks like water in a cylindrical container as seen from slightly above the horizon
  * @author John Blanco
  */
 
@@ -99,6 +99,7 @@ define( function( require ) {
     /**
      * time step function for the water
      * @param {number} dt - the change in time
+     * @public
      */
     step: function( dt ) {
       this.updateAppearance( this.waterLevelProperty.value, this.beakerOutlineRect, this.temperatureProperty.value, dt );

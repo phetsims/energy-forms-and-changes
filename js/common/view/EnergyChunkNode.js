@@ -1,7 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Class that represents a chunk of energy in the view.
+ * Scenery node that represents a chunk of energy in the view.
  *
  * @author John Blanco
  * @author Jesse Greenberg
@@ -31,11 +31,13 @@ define( function( require ) {
   var energyChunkLabelString = require( 'string!ENERGY_FORMS_AND_CHANGES/energyChunkLabel' );
 
   // constants
-  var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters.
-  var WIDTH = 24; // In screen coords, which is close to pixels.
+  var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
+  var WIDTH = 24; // in screen coords, which are close to pixels
 
-  // Convenience map that links energy types to their representing images.
+  // convenience map that links energy types to their representing images
   var mapEnergyTypeToImage = {};
+  // TODO: As an optimization, try making these nodes, and the factory function below just wraps each in a new Node(),
+  // taking advantage of Scenery's DAG support.
   mapEnergyTypeToImage[ EnergyType.THERMAL ] = thermalEnergyImage;
   mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = electricalEnergyImage;
   mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = mechanicalEnergyImage;
@@ -44,11 +46,9 @@ define( function( require ) {
   mapEnergyTypeToImage[ EnergyType.HIDDEN ] = hiddenEnergyImage;
 
   /**
-   * Function that returns the correct image for an EnergyChunkNode.  This is
-   * function is needed in both static and private scopes and is declared here
-   * so that it can be used in both scopes as necessary.
-   *
-   * @param {string} energyType
+   * Helper function that returns the correct image for an EnergyChunkNode.  This function is needed in both static and
+   * local scopes and is declared here so that it can be used in both as necessary.
+   * @param {EnergyType} energyType
    * @returns {Image}
    */
   function createEnergyChunkNode( energyType ) {
@@ -63,9 +63,7 @@ define( function( require ) {
   }
 
   /**
-   * Constructor for an EnergyChunkNode.
-   *
-   * @param {EnergyChunk} energyChunk
+   * @param {EnergyChunk} energyChunk - model of an energy chunk
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
@@ -74,23 +72,23 @@ define( function( require ) {
     Node.call( this );
     var self = this;
 
-    // Control the overall visibility of this node.
+    // control the overall visibility of this node
     energyChunk.visibleProperty.link( function( visible ) {
       self.setVisible( visible );
     } );
 
-    // Set up updating of transparency based on Z position.
+    // set up updating of transparency based on Z position
     energyChunk.zPositionProperty.link( function( zPosition ) {
       self.updateTransparency( zPosition );
     } );
 
-    // Monitor the energy type and make the image match it.
+    // monitor the energy type and update the image if a change occurs
     energyChunk.energyTypeProperty.link( function( energyType ) {
       self.removeAllChildren();
-      self.addChild( self.createEnergyChunkNode( energyType ) );
+      self.addChild( createEnergyChunkNode( energyType ) );
     } );
 
-    // Set this node's position when the corresponding model element moves.
+    // set this node's position when the corresponding model element moves
     energyChunk.positionProperty.link( function( position ) {
       assert && assert( !_.isNaN( position.x ), 'position.x = ' + position.x );
       assert && assert( !_.isNaN( position.y ), 'position.y = ' + position.y );
@@ -103,8 +101,7 @@ define( function( require ) {
   return inherit( Node, EnergyChunkNode, {
 
     /**
-     * Update the transparency, which is a function of several factors.
-     *
+     * update the transparency, which is a function of several factors
      * @private
      * @param {number} zPosition
      */
@@ -114,33 +111,23 @@ define( function( require ) {
         zFadeValue = Math.max( ( Z_DISTANCE_WHERE_FULLY_FADED + zPosition ) / Z_DISTANCE_WHERE_FULLY_FADED, 0 );
       }
       this.setOpacity( zFadeValue );
-    },
-
-    /**
-     * Function that returns the correct image for this EnergyChunkNode.
-     *
-     * @static
-     * @param {string} energyType
-     * @returns {Image}
-     */
-    createEnergyChunkNode: function( energyType ) {
-      return createEnergyChunkNode( energyType );
     }
   }, {
 
+    // statics
+    WIDTH: WIDTH,
+
     /**
-     * Function that returns the correct image for this EnergyChunkNode.
-     * This is a static function so that an image can be generated without an
-     * EnergyChunkNode instance.  This is mostly useful for button icons that
+     * A function that returns the correct image for the provided energy type. This is a static function so that an
+     * image node can be generated without an EnergyChunkNode instance.  This is mostly useful for button icons that
      * should not have visibility properties linked to the model.
-     *
      * @static
-     * @param {string} energyType
+     * @param {EnergyType} energyType
      * @returns {Image}
+     * @public
      */
     createEnergyChunkNode: function( energyType ) {
       return createEnergyChunkNode( energyType );
     }
-
   } );
 } );

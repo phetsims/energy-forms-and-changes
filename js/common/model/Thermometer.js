@@ -3,6 +3,7 @@
 /**
  * Basic thermometer model that has a position and senses temperature at that position. It has only a point and a
  * temperature in the model.  The visual representation is left entirely to the view.
+ *
  * @author John Blanco
  */
 

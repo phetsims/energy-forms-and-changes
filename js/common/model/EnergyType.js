@@ -2,6 +2,7 @@
 
 /**
  * enum that represents the various types of energy used in this simulation
+ *
  * @author John Blanco
  */
 define( function( require ) {

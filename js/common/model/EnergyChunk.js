@@ -2,6 +2,7 @@
 
 /**
  * type that represents a chunk of energy in the view
+ *
  * @author John Blanco
  */
 

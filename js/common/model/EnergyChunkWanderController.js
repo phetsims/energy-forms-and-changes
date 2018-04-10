@@ -3,6 +3,7 @@
 /**
  * This class is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
  * destination.
+ *
  * @author John Blanco
  */
 
@@ -30,8 +31,10 @@ define( function( require ) {
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {
 
-    // @private
+    // @public (read-only) {EnergyChunk)
     this.energyChunk = energyChunk;
+
+    // @private
     this.initialWanderConstraint = initialWanderConstraint;
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, MAX_VELOCITY );

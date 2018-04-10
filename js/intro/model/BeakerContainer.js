@@ -98,7 +98,6 @@ define( function( require ) {
         if ( self.getThermalContactArea().containsBounds( element.getBounds() ) &&
           element.getProjectedShape().contains( energyChunk.positionProperty.value ) ) {
           isObscured = true;
-          return;
         }
       } );
 
@@ -106,7 +105,6 @@ define( function( require ) {
     },
 
     /**
-     *
      * @param {number} dt
      */
     animateNonContainedEnergyChunks: function( dt ) {
@@ -115,10 +113,9 @@ define( function( require ) {
       var controllers = this.energyChunkWanderControllers.slice( 0 );
 
       controllers.forEach( function( controller ) {
-        var ec = controller.getEnergyChunk();
+        var ec = controller.energyChunk;
 
-        // This chunk is being transferred from a container in the
-        // beaker to the fluid, so move it sideways.
+        // This chunk is being transferred from a container in the beaker to the fluid, so move it sideways.
         if ( self.isEnergyChunkObscured( ec ) ) {
           var xVel = 0.05 * dt * ( self.getCenterPoint().getX() > ec.positionProperty.value.x ? -1 : 1 );
           var motionVector = new Vector2( xVel, 0 );
@@ -133,7 +130,7 @@ define( function( require ) {
         // Chunk is in a place where it can migrate to the slices and
         // stop moving.
         if ( !self.isEnergyChunkObscured( ec ) && self.getSliceBounds().containsPoint( ec.positionProperty.value ) ) {
-          self.moveEnergyChunkToSlices( controller.getEnergyChunk() );
+          self.moveEnergyChunkToSlices( controller.energyChunk );
         }
       } );
     },

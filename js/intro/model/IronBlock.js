@@ -5,8 +5,6 @@
  *
  * @author John Blanco
  */
-
-
 define( function( require ) {
   'use strict';
 

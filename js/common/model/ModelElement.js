@@ -3,6 +3,7 @@
 /**
  * Base class for all model elements in the Energy Forms and Changes simulation that can be moved around by the user.
  * At the time of this writing, this includes blocks, beakers, burners, and thermometers.
+ *
  * @author John Blanco
  */
 

@@ -4,6 +4,7 @@
  * Scenery node that represents a beaker in the view.  This representation is split between a front node and a back
  * node, which must be separately added to the canvas.  This is done to allow a layering effect.  Hence, this cannot be
  * added directly to the canvas, and the client must add each layer separately.
+ *
  * @author John Blanco
  * @author Andrew Adare
  */

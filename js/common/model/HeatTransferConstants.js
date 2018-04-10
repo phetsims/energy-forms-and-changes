@@ -4,6 +4,7 @@
  * Static object containing the constants that control the rate of heat transfer between the various model elements that
  * can contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are
  * capable of exchanging heat with one another.
+ *
  * @author John Blanco
  * @author Jesse Greenberg
  */

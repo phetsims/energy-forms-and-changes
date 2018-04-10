@@ -2,6 +2,7 @@
 
 /**
  * Create energyFormsAndChanges namespace
+ *
  * @author  Jesse Greenberg
  * @author  Andrew Adare
  */
