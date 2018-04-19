@@ -63,10 +63,10 @@ define( function( require ) {
   /**
    * Constructor for the Energy Forms and Changes Intro Screen.
    *
-   * @param {EnergyFormsAndChangesIntroModel} model
+   * @param {EFACIntroModel} model
    * @constructor
    */
-  function EnergyFormsAndChangesIntroScreenView( model ) {
+  function EFACIntroScreenView( model ) {
 
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 1024, 618 )
@@ -322,8 +322,8 @@ define( function( require ) {
     model.ironBlock.positionProperty.link( blockChangeObserver );
   }
 
-  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreenView', EnergyFormsAndChangesIntroScreenView );
+  energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
 
-  return inherit( ScreenView, EnergyFormsAndChangesIntroScreenView );
+  return inherit( ScreenView, EFACIntroScreenView );
 
 } );

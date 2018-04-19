@@ -58,12 +58,12 @@ define( function( require ) {
   var countUnderMin = 0;
 
   /**
-   * Main constructor for EnergyFormsAndChangesIntroModel, which contains all of
+   * Main constructor for EFACIntroModel, which contains all of
    * the model logic for the entire sim screen.
    *
    * @constructor
    */
-  function EnergyFormsAndChangesIntroModel() {
+  function EFACIntroModel() {
 
     this.energyChunksVisibleProperty = new Property( false );
 
@@ -143,9 +143,9 @@ define( function( require ) {
 
   }
 
-  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroModel', EnergyFormsAndChangesIntroModel );
+  energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
 
-  return inherit( Object, EnergyFormsAndChangesIntroModel, {
+  return inherit( Object, EFACIntroModel, {
 
     /**
      * Restore the initial conditions of the model.

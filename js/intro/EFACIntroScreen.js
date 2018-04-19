@@ -12,8 +12,8 @@ define( function( require ) {
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var EnergyFormsAndChangesIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyFormsAndChangesIntroModel' );
-  var EnergyFormsAndChangesIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyFormsAndChangesIntroScreenView' );
+  var EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
+  var EFACIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EFACIntroScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var Screen = require( 'JOIST/Screen' );
@@ -25,7 +25,7 @@ define( function( require ) {
    * @param {Tandem} tandem
    * @constructor
    */
-  function EnergyFormsAndChangesIntroScreen( tandem ) {
+  function EFACIntroScreen( tandem ) {
 
     var options = {
       name: introString,
@@ -36,15 +36,15 @@ define( function( require ) {
 
     Screen.call( this,
       function() {
-        return new EnergyFormsAndChangesIntroModel();
+        return new EFACIntroModel();
       },
       function( model ) {
-        return new EnergyFormsAndChangesIntroScreenView( model );
+        return new EFACIntroScreenView( model );
       },
       options );
   }
 
-  energyFormsAndChanges.register( 'EnergyFormsAndChangesIntroScreen', EnergyFormsAndChangesIntroScreen );
-  return inherit( Screen, EnergyFormsAndChangesIntroScreen );
+  energyFormsAndChanges.register( 'EFACIntroScreen', EFACIntroScreen );
+  return inherit( Screen, EFACIntroScreen );
 } );
 

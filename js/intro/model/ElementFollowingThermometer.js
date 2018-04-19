@@ -19,7 +19,7 @@ define( function( require ) {
   /**
    * Constructor for the ElementFollowingThermometer.
    *
-   * @param {EnergyFormsAndChangesIntroModel} model
+   * @param {EFACIntroModel} model
    * @param {Vector2} initialPosition
    * @param {boolean} initiallyActive
    * @constructor

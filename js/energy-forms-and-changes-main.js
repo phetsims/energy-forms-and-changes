@@ -11,7 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergyFormsAndChangesIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EnergyFormsAndChangesIntroScreen' );
+  var EFACIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EFACIntroScreen' );
   var EnergySystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/EnergySystemsScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
@@ -37,7 +37,7 @@ define( function( require ) {
   SimLauncher.launch( function() {
 
     var sim = new Sim( energyFormsAndChangesTitleString, [
-      new EnergyFormsAndChangesIntroScreen( tandem.createTandem( 'introScreen' ) ),
+      new EFACIntroScreen( tandem.createTandem( 'introScreen' ) ),
       new EnergySystemsScreen( tandem.createTandem( 'energySystemsScreen' ) )
     ], simOptions );
 

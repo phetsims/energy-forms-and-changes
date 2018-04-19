@@ -30,7 +30,7 @@ define( function( require ) {
   /**
    * Constructor for the NormalAndFastForwardTimeControlPanel.
    *
-   * @param {EnergyFormsAndChangesIntroModel} model
+   * @param {EFACIntroModel} model
    * @constructor
    */
   function NormalAndFastForwardTimeControlPanel( model ) {

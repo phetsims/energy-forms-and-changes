@@ -24,7 +24,7 @@ define( function( require ) {
   /**
    * Constructor for a BeakerContainerView.
    *
-   * @param {EnergyFormsAndChangesIntroModel} model
+   * @param {EFACIntroModel} model
    * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
    */
