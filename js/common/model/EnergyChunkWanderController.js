@@ -26,7 +26,7 @@ define( function( require ) {
   /**
    * @param {EnergyChunk} energyChunk
    * @param {Property.<Vector2>} destinationProperty
-   * @param {Rectangle} initialWanderConstraint
+   * @param {Rectangle} initialWanderConstraint // TODO: Can this become a Bounds2?  Seems like that'd be better.
    * @constructor
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {

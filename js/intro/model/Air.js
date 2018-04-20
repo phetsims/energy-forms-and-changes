@@ -2,8 +2,8 @@
 
 
 /**
- * Class that represents the air in the model.  Air can hold heat, and can
- * exchange thermal energy with other model objects.
+ * A type that represents the air in the model.  Air can hold heat, and can exchange thermal energy with other model
+ * objects.
  *
  * @author John Blanco
  */
@@ -35,34 +35,36 @@ define( function( require ) {
 
   // The thickness of the slice of air being modeled.  This is basically the z dimension, and is used solely for
   // volume calculations.
-  var DEPTH = 0.1; // In meters.
+  var DEPTH = 0.1; // in meters
 
   // constants that define the heat carrying capacity of the air.
   var SPECIFIC_HEAT = 1012; // In J/kg-K, source = design document.
-  // var DENSITY = 0.001; // In kg/m^3, source = design document (and common knowledge).
-  var DENSITY = 10; // In kg/m^3, far more dense than real air, done to make things cool faster.
+  var DENSITY = 10; // In kg/m^3, far more dense than real air (real air is 0.001), done to make things cool faster
 
-  // Derived constants.
+  // derived constants
   var VOLUME = SIZE.width * SIZE.height * DEPTH;
   var MASS = VOLUME * DENSITY;
   var INITIAL_ENERGY = MASS * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE;
   var THERMAL_CONTACT_AREA = new ThermalContactArea( new Bounds2( -SIZE.width / 2, 0, SIZE.width, SIZE.height ), true );
 
-  // Class variable that keeps track of energy state for all air.
-  var energy = INITIAL_ENERGY;
-
   /**
-   * *
-   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    * @constructor
    */
   function Air( energyChunksVisibleProperty ) {
 
+    // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // Energy chunks that are wandering outside this model element.
-    this.energyChunkWanderControllers = [];
+    // @public (read-only) - list of energy chunks owned by this model element
     this.energyChunkList = new ObservableArray();
+
+    // @private {Array<EnergyChunkWanderController>} - wander controolers for energy chunks that are owned by this model
+    // element but are wandering outside of it
+    this.energyChunkWanderControllers = [];
+
+    // @private {number} - total energy of the air, accessible through getters/setters defined below
+    this.energy = INITIAL_ENERGY;
   }
 
   energyFormsAndChanges.register( 'Air', Air );
@@ -70,80 +72,89 @@ define( function( require ) {
   return inherit( Object, Air, {
 
     /**
-     * *
-     * @param dt
+     * step function for this model element
+     * @param {number} dt - delta time, in seconds
+     * @public
      */
     step: function( dt ) {
 
       var self = this;
-      var controllers = this.energyChunkWanderControllers.slice();
+      var wanderControllers = this.energyChunkWanderControllers.slice();
 
-      controllers.forEach( function( controller ) {
-        controller.updatePosition( dt );
+      wanderControllers.forEach( function( wanderController ) {
+        wanderController.updatePosition( dt );
+        if ( wanderController.isDestinationReached() ) {
 
-        // if ( !( self.getThermalContactArea().containsPoint( controller.energyChunk.positionProperty.value ) ) ) {
-        if ( controller.isDestinationReached() ) {
-          // }
-          // Remove this energy chunk.
-          self.energyChunkList.remove( controller.energyChunk );
-          _.pull( self.energyChunkWanderControllers, controller );
+          // The energy chuck has reached its destination, which for the air means it has risen out of view, so remove
+          // it from the model.
+          self.energyChunkList.remove( wanderController.energyChunk );
+          _.pull( self.energyChunkWanderControllers, wanderController );
         }
       } );
 
+      this.equalizeWithSurroundingAir( dt );
     },
 
     /**
-     * *
-     * @param {number} dt
+     * This method simulates how air in a particular area loses heat over time as it equalizes with other air nearby.
+     * It assumes that the surrounding air is infinite and is at room temperature.
+     * @param {number} dt - delta time, in seconds
+     * @private
      */
     equalizeWithSurroundingAir: function( dt ) {
-      if ( Math.abs( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) > EFACConstants.SIGNIFICANT_TEMPERATURE_DIFFERENCE ) {
+      var self = this;
+      if ( Math.abs( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) >
+           EFACConstants.SIGNIFICANT_TEMPERATURE_DIFFERENCE ) {
+
         var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
         var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-        var i;
-        for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
-          var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
-          var thermalEnergyLost = ( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) * HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
-          this.changeEnergy( -thermalEnergyLost );
-        }
+        _.times( numFullTimeStepExchanges + 1, function( index ) {
+          var timeStep = index < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+          var thermalEnergyLost = (self.getTemperature() - EFACConstants.ROOM_TEMPERATURE) *
+                                  HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
+          self.changeEnergy( -thermalEnergyLost );
+
+        } );
       }
     },
 
     /**
-     * *
      * @param {number} deltaEnergy
+     * @public
      */
     changeEnergy: function( deltaEnergy ) {
-      energy += deltaEnergy;
+      this.energy += deltaEnergy;
     },
 
     /**
-     * *
      * @returns {number}
+     * @public
      */
     getEnergy: function() {
-      return energy;
+      return this.energy;
     },
 
     /**
-     * *
+     * @public
      */
     reset: function() {
-      energy = INITIAL_ENERGY;
+      this.energy = INITIAL_ENERGY;
       this.energyChunkList.clear();
     },
 
     /**
-     * *
+     * exchange thermal energy with the provided energy container
      * @param energyContainer
      * @param dt
+     * @public
      */
     exchangeEnergyWith: function( energyContainer, dt ) {
       var thermalContactLength = this.getThermalContactArea().getThermalContactLength( energyContainer.getThermalContactArea() );
       if ( thermalContactLength > 0 ) {
         var excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
         if ( excessEnergy === 0 ) {
-          // Container is below max temperature, exchange energy normally.
+
+          // container is below max temperature - exchange energy normally
           var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), energyContainer.getEnergyContainerCategory() );
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
@@ -155,7 +166,8 @@ define( function( require ) {
             this.changeEnergy( thermalEnergyGained );
           }
         } else {
-          // Item is at max temperature.  Shed all excess energy into the air.
+
+          // item is at max temperature - shed all excess energy into the air
           energyContainer.changeEnergy( -excessEnergy );
           this.changeEnergy( excessEnergy );
         }
@@ -163,71 +175,78 @@ define( function( require ) {
     },
 
     /**
-     * *
      * @param {EnergyChunk} energyChunk
-     * @param initialWanderConstraint
+     * @param {Rectangle} initialWanderConstraint
      */
     addEnergyChunk: function( energyChunk, initialWanderConstraint ) {
       energyChunk.zPositionProperty.value = 0;
       this.energyChunkList.push( energyChunk );
-      this.energyChunkWanderControllers.push( new EnergyChunkWanderController( energyChunk,
+      this.energyChunkWanderControllers.push( new EnergyChunkWanderController(
+        energyChunk,
         new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
-        initialWanderConstraint ) );
+        initialWanderConstraint )
+      );
     },
 
     /**
-     *
      * @returns {Vector2}
+     * @public
      */
     getCenterPoint: function() {
       return new Vector2( 0, SIZE.height / 2 );
     },
 
+    /**
+     * create a new energy chunk at the top of the air above the specified point
+     * @param {Vector2} point
+     * @return {EnergyChunk}
+     * @public
+     */
     requestEnergyChunk: function( point ) {
-      // Create a new chunk at the top of the air above the specified point.
+
+      // create a new chunk at the top of the air above the specified point
       return new EnergyChunk(
         EnergyType.THERMAL,
         new Vector2( point.x, SIZE.height ),
         new Vector2( 0, 0 ),
-        this.energyChunksVisibleProperty );
+        this.energyChunksVisibleProperty
+      );
     },
 
     /**
-     * *
+     * get the thermal contact area for air, where thermal energy may be exchanged with other objects
      * @returns {ThermalContactArea}
+     * @public
      */
     getThermalContactArea: function() {
       return THERMAL_CONTACT_AREA;
     },
 
     /**
-     * *
+     * get the air temperature
      * @returns {number}
+     * @public
      */
     getTemperature: function() {
-      return energy / ( MASS * SPECIFIC_HEAT );
-    },
-
-    getEnergyChunkList: function() {
-      return this.energyChunkList;
+      return this.energy / (MASS * SPECIFIC_HEAT);
     },
 
     /**
-     * *
-     * @returns {EnergyContainerCategory.AIR}
+     * @returns {EnergyContainerCategory}
+     * @public
      */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.AIR;
     },
 
     /**
-     * *
      * @returns {number}
+     * @public
      */
     getEnergyBeyondMaxTemperature: function() {
-      // Air temperature is unlimited.
+
+      // air temperature is unlimited
       return 0;
     }
   } );
 } );
-
