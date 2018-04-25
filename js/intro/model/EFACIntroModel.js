@@ -92,8 +92,13 @@ define( function( require ) {
 
     // Add and position the beaker.
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
-    this.beaker = new BeakerContainer( new Vector2( -0.015, 0 ), BEAKER_WIDTH, BEAKER_HEIGHT,
-      listOfThingsThatCanGoInBeaker, this.energyChunksVisibleProperty );
+    this.beaker = new BeakerContainer(
+      new Vector2( -0.015, 0 ),
+      BEAKER_WIDTH,
+      BEAKER_HEIGHT,
+      listOfThingsThatCanGoInBeaker,
+      this.energyChunksVisibleProperty
+    );
 
     // Put all the thermal containers on a list for easy iteration.
     this.thermalContainers = [ this.brick, this.ironBlock, this.beaker ];
