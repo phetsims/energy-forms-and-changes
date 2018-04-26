@@ -1,12 +1,10 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Class that represents a brick in the model.
+ * type that represents a brick in the model
  *
  * @author John Blanco
  */
-
-
 define( function( require ) {
   'use strict';
 
@@ -47,8 +45,9 @@ define( function( require ) {
   energyFormsAndChanges.register( 'Brick', Brick );
 
   return inherit( Block, Brick, {
+
     /**
-     * @public read-only
+     * @public
      * @returns {exports.BRICK_TEXTURE_FRONT|*}
      */
     getFrontTextureImage: function() {
@@ -91,10 +90,14 @@ define( function( require ) {
       return EnergyContainerCategory.BRICK;
     }
   }, {
-    // Some constants needed for energy chunk mapping.
-    ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE,
-    // In joules.
-    ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT * EFACConstants.FREEZING_POINT_TEMPERATURE // In joules.} );
+
+    // statics
+
+    // some constants needed for energy chunk mapping, values in joules
+    ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
+                                EFACConstants.ROOM_TEMPERATURE,
+    ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
+                                          EFACConstants.FREEZING_POINT_TEMPERATURE
   } );
 } );
 

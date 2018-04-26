@@ -32,15 +32,12 @@ define( function( require ) {
 
   // constants
   var LABEL_FONT = new PhetFont( 32 );
-  var OUTLINE_LINEWIDTH = 3;
+  var OUTLINE_LINE_WIDTH = 3;
   var OUTLINE_STROKE = Color.DARK_GRAY;
-
   var SHOW_2D_REPRESENTATION = true;
 
   /**
-   * Constructor for a BlockNode.
-   *
-   * @param model
+   * @param model TODO: Why is model here, and can it be eliminated?
    * @param {Block} block
    * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
@@ -113,7 +110,7 @@ define( function( require ) {
 
     // Add the back of the block.
     var blockBack = new Path( blockBackShape, {
-      lineWidth: OUTLINE_LINEWIDTH,
+      lineWidth: OUTLINE_LINE_WIDTH,
       stroke: OUTLINE_STROKE
     } );
     this.addChild( blockBack );
@@ -255,7 +252,7 @@ define( function( require ) {
 
       // Add the outlined shape so that edges are visible.
       root.addChild( new Path( shape, {
-        lineWidth: OUTLINE_LINEWIDTH,
+        lineWidth: OUTLINE_LINE_WIDTH,
         stroke: OUTLINE_STROKE
       } ) );
 

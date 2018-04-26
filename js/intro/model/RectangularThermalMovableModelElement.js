@@ -1,12 +1,11 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * A movable model element that contains thermal energy and that, at least in
- * the model, has an overall shape that can be represented as a rectangle.
+ * base class for a movable model element that contains thermal energy and that, at least in the model, has an overall
+ * shape that can be represented as a rectangle.
  *
  * @author John Blanco
  */
-
 define( function( require ) {
   'use strict';
 
@@ -27,39 +26,38 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * Constructor for a RectangularThermalMovableModelElement.  This implements
-   * the behavior of a superclass for many objects in this sim such as Block,
-   * Beaker, Brick, and IronBlock.
-   *
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {number} height
-   * @param {number} mass - In kg
-   * @param {number} specificHeat - In J/kg-K
-   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {number} mass - in kg
+   * @param {number} specificHeat - in J/kg-K
+   * @param {BooleanProperty} energyChunksVisibleProperty
    * @constructor
    */
-  function RectangularThermalMovableModelElement(
-    initialPosition,
-    width,
-    height,
-    mass,
-    specificHeat,
-    energyChunksVisibleProperty ) {
+  function RectangularThermalMovableModelElement( initialPosition,
+                                                  width,
+                                                  height,
+                                                  mass,
+                                                  specificHeat,
+                                                  energyChunksVisibleProperty ) {
+
     UserMovableModelElement.call( this, initialPosition );
+
+    // @public (read-only)
     this.mass = mass;
     this.width = width;
     this.height = height;
     this.specificHeat = specificHeat;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-
     this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
 
-    // Energy chunks that are approaching this model element.
-    this.energyChunkWanderControllers = [];
+    // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = new ObservableArray();
 
-    // 2D "slices" of the container, used for 3D layering of energy chunks.
+    // @private - motion controllers for the energy chunks that are approaching this model element
+    this.energyChunkWanderControllers = [];
+
+    // 2D "slices" of the container, used for 3D layering of energy chunks
     this.slices = [];
 
     // Add the slices, a.k.a. layers, where the energy chunks will live.
@@ -320,7 +318,7 @@ define( function( require ) {
               Math.min( Math.abs( destinationBounds.minX - energyChunk.positionProperty.value.x ),
                 Math.abs( destinationBounds.maxX - energyChunk.positionProperty.value.x ) );
             if ( !destinationShape.containsPoint( energyChunk.positionProperty.value ) &&
-              distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
+                 distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;
             }
@@ -432,7 +430,7 @@ define( function( require ) {
             var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
 
             var thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) *
-              thermalContactLength * heatTransferConstant * timeStep;
+                                      thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
           }

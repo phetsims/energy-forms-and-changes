@@ -44,6 +44,7 @@ define( function( require ) {
   // time values for normal and fast-forward motion
   var FRAMES_PER_SECOND = 60.0;
   var SIM_TIME_PER_TICK_NORMAL = 1 / FRAMES_PER_SECOND;
+  var FAST_FORWARD_MULTIPLIER = 4;
 
   // colors
   var NOMINAL_WATER_OPACITY = 0.75;
@@ -80,7 +81,8 @@ define( function( require ) {
     // time values for normal and fast-forward motion
     FRAMES_PER_SECOND: FRAMES_PER_SECOND,
     SIM_TIME_PER_TICK_NORMAL: 1 / FRAMES_PER_SECOND,
-    SIM_TIME_PER_TICK_FAST_FORWARD: SIM_TIME_PER_TICK_NORMAL * 4,
+    FAST_FORWARD_MULTIPLIER: FAST_FORWARD_MULTIPLIER,
+    SIM_TIME_PER_TICK_FAST_FORWARD: SIM_TIME_PER_TICK_NORMAL * FAST_FORWARD_MULTIPLIER,
     MAX_HEAT_EXCHANGE_TIME_STEP: SIM_TIME_PER_TICK_NORMAL,
 
     MAP_Z_TO_XY_OFFSET: function( zValue ) {
