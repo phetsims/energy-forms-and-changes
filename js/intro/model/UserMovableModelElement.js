@@ -1,15 +1,15 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Base class for model elements that can be moved around by the user.
+ * base class for model elements that can be moved around by the user
  *
  * @author John Blanco
  */
-
 define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
@@ -26,20 +26,24 @@ define( function( require ) {
 
     ModelElement.call( this );
 
-    this.userControlledProperty = new Property( false );
-    this.positionProperty = new Property( initialPosition ); // Position of the center of the bottom of the block.
-    this.verticalVelocityProperty = new Property( 0 ); //Velocity in the up/down direction.
+    // @public {BooleanProperty}
+    this.userControlledProperty = new BooleanProperty( false );
 
-    // Observer that moves this model element if and when the surface that is
-    // supporting it moves.
+    // @public {Property.<Vector2>}
+    this.positionProperty = new Property( initialPosition ); // Position of the center of the bottom of the block.
+
+    // @public {Property.<number>}
+    this.verticalVelocityProperty = new Property( 0 );
+
+    // @private - observer that moves this model element if and when the surface that is supporting it moves
     this.surfaceMotionObserver = function( horizontalSurface ) {
       self.positionProperty.value = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
 
     this.userControlledProperty.link( function( userControlled ) {
       if ( userControlled ) {
-        // The user has grabbed this model element, so it is no
-        // longer sitting on any surface.
+
+        // the user has grabbed this model element, so it is no longer sitting on any surface
         if ( self.supportingSurfaceProperty.value !== null ) {
           if ( self.supportingSurfaceProperty.hasListener( self.surfaceMotionObserver ) ) {
             self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
@@ -55,6 +59,10 @@ define( function( require ) {
 
   return inherit( ModelElement, UserMovableModelElement, {
 
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       if ( this.supportingSurfaceProperty !== null &&
            this.supportingSurfaceProperty.hasListener( this.surfaceMotionObserver ) ) {
@@ -67,23 +75,16 @@ define( function( require ) {
     },
 
     /**
-     * Assign the surface property (as an object, not a value)
+     * assign the surface property
      * @param {Property.<HorizontalSurface>} supportingSurface
      */
     setSupportingSurface: function( supportingSurface ) {
-      this.supportingSurfaceProperty.value = supportingSurface;
+      this.supportingSurfaceProperty.set( supportingSurface );
       if ( supportingSurface !== null ) {
         supportingSurface.link( this.surfaceMotionObserver );
       }
-    },
-
-    /**
-     *
-     * @param {number} x
-     */
-    setX: function( x ) {
-      this.positionProperty.value = new Vector2( x, this.position.y );
     }
+
   } );
 } );
 
