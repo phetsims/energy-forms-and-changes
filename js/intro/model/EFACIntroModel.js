@@ -1,7 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- *  Model for the 'Intro' screen of the Energy Forms And Changes simulation.
+ *  model for the 'Intro' screen of the Energy Forms And Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
@@ -13,6 +13,7 @@ define( function( require ) {
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -29,69 +30,69 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
+  // TODO: Follow up on why these are commented out.
   // Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
   // var EDGE_INSET = 10;
   // var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
-  // Initial thermometer location, intended to be away from any model objects.
+  // initial thermometer location, intended to be away from any model objects
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
 
   var NUM_THERMOMETERS = 3;
 
-  // Minimum distance allowed between two objects.  The basically prevents floating point issues.
-  var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // In meters.
+  // minimum distance allowed between two objects, used to prevent floating point issues
+  var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
 
-  // Threshold of temperature difference between the bodies in a multi-body
-  // system below which energy can be exchanged with air.
-  var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // In degrees K, empirically determined.
+  // Threshold of temperature difference between the bodies in a multi-body system below which energy can be exchanged
+  // with air.
+  var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // in degrees K, empirically determined
 
-  var BEAKER_WIDTH = 0.085; // In meters.
+  var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
-  // Flag that can be turned on in order to print out some profiling info.
+  // flag that can be turned on in order to print out some profiling info - TODO: Make this a query param is retained
   var ENABLE_INTERNAL_PROFILING = false;
 
-  // Public variables for the class to be used when internal profiling is enabled.
+  // local variables for the class to be used when internal profiling is enabled
   var previousTime = 0;
   var TIME_ARRAY_LENGTH = 100;
   var times = [];
   var countUnderMin = 0;
 
   /**
-   * Main constructor for EFACIntroModel, which contains all of
-   * the model logic for the entire sim screen.
-   *
+   * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
    * @constructor
    */
   function EFACIntroModel() {
 
-    this.energyChunksVisibleProperty = new Property( false );
-
-    // is the sim running or paused
-    this.playProperty = new Property( true );
-
-    // is the sim running at normal speed or fast forward
-    this.normalSimSpeedProperty = new Property( true );
-
-    // Extend the scope of this.
     var self = this;
 
-    // Sim stepping clock that keeps track of time per frame.
-    this.timePerTick = EFACConstants.SIM_TIME_PER_TICK_NORMAL;
+    // @public (read-only) {BooleanProperty} - controls whether the energy chunks are visible in the view
+    this.energyChunksVisibleProperty = new BooleanProperty( false );
 
-    // Add the air.
+    // @public (read-only) {BooleanProperty} - is the sim running or paused?
+    this.playProperty = new BooleanProperty( true );
+
+    // @public (read-only) {BooleanProperty} - true indicates normal speed, false is fast-forward
+    this.normalSimSpeedProperty = new Property( true );
+
+    // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
+    // energy
     this.air = new Air( this.energyChunksVisibleProperty );
 
-    // Add the burners.
+    // @public (read-only) {Burner} - right and left burners
     this.rightBurner = new Burner( new Vector2( 0.18, 0 ), this.energyChunksVisibleProperty );
     this.leftBurner = new Burner( new Vector2( 0.08, 0 ), this.energyChunksVisibleProperty );
 
-    // Add and position the blocks
+    //  @public (read-only) {Brick}
     this.brick = new Brick( new Vector2( -0.1, 0 ), this.energyChunksVisibleProperty );
+
+    // @public (read-only) {IronBlock}
     this.ironBlock = new IronBlock( new Vector2( -0.175, 0 ), this.energyChunksVisibleProperty );
 
-    // Add and position the beaker.
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
+
+    // @public (read-only) {BeakerContainer)
     this.beaker = new BeakerContainer(
       new Vector2( -0.015, 0 ),
       BEAKER_WIDTH,
@@ -100,26 +101,24 @@ define( function( require ) {
       this.energyChunksVisibleProperty
     );
 
-    // Put all the thermal containers on a list for easy iteration.
+    // @private - put all the thermal containers on a list for easy iteration
     this.thermalContainers = [ this.brick, this.ironBlock, this.beaker ];
 
-    // Put burners into a list for easy iteration.
+    // @private - put burners into a list for easy iteration
     this.burners = [ this.rightBurner, this.leftBurner ];
 
-    // Put all of the model elements of this
+    // @private - put all of the model elements on a list for easy iteration
     this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.beaker ];
 
-    // Add the thermometers.
+    // @public (read-only) {ElementFollowingThermometer[]}
     this.thermometers = [];
     for ( var i = 0; i < NUM_THERMOMETERS; i++ ) {
       var thermometer = new ElementFollowingThermometer( this, INITIAL_THERMOMETER_LOCATION, false );
       this.thermometers.push( thermometer );
 
-      // Add handling for a special case where the user drops something (generally a block) in the beaker
-      // behind this thermometer.
-      // The action is to automatically move the thermometer to a location where it continues to sense
-      // the beaker temperature.
-      // This was requested after interviews.
+      // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
+      // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
+      // beaker temperature. This was requested after interviews.
       thermometer.sensedElementColorProperty.link( function( newColor, oldColor ) {
 
         var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
@@ -139,13 +138,6 @@ define( function( require ) {
         }
       } );
     }
-
-    this.normalSimSpeedProperty.link( function() {
-      self.timePerTick = self.normalSimSpeedProperty.value ?
-                         EFACConstants.SIM_TIME_PER_TICK_NORMAL :
-                         EFACConstants.SIM_TIME_PER_TICK_FAST_FORWARD;
-    } );
-
   }
 
   energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
@@ -153,12 +145,13 @@ define( function( require ) {
   return inherit( Object, EFACIntroModel, {
 
     /**
-     * Restore the initial conditions of the model.
+     * restore the initial conditions of the model
+     * @public
      */
     reset: function() {
 
       // TODO: Reset is currently bypassed.  This was done in March 2017 because the sim was failing automated testing,
-      // and it was due to issues with reset not restoring state properly, but I (jblanco) don't have time to do any
+      // and it was due to issues with reset not restoring state properly, but I (@jbphet) don't have time to do any
       // further investigation.  See https://github.com/phetsims/energy-forms-and-changes/issues/25 for more
       // information.  Restore the commented-out code below as part of the process to make it work.
       console.log( 'Warning: Reset is temporarily bypassed!' );
@@ -179,34 +172,34 @@ define( function( require ) {
     },
 
     /**
-     * Manually step the sim by one frame, assuming 60 frames per second.
-     *
-     *
-     * @param {number} dt Time step.
+     * step the sim forward by one fixed nominal frame time
+     * @public
      */
     manualStep: function() {
-      this.stepModel( 1 / 60 );
+      this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
     },
 
     /**
-     * Step function or this model, automatically called by joist.
-     *
-     * @param {number} dt Time step.
+     * step function or this model, automatically called by joist
+     * @param {number} dt - delta time, in seconds
+     * @public
      */
     step: function( dt ) {
-      if ( this.playProperty.value ) {
-        this.stepModel( this.timePerTick );
+      if ( this.playProperty.get() ) {
+        var multiplier = this.normalSimSpeedProperty.get() ? 1 : EFACConstants.FAST_FORWARD_MULTIPLIER;
+        // TODO: This uses a fixed step instead of dt, this will need to be changed, see https://github.com/phetsims/energy-forms-and-changes/issues/42
+        // this.stepModel( dt * multiplier );
+        this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL * multiplier );
       }
     },
 
     /**
-     * Update the state of the model for a given time step.
-     *
-     * @param {number} dt Time step.
+     * update the state of the model for a given time amount
+     * @param {number} dt - time step, in seconds
+     * @private
      */
     stepModel: function( dt ) {
 
-      // Extend Scope for nested callbacks
       var self = this;
 
       if ( ENABLE_INTERNAL_PROFILING ) {
@@ -221,8 +214,8 @@ define( function( require ) {
         previousTime = time;
       }
 
-      // Cause any user-movable model elements that are not supported by a surface
-      // to fall (or, in some cases, jump up) towards the nearest supporting surface.
+      // cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
+      // towards the nearest supporting surface
       var unsupported;
       var raised;
       this.thermalContainers.forEach( function( movableModelElement ) {
@@ -237,7 +230,7 @@ define( function( require ) {
         }
       } );
 
-      // Update the fluid level in the beaker, which could be displaced by one or more of the blocks.
+      // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beaker.updateFluidLevel( [ this.brick.getBounds(), this.ironBlock.getBounds() ] );
 
       //=====================================================================
@@ -249,7 +242,7 @@ define( function( require ) {
       // eventually abandoned.  So, the order and nature of the exchanged below should be maintained unless there is a
       // good reason not to, and any changes should be well tested.
 
-      // Loop through all the movable thermal energy containers and have them exchange energy with one another.
+      // loop through all the movable thermal energy containers and have them exchange energy with one another
       self.thermalContainers.forEach( function( container1, index ) {
         self.thermalContainers.slice( index + 1,
           self.thermalContainers.length ).forEach( function( container2 ) {
@@ -257,7 +250,7 @@ define( function( require ) {
         } );
       } );
 
-      // Exchange thermal energy between the burners and the other thermal model elements, including air.
+      // exchange thermal energy between the burners and the other thermal model elements, including air
       this.burners.forEach( function( burner ) {
         if ( burner.areAnyOnTop( self.thermalContainers ) ) {
           self.thermalContainers.forEach( function( energyContainer ) {
@@ -270,7 +263,7 @@ define( function( require ) {
         }
       } );
 
-      // Exchange energy chunks between burners and non-air energy containers.
+      // exchange energy chunks between burners and non-air energy containers
       this.thermalContainers.forEach( function( element ) {
         self.burners.forEach( function( burner ) {
           if ( burner.inContactWith( element ) ) {
@@ -293,12 +286,13 @@ define( function( require ) {
         } );
       } );
 
-      // Exchange energy chunks between movable thermal energy containers.
+      // exchange energy chunks between movable thermal energy containers
       self.thermalContainers.forEach( function( container1, index ) {
         self.thermalContainers.slice( index + 1,
           self.thermalContainers.length ).forEach( function( container2 ) {
           if ( container1.getThermalContactArea().getThermalContactLength( container2.getThermalContactArea() ) > 0 ) {
-            // Exchange chunks if appropriate.
+
+            // exchange one or more chunks if appropriate
             if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance < 0 ) {
               container2.addEnergyChunk( container1.extractClosestEnergyChunk( container2.getThermalContactArea() ) );
             }
@@ -309,14 +303,15 @@ define( function( require ) {
         } );
       } );
 
-      // Exchange energy and energy chunks between the movable thermal energy containers and the air.
+      // exchange energy and energy chunks between the movable thermal energy containers and the air
       this.thermalContainers.forEach( function( container1 ) {
-        // Set up some variables that are used to decide whether or not energy should be exchanged with air.
+
+        // set up some variables that are used to decide whether or not energy should be exchanged with air
         var contactWithOtherMovableElement = false;
         var immersedInBeaker = false;
         var maxTemperatureDifference = 0;
 
-        // Figure out the max temperature difference between touching energy containers.
+        // figure out the max temperature difference between touching energy containers
         self.thermalContainers.forEach( function( container2 ) {
           if ( container2 === container1 ) {
             return;
@@ -329,11 +324,12 @@ define( function( require ) {
         } );
 
         if ( self.beaker.getThermalContactArea().containsPoint( container1.getBounds() ) ) {
-          // This model element is immersed in the beaker.
+
+          // this model element is immersed in the beaker
           immersedInBeaker = true;
         }
 
-        // Exchange energy and energy chunks with the air if appropriate conditions are met.
+        // exchange energy and energy chunks with the air if appropriate conditions are met
         if ( !contactWithOtherMovableElement ||
              ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
                                       container1.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
@@ -347,19 +343,18 @@ define( function( require ) {
             if ( energyChunk ) {
               var energyChunkMotionConstraints = null;
               if ( container1 instanceof Beaker ) {
-                // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker.
-                // There is a bit of a fudge factor in here to make sure that the sides of the energy chunk,
-                // and not just the center, stay in bounds.
+
+                // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is a
+                // bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
+                // center, stay in bounds.
                 var energyChunkWidth = 0.01;
                 energyChunkMotionConstraints = new Rectangle( container1.getBounds().minX + energyChunkWidth / 2,
                   container1.getBounds().minY,
                   container1.getBounds().width - energyChunkWidth,
                   container1.getBounds().height );
               }
-
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
-
           }
           else if ( container1.getEnergyChunkBalance < 0 &&
                     container1.getTemperature() < self.air.getTemperature() ) {
@@ -368,10 +363,9 @@ define( function( require ) {
         }
       } );
 
-      // Exchange energy chunks between the air and the burners.
+      // exchange energy chunks between the air and the burners
       this.burners.forEach( function( burner ) {
         if ( burner.getEnergyChunkCountForAir() > 0 ) {
-
           self.air.addEnergyChunk( burner.extractClosestEnergyChunk( burner.getCenterPoint() ), null );
         }
         else if ( burner.getEnergyChunkCountForAir() < 0 ) {
@@ -379,7 +373,7 @@ define( function( require ) {
         }
       } );
 
-      // Step model elements to animate energy chunks movement.
+      // step model elements to animate energy chunks movement
       this.air.step( dt );
       this.burners.forEach( function( burner ) {
         burner.step( dt );
@@ -392,16 +386,13 @@ define( function( require ) {
       this.thermometers.forEach( function( thermometer ) {
         thermometer.step( dt );
       } );
-
     },
 
     /**
-     * Make a user-movable model element fall to the nearest supporting
-     * surface.
-     *
+     * make a user-movable model element fall to the nearest supporting surface
+     * @param {MovableModelElement} modelElement - the falling object
+     * @param {number} dt - time step in seconds
      * @private
-     * @param {MovableModelElement} The falling object.
-     * @param {number} dt Time step.
      */
     fallToSurface: function( modelElement, dt ) {
       var self = this;
@@ -410,10 +401,10 @@ define( function( require ) {
       var targetY = 0;
       var acceleration = -9.8; // meters/s/s
 
-      //Determine whether there is something below this element that it can land upon.
-      var potentialSupportingSurface = self.findBestSupportSurface( modelElement ); // HorizontalSurface
+      // determine whether there is something below this element that it can land upon
+      var potentialSupportingSurface = self.findBestSupportSurface( modelElement );
 
-      // If so, center the modelElement above its new parent.
+      // if so, center the modelElement above its new parent
       if ( potentialSupportingSurface !== null ) {
         minYPos = potentialSupportingSurface.yPos;
         targetX = potentialSupportingSurface.getCenterX();
@@ -421,11 +412,12 @@ define( function( require ) {
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
 
-      // Calculate a proposed Y position based on gravitational falling.
+      // calculate a proposed Y position based on gravitational falling
       var velocity = modelElement.verticalVelocityProperty.value + acceleration * dt;
       var proposedYPos = modelElement.positionProperty.value.y + velocity * dt;
       if ( proposedYPos < minYPos ) {
-        // The element has landed on the ground or some other surface.
+
+        // the element has landed on the ground or some other surface
         proposedYPos = minYPos;
         modelElement.verticalVelocityProperty.set( 0 );
         if ( potentialSupportingSurface !== null ) {
@@ -436,22 +428,24 @@ define( function( require ) {
       else {
         modelElement.verticalVelocityProperty.set( velocity );
       }
-
       modelElement.positionProperty.set( new Vector2( modelElement.positionProperty.value.x, proposedYPos ) );
     },
 
+    /**
+     * get a list of the thermal blocks
+     * @return {Block[]}
+     */
     getBlockList: function() {
       return [ this.ironBlock, this.brick ];
     },
 
     /**
-     * Project a line into a 2D shape based on the provided projection vector.
-     * This is a convenience function used by the code that detects potential
-     * collisions between the 2D objects in model space.
-     *
+     * Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by
+     * the code that detects potential collisions between the 2D objects in model space.
      * @param {Line} edge
      * @param {Vector2} projection
      * @returns {Shape}
+     * @private
      */
     projectShapeFromLine: function( edge, projection ) {
       var shape = new Shape();
@@ -465,104 +459,125 @@ define( function( require ) {
     },
 
     /**
-     * Evaluate whether the proposed position would cause the model element to
-     * move through another solid element, or the side of the beaker, or something
-     * that would look weird to the user and, if so, prevent the odd behavior from
+     * Evaluate whether the proposed position would cause the model element to move through another solid element, or
+     * the side of the beaker, or something that would look weird to the user and, if so, prevent the odd behavior from
      * happening by returning a location that works better.
-     *
-     * @param {RectangularThermalMovableModelElement} modelElement Element whose position is being validated.
-     * @param {Vector2} proposedPosition Proposed new position for element
-     * @returns The original proposed position if valid, or alternative position if not.
+     * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being validated
+     * @param {Vector2} proposedPosition - proposed new position for element
+     * @returns {Vector2} the original proposed position if valid, or alternative position if not
      */
     constrainedPosition: function( modelElement, proposedPosition ) {
-      // Carry this model through scope of nested callbacks.
+
+      // carry this model through scope of nested callbacks
       var self = this;
 
-      // Compensate for the model element's center X position.
+      // compensate for the model element's center X position
       var translation = proposedPosition.copy().minus( modelElement.positionProperty.value );
 
-      // Figure out how far the block's right edge appears to protrude to the side due to perspective.
+      // figure out how far the block's right edge appears to protrude to the side due to perspective
       var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH *
-                                      EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION * Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
+                                      EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
+                                      Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
       // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't
       // drag things between them.  Also, compensate for perspective so that we can avoid difficult z-order issues.
       var standPerspectiveExtension = this.leftBurner.getOutlineRect().height *
-                                      EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO * Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+                                      EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+                                      Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
       var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension -
                         ( modelElement !== this.beaker ? blockPerspectiveExtension : 0 );
       var burnerBlockingRect = new Rectangle(
         burnerRectX,
         this.leftBurner.getOutlineRect().minY,
         this.rightBurner.getOutlineRect().maxX - burnerRectX,
-        this.leftBurner.getOutlineRect().height );
+        this.leftBurner.getOutlineRect().height
+      );
       translation = this.determineAllowedTranslation( modelElement.getBounds(), burnerBlockingRect, translation, false );
 
-      // Validate against the sides of the beaker.
+      // validate against the sides of the beaker
       if ( modelElement !== this.beaker ) {
 
-        // Create three rectangles to represent the two sides and the top of the beaker.
+        // create three rectangles to represent the two sides and the top of the beaker
         var testRectThickness = 1E-3; // 1 mm thick walls.
         var beakerRect = this.beaker.getBounds();
-        var beakerLeftSide = new Rectangle( beakerRect.minX - blockPerspectiveExtension,
+        var beakerLeftSide = new Rectangle(
+          beakerRect.minX - blockPerspectiveExtension,
           this.beaker.getBounds().minY,
           testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getBounds().height + blockPerspectiveExtension );
-        var beakerRightSide = new Rectangle( this.beaker.getBounds().maxX - testRectThickness - blockPerspectiveExtension,
+          this.beaker.getBounds().height + blockPerspectiveExtension
+        );
+        var beakerRightSide = new Rectangle(
+          this.beaker.getBounds().maxX - testRectThickness - blockPerspectiveExtension,
           this.beaker.getBounds().minY,
           testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getBounds().height + blockPerspectiveExtension );
+          this.beaker.getBounds().height + blockPerspectiveExtension
+        );
         var beakerBottom = new Rectangle(
           this.beaker.getBounds().minX,
           this.beaker.getBounds().minY,
           this.beaker.getBounds().width,
-          testRectThickness );
+          testRectThickness
+        );
 
-        // Do not restrict the model element's motion in positive Y direction if
-        // the beaker is sitting on top of the model element - the beaker will
-        // simply be lifted up.
+        // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the
+        // model element - the beaker will simply be lifted up.
         var restrictPositiveY = !this.beaker.isStackedUpon( modelElement );
 
         // Clamp the translation based on the beaker position.
-        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerLeftSide, translation, restrictPositiveY );
-        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerRightSide, translation, restrictPositiveY );
-        translation = this.determineAllowedTranslation( modelElement.getBounds(), beakerBottom, translation, restrictPositiveY );
+        translation = this.determineAllowedTranslation(
+          modelElement.getBounds(),
+          beakerLeftSide,
+          translation,
+          restrictPositiveY
+        );
+        translation = this.determineAllowedTranslation(
+          modelElement.getBounds(),
+          beakerRightSide,
+          translation,
+          restrictPositiveY
+        );
+        translation = this.determineAllowedTranslation(
+          modelElement.getBounds(),
+          beakerBottom,
+          translation,
+          restrictPositiveY
+        );
       }
 
-      // Now check the model element's motion against each of the blocks.
+      // now check the model element's motion against each of the blocks
       this.getBlockList().forEach( function( block ) {
         if ( modelElement === block ) {
-          // Don't test against self.
-          return; // continue to next iteration.
+          // don't test against self
+          return;
         }
 
-        // Do not restrict the model element's motion in positive Y direction if
-        // the tested block is sitting on top of the model element - the block
-        // will simply be lifted up.
+        // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
+        // the model element - the block will simply be lifted up.
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
         var testRect = modelElement.getBounds();
         if ( modelElement === self.beaker ) {
-          // Special handling for the beaker - block it at the outer edge of the
-          // block instead of the center in order to simplify z-order handling.
+
+          // Special handling for the beaker - block it at the outer edge of the block instead of the center in order to
+          // simplify z-order handling.
           testRect = new Rectangle( testRect.minX - blockPerspectiveExtension,
             testRect.minY,
             testRect.width + blockPerspectiveExtension * 2,
-            testRect.height );
+            testRect.height
+          );
         }
 
-        // Clamp the translation based on the test block's position, but handle
-        // the case where the block is immersed in the beaker.
+        // Clamp the translation based on the test block's position, but handle the case where the block is immersed in
+        // the beaker.
         if ( modelElement !== self.beaker || !self.beaker.getBounds().containsBounds( block.getBounds() ) ) {
           translation = self.determineAllowedTranslation( testRect, block.getBounds(), translation, restrictPositiveY );
         }
-
       } );
 
-      // Determine the new position based on the resultant translation.
+      // determine the new position based on the resultant translation
       var newPosition = modelElement.positionProperty.value.plus( translation ).copy();
 
-      // Clamp Y position to be positive to prevent dragging below table.
+      // clamp Y position to be positive to prevent dragging below table
       newPosition.setY( Math.max( newPosition.y, 0 ) );
 
       return newPosition;
@@ -575,14 +590,14 @@ define( function( require ) {
      * @param {Rectangle} movingRect
      * @param {Rectangle} stationaryRect
      * @param {Vector2} proposedTranslation
-     * @param {boolean} restrictPosY        Boolean that controls whether the positive Y direction is restricted.  This
+     * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
      *                                      is often set false if there is another model element on top of the one
      *                                      being tested.
      * @returns {Vector2}
      */
     determineAllowedTranslation: function( movingRect, stationaryRect, proposedTranslation, restrictPosY ) {
 
-      // Test for case where rectangles already overlap.
+      // test for case where rectangles already overlap
       if ( movingRect.intersectsBounds( stationaryRect ) ) {
 
         // The rectangles already overlap.  Are they right on top of one another?
@@ -591,7 +606,7 @@ define( function( require ) {
           return new Vector2( 0, 0 );
         }
 
-        // Determine the motion in the X & Y directions that will "cure" the overlap.
+        // determine the motion in the X & Y directions that will "cure" the overlap
         var xOverlapCure = 0;
         if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
           xOverlapCure = stationaryRect.minX - movingRect.maxX;
@@ -609,10 +624,12 @@ define( function( require ) {
 
         // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
         // method.
-        assert && assert( !( xOverlapCure === 0 && yOverlapCure === 0 ),
-          'xOverlap and yOverlap should not both be zero' );
+        assert && assert(
+          !( xOverlapCure === 0 && yOverlapCure === 0 ),
+          'xOverlap and yOverlap should not both be zero'
+        );
 
-        // Return a vector with the smallest valid "cure" value, leaving the other translation value unchanged.
+        // return a vector with the smallest valid "cure" value, leaving the other translation value unchanged
         if ( xOverlapCure !== 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
           return new Vector2( xOverlapCure, proposedTranslation.y );
         }
@@ -624,30 +641,34 @@ define( function( require ) {
       var xTranslation = proposedTranslation.x;
       var yTranslation = proposedTranslation.y;
 
-      // X direction.
+      // X direction
       if ( proposedTranslation.x > 0 ) {
 
-        // Check for collisions moving right.
+        // check for collisions moving right
         var rightEdge = new Line(
           new Vector2( movingRect.maxX, movingRect.minY ),
-          new Vector2( movingRect.maxX, movingRect.maxY ) );
+          new Vector2( movingRect.maxX, movingRect.maxY )
+        );
         var rightEdgeSmear = this.projectShapeFromLine( rightEdge, proposedTranslation );
 
         if ( rightEdge.start.x <= stationaryRect.minX && rightEdgeSmear.intersectsBounds( stationaryRect ) ) {
-          // Collision detected, limit motion.
+
+          // collision detected, limit motion
           xTranslation = stationaryRect.minX - rightEdge.start.x - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
       else if ( proposedTranslation.x < 0 ) {
 
-        // Check for collisions moving left.
+        // check for collisions moving left
         var leftEdge = new Line(
           new Vector2( movingRect.minX, movingRect.minY ),
-          new Vector2( movingRect.minX, movingRect.maxY ) );
+          new Vector2( movingRect.minX, movingRect.maxY )
+        );
         var leftEdgeSmear = this.projectShapeFromLine( leftEdge, proposedTranslation );
 
         if ( leftEdge.start.x >= stationaryRect.maxX && leftEdgeSmear.intersectsBounds( stationaryRect ) ) {
-          // Collision detected, limit motion.
+
+          // collision detected, limit motion
           xTranslation = stationaryRect.maxX - leftEdge.start.x + MIN_INTER_ELEMENT_DISTANCE;
         }
       }
@@ -655,27 +676,31 @@ define( function( require ) {
       // Y direction.
       if ( proposedTranslation.y > 0 && restrictPosY ) {
 
-        // Check for collisions moving up.
+        // check for collisions moving up
         var movingTopEdge = new Line(
           new Vector2( movingRect.minX, movingRect.maxY ),
-          new Vector2( movingRect.maxX, movingRect.maxY ) );
+          new Vector2( movingRect.maxX, movingRect.maxY )
+        );
         var topEdgeSmear = this.projectShapeFromLine( movingTopEdge, proposedTranslation );
 
         if ( movingTopEdge.start.y <= stationaryRect.minY && topEdgeSmear.intersectsBounds( stationaryRect ) ) {
-          // Collision detected, limit motion.
+
+          // collision detected, limit motion
           yTranslation = stationaryRect.minY - movingTopEdge.start.y - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
       if ( proposedTranslation.y < 0 ) {
 
-        // Check for collisions moving down.
+        // check for collisions moving down
         var movingBottomEdge = new Line(
           new Vector2( movingRect.minX, movingRect.minY ),
-          new Vector2( movingRect.maxX, movingRect.minY ) );
+          new Vector2( movingRect.maxX, movingRect.minY )
+        );
         var bottomEdgeSmear = this.projectShapeFromLine( movingBottomEdge, proposedTranslation );
 
         if ( movingBottomEdge.start.y >= stationaryRect.maxY && bottomEdgeSmear.intersectsBounds( stationaryRect ) ) {
-          // Collision detected, limit motion.
+
+          // collision detected, limit motion
           yTranslation = stationaryRect.maxY - movingBottomEdge.start.y + MIN_INTER_ELEMENT_DISTANCE;
         }
       }
@@ -685,28 +710,27 @@ define( function( require ) {
 
     /**
      * Returns true if surface s1's center is above surface s2.
-     *
      * @param {HorizontalSurface} surface1
      * @param {HorizontalSurface} surface2
+     * @private
      */
     isDirectlyAbove: function( surface1, surface2 ) {
       return surface2.xRange.contains( surface1.getCenterX() ) && surface1.yPos > surface2.yPos;
     },
 
     /**
-     *
      * @param {UserMovableModelElement} element
      * @returns {HorizontalSurface}
      */
     findBestSupportSurface: function( element ) {
-      var self = this; // Extend scope for nested functions.
-
+      var self = this;
       var bestOverlappingSurface = null;
 
-      // Check each of the possible supporting elements in the model to see if this element can go on top of it.
+      // check each of the possible supporting elements in the model to see if this element can go on top of it
       this.modelElementList.forEach( function( potentialSupportingElement ) {
 
         if ( potentialSupportingElement === element || potentialSupportingElement.isStackedUpon( element ) ) {
+
           // The potential supporting element is either the same as the test element or is sitting on top of the test
           // element.  In either case, it can't be used to support the test element, so skip it.
           return;
@@ -759,10 +783,10 @@ define( function( require ) {
     },
 
     /**
-     * Get the amount of overlap in the x direction between two horizontal surfaces.
-     *
+     * get the amount of overlap in the x direction between two horizontal surfaces
      * @param {HorizontalSurface} surface1
-     * @param {HorizontlaSurface} surface2
+     * @param {HorizontalSurface} surface2
+     * @public
      */
     getHorizontalOverlap: function( surface1, surface2 ) {
       var lowestMax = Math.min( surface1.xRange.max, surface2.xRange.max );
@@ -771,11 +795,9 @@ define( function( require ) {
     },
 
     /**
-     * Get the temperature and color that would be sensed by a thermometer at
-     * the provided location.
-     *
-     * @param {Vector2} location - location to be sensed.
-     * @returns {TemperatureAndColor} object with temperature and color at the provided location.
+     * get the temperature and color that would be sensed by a thermometer at the provided location
+     * @param {Vector2} position - location to be sensed
+     * @returns {TemperatureAndColor} - object with temperature and color
      */
     getTemperatureAndColorAtLocation: function( position ) {
       var locationAsPoint = position;
@@ -799,7 +821,7 @@ define( function( require ) {
         }
       } );
 
-      // Test if this point is in the water or steam associated with the beaker.
+      // test if this point is in the water or steam associated with the beaker
       if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
         return new TemperatureAndColor( this.beaker.temperatureProperty.get(), EFACConstants.WATER_COLOR_IN_BEAKER );
       }
@@ -808,14 +830,14 @@ define( function( require ) {
           locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
       }
 
-      // Test if the point is a burner.
+      // test if the point is a burner
       this.burners.forEach( function( burner ) {
         if ( burner.getFlameIceRect().containsPoint( locationAsPoint ) ) {
           return new TemperatureAndColor( burner.getTemperature(), EFACConstants.FIRST_TAB_BACKGROUND_COLOR );
         }
       } );
 
-      // Point is in nothing else, so return the air temperature.
+      // point is in nothing else, so return the air temperature
       return new TemperatureAndColor( this.air.getTemperature(), EFACConstants.FIRST_TAB_BACKGROUND_COLOR );
     }
   } );
