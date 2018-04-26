@@ -1,7 +1,9 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Class that represents a thermometer that can stick to other elements as they move.
+ * A type that represents a thermometer model that can stick to other elements as they move.  This is a derived type
+ * that added the "element following" functionality, see the parent type(s) for information on the thermometer model
+ * specifics.
  *
  * @author John Blanco
  * @author Jesse Greenberg
@@ -17,8 +19,6 @@ define( function( require ) {
   var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
 
   /**
-   * Constructor for the ElementFollowingThermometer.
-   *
    * @param {EFACIntroModel} model
    * @param {Vector2} initialPosition
    * @param {boolean} initiallyActive
@@ -26,34 +26,32 @@ define( function( require ) {
    */
   function ElementFollowingThermometer( model, initialPosition, initiallyActive ) {
 
-    // call the supertype
+    var self = this;
     Thermometer.call( this, model, initialPosition, initiallyActive );
 
-    var self = this;
-
+    // @private
     this.elementFollower = new ElementFollower( this.positionProperty );
 
-    // Monitor 'userControlled' in order to see when the user drops this
-    // thermometer and determine whether or not it was dropped over anything
-    // that it should stick to.
+    // Monitor the state of the 'userControlled' property in order to see when the user drops this thermometer and
+    // determine whether or not it was dropped over anything to which it should stick.
     this.userControlledProperty.link( function( userControlled ) {
 
-      // If being dragged, stop following any objects
+      // if being dragged, stop following any objects
       if ( userControlled ) {
         self.elementFollower.stopFollowing();
       }
 
-      // If thermometer was dropped, see if it was dropped over something that it should follow.
+      // if the thermometer was dropped, see if it was dropped over something that it should follow
       else {
         model.getBlockList().forEach( function( block ) {
 
-          // Stick to this block
+          // stick to this block
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
             self.elementFollower.startFollowing( block.positionProperty );
           }
         } );
 
-        // Stick to the beaker
+        // stick to the beaker
         if ( model.beaker.getThermalContactArea().containsPoint( self.positionProperty.value ) ) {
           self.elementFollower.startFollowing( model.beaker.positionProperty );
         }
@@ -65,6 +63,9 @@ define( function( require ) {
 
   return inherit( Thermometer, ElementFollowingThermometer, {
 
+    /**
+     * @public
+     */
     reset: function() {
       this.elementFollower.stopFollowing();
       Thermometer.prototype.reset.call( this );

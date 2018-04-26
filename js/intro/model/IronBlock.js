@@ -1,7 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Class that represents a block of iron in the view.
+ * type that represents a block of iron in the view
  *
  * @author John Blanco
  */
@@ -26,9 +26,8 @@ define( function( require ) {
   var idCounter = 0;
 
   /**
-   *
    * @param {Vector2} initialPosition
-   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {BooleanProperty} energyChunksVisibleProperty
    * @constructor
    */
   function IronBlock( initialPosition, energyChunksVisibleProperty ) {
@@ -41,28 +40,27 @@ define( function( require ) {
   return inherit( Block, IronBlock, {
 
     /**
-     * *
      * @returns {Color}
+     * @public
      */
     getColor: function() {
       return new Color( 150, 150, 150 );
     },
 
     /**
-     * *
-     * @returns {EnergyContainerCategory.IRON|*|exports.IRON}
+     * @returns {string}
+     * @public
      */
     getLabel: function() {
       return ironString;
     },
 
     /**
-     * *
-     * @returns {exports.IRON|*}
+     * @returns {EnergyContainerCategory}
+     * @public
      */
     getEnergyContainerCategory: function() {
       return EnergyContainerCategory.IRON;
     }
   } );
 } );
-
