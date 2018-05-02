@@ -1,7 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * view for the 'Intro' screen of the Energy Forms And Changes simulation.
+ * main view for the 'Intro' screen of the Energy Forms And Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
@@ -25,7 +25,6 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
-  var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
@@ -35,7 +34,6 @@ define( function( require ) {
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -48,21 +46,18 @@ define( function( require ) {
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
 
   // images
-  var mockupImage = require( 'image!ENERGY_FORMS_AND_CHANGES/mockup_intro.png' );
   var shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' );
 
   // constants
   var EDGE_INSET = 10;
-  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
+  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // multiplier empirically determined for best look
   var SHOW_LAYOUT_BOUNDS = false;
-  var SHOW_MOCKUP = false;
 
+  // TODO: I (jbphet) came across the code immediately below during code cleanup in early May 2018, not sure what it is or whether it is still needed.
   // Boolean property for showing/hiding developer control for dumping energy levels.
   // var showDumpEnergiesButton = new Property( false );
 
   /**
-   * Constructor for the Energy Forms and Changes Intro Screen.
-   *
    * @param {EFACIntroModel} model
    * @constructor
    */
@@ -73,21 +68,20 @@ define( function( require ) {
     } );
 
     var self = this;
-    this.model = model;
 
-    // Create the model-view transform.  The primary units used in the model are
-    // meters, so significant zoom is used.  The multipliers for the 2nd
-    // parameter can be used to adjust where the point (0, 0) in the model,
-    // which is on the middle of the screen above the counter as located in the
+    // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.
+    // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model appears in the
     // view.
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2(
         Math.round( self.layoutBounds.width * 0.5 ),
-        Math.round( self.layoutBounds.height * 0.85 ) ),
-      2200 ); // "Zoom factor" - smaller zooms out, larger zooms in.
+        Math.round( self.layoutBounds.height * 0.85 )
+      ),
+      2200 // zoom factor - smaller zooms out, larger zooms in
+    );
 
-    // Create some nodes that will act as layers in order to create the needed Z-order behavior.
+    // create nodes that will act as layers in order to create the needed Z-order behavior
     var backLayer = new Node();
     this.addChild( backLayer );
     var beakerBackLayer = new Node();
@@ -103,165 +97,147 @@ define( function( require ) {
     var beakerFrontLayer = new Node();
     this.addChild( beakerFrontLayer );
 
-    // Create the lab bench surface image.
+    // create the lab bench surface image
     var labBenchSurfaceImage = new Image( shelfImage );
     labBenchSurfaceImage.leftTop = ( new Vector2(
-      modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
+        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
 
-      // Slight tweak factor here due to nature of image.
-      modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 ) );
+        // slight tweak factor here due to nature of image
+        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 )
+    );
 
-    // Create a rectangle that will act as the background below the lab bench
-    // surface, basically like the side of the bench.
+    // create a rectangle that will act as the background below the lab bench surface, basically like the side of the
+    // bench
     var benchWidth = labBenchSurfaceImage.width * 0.95;
-    var benchHeight = 1000; // Arbitrary large number, user should never see the bottom of this.
+    var benchHeight = 1000; // arbitrary large number, user should never see the bottom of this
     var labBenchSide = new Rectangle(
       labBenchSurfaceImage.centerX - benchWidth / 2,
       labBenchSurfaceImage.centerY,
       benchWidth,
-      benchHeight, {
-        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
-      } );
+      benchHeight,
+      { fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR }
+    );
 
-    // Add the bench side and top to the scene.  The lab bench side must be behind the bench top.
+    // add the bench side and top to the scene - the lab bench side must be behind the bench top
     backLayer.addChild( labBenchSide );
     backLayer.addChild( labBenchSurfaceImage );
 
-    // Calculate the vertical center between the lower edge of the top of the
-    // bench and the bottom of the canvas.  This is for layout.
+    // Determine the vertical center between the lower edge of the top of the bench and the bottom of the canvas, used
+    // for layout.
     var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
-    // Add the clock controls.
+    // add the clock controls
     var clockControlPanel = new NormalAndFastForwardTimeControlPanel( model );
     clockControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
     backLayer.addChild( clockControlPanel );
 
-    // Create and add the Reset All Button in the bottom right, which resets the model
+    // create and add the "Reset All" button in the bottom right
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         model.reset();
       },
-      radius: 20
+      radius: 20,
+      right: this.layoutBounds.maxX - EDGE_INSET,
+      centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
     } );
-    resetAllButton.center = new Vector2( this.layoutBounds.width - 2 * resetAllButton.width, centerYBelowSurface );
     this.addChild( resetAllButton );
 
-    // Add the control for showing/hiding energy chunks.  The elements of this
-    // control are created separately to allow each to be independently scaled.
+    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
+    // each to be independently scaled.
     var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
-    energyChunkNode.scale( 1.0 );
     energyChunkNode.pickable = false;
     var label = new Text( energySymbolsString, {
       font: new PhetFont( 20 )
     } );
     var showEnergyCheckbox = new Checkbox( new LayoutBox( {
-      children: [ label, energyChunkNode ],
-      orientation: 'horizontal',
-      spacing: 5
-    } ), model.energyChunksVisibleProperty );
+        children: [ label, energyChunkNode ],
+        orientation: 'horizontal',
+        spacing: 5
+      } ), model.energyChunksVisibleProperty
+    );
     var controlPanel = new Panel( showEnergyCheckbox, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
     } );
-    controlPanel.rightTop = new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET );
     this.addChild( controlPanel );
 
-
-    // Add the burners.
+    // add the burners
     var burnerProjectionAmount =
       modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
-    var burnerYPosTweak = -10; // Empirically determined for best look.
 
-    // Set up left heater-cooler node. Front and back are added separately so support layering of energy chunks.
+    // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
     var leftHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
+      centerX: modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ),
+      bottom: modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY )
     } );
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
+      leftTop: leftHeaterCoolerBack.getHeaterFrontPosition()
     } );
-    leftHeaterCoolerBack.leftTop = new Vector2(
-      modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ) -
-      leftHeaterCoolerBack.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY ) -
-      leftHeaterCoolerBack.bounds.union( leftHeaterCoolerFront.bounds ).height - burnerYPosTweak );
-    leftHeaterCoolerFront.leftTop = leftHeaterCoolerBack.getHeaterFrontPosition();
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode(
       modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ),
-      burnerProjectionAmount ) );
+      burnerProjectionAmount )
+    );
 
-    // Set up right heater-cooler node.
+    // set up right heater-cooler node
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
+      centerX: modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ),
+      bottom: modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY )
     } );
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty
+      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
+      leftTop: rightHeaterCoolerBack.getHeaterFrontPosition()
     } );
-    rightHeaterCoolerBack.leftTop = new Vector2(
-      modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ) -
-      rightHeaterCoolerBack.bounds.width / 2,
-      modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY ) -
-      rightHeaterCoolerBack.bounds.union( rightHeaterCoolerFront.bounds ).height - burnerYPosTweak );
-    rightHeaterCoolerFront.leftTop = rightHeaterCoolerBack.getHeaterFrontPosition();
     heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode(
       modelViewTransform.modelToViewShape( model.rightBurner.getOutlineRect() ),
-      burnerProjectionAmount ) );
+      burnerProjectionAmount )
+    );
 
-    // Add the air.
+    // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
 
+    // TODO: convert this into a query parameter
     if ( SHOW_LAYOUT_BOUNDS ) {
       this.addChild( new Rectangle( this.layoutBounds, {
         stroke: 'rgba( 255, 0, 0, 0.9 )'
       } ) );
     }
 
-    // Add the movable objects.
-    var brickNode = new BlockNode( model, model.brick, this.layoutBounds, modelViewTransform );
-    brickNode.setApproachingEnergyChunkParentNode( airLayer );
+    // add the blocks
+    var brickNode = new BlockNode( model.brick, this.layoutBounds, modelViewTransform, {
+      setApproachingEnergyChunkParentNode: airLayer
+    } );
     blockLayer.addChild( brickNode );
-    var ironBlockNode = new BlockNode( model, model.ironBlock, this.layoutBounds, modelViewTransform );
-    ironBlockNode.setApproachingEnergyChunkParentNode( airLayer );
+    var ironBlockNode = new BlockNode( model.ironBlock, this.layoutBounds, modelViewTransform, {
+      setApproachingEnergyChunkParentNode: airLayer
+    } );
     blockLayer.addChild( ironBlockNode );
     var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
 
+    // add the beaker, which is composed of several pieces
     beakerFrontLayer.addChild( beakerView.frontNode );
     beakerBackLayer.addChild( beakerView.backNode );
     beakerGrabLayer.addChild( beakerView.grabNode );
 
-    // Thermometer layer should be above the movable objects
+    // the thermometer layer needs to be above the movable objects
     var thermometerLayer = new Node();
     this.addChild( thermometerLayer );
 
-    //Show the mock-up and a slider to change its transparency
-    if ( SHOW_MOCKUP ) {
-      var mockupOpacityProperty = new Property( 0.02 );
-      var image = new Image( mockupImage, {
-        pickable: false
-      } );
-      image.scale( this.layoutBounds.width / image.width, this.layoutBounds.height / image.height );
-      mockupOpacityProperty.linkAttribute( image, 'opacity' );
-      this.addChild( image );
-      this.addChild( new HSlider( mockupOpacityProperty, {
-        min: 0,
-        max: 1
-      }, {
-        top: 10,
-        left: 10
-      } ) );
-    }
-
-    // Add the thermometer nodes.
+    // add the thermometer nodes
     var movableThermometerNodes = [];
     model.thermometers.forEach( function( thermometer ) {
       var thermometerNode = new MovableThermometerNode( thermometer, self.layoutBounds, modelViewTransform );
       thermometerLayer.addChild( thermometerNode );
 
-      // TODO: this is not working - why?
+      // TODO: this listener implement some initial drag and drop functionality, but needs more work for the correct behavior
       thermometerNode.addInputListener( new SimpleDragHandler( {
         up: function( event ) {
 
@@ -277,7 +253,11 @@ define( function( require ) {
       movableThermometerNodes.push( thermometerNode );
     } );
 
-    // Add the toolbox for the thermometers.
+    // TODO: In the orignal Java sim, there were separate nodes for the thermometors in the tool box versus those in
+    // the play area.  I (jbphet) want to simplify this in the HTML5 version, and below is the code that will be revised
+    // in order to do this.
+
+    // add the toolbox for the thermometers
     var thermometerBox = new HBox();
     var thermometerToolboxNodes = [];
     movableThermometerNodes.forEach( function( movableThermometerNode ) {
@@ -297,9 +277,8 @@ define( function( require ) {
       thermometerToolboxNode.returnRect = thermometerBox.bounds;
     } );
 
-    // Create a function that updates the Z-order of the blocks when the user-controlled state changes.
-    var blockChangeObserver = function() {
-
+    // create a function that updates the Z-order of the blocks when the user-controlled state changes
+    var blockChangeListener = function() {
       if ( model.ironBlock.isStackedUpon( model.brick ) ) {
         brickNode.moveToBack();
       }
@@ -307,23 +286,21 @@ define( function( require ) {
         ironBlockNode.moveToBack();
       }
       else if ( model.ironBlock.getBounds().minX >= model.brick.getBounds().maxX ||
-        model.ironBlock.getBounds().minY >= model.brick.getBounds().maxY ) {
+                model.ironBlock.getBounds().minY >= model.brick.getBounds().maxY ) {
         ironBlockNode.moveToFront();
       }
       else if ( model.brick.getBounds().minX >= model.ironBlock.getBounds().maxX ||
-        model.brick.getBounds().minY >= model.ironBlock.getBounds().maxY ) {
+                model.brick.getBounds().minY >= model.ironBlock.getBounds().maxY ) {
         brickNode.moveToFront();
       }
-
     };
 
-    // Update the Z-order of the blocks whenever the "userControlled" state of either changes.
-    model.brick.positionProperty.link( blockChangeObserver );
-    model.ironBlock.positionProperty.link( blockChangeObserver );
+    // update the Z-order of the blocks whenever the "userControlled" state of either changes
+    model.brick.positionProperty.link( blockChangeListener );
+    model.ironBlock.positionProperty.link( blockChangeListener );
   }
 
   energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
 
   return inherit( ScreenView, EFACIntroScreenView );
-
 } );

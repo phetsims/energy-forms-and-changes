@@ -37,24 +37,23 @@ define( function( require ) {
   var SHOW_2D_REPRESENTATION = true; // TODO: Turn this into a query parameter.
 
   /**
-   * @param model TODO: Why is model here, and can it be eliminated?
    * @param {Block} block
    * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
    * @constructor
    */
-  function BlockNode( model, block, stageBounds, modelViewTransform ) {
+  function BlockNode( block, stageBounds, modelViewTransform, options ) {
 
     var self = this;
+    Node.call( this, { cursor: 'pointer' } );
 
-    Node.call( this, {
-      cursor: 'pointer'
-    } );
+    options = _.extend( {
 
-    // @private
-    this.block = block;
-    this.approachingEnergyChunkParentNode = null;
-    this.modelViewTransform = modelViewTransform;
+      // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
+      // the energy chunks that are outside the block don't affect the bounds of the block.
+      approachingEnergyChunksLayer: null
+    }, options );
 
     // extract the scale transform from the MVT so that we can separate the shape from the position of the block
     var scaleVector = modelViewTransform.matrix.getScaleVector();
@@ -156,9 +155,10 @@ define( function( require ) {
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 
-      var parentNode = ( self.approachingEnergyChunkParentNode === null ) ?
-        self.energyChunkRootNode :
-        self.approachingEnergyChunkParentNode;
+      // if a node was specified for the approaching energy chunks, use it, otherwise make them a child of this node
+      var parentNode = ( options.approachingEnergyChunkParentNode === null ) ?
+                       self.energyChunkRootNode :
+                       options.approachingEnergyChunkParentNode;
 
       parentNode.addChild( energyChunkNode );
 
@@ -244,20 +244,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'BlockNode', BlockNode );
 
-  return inherit( Node, BlockNode, {
-
-    /**
-     * Set the parent node to be used for energy chunks that are outside this block but headed for it.  This allows
-     * the energy chunk nodes to be created and managed but not extend the bounds of this node.
-     * @param {Node} node
-     * @public
-     */
-    setApproachingEnergyChunkParentNode: function( node ) {
-
-      // this should not be set more than once
-      assert && assert( this.approachingEnergyChunkParentNode === null );
-      this.approachingEnergyChunkParentNode = node;
-    }
-  } );
+  return inherit( Node, BlockNode );
 } );
 
