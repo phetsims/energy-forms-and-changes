@@ -247,8 +247,8 @@ define( function( require ) {
   return inherit( Node, BlockNode, {
 
     /**
-     * Set the parent node to be used for energy chunks that are outside the block but headed for it.  This allows
-     * these to be managed but not extend the bounds of this node.
+     * Set the parent node to be used for energy chunks that are outside this block but headed for it.  This allows
+     * the energy chunk nodes to be created and managed but not extend the bounds of this node.
      * @param {Node} node
      * @public
      */
