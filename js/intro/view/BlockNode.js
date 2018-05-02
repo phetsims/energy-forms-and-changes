@@ -1,7 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Node that represents a block in the view.  The blocks in the model are 2D, and this class gives them some perspective
+ * Node that represents a block in the view.  The blocks in the model are 2D, and this node gives them some perspective
  * in order to make them appear to be 3D.
  *
  * @author John Blanco
@@ -34,7 +34,7 @@ define( function( require ) {
   var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINE_WIDTH = 3;
   var OUTLINE_STROKE = Color.DARK_GRAY;
-  var SHOW_2D_REPRESENTATION = true;
+  var SHOW_2D_REPRESENTATION = true; // TODO: Turn this into a query parameter.
 
   /**
    * @param model TODO: Why is model here, and can it be eliminated?
@@ -51,22 +51,27 @@ define( function( require ) {
       cursor: 'pointer'
     } );
 
+    // @private
     this.block = block;
     this.approachingEnergyChunkParentNode = null;
     this.modelViewTransform = modelViewTransform;
 
-    // Extract the scale transform from the MVT so that we can separate the shape from the position of the block.
+    // extract the scale transform from the MVT so that we can separate the shape from the position of the block
     var scaleVector = modelViewTransform.matrix.getScaleVector();
     var scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
+
+    // TODO: I (jbphet) noticed the code below during an initial pass through this file.  This looks like there is
+    // something wrong with the transforms, and I should straighten it out.
 
     // Note that blockRect is in view coordinates.
     // The shift by the block height is not in the original Java, but without it, the blocks sit too low.
     var blockShape = block.getRawShape();
     var blockRect = scaleTransform.transformShape( blockShape.shiftedY( -blockShape.height ) );
 
-    // Create the shape for the front of the block.
+    // create the shape for the front of the block
     var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX(
-      block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION );
+      block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION
+    );
     var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMaxY() ).plus( blockFaceOffset );
@@ -77,9 +82,10 @@ define( function( require ) {
       lowerLeftFrontCorner.x,
       upperLeftFrontCorner.y,
       blockRect.width,
-      blockRect.height );
+      blockRect.height
+    );
 
-    // Create the shape of the top of the block.
+    // create the shape of the top of the block
     var upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
     var upperRightBackCorner = upperRightFrontCorner.plus( backCornersOffset );
     var blockTopShape = new Shape();
@@ -89,7 +95,7 @@ define( function( require ) {
       .lineToPoint( upperLeftBackCorner )
       .lineToPoint( upperLeftFrontCorner );
 
-    // Create the shape of the side of the block.
+    // create the shape of the side of the block
     var lowerRightBackCorner = lowerRightFrontCorner.plus( backCornersOffset );
     var blockSideShape = new Shape();
     blockSideShape.moveToPoint( upperRightFrontCorner )
@@ -98,7 +104,7 @@ define( function( require ) {
       .lineToPoint( upperRightBackCorner )
       .lineToPoint( upperRightFrontCorner );
 
-    // Create the shape for the back of the block.
+    // create the shape for the back of the block
     var lowerLeftBackCorner = lowerLeftFrontCorner.plus( backCornersOffset );
     var blockBackShape = new Shape();
     blockBackShape.moveToPoint( lowerLeftBackCorner )
@@ -108,24 +114,24 @@ define( function( require ) {
       .moveToPoint( lowerLeftBackCorner )
       .lineToPoint( upperLeftBackCorner );
 
-    // Add the back of the block.
+    // add the back of the block
     var blockBack = new Path( blockBackShape, {
       lineWidth: OUTLINE_LINE_WIDTH,
       stroke: OUTLINE_STROKE
     } );
     this.addChild( blockBack );
 
-    // Create the layers where the energy chunks will be placed.
+    // create the layers where the energy chunks will be placed
     this.energyChunkRootNode = new Node();
     this.addChild( this.energyChunkRootNode );
     for ( var i = block.slices.length - 1; i >= 0; i-- ) {
       this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
     }
 
-    // Add the face, top, and sides of the block.
-    var blockFace = this.createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
-    var blockTop = this.createSurface( blockTopShape, block.getColor(), block.getTopTextureImage() );
-    var blockSide = this.createSurface( blockSideShape, block.getColor(), block.getSideTextureImage() );
+    // add the face, top, and sides of the block
+    var blockFace = createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
+    var blockTop = createSurface( blockTopShape, block.getColor(), block.getTopTextureImage() );
+    var blockSide = createSurface( blockSideShape, block.getColor(), block.getSideTextureImage() );
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
@@ -137,22 +143,16 @@ define( function( require ) {
       } ) ) );
     }
 
-    // Position and add the label.
-    var label = new Text( block.getLabel() );
-    label.setFont( LABEL_FONT );
-    if ( label.bounds.width >= modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) ) {
-      // Scale the label to fit on the face of the block.  This also supports translations.
-      var scale = modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ) / label.bounds.width;
-      label.setScaleMagnitude( scale );
-    }
-    var labelCenterX = ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2;
-    var labelCenterY =
-      ( upperLeftFrontCorner.y - modelViewTransform.modelToViewDeltaY( EFACConstants.BLOCK_SURFACE_WIDTH ) / 2 );
-    label.center = new Vector2( labelCenterX, labelCenterY );
+    // position and add the label
+    var label = new Text( block.getLabel(), {
+      font: LABEL_FONT,
+      maxWidth: modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ),
+      centerX: ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2,
+      centerY: ( upperLeftFrontCorner.y + lowerLeftFrontCorner.y ) / 2
+    } );
     this.addChild( label );
 
-    // Watch for coming and going of energy chunks that are approaching
-    // this model element and add/remove them as needed.
+    // watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed
     block.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 
@@ -164,14 +164,13 @@ define( function( require ) {
 
       block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          // console.log( 'BN: Removing chunk node (approaching chunks)' );
           parentNode.removeChild( energyChunkNode );
           block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
       } );
     } );
 
-    // Make the block be transparent when the energy chunks are visible so that it looks like they are in the block.
+    // make the block be transparent when the energy chunks are visible so that it looks like they are inside the block
     block.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       var opaqueness = energyChunksVisible ? 0.5 : 1.0;
       blockFace.opacity = opaqueness;
@@ -180,18 +179,67 @@ define( function( require ) {
       label.opacity = opaqueness;
     } );
 
-    // Update the offset if and when the model position changes.
+    // update the offset when the model position changes
     block.positionProperty.link( function( newPosition ) {
 
       self.translation = modelViewTransform.modelToViewPosition( newPosition );
 
-      // Compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning.
+      // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
       self.energyChunkRootNode.translation =
         modelViewTransform.modelToViewPosition( newPosition ).rotated( Math.PI );
     } );
 
-    // Add the drag handler
+    // add the drag handler
     this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform ) );
+  }
+
+  /**
+   * convenience method to avoid code duplication - adds a node of the given shape, color, and texture (if specified)
+   * @param {Shape} shape
+   * @param {Color} fillColor
+   * @param {Image} textureImage
+   * @returns {Node}
+   * @private
+   */
+  function createSurface( shape, fillColor, textureImage ) {
+
+    var root = new Node( {
+      clipArea: shape
+    } );
+
+    // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
+    // entirely covered up.
+    root.addChild( new Path( shape, {
+      fill: fillColor
+    } ) );
+
+    if ( textureImage !== null ) {
+
+      // Add the texture image.
+      var texture = new Image( textureImage );
+
+      // Scale up the texture image if needed.
+      var textureScale = 1;
+      if ( texture.bounds.width < shape.bounds.width ) {
+        textureScale = shape.bounds.width / texture.bounds.width;
+      }
+      if ( texture.bounds.height < shape.bounds.height ) {
+        textureScale = Math.max( shape.bounds.height / texture.bounds.height, textureScale );
+      }
+      texture.scale( textureScale );
+
+      // Add the texture to the clip node in order to clip it.
+      texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
+      root.addChild( texture );
+    }
+
+    // Add the outlined shape so that edges are visible.
+    root.addChild( new Path( shape, {
+      lineWidth: OUTLINE_LINE_WIDTH,
+      stroke: OUTLINE_STROKE
+    } ) );
+
+    return root;
   }
 
   energyFormsAndChanges.register( 'BlockNode', BlockNode );
@@ -199,65 +247,16 @@ define( function( require ) {
   return inherit( Node, BlockNode, {
 
     /**
-     *
+     * Set the parent node to be used for energy chunks that are outside the block but headed for it.  This allows
+     * these to be managed but not extend the bounds of this node.
      * @param {Node} node
+     * @public
      */
     setApproachingEnergyChunkParentNode: function( node ) {
-      // This should not be set more than once.
+
+      // this should not be set more than once
       assert && assert( this.approachingEnergyChunkParentNode === null );
       this.approachingEnergyChunkParentNode = node;
-    },
-
-    /**
-     * Convenience method to avoid code duplication.  Adds a node of the given shape, color, and texture (if a texture
-     * is specified).
-     *
-     * @param {Shape} shape
-     * @param {Color} fillColor
-     * @param {Image} textureImage
-     * @returns {Node}
-     * @private
-     */
-    createSurface: function( shape, fillColor, textureImage ) {
-
-      var root = new Node( {
-        clipArea: shape
-      } );
-
-      // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
-      // entirely covered up.
-      root.addChild( new Path( shape, {
-        fill: fillColor
-      } ) );
-
-      if ( textureImage !== null ) {
-
-        // Add the texture image.
-        var texture = new Image( textureImage );
-
-        // Scale up the texture image if needed.
-        var textureScale = 1;
-        if ( texture.bounds.width < shape.bounds.width ) {
-          textureScale = shape.bounds.width / texture.bounds.width;
-        }
-        if ( texture.bounds.height < shape.bounds.height ) {
-          textureScale = Math.max( shape.bounds.height / texture.bounds.height, textureScale );
-        }
-        texture.scale( textureScale );
-
-        // Add the texture to the clip node in order to clip it.
-        texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
-        root.addChild( texture );
-      }
-
-      // Add the outlined shape so that edges are visible.
-      root.addChild( new Path( shape, {
-        lineWidth: OUTLINE_LINE_WIDTH,
-        stroke: OUTLINE_STROKE
-      } ) );
-
-      return root;
-
     }
   } );
 } );
