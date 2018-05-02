@@ -1,4 +1,4 @@
-// Copyright 2016-2017, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 // Note: This file is a mashup of two ported Java files: Carousel and
 // EnergySystemElementCarousel. Carousel.java was not ported to avoid confusion

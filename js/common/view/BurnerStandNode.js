@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * Scener node that represents a burner stand in the view.  A burner stand is a faux-3D representation of an object upon

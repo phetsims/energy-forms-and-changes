@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * Abstract base type for a block that contains and exchanges thermal energy.  In the model, a block is two-dimensional,

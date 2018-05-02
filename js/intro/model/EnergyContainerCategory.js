@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * An Enum that defines the types of thermal energy containers, primarily used for determining the rate at which heat is

@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
