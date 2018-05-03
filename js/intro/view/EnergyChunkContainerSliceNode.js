@@ -1,14 +1,13 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * A node that represents a 2D surface on which energy chunks reside.  The
- * surface contains z-dimension information, and can thus be used to create an
- * effect of layering in order to get a bit of a 3D appearance.
+ * A node that represents a 2D surface on which energy chunks reside.  The surface contains z-dimension information,
+ * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance.  The slice itself
+ * is generally invisible, but can be shown using when needed for debugging.
  *
  * @author John Blanco
  * @author Andrew Adare
  */
-
 define( function( require ) {
   'use strict';
 
@@ -20,7 +19,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
 
   // constants
-  var ALWAYS_SHOW_OUTLINE = false; // DEBUG
+  var ALWAYS_SHOW_OUTLINE = false; // TODO: convert this into a query parameter
 
   /**
    * @param {EnergyChunkContainerSlice} slice
@@ -31,10 +30,10 @@ define( function( require ) {
 
     var self = this;
     this.modelViewTransform = modelViewTransform;
-    this.energyChunkContainerSlice = slice;
     Node.call( this );
 
-    var listener = function( addedChunk ) {
+    // define a function that will add and remove energy chunk nodes as energy come and go in the model
+    function addEnergyChunkNode( addedChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedChunk, modelViewTransform );
       self.addChild( energyChunkNode );
       slice.energyChunkList.addItemRemovedListener( function removalListener( removedChunk ) {
@@ -43,15 +42,15 @@ define( function( require ) {
           slice.energyChunkList.removeItemRemovedListener( removalListener );
         }
       } );
-    };
+    }
 
-    // Add listeners to any existing chunks in the slice
-    slice.energyChunkList.forEach( listener );
+    // add the initial energy chunks
+    slice.energyChunkList.forEach( addEnergyChunkNode );
 
-    // Add listeners to future chunks when added
-    slice.energyChunkList.addItemAddedListener( listener );
+    // listen for the arrival of new energy chunks and create a node for each
+    slice.energyChunkList.addItemAddedListener( addEnergyChunkNode );
 
-    // For debug.
+    // for debug
     if ( ALWAYS_SHOW_OUTLINE ) {
       this.addChild( new Path( modelViewTransform.modelToViewShape( slice.shape ), {
         lineWidth: 1,
