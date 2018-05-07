@@ -5,10 +5,9 @@
 // with the PhET Sun Carousel.js UI component.
 
 /**
- * This class implements a container of sorts for positionable model elements.
- * The model elements are positioned by this class, and an API is provided
- * that allows clients to move elements to the "selected" position.  Changes
- * to the selected element are animated.
+ * This type implements a model-based carousel for positionable model elements. Model elements are positioned based
+ * on the current selection, and an API is provided that allows clients to change those selection. Changes to the
+ * selected element are animated.
  *
  * @author  John Blanco
  * @author  Andrew Adare
@@ -17,68 +16,62 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var Easing = require( 'TWIXT/Easing' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
-  var TRANSITION_DURATION = 0.5;
+  // constants
+  var TRANSITION_DURATION = 0.75;
 
   /**
-   * Container for containing and managing the position of energy system
-   * elements.
-   *
-   * @param {Vector2} selectedElementPosition Location of currently selected element
+   * @param {Vector2} selectedElementPosition - location were the selected model element should
    * @param {Vector2} offsetBetweenElements   Offset between elements in the carousel
    * @constructor
    */
   function EnergySystemElementCarousel( selectedElementPosition, offsetBetweenElements ) {
 
-    // Target selected element.  Will be the same as the current selection
-    // except when animating to a new selection.  This property is the API for
-    // selecting elements in the carousel.
-    this.targetIndexProperty = new Property( 0 );
-
-    // Indicator for when animations are in progress, meant to be monitored by
-    // clients that need to be aware of this.
-    this.animationInProgressProperty = new Property( false );
-
-    // The position in model space where the currently selected element should be.
-    this.selectedElementPosition = selectedElementPosition;
-
-    // Offset between elements in the carousel.
-    this.offsetBetweenElements = offsetBetweenElements;
-
-    // List of the elements whose position is managed by this carousel.
-    this.managedElements = [];
-
-    this.elapsedTransitionTime = 0;
-
-    this.currentCarouselOffset = new Vector2( 0, 0 );
-
-    this.initialCarouselOffset = new Vector2( 0, 0 );
-
-    // Create a handle for use inside callbacks
     var self = this;
 
-    // Monitor our own target setting and set up the variables needed for
-    // animation each time the target changes. Use lazyLink to avoid calling
-    // this during initialization.
-    this.targetIndexProperty.lazyLink( function() {
-      // Check bounds
-      var i = self.targetIndexProperty.value;
-      assert && assert( i === 0 || i < self.managedElements.length, 'targetIndex out of range:' + i );
+    // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
+    this.targetIndexProperty = new NumberProperty( 0 );
 
+    // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
+    // to another is in progress
+    this.animationInProgressProperty = new BooleanProperty( false );
+
+    // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
+    this.selectedElementPosition = selectedElementPosition;
+
+    // @private {Vector2} - the offset between elements whose position is managed by this carousel
+    this.offsetBetweenElements = offsetBetweenElements;
+
+    // @public (read-only) {EnergySystemElement[]} - list of the elements whose position is managed by this carousel
+    this.managedElements = [];
+
+    // @private - variables needed to manage carousel transitions
+    this.elapsedTransitionTime = 0;
+    this.currentCarouselOffset = new Vector2( 0, 0 );
+    this.initialCarouselOffset = new Vector2( 0, 0 );
+
+    // monitor the target setting and set up the variables needed for animation each time the target changes
+    this.targetIndexProperty.lazyLink( function() {
+
+      // check bounds
+      var target = self.targetIndexProperty.value;
+      assert && assert( target === 0 || target < self.managedElements.length, 'targetIndex out of range:' + target );
+
+      // set vars for the transition
       self.elapsedTransitionTime = 0;
       self.initialCarouselOffset = self.currentCarouselOffset;
       self.animationInProgressProperty.set( true );
     } );
 
-    // Activate and deactivate energy system elements as they come into
-    // the center location. Use lazyLink to avoid calling this during initialization.
+    // activate and deactivate energy system elements as they come into the center location
     this.animationInProgressProperty.lazyLink( function( animationInProgress ) {
       if ( animationInProgress ) {
         self.managedElements.forEach( function( element ) {
@@ -94,14 +87,15 @@ define( function( require ) {
   energyFormsAndChanges.register( 'EnergySystemElementCarousel', EnergySystemElementCarousel );
 
   return inherit( Object, EnergySystemElementCarousel, {
+
     /**
-     * Add element to list of managed elements
-     *
-     * @param {EnergySystemElement} element Element to be added to carousel
+     * add element to list of managed elements
+     * @param {EnergySystemElement} element - energy system element to be added to carousel
+     * @publid
      */
     add: function( element ) {
 
-      // Set the element's position to be at the end of the carousel.
+      // set the element's position to be at the end of the carousel
       if ( this.managedElements.length === 0 ) {
         element.positionProperty.set( this.selectedElementPosition );
       }
@@ -110,29 +104,28 @@ define( function( require ) {
         element.positionProperty.set( lastElement.positionProperty.value.plus( this.offsetBetweenElements ) );
       }
 
-      // Add element to the list of managed elements.
+      // add element to the list of managed elements
       this.managedElements.push( element );
 
-      // Update opacities.
+      // update opacities
       this.updateManagedElementOpacities();
     },
 
     /**
-     * Get element from carousel by index.
-     *
+     * get an element from carousel by index
      * @param  {number} index Requested position in array of EnergySystemElements
-     *
      * @returns {EnergySystemElement}
+     * @public
      */
     getElement: function( index ) {
-      assert && assert( index < this.managedElements.length, 'Carousel index out of range: ' + index );
+      assert && assert( index < this.managedElements.length, 'carousel index out of range: ' + index );
       return this.managedElements[ index ];
     },
 
     /**
-     * Get selected element from carousel
-     *
-     * @returns {[type]} Selected element
+     * get the currently selected element from carousel
+     * @returns {EnergySystemElement|null}
+     * @public
      */
     getSelectedElement: function() {
       var i = this.targetIndexProperty.get();
@@ -142,17 +135,21 @@ define( function( require ) {
       return null;
     },
 
+    /**
+     * step this model element
+     * @param {number} dt - time step, in seconds
+     */
     step: function( dt ) {
       if ( !this.atTargetPosition() ) {
         this.elapsedTransitionTime += dt;
         var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
         var totalTravelVector = targetCarouselOffset.minus( this.initialCarouselOffset );
-        var elapsedFraction = Util.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
+        var transitionProportion = Util.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
         this.currentCarouselOffset =
-          this.initialCarouselOffset.plus( totalTravelVector.times( this.computeSlowInSlowOut( elapsedFraction ) ) );
+          this.initialCarouselOffset.plus( totalTravelVector.times( Easing.CUBIC_IN_OUT.value( transitionProportion ) ) );
         this.updateManagedElementPositions();
 
-        if ( elapsedFraction === 1 ) {
+        if ( transitionProportion === 1 ) {
           this.currentCarouselOffset = targetCarouselOffset;
         }
 
@@ -163,6 +160,9 @@ define( function( require ) {
       }
     },
 
+    /**
+     * @private
+     */
     updateManagedElementPositions: function() {
       for ( var i = 0; i < this.managedElements.length; i++ ) {
         var position = this.selectedElementPosition.plus( this.offsetBetweenElements.times( i ) );
@@ -171,6 +171,9 @@ define( function( require ) {
       }
     },
 
+    /**
+     * @private
+     */
     updateManagedElementOpacities: function() {
       var self = this;
       this.managedElements.forEach( function( managedElement ) {
@@ -180,25 +183,20 @@ define( function( require ) {
       } );
     },
 
+    /**
+     * @private
+     */
     atTargetPosition: function() {
       var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.value );
       return this.currentCarouselOffset.equals( targetCarouselOffset );
     },
 
-    computeSlowInSlowOut: function( zeroToOne ) {
-      if ( zeroToOne < 0.5 ) {
-        return 2.0 * zeroToOne * zeroToOne;
-      }
-      else {
-        var complement = 1.0 - zeroToOne;
-        return 1.0 - 2.0 * complement * complement;
-      }
-    },
-
+    /**
+     * @public
+     */
     reset: function() {
       this.targetIndexProperty.reset();
       this.animationInProgressProperty.reset();
     }
-
   } );
 } );
