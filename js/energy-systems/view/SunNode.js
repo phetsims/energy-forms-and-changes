@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
@@ -41,7 +41,7 @@ define( function( require ) {
   var lotsString = require( 'string!ENERGY_FORMS_AND_CHANGES/lots' );
   var noneString = require( 'string!ENERGY_FORMS_AND_CHANGES/none' );
 
-  // Constants
+  // constants
   var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
   var SLIDER_LABEL_FONT = new PhetFont( 12 );
 

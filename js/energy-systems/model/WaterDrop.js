@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Dimension2 = require( 'DOT/Dimension2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );

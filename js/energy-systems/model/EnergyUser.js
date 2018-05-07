@@ -11,7 +11,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElement' );
   var inherit = require( 'PHET_CORE/inherit' );

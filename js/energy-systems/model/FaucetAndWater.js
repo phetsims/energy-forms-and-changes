@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -29,7 +29,7 @@ define( function( require ) {
   // Images
   var FAUCET_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/faucet_icon.png' );
 
-  // Constants
+  // constants
   var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.072, 0.09 );
   var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
   var MAX_WATER_WIDTH = 0.01; // In meters.

@@ -10,12 +10,12 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
 
-  // Constants
+  // constants
   // This is not used, but could be used to scale image.getImageWidth() to set
   // this.width.
   var DEFAULT_SCALE_FACTOR = 1 / EFACConstants.ENERGY_SYSTEMS_MVT_SCALE_FACTOR;

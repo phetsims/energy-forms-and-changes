@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );

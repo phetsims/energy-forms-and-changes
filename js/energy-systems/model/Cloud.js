@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -17,7 +17,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
+  // constants
   var CLOUD_WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
   var CLOUD_HEIGHT = CLOUD_WIDTH;
 

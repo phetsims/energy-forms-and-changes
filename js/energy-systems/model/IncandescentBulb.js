@@ -3,7 +3,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -16,7 +16,7 @@ define( function( require ) {
   var INCANDESCENT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_icon.png' );
   var INCANDESCENT_ON_3 = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_on_3.png' );
 
-  // Constants
+  // constants
   var IMAGE_OFFSET = new Vector2( 0, 0.055 );
   var NON_ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_2, IMAGE_OFFSET );
   var ENERGIZED_BULB = new EFACModelImage( INCANDESCENT_ON_3, IMAGE_OFFSET );

@@ -3,7 +3,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );

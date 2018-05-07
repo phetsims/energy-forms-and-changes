@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Color = require( 'SCENERY/util/Color' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -17,7 +17,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 
-  // Constants
+  // constants
   // var BELT_STROKE = new BasicStroke( 5, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND );
   var BELT_COLOR = Color.BLACK;
 

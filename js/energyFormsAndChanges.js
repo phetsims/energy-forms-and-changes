@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Namespace = require( 'PHET_CORE/Namespace' );
 
   return new Namespace( 'energyFormsAndChanges' );

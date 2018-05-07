@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
@@ -34,7 +34,7 @@ define( function( require ) {
   var SOLAR_PANEL_POST_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
-  // Constants
+  // constants
   var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
@@ -52,7 +52,7 @@ define( function( require ) {
   var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
   var ABSORPTION_SHAPE = new Shape();
 
-  // Constants used for creating the path followed by the energy chunks.
+  // constants used for creating the path followed by the energy chunks.
   // Many of these numbers were empirically determined based on the images,
   // and will need updating if the images change.
   var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.01 );

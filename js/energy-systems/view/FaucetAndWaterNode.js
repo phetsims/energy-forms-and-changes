@@ -3,7 +3,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -13,7 +13,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var WaterDropNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/WaterDropNode' );
 
-  // Constants
+  // constants
   var FAUCET_NODE_HORIZONTAL_LENGTH = 700; // In screen coords, which are close to pixels
 
   /**

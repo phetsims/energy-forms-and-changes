@@ -9,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -27,7 +27,7 @@ define( function( require ) {
   // Images
   var TEAPOT_LARGE = require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_large.png' );
 
-  // Constants
+  // constants
   var TEAPOT_OFFSET = new Vector2( 0.0, 0.015 );
   var TEAPOT_IMAGE = new EFACModelImage( TEAPOT_LARGE, TEAPOT_OFFSET );
 

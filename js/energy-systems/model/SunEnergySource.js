@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -24,13 +24,13 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
+  // constants
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
   var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
-  // Constants that control the nature of the emission sectors.  These are
+  // constants that control the nature of the emission sectors.  These are
   // used to make emission look random yet still have a fairly steady rate
   // within each sector.  One sector is intended to point at the solar panel.
   var NUM_EMISSION_SECTORS = 10;

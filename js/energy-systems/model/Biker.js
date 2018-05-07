@@ -1,8 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * This class represents a bicycle being pedaled by a rider in order to
- * generate energy.
+ * model of a bicycle being pedaled by a rider in order to generate energy
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -10,7 +9,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -24,7 +23,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
+  // constants
   var MAX_ANGULAR_VELOCITY_OF_CRANK = 3 * Math.PI; // In radians/sec.
   var ANGULAR_ACCELERATION = Math.PI / 2; // In radians/(sec^2).
   var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec

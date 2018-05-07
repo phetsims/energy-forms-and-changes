@@ -11,7 +11,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var BeakerHeaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeakerHeaterNode' );
   var BeltNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeltNode' );
   var BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BikerNode' );
@@ -45,7 +45,7 @@ define( function( require ) {
   // Strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
 
-  // Constants
+  // constants
   var EDGE_INSET = 10;
 
   /**

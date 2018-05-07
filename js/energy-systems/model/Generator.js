@@ -3,7 +3,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -29,7 +29,7 @@ define( function( require ) {
   var GENERATOR_WHEEL_SPOKES = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );
   var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
-  // Constants
+  // constants
 
   // Attributes of the wheel and generator.
   var WHEEL_MOMENT_OF_INERTIA = 5; // In kg.

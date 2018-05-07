@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  // Modules
+  // modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var Belt = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Belt' );
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
@@ -27,7 +27,7 @@ define( function( require ) {
   var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
+  // constants
 
   // For the images (sun, teapot, biker, ...) scrolling like a one-armed bandit,
   // this is the offset between them (purely vertical).
