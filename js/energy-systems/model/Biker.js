@@ -3,6 +3,8 @@
 /**
  * model of a bicycle being pedaled by a rider in order to generate energy
  *
+ * TODO: It's a bit odd that the images are handled here in the view.  Consider moving them to the view or explain why they need to be here.
+ *
  * @author John Blanco
  * @author Andrew Adare
  */
@@ -10,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -20,7 +23,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -33,8 +36,7 @@ define( function( require ) {
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
 
-  // Offsets used for creating energy chunk paths.  These need to be
-  // coordinated with the images.
+  // offsets used for creating energy chunk paths - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
   var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.007, 0.015 );
   var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.006 );
@@ -42,15 +44,15 @@ define( function( require ) {
   var BOTTOM_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.03 );
   var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.13, -0.01 );
 
-  // Offset of the bike frame center.  Most other image offsets are relative
-  // to this one.
+  // offset of the bike frame center - most other image offsets are relative to this one
   var FRAME_CENTER_OFFSET = new Vector2( 0.0, 0.01 );
 
+  // other image offsets
   var LEG_IMAGE_OFFSET = new Vector2( 0.009, 0.002 );
   var LEG_OFFSET = FRAME_CENTER_OFFSET.plus( LEG_IMAGE_OFFSET );
 
-  // Images
-  var BACK_LEG = [
+  // images
+  var BACK_LEG_IMAGES = [
     require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_01.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_02.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_03.png' ),
@@ -76,7 +78,7 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_23.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_24.png' )
   ];
-  var FRONT_LEG = [
+  var FRONT_LEG_IMAGES = [
     require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_01.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_02.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_03.png' ),
@@ -102,28 +104,24 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_23.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_24.png' )
   ];
-
-  // EFACModelImage arrays
-  var FRONT_LEG_IMAGES = [];
-  var BACK_LEG_IMAGES = [];
-
-  for ( var i = 1; i < 25; i++ ) {
-    BACK_LEG_IMAGES.push( new EFACModelImage( BACK_LEG[ i - 1 ], LEG_OFFSET ) );
-    FRONT_LEG_IMAGES.push( new EFACModelImage( FRONT_LEG[ i - 1 ], LEG_OFFSET ) );
-  }
-
-  var NUM_LEG_IMAGES = FRONT_LEG_IMAGES.length;
-
   var BICYCLE_FRAME_3 = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame_3.png' );
   var BICYCLE_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_icon.png' );
   var BICYCLE_RIDER = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider.png' );
   var BICYCLE_RIDER_TIRED = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider_tired.png' );
   var BICYCLE_SPOKES = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
 
-  // Images used when representing this model element in the view.  The
-  // offsets, which are in meters, were empirically determined.  The values
-  // aren't really to scale, since there are so many things in this model
-  // with very different scales.
+  // populate image node arrays used for animation
+  var FRONT_LEG_IMAGE_NODES = [];
+  var BACK_LEG_IMAGE_NODES = [];
+  for ( var i = 1; i < 25; i++ ) {
+    BACK_LEG_IMAGE_NODES.push( new EFACModelImage( BACK_LEG_IMAGES[ i - 1 ], LEG_OFFSET ) );
+    FRONT_LEG_IMAGE_NODES.push( new EFACModelImage( FRONT_LEG_IMAGES[ i - 1 ], LEG_OFFSET ) );
+  }
+  var NUM_LEG_IMAGES = FRONT_LEG_IMAGE_NODES.length;
+
+  // Image nodes used when representing this model element in the view.  The offsets, which are in meters, were
+  // empirically determined.  The values aren't really to scale, since there are so many things in this model with very
+  // different scales.
   var FRAME_IMAGE = new EFACModelImage( BICYCLE_FRAME_3, FRAME_CENTER_OFFSET );
   var REAR_WHEEL_SPOKES_IMAGE = new EFACModelImage( BICYCLE_SPOKES, FRAME_CENTER_OFFSET.plus( new Vector2( 0.035, -0.020 ) ) );
   var RIDER_NORMAL_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0025, 0.062 ) ) );
@@ -138,13 +136,16 @@ define( function( require ) {
 
     EnergySource.call( this, new Image( BICYCLE_ICON ) );
 
+    // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
 
-    this.crankAngleProperty = new Property( 0 ); // rad
-    this.rearWheelAngleProperty = new Property( 0 ); // rad
-    this.bikerHasEnergyProperty = new Property( true );
-    this.targetCrankAngularVelocityProperty = new Property( 0 );
+    // @public (read-only) {NumberProperty} - angle of the crank arm on the bike, in radians
+    this.crankAngleProperty = new NumberProperty( 0 );
+
+    this.rearWheelAngleProperty = new NumberProperty( 0 ); //  in radians
+    this.bikerHasEnergyProperty = new BooleanProperty( true );
+    this.targetCrankAngularVelocityProperty = new NumberProperty( 0 );
 
     this.crankAngularVelocity = 0; // rad/s
     this.energyChunkMovers = [];
@@ -598,10 +599,10 @@ define( function( require ) {
 
   }, {
     // Exported variables for static access
-    BACK_LEG_IMAGES: BACK_LEG_IMAGES,
+    BACK_LEG_IMAGES: BACK_LEG_IMAGE_NODES,
     CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
     FRAME_IMAGE: FRAME_IMAGE,
-    FRONT_LEG_IMAGES: FRONT_LEG_IMAGES,
+    FRONT_LEG_IMAGES: FRONT_LEG_IMAGE_NODES,
     MAX_ANGULAR_VELOCITY_OF_CRANK: MAX_ANGULAR_VELOCITY_OF_CRANK,
     NUM_LEG_IMAGES: NUM_LEG_IMAGES,
     REAR_WHEEL_SPOKES_IMAGE: REAR_WHEEL_SPOKES_IMAGE,
