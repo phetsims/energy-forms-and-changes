@@ -17,6 +17,7 @@ define( function( require ) {
   var BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BikerNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -28,6 +29,7 @@ define( function( require ) {
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var IncandescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/IncandescentBulbNode' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var JoistA11yStrings = require( 'JOIST/JoistA11yStrings' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -42,7 +44,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Strings
+  // strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
 
   // constants
@@ -55,9 +57,19 @@ define( function( require ) {
   function EnergySystemsScreenView( model ) {
 
     ScreenView.call( this, {
-      // Boundaries taken from original Java sim
+
+      // boundaries taken from original Java sim
       layoutBounds: new Bounds2( 0, 0, 1008, 679 )
     } );
+
+    // a11y - the scene summary to be read by assistive technology
+    this.addChild( new Node( {
+      tagName: 'div',
+      innerContent: EFACA11yStrings.energySystemsSceneInteractionHint.value,
+      labelTagName: 'h2',
+      labelContent: JoistA11yStrings.sceneSummary.value,
+      descriptionContent: EFACA11yStrings.energySystemsSceneSummaryDescription.value
+    } ) );
 
     // Bounds2 object for use as primary geometric reference
     var stage = this.layoutBounds;

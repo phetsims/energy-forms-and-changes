@@ -14,9 +14,17 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   var EnergyFormsAndChangesA11yStrings = {
-    resistanceUnitsPattern: {
-      value: '{{value}} Ohms'
+    energySystemsSceneSummaryDescription: {
+      value: 'This is an interactive sim. It changes as you play with it. It has a Play Area and a ' +
+             'Control Panel. In the play area, construct an energy system with an energy producer, ' +
+             'converter and consumer. Adjust the energy production and observe the flow of energy in the ' +
+             'system. Inspect the energy forms and changes with energy symbols. In the control panel, ' +
+             'use the play, pause and step buttons or reset the sim.'
+    },
+    energySystemsSceneInteractionHint: {
+      value: 'Adjust the energy producer to begin observations.'
     }
+
   };
 
   if ( phet.chipper.queryParameters.stringTest === 'xss' ) {
