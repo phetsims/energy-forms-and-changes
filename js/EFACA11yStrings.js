@@ -23,7 +23,14 @@ define( function( require ) {
     },
     energySystemsSceneInteractionHint: {
       value: 'Adjust the energy producer to begin observations.'
-    }
+    },
+    energySystem: {
+      value: 'Energy System'
+    },
+    energySystemHelpText: {
+      value: 'Energy system contains a {{producer}}, {{converter}}, and {{consumer}}.'
+    },
+
 
   };
 

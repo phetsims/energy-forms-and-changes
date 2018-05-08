@@ -71,6 +71,13 @@ define( function( require ) {
       descriptionContent: EFACA11yStrings.energySystemsSceneSummaryDescription.value
     } ) );
 
+    // a11y - a description of the current configuration of the energy system to be read by assistive technology
+    this.addChild( new Node( {
+      tagName: 'h3',
+      innerContent: EFACA11yStrings.energySystem.value,
+      descriptionContent: EFACA11yStrings.energySystemHelpText.value
+    } ) );
+
     // Bounds2 object for use as primary geometric reference
     var stage = this.layoutBounds;
 
