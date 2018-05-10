@@ -4,6 +4,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -27,6 +28,9 @@ define( function( require ) {
    */
   function IncandescentBulb( energyChunksVisibleProperty ) {
     LightBulb.call( this, new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.incandescentLightBulb.value;
   }
 
   energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );

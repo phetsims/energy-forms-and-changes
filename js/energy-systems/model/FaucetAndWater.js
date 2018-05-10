@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var Dimension2 = require( 'DOT/Dimension2' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -50,6 +51,9 @@ define( function( require ) {
   function FaucetAndWater( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty ) {
 
     EnergySource.call( this, new Image( FAUCET_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.waterFaucet.value;
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 

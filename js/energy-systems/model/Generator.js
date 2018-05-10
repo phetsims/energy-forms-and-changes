@@ -4,6 +4,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -64,6 +65,9 @@ define( function( require ) {
 
     // Add args to constructor as needed
     EnergyConverter.call( this, new Image( GENERATOR_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.electricalGenerator.value;
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 

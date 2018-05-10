@@ -28,10 +28,35 @@ define( function( require ) {
       value: 'Energy System'
     },
     energySystemHelpText: {
-      value: 'Energy system contains a {{producer}}, {{converter}}, and {{consumer}}.'
+      value: 'Energy system contains a {{producer}}, {{converter}}, and {{user}}.'
     },
-
-
+    waterFaucet: {
+      value: 'water faucet'
+    },
+    sun: {
+      value: 'sun'
+    },
+    teaPot: {
+      value: 'tea pot'
+    },
+    cyclist: {
+      value: 'cyclist'
+    },
+    electricalGenerator: {
+      value: 'electrical generator'
+    },
+    solarPanel: {
+      value: 'solar panel'
+    },
+    beakerOfWater: {
+      value: 'beaker of water'
+    },
+    incandescentLightBulb: {
+      value: 'incandescent light bulb'
+    },
+    fluorescentLightBulb: {
+      value: 'fluorescent light bulb'
+    }
   };
 
   if ( phet.chipper.queryParameters.stringTest === 'xss' ) {

@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -73,7 +74,12 @@ define( function( require ) {
    * @constructor
    */
   function SolarPanel( energyChunksVisibleProperty ) {
+
     EnergyConverter.call( this, new Image( SOLAR_PANEL_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.solarPanel.value;
+
     this.energyChunkMovers = [];
     this.latestChunkArrivalTime = 0;
     this.energyOutputRate = 0;

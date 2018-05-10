@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -51,6 +52,9 @@ define( function( require ) {
     var self = this;
 
     EnergySource.call( this, new Image( SUN_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.sun.value;
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 

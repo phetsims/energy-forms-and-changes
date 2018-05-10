@@ -35,10 +35,12 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SolarPanelNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SolarPanelNode' );
+  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
   var TeaPotNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaPotNode' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -72,11 +74,35 @@ define( function( require ) {
     } ) );
 
     // a11y - a description of the current configuration of the energy system to be read by assistive technology
-    this.addChild( new Node( {
+    var energySystemConfigDescription = new Node( {
       tagName: 'h3',
       innerContent: EFACA11yStrings.energySystem.value,
       descriptionContent: EFACA11yStrings.energySystemHelpText.value
-    } ) );
+    } );
+    this.addChild( energySystemConfigDescription );
+
+    // update the a11y description as the selected element changes
+    Property.multilink(
+      [
+        model.energySourcesCarousel.targetIndexProperty,
+        model.energyConvertersCarousel.targetIndexProperty,
+        model.energyUsersCarousel.targetIndexProperty
+      ],
+      function() {
+        var energySource = model.energySourcesCarousel.getSelectedElement();
+        var energyConverter = model.energyConvertersCarousel.getSelectedElement();
+        var energyUser = model.energyUsersCarousel.getSelectedElement();
+        assert && assert( energySource.a11yName, 'the selected element has no accessibility name specified' );
+        energySystemConfigDescription.descriptionContent = StringUtils.fillIn(
+          EFACA11yStrings.energySystemHelpText.value,
+          {
+            producer: energySource.a11yName,
+            converter: energyConverter.a11yName,
+            user: energyUser.a11yName
+          }
+        );
+      }
+    );
 
     // Bounds2 object for use as primary geometric reference
     var stage = this.layoutBounds;

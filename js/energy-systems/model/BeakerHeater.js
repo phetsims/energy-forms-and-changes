@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
@@ -68,6 +69,9 @@ define( function( require ) {
   function BeakerHeater( energyChunksVisibleProperty ) {
 
     EnergyUser.call( this, new Image( WATER_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.beakerOfWater.value;
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;

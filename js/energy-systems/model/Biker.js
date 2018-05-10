@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -135,6 +136,9 @@ define( function( require ) {
   function Biker( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty ) {
 
     EnergySource.call( this, new Image( BICYCLE_ICON ) );
+
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.cyclist.value;
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;

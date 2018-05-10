@@ -31,6 +31,9 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
     this.activeProperty = new Property( false );
 
+    // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
+    this.a11yName = 'name not set';
+
     var self = this;
     // At initialization, oldPosition is null, so skip that case with lazyLink
     this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
