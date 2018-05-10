@@ -37,19 +37,19 @@ define( function( require ) {
       value: 'sun'
     },
     teaPot: {
-      value: 'tea pot'
+      value: 'tea kettle'
     },
     cyclist: {
       value: 'cyclist'
     },
     electricalGenerator: {
-      value: 'electrical generator'
+      value: 'wheel generator'
     },
     solarPanel: {
       value: 'solar panel'
     },
     beakerOfWater: {
-      value: 'beaker of water'
+      value: 'beaker of water on heating element'
     },
     incandescentLightBulb: {
       value: 'incandescent light bulb'
