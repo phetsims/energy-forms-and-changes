@@ -32,13 +32,20 @@ define( function( require ) {
       self.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
     } );
 
+    // TODO: The model shouldn't have opacity, it should have something like a selection proportion.
     /**
-     * Update the overall opacity base on model element opacity.
+     * Update the overall opacity based on model element opacity.
      *
      * @param  {number} opacity
      */
     modelElement.opacityProperty.link( function( opacity ) {
       self.setOpacity( opacity );
+      if ( opacity === 0 && self.visible ) {
+        self.visible = false;
+      }
+      else if ( opacity > 0 && !self.visible ) {
+        self.visible = true;
+      }
     } );
   }
 
