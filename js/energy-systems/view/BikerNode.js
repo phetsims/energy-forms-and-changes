@@ -105,15 +105,19 @@ define( function( require ) {
     } );
 
     // Slider to control crank speed
-    var crankSlider = new HSlider( biker.targetCrankAngularVelocityProperty, {
-      min: 0,
-      max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
-    }, {
-      trackSize: new Dimension2( 200, 5 ),
-      thumbSize: new Dimension2( 20, 40 ), // Default: ( 22, 45 )
-      thumbTouchAreaXDilation: 11,
-      thumbTouchAreaYDilation: 11
-    } );
+    var crankSlider = new HSlider(
+      biker.targetCrankAngularVelocityProperty,
+      {
+        min: 0,
+        max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
+      },
+      {
+        trackSize: new Dimension2( 200, 5 ),
+        thumbSize: new Dimension2( 20, 40 ),
+        thumbTouchAreaXDilation: 11,
+        thumbTouchAreaYDilation: 11
+      }
+    );
 
     this.addChild( new Panel( crankSlider, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
