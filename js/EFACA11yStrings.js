@@ -13,7 +13,7 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  var EnergyFormsAndChangesA11yStrings = {
+  var EFACA11yStrings = {
     energySystemsSceneSummaryDescription: {
       value: 'This is an interactive sim. It changes as you play with it. It has a Play Area and a ' +
              'Control Panel. In the play area, construct an energy system with an energy producer, ' +
@@ -60,15 +60,15 @@ define( function( require ) {
   };
 
   if ( phet.chipper.queryParameters.stringTest === 'xss' ) {
-    for ( var key in EnergyFormsAndChangesA11yStrings ) {
-      EnergyFormsAndChangesA11yStrings[ key ].value += '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGD4DwABCQEBtxmN7wAAAABJRU5ErkJggg==" onload="window.location.href=atob(\'aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==\')" />';
+    for ( var key in EFACA11yStrings ) {
+      EFACA11yStrings[ key ].value += '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGD4DwABCQEBtxmN7wAAAABJRU5ErkJggg==" onload="window.location.href=atob(\'aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==\')" />';
     }
   }
 
   // verify that object is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( EnergyFormsAndChangesA11yStrings ); }
+  if ( assert ) { Object.freeze( EFACA11yStrings ); }
 
-  energyFormsAndChanges.register( 'EnergyFormsAndChangesA11yStrings', EnergyFormsAndChangesA11yStrings );
+  energyFormsAndChanges.register( 'EFACA11yStrings', EFACA11yStrings );
 
-  return EnergyFormsAndChangesA11yStrings;
+  return EFACA11yStrings;
 } );

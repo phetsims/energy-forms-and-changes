@@ -76,15 +76,17 @@ define( function( require ) {
 
     /**
      * assign the surface property
-     * @param {Property.<HorizontalSurface>} supportingSurface
+     * @param {HorizontalSurface} supportingSurface
      */
     setSupportingSurface: function( supportingSurface ) {
+
+      // TODO: This seems suspicious, since there is no unlink of the supporting surface, but I (jbphet) tried adding
+      // one on 5/11/2018 and it didn't work, so I need to revisit after code cleanup is complete.
       this.supportingSurfaceProperty.set( supportingSurface );
       if ( supportingSurface !== null ) {
         supportingSurface.link( this.surfaceMotionObserver );
       }
     }
-
   } );
 } );
 

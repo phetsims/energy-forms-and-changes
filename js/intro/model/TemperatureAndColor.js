@@ -1,7 +1,8 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * convenience type that combines values for temperature and color.  Used primarily by the thermometer to obtain information from the model.
+ * convenience type that combines values for temperature and color, used primarily by the thermometer to obtain
+ * information from the model
  *
  * @author John Blanco
  */
@@ -24,4 +25,3 @@ define( function( require ) {
 
   return TemperatureAndColor;
 } );
-
