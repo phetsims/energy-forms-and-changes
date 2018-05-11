@@ -8,7 +8,6 @@
  * @author John Blanco
  * @author Jesse Greenberg
  */
-
 define( function( require ) {
   'use strict';
 
@@ -64,6 +63,7 @@ define( function( require ) {
   return inherit( Thermometer, ElementFollowingThermometer, {
 
     /**
+     * restore initial state
      * @public
      */
     reset: function() {

@@ -1,8 +1,8 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * An Enum that defines the types of thermal energy containers, primarily used for determining the rate at which heat is
- * transferred between different items.
+ * enum that defines the types of thermal energy containers, primarily used for determining the rate at which heat is
+ * transferred between different items
  *
  * @author John Blanco
  */
