@@ -3,6 +3,7 @@
 /**
  * Abstract base type for a block that contains and exchanges thermal energy.  In the model, a block is two-dimensional,
  * so its shape is represented by a rectangle.
+ *
  * @author John Blanco
  */
 define( function( require ) {
@@ -73,6 +74,8 @@ define( function( require ) {
       assert && assert( false, 'Get label should be implemented in subclasses.' );
     },
 
+    // TODO: I (jbphet) noticed a number of unused methods below during code cleanup, and should delete any that are still not used when code is fully cleaned up.
+
     /**
      * @return {Image|null}
      * @public
@@ -126,7 +129,7 @@ define( function( require ) {
      */
     addEnergyChunkSlices: function() {
 
-      // The slices for the block are intended to match the projection used in the view.
+      // the slices for the block are intended to match the projection used in the view
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
       var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / (NUM_ENERGY_CHUNK_SLICES - 1 );
       var rect = this.getRect();

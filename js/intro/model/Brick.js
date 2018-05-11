@@ -32,9 +32,8 @@ define( function( require ) {
   var idCounter = 0;
 
   /**
-   *
    * @param {Vector2} initialPosition
-   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {BooleanProperty} energyChunksVisibleProperty
    * @constructor
    */
   function Brick( initialPosition, energyChunksVisibleProperty ) {
@@ -44,60 +43,68 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'Brick', Brick );
 
-  return inherit( Block, Brick, {
+  return inherit(
+    Block,
+    Brick,
+    {
 
-    /**
-     * @public
-     * @returns {exports.BRICK_TEXTURE_FRONT|*}
-     */
-    getFrontTextureImage: function() {
-      return brickTextureFrontImage;
+      /**
+       * @returns {image}
+       * @public
+       */
+      getFrontTextureImage: function() {
+        return brickTextureFrontImage;
+      },
+
+      /**
+       * @returns {image}
+       * @public
+       */
+      getTopTextureImage: function() {
+        return brickTextureTopImage;
+      },
+
+      /**
+       * @returns {image}
+       * @public
+       */
+      getSideTextureImage: function() {
+        return brickTextureRightImage;
+      },
+
+      /**
+       * @returns {Color}
+       * @public
+       */
+      getColor: function() {
+        return new Color( 200, 22, 11 );
+      },
+
+      /**
+       * @public read-only
+       * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
+       */
+      getLabel: function() {
+        return brickString;
+      },
+
+      /**
+       *
+       * @returns {exports.BRICK|*}
+       */
+      getEnergyContainerCategory: function() {
+        return EnergyContainerCategory.BRICK;
+      }
     },
+    {
 
-    /**
-     * @public read-only
-     * @returns {exports.BRICK_TEXTURE_TOP|*}
-     */
-    getTopTextureImage: function() {
-      return brickTextureTopImage;
-    },
+      // statics
 
-    getSideTextureImage: function() {
-      return brickTextureRightImage;
-    },
-
-    /**
-     * @public read-only
-     * @returns {Color}
-     */
-    getColor: function() {
-      return new Color( 200, 22, 11 );
-    },
-
-    /**
-     * @public read-only
-     * @returns {EnergyContainerCategory.BRICK|*|exports.BRICK}
-     */
-    getLabel: function() {
-      return brickString;
-    },
-
-    /**
-     *
-     * @returns {exports.BRICK|*}
-     */
-    getEnergyContainerCategory: function() {
-      return EnergyContainerCategory.BRICK;
-    }
-  }, {
-
-    // statics
-
-    // some constants needed for energy chunk mapping, values in joules
-    ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
-                                EFACConstants.ROOM_TEMPERATURE,
-    ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
-                                          EFACConstants.FREEZING_POINT_TEMPERATURE
-  } );
+      // some constants needed for energy chunk mapping, values in joules
+      ENERGY_AT_ROOM_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
+                                  EFACConstants.ROOM_TEMPERATURE,
+      ENERGY_AT_WATER_FREEZING_TEMPERATURE: Math.pow( EFACConstants.SURFACE_WIDTH, 3 ) * DENSITY * SPECIFIC_HEAT *
+                                            EFACConstants.FREEZING_POINT_TEMPERATURE
+    } );
 } );
 
