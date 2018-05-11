@@ -586,7 +586,6 @@ define( function( require ) {
     /**
      * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
      * rectangle that can block the moving one.
-     *
      * @param {Rectangle} movingRect
      * @param {Rectangle} stationaryRect
      * @param {Vector2} proposedTranslation
@@ -594,6 +593,7 @@ define( function( require ) {
      *                                      is often set false if there is another model element on top of the one
      *                                      being tested.
      * @returns {Vector2}
+     * @private
      */
     determineAllowedTranslation: function( movingRect, stationaryRect, proposedTranslation, restrictPosY ) {
 
@@ -709,7 +709,7 @@ define( function( require ) {
     },
 
     /**
-     * Returns true if surface s1's center is above surface s2.
+     * returns true if surface1 is above surface 2 such that they overlap in the x (horizontal) direction
      * @param {HorizontalSurface} surface1
      * @param {HorizontalSurface} surface2
      * @private
@@ -721,6 +721,7 @@ define( function( require ) {
     /**
      * @param {UserMovableModelElement} element
      * @returns {HorizontalSurface}
+     * @private
      */
     findBestSupportSurface: function( element ) {
       var self = this;
@@ -798,6 +799,7 @@ define( function( require ) {
      * get the temperature and color that would be sensed by a thermometer at the provided location
      * @param {Vector2} position - location to be sensed
      * @returns {TemperatureAndColor} - object with temperature and color
+     * @public
      */
     getTemperatureAndColorAtLocation: function( position ) {
       var locationAsPoint = position;
