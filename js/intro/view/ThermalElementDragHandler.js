@@ -1,7 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * Drag handler for objects that can be moved by the user.
+ * drag handler for objects that can be moved by the user
  */
 define( function( require ) {
   'use strict';
@@ -14,7 +14,6 @@ define( function( require ) {
   /**
    * Constructor for the ThermalElementDragHandler.  The node must be property positioned before calling this, or it
    * won't work correctly.
-   *
    * @param {UserMovableModelElement} modelElement
    * @param {Node} node
    * @param {ModelViewTransform2} modelViewTransform
@@ -24,7 +23,7 @@ define( function( require ) {
 
     MovableDragHandler.call( this, modelElement.positionProperty, {
 
-      // Allow moving a finger (touch) across a node to pick it up.
+      // allow moving a finger (touch) across a node to pick it up
       allowTouchSnag: true,
 
       modelViewTransform: modelViewTransform,

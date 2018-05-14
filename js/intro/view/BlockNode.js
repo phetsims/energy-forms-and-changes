@@ -215,10 +215,10 @@ define( function( require ) {
 
     if ( textureImage !== null ) {
 
-      // Add the texture image.
+      // add the texture image
       var texture = new Image( textureImage );
 
-      // Scale up the texture image if needed.
+      // scale up the texture image if needed
       var textureScale = 1;
       if ( texture.bounds.width < shape.bounds.width ) {
         textureScale = shape.bounds.width / texture.bounds.width;
@@ -228,12 +228,12 @@ define( function( require ) {
       }
       texture.scale( textureScale );
 
-      // Add the texture to the clip node in order to clip it.
+      // add the texture to the clip node in order to clip it
       texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
       root.addChild( texture );
     }
 
-    // Add the outlined shape so that edges are visible.
+    // add the outlined shape so that edges are visible
     root.addChild( new Path( shape, {
       lineWidth: OUTLINE_LINE_WIDTH,
       stroke: OUTLINE_STROKE

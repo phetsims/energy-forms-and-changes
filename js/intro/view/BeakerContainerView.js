@@ -2,7 +2,7 @@
 
 /**
  * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
- * which other objects can be placed, generally displacing the fluid.
+ * which other objects can be placed, which generally displaces the fluid.
  *
  * See the header comments in the parent class for some important information about how this class is used on the
  * canvas.
@@ -60,7 +60,8 @@ define( function( require ) {
      */
     updateEnergyChunkClipMask: function( model, clip ) {
 
-      // TODO: Come up with an alternative clipping solution.
+      // TODO: I (jbphet) came across this on May 14 2018 during the initial code cleanup, and obviously some work is
+      // needed here, since the functionality seems to be commented out.
 
       //var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
       //var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET.apply( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );

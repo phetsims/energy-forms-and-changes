@@ -1,12 +1,11 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * Thermometer node that updates its displayed temperature and color based on
- * what is being "sensed" by the supplied thermometer model element.
+ * a thermometer node that updates its displayed temperature and color based on what is being "sensed" by the supplied
+ * thermometer model element
  *
  * @author John Blanco
  */
-
 define( function( require ) {
   'use strict';
 
@@ -15,15 +14,18 @@ define( function( require ) {
   var ThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/ThermometerNode' );
 
   /**
-   *
-   * @param {Thermometer} thermometer
+   * @param {Thermometer} thermometer - model of a thermometer
    * @constructor
    */
   function SensingThermometerNode( thermometer ) {
-    ThermometerNode.call( this );
-    this.thermometer = thermometer;
-    var self = this;
 
+    var self = this;
+    ThermometerNode.call( this );
+
+    // @public (read-only) {Thermometer}
+    this.thermometer = thermometer;
+
+    // monitor the attributes of the thermometer model and update the appearance as changes occur
     thermometer.sensedTemperatureProperty.link( function( sensedTemperature ) {
       self.setSensedTemperature( sensedTemperature );
     } );

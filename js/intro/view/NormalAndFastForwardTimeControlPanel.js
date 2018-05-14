@@ -28,17 +28,15 @@ define( function( require ) {
   var RADIO_BUTTON_FONT = new PhetFont( 16 );
 
   /**
-   * Constructor for the NormalAndFastForwardTimeControlPanel.
-   *
    * @param {EFACIntroModel} model
    * @constructor
    */
   function NormalAndFastForwardTimeControlPanel( model ) {
 
-    // Add play/pause button.
+    // add play/pause button
     var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
 
-    // Add the step button to manually step animation.
+    // add the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
       playingProperty: model.playProperty,
       listener: function() { model.manualStep(); },
@@ -46,7 +44,7 @@ define( function( require ) {
       centerX: playPauseButton.centerX
     } );
 
-    // Group the play and pause buttons into their own panel for correct layout in the LayoutBox.
+    // group the play and pause buttons into their own panel for correct layout in the LayoutBox
     var playPauseButtonGroup = new LayoutBox( {
       children: [ playPauseButton, stepButton ],
       spacing: 10,
@@ -67,12 +65,10 @@ define( function( require ) {
       orientation: 'horizontal',
       spacing: 35
     } );
-
   }
 
   energyFormsAndChanges.register( 'NormalAndFastForwardTimeControlPanel', NormalAndFastForwardTimeControlPanel );
 
   return inherit( LayoutBox, NormalAndFastForwardTimeControlPanel );
-
 } );
 

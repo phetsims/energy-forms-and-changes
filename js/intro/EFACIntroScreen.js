@@ -1,7 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * The 'Intro' screen in the Energy Forms and Changes simulation.
+ * the 'Intro' screen in the Energy Forms and Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
@@ -47,4 +47,3 @@ define( function( require ) {
   energyFormsAndChanges.register( 'EFACIntroScreen', EFACIntroScreen );
   return inherit( Screen, EFACIntroScreen );
 } );
-

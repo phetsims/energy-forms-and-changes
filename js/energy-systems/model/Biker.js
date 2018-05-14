@@ -135,42 +135,48 @@ define( function( require ) {
    */
   function Biker( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty ) {
 
+    var self = this;
     EnergySource.call( this, new Image( BICYCLE_ICON ) );
 
     // @public {string} - a11y name
     this.a11yName = EFACA11yStrings.cyclist.value;
 
-    // @private
-    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-    this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
-
     // @public (read-only) {NumberProperty} - angle of the crank arm on the bike, in radians
     this.crankAngleProperty = new NumberProperty( 0 );
 
-    this.rearWheelAngleProperty = new NumberProperty( 0 ); //  in radians
+    // @public (read-only) {NumberProperty} - angle of the rear wheel on the bike, in radians
+    this.rearWheelAngleProperty = new NumberProperty( 0 );
+
+    // @public (read-only) {BooleanProperty} - flag that indicates whether the biker has enough energy to pedal
     this.bikerHasEnergyProperty = new BooleanProperty( true );
+
+    // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians
     this.targetCrankAngularVelocityProperty = new NumberProperty( 0 );
 
-    this.crankAngularVelocity = 0; // rad/s
+    // @private - internal variables
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
+    this.crankAngularVelocity = 0; // radians per second
     this.energyChunkMovers = [];
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
-    this.mechanicalChunksSinceLastThermal = 0; // Number of chunks
+    this.mechanicalChunksSinceLastThermal = 0;
 
-    // Monitor target rotation rate for validity.
-    this.targetCrankAngularVelocityProperty.link( function( omega ) {
-      assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
-        'Angular velocity out of range: ' + omega );
-    } );
+    // monitor target rotation rate for validity
+    if ( assert ) {
+      this.targetCrankAngularVelocityProperty.link( function( omega ) {
+        assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
+          'Angular velocity out of range: ' + omega );
+      } );
+    }
 
-    // Add initial set of energy chunks.
+    // add initial set of energy chunks
     this.replenishEnergyChunks();
 
-    // Get the crank into a position where animation will start right away.
+    // get the crank into a position where animation will start right away
     this.setCrankToPoisedPosition();
 
-    // Add a handler for the situation when energy chunks were in transit
-    // to the next energy system and that system is swapped out.
-    var self = this;
+    // add a handler for the situation when energy chunks were in transit to the next energy system and that system is
+    // swapped out
     this.mechanicalPoweredSystemIsNextProperty.link( function( isNext ) {
 
       var movers = self.energyChunkMovers.slice();
@@ -183,13 +189,13 @@ define( function( require ) {
         if ( ec.energyTypeProperty.get() === EnergyType.MECHANICAL ) {
           if ( ec.positionProperty.get().x > hubPosition.x ) {
 
-            // Just remove this energy chunk.
+            // remove this energy chunk
             _.pull( self.energyChunkMovers, mover );
             self.energyChunkList.remove( ec );
           }
           else {
 
-            // Make sure that this energy chunk turns into thermal energy.
+            // make sure that this energy chunk turns into thermal energy
             _.pull( self.energyChunkMovers, mover );
 
             self.energyChunkMovers.push( new EnergyChunkPathMover( ec,
@@ -206,8 +212,8 @@ define( function( require ) {
   return inherit( EnergySource, Biker, {
 
     /**
-     * @param  {number} dt timestep
-     *
+     * step this energy producer forward in time
+     * @param  {number} dt - time step in seconds
      * @returns {Energy}
      * @public
      * @override
@@ -218,14 +224,13 @@ define( function( require ) {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
-      // Update energy state
+      // update energy state state
       this.bikerHasEnergyProperty.set( this.bikerCanPedal() );
 
-      // If there is no energy, the target speed is 0, otherwise it is
-      // the current set point.
+      // if there is no energy, the target speed is 0, otherwise it is the current set point
       var target = this.bikerHasEnergyProperty.value ? this.targetCrankAngularVelocityProperty.value : 0;
 
-      // Speed up or slow down the angular velocity of the crank.
+      // speed up or slow down the angular velocity of the crank
       var previousAngularVelocity = this.crankAngularVelocity;
 
       var dOmega = target - this.crankAngularVelocity;
@@ -233,11 +238,16 @@ define( function( require ) {
       if ( dOmega !== 0 ) {
         var change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
-          // Accelerate
-          this.crankAngularVelocity = Math.min( this.crankAngularVelocity + change, this.targetCrankAngularVelocityProperty.value );
+
+          // accelerate
+          this.crankAngularVelocity = Math.min(
+            this.crankAngularVelocity + change,
+            this.targetCrankAngularVelocityProperty.value
+          );
         }
         else {
-          // Decelerate
+
+          // decelerate
           this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
         }
       }
@@ -246,20 +256,23 @@ define( function( require ) {
 
       this.crankAngleProperty.set( newAngle );
 
-      this.rearWheelAngleProperty.set( ( this.rearWheelAngleProperty.value +
-        this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI ) );
+      this.rearWheelAngleProperty.set(
+        ( this.rearWheelAngleProperty.value +
+          this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI )
+      );
 
       if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
-        // Set crank to a good position where animation will start
-        // right away when motion is restarted.
+
+        // set crank to a good position where animation will start right away when motion is restarted
         this.setCrankToPoisedPosition();
       }
 
       var fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
-      // Determine how much energy is produced in this time step.
+
+      // determine how much energy is produced in this time step
       if ( this.targetCrankAngularVelocityProperty.value > 0 ) {
 
-        // Less energy is produced if not hooked up to generator.
+        // less energy is produced if not hooked up to generator
         var maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE;
         if ( this.mechanicalPoweredSystemIsNext ) {
           maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR;
@@ -267,15 +280,18 @@ define( function( require ) {
         this.energyProducedSinceLastChunkEmitted += maxEnergyProductionRate * fractionalVelocity * dt;
       }
 
-      // Decide if new chem energy chunk should start on its way.
+      // decide if new chem energy chunk should start on its way
       if ( this.energyProducedSinceLastChunkEmitted >= EFACConstants.ENERGY_PER_CHUNK &&
-        this.targetCrankAngularVelocityProperty.value > 0 ) {
+           this.targetCrankAngularVelocityProperty.value > 0 ) {
 
-        // Start a new chunk moving.
+        // start a new chunk moving
         if ( this.bikerCanPedal() ) {
           var energyChunk = this.findNonMovingEnergyChunk();
-          this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
-            this.createChemicalEnergyChunkPath( this.positionProperty.value ), EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          this.energyChunkMovers.push( new EnergyChunkPathMover(
+            energyChunk,
+            this.createChemicalEnergyChunkPath( this.positionProperty.value ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY )
+          );
           this.energyProducedSinceLastChunkEmitted = 0;
         }
       }
@@ -290,14 +306,12 @@ define( function( require ) {
     },
 
     /**
-     * Factored from step(dt)
-     *
      * @param  {number} dt timestep
      * @private
      */
     moveEnergyChunks: function( dt ) {
 
-      // Iterate through this copy while the original is mutated
+      // iterate through this copy while the original is mutated
       var movers = this.energyChunkMovers.slice();
 
       var self = this;
@@ -311,59 +325,60 @@ define( function( require ) {
 
         var chunk = mover.energyChunk;
 
-        // CHEMICAL
+        // CHEMICAL --> MECHANICAL
         if ( chunk.energyTypeProperty.get() === EnergyType.CHEMICAL ) {
 
-          // Turn this into mechanical energy.
+          // turn this into mechanical energy
           chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
           _.pull( self.energyChunkMovers, mover );
 
-          // Add new mover for the mechanical energy chunk.
+          // add new mover for the mechanical energy chunk
           if ( self.mechanicalChunksSinceLastThermal >= MECHANICAL_TO_THERMAL_CHUNK_RATIO ||
-            !self.mechanicalPoweredSystemIsNextProperty.get() ) {
+               !self.mechanicalPoweredSystemIsNextProperty.get() ) {
 
-            // Make this chunk travel to the rear hub, where it
-            // will become a chunk of thermal energy.
+            // make this chunk travel to the rear hub, where it will become a chunk of thermal energy
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
               self.createMechanicalToThermalEnergyChunkPath( self.positionProperty.value, chunk.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY )
+            );
             self.mechanicalChunksSinceLastThermal = 0;
           }
           else {
 
-            // Send this chunk to the next energy system.
+            // send this chunk to the next energy system
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
               self.createMechanicalEnergyChunkPath( self.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY )
+            );
             self.mechanicalChunksSinceLastThermal++;
           }
         }
 
         // MECHANICAL --> THERMAL
         else if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
-          chunk.positionProperty.get().distance( self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
+                  chunk.positionProperty.get().distance( self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
 
-          // This is a mechanical energy chunk that has traveled
-          // to the hub and should now become thermal energy.
+          // this is a mechanical energy chunk that has traveled to the hub and should now become thermal energy
           _.pull( self.energyChunkMovers, mover );
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
             self.createThermalEnergyChunkPath( self.positionProperty.value ),
-            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+            EFACConstants.ENERGY_CHUNK_VELOCITY )
+          );
         }
 
         // THERMAL
         else if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL ) {
-          // This is a radiating thermal energy chunk that has
-          // reached the end of its route.  Delete it.
+
+          // this is a radiating thermal energy chunk that has reached the end of its route - delete it
           _.pull( self.energyChunkMovers, mover );
           self.energyChunkList.remove( chunk );
         }
 
         // MECHANICAL
         else {
-          // Must be mechanical energy that is being passed to
-          // the next energy system.
+
+          // must be mechanical energy that is being passed to the next energy system element
           self.outgoingEnergyChunks.push( chunk );
           _.pull( self.energyChunkMovers, mover );
         }
@@ -371,13 +386,13 @@ define( function( require ) {
     },
 
     /**
-     * For the biker, pre-loading of energy chunks isn't necessary, since
-     * they are being maintained even when visibility is turned off.
+     * For the biker, pre-loading of energy chunks isn't necessary, since they are being maintained even when visibility
+     * is turned off.
      * @public
      * @override
      */
     preLoadEnergyChunks: function() {
-      // No-op for Biker
+      // no-op for Biker
     },
 
     /**
@@ -386,17 +401,15 @@ define( function( require ) {
      * @override
      */
     getEnergyOutputRate: function() {
-      var amount = Math.abs( this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK *
-        MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR );
-
+      var amount = Math.abs(
+        this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
+      );
       return new Energy( EnergyType.MECHANICAL, amount, -Math.PI / 2 );
     },
 
-    /*
-     * Set the crank to a position where a very small amount of motion will
-     * cause a new image to be chosen.  This is generally done when the biker
-     * stops so that the animation starts right away the next time the motion
-     * starts.
+    /**
+     * Set the crank to a position where a very small amount of motion will cause a new image to be chosen.  This is
+     * generally done when the biker stops so that the animation starts right away the next time the motion starts.
      * @private
      */
     setCrankToPoisedPosition: function() {
@@ -407,9 +420,8 @@ define( function( require ) {
     },
 
     /**
-     * The biker is replenished each time she is reactivated.
-     * This was a fairly arbitrary decision, and can be changed if desired.
-     *
+     * The biker is replenished each time she is reactivated. This was a fairly arbitrary decision, and can be changed
+     * if desired.
      * @public
      * @override
      */
@@ -438,15 +450,14 @@ define( function( require ) {
     },
 
     /**
-     * Add/restore initial number of energy chunks to biker
-     *
+     * add/restore initial number of energy chunks to biker
      * @public
      */
     replenishEnergyChunks: function() {
       var nominalInitialOffset = new Vector2( 0.019, 0.05 );
 
       for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
-        var displacement = new Vector2( (phet.joist.random.nextDouble() - 0.5) * 0.02, 0 ).rotated( Math.PI * 0.7 );
+        var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
         var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
         var newEnergyChunk = new EnergyChunk(
@@ -460,43 +471,36 @@ define( function( require ) {
     },
 
     /**
-     * Find the image index corresponding to this angle in radians
-     *
+     * find the image index corresponding to this angle in radians
      * @param  {number} angle
-     *
      * @returns {number} - image index
      * @private
      */
     mapAngleToImageIndex: function( angle ) {
       var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_LEG_IMAGES ) );
-
       assert && assert( i >= 0 && i < NUM_LEG_IMAGES );
-
       return i;
     },
 
     /**
      * @param  {Vector2} centerPosition
-     *
      * @returns {Vector2[]}
+     * @private
      */
     createChemicalEnergyChunkPath: function( centerPosition ) {
       var path = [];
-
       path.push( centerPosition.plus( BIKER_BUTTOCKS_OFFSET ) );
       path.push( centerPosition.plus( TOP_TUBE_ABOVE_CRANK_OFFSET ) );
-
       return path;
     },
 
     /**
      * @param  {Vector2} centerPosition
-     *
      * @returns {Vector2[]}
+     * @private
      */
     createMechanicalEnergyChunkPath: function( centerPosition ) {
       var path = [];
-
       path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
       path.push( centerPosition.plus( BOTTOM_OF_BACK_WHEEL_OFFSET ) );
       path.push( centerPosition.plus( NEXT_ENERGY_SYSTEM_OFFSET ) );
@@ -504,30 +508,28 @@ define( function( require ) {
     },
 
     /**
-     * Create a path for an energy chunk that will travel to the hub and then become thermal.
+     * create a path for an energy chunk that will travel to the hub and then become thermal
      * @param  {Vector2} centerPosition
      * @param  {Vector2} currentPosition
-     *
      * @returns {Vector2[]}
+     * @private
      */
     createMechanicalToThermalEnergyChunkPath: function( centerPosition, currentPosition ) {
       var path = [];
       var crankPosition = centerPosition.plus( BIKE_CRANK_OFFSET );
-
       if ( currentPosition.y > crankPosition.y ) {
-        // Only add the crank position if the current position
-        // indicates that the chunk hasn't reached the crank yet.
+
+        // only add the crank position if the current position indicates that the chunk hasn't reached the crank yet
         path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
       }
       path.push( centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET ) );
-
       return path;
     },
 
     /**
      * @param  {Vector2} centerPosition
-     *
      * @returns {Vector2[]}
+     * @private
      */
     createThermalEnergyChunkPath: function( centerPosition ) {
       var path = [];
@@ -538,14 +540,14 @@ define( function( require ) {
       var offset = centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET );
       path.push( offset );
 
-      // The chuck needs to move up and to the right to avoid overlapping with the biker.
+      // the chuck needs to move up and to the right to avoid overlapping with the biker
       offset = offset.plus( new Vector2( segmentLength, 0 ).rotated( Math.PI * 0.4 ) );
 
-      // Add a set of path segments that make the chunk move up in a somewhat random path.
+      // add a set of path segments that make the chunk move up in a somewhat random path
       path.push( offset );
 
       for ( var i = 0; i < numSegments; i++ ) {
-        offset = offset.plus( new Vector2( 0, segmentLength ).rotated( (phet.joist.random.nextDouble() - 0.5) * maxAngle ) );
+        offset = offset.plus( new Vector2( 0, segmentLength ).rotated( ( phet.joist.random.nextDouble() - 0.5 ) * maxAngle ) );
         path.push( offset );
       }
 
@@ -553,9 +555,9 @@ define( function( require ) {
     },
 
     /**
-     * Find a non-moving CHEMICAL energy chunk. Returns null if none is found.
-     *
+     * find a non-moving CHEMICAL energy chunk, returns null if none is found
      * @returns {EnergyChunk}
+     * @private
      */
     findNonMovingEnergyChunk: function() {
       var movingEnergyChunks = [];
@@ -567,33 +569,35 @@ define( function( require ) {
 
       this.energyChunkList.forEach( function( ec ) {
 
-        // Only interested in CHEMICAL energy chunks
+        // only interested in CHEMICAL energy chunks
         if ( ec.energyTypeProperty.value !== EnergyType.CHEMICAL ) {
           return;
         }
 
         if ( !_.includes( movingEnergyChunks, function( chunk ) {
-            return chunk === ec;
-          } ) ) {
+          return chunk === ec;
+        } ) ) {
           nonMovingEnergyChunk = ec;
-          return;
         }
       } );
       return nonMovingEnergyChunk;
     },
 
     /**
-     * Say whether the biker has energy to pedal.
-     * Renamed from bikerHasEnergy() to avoid collision with the identically-
+     * Say whether the biker has energy to pedal. Renamed from bikerHasEnergy() to avoid collision with the identically-
      * named property.
-     *
      * @returns {boolean}
+     * @private
      */
     bikerCanPedal: function() {
       var nChunks = this.energyChunkList.length;
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     },
 
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       this.crankAngleProperty.reset();
       this.rearWheelAngleProperty.reset();
@@ -602,7 +606,8 @@ define( function( require ) {
     }
 
   }, {
-    // Exported variables for static access
+
+    // statics
     BACK_LEG_IMAGES: BACK_LEG_IMAGE_NODES,
     CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
     FRAME_IMAGE: FRAME_IMAGE,
