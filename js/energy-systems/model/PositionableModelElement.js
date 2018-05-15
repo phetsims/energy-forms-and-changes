@@ -1,8 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * A model element that has a position (a.k.a. a location) which can be
- * changed.
+ * a model element that has a position (a.k.a. a location) which can be changed
  *
  * @author John Blanco
  * @author Jesse Greenberg
@@ -16,12 +15,12 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   /**
-   * Abstract positionable model element class
-   *
-   * @param {Vector2} initialPosition Initial position of element
+   * @param {Vector2} initialPosition
    * @constructor
    */
   function PositionableModelElement( initialPosition ) {
+
+    // @public {Property.<Vector>}
     this.positionProperty = new Property( initialPosition );
   }
 
@@ -29,10 +28,13 @@ define( function( require ) {
 
   return inherit( Object, PositionableModelElement, {
 
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       this.positionProperty.reset();
     }
-
   } );
 } );
 

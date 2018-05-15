@@ -1,8 +1,9 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Base class for model elements that can be positioned and faded.
+ * base type for model elements that can be positioned and faded
  *
+ * @author  John Blanco
  * @author  Andrew Adare
  * @author  Jesse Greenberg
  */
@@ -11,23 +12,29 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableModelElement' );
-  var Property = require( 'AXON/Property' );
 
   /**
-   * Abstract positionable fadable model element class
-   *
-   * @param {Vector2} initialPosition Initial position of element
+   * @param {Vector2} initialPosition
+   * @param {number} initialOpacity
    * @constructor
    */
   function PositionableFadableModelElement( initialPosition, initialOpacity ) {
     PositionableModelElement.call( this, initialPosition );
-    this.opacityProperty = new Property( initialOpacity );
+
+    // @public {NumberProperty}
+    this.opacityProperty = new NumberProperty( initialOpacity );
   }
 
   energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
 
   return inherit( Object, PositionableFadableModelElement, {
+
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       this.opacityProperty.reset();
     }

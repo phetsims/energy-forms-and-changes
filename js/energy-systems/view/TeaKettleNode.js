@@ -6,6 +6,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
+  var Color = require( 'SCENERY/util/Color' );
   var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
@@ -14,38 +15,36 @@ define( function( require ) {
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var TeaPot = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaPot' );
-  var Vector2 = require( 'DOT/Vector2' );
-
-  var Color = require( 'SCENERY/util/Color' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
+  var TeaKettle = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaKettle' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   var BURNER_MODEL_BOUNDS = new Bounds2( -0.0375, 0, 0.0375, 0.075 ); // From Burner.getBoundingRect()
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
-  var MAX_HEIGHT_AND_WIDTH = 200; // For teapot steam node
+  var MAX_HEIGHT_AND_WIDTH = 200; // For tea kettle steam node
 
   /**
-   * @param {TeaPot} teaPot
+   * @param {TeaKettle} teaKettle
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
-  function TeaPotNode( teaPot, energyChunksVisibleProperty, modelViewTransform ) {
+  function TeaKettleNode( teaKettle, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, teaPot, modelViewTransform );
+    EFACBaseNode.call( this, teaKettle, modelViewTransform );
 
-    var teaPotImageNode = new EFACModelImageNode( TeaPot.TEAPOT_IMAGE, modelViewTransform );
+    var teaKettleImageNode = new EFACModelImageNode( TeaKettle.TEAPOT_IMAGE, modelViewTransform );
 
     // Node for heater-cooler bucket.
     // Front and back are added separately so support layering of energy chunks.
     var heaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: teaPot.heatCoolAmountProperty
+      heatCoolAmountProperty: teaKettle.heatCoolAmountProperty
     } );
     var heaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: teaPot.heatCoolAmountProperty
+      heatCoolAmountProperty: teaKettle.heatCoolAmountProperty
     } );
 
     // Burner stand node
@@ -53,30 +52,30 @@ define( function( require ) {
     var burnerProjection = burnerSize.width * BURNER_EDGE_TO_HEIGHT_RATIO;
     var burnerStandNode = new BurnerStandNode( burnerSize, burnerProjection );
 
-    burnerStandNode.centerTop = teaPotImageNode.centerBottom.plus( new Vector2( 0, -teaPotImageNode.height / 4 ) );
-    heaterCoolerBack.centerTop = teaPotImageNode.centerBottom.plus( new Vector2( 0, teaPotImageNode.height / 4 ) );
+    burnerStandNode.centerTop = teaKettleImageNode.centerBottom.plus( new Vector2( 0, -teaKettleImageNode.height / 4 ) );
+    heaterCoolerBack.centerTop = teaKettleImageNode.centerBottom.plus( new Vector2( 0, teaKettleImageNode.height / 4 ) );
     heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
 
-    // Make the tea pot & stand transparent when the energy chunks are visible.
+    // Make the tea kettle & stand transparent when the energy chunks are visible.
     energyChunksVisibleProperty.link( function( chunksVisible ) {
       var opacity = chunksVisible ? 0.7 : 1;
-      teaPotImageNode.setOpacity( opacity );
+      teaKettleImageNode.setOpacity( opacity );
       burnerStandNode.setOpacity( opacity );
     } );
 
-    var energyChunkLayer = new EnergyChunkLayer( teaPot.energyChunkList, teaPot.positionProperty, modelViewTransform );
+    var energyChunkLayer = new EnergyChunkLayer( teaKettle.energyChunkList, teaKettle.positionProperty, modelViewTransform );
 
-    var spoutXY = new Vector2( teaPotImageNode.bounds.maxX - 5, teaPotImageNode.bounds.minY + 16 );
+    var spoutXY = new Vector2( teaKettleImageNode.bounds.maxX - 5, teaKettleImageNode.bounds.minY + 16 );
     this.steamNode = new SteamNode( spoutXY,
-      teaPot.energyProductionRateProperty,
+      teaKettle.energyProductionRateProperty,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE,
-      teaPot.activeProperty );
+      teaKettle.activeProperty );
 
     this.addChild( heaterCoolerBack );
     this.addChild( heaterCoolerFront );
     this.addChild( burnerStandNode );
     this.addChild( energyChunkLayer );
-    this.addChild( teaPotImageNode );
+    this.addChild( teaKettleImageNode );
     this.addChild( this.steamNode );
   }
 
@@ -145,7 +144,7 @@ define( function( require ) {
 
         cloudStem.moveToPoint( startPoint );
 
-        // Point at bottom of teapot spout
+        // Point at bottom of tea kettle spout
         cloudStem.lineToPoint( new Vector2( stemBaseWidth / 2, stemBaseWidth / 2 ).rotated( -Math.PI / 4 ) );
 
         // Points furthest from spout
@@ -177,8 +176,8 @@ define( function( require ) {
     }
   } );
 
-  energyFormsAndChanges.register( 'TeaPotNode', TeaPotNode );
+  energyFormsAndChanges.register( 'TeaKettleNode', TeaKettleNode );
 
-  return inherit( EFACBaseNode, TeaPotNode );
+  return inherit( EFACBaseNode, TeaKettleNode );
 } );
 

@@ -36,7 +36,7 @@ define( function( require ) {
     sun: {
       value: 'sun'
     },
-    teaPot: {
+    teaKettle: {
       value: 'tea kettle'
     },
     cyclist: {

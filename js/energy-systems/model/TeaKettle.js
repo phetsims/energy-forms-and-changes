@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Class representing the steam-generating tea pot in the model.
+ * a type representing the steam-generating tea kettle in the model.
  *
  * @author John Blanco
  * @author  Andrew Adare
@@ -26,7 +26,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // Images
-  var TEAPOT_LARGE = require( 'image!ENERGY_FORMS_AND_CHANGES/teapot_large.png' );
+  var TEAPOT_LARGE = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
 
   // constants
   var TEAPOT_OFFSET = new Vector2( 0.0, 0.015 );
@@ -37,13 +37,13 @@ define( function( require ) {
   var SPOUT_BOTTOM_OFFSET = new Vector2( 0.03, 0.02 );
   var SPOUT_TIP_OFFSET = new Vector2( 0.25, 0.3 );
   var DISTANT_TARGET_OFFSET = new Vector2( 1, 1 );
-  var WATER_SURFACE_HEIGHT_OFFSET = 0; // From teapot position, in meters.
+  var WATER_SURFACE_HEIGHT_OFFSET = 0; // From tea kettle position, in meters.
   var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
   var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new RangeWithValue( -0.015, 0.015 ); // Meters. Coordinated with heater position.
 
   // Miscellaneous other constants.
   var MAX_ENERGY_CHANGE_RATE = EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 5; // In joules/second
-  var COOLING_CONSTANT = 0.1; // Controls rate at which tea pot cools down, empirically determined.
+  var COOLING_CONSTANT = 0.1; // Controls rate at which tea kettle cools down, empirically determined.
   var COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new RangeWithValue( 0.12, 0.15 );
   var ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
@@ -53,12 +53,12 @@ define( function( require ) {
    * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
    * @constructor
    */
-  function TeaPot( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty ) {
+  function TeaKettle( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty ) {
 
     EnergySource.call( this, new Image( TEAPOT_LARGE ) );
 
     // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.teaPot.value;
+    this.a11yName = EFACA11yStrings.teaKettle.value;
 
     this.heatCoolAmountProperty = new Property( 0 );
     this.energyProductionRateProperty = new Property( 0 );
@@ -77,12 +77,12 @@ define( function( require ) {
     this.transferNextAvailableChunk = true;
   }
 
-  energyFormsAndChanges.register( 'TeaPot', TeaPot );
+  energyFormsAndChanges.register( 'TeaKettle', TeaKettle );
 
-  return inherit( EnergySource, TeaPot, {
+  return inherit( EnergySource, TeaKettle, {
 
     /**
-     * Animation for teapot and energy chunks
+     * Animation for tea kettle and energy chunks
      *
      * @param  {number} dt timestep
      *
@@ -231,15 +231,15 @@ define( function( require ) {
 
     /**
      * @param  {Vector2}  startPosition
-     * @param  {Vector2}  teapotPosition
+     * @param  {Vector2}  teaKettlePosition
      *
      * @returns {Vector2[]}
      * @private
      */
-    createThermalEnergyChunkPath: function( startPosition, teapotPosition ) {
+    createThermalEnergyChunkPath: function( startPosition, teaKettlePosition ) {
       var path = [];
 
-      path.push( new Vector2( startPosition.x, teapotPosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );
+      path.push( new Vector2( startPosition.x, teaKettlePosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );
 
       return path;
     },
@@ -296,7 +296,7 @@ define( function( require ) {
 
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
-          // Create a chunk inside the teapot (at the water surface).
+          // Create a chunk inside the tea kettle (at the water surface).
           var initialPosition = new Vector2( this.positionProperty.value.x,
             this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
 
@@ -335,7 +335,7 @@ define( function( require ) {
     },
 
     /**
-     * Deactivate the teapot
+     * Deactivate the tea kettle
      * @public
      * @override
      */

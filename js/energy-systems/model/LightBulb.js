@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Base class for light bulbs in the model.
+ * base class for light bulbs in the model
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -23,13 +23,13 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Images
+  // images
   var ELEMENT_BASE_BACK = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
   var ELEMENT_BASE_FRONT = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
   var WIRE_BLACK_62 = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
   var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
 
-  // constants - uncomment as needed
+  // constants
   var WIRE_FLAT_IMAGE = new EFACModelImage( WIRE_BLACK_62, new Vector2( -0.036, -0.04 ) );
   var WIRE_CURVE_IMAGE = new EFACModelImage( WIRE_BLACK_RIGHT, new Vector2( -0.009, -0.016 ) );
   var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, new Vector2( 0, 0.0 ) );
@@ -59,17 +59,21 @@ define( function( require ) {
 
     EnergyUser.call( this, iconImage );
 
+    // @public (read-only) {NumberProperty}
+    this.litProportionProperty = new Property( 0 );
+
+    // @private
     this.hasFilament = hasFilament;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // Fewer thermal energy chunks are radiated for bulbs without a filament.
+    // @private {number} - fewer thermal energy chunks are radiated for bulbs without a filament
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
 
-    this.litProportionProperty = new Property( 0 );
+    // @private - movers and flags that control how the energy chunks move through the light bulb
     this.electricalEnergyChunkMovers = [];
     this.filamentEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
-    this.goRightNextTime = true; // @private
+    this.goRightNextTime = true;
   }
 
   energyFormsAndChanges.register( 'LightBulb', LightBulb );
@@ -77,7 +81,7 @@ define( function( require ) {
   return inherit( EnergyUser, LightBulb, {
 
     /**
-     * @param  {number} dt - timestep
+     * @param  {number} dt - time step, in seconds
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -86,7 +90,7 @@ define( function( require ) {
       var self = this;
       if ( this.activeProperty.value ) {
 
-        // Handle any incoming energy chunks.
+        // handle any incoming energy chunks
         if ( this.incomingEnergyChunks.length > 0 ) {
 
           var incomingChunks = _.clone( this.incomingEnergyChunks );
@@ -95,38 +99,39 @@ define( function( require ) {
 
             if ( incomingChunk.energyTypeProperty.get() === EnergyType.ELECTRICAL ) {
 
-              // Add the energy chunk to the list of those under management.
+              // add the energy chunk to the list of those under management
               self.energyChunkList.push( incomingChunk );
 
-              // Add a "mover" that will move this energy chunk through
-              // the wire to the bulb.
+              // add a "mover" that will move this energy chunk through the wire to the bulb
               self.electricalEnergyChunkMovers.push(
                 new EnergyChunkPathMover(
                   incomingChunk,
                   self.createElectricalEnergyChunkPath( self.positionProperty.value ),
-                  EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+                  EFACConstants.ENERGY_CHUNK_VELOCITY )
+              );
             }
 
-            // By design, this shouldn't happen, so warn if it does.
+            // yy design, this shouldn't happen, so warn if it does
             else {
-              assert && assert( false, 'Encountered energy chunk with unexpected type: ' +
-                self.incomingEnergyChunk.energyTypeProperty.get() );
+              assert && assert(
+                false,
+                'Encountered energy chunk with unexpected type: ' + self.incomingEnergyChunk.energyTypeProperty.get()
+              );
             }
           } );
 
           self.incomingEnergyChunks.length = 0;
         }
 
-        // Move all of the energy chunks.
+        // move all of the energy chunks
         this.moveElectricalEnergyChunks( dt );
         this.moveFilamentEnergyChunks( dt );
         this.moveRadiatedEnergyChunks( dt );
 
-        // Set how lit the bulb is.
+        // set how lit the bulb is
         if ( this.energyChunksVisibleProperty.get() ) {
 
-          // Energy chunks are visible, so the lit proportion is
-          // dependent upon whether light energy chunks are present.
+          // energy chunks are visible, so the lit proportion is dependent upon whether light energy chunks are present
           var lightChunksInLitRadius = 0;
 
           this.radiatedEnergyChunkMovers.forEach( function( mover ) {
@@ -137,15 +142,17 @@ define( function( require ) {
           } );
 
           if ( lightChunksInLitRadius > 0 ) {
-            // Light is on.
+
+            // light is on
             this.litProportionProperty.set( Math.min( 1, this.litProportionProperty.get() + LIGHT_CHANGE_RATE * dt ) );
           } else {
-            // Light is off.
+
+            // light is off
             this.litProportionProperty.set( Math.max( 0, this.litProportionProperty.get() - LIGHT_CHANGE_RATE * dt ) );
           }
         }
 
-        // Energy chunks not currently visible
+        // energy chunks not currently visible
         else {
           if ( this.activeProperty.value && incomingEnergy.type === EnergyType.ELECTRICAL ) {
             this.litProportionProperty.set( Util.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
@@ -157,13 +164,12 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
-     * @param  {number} dt - timestep
+     * @param  {number} dt - time step, in seconds
      * @private
      */
     moveRadiatedEnergyChunks: function( dt ) {
-      // Iterate over a copy to mutate original without problems
+
+      // iterate over a copy to mutate original without problems
       var movers = _.clone( this.radiatedEnergyChunkMovers );
 
       var self = this;
@@ -171,7 +177,7 @@ define( function( require ) {
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
-        // Remove the chunk and its mover.
+        // remove the chunk and its mover
         if ( mover.pathFullyTraversed ) {
           _.pull( self.energyChunkList, mover.energyChunk );
           _.pull( self.radiatedEnergyChunkMovers, mover );
@@ -180,13 +186,12 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
-     * @param  {number} dt - timestep
+     * @param  {number} dt - time step, in seconds
      * @private
      */
     moveFilamentEnergyChunks: function( dt ) {
-      // Iterate over a copy to mutate original without problems
+
+      // iterate over a copy to mutate original without problems
       var movers = _.clone( this.filamentEnergyChunkMovers );
 
       var self = this;
@@ -194,7 +199,7 @@ define( function( require ) {
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
-        // Cause this energy chunk to be radiated from the bulb.
+        // cause this energy chunk to be radiated from the bulb
         if ( mover.pathFullyTraversed ) {
           _.pull( self.filamentEnergyChunkMovers, mover );
           self.radiateEnergyChunk( mover.energyChunk );
@@ -203,14 +208,12 @@ define( function( require ) {
     },
 
     /**
-     *
-     *
-     * @param  {number} dt - timestep
+     * @param  {number} dt - time step, in seconds
      * @private
      */
     moveElectricalEnergyChunks: function( dt ) {
 
-      // Iterate over a copy to mutate original without problems
+      // iterate over a copy to mutate original without problems
       var movers = _.clone( this.electricalEnergyChunkMovers );
 
       var self = this;
@@ -221,7 +224,7 @@ define( function( require ) {
         if ( mover.pathFullyTraversed ) {
           _.pull( self.electricalEnergyChunkMovers, mover );
 
-          // Turn this energy chunk into thermal energy on the filament.
+          // turn this energy chunk into thermal energy on the filament
           if ( self.hasFilament ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
             var path = self.createThermalEnergyChunkPath( mover.energyChunk.positionProperty.value );
@@ -230,7 +233,8 @@ define( function( require ) {
 
             self.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
           } else {
-            // There is no filament, so just radiate the chunk.
+
+            // there is no filament, so just radiate the chunk
             self.radiateEnergyChunk( mover.energyChunk );
           }
         }
@@ -238,8 +242,6 @@ define( function( require ) {
     },
 
     /**
-     * [preLoadEnergyChunks description]
-     *
      * @param  {Energy} incomingEnergy
      * @public
      * @override
@@ -250,34 +252,37 @@ define( function( require ) {
 
       if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
         incomingEnergy.type !== EnergyType.ELECTRICAL ) {
-        // No energy chunk pre-loading needed.
+
+        // no energy chunk pre-loading needed
         return;
       }
 
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
 
-      // Simulate energy chunks moving through the system.
+      // simulate energy chunks moving through the system
       var preLoadComplete = false;
       while ( !preLoadComplete ) {
         this.energySinceLastChunk += incomingEnergy.amount * dt;
 
-        // Determine if time to add a new chunk.
+        // determine if time to add a new chunk
         if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
             this.positionProperty.value.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
-            this.energyChunksVisibleProperty );
+            this.energyChunksVisibleProperty
+          );
 
           this.energyChunkList.push( newEnergyChunk );
-          // Add a 'mover' for this energy chunk.
-          // And a "mover" that will move this energy chunk through
-          // the wire to the heating element.
-          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
-            EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
-          // Update energy since last chunk.
+          // add a "mover" that will move this energy chunk through the wire to the heating element
+          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+            newEnergyChunk,
+            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY
+          ) );
+
+          // update energy since last chunk
           energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
         }
 
@@ -285,7 +290,8 @@ define( function( require ) {
         this.moveFilamentEnergyChunks( dt );
 
         if ( this.radiatedEnergyChunkMovers.length > 1 ) {
-          // A couple of chunks are radiating, which completes the pre-load.
+
+          // a couple of chunks are radiating, which completes the pre-load
           preLoadComplete = true;
         }
       }
@@ -302,23 +308,25 @@ define( function( require ) {
         energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
       }
 
-      // Path of radiated light chunks
+      // path of radiated light chunks
       var path = [];
 
       path.push( this.positionProperty.value
         .plus( OFFSET_TO_RADIATE_POINT )
         .plus( new Vector2( 0, RADIATED_ENERGY_CHUNK_MAX_DISTANCE )
-          .rotated( (phet.joist.random.nextDouble() - 0.5) * (Math.PI / 2) ) ) );
+          .rotated( ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 2 ) )
+        )
+      );
 
       this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
         energyChunk,
         path,
-        EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+        EFACConstants.ENERGY_CHUNK_VELOCITY )
+      );
     },
 
     /**
      * @param  {Vector2} startingPoint
-     *
      * @returns {Vector2[]}
      * @private
      */
@@ -335,7 +343,6 @@ define( function( require ) {
 
     /**
      * @param  {Vector2} center
-     *
      * @returns {Vector2[]}
      * @private
      */
@@ -381,7 +388,7 @@ define( function( require ) {
     },
 
     /**
-     * Deactivate the light bulb.
+     * deactivate the light bulb
      * @public
      * @override
      */
@@ -400,15 +407,19 @@ define( function( require ) {
       this.filamentEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;
       this.incomingEnergyChunks.length = 0;
-
     },
 
+    /**
+     * restore the initial state
+     * @public
+     */
     reset: function() {
       this.litProportionProperty.reset();
     }
 
   }, {
-    // Export module-scope consts for static access
+
+    // static
     WIRE_BLACK_RIGHT: WIRE_BLACK_RIGHT,
     WIRE_BLACK_62: WIRE_BLACK_62,
     ELEMENT_BASE_FRONT: ELEMENT_BASE_FRONT,

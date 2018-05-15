@@ -42,7 +42,7 @@ define( function( require ) {
   var SolarPanelNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SolarPanelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/SunNode' );
-  var TeaPotNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaPotNode' );
+  var TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/TeaKettleNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -242,13 +242,13 @@ define( function( require ) {
     // Energy sources
     var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
-    this.teaPotNode = new TeaPotNode( model.teaPot, model.energyChunksVisibleProperty, modelViewTransform );
+    this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
     var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
 
     this.addChild( sunNode );
     this.addChild( faucetNode );
     this.addChild( bikerNode );
-    this.addChild( this.teaPotNode );
+    this.addChild( this.teaKettleNode );
 
     var carousels = createCarousels();
     carousels.forEach( function( carousel ) {
@@ -263,7 +263,7 @@ define( function( require ) {
 
   return inherit( ScreenView, EnergySystemsScreenView, {
     step: function( dt ) {
-      this.teaPotNode.steamNode.step( dt );
+      this.teaKettleNode.steamNode.step( dt );
       this.beakerHeaterNode.beakerView.water.step( dt );
     }
   } );
