@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements
+ * a type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements
  *
  * @author John Blanco
  * @author Andrew Adare
