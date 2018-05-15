@@ -1,8 +1,10 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * Base class for energy sources, converters, and users.
+ * base class for energy sources, converters, and users, that can be connected together to create what is referred to
+ * as an "energy system" in this simulation
  *
+ * @author  John Blanco
  * @author  Andrew Adare
  * @author  Jesse Greenberg
  */
@@ -13,12 +15,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/PositionableFadableModelElement' );
-  var Property = require( 'AXON/Property' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * Energy system element
-   *
    * @param {Image} iconImage
    * @constructor
    */
@@ -26,16 +26,21 @@ define( function( require ) {
 
     PositionableFadableModelElement.call( this, new Vector2( 0, 0 ), 1.0 );
 
-    // @public
+    // @public (read-only) {image}
     this.iconImage = iconImage;
+
+    // @public (read-only) {ObservableArray.<EnergyChunk>}
     this.energyChunkList = new ObservableArray();
-    this.activeProperty = new Property( false );
+
+    // @public {BooleanProperty}
+    this.activeProperty = new BooleanProperty( false );
 
     // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
     this.a11yName = 'name not set';
 
     var self = this;
-    // At initialization, oldPosition is null, so skip that case with lazyLink
+
+    // at initialization, oldPosition is null, so skip that case with lazyLink
     this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
       var deltaPosition = newPosition.minus( oldPosition );
       self.energyChunkList.forEach( function( chunk ) {
@@ -47,17 +52,18 @@ define( function( require ) {
   energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
 
   return inherit( PositionableFadableModelElement, EnergySystemElement, {
+
     /**
-     * Activate this element
-     *
+     * activate this element
+     * @public
      */
     activate: function() {
       this.activeProperty.set( true );
     },
 
     /**
-     * Deactivate this element. All energy chunks are removed.
-     *
+     * deactivate this element - this causes all energy chunks to be removed
+     * @public
      */
     deactivate: function() {
       this.activeProperty.set( false );
@@ -65,13 +71,17 @@ define( function( require ) {
     },
 
     /**
-     * Clear daughter energy chunks
-     *
+     * clear daughter energy chunks
+     * @protected
      */
     clearEnergyChunks: function() {
       this.energyChunkList.clear();
     },
 
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       this.activeProperty.reset();
     }

@@ -1,9 +1,8 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Base class for energy converters, i.e. model elements that take energy from
- * a source and convert it to something else (such as mechanical to electrical)
- * and then supply it to an energy user.
+ * base class for energy sources, i.e. model elements that produce energy and can supply it to other energy system
+ * components, such as energy converters or energy users
  *
  * @author  John Blanco
  * @author  Andrew Adare
@@ -17,15 +16,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
 
   /**
-   * EnergySource constructor
-   *
    * @param {Image} iconImage Image to identify source on carousel menu
    * @constructor
    */
   function EnergySource( iconImage ) {
-
     EnergySystemElement.call( this, iconImage );
-
     this.outgoingEnergyChunks = [];
   }
 
@@ -34,23 +29,22 @@ define( function( require ) {
   return inherit( EnergySystemElement, EnergySource, {
 
     /**
-     * Get the energy chunks that this source wants to transfer to the next
-     * energy system element. This is a mutating operation: it removes all
-     * outgoing chunks from both this.energyChunkList and
-     * this.outgoingEnergyChunks.
-     *
+     * Get the energy chunks that this source wants to transfer to the next energy system element. This is a mutating
+     * operation: it removes all outgoing chunks from both this.energyChunkList and this.outgoingEnergyChunks.
      * @returns {EnergyChunk[]} List of energy chunks to transfer
+     * @public
      */
     extractOutgoingEnergyChunks: function() {
-      // Remove all outgoing chunks from this.energyChunkList
+
+      // remove all outgoing chunks from this.energyChunkList
       this.energyChunkList.removeAll( this.outgoingEnergyChunks );
 
-      // Return a copy of the outgoing chunk list and clear it in one fell swoop
+      // return a copy of the outgoing chunk list and clear it in one fell swoop
       return this.outgoingEnergyChunks.splice( 0 );
     },
 
     /**
-     * Clear internal list of energy chunks and outgoing energy chunks
+     * clear internal list of energy chunks and outgoing energy chunks
      * @public
      * @override
      */
@@ -58,7 +52,6 @@ define( function( require ) {
       EnergySystemElement.prototype.clearEnergyChunks.call( this );
       this.outgoingEnergyChunks.length = 0;
     }
-
   } );
 } );
 
