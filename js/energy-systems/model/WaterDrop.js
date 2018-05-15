@@ -1,7 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * A drop of water, generally used to create a stream of water.
+ * a model of a drop of water, generally used to create a stream of water coming from, say, a faucet
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -15,23 +15,28 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
 
-  // The following constant is used to adjust the way in which the drop
-  // elongates as its velocity increases.
+  // the following constant is used to adjust the way in which the drop elongates as its velocity increases
   var WIDTH_CHANGE_TWEAK_FACTOR = 2;
 
   /**
-   * @param {Vector2} initialOffsetFromParent (x,y) offset in model space
-   * @param {Vector2} initialVelocity         2-D velocity at initialization
-   * @param {Dimension2} size                 Droplet dimensions
+   * @param {Vector2} initialOffsetFromParent - (x,y) offset in model space
+   * @param {Vector2} initialVelocity - 2D velocity at initialization
+   * @param {Dimension2} size - droplet dimensions
    */
   function WaterDrop( initialOffsetFromParent, initialVelocity, size ) {
 
-    this.offsetFromParentProperty = new Property( initialOffsetFromParent );
-    this.velocityProperty = new Property( initialVelocity );
-    this.sizeProperty = new Property( size );
-
     var self = this;
 
+    // @public {Property.<Vector2>} - offset from... TODO: Describe what exactly this offset is
+    this.offsetFromParentProperty = new Property( initialOffsetFromParent );
+
+    // @public {Property.<Vector2>}
+    this.velocityProperty = new Property( initialVelocity );
+
+    // @public (read-only) {Property.<Dimension2>}
+    this.sizeProperty = new Property( size );
+
+    // adjust the size as the velocity changes, mimicking how water drops thin out as they fall through air
     this.velocityProperty.link( function( velocity ) {
       var size = self.sizeProperty.value;
       var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * size.width;
@@ -42,13 +47,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'WaterDrop', WaterDrop );
 
-  return inherit( Object, WaterDrop, {
-
-    reset: function() {
-      this.offsetFromParentProperty.reset();
-      this.velocityProperty.reset();
-      this.sizeProperty.reset();
-    }
-
-  } );
+  return inherit( Object, WaterDrop );
 } );
