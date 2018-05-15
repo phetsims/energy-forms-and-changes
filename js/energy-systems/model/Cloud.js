@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Module representing a cloud to block energy from the sun.
+ * model of a cloud that can block energy coming from the sun
  *
  * @author  John Blanco
  * @author  Andrew Adare
@@ -13,7 +13,7 @@ define( function( require ) {
   var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -21,7 +21,8 @@ define( function( require ) {
   var CLOUD_WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
   var CLOUD_HEIGHT = CLOUD_WIDTH;
 
-  // Cloud image
+  // images
+  // TODO: I (jbphet) have seen this in some other places, and I should investigate: Why are images here and not in the view?
   var CLOUD_1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
 
   var CLOUD_IMAGE = new EFACModelImage( CLOUD_1, new Vector2( 0, 0 ), {
@@ -36,9 +37,13 @@ define( function( require ) {
    */
   function Cloud( offsetFromParent, parentPositionProperty ) {
 
-    this.existenceStrengthProperty = new Property( 1.0 );
+    // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
+    this.existenceStrengthProperty = new NumberProperty( 1.0 );
 
+    // @public (read-only) {number} - offset position for this cloud
     this.offsetFromParent = offsetFromParent;
+
+    // @private {number} - used to calculate this cloud's position
     this.parentPositionProperty = parentPositionProperty;
   }
 
@@ -47,9 +52,9 @@ define( function( require ) {
   return inherit( Object, Cloud, {
 
     /**
-     * Return ellipse with size of Cloud
-     *
-     * @returns {Shape.ellipse} Ellipse with axes sized to width and height of cloud
+     * return ellipse with size of this cloud
+     * @returns {Shape.ellipse} - ellipse with axes sized to width and height of cloud
+     * @public
      */
     getCloudAbsorptionReflectionShape: function() {
       var center = this.getCenterPosition().minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
@@ -57,19 +62,24 @@ define( function( require ) {
     },
 
     /**
-     * Return (x,y) position of center of cloud
-     *
      * @returns {Vector2} Center position of cloud
+     * @public
      */
     getCenterPosition: function() {
       return this.parentPositionProperty.get().plus( this.offsetFromParent );
     },
 
+    /**
+     * restore initial state
+     * @public
+     */
     reset: function() {
       this.existenceStrengthProperty.reset();
     }
 
   }, {
+
+    // statics
     CLOUD_1: CLOUD_1,
     CLOUD_IMAGE: CLOUD_IMAGE
   } );

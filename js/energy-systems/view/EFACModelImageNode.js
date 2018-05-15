@@ -1,8 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * Class that represents an image-based model element, or a piece thereof, in
- * the view.
+ * a type that represents an image-based model element, or a piece thereof, in the view
  *
  * @author John Blanco
  * @author Andrew Adare
