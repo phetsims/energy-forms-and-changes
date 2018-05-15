@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Node representing the biker in the view.
+ * a Scenery Node that represents a biker in the view
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -25,18 +25,17 @@ define( function( require ) {
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Text = require( 'SCENERY/nodes/Text' );
 
-  // Strings
+  // strings
   var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
 
   /**
    * @param {Biker} biker EnergySource
-   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
   function BikerNode( biker, energyChunksVisibleProperty, modelViewTransform ) {
 
-    // Add args to constructor as needed
     EFACBaseNode.call( this, biker, modelViewTransform );
 
     var spokesImage = new EFACModelImageNode( Biker.REAR_WHEEL_SPOKES_IMAGE, modelViewTransform );
@@ -46,12 +45,13 @@ define( function( require ) {
     var frontLegImageNodes = [];
 
     for ( var i = 0; i < Biker.NUM_LEG_IMAGES; i++ ) {
-      // Back leg image nodes
+
+      // back leg image nodes
       backLegImageNodes.push( new EFACModelImageNode( Biker.BACK_LEG_IMAGES[ i ], modelViewTransform ) );
       backLegImageNodes[ i ].setVisible( false );
       backLegRootNode.addChild( backLegImageNodes[ i ] );
 
-      // Front leg image nodes
+      // front leg image nodes
       frontLegImageNodes.push( new EFACModelImageNode( Biker.FRONT_LEG_IMAGES[ i ], modelViewTransform ) );
       frontLegImageNodes[ i ].setVisible( false );
       frontLegRootNode.addChild( frontLegImageNodes[ i ] );
@@ -60,7 +60,7 @@ define( function( require ) {
     var upperBodyNormal = new EFACModelImageNode( Biker.RIDER_NORMAL_UPPER_BODY_IMAGE, modelViewTransform );
     var upperBodyTired = new EFACModelImageNode( Biker.RIDER_TIRED_UPPER_BODY_IMAGE, modelViewTransform );
 
-    // Animate legs by setting image visibility based on crank arm angle
+    // animate legs by setting image visibility based on crank arm angle
     var visibleBackLeg = backLegImageNodes[ 0 ];
     var visibleFrontLeg = frontLegImageNodes[ 0 ];
     biker.crankAngleProperty.link( function( angle ) {
@@ -74,7 +74,7 @@ define( function( require ) {
       visibleBackLeg.setVisible( true );
     } );
 
-    // Add button to replenish the biker's energy
+    // add button to replenish the biker's energy (when she runs out)
     var feedMeButton = new RectangularPushButton( {
       content: new Text( feedMeString, { font: new PhetFont( 18 ), maxWidth: 100 } ),
       listener: function() {
@@ -86,25 +86,26 @@ define( function( require ) {
     } );
     this.addChild( feedMeButton );
 
+    // control the visibility of the "feed me" button the the position of the upper body based on the energy level
     biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
       feedMeButton.setVisible( !hasEnergy );
       upperBodyNormal.setVisible( hasEnergy );
       upperBodyTired.setVisible( !hasEnergy );
     } );
 
-    // Add and observer that will turn the back wheel.
+    // add a listener that will turn the back wheel
     var wheelRotationPoint = spokesImage.bounds.center;
     biker.rearWheelAngleProperty.link( function( angle ) {
       assert && assert( angle < 2 * Math.PI, 'Angle is out of bounds' );
-      // Scenery doesn't use the convention in physics where a
-      // positive rotation is counter-clockwise, so we have to
+
+      // Scenery doesn't use the convention in physics where a positive rotation is counter-clockwise, so we have to
       // invert the angle in the following calculation.
       var compensatedAngle = ( 2 * Math.PI - spokesImage.getRotation() ) % ( 2 * Math.PI );
       var delta = angle - compensatedAngle;
       spokesImage.rotateAround( wheelRotationPoint, -delta );
     } );
 
-    // Slider to control crank speed
+    // slider to control crank speed
     var crankSlider = new HSlider(
       biker.targetCrankAngularVelocityProperty,
       {
@@ -127,6 +128,7 @@ define( function( require ) {
       resize: false
     } ) );
 
+    // add the other images used
     this.addChild( spokesImage );
     this.addChild( backLegRootNode );
     this.addChild( new EFACModelImageNode( Biker.FRAME_IMAGE, modelViewTransform ) );
@@ -134,23 +136,7 @@ define( function( require ) {
     this.addChild( upperBodyNormal );
     this.addChild( upperBodyTired );
 
-    // DEBUG
-    // Remove when #21 is solved
-    // var Path = require( 'SCENERY/nodes/Path' );
-    // var Shape = require( 'KITE/Shape' );
-    // var Vector2 = require( 'DOT/Vector2' );
-    // var mechPath = biker.createMechanicalEnergyChunkPath( new Vector2( -0.23, 0.15 ) );
-    // var shape = new Shape();
-    // for ( i = 0; i < 3; i++ ) {
-    //   var p = modelViewTransform.modelToViewPosition( mechPath[ i ] );
-    //   i === 0 ? shape.moveTo( p.x, p.y ) : shape.lineTo( p.x, p.y );
-    // }
-    // this.addChild( new Path( shape, {
-    //   stroke: 'lime',
-    //   lineWidth: 25
-    // } ) );
-
-    // Add the energy chunk layer.
+    // add the energy chunk layer
     this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
   }
 
