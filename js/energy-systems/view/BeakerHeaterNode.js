@@ -1,7 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * Node representing the beaker heater view.
+ * a Scenery Node representing the beaker heater in the view
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -20,6 +20,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
 
+  // TODO: Make this a query parameter
   var DEBUG = false;
 
   /**
@@ -34,8 +35,7 @@ define( function( require ) {
 
     var energizedCoil = new EFACModelImageNode( BeakerHeater.HEATER_ELEMENT_ON_IMAGE, modelViewTransform );
 
-    // Add the images that are used to depict this element along with the
-    // layer that will contain the energy chunks.
+    // add the images that are used to depict this element along with the layer that will contain the energy chunks
     this.addChild( new EFACModelImageNode( BeakerHeater.WIRE_STRAIGHT_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.WIRE_CURVE_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_BACK_IMAGE, modelViewTransform ) );
@@ -44,24 +44,29 @@ define( function( require ) {
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
 
-    var thermometerNode = new ThermometerNode( 0, 1, beakerHeater.heatProportionProperty, {} );
-    thermometerNode.translate( 150, -120 );
+    // add the thermometer that will indicate the beaker water temperature
+    // TODO: Why aren't we using one that looks more like those used on the first screen?
+    var thermometerNode = new ThermometerNode( 0, 1, beakerHeater.heatProportionProperty, {
+      left: energizedCoil.right + 20,
+      bottom: energizedCoil.top
+    } );
     this.addChild( thermometerNode );
 
-    // Add the beaker.  A compensating MVT is needed because the beaker
-    // node is being added as a child of this node, but wants to set its
-    // own offset in model space.
+    // Add the beaker.  A compensating MVT is needed because the beaker node is being added as a child of this node,
+    // but wants to set its own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
     var offset = modelViewTransform.modelToViewDelta( beakerHeater.positionProperty.value ).negated();
     var beakerMvt = ModelViewTransform2.createOffsetXYScaleMapping( offset, scale.x, -scale.y );
 
-    this.beakerHeater = beakerHeater;
-
+    // @public (read-only) {BeakerView}
     this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, beakerMvt );
 
     this.addChild( this.beakerView.backNode );
-    this.addChild( new EnergyChunkLayer( beakerHeater.radiatedEnergyChunkList, beakerHeater.beaker.positionProperty,
-      modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer(
+      beakerHeater.radiatedEnergyChunkList,
+      beakerHeater.beaker.positionProperty,
+      modelViewTransform
+    ) );
     this.addChild( this.beakerView.frontNode );
 
     if ( DEBUG ) {
@@ -82,16 +87,14 @@ define( function( require ) {
         fill: 'lime'
       } ) );
     }
-    // Update the transparency of the hot element to make the dark element
-    // appear to heat up.
+
+    // update the transparency of the hot element to make the dark element appear to heat up
     beakerHeater.heatProportionProperty.link( function( litProportion ) {
       energizedCoil.opacity = litProportion;
     } );
-
   }
 
   energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
 
   return inherit( EFACBaseNode, BeakerHeaterNode );
 } );
-
