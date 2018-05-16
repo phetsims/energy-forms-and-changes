@@ -98,13 +98,10 @@ define( function( require ) {
     this.addChild( beakerFrontLayer );
 
     // create the lab bench surface image
-    var labBenchSurfaceImage = new Image( shelfImage );
-    labBenchSurfaceImage.leftTop = ( new Vector2(
-        modelViewTransform.modelToViewX( 0 ) - labBenchSurfaceImage.width / 2,
-
-        // slight tweak factor here due to nature of image
-        modelViewTransform.modelToViewY( 0 ) - ( labBenchSurfaceImage.height / 2 ) + 10 )
-    );
+    var labBenchSurfaceImage = new Image( shelfImage, {
+      centerX: modelViewTransform.modelToViewX( 0 ),
+      centerY: modelViewTransform.modelToViewY( 0 ) + 10 // slight tweak required due to nature of the image
+    } );
 
     // create a rectangle that will act as the background below the lab bench surface, basically like the side of the
     // bench
@@ -136,7 +133,7 @@ define( function( require ) {
       listener: function() {
         model.reset();
       },
-      radius: 20,
+      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - EDGE_INSET,
       centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
     } );
@@ -253,7 +250,7 @@ define( function( require ) {
       movableThermometerNodes.push( thermometerNode );
     } );
 
-    // TODO: In the orignal Java sim, there were separate nodes for the thermometors in the tool box versus those in
+    // TODO: In the original Java sim, there were separate nodes for the thermometors in the tool box versus those in
     // the play area.  I (jbphet) want to simplify this in the HTML5 version, and below is the code that will be revised
     // in order to do this.
 
@@ -267,11 +264,10 @@ define( function( require ) {
     } );
 
     var thermometerToolbox = new Panel( thermometerBox, {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      left: EDGE_INSET,
+      top: EDGE_INSET
     } );
-
-    thermometerToolbox.translation = new Vector2( EDGE_INSET, EDGE_INSET );
-    // backLayer.addChild( thermometerBox );
     backLayer.addChild( thermometerToolbox );
     thermometerToolboxNodes.forEach( function( thermometerToolboxNode ) {
       thermometerToolboxNode.returnRect = thermometerBox.bounds;

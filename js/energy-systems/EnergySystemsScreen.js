@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemsModel' );
   var EnergySystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemsScreenView' );
@@ -20,7 +21,6 @@ define( function( require ) {
 
   // strings
   var energySystemsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySystems' );
-
 
   // TODO: include icon for screen
   // images
@@ -35,7 +35,7 @@ define( function( require ) {
 
     var options = {
       name: energySystemsString,
-      backgroundColorProperty: new Property( 'white' ),
+      backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
       //TODO add homeScreenIcon
       tandem: tandem
     };

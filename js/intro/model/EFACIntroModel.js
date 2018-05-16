@@ -835,12 +835,12 @@ define( function( require ) {
       // test if the point is a burner
       this.burners.forEach( function( burner ) {
         if ( burner.getFlameIceRect().containsPoint( locationAsPoint ) ) {
-          return new TemperatureAndColor( burner.getTemperature(), EFACConstants.FIRST_TAB_BACKGROUND_COLOR );
+          return new TemperatureAndColor( burner.getTemperature(), EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
         }
       } );
 
       // point is in nothing else, so return the air temperature
-      return new TemperatureAndColor( this.air.getTemperature(), EFACConstants.FIRST_TAB_BACKGROUND_COLOR );
+      return new TemperatureAndColor( this.air.getTemperature(), EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
     }
   } );
 } );

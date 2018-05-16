@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * View for the 'Energy Systems' screen of the Energy Forms And Changes simulation.
+ * main view for the 'Energy Systems' screen of the Energy Forms And Changes simulation
  *
  * @author  John Blanco
  * @author  Martin Veillette (Berea College)
@@ -15,7 +15,6 @@ define( function( require ) {
   var BeakerHeaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeakerHeaterNode' );
   var BeltNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BeltNode' );
   var BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/BikerNode' );
-  var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -51,6 +50,8 @@ define( function( require ) {
 
   // constants
   var EDGE_INSET = 10;
+  var SELECTOR_SPACING = 50;
+  var BOTTOM_CONTROL_PANEL_HEIGHT = 49; // manually coordinated to match similar panel on 1st screen
 
   /**
    * @param {EnergySystemsModel} model
@@ -58,11 +59,9 @@ define( function( require ) {
    */
   function EnergySystemsScreenView( model ) {
 
-    ScreenView.call( this, {
+    var self = this;
 
-      // boundaries taken from original Java sim
-      layoutBounds: new Bounds2( 0, 0, 1008, 679 )
-    } );
+    ScreenView.call( this );
 
     // a11y - the scene summary to be read by assistive technology
     this.addChild( new Node( {
@@ -104,159 +103,135 @@ define( function( require ) {
       }
     );
 
-    // Bounds2 object for use as primary geometric reference
-    var stage = this.layoutBounds;
+    // convenience variable
+    var layoutBounds = this.layoutBounds;
 
-    // Upper y-border of play/pause control panel.
-    // The subtracted offset is from eyeballing a match to the mockup image.
-    // var playControlYborder = stage.maxY - 75;
-    var playControlYborder = stage.maxY;
+    // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.
+    // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model, which is on the
+    // middle of the screen above the counter as located in the view. Final arg is zoom factor from original Java sim -
+    // smaller zooms out, larger zooms in.
+    var mvtOriginX = Math.round( layoutBounds.width * 0.5 );
+    var mvtOriginY = Math.round( layoutBounds.height * 0.475 );
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO, new Vector2( mvtOriginX, mvtOriginY ), 2200
+    );
 
-    // Node for back-most layer
+    // layer node for back-most layer
     var backLayer = new Node();
     this.addChild( backLayer );
 
-    // ScreenView handle for use inside functions
-    var self = this;
-
-    // Create the model-view transform.  The primary units used in the model are
-    // meters, so significant zoom is used. The multipliers for the 2nd parameter
-    // can be used to adjust where the point (0, 0) in the model, which is on the
-    // middle of the screen above the counter as located in the view. Final arg
-    // is zoom factor from original Java sim - smaller zooms out, larger zooms in.
-    var mvtOriginX = Math.round( stage.width * 0.5 );
-    var mvtOriginY = Math.round( stage.height * 0.475 );
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      Vector2.ZERO, new Vector2( mvtOriginX, mvtOriginY ), 2200 );
-
-    // Add beige background rectangle
-    function addBackground() {
-      var x = stage.centerX - stage.width;
-      var y = stage.centerY - stage.height;
-      var width = 2 * stage.width;
-      var height = 2 * stage.height;
-      backLayer.addChild( new Rectangle( x, y, width, height, {
-        fill: EFACConstants.SECOND_TAB_BACKGROUND_COLOR
-      } ) );
-    }
-
-    // Create a background rectangle for the play/pause controls.
-    function addPlayControls() {
-      var bottomPanel = new Rectangle( 0, playControlYborder, stage.width, stage.height, 0, 0, {
-        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR,
-        stroke: 'black'
-      } );
-      backLayer.addChild( bottomPanel );
-    }
-
-    // Create the legend for energy chunk types
-    function addEnergyChunkLegend() {
-      var legend = new EnergyChunkLegend();
-      legend.center = new Vector2( 0.9 * stage.width, 0.5 * stage.height );
-      self.addChild( legend );
-    }
-
-    // Checkbox panel to display energy chunks
-    function addCheckboxPanel() {
-      var label = new Text( energySymbolsString, {
-        font: new PhetFont( 20 )
-      } );
-
-      var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
-      energyChunkNode.scale( 1.0 );
-      energyChunkNode.pickable = false;
-
-      var checkbox = new Checkbox( new LayoutBox( {
-        children: [ label, energyChunkNode ],
+    // create the checkbox that controls the visibility of the energy chunks
+    var showEnergyChunksCheckbox = new Checkbox(
+      new LayoutBox( {
+        children: [
+          new Text( energySymbolsString, { font: new PhetFont( 20 ) } ),
+          EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL )
+        ],
         orientation: 'horizontal',
         spacing: 5
-      } ), model.energyChunksVisibleProperty );
+      } ),
+      model.energyChunksVisibleProperty
+    );
 
-      var panel = new Panel( checkbox, {
-        fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-        stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-        lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
-      } );
-      panel.rightTop = new Vector2( stage.width - EDGE_INSET, EDGE_INSET );
-      self.addChild( panel );
-    }
+    // add the checkbox that controls the visibility of the energy chunks to a panel and then add it to the scene graph
+    var showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      right: layoutBounds.maxX - EDGE_INSET,
+      top: EDGE_INSET
+    } );
+    self.addChild( showEnergyChunksPanel );
 
-    // Create and add the Reset All Button in the bottom right, which resets the model
-    function addResetButton() {
-      var resetAllButton = new ResetAllButton( {
-        listener: function() {
-          model.reset();
-        },
-        right: stage.maxX - 10,
-        bottom: stage.maxY - 10
-      } );
-      self.addChild( resetAllButton );
-    }
+    // add the energy chunk legend
+    var energyChunkLegend = new EnergyChunkLegend( {
+      right: layoutBounds.maxX - EDGE_INSET,
+      top: showEnergyChunksPanel.bottom + 10
+    } );
+    this.addChild( energyChunkLegend );
 
-    // Create the carousel control nodes.
-    function createCarousels() {
+    // only show the energy chunk legend when energy chunks are visible
+    model.energyChunksVisibleProperty.linkAttribute( energyChunkLegend, 'visible' );
 
-      // Instantiate nodes for the three carousels
-      var sourcesCarousel = new EnergySystemElementSelector( model.energySourcesCarousel );
-      var convertersCarousel = new EnergySystemElementSelector( model.energyConvertersCarousel );
-      var usersCarousel = new EnergySystemElementSelector( model.energyUsersCarousel );
+    // create a background rectangle at the bottom of the screen where the play/pause controls will reside
+    var bottomPanel = new Rectangle(
+      0,
+      0,
+      layoutBounds.width * 2, // wide enough that users are unlikely to see the edge
+      layoutBounds.height, // tall enough that users are unlikely to see the bottom
+      {
+        centerX: layoutBounds.centerX,
+        top: layoutBounds.maxY - BOTTOM_CONTROL_PANEL_HEIGHT,
+        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
+      }
+    );
+    backLayer.addChild( bottomPanel );
 
-      // Position carousels
-      // Assume all carousels have the height of the sources Carousel
-      var centerY = playControlYborder - sourcesCarousel.height / 2 - 5;
-      var spacing = 50;
-      sourcesCarousel.leftCenter = new Vector2( EDGE_INSET, centerY );
-      convertersCarousel.leftCenter = new Vector2( sourcesCarousel.rightCenter.x + spacing, centerY );
-      usersCarousel.leftCenter = new Vector2( convertersCarousel.rightCenter.x + spacing, centerY );
+    // add the reset all button
+    var resetAllButton = new ResetAllButton( {
+      listener: function() {
+        model.reset();
+      },
+      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
+      right: layoutBounds.maxX - EDGE_INSET,
+      centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2
+    } );
+    self.addChild( resetAllButton );
 
-      return [ sourcesCarousel, convertersCarousel, usersCarousel ];
-    }
-
-    addBackground();
-    addPlayControls();
-    addEnergyChunkLegend();
-    addCheckboxPanel();
-    addResetButton();
-
-    // Debug - Layout boundary rectangle
-    this.addChild( new Rectangle( this.layoutBounds, { stroke: 'rgba( 255, 0, 0, 0.9 )' } ) );
-
-    // Energy users
-    this.beakerHeaterNode = new BeakerHeaterNode( model.beakerHeater, model.energyChunksVisibleProperty, modelViewTransform );
-    var incandescentBulbNode = new IncandescentBulbNode( model.incandescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
-    var fluorescentBulbNode = new FluorescentBulbNode( model.fluorescentBulb, model.energyChunksVisibleProperty, modelViewTransform );
-
+    // create the energy user nodes
+    this.beakerHeaterNode = new BeakerHeaterNode(
+      model.beakerHeater,
+      model.energyChunksVisibleProperty,
+      modelViewTransform
+    );
+    var incandescentBulbNode = new IncandescentBulbNode(
+      model.incandescentBulb,
+      model.energyChunksVisibleProperty,
+      modelViewTransform
+    );
+    var fluorescentBulbNode = new FluorescentBulbNode(
+      model.fluorescentBulb,
+      model.energyChunksVisibleProperty,
+      modelViewTransform
+    );
     this.addChild( this.beakerHeaterNode );
     this.addChild( incandescentBulbNode );
     this.addChild( fluorescentBulbNode );
 
-    // Energy converters
+    // create the energy converter nodes
     var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
     var beltNode = new BeltNode( model.belt, modelViewTransform );
     var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
-
     this.addChild( generatorNode );
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // Energy sources
+    // create the energy source noes
     var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
     this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
     var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
-
     this.addChild( sunNode );
     this.addChild( faucetNode );
     this.addChild( bikerNode );
     this.addChild( this.teaKettleNode );
 
-    var carousels = createCarousels();
-    carousels.forEach( function( carousel ) {
-      self.addChild( carousel );
+    // add the energy system element selectors, which are sets of radio buttons
+    var energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {
+      left: EDGE_INSET,
+      bottom: bottomPanel.top - EDGE_INSET
     } );
-
-    // This is a hack to deal with issue #23.
-    // model.reset();
+    this.addChild( energySourceSelector );
+    var energyConverterSelector = new EnergySystemElementSelector( model.energyConvertersCarousel, {
+      left: energySourceSelector.right + SELECTOR_SPACING,
+      bottom: bottomPanel.top - EDGE_INSET
+    } );
+    this.addChild( energyConverterSelector );
+    var energyUserSelector = new EnergySystemElementSelector( model.energyUsersCarousel, {
+      left: energyConverterSelector.right + SELECTOR_SPACING,
+      bottom: bottomPanel.top - EDGE_INSET
+    } );
+    this.addChild( energyUserSelector );
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );

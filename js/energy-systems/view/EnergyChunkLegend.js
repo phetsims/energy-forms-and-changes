@@ -38,8 +38,6 @@ define( function( require ) {
    */
   function EnergyChunkLegend( options ) {
 
-    options = _.extend( {}, options );
-
     // title that appears at the top of the legend
     var titleText = new Text( formsOfEnergyString, {
       font: new PhetFont( {

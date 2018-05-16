@@ -29,7 +29,7 @@ define( function( require ) {
 
     var options = {
       name: introString,
-      backgroundColorProperty: new Property( EFACConstants.FIRST_TAB_BACKGROUND_COLOR ),
+      backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
       //TODO add homeScreenIcon
       tandem: tandem
     };

@@ -48,7 +48,7 @@ define( function( require ) {
 
   // colors
   var NOMINAL_WATER_OPACITY = 0.75;
-  var FIRST_TAB_BACKGROUND_COLOR = new Color( 245, 235, 175 );
+  var FIRST_SCREEN_BACKGROUND_COLOR = new Color( 245, 235, 175 );
 
   // mapping function that maps the energy to the number of energy chunks
   var MAP_ENERGY_TO_NUM_CHUNKS = new LinearFunction(
@@ -59,7 +59,8 @@ define( function( require ) {
   );
 
   // mapping function that maps the number of chunks of energy to the energy value
-  var MAP_NUM_CHUNKS_TO_ENERGY = new LinearFunction( NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
+  var MAP_NUM_CHUNKS_TO_ENERGY = new LinearFunction(
+    NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING,
     NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP,
     LOW_ENERGY_FOR_MAP_FUNCTION,
     HIGH_ENERGY_FOR_MAP_FUNCTION
@@ -109,14 +110,15 @@ define( function( require ) {
     NOMINAL_WATER_OPACITY: 0.75,
     WATER_COLOR_OPAQUE: new Color( 175, 238, 238 ),
     WATER_COLOR_IN_BEAKER: new Color( 175, 238, 238, NOMINAL_WATER_OPACITY ),
-    FIRST_TAB_BACKGROUND_COLOR: new Color( 245, 235, 175 ),
-    SECOND_TAB_BACKGROUND_COLOR: FIRST_TAB_BACKGROUND_COLOR,
+    FIRST_SCREEN_BACKGROUND_COLOR: new Color( 245, 235, 175 ),
+    SECOND_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
 
     // appearance of controls
     CONTROL_PANEL_OUTLINE_LINE_WIDTH: 1.5,
     CONTROL_PANEL_OUTLINE_STROKE: 'black',
     CLOCK_CONTROL_BACKGROUND_COLOR: new Color( 120, 120, 120 ),
+    RESET_ALL_BUTTON_RADIUS: 20,
 
     // model-view transform scale factor for Energy Systems tab
     ENERGY_SYSTEMS_MVT_SCALE_FACTOR: 2200,

@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * a Scenery node that allows the user to select the various elements contained within a carousel by presenting a set of
+ * a Scenery Node that allows the user to select the various elements contained within a carousel by presenting a set of
  * radio-style push buttons, each with an icon image of the selection that it represents
  *
  * @author  John Blanco
@@ -26,7 +26,11 @@ define( function( require ) {
    * @param {EnergySystemElementCarousel} carousel
    * @constructor
    */
-  function EnergySystemElementSelector( carousel ) {
+  function EnergySystemElementSelector( carousel, options ) {
+
+    options = _.extend( {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+    }, options );
 
     var buttonElementList = [];
 
@@ -62,9 +66,7 @@ define( function( require ) {
       deselectedStroke: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
     } );
 
-    Panel.call( this, buttonGroup, {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
-    } );
+    Panel.call( this, buttonGroup, options );
   }
 
   energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
