@@ -25,7 +25,8 @@ define( function( require ) {
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Images
+  // images
+  var TEAPOT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_icon.png' );
   var TEAPOT_LARGE = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
 
   // constants
@@ -55,7 +56,7 @@ define( function( require ) {
    */
   function TeaKettle( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty ) {
 
-    EnergySource.call( this, new Image( TEAPOT_LARGE ) );
+    EnergySource.call( this, new Image( TEAPOT_ICON ) );
 
     // @public {string} - a11y name
     this.a11yName = EFACA11yStrings.teaKettle.value;
