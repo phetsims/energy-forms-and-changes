@@ -1,5 +1,8 @@
 // Copyright 2016, University of Colorado Boulder
 
+/**
+ * a Scenery Node that represents a collection of light rays emanating from a circular or point source
+ */
 define( function( require ) {
   'use strict';
 
@@ -11,8 +14,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * Light rays from the sun and from the light bulb
-   *
    * @param {Vector2} center - Center position of radial rays
    * @param {number} innerRadius - Start point
    * @param {number} outerRadius - End point
@@ -31,6 +32,8 @@ define( function( require ) {
       angle = ( 2 * Math.PI / numRays ) * i;
       startPoint = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
       endPoint = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
+
+      // TODO: I (jbphet) found the following commented out code during code cleanup in mid-May 2018.  Can it be removed?
       // var transparent = 'rgba(255,255,255,0)';
 
       // var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )

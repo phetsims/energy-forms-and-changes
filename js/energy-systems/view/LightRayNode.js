@@ -2,8 +2,8 @@
 
 
 /**
- * Type that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the amount of
- * light passing through.
+ * A Scenery Node that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the
+ * amount of light passing through.
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -22,6 +22,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
   var STROKE_THICKNESS = 2;
   var SEARCH_ITERATIONS = 10;
   var FADE_COEFFICIENT_IN_AIR = 0.005;
@@ -76,12 +77,11 @@ define( function( require ) {
     },
 
     /**
-     * [removeLightAbsorbingShape description]
      * @param  {LightAbsorbingShape} lightAbsorbingShape
-     * @returns {[type]}
      * @public
      */
     removeLightAbsorbingShape: function( lightAbsorbingShape ) {
+      // TODO: This probably works, but is not quite correct, since it should really be unlinking the added listener, not everything.
       lightAbsorbingShape.absorptionCoefficientProperty.unlinkAll();
       _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
       this.updateRays();
@@ -112,7 +112,7 @@ define( function( require ) {
         }
       } );
 
-      // Sort the list of PointAndFadeValues by their distance from the origin, closest first.
+      // sort the list of PointAndFadeValues by their distance from the origin, closest first
       var sorted = _.sortBy( this.pointAndFadeValues, function( p ) {
         return p.point.distance( self.origin );
       } );
@@ -146,35 +146,7 @@ define( function( require ) {
       this.addChild( fadingLine );
     },
 
-    // /**
-    //  * [lineIntersectsShape description]
-    //  * @param  {Vector2} startPoint
-    //  * @param  {Vector2} endPoint
-    //  * @param  {Shape} shape
-    //  * @returns {boolean}
-    //  * @private
-    //  */
-    // lineIntersectsShape: function( startPoint, endPoint, shape ) {
-    //   var line = new Line( startPoint, endPoint );
-    //   var kiteLine = new KiteLine( startPoint, endPoint );
-    //   var path = new Path( line, {} );
-    //   var strokedLineShape = path.getStrokedShape();
-
-    //   var b = shape.bounds;
-    //   var shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
-
-    //   var ips = this.getRectangleLineIntersectionPoints( shapeRect, kiteLine );
-    //   if ( ips.length === 0 ) {
-    //     return false;
-    //   }
-
-    //   // Warning: This only checks the bounding rect, not the full shape.
-    //   // This was adequate in this case, but take care if reusing.
-    //   return strokedLineShape.intersectsBounds( shape.bounds );
-    // },
-
     /**
-     * [getLineIntersection description]
      * @param  {KiteLine} line1
      * @param  {KiteLine} line2
      * @returns {Vector2}
@@ -207,9 +179,11 @@ define( function( require ) {
         return null;
       }
 
-      // Find intersection point
-      return new Vector2( start1.x + ( r * ( end1.x - start1.x ) ),
-        start1.y + ( r * ( end1.y - start1.y ) ) );
+      // find intersection point
+      return new Vector2(
+        start1.x + ( r * ( end1.x - start1.x ) ),
+        start1.y + ( r * ( end1.y - start1.y ) )
+      );
     },
 
     /**
@@ -245,10 +219,9 @@ define( function( require ) {
         var boundsExitPoint = this.getRectangleExitPoint( origin, endpoint, shapeRect );
         var searchEndPoint = boundsExitPoint === null ? endpoint : boundsExitPoint;
 
-        // Search linearly for edge of the shape.  BIG HAIRY NOTE - This
-        // will not work in all cases.  It worked for the coarse shapes
-        // and rough bounds needed for this simulation.  Don't reuse if you
-        // need good general edge finding.
+        // Search linearly for edge of the shape.  BIG HAIRY NOTE - This will not work in all cases.  It worked for the
+        // coarse shapes and rough bounds needed for this simulation.  Don't reuse if you need good general edge
+        // finding.
         var angle = endpoint.minus( origin ).angle();
         var incrementalDistance = boundsEntryPoint.distance( searchEndPoint ) / SEARCH_ITERATIONS;
         for ( var i = 0; i < SEARCH_ITERATIONS; i++ ) {
@@ -270,17 +243,18 @@ define( function( require ) {
      * @private
      */
     getShapeExitPoint: function( origin, endpoint, shape ) {
-      // var shapeRect = shape.bounds;
+
       var exitPoint = null;
 
       if ( shape.bounds.containsPoint( endpoint ) ) {
-        // Line ends inside shape, return null.
+
+        // line ends inside shape, return null
         return null;
       }
 
       if ( !shape.bounds.containsPoint( endpoint ) && shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
-        // Phase I - Do a binary search to locate the edge of the
-        // rectangle that encloses the shape.
+
+        // phase I - Do a binary search to locate the edge of the rectangle that encloses the shape
         var angle = endpoint.minus( origin ).angle();
         var length = origin.distance( endpoint );
         var lengthChange = length / 2;
@@ -294,11 +268,10 @@ define( function( require ) {
       return exitPoint;
     },
 
-
     /**
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
-     * @param  {Rectangle} shape
+     * @param  {Rectangle} rect
      * @returns {Vector2}
      * @private
      */
@@ -318,7 +291,7 @@ define( function( require ) {
     /**
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
-     * @param  {Rectangle} shape
+     * @param  {Rectangle} rect
      * @returns {Vector2}
      * @private
      */
@@ -326,7 +299,8 @@ define( function( require ) {
       var intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
 
       if ( intersectingPoints.length < 2 ) {
-        // Line either doesn't intersect or ends inside the rectangle.
+
+        // line either doesn't intersect or ends inside the rectangle
         return null;
       }
 
@@ -342,14 +316,13 @@ define( function( require ) {
     },
 
     /**
-     * [getRectangleLineIntersectionPoints description]
      * @param  {Rectangle} rect
      * @param  {Line} line
      * @returns {Vector2[]}
      */
     getRectangleLineIntersectionPoints: function( rect, line ) {
 
-      // Corners of rect
+      // corners of rect
       var p = [
         new Vector2( rect.bounds.minX, rect.bounds.minY ),
         new Vector2( rect.bounds.minX, rect.bounds.maxY ),
@@ -357,7 +330,7 @@ define( function( require ) {
         new Vector2( rect.bounds.maxX, rect.bounds.minY )
       ];
 
-      // Perimeter lines of rect
+      // perimeter lines of rect
       var lines = [];
       lines.push( new KiteLine( p[ 0 ], p[ 1 ] ) );
       lines.push( new KiteLine( p[ 1 ], p[ 2 ] ) );

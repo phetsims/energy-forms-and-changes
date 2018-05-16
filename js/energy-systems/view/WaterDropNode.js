@@ -1,7 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * Piccolo node that represents a drop of water in the view.
+ * a Scenery Node that represents a drop of water in the view, can be used to create the look of a stream of water
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -22,7 +22,7 @@ define( function( require ) {
     Node.call( this );
     var self = this;
 
-    // Create and maintain the initial shape.
+    // create and maintain the initial shape
     var dropShape = new Shape();
     waterDrop.sizeProperty.link( function( dropSize ) {
       var dropWidth = modelViewTransform.modelToViewDeltaX( dropSize.width );
@@ -37,14 +37,12 @@ define( function( require ) {
 
     this.addChild( waterDropNode );
 
-    // Update offset as it changes.
+    // update offset as it changes
     waterDrop.offsetFromParentProperty.link( function( offset ) {
       var x = modelViewTransform.modelToViewDeltaX( offset.x );
       var y = modelViewTransform.modelToViewDeltaY( offset.y );
-
       self.translate( x, y );
     } );
-
   }
 
   energyFormsAndChanges.register( 'WaterDropNode', WaterDropNode );

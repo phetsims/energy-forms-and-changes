@@ -1,8 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Node that represents the sun, clouds, and a slider to control the level
- * of cloudiness in the view.
+ * a Scenery Node that represents the sun, clouds, and a slider to control the level of cloudiness in the view
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -36,7 +35,7 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Strings
+  // strings
   var cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
   var lotsString = require( 'string!ENERGY_FORMS_AND_CHANGES/lots' );
   var noneString = require( 'string!ENERGY_FORMS_AND_CHANGES/none' );
@@ -44,44 +43,6 @@ define( function( require ) {
   // constants
   var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
   var SLIDER_LABEL_FONT = new PhetFont( 12 );
-
-  // var EMISSION_SECTOR_LINE_LENGTH = 700;
-
-  /**
-   * Shape with observable light absorption coefficient.
-   * @param {Shape} shape
-   * @param {number} initialAbsorptionCoefficient
-   * @constructor
-   */
-  function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
-    this.absorptionCoefficientProperty = new Property( initialAbsorptionCoefficient );
-    this.shape = shape;
-  }
-
-  energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
-
-  inherit( Object, LightAbsorbingShape, {
-    reset: function() {
-      this.absorptionCoefficientProperty.reset();
-    }
-  } );
-
-  function CloudNode( cloud, modelViewTransform ) {
-    Node.call( this );
-    var self = this;
-
-    this.addChild( new EFACModelImageNode( Cloud.CLOUD_IMAGE, modelViewTransform ) );
-
-    var x = modelViewTransform.modelToViewDeltaX( cloud.offsetFromParent.x );
-    var y = modelViewTransform.modelToViewDeltaY( cloud.offsetFromParent.y );
-    this.center = new Vector2( x, y );
-
-    cloud.existenceStrengthProperty.link( function( opacity ) {
-      self.opacity = opacity;
-    } );
-  }
-  inherit( Node, CloudNode );
-
 
   /**
    * @param {SunEnergySource} sun Sun model element
@@ -99,12 +60,12 @@ define( function( require ) {
 
     this.addChild( lightRays );
 
-    // Turn off light rays when energy chunks are visible
+    // turn off light rays when energy chunks are visible
     energyChunksVisibleProperty.link( function( chunksVisible ) {
       lightRays.setVisible( !chunksVisible );
     } );
 
-    // Add the sun
+    // add the sun
     var sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
     var sunPath = new Path( sunShape, {
       fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
@@ -117,12 +78,11 @@ define( function( require ) {
 
     sunPath.setTranslation( sunCenter );
 
-
-    // Add clouds, initially transparent
+    // add clouds, initially transparent
     sun.clouds.forEach( function( cloud ) {
       var cloudNode = new CloudNode( cloud, modelViewTransform );
 
-      // Make a crude light-absorbing shape from the rectangular cloud boundary
+      // make a crude light-absorbing shape from the rectangular cloud boundary
       var b = cloudNode.bounds;
       var cloudShape = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
       var lightAbsorbingShape = new LightAbsorbingShape( cloudShape, 0 );
@@ -137,14 +97,12 @@ define( function( require ) {
       self.addChild( cloudNode );
     } );
 
-    // Add slider panel to control cloudiness
-    var slider = new HSlider( sun.cloudinessProperty, {
-      min: 0,
-      max: 1
-    }, {
-      top: 0,
-      left: 0
-    } );
+    // add slider panel to control cloudiness
+    var slider = new HSlider(
+      sun.cloudinessProperty,
+      { min: 0, max: 1 },
+      { top: 0, left: 0 }
+    );
 
     slider.rotate( -Math.PI / 2 );
 
@@ -163,7 +121,7 @@ define( function( require ) {
       font: CONTROL_PANEL_TITLE_FONT
     } );
 
-    var iconNode = new Image( Cloud.CLOUD_1 );
+    var iconNode = new Image( Cloud.CLOUD_1, { scale: 0.25 } );
     iconNode.setScaleMagnitude( 0.25 );
 
     var titleBox = new HBox( {
@@ -185,13 +143,14 @@ define( function( require ) {
       resize: false
     } ) );
 
-    // Add the energy chunks, which reside on their own layer.
+    // add the energy chunks, which reside on their own layer
     this.addChild( new EnergyChunkLayer( sun.energyChunkList, sun.positionProperty, modelViewTransform ) );
     this.addChild( sunPath );
 
-    // Add/remove the light-absorbing shape for the solar panel
+    // add/remove the light-absorbing shape for the solar panel
     var currentLightAbsorbingShape = null;
-    Property.multilink( [ sun.activeProperty, sun.solarPanel.activeProperty ],
+    Property.multilink(
+      [ sun.activeProperty, sun.solarPanel.activeProperty ],
       function( sunActive, solarPanelActive ) {
 
         if ( sunActive && solarPanelActive ) {
@@ -207,22 +166,66 @@ define( function( require ) {
 
           lightRays.addLightAbsorbingShape( currentLightAbsorbingShape );
 
+          // TODO: Is the commented out code below still needed?
           // DEBUG: Show absorption shape outline with wide line visible behind image.
           // var path = new Path( absorptionShape, {
           //   stroke: 'lime',
           //   lineWidth: 50
           // } );
           // self.addChild( path );
-
-        } else if ( currentLightAbsorbingShape !== null ) {
+        }
+        else if ( currentLightAbsorbingShape !== null ) {
           lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
           currentLightAbsorbingShape = null;
 
+          // TODO: I (jbphet) came across the commented-out code below during initial code cleanup in mid-May 2018.  Is it needed?
           // self.removeChild(path);
         }
-      } );
-
+      }
+    );
   }
+
+  /**
+   * inner type - a shape with observable light absorption coefficient
+   * @param {Shape} shape
+   * @param {number} initialAbsorptionCoefficient
+   * @constructor
+   */
+  function LightAbsorbingShape( shape, initialAbsorptionCoefficient ) {
+    this.absorptionCoefficientProperty = new Property( initialAbsorptionCoefficient );
+    this.shape = shape;
+  }
+
+  energyFormsAndChanges.register( 'LightAbsorbingShape', LightAbsorbingShape );
+
+  inherit( Object, LightAbsorbingShape, {
+    reset: function() {
+      this.absorptionCoefficientProperty.reset();
+    }
+  } );
+
+  /**
+   * inner type - a cloud
+   * @param cloud
+   * @param modelViewTransform
+   * @constructor
+   */
+  function CloudNode( cloud, modelViewTransform ) {
+    Node.call( this );
+    var self = this;
+
+    this.addChild( new EFACModelImageNode( Cloud.CLOUD_IMAGE, modelViewTransform ) );
+
+    var x = modelViewTransform.modelToViewDeltaX( cloud.offsetFromParent.x );
+    var y = modelViewTransform.modelToViewDeltaY( cloud.offsetFromParent.y );
+    this.center = new Vector2( x, y );
+
+    cloud.existenceStrengthProperty.link( function( opacity ) {
+      self.opacity = opacity;
+    } );
+  }
+
+  inherit( Node, CloudNode );
 
   energyFormsAndChanges.register( 'SunNode', SunNode );
 

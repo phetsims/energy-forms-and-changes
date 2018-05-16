@@ -1,5 +1,10 @@
 // Copyright 2016, University of Colorado Boulder
 
+/**
+ * a scenery node that represents a faucet from which water flows
+ *
+ * @author John Blanco
+ */
 define( function( require ) {
   'use strict';
 
@@ -14,7 +19,7 @@ define( function( require ) {
   var WaterDropNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/WaterDropNode' );
 
   // constants
-  var FAUCET_NODE_HORIZONTAL_LENGTH = 700; // In screen coords, which are close to pixels
+  var FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long enough that end is generally not seen
 
   /**
    * @param {FaucetAndWater} faucet EnergySource
@@ -30,18 +35,15 @@ define( function( require ) {
     var faucetNode = new FaucetNode( maxFlowProportion, faucet.flowProportionProperty, faucet.activeProperty, {
       horizontalPipeLength: FAUCET_NODE_HORIZONTAL_LENGTH,
       verticalPipeLength: 40,
-      closeOnRelease: false
+      scale: 0.45
     } );
 
-    faucetNode.setScaleMagnitude( 0.5 );
-
-    // Position faucet node
+    // position faucet node such that the water will appear to come out of it
     var faucetToWater = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
-    var dx = -faucetNode.center.x + faucetToWater.x;
-    var dy = faucetNode.center.y + faucetToWater.y - 120; // y adjustment due to use of different FaucetNode than Java
-    faucetNode.translate( dx, dy );
+    faucetNode.right = faucetToWater.x + 30;
+    faucetNode.bottom = faucetToWater.y;
 
-    // Create the water, which consists of a set of water drops.
+    // create the water, which consists of a set of water drops
     var waterLayer = new Node();
     waterLayer.translate( faucetToWater );
 
@@ -49,23 +51,23 @@ define( function( require ) {
       var waterDropNode = new WaterDropNode( droplet, modelViewTransform );
       waterLayer.addChild( waterDropNode );
 
-      // When droplet is removed from the model, remove its node from the view
+      // when droplet is removed from the model, remove its node from the view
       var itemRemovedListener = function( removedDroplet ) {
         if ( removedDroplet === droplet ) {
           waterLayer.removeChild( waterDropNode );
 
-          // Remove this listener to reclaim memory
+          // remove this listener to reclaim memory
           faucet.waterDrops.removeItemRemovedListener( itemRemovedListener );
         }
       };
 
-      // Link itemRemovedListener to the waterDrops ObservableArray
+      // link itemRemovedListener to the waterDrops ObservableArray
       faucet.waterDrops.addItemRemovedListener( itemRemovedListener );
     }
 
     faucet.waterDrops.addItemAddedListener( addDroplet );
 
-    // Create the energy chunk layer.
+    // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
 
     this.addChild( waterLayer );
@@ -77,4 +79,3 @@ define( function( require ) {
 
   return inherit( MoveFadeModelElementNode, FaucetAndWaterNode );
 } );
-

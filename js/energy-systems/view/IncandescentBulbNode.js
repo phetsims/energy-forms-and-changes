@@ -1,6 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
+ * a Scenery Node that represents an incandescent light bulb in the view
  *
  * @author  Andrew Adare
  * @author Jesse Greenberg
@@ -33,12 +34,12 @@ define( function( require ) {
     var lightRays = new LightRays( Vector2.ZERO, 30, 400, 20, Color.YELLOW );
     this.addChild( lightRays );
 
-    // Only show the light rays when the energy chunks are not shown.
+    // only show the light rays when the energy chunks are not shown
     energyChunksVisibleProperty.link( function( visible ) {
       lightRays.setVisible( !visible );
     } );
 
-    // Add the images and the layer that will contain the energy chunks.
+    // add the images and the layer that will contain the energy chunks
     this.addChild( new EFACModelImageNode( LightBulb.WIRE_FLAT_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( LightBulb.WIRE_CURVE_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( LightBulb.ELEMENT_BASE_BACK_IMAGE, modelViewTransform ) );
@@ -49,15 +50,14 @@ define( function( require ) {
     var energizedBulb = new EFACModelImageNode( IncandescentBulb.ENERGIZED_BULB, modelViewTransform );
     this.addChild( energizedBulb );
 
-    // Center the light rays on the bulb image.
+    // center the light rays on the bulb image
     lightRays.y = energizedBulb.bounds.center.y - energizedBulb.bounds.height * 0.1;
 
-    // Update the transparency of the lit bulb based on model element.
+    // update the transparency of the lit bulb based on model element
     lightBulb.litProportionProperty.link( function( litProportion ) {
       energizedBulb.setOpacity( litProportion );
       lightRays.setOpacity( litProportion );
     } );
-
   }
 
   energyFormsAndChanges.register( 'IncandescentBulbNode', IncandescentBulbNode );

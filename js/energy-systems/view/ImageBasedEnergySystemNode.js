@@ -1,8 +1,11 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
+// TODO: This doesn't seem to do much, so I (jbphet) am unsure why it is needed.  If this is still the case when the
+// development is further along, it should be removed.  May 16 2018
+
 /**
- * Base class for Nodes that represent energy system elements in the view
- * that use images as part of their representation.
+ * base type for Scenery Nodes that represent energy system elements in the view that use images as part of their
+ * depiction
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -10,6 +13,7 @@
 define( function( require ) {
   'use strict';
 
+  // modules
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -27,8 +31,6 @@ define( function( require ) {
   return inherit( MoveFadeModelElementNode, ImageBasedEnergySystemNode, {
 
     /**
-     * [addImageNode description]
-     *
      * @param {EFACModelImage} modelElementImage
      */
     addImageNode: function( modelElementImage ) {

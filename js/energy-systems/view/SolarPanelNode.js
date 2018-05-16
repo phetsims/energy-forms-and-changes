@@ -1,7 +1,7 @@
 // Copyright 2016, University of Colorado Boulder
 
 /**
- * Node representing a solar panel in the view.
+ * a Scenery Node that depicts a solar panel in the view
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -24,11 +24,9 @@ define( function( require ) {
    */
   function SolarPanelNode( solarPanel, modelViewTransform ) {
 
-    // Add args to constructor as needed
     MoveFadeModelElementNode.call( this, solarPanel, modelViewTransform );
 
-    // Add the images and the node that will manage the energy chunks in
-    // the order needed for the desired layering.
+    // add the images and the node that will manage the energy chunks in the order needed for the desired layering
     this.addChild( new EFACModelImageNode( SolarPanel.CURVED_WIRE_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( SolarPanel.POST_IMAGE, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( SolarPanel.SOLAR_PANEL_IMAGE, modelViewTransform ) );

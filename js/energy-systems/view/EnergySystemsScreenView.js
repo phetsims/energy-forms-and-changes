@@ -206,7 +206,7 @@ define( function( require ) {
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // create the energy source noes
+    // create the energy source nodes
     var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
     this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
