@@ -1,7 +1,8 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * Base module for model elements whose position and opacity can change.
+ * base type for a Scenery Node that moves as the associated model element moves and and fades in and out as the opacity
+ * property changes
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -18,26 +19,18 @@ define( function( require ) {
    * @param {ModelViewTransform} modelViewTransform
    * @constructor
    */
-  function EFACBaseNode( modelElement, modelViewTransform ) {
+  function MoveFadeModelElementNode( modelElement, modelViewTransform ) {
     Node.call( this );
 
     var self = this;
 
-    /**
-     * Update the overall offset based on the model position.
-     *
-     * @param  {Vector2} offset
-     */
+    // update our position as the model element moves
     modelElement.positionProperty.link( function( offset ) {
       self.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
     } );
 
     // TODO: The model shouldn't have opacity, it should have something like a selection proportion.
-    /**
-     * Update the overall opacity based on model element opacity.
-     *
-     * @param  {number} opacity
-     */
+    // update our opacity as the model element fades in and out
     modelElement.opacityProperty.link( function( opacity ) {
       self.setOpacity( opacity );
       if ( opacity === 0 && self.visible ) {
@@ -49,7 +42,7 @@ define( function( require ) {
     } );
   }
 
-  energyFormsAndChanges.register( 'EFACBaseNode', EFACBaseNode );
+  energyFormsAndChanges.register( 'MoveFadeModelElementNode', MoveFadeModelElementNode );
 
-  return inherit( Node, EFACBaseNode );
+  return inherit( Node, MoveFadeModelElementNode );
 } );

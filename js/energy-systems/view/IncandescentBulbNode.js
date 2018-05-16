@@ -10,7 +10,7 @@ define( function( require ) {
 
   // modules
   var Color = require( 'SCENERY/util/Color' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -28,7 +28,7 @@ define( function( require ) {
    */
   function IncandescentBulbNode( lightBulb, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, lightBulb, modelViewTransform );
+    MoveFadeModelElementNode.call( this, lightBulb, modelViewTransform );
 
     var lightRays = new LightRays( Vector2.ZERO, 30, 400, 20, Color.YELLOW );
     this.addChild( lightRays );
@@ -62,6 +62,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'IncandescentBulbNode', IncandescentBulbNode );
 
-  return inherit( EFACBaseNode, IncandescentBulbNode, {} );
+  return inherit( MoveFadeModelElementNode, IncandescentBulbNode, {} );
 } );
 

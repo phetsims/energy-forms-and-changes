@@ -13,7 +13,7 @@ define( function( require ) {
   // modules
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var Color = require( 'SCENERY/util/Color' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -90,7 +90,7 @@ define( function( require ) {
    * @constructor
    */
   function SunNode( sun, energyChunksVisibleProperty, modelViewTransform ) {
-    EFACBaseNode.call( this, sun, modelViewTransform );
+    MoveFadeModelElementNode.call( this, sun, modelViewTransform );
     var self = this;
 
     var sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
@@ -226,6 +226,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'SunNode', SunNode );
 
-  return inherit( EFACBaseNode, SunNode );
+  return inherit( MoveFadeModelElementNode, SunNode );
 } );
 

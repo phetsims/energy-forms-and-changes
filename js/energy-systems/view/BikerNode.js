@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -36,7 +36,7 @@ define( function( require ) {
    */
   function BikerNode( biker, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, biker, modelViewTransform );
+    MoveFadeModelElementNode.call( this, biker, modelViewTransform );
 
     var spokesImage = new EFACModelImageNode( Biker.REAR_WHEEL_SPOKES_IMAGE, modelViewTransform );
     var backLegRootNode = new Node();
@@ -142,5 +142,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'BikerNode', BikerNode );
 
-  return inherit( EFACBaseNode, BikerNode );
+  return inherit( MoveFadeModelElementNode, BikerNode );
 } );

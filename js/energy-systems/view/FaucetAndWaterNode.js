@@ -4,7 +4,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
@@ -24,7 +24,7 @@ define( function( require ) {
    */
   function FaucetAndWaterNode( faucet, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, faucet, modelViewTransform );
+    MoveFadeModelElementNode.call( this, faucet, modelViewTransform );
 
     var maxFlowProportion = 1.0;
     var faucetNode = new FaucetNode( maxFlowProportion, faucet.flowProportionProperty, faucet.activeProperty, {
@@ -75,6 +75,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'FaucetAndWaterNode', FaucetAndWaterNode );
 
-  return inherit( EFACBaseNode, FaucetAndWaterNode );
+  return inherit( MoveFadeModelElementNode, FaucetAndWaterNode );
 } );
 

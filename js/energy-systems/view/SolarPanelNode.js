@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -25,7 +25,7 @@ define( function( require ) {
   function SolarPanelNode( solarPanel, modelViewTransform ) {
 
     // Add args to constructor as needed
-    EFACBaseNode.call( this, solarPanel, modelViewTransform );
+    MoveFadeModelElementNode.call( this, solarPanel, modelViewTransform );
 
     // Add the images and the node that will manage the energy chunks in
     // the order needed for the desired layering.
@@ -39,6 +39,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );
 
-  return inherit( EFACBaseNode, SolarPanelNode );
+  return inherit( MoveFadeModelElementNode, SolarPanelNode );
 } );
 

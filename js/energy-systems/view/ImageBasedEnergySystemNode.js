@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
 
@@ -20,11 +20,11 @@ define( function( require ) {
    * @constructor
    */
   function ImageBasedEnergySystemNode( element, modelViewTransform ) {
-    EFACBaseNode.call( this, element, modelViewTransform );
+    MoveFadeModelElementNode.call( this, element, modelViewTransform );
     this.modelViewTransform = modelViewTransform;
   }
 
-  return inherit( EFACBaseNode, ImageBasedEnergySystemNode, {
+  return inherit( MoveFadeModelElementNode, ImageBasedEnergySystemNode, {
 
     /**
      * [addImageNode description]

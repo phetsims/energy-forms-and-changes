@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -31,7 +31,7 @@ define( function( require ) {
    */
   function BeakerHeaterNode( beakerHeater, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, beakerHeater, modelViewTransform );
+    MoveFadeModelElementNode.call( this, beakerHeater, modelViewTransform );
 
     var energizedCoil = new EFACModelImageNode( BeakerHeater.HEATER_ELEMENT_ON_IMAGE, modelViewTransform );
 
@@ -96,5 +96,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
 
-  return inherit( EFACBaseNode, BeakerHeaterNode );
+  return inherit( MoveFadeModelElementNode, BeakerHeaterNode );
 } );

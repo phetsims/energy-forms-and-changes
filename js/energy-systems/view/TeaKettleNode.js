@@ -7,7 +7,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var Color = require( 'SCENERY/util/Color' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -34,7 +34,7 @@ define( function( require ) {
    */
   function TeaKettleNode( teaKettle, energyChunksVisibleProperty, modelViewTransform ) {
 
-    EFACBaseNode.call( this, teaKettle, modelViewTransform );
+    MoveFadeModelElementNode.call( this, teaKettle, modelViewTransform );
 
     var teaKettleImageNode = new EFACModelImageNode( TeaKettle.TEAPOT_IMAGE, modelViewTransform );
 
@@ -178,6 +178,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'TeaKettleNode', TeaKettleNode );
 
-  return inherit( EFACBaseNode, TeaKettleNode );
+  return inherit( MoveFadeModelElementNode, TeaKettleNode );
 } );
 

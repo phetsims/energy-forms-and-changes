@@ -11,7 +11,7 @@ define( function( require ) {
 
   // modules
   // var Circle = require( 'SCENERY/nodes/Circle' );
-  var EFACBaseNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACBaseNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -26,7 +26,7 @@ define( function( require ) {
    */
   function GeneratorNode( generator, modelViewTransform ) {
 
-    EFACBaseNode.call( this, generator, modelViewTransform );
+    MoveFadeModelElementNode.call( this, generator, modelViewTransform );
 
     var spokesNode = new EFACModelImageNode( Generator.SHORT_SPOKES_IMAGE, modelViewTransform );
     var paddlesNode = new EFACModelImageNode( Generator.WHEEL_PADDLES_IMAGE, modelViewTransform );
@@ -90,6 +90,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'GeneratorNode', GeneratorNode );
 
-  return inherit( EFACBaseNode, GeneratorNode );
+  return inherit( MoveFadeModelElementNode, GeneratorNode );
 } );
 
