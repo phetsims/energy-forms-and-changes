@@ -1,6 +1,9 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
+ *
+ * a Scenery Node that represent a legend that describes the different types of energy chunks
+ *
  * @author John Blanco
  * @author Jesse Greenberg
  * @author  Andrew Adare
@@ -37,6 +40,7 @@ define( function( require ) {
 
     options = _.extend( {}, options );
 
+    // title that appears at the top of the legend
     var titleText = new Text( formsOfEnergyString, {
       font: new PhetFont( {
         size: 14,
@@ -44,19 +48,7 @@ define( function( require ) {
       } )
     } );
 
-    var createEnergyChunkSymbol = function( labelString, energyType ) {
-      var labelText = new Text( labelString, {
-        font: LEGEND_ENTRY_FONT
-      } );
-
-      var iconNode = EnergyChunkNode.createEnergyChunkNode( energyType );
-
-      return new HBox( {
-        children: [ iconNode, labelText ],
-        spacing: 10
-      } );
-    };
-
+    // add an entry for each type of energy that can appear in the sim
     var content = new VBox( {
       children: [
         titleText,
@@ -71,19 +63,24 @@ define( function( require ) {
     } );
 
     Panel.call( this, content, options );
+  }
 
+  // helper function to create energy chunk legend entries
+  function createEnergyChunkSymbol( labelString, energyType ) {
+    var labelText = new Text( labelString, {
+      font: LEGEND_ENTRY_FONT
+    } );
+
+    var iconNode = EnergyChunkNode.createEnergyChunkNode( energyType );
+
+    return new HBox( {
+      children: [ iconNode, labelText ],
+      spacing: 10
+    } );
   }
 
   energyFormsAndChanges.register( 'EnergyChunkLegend', EnergyChunkLegend );
 
-  return inherit( Panel, EnergyChunkLegend, {
-    /**
-     * @public
-     * @param {Rectangle} returnRect
-     */
-    setReturnRect: function( returnRect ) {
-      this.returnRect = returnRect;
-    }
-  } );
+  return inherit( Panel, EnergyChunkLegend );
 } );
 
