@@ -221,22 +221,28 @@ define( function( require ) {
       left: EDGE_INSET,
       bottom: bottomPanel.top - EDGE_INSET
     } );
-    this.addChild( energySourceSelector );
     var energyConverterSelector = new EnergySystemElementSelector( model.energyConvertersCarousel, {
       left: energySourceSelector.right + SELECTOR_SPACING,
       bottom: bottomPanel.top - EDGE_INSET
     } );
-    this.addChild( energyConverterSelector );
     var energyUserSelector = new EnergySystemElementSelector( model.energyUsersCarousel, {
       left: energyConverterSelector.right + SELECTOR_SPACING,
       bottom: bottomPanel.top - EDGE_INSET
     } );
+    this.addChild( energySourceSelector );
+    this.addChild( energyConverterSelector );
     this.addChild( energyUserSelector );
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
 
   return inherit( ScreenView, EnergySystemsScreenView, {
+
+    /**
+     * step this view element, called by the framework
+     * @param dt - time step, in seconds
+     * @public
+     */
     step: function( dt ) {
       this.teaKettleNode.steamNode.step( dt );
       this.beakerHeaterNode.beakerView.water.step( dt );
