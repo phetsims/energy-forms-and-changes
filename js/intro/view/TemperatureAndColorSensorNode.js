@@ -1,8 +1,9 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * a thermometer node that updates its displayed temperature and color based on what is being "sensed" by the supplied
- * thermometer model element
+ * A Scenery Node that portrays a thermometer and a triangular indicator of the precise location where the temperature
+ * is being sensed. The triangular indicator can be filled with a color to make it more clear what exactly is being
+ * measured.
  *
  * @author John Blanco
  */
@@ -17,7 +18,7 @@ define( function( require ) {
    * @param {Thermometer} thermometer - model of a thermometer
    * @constructor
    */
-  function SensingThermometerNode( thermometer ) {
+  function TemperatureAndColorSensorNode( thermometer ) {
 
     var self = this;
     ThermometerNode.call( this );
@@ -37,7 +38,7 @@ define( function( require ) {
     } );
   }
 
-  energyFormsAndChanges.register( 'SensingThermometerNode', SensingThermometerNode );
+  energyFormsAndChanges.register( 'TemperatureAndColorSensorNode', TemperatureAndColorSensorNode );
 
-  return inherit( ThermometerNode, SensingThermometerNode );
+  return inherit( ThermometerNode, TemperatureAndColorSensorNode );
 } );

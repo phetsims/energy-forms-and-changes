@@ -13,7 +13,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
-  var SensingThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SensingThermometerNode' );
+  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/TemperatureAndColorSensorNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -25,7 +25,7 @@ define( function( require ) {
   function MovableThermometerNode( thermometer, dragBounds, modelViewTransform ) {
 
     var self = this;
-    SensingThermometerNode.call( this, thermometer );
+    TemperatureAndColorSensorNode.call( this, thermometer );
 
     this.addInputListener( new MovableDragHandler( thermometer.positionProperty, {
       modelViewTransform: modelViewTransform,
@@ -43,5 +43,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'MovableThermometerNode', MovableThermometerNode );
 
-  return inherit( SensingThermometerNode, MovableThermometerNode );
+  return inherit( TemperatureAndColorSensorNode, MovableThermometerNode );
 } );

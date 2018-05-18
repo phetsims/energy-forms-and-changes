@@ -2,7 +2,7 @@
 
 /**
  * A type that represents a thermometer model that can stick to other elements as they move.  This is a derived type
- * that added the "element following" functionality, see the parent type(s) for information on the thermometer model
+ * that adds the "element following" functionality, see the parent type(s) for information on the thermometer model
  * specifics.
  *
  * @author John Blanco
@@ -15,7 +15,7 @@ define( function( require ) {
   var ElementFollower = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ElementFollower' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Thermometer = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Thermometer' );
+  var TemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/TemperatureAndColorSensor' );
 
   /**
    * @param {EFACIntroModel} model
@@ -26,7 +26,7 @@ define( function( require ) {
   function ElementFollowingThermometer( model, initialPosition, initiallyActive ) {
 
     var self = this;
-    Thermometer.call( this, model, initialPosition, initiallyActive );
+    TemperatureAndColorSensor.call( this, model, initialPosition, initiallyActive );
 
     // @private
     this.elementFollower = new ElementFollower( this.positionProperty );
@@ -60,7 +60,7 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ElementFollowingThermometer', ElementFollowingThermometer );
 
-  return inherit( Thermometer, ElementFollowingThermometer, {
+  return inherit( TemperatureAndColorSensor, ElementFollowingThermometer, {
 
     /**
      * restore initial state
@@ -68,7 +68,7 @@ define( function( require ) {
      */
     reset: function() {
       this.elementFollower.stopFollowing();
-      Thermometer.prototype.reset.call( this );
+      TemperatureAndColorSensor.prototype.reset.call( this );
     }
   } );
 } );

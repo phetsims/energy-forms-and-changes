@@ -1,8 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * Basic thermometer model that has a position and senses temperature at that position. It has only a point and a
- * temperature in the model.  The visual representation is left entirely to the view.
+ * a model element that has a position and senses the temperature and color of the model at that position
  *
  * @author John Blanco
  */
@@ -24,7 +23,7 @@ define( function( require ) {
    * @param {boolean} initiallyActive
    * @constructor
    */
-  function Thermometer( model, initialPosition, initiallyActive ) {
+  function TemperatureAndColorSensor( model, initialPosition, initiallyActive ) {
     UserMovableModelElement.call( this, initialPosition );
 
     // @private
@@ -40,9 +39,9 @@ define( function( require ) {
     this.activeProperty = new Property( initiallyActive );
   }
 
-  energyFormsAndChanges.register( 'Thermometer', Thermometer );
+  energyFormsAndChanges.register( 'TemperatureAndColorSensor', TemperatureAndColorSensor );
 
-  return inherit( UserMovableModelElement, Thermometer, {
+  return inherit( UserMovableModelElement, TemperatureAndColorSensor, {
 
     /**
      * @public
