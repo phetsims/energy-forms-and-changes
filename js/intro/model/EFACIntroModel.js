@@ -17,7 +17,7 @@ define( function( require ) {
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var ElementFollowingThermometer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ElementFollowingThermometer' );
+  var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
@@ -110,10 +110,10 @@ define( function( require ) {
     // @private - put all of the model elements on a list for easy iteration
     this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.beaker ];
 
-    // @public (read-only) {ElementFollowingThermometer[]}
+    // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.thermometers = [];
     for ( var i = 0; i < NUM_THERMOMETERS; i++ ) {
-      var thermometer = new ElementFollowingThermometer( this, INITIAL_THERMOMETER_LOCATION, false );
+      var thermometer = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
       this.thermometers.push( thermometer );
 
       // Add handling for a special case where the user drops something (generally a block) in the beaker behind this

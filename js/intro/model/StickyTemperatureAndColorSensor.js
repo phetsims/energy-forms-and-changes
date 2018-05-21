@@ -1,9 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * A type that represents a thermometer model that can stick to other elements as they move.  This is a derived type
- * that adds the "element following" functionality, see the parent type(s) for information on the thermometer model
- * specifics.
+ * a temperature and color sensor that sticks to movable objects
  *
  * @author John Blanco
  * @author Jesse Greenberg
@@ -23,7 +21,7 @@ define( function( require ) {
    * @param {boolean} initiallyActive
    * @constructor
    */
-  function ElementFollowingThermometer( model, initialPosition, initiallyActive ) {
+  function StickyTemperatureAndColorSensor( model, initialPosition, initiallyActive ) {
 
     var self = this;
     TemperatureAndColorSensor.call( this, model, initialPosition, initiallyActive );
@@ -31,7 +29,7 @@ define( function( require ) {
     // @private
     this.elementFollower = new ElementFollower( this.positionProperty );
 
-    // Monitor the state of the 'userControlled' property in order to see when the user drops this thermometer and
+    // Monitor the state of the 'userControlled' property in order to detect when the user drops this thermometer and
     // determine whether or not it was dropped over anything to which it should stick.
     this.userControlledProperty.link( function( userControlled ) {
 
@@ -58,9 +56,9 @@ define( function( require ) {
     } );
   }
 
-  energyFormsAndChanges.register( 'ElementFollowingThermometer', ElementFollowingThermometer );
+  energyFormsAndChanges.register( 'StickyTemperatureAndColorSensor', StickyTemperatureAndColorSensor );
 
-  return inherit( TemperatureAndColorSensor, ElementFollowingThermometer, {
+  return inherit( TemperatureAndColorSensor, StickyTemperatureAndColorSensor, {
 
     /**
      * restore initial state
