@@ -12,9 +12,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
-  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/TemperatureAndColorSensorNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
 
   /**
    * @param {Thermometer} thermometer
@@ -24,21 +22,21 @@ define( function( require ) {
    */
   function MovableThermometerNode( thermometer, dragBounds, modelViewTransform ) {
 
-    var self = this;
     TemperatureAndColorSensorNode.call( this, thermometer );
 
-    this.addInputListener( new MovableDragHandler( thermometer.positionProperty, {
-      modelViewTransform: modelViewTransform,
-      dragBounds: modelViewTransform.viewToModelBounds( dragBounds )
-    } ) );
+    // this.addInputListener( new MovableDragHandler( thermometer.positionProperty, {
+    //   modelViewTransform: modelViewTransform,
+    //   dragBounds: modelViewTransform.viewToModelBounds( dragBounds )
+    // } ) );
 
     // update the offset when the model position changes
-    thermometer.positionProperty.link( function( position ) {
-      self.translation = new Vector2(
-        modelViewTransform.modelToViewX( position.x ),
-        modelViewTransform.modelToViewY( position.y ) - ( self.height / 2 + self.triangleTipOffset.height )
-      );
-    } );
+    // thermometer.positionProperty.link( function( position ) {
+    //   self.translation = new Vector2(
+    //     modelViewTransform.modelToViewX( position.x ),
+    //     modelViewTransform.modelToViewY( position.y )
+    //     // modelViewTransform.modelToViewY( position.y ) - ( self.height / 2 + self.triangleTipOffset.height )
+    //   );
+    // } );
   }
 
   energyFormsAndChanges.register( 'MovableThermometerNode', MovableThermometerNode );

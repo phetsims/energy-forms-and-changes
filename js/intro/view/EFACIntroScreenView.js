@@ -22,14 +22,13 @@ define( function( require ) {
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var MovableThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/MovableThermometerNode' );
+  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
   var Panel = require( 'SUN/Panel' );
@@ -37,9 +36,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var ThermometerToolboxNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermometerToolboxNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
@@ -230,22 +227,30 @@ define( function( require ) {
 
     // add the thermometer nodes
     var movableThermometerNodes = [];
-    model.thermometers.forEach( function( thermometer ) {
-      var thermometerNode = new MovableThermometerNode( thermometer, self.layoutBounds, modelViewTransform );
+    model.temperatureAndColorSensors.forEach( function( sensor ) {
+
+      // move the sensor to a good initial position, since the model doesn't know where these should initially go
+      sensor.positionProperty.set( Vector2.ZERO );
+
+      var thermometerNode = new TemperatureAndColorSensorNode( sensor, {
+        modelViewTransform: modelViewTransform,
+        dragBounds: modelViewTransform.viewToModelBounds( self.layoutBounds ),
+        draggable: true
+      } );
       thermometerLayer.addChild( thermometerNode );
 
       // TODO: this listener implement some initial drag and drop functionality, but needs more work for the correct behavior
-      thermometerNode.addInputListener( new SimpleDragHandler( {
-        up: function( event ) {
-
-          console.log( 'up' );
-
-          // Released over toolbox, so deactivate.
-          if ( thermometerNode.intersectsBounds( thermometerToolbox.bounds ) ) {
-            thermometer.activeProperty.set( false );
-          }
-        }
-      } ) );
+      // thermometerNode.addInputListener( new SimpleDragHandler( {
+      //   up: function( event ) {
+      //
+      //     console.log( 'up' );
+      //
+      //     // Released over toolbox, so deactivate.
+      //     if ( thermometerNode.intersectsBounds( thermometerToolbox.bounds ) ) {
+      //       thermometer.activeProperty.set( false );
+      //     }
+      //   }
+      // } ) );
 
       movableThermometerNodes.push( thermometerNode );
     } );
@@ -255,23 +260,23 @@ define( function( require ) {
     // in order to do this.
 
     // add the toolbox for the thermometers
-    var thermometerBox = new HBox();
-    var thermometerToolboxNodes = [];
-    movableThermometerNodes.forEach( function( movableThermometerNode ) {
-      var thermometerToolboxNode = new ThermometerToolboxNode( movableThermometerNode, modelViewTransform );
-      thermometerBox.addChild( thermometerToolboxNode );
-      thermometerToolboxNodes.push( thermometerToolboxNode );
-    } );
-
-    var thermometerToolbox = new Panel( thermometerBox, {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      left: EDGE_INSET,
-      top: EDGE_INSET
-    } );
-    backLayer.addChild( thermometerToolbox );
-    thermometerToolboxNodes.forEach( function( thermometerToolboxNode ) {
-      thermometerToolboxNode.returnRect = thermometerBox.bounds;
-    } );
+    // var thermometerBox = new HBox();
+    // var thermometerToolboxNodes = [];
+    // movableThermometerNodes.forEach( function( movableThermometerNode ) {
+    //   var thermometerToolboxNode = new ThermometerToolboxNode( movableThermometerNode, modelViewTransform );
+    //   thermometerBox.addChild( thermometerToolboxNode );
+    //   thermometerToolboxNodes.push( thermometerToolboxNode );
+    // } );
+    //
+    // var thermometerToolbox = new Panel( thermometerBox, {
+    //   fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+    //   left: EDGE_INSET,
+    //   top: EDGE_INSET
+    // } );
+    // backLayer.addChild( thermometerToolbox );
+    // thermometerToolboxNodes.forEach( function( thermometerToolboxNode ) {
+    //   thermometerToolboxNode.returnRect = thermometerBox.bounds;
+    // } );
 
     // create a function that updates the Z-order of the blocks when the user-controlled state changes
     var blockChangeListener = function() {

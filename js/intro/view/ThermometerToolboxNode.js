@@ -16,17 +16,17 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var ThermometerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/ThermometerNode' );
+  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
 
   /**
-   * @param {ThermometerNode} thermometerNode
+   * @param {TemperatureAndColorSensorNode} thermometerNode
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
   function ThermometerToolboxNode( thermometerNode, modelViewTransform ) {
 
     var self = this;
-    ThermometerNode.call( this );
+    TemperatureAndColorSensorNode.call( this );
 
     // TODO: I (jbphet) am not sure this is used or needed, update when sure.
     this.modelViewTransform = modelViewTransform;
@@ -93,6 +93,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ThermometerToolboxNode', ThermometerToolboxNode );
 
-  return inherit( ThermometerNode, ThermometerToolboxNode );
+  return inherit( TemperatureAndColorSensorNode, ThermometerToolboxNode );
 } );
 

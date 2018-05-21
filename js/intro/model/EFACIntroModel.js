@@ -35,7 +35,7 @@ define( function( require ) {
   // var EDGE_INSET = 10;
   // var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
 
-  // initial thermometer location, intended to be away from any model objects
+  // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
 
   var NUM_THERMOMETERS = 3;
@@ -111,10 +111,10 @@ define( function( require ) {
     this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.beaker ];
 
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
-    this.thermometers = [];
+    this.temperatureAndColorSensors = [];
     for ( var i = 0; i < NUM_THERMOMETERS; i++ ) {
       var thermometer = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
-      this.thermometers.push( thermometer );
+      this.temperatureAndColorSensors.push( thermometer );
 
       // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
       // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
@@ -166,7 +166,7 @@ define( function( require ) {
       //this.brick.reset();
       //this.beaker.reset();
       //
-      //this.thermometers.forEach( function( thermometer ) {
+      //this.temperatureAndColorSensors.forEach( function( thermometer ) {
       //  thermometer.reset();
       //} );
     },
@@ -383,7 +383,7 @@ define( function( require ) {
         thermalEnergyContainer.step( dt );
       } );
 
-      this.thermometers.forEach( function( thermometer ) {
+      this.temperatureAndColorSensors.forEach( function( thermometer ) {
         thermometer.step( dt );
       } );
     },
