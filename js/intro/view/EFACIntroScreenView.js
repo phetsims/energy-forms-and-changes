@@ -125,39 +125,6 @@ define( function( require ) {
     clockControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
     backLayer.addChild( clockControlPanel );
 
-    // create and add the "Reset All" button in the bottom right
-    var resetAllButton = new ResetAllButton( {
-      listener: function() {
-        model.reset();
-      },
-      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
-      right: this.layoutBounds.maxX - EDGE_INSET,
-      centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
-    } );
-    this.addChild( resetAllButton );
-
-    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
-    // each to be independently scaled.
-    var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
-    energyChunkNode.pickable = false;
-    var label = new Text( energySymbolsString, {
-      font: new PhetFont( 20 )
-    } );
-    var showEnergyCheckbox = new Checkbox( new LayoutBox( {
-        children: [ label, energyChunkNode ],
-        orientation: 'horizontal',
-        spacing: 5
-      } ), model.energyChunksVisibleProperty
-    );
-    var controlPanel = new Panel( showEnergyCheckbox, {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-      rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
-    } );
-    this.addChild( controlPanel );
-
     // add the burners
     var burnerProjectionAmount =
       modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
@@ -264,22 +231,22 @@ define( function( require ) {
     );
     backLayer.addChild( thermometerStorageArea );
 
-    // position the thermometers in the storage area
+    // set initial positions for sensors in the storage area, hook up listers to handle removal from storate area
     var interThermometerSpacing = ( thermometerStorageArea.width - sumOfThermometerNodeWidths ) / 4;
     var offsetFromBottomOfStorageArea = 30; // empirically determined
-    this.sensorNodeInitialPositions = [];
+    var sensorPositionsInStorageAreaMap = [];
     var nextThermometerViewPositionX = thermometerStorageArea.left + interThermometerSpacing;
-    model.temperatureAndColorSensors.forEach( function( sensor, index ) {
+    model.temperatureAndColorSensors.forEach( function( sensor ) {
 
-      // set the position to a point inside the thermometer storage area
-      sensor.positionProperty.set( new Vector2(
-        modelViewTransform.viewToModelX( nextThermometerViewPositionX ),
-        modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea )
-      ) );
-      nextThermometerViewPositionX += thermometerNodeWidth + interThermometerSpacing;
-
-      // save the initial position so that it can be used when returning to the storage area
-      self.sensorNodeInitialPositions.push( sensor.positionProperty.get() );
+      // define the position in the storage area and group it in an object with a reference to the sensor
+      sensorPositionsInStorageAreaMap.push( {
+        sensor: sensor,
+        position: new Vector2(
+          modelViewTransform.viewToModelX( nextThermometerViewPositionX ),
+          modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea )
+        )
+      } );
+      nextThermometerViewPositionX += interThermometerSpacing + thermometerNodeWidth;
 
       // add a listener that will move the sensor back into the storage area when released over it
       // TODO: This is not complete
@@ -288,28 +255,33 @@ define( function( require ) {
       } );
     } );
 
-    // TODO: In the original Java sim, there were separate nodes for the thermometors in the tool box versus those in
-    // the play area.  I (jbphet) want to simplify this in the HTML5 version, and below is the code that will be revised
-    // in order to do this.
+    // function to return a sensor to its initial position in the storage area
+    function returnSensorToStorageArea( sensor ) {
 
-    // add the toolbox for the thermometers
-    // var thermometerBox = new HBox();
-    // var thermometerToolboxNodes = [];
-    // temperatureAndColorSensorNodes.forEach( function( movableThermometerNode ) {
-    //   var thermometerToolboxNode = new ThermometerToolboxNode( movableThermometerNode, modelViewTransform );
-    //   thermometerBox.addChild( thermometerToolboxNode );
-    //   thermometerToolboxNodes.push( thermometerToolboxNode );
-    // } );
-    //
-    // var thermometerToolbox = new Panel( thermometerBox, {
-    //   fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-    //   left: EDGE_INSET,
-    //   top: EDGE_INSET
-    // } );
-    // backLayer.addChild( thermometerToolbox );
-    // thermometerToolboxNodes.forEach( function( thermometerToolboxNode ) {
-    //   thermometerToolboxNode.returnRect = thermometerBox.bounds;
-    // } );
+      // find and set the initial position for this sensor
+      var position = null;
+      for ( var i = 0; i < model.temperatureAndColorSensors.length; i++ ) {
+        if ( sensorPositionsInStorageAreaMap[ i ].sensor === sensor ) {
+          position = sensorPositionsInStorageAreaMap[ i ].position;
+          break;
+        }
+      }
+      assert && assert( position, 'position not found for specified sensor' );
+      sensor.positionProperty.set( position );
+
+      // sensors are inactive when in the storage area
+      sensor.activeProperty.set( false );
+    }
+
+    // function to return all sensors to the storage area
+    function returnAllSensorsToStorageArea() {
+      model.temperatureAndColorSensors.forEach( function( sensor ) {
+        returnSensorToStorageArea( sensor );
+      } );
+    }
+
+    // put all of the temperature and color sensors into the storage area as part of initialization process
+    returnAllSensorsToStorageArea();
 
     // create a function that updates the Z-order of the blocks when the user-controlled state changes
     var blockChangeListener = function() {
@@ -332,6 +304,40 @@ define( function( require ) {
     // update the Z-order of the blocks whenever the "userControlled" state of either changes
     model.brick.positionProperty.link( blockChangeListener );
     model.ironBlock.positionProperty.link( blockChangeListener );
+
+    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
+    // each to be independently scaled.
+    var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
+    energyChunkNode.pickable = false;
+    var label = new Text( energySymbolsString, {
+      font: new PhetFont( 20 )
+    } );
+    var showEnergyCheckbox = new Checkbox( new LayoutBox( {
+        children: [ label, energyChunkNode ],
+        orientation: 'horizontal',
+        spacing: 5
+      } ), model.energyChunksVisibleProperty
+    );
+    var controlPanel = new Panel( showEnergyCheckbox, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
+    } );
+    this.addChild( controlPanel );
+
+    // create and add the "Reset All" button in the bottom right
+    var resetAllButton = new ResetAllButton( {
+      listener: function() {
+        model.reset();
+        returnAllSensorsToStorageArea();
+      },
+      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
+      right: this.layoutBounds.maxX - EDGE_INSET,
+      centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
+    } );
+    this.addChild( resetAllButton );
   }
 
   energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );

@@ -154,7 +154,7 @@ define( function( require ) {
       // and it was due to issues with reset not restoring state properly, but I (@jbphet) don't have time to do any
       // further investigation.  See https://github.com/phetsims/energy-forms-and-changes/issues/25 for more
       // information.  Restore the commented-out code below as part of the process to make it work.
-      console.log( 'Warning: Reset is temporarily bypassed!' );
+      console.log( 'warning: portions of reset are temporarily bypassed' );
 
       //this.energyChunksVisibleProperty.reset();
       //this.playProperty.reset();
