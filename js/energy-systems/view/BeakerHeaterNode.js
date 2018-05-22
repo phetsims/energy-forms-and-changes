@@ -18,7 +18,8 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
+  var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // TODO: Make this a query parameter
   var DEBUG = false;
@@ -44,14 +45,6 @@ define( function( require ) {
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
 
-    // add the thermometer that will indicate the beaker water temperature
-    // TODO: Why aren't we using one that looks more like those used on the first screen?
-    var thermometerNode = new ThermometerNode( 0, 1, beakerHeater.heatProportionProperty, {
-      left: energizedCoil.right + 20,
-      bottom: energizedCoil.top
-    } );
-    this.addChild( thermometerNode );
-
     // Add the beaker.  A compensating MVT is needed because the beaker node is being added as a child of this node,
     // but wants to set its own offset in model space.
     var scale = modelViewTransform.matrix.scaleVector;
@@ -68,6 +61,17 @@ define( function( require ) {
       modelViewTransform
     ) );
     this.addChild( this.beakerView.frontNode );
+
+    // Add the thermometer that will indicate the beaker water temperature.  Since the position of the thermometer is
+    // relative to the beaker heater, the model view transform must be compensated
+    var temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( beakerHeater.temperatureAndColorSensor, {
+      modelViewTransform: ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+        Vector2.ZERO,
+        Vector2.ZERO,
+        modelViewTransform.getMatrix().getScaleVector().x
+      )
+    } );
+    this.addChild( temperatureAndColorSensorNode );
 
     if ( DEBUG ) {
       var Rectangle = require( 'SCENERY/nodes/Rectangle' );
