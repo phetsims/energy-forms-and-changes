@@ -118,6 +118,7 @@ define( function( require ) {
     CONTROL_PANEL_OUTLINE_LINE_WIDTH: 1.5,
     CONTROL_PANEL_OUTLINE_STROKE: 'black',
     CLOCK_CONTROL_BACKGROUND_COLOR: new Color( 120, 120, 120 ),
+    CONTROL_PANEL_CORNER_RADIUS: 6,
     RESET_ALL_BUTTON_RADIUS: 20,
 
     // model-view transform scale factor for Energy Systems tab

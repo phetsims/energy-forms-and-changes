@@ -153,6 +153,7 @@ define( function( require ) {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
     } );
     this.addChild( controlPanel );
@@ -225,34 +226,66 @@ define( function( require ) {
     var thermometerLayer = new Node();
     this.addChild( thermometerLayer );
 
-    // add the thermometer nodes
-    var movableThermometerNodes = [];
+    // create and add the temperature and color sensor nodes, which look like a thermometer with a triangle on the side
+    var temperatureAndColorSensorNodes = [];
+    var sumOfThermometerNodeWidths = 0;
+    var thermometerNodeWidth = 0;
+    var thermometerNodeHeight = 0;
     model.temperatureAndColorSensors.forEach( function( sensor ) {
-
-      // move the sensor to a good initial position, since the model doesn't know where these should initially go
-      sensor.positionProperty.set( Vector2.ZERO );
-
       var thermometerNode = new TemperatureAndColorSensorNode( sensor, {
         modelViewTransform: modelViewTransform,
         dragBounds: modelViewTransform.viewToModelBounds( self.layoutBounds ),
         draggable: true
       } );
       thermometerLayer.addChild( thermometerNode );
+      temperatureAndColorSensorNodes.push( thermometerNode );
 
-      // TODO: this listener implement some initial drag and drop functionality, but needs more work for the correct behavior
-      // thermometerNode.addInputListener( new SimpleDragHandler( {
-      //   up: function( event ) {
-      //
-      //     console.log( 'up' );
-      //
-      //     // Released over toolbox, so deactivate.
-      //     if ( thermometerNode.intersectsBounds( thermometerToolbox.bounds ) ) {
-      //       thermometer.activeProperty.set( false );
-      //     }
-      //   }
-      // } ) );
+      // update the variables that will be used to create the storage area
+      sumOfThermometerNodeWidths += thermometerNode.width;
+      thermometerNodeHeight = thermometerNodeHeight || thermometerNode.height;
+      thermometerNodeWidth = thermometerNodeWidth || thermometerNode.width;
+    } );
 
-      movableThermometerNodes.push( thermometerNode );
+    // create the storage area for the thermometers
+    var thermometerStorageArea = new Rectangle(
+      0,
+      0,
+      sumOfThermometerNodeWidths * 1.1,
+      thermometerNodeHeight * 1.1,
+      EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      {
+        fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+        stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+        lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+        left: EDGE_INSET,
+        top: EDGE_INSET
+      }
+    );
+    backLayer.addChild( thermometerStorageArea );
+
+    // position the thermometers in the storage area
+    var interThermometerSpacing = ( thermometerStorageArea.width - sumOfThermometerNodeWidths ) / 4;
+    var offsetFromBottomOfStorageArea = 30; // empirically determined
+    this.sensorNodeInitialPositions = [];
+    var nextThermometerViewPositionX = thermometerStorageArea.left + interThermometerSpacing;
+    model.temperatureAndColorSensors.forEach( function( sensor, index ) {
+
+      // set the position to a point inside the thermometer storage area
+      sensor.positionProperty.set( new Vector2(
+        modelViewTransform.viewToModelX( nextThermometerViewPositionX ),
+        modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea )
+      ) );
+      nextThermometerViewPositionX += thermometerNodeWidth + interThermometerSpacing;
+
+      // save the initial position so that it can be used when returning to the storage area
+      self.sensorNodeInitialPositions.push( sensor.positionProperty.get() );
+
+      // add a listener that will move the sensor back into the storage area when released over it
+      // TODO: This is not complete
+      sensor.userControlledProperty.link( function() {
+        sensor.activeProperty.set( true );
+      } );
     } );
 
     // TODO: In the original Java sim, there were separate nodes for the thermometors in the tool box versus those in
@@ -262,7 +295,7 @@ define( function( require ) {
     // add the toolbox for the thermometers
     // var thermometerBox = new HBox();
     // var thermometerToolboxNodes = [];
-    // movableThermometerNodes.forEach( function( movableThermometerNode ) {
+    // temperatureAndColorSensorNodes.forEach( function( movableThermometerNode ) {
     //   var thermometerToolboxNode = new ThermometerToolboxNode( movableThermometerNode, modelViewTransform );
     //   thermometerBox.addChild( thermometerToolboxNode );
     //   thermometerToolboxNodes.push( thermometerToolboxNode );
