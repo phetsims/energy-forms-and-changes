@@ -189,36 +189,36 @@ define( function( require ) {
     beakerBackLayer.addChild( beakerView.backNode );
     beakerGrabLayer.addChild( beakerView.grabNode );
 
-    // the thermometer layer needs to be above the movable objects
-    var thermometerLayer = new Node();
-    this.addChild( thermometerLayer );
+    // the sensor layer needs to be above the movable objects
+    var sensorLayer = new Node();
+    this.addChild( sensorLayer );
 
     // create and add the temperature and color sensor nodes, which look like a thermometer with a triangle on the side
     var temperatureAndColorSensorNodes = [];
-    var sumOfThermometerNodeWidths = 0;
-    var thermometerNodeWidth = 0;
-    var thermometerNodeHeight = 0;
+    var sumOfSensorNodeWidths = 0;
+    var sensorNodeWidth = 0;
+    var sensorNodeHeight = 0;
     model.temperatureAndColorSensors.forEach( function( sensor ) {
-      var thermometerNode = new TemperatureAndColorSensorNode( sensor, {
+      var temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( sensor, {
         modelViewTransform: modelViewTransform,
         dragBounds: modelViewTransform.viewToModelBounds( self.layoutBounds ),
         draggable: true
       } );
-      thermometerLayer.addChild( thermometerNode );
-      temperatureAndColorSensorNodes.push( thermometerNode );
+      sensorLayer.addChild( temperatureAndColorSensorNode );
+      temperatureAndColorSensorNodes.push( temperatureAndColorSensorNode );
 
       // update the variables that will be used to create the storage area
-      sumOfThermometerNodeWidths += thermometerNode.width;
-      thermometerNodeHeight = thermometerNodeHeight || thermometerNode.height;
-      thermometerNodeWidth = thermometerNodeWidth || thermometerNode.width;
+      sumOfSensorNodeWidths += temperatureAndColorSensorNode.width;
+      sensorNodeHeight = sensorNodeHeight || temperatureAndColorSensorNode.height;
+      sensorNodeWidth = sensorNodeWidth || temperatureAndColorSensorNode.width;
     } );
 
-    // create the storage area for the thermometers
-    var thermometerStorageArea = new Rectangle(
+    // create the storage area for the sensors
+    var sensorStorageArea = new Rectangle(
       0,
       0,
-      sumOfThermometerNodeWidths * 1.1,
-      thermometerNodeHeight * 1.1,
+      sumOfSensorNodeWidths * 1.1,
+      sensorNodeHeight * 1.1,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       {
@@ -229,29 +229,42 @@ define( function( require ) {
         top: EDGE_INSET
       }
     );
-    backLayer.addChild( thermometerStorageArea );
+    backLayer.addChild( sensorStorageArea );
 
-    // set initial positions for sensors in the storage area, hook up listers to handle removal from storate area
-    var interThermometerSpacing = ( thermometerStorageArea.width - sumOfThermometerNodeWidths ) / 4;
+    // set initial positions for sensors in the storage area, hook up listeners to handle interaction with storage area
+    var interSensorSpacing = ( sensorStorageArea.width - sumOfSensorNodeWidths ) / 4;
     var offsetFromBottomOfStorageArea = 30; // empirically determined
     var sensorPositionsInStorageAreaMap = [];
-    var nextThermometerViewPositionX = thermometerStorageArea.left + interThermometerSpacing;
-    model.temperatureAndColorSensors.forEach( function( sensor ) {
+    var nextSensorViewPositionX = sensorStorageArea.left + interSensorSpacing;
+    model.temperatureAndColorSensors.forEach( function( sensor, index ) {
 
-      // define the position in the storage area and group it in an object with a reference to the sensor
+      // define the storage position and put it into an object with a reference to the sensor
       sensorPositionsInStorageAreaMap.push( {
         sensor: sensor,
         position: new Vector2(
-          modelViewTransform.viewToModelX( nextThermometerViewPositionX ),
-          modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea )
+          modelViewTransform.viewToModelX( nextSensorViewPositionX ),
+          modelViewTransform.viewToModelY( sensorStorageArea.bottom - offsetFromBottomOfStorageArea )
         )
       } );
-      nextThermometerViewPositionX += interThermometerSpacing + thermometerNodeWidth;
 
-      // add a listener that will move the sensor back into the storage area when released over it
-      // TODO: This is not complete
-      sensor.userControlledProperty.link( function() {
-        sensor.activeProperty.set( true );
+      // update the horizontal placement to be used for the next sensor
+      nextSensorViewPositionX += interSensorSpacing + sensorNodeWidth;
+
+      // add a listener for when the sense is removed from or returned to the storage area
+      sensor.userControlledProperty.link( function( userControlled ) {
+        if ( userControlled ) {
+
+          // the user has picked up this sensor, make sure it is active
+          sensor.activeProperty.set( true );
+        }
+        else {
+
+          // the user has released this sensor - test if it should go back in the storage area
+          var sensorNode = temperatureAndColorSensorNodes[ index ];
+          if ( sensorNode.bounds.intersectsBounds( sensorStorageArea.bounds ) ) {
+            returnSensorToStorageArea( sensor );
+          }
+        }
       } );
     } );
 
