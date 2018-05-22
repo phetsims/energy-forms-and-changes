@@ -11,6 +11,9 @@
   },
   "phet": {
     "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
+    "phetLibs": [
+      "twixt"
+    ],
     "runnable": true,
     "supportedBrands": [
       "phet",
