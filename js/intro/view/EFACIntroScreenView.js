@@ -49,6 +49,7 @@ define( function( require ) {
   var EDGE_INSET = 10;
   var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // multiplier empirically determined for best look
   var SHOW_LAYOUT_BOUNDS = false;
+  var SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
 
   // TODO: I (jbphet) came across the code immediately below during code cleanup in early May 2018, not sure what it is or whether it is still needed.
   // Boolean property for showing/hiding developer control for dumping energy levels.
@@ -250,12 +251,23 @@ define( function( require ) {
       // update the horizontal placement to be used for the next sensor
       nextSensorViewPositionX += interSensorSpacing + sensorNodeWidth;
 
-      // add a listener for when the sense is removed from or returned to the storage area
+      // add a listener for when the sensor is removed from or returned to the storage area
       sensor.userControlledProperty.link( function( userControlled ) {
         if ( userControlled ) {
 
-          // the user has picked up this sensor, make sure it is active
-          sensor.activeProperty.set( true );
+          // the user has picked up this sensor
+          if ( !sensor.activeProperty.get() ) {
+
+            // The sensor was inactive, which means that it was in the storage area.  In this case, we make it jump
+            // a little to cue the user that this is a movable object.
+            console.log( 'offset' );
+            sensor.positionProperty.set(
+              sensor.positionProperty.get().plus( modelViewTransform.viewToModelDelta( SENSOR_JUMP_ON_EXTRACTION ) )
+            );
+
+            // activate the sensor
+            sensor.activeProperty.set( true );
+          }
         }
         else {
 
