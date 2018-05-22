@@ -53,12 +53,13 @@ define( function( require ) {
       .lineTo( Math.cos( Math.PI / 6 ) * TRIANGLE_SIDE_LENGTH, Math.sin( Math.PI / 6 ) * TRIANGLE_SIDE_LENGTH )
       .close();
 
-    var triangle = new Path( triangleShape, {
+    // @public (read-only) {Path} - color indicator, public so that it can be used for bounds intersection testing
+    this.colorIndicatorNode = new Path( triangleShape, {
       fill: new Color( 0, 0, 0, 0 ),
       lineWidth: 2,
       stroke: 'black'
     } );
-    this.addChild( triangle );
+    this.addChild( this.colorIndicatorNode );
 
     // set the fill color of the triangle as the 'sensed color' changes
     Property.multilink(
@@ -67,20 +68,22 @@ define( function( require ) {
         temperatureAndColorSensor.sensedElementColorProperty
       ],
       function( active, color ) {
-        triangle.fill = active ? color : INACTIVE_COLOR;
+        self.colorIndicatorNode.fill = active ? color : INACTIVE_COLOR;
       }
     );
 
-    // add the thermometer node - its position relative to the triangle is empirically determined for optimal look
-    this.addChild( new ThermometerNode(
+    // @public (read-only) {ThermometerNode} - thermometer node, public so that it can be used for bounds intersection
+    // testing
+    this.thermometerNode = new ThermometerNode(
       EFACConstants.FREEZING_POINT_TEMPERATURE,
       EFACConstants.BOILING_POINT_TEMPERATURE,
       temperatureAndColorSensor.sensedTemperatureProperty,
       {
-        left: triangle.right + 10,
-        bottom: triangle.bottom + 12
+        left: this.colorIndicatorNode.right + 10,
+        bottom: this.colorIndicatorNode.bottom + 12
       }
-    ) );
+    );
+    this.addChild( this.thermometerNode );
 
     // move this node when the model element moves
     temperatureAndColorSensor.positionProperty.link( function( position ) {

@@ -260,7 +260,6 @@ define( function( require ) {
 
             // The sensor was inactive, which means that it was in the storage area.  In this case, we make it jump
             // a little to cue the user that this is a movable object.
-            console.log( 'offset' );
             sensor.positionProperty.set(
               sensor.positionProperty.get().plus( modelViewTransform.viewToModelDelta( SENSOR_JUMP_ON_EXTRACTION ) )
             );
@@ -273,7 +272,10 @@ define( function( require ) {
 
           // the user has released this sensor - test if it should go back in the storage area
           var sensorNode = temperatureAndColorSensorNodes[ index ];
-          if ( sensorNode.bounds.intersectsBounds( sensorStorageArea.bounds ) ) {
+          var colorIndicatorBounds = sensorNode.localToParentBounds( sensorNode.colorIndicatorNode.bounds );
+          var thermometerBounds = sensorNode.localToParentBounds( sensorNode.thermometerNode.bounds );
+          if ( colorIndicatorBounds.intersectsBounds( sensorStorageArea.bounds ) ||
+               thermometerBounds.intersectsBounds( sensorStorageArea.bounds ) ) {
             returnSensorToStorageArea( sensor );
           }
         }
