@@ -1,7 +1,7 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * model of a beaker and a heating element that can heat it up
+ * model of a heating element with a beaker on it
  *
  * @author John Blanco
  */
@@ -23,6 +23,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
   var TemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/TemperatureAndColorSensor' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -56,7 +57,7 @@ define( function( require ) {
   var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
-  var BEAKER_OFFSET = new Vector2( 0.089, 0.025 );
+  var BEAKER_OFFSET = new Vector2( 0, 0.025 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
   var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.getHeight();
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
@@ -90,7 +91,7 @@ define( function( require ) {
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = new ObservableArray();
 
-    // @public {Beaker} (read-only)
+    // @public {Beaker} (read-only) - note that its position is relative to this model element as a whole, not absolute
     this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisibleProperty );
 
     // @public {TemperatureAndColorSensor} (read-only)
@@ -125,20 +126,21 @@ define( function( require ) {
       if ( this.incomingEnergyChunks.length > 0 ) {
         this.incomingEnergyChunks.forEach( function( chunk ) {
 
-          assert && assert( chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
-            'Energy chunk type should be ELECTRICAL but is ' + chunk.energyTypeProperty.value );
+          assert && assert(
+            chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
+            'Energy chunk type should be ELECTRICAL but is ' + chunk.energyTypeProperty.value
+          );
 
-          // Add the energy chunk to the list of those under management.
+          // add the energy chunk to the list of those under management
           self.energyChunkList.push( chunk );
 
-          // Add a "mover" that will move this energy chunk through
-          // the wire to the heating element.
+          // add a "mover" that will move this energy chunk through the wire to the heating element
           self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
             self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         } );
 
-        // Clear incoming chunks array
+        // clear incoming chunks array
         this.incomingEnergyChunks.length = 0;
       }
       this.moveElectricalEnergyChunks( dt );
@@ -211,20 +213,17 @@ define( function( require ) {
      */
     getTemperatureAndColorAtLocation: function( location ) {
 
-      // TODO: validate location
-      // assert && assert(
-      //   location.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && location.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
-      //   'location is not inside of beaker'
-      // );
-      // assert && assert(
-      //   location.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && location.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
-      //   'location is not inside of beaker'
-      // );
+      // validate that the specified location is inside the beaker, since that's the only supported location
+      assert && assert(
+      location.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && location.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
+        'location is not inside of beaker'
+      );
+      assert && assert(
+      location.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && location.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
+        'location is not inside of beaker'
+      );
 
-      return {
-        temperature: this.beaker.getTemperature(),
-        color: EFACConstants.WATER_COLOR_OPAQUE
-      };
+      return new TemperatureAndColor( this.beaker.getTemperature(), EFACConstants.WATER_COLOR_OPAQUE );
     },
 
     /**
