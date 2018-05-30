@@ -218,8 +218,8 @@ define( function( require ) {
     var sensorStorageArea = new Rectangle(
       0,
       0,
-      sumOfSensorNodeWidths * 1.1,
-      sensorNodeHeight * 1.1,
+      sumOfSensorNodeWidths * 1.3,
+      sensorNodeHeight * 1.15,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       {
@@ -234,7 +234,7 @@ define( function( require ) {
 
     // set initial positions for sensors in the storage area, hook up listeners to handle interaction with storage area
     var interSensorSpacing = ( sensorStorageArea.width - sumOfSensorNodeWidths ) / 4;
-    var offsetFromBottomOfStorageArea = 30; // empirically determined
+    var offsetFromBottomOfStorageArea = 25; // empirically determined
     var sensorPositionsInStorageAreaMap = [];
     var nextSensorViewPositionX = sensorStorageArea.left + interSensorSpacing;
     model.temperatureAndColorSensors.forEach( function( sensor, index ) {

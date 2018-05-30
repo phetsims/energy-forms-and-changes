@@ -86,7 +86,8 @@ define( function( require ) {
         tickSpacing: 10,
         majorTickLength: 10,
         minorTickLength: 5,
-        left: this.colorIndicatorNode.right + 4,
+        backgroundFill: new Color( 256, 256, 256, 0.67 ),
+        left: this.colorIndicatorNode.right + 3,
         bottom: this.colorIndicatorNode.bottom + 5
       }
     );
