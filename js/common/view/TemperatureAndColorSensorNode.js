@@ -25,7 +25,7 @@ define( function( require ) {
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
 
   // constants
-  var TRIANGLE_SIDE_LENGTH = 20; // in screen coordinates
+  var TRIANGLE_SIDE_LENGTH = 18; // in screen coordinates
   var INACTIVE_COLOR = new Color( 'white' );
 
   /**
@@ -57,7 +57,8 @@ define( function( require ) {
     this.colorIndicatorNode = new Path( triangleShape, {
       fill: new Color( 0, 0, 0, 0 ),
       lineWidth: 2,
-      stroke: 'black'
+      stroke: 'black',
+      lineJoin: 'round'
     } );
     this.addChild( this.colorIndicatorNode );
 
@@ -79,8 +80,14 @@ define( function( require ) {
       EFACConstants.BOILING_POINT_TEMPERATURE,
       temperatureAndColorSensor.sensedTemperatureProperty,
       {
-        left: this.colorIndicatorNode.right + 10,
-        bottom: this.colorIndicatorNode.bottom + 12
+        bulbDiameter: 30,
+        tubeWidth: 18,
+        lineWidth: 2,
+        tickSpacing: 10,
+        majorTickLength: 10,
+        minorTickLength: 5,
+        left: this.colorIndicatorNode.right + 4,
+        bottom: this.colorIndicatorNode.bottom + 5
       }
     );
     this.addChild( this.thermometerNode );
