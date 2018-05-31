@@ -3,7 +3,7 @@
 /**
  * Scenery node that represents a beaker in the view.  This representation is split between a front node and a back
  * node, which must be separately added to the canvas.  This is done to allow a layering effect.  Hence, this cannot be
- * added directly to the canvas, and the client must add each layer separately.
+ * added directly to the scene graph, and the client must add each layer separately.
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -54,12 +54,11 @@ define( function( require ) {
     this.modelViewTransform = modelViewTransform;
     this.energyChunkClipNode = new Node();
 
-    // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, so
+    // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
     // the header comment for info about how these are used.
-    // be revisted when the port is further along.
     this.frontNode = new Node();
     this.backNode = new Node();
-    this.grabNode = new Node();
+    this.grabNode = new Node( { cursor: 'pointer' } );
 
     this.addChild( this.frontNode );
     this.addChild( this.backNode );
