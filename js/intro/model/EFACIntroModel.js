@@ -217,7 +217,7 @@ define( function( require ) {
         if ( y !== 0 && !y ) {
           assert && assert( false, 'NaN value in position' );
         }
-        unsupported = ( movableModelElement.supportingSurfaceProperty.value === null );
+        unsupported = movableModelElement.supportingSurfaceProperty === null;
         raised = ( movableModelElement.positionProperty.value.y !== 0 );
         if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
           self.fallToSurface( movableModelElement, dt );
@@ -400,8 +400,8 @@ define( function( require ) {
 
       // if so, center the modelElement above its new parent
       if ( potentialSupportingSurface !== null ) {
-        minYPos = potentialSupportingSurface.yPos;
-        targetX = potentialSupportingSurface.getCenterX();
+        minYPos = potentialSupportingSurface.value.yPos;
+        targetX = potentialSupportingSurface.value.getCenterX();
         targetY = modelElement.positionProperty.value.y;
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
@@ -415,8 +415,8 @@ define( function( require ) {
         proposedYPos = minYPos;
         modelElement.verticalVelocityProperty.set( 0 );
         if ( potentialSupportingSurface !== null ) {
-          modelElement.supportingSurfaceProperty.set( potentialSupportingSurface );
-          potentialSupportingSurface.addElementToSurface( modelElement );
+          modelElement.setSupportingSurfaceProperty( potentialSupportingSurface );
+          potentialSupportingSurface.value.addElementToSurface( modelElement );
         }
       }
       else {
@@ -714,7 +714,7 @@ define( function( require ) {
 
     /**
      * @param {UserMovableModelElement} element
-     * @returns {HorizontalSurface}
+     * @returns {Property.<HorizontalSurface>}
      * @private
      */
     findBestSupportSurface: function( element ) {
@@ -731,22 +731,23 @@ define( function( require ) {
           return;
         }
 
-        var bottom = element.bottomSurfaceProperty.value;
-        var top = potentialSupportingElement.topSurfaceProperty.value;
+        var bottom = element.bottomSurfaceProperty;
+        var top = potentialSupportingElement.topSurfaceProperty;
 
-        assert && assert( top === null || top.owner === potentialSupportingElement );
+        assert && assert( top.value === null || top.value.owner === potentialSupportingElement );
 
-        if ( top && bottom.overlapsWith( top ) ) {
+        if ( top.value && bottom.value.overlapsWith( top.value ) ) {
 
-          // There is at least some overlap.  Determine if this surface is the best one so far.
-          var surfaceOverlap = self.getHorizontalOverlap( top, bottom );
+          // there is at least some overlap, so determine if this surface is the best one so far
+          var surfaceOverlap = self.getHorizontalOverlap( top.value, bottom.value );
 
           // The following nasty 'if' clause determines if the potential supporting surface is a better one than we
           // currently have based on whether we have one at all, or has more overlap than the previous best choice, or
           // is directly above the current one.
           if ( bestOverlappingSurface === null ||
-               ( surfaceOverlap > self.getHorizontalOverlap( bestOverlappingSurface, bottom ) && !self.isDirectlyAbove( bestOverlappingSurface, top ) ) ||
-               ( self.isDirectlyAbove( top, bestOverlappingSurface ) ) ) {
+               ( surfaceOverlap > self.getHorizontalOverlap( bestOverlappingSurface.value, bottom.value ) &&
+                 !self.isDirectlyAbove( bestOverlappingSurface.value, top.value ) ) ||
+               ( self.isDirectlyAbove( top.value, bestOverlappingSurface.value ) ) ) {
             bestOverlappingSurface = top;
           }
         }
@@ -755,7 +756,7 @@ define( function( require ) {
       // Make sure that the best supporting surface isn't at the bottom of a stack, which can happen in cases where the
       // model element being tested isn't directly above the best surface's center.
       if ( bestOverlappingSurface !== null ) {
-        while ( bestOverlappingSurface.getElementOnSurface() !== null ) {
+        while ( bestOverlappingSurface.value.getElementOnSurface() !== null ) {
           // TODO: The commented-out code was helpful in starting to track down some issues related to reset that was
           // causing failures of the automated testing, see
           // https://github.com/phetsims/energy-forms-and-changes/issues/25.  I (jblanco) am leaving it here so that
@@ -766,7 +767,7 @@ define( function( require ) {
           //);
           //console.log( '--------------' );
           //console.log( 'best overlapping surface was owned by ' + bestOverlappingSurface.owner.id );
-          bestOverlappingSurface = bestOverlappingSurface.getElementOnSurface().topSurfaceProperty.get();
+          bestOverlappingSurface = bestOverlappingSurface.value.getElementOnSurface().topSurfaceProperty;
           //console.log( 'best overlapping surface now owned by ' + bestOverlappingSurface.owner.id );
           //if ( bestOverlappingSurface && bestOverlappingSurface.owner === element ){
           //  debugger;

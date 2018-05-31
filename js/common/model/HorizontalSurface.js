@@ -3,7 +3,8 @@
 
 /**
  * A simple, level horizontal surface in a 2D model space.  This is represented by a range of x values and a single y
- * value.
+ * value.  The best way to thing of this is that it is much like a Vector2 in that it represents a small piece of
+ * information that is generally immutable and is often wrapped in a Property.
  *
  * @author John Blanco
  */

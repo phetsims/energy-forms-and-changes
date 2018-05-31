@@ -20,15 +20,11 @@ define( function( require ) {
    */
   function ModelElement() {
 
-    // @public {Property<HorizontalSurface>} - The surface upon which this model element is resting.  This is null if
-    // the element is floating in the air, which is perfectly legitimate in some cases for some model elements.
-    this.supportingSurfaceProperty = new Property( null );
-
-    // @protected {Property<HorizontalSurface>} - The top surface of this model element, the value will be null if other
-    // elements can't rest upon the surface.  This is updated with a new value when the model element is moved.
+    // @public {Property<HorizontalSurface>|null} - The top surface of this model element, the enclosed value will be
+    // null if other elements can't rest upon the surface.  This is updated when the model element is moved.
     this.topSurfaceProperty = new Property( null );
 
-    // @protected {Property<HorizontalSurface>} - The bottom surface of this model element, the value will be null if
+    // @protected {Property<HorizontalSurface|null>} - The bottom surface of this model element, the value will be null if
     // this model element can't rest on another surface.
     this.bottomSurfaceProperty = new Property( null );
   }
@@ -38,23 +34,6 @@ define( function( require ) {
   return inherit( Object, ModelElement, {
 
     // TODO: Consider making these properties set directly instead of through methods when the port is nearly complete.
-
-    /**
-     * set the surface upon which this model element is resting
-     * @param {HorizontalSurface} surface
-     * @public
-     */
-    setSupportingSurface: function( surface ) {
-      this.supportingSurfaceProperty.set( surface );
-    },
-
-    /**
-     * @returns {Property.<HorizontalSurface>}
-     * @public
-     */
-    getSupportingSurfaceProperty: function() {
-      return this.supportingSurfaceProperty;
-    },
 
     /**
      * Get the bottom surface of this model element.  Only model elements that can rest on top of other model elements
@@ -76,16 +55,14 @@ define( function( require ) {
     },
 
     /**
-     * get a value that indicates whether this element is stacked upon the given model element
+     * method to test whether this element is stacked upon another, always false for non-movable model elements,
+     * override as needed in descendant types
      * @param {ModelElement} element - model element to be checked
-     * @returns {boolean} - true if this model element is stacked anywhere on top of the provided element, which
-     * includes cases where one or more elements are in between.
+     * @return {boolean}
      * @public
      */
     isStackedUpon: function( element ) {
-      var surface = this.supportingSurfaceProperty.get();
-      return ( surface !== null ) &&
-        ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
+      return false;
     },
 
     /**

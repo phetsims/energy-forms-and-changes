@@ -32,27 +32,27 @@ define( function( require ) {
     // @public {Property.<Vector2>}
     this.positionProperty = new Property( initialPosition ); // Position of the center of the bottom of the block.
 
+    // @protected {Property<HorizontalSurface>|null} - The surface upon which this model element is resting.  This is
+    // null (and note that the reference, not the wrapped value, that can be null) if the element is not resting on a
+    // movable surface.  This should only be set through the getter/setter methods below.
+    this.supportingSurfaceProperty = null;
+
     // @public {Property.<number>}
     this.verticalVelocityProperty = new Property( 0 );
+
+    // update internal state when the user picks up this model element
+    this.userControlledProperty.link( function( userControlled ) {
+      if ( userControlled ) {
+
+        // the user has picked up this model element, so it is no longer sitting on any surface
+        self.clearSupportingSurface();
+      }
+    } );
 
     // @private - observer that moves this model element if and when the surface that is supporting it moves
     this.surfaceMotionObserver = function( horizontalSurface ) {
       self.positionProperty.value = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
     };
-
-    this.userControlledProperty.link( function( userControlled ) {
-      if ( userControlled ) {
-
-        // the user has grabbed this model element, so it is no longer sitting on any surface
-        if ( self.supportingSurfaceProperty.value !== null ) {
-          if ( self.supportingSurfaceProperty.hasListener( self.surfaceMotionObserver ) ) {
-            self.supportingSurfaceProperty.unlink( self.surfaceMotionObserver );
-          }
-          self.getSupportingSurfaceProperty().value.clearSurface();
-          self.setSupportingSurface( null );
-        }
-      }
-    } );
   }
 
   energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
@@ -64,10 +64,7 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      if ( this.supportingSurfaceProperty !== null &&
-           this.supportingSurfaceProperty.hasListener( this.surfaceMotionObserver ) ) {
-        this.supportingSurfaceProperty.unlink( this.surfaceMotionObserver );
-      }
+      this.clearSupportingSurface();
       this.userControlledProperty.reset();
       this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
@@ -76,19 +73,53 @@ define( function( require ) {
 
     /**
      * assign the surface property
-     * @param {HorizontalSurface} supportingSurface
+     * @param {Property.<HorizontalSurface>} supportingSurfaceProperty
      * @override
      * @public
      */
-    setSupportingSurface: function( supportingSurface ) {
+    setSupportingSurfaceProperty: function( supportingSurfaceProperty ) {
 
-      // TODO: This seems suspicious, since there is no unlink of the supporting surface, but I (jbphet) tried adding
-      // one on 5/11/2018 and it didn't work, so I need to revisit after code cleanup is complete.
-      ModelElement.prototype.setSupportingSurface.call( this );
-      if ( supportingSurface !== null ) {
-        supportingSurface.link( this.surfaceMotionObserver );
+      // state and parameter checking
+      assert && assert(
+        supportingSurfaceProperty !== null,
+        'this method should not be used to clear the supporting surface'
+      );
+      assert && assert(
+        this.supportingSurfaceProperty === null,
+        'a supporting surface was already set'
+      );
+
+      supportingSurfaceProperty.link( this.surfaceMotionObserver );
+      this.supportingSurfaceProperty = supportingSurfaceProperty;
+    },
+
+    /**
+     * clear the supporting surface so that this model element is no longer sitting on a surface
+     * @public TODO: Check this visibility when sim dev is closer to completion
+     */
+    clearSupportingSurface: function() {
+
+      // only do something if the supporting surface was set
+      if ( this.supportingSurfaceProperty !== null ) {
+        this.supportingSurfaceProperty.unlink( this.surfaceMotionObserver );
+        this.supportingSurfaceProperty.get().clearSurface();
+        this.supportingSurfaceProperty = null;
       }
+    },
+
+    /**
+     * get a value that indicates whether this element is stacked upon the given model element
+     * @param {ModelElement} element - model element to be checked
+     * @returns {boolean} - true if this model element is stacked anywhere on top of the provided element, which
+     * includes cases where one or more elements are in between.
+     * @public
+     * @override
+     */
+    isStackedUpon: function( element ) {
+      var surface = this.supportingSurfaceProperty ? this.supportingSurfaceProperty.get() : null;
+      return ( surface !== null ) && ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
     }
+
   } );
 } );
 
