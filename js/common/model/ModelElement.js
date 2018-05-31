@@ -41,16 +41,16 @@ define( function( require ) {
 
     /**
      * set the surface upon which this model element is resting
-     * @public
      * @param {HorizontalSurface} surface
+     * @public
      */
     setSupportingSurface: function( surface ) {
       this.supportingSurfaceProperty.set( surface );
     },
 
     /**
-     * @public read-only
      * @returns {Property.<HorizontalSurface>}
+     * @public
      */
     getSupportingSurfaceProperty: function() {
       return this.supportingSurfaceProperty;

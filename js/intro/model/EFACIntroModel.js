@@ -30,15 +30,12 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  // TODO: Follow up on why these are commented out.
-  // Dimension2D STAGE_SIZE = CenteredStage.DEFAULT_STAGE_SIZE;
-  // var EDGE_INSET = 10;
-  // var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
+  var NUM_THERMOMETERS = 3;
+  var BEAKER_WIDTH = 0.085; // in meters
+  var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
-
-  var NUM_THERMOMETERS = 3;
 
   // minimum distance allowed between two objects, used to prevent floating point issues
   var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
@@ -46,9 +43,6 @@ define( function( require ) {
   // Threshold of temperature difference between the bodies in a multi-body system below which energy can be exchanged
   // with air.
   var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // in degrees K, empirically determined
-
-  var BEAKER_WIDTH = 0.085; // in meters
-  var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
   // flag that can be turned on in order to print out some profiling info - TODO: Make this a query param is retained
   var ENABLE_INTERNAL_PROFILING = false;
@@ -112,9 +106,9 @@ define( function( require ) {
 
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.temperatureAndColorSensors = [];
-    for ( var i = 0; i < NUM_THERMOMETERS; i++ ) {
-      var thermometer = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
-      this.temperatureAndColorSensors.push( thermometer );
+    _.times( NUM_THERMOMETERS, function() {
+      var thermometer = new StickyTemperatureAndColorSensor( self, INITIAL_THERMOMETER_LOCATION, false );
+      self.temperatureAndColorSensors.push( thermometer );
 
       // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
       // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
@@ -137,7 +131,7 @@ define( function( require ) {
           thermometer.userControlled = false; // Must toggle userControlled to enable element following.
         }
       } );
-    }
+    } );
   }
 
   energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
