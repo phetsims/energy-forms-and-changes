@@ -2,6 +2,11 @@
 TODO: The contents of this file was copied over from the Java project in late
 April 2018 and should be updated for the HTML5 version before publication.
 
+TODO: Going through the code, I notice how important surfaces, horizontal
+surfaces, and such are and how they work for stack, dragging, and such, so
+there should be a good overview - a "forest for the trees" sort of thing -
+that explains this.
+
 This simulation was originally written in Java, and was later ported to HTML5.
 As a result, some of the code may appear more "Java-esque" than if the sim had
 been originally written in HTML5.  Also, the port was done by a number of
