@@ -330,7 +330,7 @@ define( function( require ) {
           self.air.exchangeEnergyWith( container1, dt );
 
           if ( container1.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2( Math.random() * container1.getBounds().width + container1.getBounds().minX,
+            var pointAbove = new Vector2( phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
               container1.getBounds().maxY );
             var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
 
