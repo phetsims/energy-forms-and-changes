@@ -27,7 +27,7 @@ define( function( require ) {
     credits: {
       leadDesign: 'Noah Podolefsky',
       softwareDevelopment: 'John Blanco',
-      team: 'Ariel Paul, Emily Moore, Katherine Perkins, Trish Loeblein',
+      team: 'Ariel Paul, Emily Moore, Katherine Perkins, Trish Loeblein, and in cooperation with the Next-Lab project',
       qualityAssurance: '', //TODO
       graphicArts: '', //TODO
       thanks: ''
