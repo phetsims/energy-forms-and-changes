@@ -1,13 +1,11 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * Model element that represents a beaker that contains some amount of water, and the water contains energy, which
- * includes energy chunks, and has temperature.
+ * Model element that represents a beaker that contains water.  The water contains energy, which includes energy chunks,
+ * and has temperature.
  *
  * @author John Blanco
  */
-
-
 define( function( require ) {
   'use strict';
 
@@ -65,6 +63,9 @@ define( function( require ) {
     // @private
     this.width = width;
     this.height = height;
+
+    // set the shape that will be used to validate positions when dragged around (originally defined in base type)
+    this.positionValidationShape = Shape.rect( -width / 2, 0, width, height );
 
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );

@@ -35,6 +35,7 @@ define( function( require ) {
    * @constructor
    */
   function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
+
     RectangularThermalMovableModelElement.call(
       this,
       initialPosition,
@@ -46,6 +47,14 @@ define( function( require ) {
     );
 
     var self = this;
+
+    // set the shape that will be used to validate positions when dragged around (originally defined in base type)
+    this.positionValidationShape = Shape.rect(
+      -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
+      0,
+      EFACConstants.BLOCK_SURFACE_WIDTH,
+      EFACConstants.BLOCK_SURFACE_WIDTH
+    );
 
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function() {

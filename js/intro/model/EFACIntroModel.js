@@ -453,20 +453,20 @@ define( function( require ) {
     },
 
     /**
-     * Evaluate whether the proposed position would cause the model element to move through another solid element, or
-     * the side of the beaker, or something that would look weird to the user and, if so, prevent the odd behavior from
-     * happening by returning a location that works better.
-     * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being validated
-     * @param {Vector2} proposedPosition - proposed new position for element
+     * Evaluate whether the provided model element is in a position that doesn't overlap with other solid model elements
+     * and, if it does, move it based on the provided motion vector that describes how it got to where it is.
+     * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
+     * @param {Vector2} proposedPosition - the position where the model element would like to go
      * @returns {Vector2} the original proposed position if valid, or alternative position if not
      */
-    constrainedPosition: function( modelElement, proposedPosition ) {
+    constrainPosition: function( modelElement, proposedPosition ) {
 
-      // carry this model through scope of nested callbacks
-      var self = this;
+      // TODO: This is stubbed for now.
+      return proposedPosition;
 
-      // compensate for the model element's center X position
-      var translation = proposedPosition.copy().minus( modelElement.positionProperty.value );
+      //========== old stuff below ======================
+
+      /*
 
       // figure out how far the block's right edge appears to protrude to the side due to perspective
       var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH *
@@ -575,6 +575,7 @@ define( function( require ) {
       newPosition.setY( Math.max( newPosition.y, 0 ) );
 
       return newPosition;
+      */
     },
 
     /**

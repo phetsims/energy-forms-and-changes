@@ -16,9 +16,13 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   /**
+   * @param {Vector2} initialPosition
    * @constructor
    */
-  function ModelElement() {
+  function ModelElement( initialPosition ) {
+
+    // @public {Property.<Vector2>} - position of the center bottom of this model element
+    this.positionProperty = new Property( initialPosition );
 
     // @public {Property<HorizontalSurface>|null} - The top surface of this model element, the enclosed value will be
     // null if other elements can't rest upon the surface.  This is updated when the model element is moved.
@@ -27,11 +31,22 @@ define( function( require ) {
     // @protected {Property<HorizontalSurface|null>} - The bottom surface of this model element, the value will be null if
     // this model element can't rest on another surface.
     this.bottomSurfaceProperty = new Property( null );
+
+    // @public {Shape} - shape used for checking if this model element can be moved into a given position, must be set
+    // in subtypes
+    this.positionValidationShape = null;
   }
 
   energyFormsAndChanges.register( 'ModelElement', ModelElement );
 
   return inherit( Object, ModelElement, {
+
+    get position() {
+      return this.positionProperty.get();
+    },
+    set position( newPosition ) {
+      this.positionProperty.set( newPosition );
+    },
 
     // TODO: Consider making these properties set directly instead of through methods when the port is nearly complete.
 

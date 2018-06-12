@@ -1,44 +1,47 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * drag handler for objects that can be moved by the user
+ * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
+ * them from being dragged through one another
  */
 define( function( require ) {
   'use strict';
 
-  var Bounds2 = require( 'DOT/Bounds2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
   /**
-   * Constructor for the ThermalElementDragHandler.  The node must be property positioned before calling this, or it
-   * won't work correctly.
    * @param {UserMovableModelElement} modelElement
-   * @param {Node} node
+   * @param {Node} node TODO: I (jbphet) don't think I need node, right?
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {function} constrainPosition
    */
-  function ThermalElementDragHandler( modelElement, node, modelViewTransform ) {
-    this.modelElement = modelElement;
+  function ThermalElementDragHandler( modelElement, node, modelViewTransform, constrainPosition ) {
 
-    MovableDragHandler.call( this, modelElement.positionProperty, {
+    var dragStartOffset = null;
+
+    SimpleDragHandler.call( this, {
 
       // allow moving a finger (touch) across a node to pick it up
       allowTouchSnag: true,
 
-      modelViewTransform: modelViewTransform,
-
-      dragBounds: modelViewTransform.viewToModelBounds( new Bounds2( 0, 0, 1024, 618 ) ),
-
-      startDrag: function( event ) {
+      start: function( event, trail ) {
         modelElement.userControlledProperty.set( true );
+        var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
+        var dragStartPosition = trail.globalToLocalPoint( event.pointer.point );
+        dragStartOffset = dragStartPosition.minus( modelElementViewPosition );
       },
 
-      endDrag: function( event ) {
+      drag: function( event, trail ) {
+        var dragPosition = trail.globalToLocalPoint( event.pointer.point );
+        var modelElementViewPosition = dragPosition.minus( dragStartOffset );
+        var modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
+        modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
+      },
+
+      end: function( event ) {
         modelElement.userControlledProperty.set( false );
-      },
-
-      onDrag: function( event ) {
       }
 
     } );
@@ -46,5 +49,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
 
-  return inherit( MovableDragHandler, ThermalElementDragHandler );
+  return inherit( SimpleDragHandler, ThermalElementDragHandler );
 } );

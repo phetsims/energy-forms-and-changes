@@ -24,13 +24,10 @@ define( function( require ) {
 
     var self = this;
 
-    ModelElement.call( this );
+    ModelElement.call( this, initialPosition );
 
     // @public {BooleanProperty}
     this.userControlledProperty = new BooleanProperty( false );
-
-    // @public {Property.<Vector2>}
-    this.positionProperty = new Property( initialPosition ); // Position of the center of the bottom of the block.
 
     // @protected {Property<HorizontalSurface>|null} - The surface upon which this model element is resting.  This is
     // null (and note that the reference, not the wrapped value, that can be null) if the element is not resting on a

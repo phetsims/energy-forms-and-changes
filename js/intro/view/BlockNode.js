@@ -38,12 +38,12 @@ define( function( require ) {
 
   /**
    * @param {Block} block
-   * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {function} constrainPosition
    * @param {Object} [options]
    * @constructor
    */
-  function BlockNode( block, stageBounds, modelViewTransform, options ) {
+  function BlockNode( block, modelViewTransform, constrainPosition, options ) {
 
     var self = this;
     Node.call( this, { cursor: 'pointer' } );
@@ -190,7 +190,12 @@ define( function( require ) {
     } );
 
     // add the drag handler
-    this.addInputListener( new ThermalElementDragHandler( block, this, modelViewTransform ) );
+    this.addInputListener( new ThermalElementDragHandler(
+      block,
+      this,
+      modelViewTransform,
+      constrainPosition
+    ) );
   }
 
   /**

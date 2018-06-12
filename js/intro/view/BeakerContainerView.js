@@ -22,10 +22,10 @@ define( function( require ) {
 
   /**
    * @param {EFACIntroModel} model
-   * @param {Bounds2} stageBounds
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {function} constrainPosition
    */
-  function BeakerContainerView( model, stageBounds, modelViewTransform ) {
+  function BeakerContainerView( model, modelViewTransform, constrainPosition ) {
 
     var self = this;
     BeakerView.call( this, model.beaker, model.energyChunksVisibleProperty, modelViewTransform );
@@ -43,10 +43,12 @@ define( function( require ) {
       self.updateEnergyChunkClipMask( model, self.energyChunkClipNode );
     } );
 
-
-    // TODO: Document why two drag listeners are added or, if both aren't needed, remove one of them.
-    this.grabNode.addInputListener( new ThermalElementDragHandler( model.beaker, this.grabNode, modelViewTransform ) );
-    this.addInputListener( new ThermalElementDragHandler( model.beaker, this, modelViewTransform ) );
+    this.grabNode.addInputListener( new ThermalElementDragHandler(
+      model.beaker,
+      this.grabNode,
+      modelViewTransform,
+      constrainPosition
+    ) );
   }
 
   energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );

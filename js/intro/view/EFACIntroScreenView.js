@@ -174,16 +174,61 @@ define( function( require ) {
       } ) );
     }
 
+    //TODO: I (jbphet) am now thinking that this should migrate into ThermalElementDragHandler
+    // create a constrain function that combines the view constraint of staying in bounds with the model constraints,
+    // which generally involved preventing elements from dragging through one another
+    function constrainMovableElementMotion( modelElement, proposedPosition ) {
+
+      var constrainedPosition = proposedPosition.copy();
+
+      // constrain the element to stay in the view bounds
+      var elementViewBounds = modelViewTransform.modelToViewBounds(
+        modelElement.positionValidationShape.bounds.shifted(
+          proposedPosition.x,
+          proposedPosition.y
+        )
+      );
+
+      var deltaX = 0;
+      var deltaY = 0;
+      if ( elementViewBounds.maxX >= self.layoutBounds.maxX ) {
+        deltaX = modelViewTransform.viewToModelDeltaX( self.layoutBounds.maxX - elementViewBounds.maxX );
+      }
+      else if ( elementViewBounds.minX <= self.layoutBounds.minX ) {
+        deltaX = modelViewTransform.viewToModelDeltaX( self.layoutBounds.minX - elementViewBounds.minX );
+      }
+      if ( elementViewBounds.minY <= self.layoutBounds.minY ) {
+        deltaY = modelViewTransform.viewToModelDeltaY( self.layoutBounds.minY - elementViewBounds.minY );
+      }
+      else if ( proposedPosition.y < 0 ) {
+        deltaY = -proposedPosition.y;
+      }
+      constrainedPosition.setXY( constrainedPosition.x + deltaX, constrainedPosition.y + deltaY );
+
+      constrainedPosition = model.constrainPosition( modelElement, constrainedPosition );
+      return constrainedPosition;
+    }
+
     // add the blocks
-    var brickNode = new BlockNode( model.brick, this.layoutBounds, modelViewTransform, {
-      setApproachingEnergyChunkParentNode: airLayer
-    } );
+    var brickNode = new BlockNode(
+      model.brick,
+      modelViewTransform,
+      constrainMovableElementMotion,
+      { setApproachingEnergyChunkParentNode: airLayer }
+    );
     blockLayer.addChild( brickNode );
-    var ironBlockNode = new BlockNode( model.ironBlock, this.layoutBounds, modelViewTransform, {
-      setApproachingEnergyChunkParentNode: airLayer
-    } );
+    var ironBlockNode = new BlockNode(
+      model.ironBlock,
+      modelViewTransform,
+      constrainMovableElementMotion,
+      { setApproachingEnergyChunkParentNode: airLayer }
+    );
     blockLayer.addChild( ironBlockNode );
-    var beakerView = new BeakerContainerView( model, this.layoutBounds, modelViewTransform );
+    var beakerView = new BeakerContainerView(
+      model,
+      modelViewTransform,
+      constrainMovableElementMotion
+    );
 
     // add the beaker, which is composed of several pieces
     beakerFrontLayer.addChild( beakerView.frontNode );

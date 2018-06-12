@@ -67,9 +67,9 @@ define( function( require ) {
           // error if a threshold is exceeded so that we can know that the value needs adjusting.  The threshold value
           // was determined by testing.
           if ( yOverlap > 1E-6 && xOverlap > 1E-6 ) {
-            console.log( ' - Error: Double overlap detected in case where neither energy container supports immersion.  Ignoring.' );
-            console.log( 'yOverlap = ' + yOverlap );
-            console.log( 'xOverlap = ' + xOverlap );
+            console.warn( 'Double overlap detected in case where neither energy container supports immersion.  Ignoring.' );
+            console.warn( 'yOverlap = ' + yOverlap );
+            console.warn( 'xOverlap = ' + xOverlap );
           }
         }
       } else if ( xOverlap > 0 || yOverlap > 0 ) {
