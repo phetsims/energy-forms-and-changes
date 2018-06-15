@@ -13,6 +13,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
@@ -89,6 +90,9 @@ define( function( require ) {
           self.getOutlineRect().maxX + perspectiveCompensation ), self.getOutlineRect().maxY, this
       )
     );
+
+    // add position test bounds (see definition in base class for more info)
+    this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );
@@ -101,6 +105,7 @@ define( function( require ) {
      * @public
      */
     getOutlineRect: function() {
+      // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.  Also should be bounds.
       return new Rectangle( this.position.x - SIDE_LENGTH / 2, this.position.y, SIDE_LENGTH, SIDE_LENGTH );
     },
 

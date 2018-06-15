@@ -14,6 +14,7 @@ define( function( require ) {
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -84,6 +85,9 @@ define( function( require ) {
     // @public (read-only) {IronBlock}
     this.ironBlock = new IronBlock( new Vector2( -0.175, 0 ), this.energyChunksVisibleProperty );
 
+    // @private {Block[]} - for convenience
+    this.blocks = [ this.brick, this.ironBlock ];
+
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
     // @public (read-only) {BeakerContainer)
@@ -132,6 +136,21 @@ define( function( require ) {
         }
       } );
     } );
+
+    // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
+    // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
+    // preventing overlap.
+    var leftBurnerBounds = this.leftBurner.getCompositeBounds();
+    var rightBurnerBounds = this.rightBurner.getCompositeBounds();
+    var burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+                                     Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+
+    this.burnerBlockingRect = new Bounds2(
+      leftBurnerBounds.minX - burnerPerspectiveExtension,
+      leftBurnerBounds.minY,
+      rightBurnerBounds.maxX,
+      rightBurnerBounds.maxY
+    );
   }
 
   energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
@@ -449,140 +468,147 @@ define( function( require ) {
       shape.lineToPoint( edge.end );
       shape.close();
       return shape;
-
     },
 
     /**
-     * Evaluate whether the provided model element is in a position that doesn't overlap with other solid model elements
-     * and, if it does, move it based on the provided motion vector that describes how it got to where it is.
+     * Evaluate whether the provided model element can be moved to the provided position without overlapping with other
+     * solid model elements.  If overlap would occur, adjust the position to one that works.  Note that this is not
+     * very general due to a number of special requirements for the Energy Forms and Changes sim, so it would likely not
+     * be easy to reuse.
      * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
      * @param {Vector2} proposedPosition - the position where the model element would like to go
      * @returns {Vector2} the original proposed position if valid, or alternative position if not
+     * TODO: Consider adding the optimization where a vector is provided so that a new one doesn't have to be allocated
      */
     constrainPosition: function( modelElement, proposedPosition ) {
 
-      // TODO: This is stubbed for now.
-      return proposedPosition;
+      var self = this;
 
-      //========== old stuff below ======================
+      // TODO: Optimize this method for allocations
 
-      /*
+      // calculate the proposed motion TODO consider optimizing to avoid allocation
+      var allowedTranslation = proposedPosition.minus( modelElement.positionProperty.get() );
 
-      // figure out how far the block's right edge appears to protrude to the side due to perspective
-      var blockPerspectiveExtension = EFACConstants.BLOCK_SURFACE_WIDTH *
-                                      EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
-                                      Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
+      // get the current composite bounds of the model element
+      var modelElementBounds = modelElement.getCompositeBoundsForPosition( modelElement.positionProperty.get() );
 
-      // Validate against burner boundaries.  Treat the burners as one big blocking rectangle so that the user can't
-      // drag things between them.  Also, compensate for perspective so that we can avoid difficult z-order issues.
-      var standPerspectiveExtension = this.leftBurner.getOutlineRect().height *
-                                      EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
-                                      Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
-      var burnerRectX = this.leftBurner.getOutlineRect().minX - standPerspectiveExtension -
-                        ( modelElement !== this.beaker ? blockPerspectiveExtension : 0 );
-      var burnerBlockingRect = new Rectangle(
-        burnerRectX,
-        this.leftBurner.getOutlineRect().minY,
-        this.rightBurner.getOutlineRect().maxX - burnerRectX,
-        this.leftBurner.getOutlineRect().height
+      // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
+      var modelElementBoundsWithSidePerspective = new Bounds2(
+        modelElementBounds.minX - modelElement.perspectiveCompensation.x,
+        modelElementBounds.minY,
+        modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
+        modelElementBounds.maxY
       );
-      translation = this.determineAllowedTranslation( modelElement.getBounds(), burnerBlockingRect, translation, false );
 
-      // validate against the sides of the beaker
+      // validate against burner boundaries
+      allowedTranslation = this.determineAllowedTranslation(
+        modelElementBoundsWithSidePerspective,
+        this.burnerBlockingRect,
+        allowedTranslation,
+        false
+      );
+
+      // validate this model element's position against the beaker
       if ( modelElement !== this.beaker ) {
 
-        // create three rectangles to represent the two sides and the top of the beaker
-        var testRectThickness = 1E-3; // 1 mm thick walls.
-        var beakerRect = this.beaker.getBounds();
-        var beakerLeftSide = new Rectangle(
-          beakerRect.minX - blockPerspectiveExtension,
-          this.beaker.getBounds().minY,
-          testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getBounds().height + blockPerspectiveExtension
-        );
-        var beakerRightSide = new Rectangle(
-          this.beaker.getBounds().maxX - testRectThickness - blockPerspectiveExtension,
-          this.beaker.getBounds().minY,
-          testRectThickness + blockPerspectiveExtension * 2,
-          this.beaker.getBounds().height + blockPerspectiveExtension
-        );
-        var beakerBottom = new Rectangle(
-          this.beaker.getBounds().minX,
-          this.beaker.getBounds().minY,
-          this.beaker.getBounds().width,
-          testRectThickness
+        // get the bounds set that describes the shape of the beaker
+        var beakerBoundsList = this.beaker.translatedPositionTestingBoundsList;
+
+        // since this model element isn't the beaker, it must be a block, so both x and y perspective comp must be used
+        var modelElementBoundsWithTopAndSidePerspective = new Bounds2(
+          modelElementBounds.minX - modelElement.perspectiveCompensation.x,
+          modelElementBounds.minY - modelElement.perspectiveCompensation.y,
+          modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
+          modelElementBounds.maxY + modelElement.perspectiveCompensation.y
         );
 
         // Do not restrict the model element's motion in positive Y direction if the beaker is sitting on top of the
         // model element - the beaker will simply be lifted up.
         var restrictPositiveY = !this.beaker.isStackedUpon( modelElement );
 
-        // Clamp the translation based on the beaker position.
-        translation = this.determineAllowedTranslation(
-          modelElement.getBounds(),
-          beakerLeftSide,
-          translation,
+        // TODO: This is less than ideal because it assumes the bottom of the beaker is the 2nd bounds entry
+        allowedTranslation = self.determineAllowedTranslation(
+          modelElementBoundsWithTopAndSidePerspective,
+          beakerBoundsList[ 0 ],
+          allowedTranslation,
           restrictPositiveY
         );
-        translation = this.determineAllowedTranslation(
-          modelElement.getBounds(),
-          beakerRightSide,
-          translation,
+        allowedTranslation = self.determineAllowedTranslation(
+          modelElementBoundsWithSidePerspective,
+          beakerBoundsList[ 1 ],
+          allowedTranslation,
           restrictPositiveY
         );
-        translation = this.determineAllowedTranslation(
-          modelElement.getBounds(),
-          beakerBottom,
-          translation,
+        allowedTranslation = self.determineAllowedTranslation(
+          modelElementBoundsWithTopAndSidePerspective,
+          beakerBoundsList[ 2 ],
+          allowedTranslation,
           restrictPositiveY
         );
       }
 
       // now check the model element's motion against each of the blocks
-      this.getBlockList().forEach( function( block ) {
-        if ( modelElement === block ) {
+      this.blocks.forEach( function( block ) {
+
+        if ( block === modelElement ) {
           // don't test against self
           return;
         }
+
+        var blockBounds = block.getCompositeBounds();
 
         // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
         // the model element - the block will simply be lifted up.
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
-        var testRect = modelElement.getBounds();
+        var testBounds = modelElement.getCompositeBoundsForPosition( modelElement.positionProperty.get() );
         if ( modelElement === self.beaker ) {
 
           // Special handling for the beaker - block it at the outer edge of the block instead of the center in order to
           // simplify z-order handling.
-          testRect = new Rectangle( testRect.minX - blockPerspectiveExtension,
-            testRect.minY,
-            testRect.width + blockPerspectiveExtension * 2,
-            testRect.height
+          testBounds = new Bounds2(
+            testBounds.minX - self.brick.perspectiveCompensation.x,
+            testBounds.minY,
+            testBounds.maxX + self.brick.perspectiveCompensation.x,
+            testBounds.maxY
           );
         }
 
-        // Clamp the translation based on the test block's position, but handle the case where the block is immersed in
-        // the beaker.
-        if ( modelElement !== self.beaker || !self.beaker.getBounds().containsBounds( block.getBounds() ) ) {
-          translation = self.determineAllowedTranslation( testRect, block.getBounds(), translation, restrictPositiveY );
+        // Clamp the translation based on the test block's position, but handle the case where the block is immersed
+        // in the beaker.
+        if ( modelElement !== self.beaker ||
+             !self.beaker.getCompositeBounds().containsBounds( blockBounds ) ) {
+          allowedTranslation = self.determineAllowedTranslation(
+            testBounds,
+            blockBounds,
+            allowedTranslation,
+            restrictPositiveY
+          );
         }
       } );
 
-      // determine the new position based on the resultant translation
-      var newPosition = modelElement.positionProperty.value.plus( translation ).copy();
+      return modelElement.positionProperty.get().plus( allowedTranslation );
+    },
 
-      // clamp Y position to be positive to prevent dragging below table
-      newPosition.setY( Math.max( newPosition.y, 0 ) );
-
-      return newPosition;
-      */
+    /**
+     * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
+     * @param {Bounds2} bounds1
+     * @param {Bounds2} bounds2
+     * @return {boolean}
+     */
+    exclusiveIntersectsBounds: function( bounds1, bounds2 ) {
+      var minX = Math.max( bounds1.minX, bounds2.minX );
+      var minY = Math.max( bounds1.minY, bounds2.minY );
+      var maxX = Math.min( bounds1.maxX, bounds2.maxX );
+      var maxY = Math.min( bounds1.maxY, bounds2.maxY );
+      return ( maxX - minX ) > 0 && ( maxY - minY > 0 );
     },
 
     /**
      * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
      * rectangle that can block the moving one.
-     * @param {Rectangle} movingRect
-     * @param {Rectangle} stationaryRect
+     * @param {Boundd2} movingElementBounds
+     * @param {Boundd2} stationaryElementBounds
      * @param {Vector2} proposedTranslation
      * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
      *                                      is often set false if there is another model element on top of the one
@@ -590,31 +616,31 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    determineAllowedTranslation: function( movingRect, stationaryRect, proposedTranslation, restrictPosY ) {
+    determineAllowedTranslation: function( movingElementBounds, stationaryElementBounds, proposedTranslation, restrictPosY ) {
 
       // test for case where rectangles already overlap
-      if ( movingRect.intersectsBounds( stationaryRect ) ) {
+      if ( this.exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
 
-        // The rectangles already overlap.  Are they right on top of one another?
-        if ( movingRect.centerX === stationaryRect.centerX && movingRect.centerX === stationaryRect.centerY ) {
+        // the bounds already overlap - are they right on top of one another in both dimensions?
+        if ( movingElementBounds.centerX === stationaryElementBounds.centerX && movingElementBounds.centerY === stationaryElementBounds.centerY ) {
           console.log( 'Warning: Rectangle centers in same location, returning zero vector.' );
           return new Vector2( 0, 0 );
         }
 
         // determine the motion in the X & Y directions that will "cure" the overlap
         var xOverlapCure = 0;
-        if ( movingRect.maxX > stationaryRect.minX && movingRect.minX < stationaryRect.minX ) {
-          xOverlapCure = stationaryRect.minX - movingRect.maxX;
+        if ( movingElementBounds.maxX > stationaryElementBounds.minX && movingElementBounds.minX < stationaryElementBounds.minX ) {
+          xOverlapCure = stationaryElementBounds.minX - movingElementBounds.maxX;
         }
-        else if ( stationaryRect.maxX > movingRect.minX && stationaryRect.minX < movingRect.minX ) {
-          xOverlapCure = stationaryRect.maxX - movingRect.minX;
+        else if ( stationaryElementBounds.maxX > movingElementBounds.minX && stationaryElementBounds.minX < movingElementBounds.minX ) {
+          xOverlapCure = stationaryElementBounds.maxX - movingElementBounds.minX;
         }
         var yOverlapCure = 0;
-        if ( movingRect.maxY > stationaryRect.minY && movingRect.minY < stationaryRect.minY ) {
-          yOverlapCure = stationaryRect.minY - movingRect.maxY;
+        if ( movingElementBounds.maxY > stationaryElementBounds.minY && movingElementBounds.minY < stationaryElementBounds.minY ) {
+          yOverlapCure = stationaryElementBounds.minY - movingElementBounds.maxY;
         }
-        else if ( stationaryRect.maxY > movingRect.minY && stationaryRect.minY < movingRect.minY ) {
-          yOverlapCure = stationaryRect.maxY - movingRect.minY;
+        else if ( stationaryElementBounds.maxY > movingElementBounds.minY && stationaryElementBounds.minY < movingElementBounds.minY ) {
+          yOverlapCure = stationaryElementBounds.maxY - movingElementBounds.minY;
         }
 
         // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
@@ -641,30 +667,30 @@ define( function( require ) {
 
         // check for collisions moving right
         var rightEdge = new Line(
-          new Vector2( movingRect.maxX, movingRect.minY ),
-          new Vector2( movingRect.maxX, movingRect.maxY )
+          new Vector2( movingElementBounds.maxX, movingElementBounds.minY ),
+          new Vector2( movingElementBounds.maxX, movingElementBounds.maxY )
         );
         var rightEdgeSmear = this.projectShapeFromLine( rightEdge, proposedTranslation );
 
-        if ( rightEdge.start.x <= stationaryRect.minX && rightEdgeSmear.intersectsBounds( stationaryRect ) ) {
+        if ( rightEdge.start.x <= stationaryElementBounds.minX && rightEdgeSmear.intersectsBounds( stationaryElementBounds ) ) {
 
           // collision detected, limit motion
-          xTranslation = stationaryRect.minX - rightEdge.start.x - MIN_INTER_ELEMENT_DISTANCE;
+          xTranslation = stationaryElementBounds.minX - rightEdge.start.x - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
       else if ( proposedTranslation.x < 0 ) {
 
         // check for collisions moving left
         var leftEdge = new Line(
-          new Vector2( movingRect.minX, movingRect.minY ),
-          new Vector2( movingRect.minX, movingRect.maxY )
+          new Vector2( movingElementBounds.minX, movingElementBounds.minY ),
+          new Vector2( movingElementBounds.minX, movingElementBounds.maxY )
         );
         var leftEdgeSmear = this.projectShapeFromLine( leftEdge, proposedTranslation );
 
-        if ( leftEdge.start.x >= stationaryRect.maxX && leftEdgeSmear.intersectsBounds( stationaryRect ) ) {
+        if ( leftEdge.start.x >= stationaryElementBounds.maxX && leftEdgeSmear.intersectsBounds( stationaryElementBounds ) ) {
 
           // collision detected, limit motion
-          xTranslation = stationaryRect.maxX - leftEdge.start.x + MIN_INTER_ELEMENT_DISTANCE;
+          xTranslation = stationaryElementBounds.maxX - leftEdge.start.x + MIN_INTER_ELEMENT_DISTANCE;
         }
       }
 
@@ -673,30 +699,30 @@ define( function( require ) {
 
         // check for collisions moving up
         var movingTopEdge = new Line(
-          new Vector2( movingRect.minX, movingRect.maxY ),
-          new Vector2( movingRect.maxX, movingRect.maxY )
+          new Vector2( movingElementBounds.minX, movingElementBounds.maxY ),
+          new Vector2( movingElementBounds.maxX, movingElementBounds.maxY )
         );
         var topEdgeSmear = this.projectShapeFromLine( movingTopEdge, proposedTranslation );
 
-        if ( movingTopEdge.start.y <= stationaryRect.minY && topEdgeSmear.intersectsBounds( stationaryRect ) ) {
+        if ( movingTopEdge.start.y <= stationaryElementBounds.minY && topEdgeSmear.intersectsBounds( stationaryElementBounds ) ) {
 
           // collision detected, limit motion
-          yTranslation = stationaryRect.minY - movingTopEdge.start.y - MIN_INTER_ELEMENT_DISTANCE;
+          yTranslation = stationaryElementBounds.minY - movingTopEdge.start.y - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
       if ( proposedTranslation.y < 0 ) {
 
         // check for collisions moving down
         var movingBottomEdge = new Line(
-          new Vector2( movingRect.minX, movingRect.minY ),
-          new Vector2( movingRect.maxX, movingRect.minY )
+          new Vector2( movingElementBounds.minX, movingElementBounds.minY ),
+          new Vector2( movingElementBounds.maxX, movingElementBounds.minY )
         );
         var bottomEdgeSmear = this.projectShapeFromLine( movingBottomEdge, proposedTranslation );
 
-        if ( movingBottomEdge.start.y >= stationaryRect.maxY && bottomEdgeSmear.intersectsBounds( stationaryRect ) ) {
+        if ( movingBottomEdge.start.y >= stationaryElementBounds.maxY && bottomEdgeSmear.intersectsBounds( stationaryElementBounds ) ) {
 
           // collision detected, limit motion
-          yTranslation = stationaryRect.maxY - movingBottomEdge.start.y + MIN_INTER_ELEMENT_DISTANCE;
+          yTranslation = stationaryElementBounds.maxY - movingBottomEdge.start.y + MIN_INTER_ELEMENT_DISTANCE;
         }
       }
 

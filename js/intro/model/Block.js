@@ -26,6 +26,9 @@ define( function( require ) {
   // constants
   var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
   var MAX_TEMPERATURE = 450; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
+  var BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
+                                    EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
+                                    Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
   /**
    * @param {Vector2} initialPosition
@@ -48,19 +51,22 @@ define( function( require ) {
 
     var self = this;
 
-    // set the shape that will be used to validate positions when dragged around (originally defined in base type)
-    this.positionValidationShape = Shape.rect(
+    // add position test bounds (see definition in base class for more info)
+    this.relativePositionTestingBoundsList.push( new Bounds2(
       -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
       0,
-      EFACConstants.BLOCK_SURFACE_WIDTH,
+      EFACConstants.BLOCK_SURFACE_WIDTH / 2,
       EFACConstants.BLOCK_SURFACE_WIDTH
-    );
+    ) );
 
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function() {
       self.updateTopSurfaceProperty();
       self.updateBottomSurfaceProperty();
     } );
+
+    // add perspective information, used for validating positions
+    this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
   }
 
   energyFormsAndChanges.register( 'Block', Block );

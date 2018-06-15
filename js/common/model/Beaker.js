@@ -64,9 +64,6 @@ define( function( require ) {
     this.width = width;
     this.height = height;
 
-    // set the shape that will be used to validate positions when dragged around (originally defined in base type)
-    this.positionValidationShape = Shape.rect( -width / 2, 0, width, height );
-
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
 
@@ -79,6 +76,26 @@ define( function( require ) {
 
     // @private {number} - max height above water where steam still affects the measured temperature
     this.maxSteamHeight = 2 * height;
+
+    // add position test bounds - three sides (see definition in base class for more info)
+    this.relativePositionTestingBoundsList.push( new Bounds2(
+      -width / 2 - MATERIAL_THICKNESS / 2,
+      0,
+      -width / 2 + MATERIAL_THICKNESS / 2,
+      height
+    ) );
+    this.relativePositionTestingBoundsList.push( new Bounds2(
+      -width / 2,
+      -MATERIAL_THICKNESS / 2,
+      width / 2,
+      MATERIAL_THICKNESS / 2
+    ) );
+    this.relativePositionTestingBoundsList.push( new Bounds2(
+      width / 2 - MATERIAL_THICKNESS / 2,
+      0,
+      width / 2 + MATERIAL_THICKNESS / 2,
+      height
+    ) );
 
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function() {

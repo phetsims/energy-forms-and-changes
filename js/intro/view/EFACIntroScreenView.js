@@ -179,16 +179,19 @@ define( function( require ) {
     // which generally involved preventing elements from dragging through one another
     function constrainMovableElementMotion( modelElement, proposedPosition ) {
 
-      var constrainedPosition = proposedPosition.copy();
+      var viewConstrainedPosition = proposedPosition.copy();
 
-      // constrain the element to stay in the view bounds
-      var elementViewBounds = modelViewTransform.modelToViewBounds(
-        modelElement.positionValidationShape.bounds.shifted(
-          proposedPosition.x,
-          proposedPosition.y
-        )
+      assert && assert(
+        modelElement.relativePositionTestingBoundsList.length >= 1,
+        'no bounds on validation list for this model element, unable to constrain position'
       );
 
+      // TODO: Use a pre-allocated bounds for this if retained
+      var elementViewBounds = modelViewTransform.modelToViewBounds(
+        modelElement.getCompositeBoundsForPosition( proposedPosition )
+      );
+
+      // constrain the model element to stay within the play area
       var deltaX = 0;
       var deltaY = 0;
       if ( elementViewBounds.maxX >= self.layoutBounds.maxX ) {
@@ -203,10 +206,13 @@ define( function( require ) {
       else if ( proposedPosition.y < 0 ) {
         deltaY = -proposedPosition.y;
       }
-      constrainedPosition.setXY( constrainedPosition.x + deltaX, constrainedPosition.y + deltaY );
+      viewConstrainedPosition.setXY( viewConstrainedPosition.x + deltaX, viewConstrainedPosition.y + deltaY );
 
-      constrainedPosition = model.constrainPosition( modelElement, constrainedPosition );
-      return constrainedPosition;
+      // now give the model an opportunity to constrain the position
+      var viewAndModelConstrainedPosition = model.constrainPosition( modelElement, viewConstrainedPosition );
+
+      // return the position as constrained by both the model and the view
+      return viewAndModelConstrainedPosition;
     }
 
     // add the blocks
