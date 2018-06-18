@@ -174,41 +174,18 @@ define( function( require ) {
       } ) );
     }
 
-    //TODO: I (jbphet) am now thinking that this should migrate into ThermalElementDragHandler
-    // create a constrain function that combines the view constraint of staying in bounds with the model constraints,
-    // which generally involved preventing elements from dragging through one another
+    // define a closure that will limit the model element motion based on both view and model constraints
     function constrainMovableElementMotion( modelElement, proposedPosition ) {
 
-      var viewConstrainedPosition = proposedPosition.copy();
-
-      assert && assert(
-        modelElement.relativePositionTestingBoundsList.length >= 1,
-        'no bounds on validation list for this model element, unable to constrain position'
-      );
-
-      // TODO: Use a pre-allocated bounds for this if retained
-      var elementViewBounds = modelViewTransform.modelToViewBounds(
-        modelElement.getCompositeBoundsForPosition( proposedPosition )
-      );
-
       // constrain the model element to stay within the play area
-      var deltaX = 0;
-      var deltaY = 0;
-      if ( elementViewBounds.maxX >= self.layoutBounds.maxX ) {
-        deltaX = modelViewTransform.viewToModelDeltaX( self.layoutBounds.maxX - elementViewBounds.maxX );
-      }
-      else if ( elementViewBounds.minX <= self.layoutBounds.minX ) {
-        deltaX = modelViewTransform.viewToModelDeltaX( self.layoutBounds.minX - elementViewBounds.minX );
-      }
-      if ( elementViewBounds.minY <= self.layoutBounds.minY ) {
-        deltaY = modelViewTransform.viewToModelDeltaY( self.layoutBounds.minY - elementViewBounds.minY );
-      }
-      else if ( proposedPosition.y < 0 ) {
-        deltaY = -proposedPosition.y;
-      }
-      viewConstrainedPosition.setXY( viewConstrainedPosition.x + deltaX, viewConstrainedPosition.y + deltaY );
+      var viewConstrainedPosition = constrainToPlayArea(
+        modelElement,
+        proposedPosition,
+        self.layoutBounds,
+        modelViewTransform
+      );
 
-      // now give the model an opportunity to constrain the position
+      // constrain the model element to move legally within the model, which generally means not moving through things
       var viewAndModelConstrainedPosition = model.constrainPosition( modelElement, viewConstrainedPosition );
 
       // return the position as constrained by both the model and the view
@@ -416,6 +393,37 @@ define( function( require ) {
       centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
     } );
     this.addChild( resetAllButton );
+  }
+
+  // helper function the constrains the provided model element's position to the play area
+  function constrainToPlayArea( modelElement, proposedPosition, playAreaBounds, modelViewTransform ) {
+
+    var viewConstrainedPosition = proposedPosition.copy();
+
+    // TODO: Consider using a pre-allocated bounds for this if retained
+    var elementViewBounds = modelViewTransform.modelToViewBounds(
+      modelElement.getCompositeBoundsForPosition( proposedPosition )
+    );
+
+    // constrain the model element to stay within the play area
+    var deltaX = 0;
+    var deltaY = 0;
+    if ( elementViewBounds.maxX >= playAreaBounds.maxX ) {
+      deltaX = modelViewTransform.viewToModelDeltaX( playAreaBounds.maxX - elementViewBounds.maxX );
+    }
+    else if ( elementViewBounds.minX <= playAreaBounds.minX ) {
+      deltaX = modelViewTransform.viewToModelDeltaX( playAreaBounds.minX - elementViewBounds.minX );
+    }
+    if ( elementViewBounds.minY <= playAreaBounds.minY ) {
+      deltaY = modelViewTransform.viewToModelDeltaY( playAreaBounds.minY - elementViewBounds.minY );
+    }
+    else if ( proposedPosition.y < 0 ) {
+      deltaY = -proposedPosition.y;
+    }
+    viewConstrainedPosition.setXY( viewConstrainedPosition.x + deltaX, viewConstrainedPosition.y + deltaY );
+
+    // return the position as constrained by both the model and the view
+    return viewConstrainedPosition;
   }
 
   energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
