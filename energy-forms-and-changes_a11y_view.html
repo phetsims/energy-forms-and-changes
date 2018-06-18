@@ -129,7 +129,8 @@
       <div id="alerts">
         <h3>Activity log of Interactive Alerts</h3>
         <p>
-          Interactive alerts are read out as the user interacts providing a description of what is happening in real-time. Alerts appear in reverse chronological order with the latest on top.
+          Interactive alerts are read out as the user interacts providing a description of what is happening in
+          real-time. Alerts appear in reverse chronological order with the latest on top.
         </p>
         <div id=alert-copy-container class=alert_copy_container>
           <div id='polite-element-container'>
@@ -144,14 +145,23 @@
       <div id="intro">
         <h2>What is the A11y View?</h2>
         <p>
-          The A11y View is a design and presentation tool that allows us to visually demonstrate the accessibility layer of the simulation. We refer to this layer as the Parallel DOM, or PDOM. The PDOM (copied into the blue box) exposes the simulation’s full document structure and all the dynamic descriptive content that lives within that structure to a student accessing the simulation using assistive technology, such as screen reader software. The activity log (copied into the orange box), exposes the interactive alerts that a student would hear in real-time as they interact with the simulation. Interact with the accessible version of Energy Forms And Changes in the iframe, with either a keyboard or a mouse, and notice how the activity log (orange box) and the content of the PDOM (blue box) update as you interact.
+          The A11y View is a design and presentation tool that allows us to visually demonstrate the accessibility layer
+          of the simulation. We refer to this layer as the Parallel DOM, or PDOM. The PDOM (copied into the blue box)
+          exposes the simulation’s full document structure and all the dynamic descriptive content that lives within
+          that structure to a student accessing the simulation using assistive technology, such as screen reader
+          software. The activity log (copied into the orange box), exposes the interactive alerts that a student would
+          hear in real-time as they interact with the simulation. Interact with the accessible version of
+          Energy Forms And Changes in the iframe, with either a keyboard or a mouse, and notice how the activity log (orange
+          box) and the content of the PDOM (blue box) update as you interact.
         </p>
         <p>
-          <b>Please note</b> that students do not use the A11y View, they use the accessible simulation, alone, which is rendered here inside the iframe. 
+          <b>Please note</b> that students do not use the A11y View, they use the accessible simulation, alone, which is
+          rendered here inside the iframe.
         </p>
       </div>
       <h3>PDOM & Descriptions for Energy Forms And Changes</h3>
-      <p>Content in the blue box updates in real-time to provide an always-available description of the current state of the sim.</p>
+      <p>Content in the blue box updates in real-time to provide an always-available description of the current state of
+        the sim.</p>
       <div id="dom-copy-container" class="dom_copy_container" role="presentation"></div>
     </div>
 
@@ -162,6 +172,9 @@
 </div>
 
 <script type="application/javascript">
+  var IS_BUILT_STRING = '{{IS_BUILT}}';
+  var IS_BUILT = IS_BUILT_STRING.indexOf( '{{' ) !== 0;
+
 
   // Grab all query parameters to pass to the simulation, and a couple of params that are required for this test
   var simulationQueryString = window.location.search;
@@ -178,30 +191,12 @@
   noPostMessage && ( simulationQueryString += 'postMessageOnLoad&postMessageOnError&' );
   noAccessibility && ( simulationQueryString += 'accessibility' );
 
-  // we will try to find the sim with and without brand because it may or may not be there depending on build, use
-  // XHR to determine if file is there, solution from
-  // https://stackoverflow.com/questions/10418031/how-do-i-capture-the-http-code-of-an-iframe/
   var repoLocale = 'energy-forms-and-changes_en';
-  var withBrand = repoLocale + '_phet.html' + simulationQueryString;
-  var withoutBrand = repoLocale + '.html' + simulationQueryString;
+  var filenameEnding = IS_BUILT ? '_phet.html' : '.html';
+  var simURL = repoLocale + filenameEnding + simulationQueryString;
 
-  var httpRequest = new XMLHttpRequest();
-  httpRequest.onreadystatechange = function() {
-    if ( httpRequest.readyState === 4 ) {
-      if ( httpRequest.status === 200 ) {
-
-        // success without suffix, go ahead and set the src
-        document.getElementById( 'iframe' ).setAttribute( 'src', withoutBrand );
-      }
-      else {
-
-        // file without suffix didn't exist, try with the brand suffix
-        document.getElementById( 'iframe' ).setAttribute( 'src', withBrand );
-      }
-    }
-  };
-  httpRequest.open( 'GET', withoutBrand );
-  httpRequest.send();
+  // set the source of the sim iframe
+  document.getElementById( 'iframe' ).setAttribute( 'src', simURL );
 </script>
 
 <script type="application/javascript">
@@ -255,6 +250,9 @@
 
   // handling messages from sims
   window.addEventListener( 'message', function( evt ) {
+    if ( !evt.data ) {
+      return;
+    }
     var data = JSON.parse( evt.data );
 
     // if load is successful, create a visualization of the parallel DOM
