@@ -508,6 +508,24 @@ define( function( require ) {
         true
       );
 
+      // TODO: There is a request to add another beaker, see https://github.com/phetsims/energy-forms-and-changes/issues/39.
+      // The code below is not general enough to handle the interactions in that case, and will need to be improved.
+      // One thought that I (jbphet) had was to add a set of methods to an object that would test the various interactions
+      // and would be indexed by the model element type of the moving and stationary objects, so it would be structured
+      // like this:
+      // OVERLAP_TEST_FUNCTIONS = {
+      //   block: {
+      //     block: function...
+      //     beaker: function...
+      //     burners: function...
+      //   }
+      //   beaker: {
+      //     block: function...
+      //     beaker: function...
+      //     burners: function...
+      //   }
+      // }
+
       // validate this model element's position against the beaker
       if ( modelElement !== this.beaker ) {
 
