@@ -112,6 +112,9 @@ define( function( require ) {
       assert && assert( this.specificHeat > 0, 'Invalid specific heat: ' + this.specificHeat );
       return this.energy / ( this.mass * this.specificHeat );
     },
+    get temperature() {
+      return this.getTemperature();
+    },
 
     /**
      * restore initial state

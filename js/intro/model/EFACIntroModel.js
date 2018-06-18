@@ -153,6 +153,21 @@ define( function( require ) {
     );
   }
 
+  // helper function
+  function mapHeatCoolLevelToColor( heatCoolLevel ) {
+    var color;
+    if ( heatCoolLevel > 0 ) {
+      color = 'orange';
+    }
+    else if ( heatCoolLevel < 0 ) {
+      color = '#87CEFA';
+    }
+    else {
+      color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
+    }
+    return color;
+  }
+
   energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
 
   return inherit( Object, EFACIntroModel, {
@@ -836,13 +851,16 @@ define( function( require ) {
     },
 
     /**
-     * get the temperature and color that would be sensed by a thermometer at the provided location
+     * Get the temperature and color that would be sensed by a thermometer at the provided location.  This is done as
+     * a single operation instead of having separate methods for getting temperature and color because it is more
+     * efficient to do it like this.
      * @param {Vector2} position - location to be sensed
      * @returns {TemperatureAndColor} - object with temperature and color
      * @public
      */
     getTemperatureAndColorAtLocation: function( position ) {
-      var locationAsPoint = position;
+
+      var temperatureAndColor = null;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
       var copyOfBlockList = this.getBlockList().slice( 0 );
@@ -851,36 +869,57 @@ define( function( require ) {
         if ( block1.position === block2.position ) {
           return 0;
         }
-        if ( block2.positionProperty.value.x > block1.positionProperty.value.x || block2.positionProperty.value.y > block1.positionProperty.value.y ) {
+        if ( block2.positionProperty.value.x > block1.positionProperty.value.x ||
+             block2.positionProperty.value.y > block1.positionProperty.value.y ) {
           return 1;
         }
         return -1;
       } );
 
-      copyOfBlockList.forEach( function( block ) {
-        if ( block.getProjectedShape().containsPoint( locationAsPoint ) ) {
-          return new TemperatureAndColor( block.temperature, block.color );
+      for ( var i = 0; i < copyOfBlockList.length && !temperatureAndColor; i++ ) {
+        var block = copyOfBlockList[ i ];
+        if ( block.getProjectedShape().containsPoint( position ) ) {
+          temperatureAndColor = new TemperatureAndColor( block.temperature, block.color );
         }
-      } );
+      }
 
       // test if this point is in the water or steam associated with the beaker
-      if ( this.beaker.getThermalContactArea().containsPoint( locationAsPoint ) ) {
-        return new TemperatureAndColor( this.beaker.temperatureProperty.get(), EFACConstants.WATER_COLOR_IN_BEAKER );
+      if ( !temperatureAndColor && this.beaker.getThermalContactArea().containsPoint( position ) ) {
+        temperatureAndColor = new TemperatureAndColor(
+          this.beaker.temperatureProperty.get(),
+          EFACConstants.WATER_COLOR_IN_BEAKER
+        );
       }
-      else if ( this.beaker.getSteamArea().containsPoint( locationAsPoint ) && this.beaker.steamingProportion > 0 ) {
-        return new TemperatureAndColor( this.beaker.getSteamTemperature(
-          locationAsPoint.y - this.beaker.getSteamArea().minY ), 'white' );
+      else if ( !temperatureAndColor &&
+                this.beaker.getSteamArea().containsPoint( position ) &&
+                this.beaker.steamingProportion > 0 ) {
+        temperatureAndColor = new TemperatureAndColor(
+          this.beaker.getSteamTemperature( position.y - this.beaker.getSteamArea().minY ),
+          'white'
+        );
       }
 
       // test if the point is a burner
-      this.burners.forEach( function( burner ) {
-        if ( burner.getFlameIceRect().containsPoint( locationAsPoint ) ) {
-          return new TemperatureAndColor( burner.getTemperature(), EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
+      for ( i = 0; i < this.burners.length && !temperatureAndColor; i++ ) {
+        var burner = this.burners[ i ];
+        if ( burner.getFlameIceRect().containsPoint( position ) ) {
+          temperatureAndColor = new TemperatureAndColor(
+            burner.getTemperature(),
+            mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() )
+          );
         }
-      } );
+      }
 
-      // point is in nothing else, so return the air temperature
-      return new TemperatureAndColor( this.air.getTemperature(), EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
+      if ( !temperatureAndColor ) {
+
+        // the position is in nothing else, so return the air temperature and color
+        temperatureAndColor = new TemperatureAndColor(
+          this.air.getTemperature(),
+          EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR
+        );
+      }
+
+      return temperatureAndColor;
     }
   } );
 } );

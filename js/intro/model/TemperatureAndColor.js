@@ -4,6 +4,8 @@
  * convenience type that combines values for temperature and color, used primarily by the thermometer to obtain
  * information from the model
  *
+ * TODO: make this poolable and use a pool to reduce memory allocations
+ *
  * @author John Blanco
  */
 define( function( require ) {

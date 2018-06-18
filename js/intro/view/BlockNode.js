@@ -156,9 +156,7 @@ define( function( require ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 
       // if a node was specified for the approaching energy chunks, use it, otherwise make them a child of this node
-      var parentNode = ( options.approachingEnergyChunkParentNode === null ) ?
-                       self.energyChunkRootNode :
-                       options.approachingEnergyChunkParentNode;
+      var parentNode = options.approachingEnergyChunkParentNode || self.energyChunkRootNode;
 
       parentNode.addChild( energyChunkNode );
 

@@ -81,6 +81,9 @@ define( function( require ) {
       assert && assert( false, 'This function should not be called, getColor() needs to be implemented in a subclass' );
       return 'pink';
     },
+    get color() {
+      return this.getColor();
+    },
 
     /**
      * @public
