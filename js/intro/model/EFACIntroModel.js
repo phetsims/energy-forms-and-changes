@@ -505,7 +505,7 @@ define( function( require ) {
         modelElementBoundsWithSidePerspective,
         this.burnerBlockingRect,
         allowedTranslation,
-        false
+        true
       );
 
       // validate this model element's position against the beaker
