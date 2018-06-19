@@ -107,7 +107,7 @@ define( function( require ) {
     MAX_ENERGY_PRODUCTION_RATE: 10000, // in joules/sec
 
     // colors
-    NOMINAL_WATER_OPACITY: 0.75,
+    NOMINAL_WATER_OPACITY: 0.7,
     WATER_COLOR_OPAQUE: new Color( 175, 238, 238 ),
     WATER_COLOR_IN_BEAKER: new Color( 175, 238, 238, NOMINAL_WATER_OPACITY ),
     FIRST_SCREEN_BACKGROUND_COLOR: new Color( 245, 235, 175 ),

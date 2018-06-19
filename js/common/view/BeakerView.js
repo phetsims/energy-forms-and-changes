@@ -33,7 +33,7 @@ define( function( require ) {
   var waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
 
   // constants
-  var OUTLINE_COLOR = 'lightgrey';
+  var OUTLINE_COLOR = 'rgb( 160, 160, 160 )';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32 );
   var SHOW_MODEL_RECT = false;
@@ -98,7 +98,7 @@ define( function( require ) {
     } ) );
 
     // add the bottom ellipse
-    this.frontNode.addChild( new Path( bottomEllipse, {
+    this.backNode.addChild( new Path( bottomEllipse, {
       fill: BEAKER_COLOR,
       lineWidth: 3,
       stroke: OUTLINE_COLOR
