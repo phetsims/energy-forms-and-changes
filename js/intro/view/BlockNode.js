@@ -213,13 +213,19 @@ define( function( require ) {
    */
   function createSurface( shape, fillColor, textureImage ) {
 
-    var root = new Node( {
-      clipArea: shape
-    } );
+    var surfaceNode = null;
+    var edgeColor = fillColor.darkerColor( 0.5 );
 
-    if ( textureImage !== null ) {
+    if ( textureImage ) {
 
-      // add the texture image
+      // create a root node to which the texture and outline can be added separately
+      surfaceNode = new Node();
+
+      var textureNode = new Node( {
+        clipArea: shape
+      } );
+
+      // create the texture image
       var texture = new Image( textureImage );
 
       // scale up the texture image if needed
@@ -234,23 +240,32 @@ define( function( require ) {
 
       // add the texture to the clip node in order to clip it
       texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
-      root.addChild( texture );
+      textureNode.addChild( texture );
+
+      // add texture node to the root
+      surfaceNode.addChild( textureNode );
+
+      // add the outline
+      surfaceNode.addChild( new Path( shape, {
+        lineWidth: OUTLINE_LINE_WIDTH,
+        stroke: edgeColor,
+        lineEnd: 'butt',
+        lineJoin: 'round'
+      } ) );
     }
     else {
 
       // add filled shape using only color
-      root.addChild( new Path( shape, {
-        fill: fillColor
-      } ) );
+      surfaceNode = new Path( shape, {
+        fill: fillColor,
+        stroke: edgeColor,
+        lineWidth: OUTLINE_LINE_WIDTH,
+        lineEnd: 'butt',
+        lineJoin: 'round'
+      } );
     }
 
-    // add the outlined shape so that edges are visible
-    root.addChild( new Path( shape, {
-      lineWidth: OUTLINE_LINE_WIDTH,
-      stroke: OUTLINE_STROKE
-    } ) );
-
-    return root;
+    return surfaceNode;
   }
 
   energyFormsAndChanges.register( 'BlockNode', BlockNode );
