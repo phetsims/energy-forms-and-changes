@@ -84,10 +84,14 @@ define( function( require ) {
                                   Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
 
     // @public (read-only) {Property.<HorizontalSurface>} - surface upon which other objects can rest
-    this.topSurfaceProperty = new Property(
+    this.topSurfaceProperty.set(
       new HorizontalSurface(
-        new RangeWithValue( self.getOutlineRect().getMinX() - perspectiveCompensation,
-          self.getOutlineRect().maxX + perspectiveCompensation ), self.getOutlineRect().maxY, this
+        new RangeWithValue(
+          self.getOutlineRect().getMinX() - perspectiveCompensation,
+          self.getOutlineRect().maxX + perspectiveCompensation
+        ),
+        self.getOutlineRect().maxY,
+        this
       )
     );
 

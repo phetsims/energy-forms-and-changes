@@ -196,19 +196,10 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      if ( this.supportingSurfaceProperty !== null ) {
-        // TODO: the next line was in the java code but I (jbphet) am not sure what if anything is needed here
-        //        this.supportingSurfaceProperty.removeAllObservers();
-        // TODO: Re-test this once supporting surfaces have been added to the model elements!
-        //this.supportingSurface.clearSurface();
-        this.supportingSurfaceProperty.reset();
-      }
-      if ( this.topSurfaceProperty !== null ) {
-        this.topSurfaceProperty.reset();
-      }
-      if ( this.bottomSurfaceProperty !== null ) {
-        this.bottomSurfaceProperty.reset();
-      }
+
+      this.positionProperty.reset();
+
+      // note - the top and bottom surface properties are NOT reset here since they are managed by sub-types
     }
   } );
 } );

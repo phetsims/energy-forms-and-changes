@@ -27,6 +27,7 @@ define( function( require ) {
   var RangeWithValue = require( 'DOT/RangeWithValue' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
+  var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -69,7 +70,7 @@ define( function( require ) {
     this.playProperty = new BooleanProperty( true );
 
     // @public (read-only) {BooleanProperty} - true indicates normal speed, false is fast-forward
-    this.normalSimSpeedProperty = new Property( true );
+    this.normalSimSpeedProperty = new Property( SimSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
@@ -177,26 +178,18 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-
-      // TODO: Reset is currently bypassed.  This was done in March 2017 because the sim was failing automated testing,
-      // and it was due to issues with reset not restoring state properly, but I (@jbphet) don't have time to do any
-      // further investigation.  See https://github.com/phetsims/energy-forms-and-changes/issues/25 for more
-      // information.  Restore the commented-out code below as part of the process to make it work.
-      console.log( 'warning: portions of reset are temporarily bypassed' );
-
-      //this.energyChunksVisibleProperty.reset();
-      //this.playProperty.reset();
-      //this.normalSimSpeedProperty.reset();
-      //this.air.reset();
-      //this.leftBurner.reset();
-      //this.rightBurner.reset();
-      //this.ironBlock.reset();
-      //this.brick.reset();
-      //this.beaker.reset();
-      //
-      //this.temperatureAndColorSensors.forEach( function( thermometer ) {
-      //  thermometer.reset();
-      //} );
+      this.energyChunksVisibleProperty.reset();
+      this.playProperty.reset();
+      this.normalSimSpeedProperty.reset();
+      this.air.reset();
+      this.leftBurner.reset();
+      this.rightBurner.reset();
+      this.ironBlock.reset();
+      this.brick.reset();
+      this.beaker.reset();
+      this.temperatureAndColorSensors.forEach( function( sensor ) {
+        sensor.reset();
+      } );
     },
 
     /**
@@ -214,7 +207,8 @@ define( function( require ) {
      */
     step: function( dt ) {
       if ( this.playProperty.get() ) {
-        var multiplier = this.normalSimSpeedProperty.get() ? 1 : EFACConstants.FAST_FORWARD_MULTIPLIER;
+        var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 :
+                         EFACConstants.FAST_FORWARD_MULTIPLIER;
         // TODO: This uses a fixed step instead of dt, this will need to be changed, see https://github.com/phetsims/energy-forms-and-changes/issues/42
         // this.stepModel( dt * multiplier );
         this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL * multiplier );

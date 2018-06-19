@@ -30,8 +30,8 @@ define( function( require ) {
     this.userControlledProperty = new BooleanProperty( false );
 
     // @protected {Property<HorizontalSurface>|null} - The surface upon which this model element is resting.  This is
-    // null (and note that the reference, not the wrapped value, that can be null) if the element is not resting on a
-    // movable surface.  This should only be set through the getter/setter methods below.
+    // null (and note that it is the reference itself, not the wrapped value, that can be null) if the element is not
+    // resting on a movable surface.  This should only be set through the getter/setter methods below.
     this.supportingSurfaceProperty = null;
 
     // @public {Property.<number>}
@@ -63,7 +63,6 @@ define( function( require ) {
     reset: function() {
       this.clearSupportingSurface();
       this.userControlledProperty.reset();
-      this.positionProperty.reset();
       this.verticalVelocityProperty.reset();
       ModelElement.prototype.reset.call( this );
     },

@@ -17,6 +17,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -52,8 +53,8 @@ define( function( require ) {
     } );
 
     var radioButtonContent = [
-      { value: true, node: new Text( normalString, { font: RADIO_BUTTON_FONT } ) },
-      { value: false, node: new Text( fastForwardString, { font: RADIO_BUTTON_FONT } ) }
+      { value: SimSpeed.NORMAL, node: new Text( normalString, { font: RADIO_BUTTON_FONT } ) },
+      { value: SimSpeed.FAST_FORWARD, node: new Text( fastForwardString, { font: RADIO_BUTTON_FONT } ) }
     ];
     var radioButtonGroup = new RadioButtonGroup( model.normalSimSpeedProperty, radioButtonContent, {
       orientation: 'horizontal',

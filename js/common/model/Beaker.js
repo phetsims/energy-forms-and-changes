@@ -361,9 +361,9 @@ define( function( require ) {
      * @public
      */
     getTemperature: function() {
-      var T = RectangularThermalMovableModelElement.prototype.getTemperature.call( this );
-      assert && assert( T >= 0, 'Invalid temperature: ' + T );
-      return Math.min( T, EFACConstants.BOILING_POINT_TEMPERATURE );
+      var temperature = RectangularThermalMovableModelElement.prototype.getTemperature.call( this );
+      assert && assert( temperature >= 0, 'Invalid temperature: ' + temperature );
+      return Math.min( temperature, EFACConstants.BOILING_POINT_TEMPERATURE );
     },
 
     /**
@@ -422,8 +422,6 @@ define( function( require ) {
      */
     reset: function() {
       this.fluidLevelProperty.reset();
-      this.topSurfaceProperty.reset();
-      this.bottomSurfaceProperty.reset();
       this.temperatureProperty.reset();
       RectangularThermalMovableModelElement.prototype.reset.call( this );
     }
