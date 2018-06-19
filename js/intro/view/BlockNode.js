@@ -35,6 +35,7 @@ define( function( require ) {
   var OUTLINE_LINE_WIDTH = 3;
   var OUTLINE_STROKE = Color.DARK_GRAY;
   var SHOW_2D_REPRESENTATION = true; // TODO: Turn this into a query parameter.
+  var PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
 
   /**
    * @param {Block} block
@@ -71,8 +72,8 @@ define( function( require ) {
     var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX(
       block.getBounds().width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION
     );
-    var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
-    var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -EFACConstants.BLOCK_PERSPECTIVE_ANGLE );
+    var blockFaceOffset = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -PERSPECTIVE_ANGLE );
+    var backCornersOffset = new Vector2( perspectiveEdgeSize, 0 ).rotated( -PERSPECTIVE_ANGLE );
     var lowerLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMaxY() ).plus( blockFaceOffset );
     var lowerRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMaxY() ).plus( blockFaceOffset );
     var upperRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMinY() ).plus( blockFaceOffset );
@@ -103,20 +104,25 @@ define( function( require ) {
       .lineToPoint( upperRightBackCorner )
       .lineToPoint( upperRightFrontCorner );
 
-    // create the shape for the back of the block
+    // Create the shape for the back of the block, which can only be seen when the block is transparent.  The lines are
+    // shortened a little so that they don't stick out from behind the block.
     var lowerLeftBackCorner = lowerLeftFrontCorner.plus( backCornersOffset );
     var blockBackShape = new Shape();
     blockBackShape.moveToPoint( lowerLeftBackCorner )
-      .lineToPoint( lowerRightBackCorner )
+      .lineTo( lowerRightBackCorner.x - OUTLINE_LINE_WIDTH, lowerRightBackCorner.y )
       .moveToPoint( lowerLeftBackCorner )
-      .lineToPoint( lowerLeftFrontCorner )
+      .lineTo(
+        lowerLeftFrontCorner.x + Math.sin( PERSPECTIVE_ANGLE ) * OUTLINE_LINE_WIDTH,
+        lowerLeftFrontCorner.y - Math.cos( PERSPECTIVE_ANGLE ) * OUTLINE_LINE_WIDTH
+      )
       .moveToPoint( lowerLeftBackCorner )
-      .lineToPoint( upperLeftBackCorner );
+      .lineTo( upperLeftBackCorner.x, upperLeftBackCorner.y + OUTLINE_LINE_WIDTH );
 
     // add the back of the block
     var blockBack = new Path( blockBackShape, {
       lineWidth: OUTLINE_LINE_WIDTH,
-      stroke: OUTLINE_STROKE
+      stroke: OUTLINE_STROKE,
+      lineCap: 'round'
     } );
     this.addChild( blockBack );
 
@@ -170,11 +176,12 @@ define( function( require ) {
 
     // make the block be transparent when the energy chunks are visible so that it looks like they are inside the block
     block.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
-      var opaqueness = energyChunksVisible ? 0.5 : 1.0;
-      blockFace.opacity = opaqueness;
-      blockTop.opacity = opaqueness;
-      blockSide.opacity = opaqueness;
-      label.opacity = opaqueness;
+      var opacity = energyChunksVisible ? 0.5 : 1.0;
+      blockFace.opacity = opacity;
+      blockTop.opacity = opacity;
+      blockSide.opacity = opacity;
+      blockBack.opacity = opacity;
+      label.opacity = opacity;
     } );
 
     // update the offset when the model position changes
@@ -210,12 +217,6 @@ define( function( require ) {
       clipArea: shape
     } );
 
-    // Add the filled shape.  Note that in cases where a texture is provided, this may end up getting partially or
-    // entirely covered up.
-    root.addChild( new Path( shape, {
-      fill: fillColor
-    } ) );
-
     if ( textureImage !== null ) {
 
       // add the texture image
@@ -234,6 +235,13 @@ define( function( require ) {
       // add the texture to the clip node in order to clip it
       texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
       root.addChild( texture );
+    }
+    else {
+
+      // add filled shape using only color
+      root.addChild( new Path( shape, {
+        fill: fillColor
+      } ) );
     }
 
     // add the outlined shape so that edges are visible
