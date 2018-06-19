@@ -17,7 +17,7 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var Shape = require( 'KITE/Shape' );
@@ -195,7 +195,7 @@ define( function( require ) {
      */
     updateTopSurfaceProperty: function() {
       var rectangle = this.getBounds();
-      this.topSurfaceProperty.set( new HorizontalSurface( new RangeWithValue( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
+      this.topSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
     },
 
     /**
@@ -203,7 +203,7 @@ define( function( require ) {
      */
     updateBottomSurfaceProperty: function() {
       var rectangle = this.getBounds();
-      this.bottomSurfaceProperty.set( new HorizontalSurface( new RangeWithValue( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
+      this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
     },
 
     /**

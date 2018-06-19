@@ -22,7 +22,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var Property = require( 'AXON/Property' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var Shape = require( 'KITE/Shape' );
@@ -102,12 +102,12 @@ define( function( require ) {
       var rectangle = self.getBounds();
 
       self.topSurfaceProperty.set( new HorizontalSurface(
-        new RangeWithValue( rectangle.minX, rectangle.maxX ),
+        new Range( rectangle.minX, rectangle.maxX ),
         rectangle.minY + MATERIAL_THICKNESS, self )
       );
 
       self.bottomSurfaceProperty.set( new HorizontalSurface(
-        new RangeWithValue( rectangle.minX, rectangle.maxX ),
+        new Range( rectangle.minX, rectangle.maxX ),
         rectangle.minY, self )
       );
     } );

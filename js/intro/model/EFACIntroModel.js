@@ -24,7 +24,7 @@ define( function( require ) {
   var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var Line = require( 'KITE/segments/Line' );
   var Property = require( 'AXON/Property' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
@@ -122,7 +122,7 @@ define( function( require ) {
 
         var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
 
-        var xRange = new RangeWithValue(
+        var xRange = new Range(
           self.beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
           self.beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
         );

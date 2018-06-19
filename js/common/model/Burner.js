@@ -24,7 +24,7 @@ define( function( require ) {
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -86,7 +86,7 @@ define( function( require ) {
     // @public (read-only) {Property.<HorizontalSurface>} - surface upon which other objects can rest
     this.topSurfaceProperty.set(
       new HorizontalSurface(
-        new RangeWithValue(
+        new Range(
           self.getOutlineRect().getMinX() - perspectiveCompensation,
           self.getOutlineRect().maxX + perspectiveCompensation
         ),

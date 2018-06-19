@@ -19,7 +19,7 @@ define( function( require ) {
   var EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyUser' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var RangeWithValue = require( 'DOT/RangeWithValue' );
+  var Range = require( 'DOT/Range' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -44,7 +44,7 @@ define( function( require ) {
   var OFFSET_TO_RADIATE_POINT = new Vector2( 0, 0.066 );
 
   var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
-  var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new RangeWithValue( 2, 2.5 );
+  var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
   var ENERGY_TO_FULLY_LIGHT = EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
   var LIGHT_CHUNK_LIT_BULB_RADIUS = 0.1; // In meters.
   var LIGHT_CHANGE_RATE = 0.5; // In proportion per second.
