@@ -77,7 +77,7 @@ define( function( require ) {
        * @public
        */
       getColor: function() {
-        return new Color( 200, 22, 11 );
+        return new Color( 223, 22, 12 );
       },
 
       /**
