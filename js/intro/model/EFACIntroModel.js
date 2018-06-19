@@ -112,13 +112,13 @@ define( function( require ) {
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.temperatureAndColorSensors = [];
     _.times( NUM_THERMOMETERS, function() {
-      var thermometer = new StickyTemperatureAndColorSensor( self, INITIAL_THERMOMETER_LOCATION, false );
-      self.temperatureAndColorSensors.push( thermometer );
+      var sensor = new StickyTemperatureAndColorSensor( self, INITIAL_THERMOMETER_LOCATION, false );
+      self.temperatureAndColorSensors.push( sensor );
 
       // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
       // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
       // beaker temperature. This was requested after interviews.
-      thermometer.sensedElementColorProperty.link( function( newColor, oldColor ) {
+      sensor.sensedElementColorProperty.link( function( newColor, oldColor ) {
 
         var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
 
@@ -127,13 +127,17 @@ define( function( require ) {
           self.beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
         );
 
-        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER && !thermometer.userControlled &&
-             xRange.contains( thermometer.positionProperty.value.x ) ) {
-          thermometer.userControlled = true; // Must toggle userControlled to enable element following.
-          thermometer.position = new Vector2(
+        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER &&
+             !sensor.userControlledProperty.get() &&
+             xRange.contains( sensor.positionProperty.value.x ) ) {
+
+          // fake a movement by the user to a point in the beaker where the sensor is not over a brick
+          sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+          sensor.position = new Vector2(
             self.beaker.getBounds().maxX - 0.01,
-            self.beaker.getBounds().minY + self.beaker.getBounds().height * 0.33 );
-          thermometer.userControlled = false; // Must toggle userControlled to enable element following.
+            self.beaker.getBounds().minY + self.beaker.getBounds().height * 0.33
+          );
+          sensor.userControlledProperty.set( false );
         }
       } );
     } );

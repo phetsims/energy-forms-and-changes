@@ -173,7 +173,7 @@ define( function( require ) {
           1
         );
       }
-      else{
+      else {
         this.steamingProportion = 0;
       }
       RectangularThermalMovableModelElement.prototype.step.call( this, dt );
@@ -256,11 +256,17 @@ define( function( require ) {
      */
     getThermalContactArea: function() {
 
-      return new ThermalContactArea( new Bounds2(
-        this.positionProperty.value.x - this.width / 2,
-        this.positionProperty.value.y,
-        this.width,
-        this.height * this.fluidLevelProperty.value ), true );
+      var currentPosition = this.positionProperty.get();
+
+      return new ThermalContactArea(
+        new Bounds2(
+          currentPosition.x - this.width / 2,
+          currentPosition.y,
+          currentPosition.x + this.width / 2,
+          currentPosition.y + this.height * this.fluidLevelProperty.get()
+        ),
+        true
+      );
     },
 
     /**
