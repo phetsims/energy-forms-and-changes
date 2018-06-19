@@ -12,7 +12,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -33,7 +32,6 @@ define( function( require ) {
   // constants
   var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINE_WIDTH = 3;
-  var OUTLINE_STROKE = Color.DARK_GRAY;
   var SHOW_2D_REPRESENTATION = true; // TODO: Turn this into a query parameter.
   var PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
 
@@ -118,10 +116,12 @@ define( function( require ) {
       .moveToPoint( lowerLeftBackCorner )
       .lineTo( upperLeftBackCorner.x, upperLeftBackCorner.y + OUTLINE_LINE_WIDTH );
 
+    var edgeColor = block.getColor().darkerColor( 0.5 );
+
     // add the back of the block
     var blockBack = new Path( blockBackShape, {
       lineWidth: OUTLINE_LINE_WIDTH,
-      stroke: OUTLINE_STROKE,
+      stroke: edgeColor,
       lineCap: 'round'
     } );
     this.addChild( blockBack );
@@ -134,9 +134,9 @@ define( function( require ) {
     }
 
     // add the face, top, and sides of the block
-    var blockFace = createSurface( blockFaceShape, block.getColor(), block.getFrontTextureImage() );
-    var blockTop = createSurface( blockTopShape, block.getColor(), block.getTopTextureImage() );
-    var blockSide = createSurface( blockSideShape, block.getColor(), block.getSideTextureImage() );
+    var blockFace = createSurface( blockFaceShape, block.getColor(), edgeColor, block.getFrontTextureImage() );
+    var blockTop = createSurface( blockTopShape, block.getColor(), edgeColor, block.getTopTextureImage() );
+    var blockSide = createSurface( blockSideShape, block.getColor(), edgeColor, block.getSideTextureImage() );
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
@@ -180,8 +180,11 @@ define( function( require ) {
       blockFace.opacity = opacity;
       blockTop.opacity = opacity;
       blockSide.opacity = opacity;
-      blockBack.opacity = opacity;
+      blockBack.opacity = opacity / 2; // make back less opaque to create a look of distance
       label.opacity = opacity;
+
+      // don't bother displaying the back if the block is not in see-through mode
+      blockBack.visible = energyChunksVisible;
     } );
 
     // update the offset when the model position changes
@@ -207,43 +210,38 @@ define( function( require ) {
    * convenience method to avoid code duplication - adds a node of the given shape, color, and texture (if specified)
    * @param {Shape} shape
    * @param {Color} fillColor
+   * @param {Color} edgeColor
    * @param {Image} textureImage
    * @returns {Node}
    * @private
    */
-  function createSurface( shape, fillColor, textureImage ) {
+  function createSurface( shape, fillColor, edgeColor, textureImage ) {
 
     var surfaceNode = null;
-    var edgeColor = fillColor.darkerColor( 0.5 );
 
     if ( textureImage ) {
 
       // create a root node to which the texture and outline can be added separately
       surfaceNode = new Node();
 
-      var textureNode = new Node( {
+      var textureClipNode = new Node( {
         clipArea: shape
       } );
 
       // create the texture image
-      var texture = new Image( textureImage );
-
-      // scale up the texture image if needed
-      var textureScale = 1;
-      if ( texture.bounds.width < shape.bounds.width ) {
-        textureScale = shape.bounds.width / texture.bounds.width;
-      }
-      if ( texture.bounds.height < shape.bounds.height ) {
-        textureScale = Math.max( shape.bounds.height / texture.bounds.height, textureScale );
-      }
-      texture.scale( textureScale );
+      var texture = new Image( textureImage, {
+        minWidth: shape.bounds.width,
+        minHeight: shape.bounds.height,
+        left: shape.bounds.minX,
+        top: shape.bounds.minY
+      } );
 
       // add the texture to the clip node in order to clip it
-      texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
-      textureNode.addChild( texture );
+      // texture.leftTop = new Vector2( shape.bounds.minX, shape.bounds.minY );
+      textureClipNode.addChild( texture );
 
       // add texture node to the root
-      surfaceNode.addChild( textureNode );
+      surfaceNode.addChild( textureClipNode );
 
       // add the outline
       surfaceNode.addChild( new Path( shape, {
