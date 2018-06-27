@@ -69,7 +69,7 @@ define( function( require ) {
     var strokeStyles = new LineStyles( {
       lineWidth: BURNER_STAND_STROKE_LINE_WIDTH,
       lineCap: 'butt',
-      lineJoin: 'bevel'
+      lineJoin: 'round'
     } );
     shape = shape.getStrokedShape( strokeStyles );
 
