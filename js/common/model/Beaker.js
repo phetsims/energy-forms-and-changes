@@ -77,7 +77,7 @@ define( function( require ) {
     // @private {number} - max height above water where steam still affects the measured temperature
     this.maxSteamHeight = 2 * height;
 
-    // add position test bounds - three sides (see definition in base class for more info)
+    // add position test bounds - left side, bottom, right side (see declaration in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2(
       -width / 2 - MATERIAL_THICKNESS / 2,
       0,
@@ -86,9 +86,9 @@ define( function( require ) {
     ) );
     this.relativePositionTestingBoundsList.push( new Bounds2(
       -width / 2,
-      -MATERIAL_THICKNESS / 2,
+      0,
       width / 2,
-      MATERIAL_THICKNESS / 2
+      MATERIAL_THICKNESS
     ) );
     this.relativePositionTestingBoundsList.push( new Bounds2(
       width / 2 - MATERIAL_THICKNESS / 2,
