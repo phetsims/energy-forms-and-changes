@@ -47,7 +47,6 @@ define( function( require ) {
 
   // constants
   var EDGE_INSET = 10;
-  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // multiplier empirically determined for best look
   var SHOW_LAYOUT_BOUNDS = false;
   var SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
 
@@ -127,14 +126,15 @@ define( function( require ) {
     backLayer.addChild( clockControlPanel );
 
     // add the burners
-    var burnerProjectionAmount =
-      modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ).width * BURNER_EDGE_TO_HEIGHT_RATIO;
+    var burnerProjectionAmount = modelViewTransform.modelToViewDeltaX(
+      model.leftBurner.getCompositeBounds().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO
+    );
 
     // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
     var leftHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
-      centerX: modelViewTransform.modelToViewX( model.leftBurner.getOutlineRect().centerX ),
-      bottom: modelViewTransform.modelToViewY( model.leftBurner.getOutlineRect().minY )
+      centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
+      bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY )
     } );
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
@@ -143,15 +143,15 @@ define( function( require ) {
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode(
-      modelViewTransform.modelToViewShape( model.leftBurner.getOutlineRect() ),
+      modelViewTransform.modelToViewShape( model.leftBurner.getCompositeBounds() ),
       burnerProjectionAmount )
     );
 
     // set up right heater-cooler node
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
-      centerX: modelViewTransform.modelToViewX( model.rightBurner.getOutlineRect().centerX ),
-      bottom: modelViewTransform.modelToViewY( model.rightBurner.getOutlineRect().minY )
+      centerX: modelViewTransform.modelToViewX( model.rightBurner.getCompositeBounds().centerX ),
+      bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY )
     } );
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
@@ -160,7 +160,7 @@ define( function( require ) {
     heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( new BurnerStandNode(
-      modelViewTransform.modelToViewShape( model.rightBurner.getOutlineRect() ),
+      modelViewTransform.modelToViewShape( model.rightBurner.getCompositeBounds() ),
       burnerProjectionAmount )
     );
 

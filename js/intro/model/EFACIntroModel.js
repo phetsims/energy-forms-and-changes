@@ -429,7 +429,7 @@ define( function( require ) {
       // determine whether there is something below this element that it can land upon
       var potentialSupportingSurface = self.findBestSupportSurface( modelElement );
 
-      // if so, center the modelElement above its new parent
+      // if so, center the model element above its new supporting element
       if ( potentialSupportingSurface !== null ) {
         minYPos = potentialSupportingSurface.value.yPos;
         targetX = potentialSupportingSurface.value.getCenterX();

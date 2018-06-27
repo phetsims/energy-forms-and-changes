@@ -185,7 +185,7 @@ define( function( require ) {
       return bounds;
     },
 
-    // TODO: Document if kept, but consider just maintaining these bounds as the model element moves
+    // TODO: Document if kept, but consider maintaining these bounds as the model element moves for efficiency
     getCompositeBounds: function() {
       return this.getCompositeBoundsForPosition( this.positionProperty.get() );
     },

@@ -78,25 +78,26 @@ define( function( require ) {
     // Track build up of energy for transferring chunks to/from the air.
     this.energyExchangedWithAirSinceLastChunkTransfer = 0; // @private
 
+    // add position test bounds (see definition in base class for more info)
+    this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
+
     // Create and add the top surface.  Some compensation for perspective is necessary in order to avoid problems with
     // edge overlap when dropping objects on top of burner.
-    var perspectiveCompensation = self.getOutlineRect().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
-                                  Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE );
+    var compositeBounds = self.getCompositeBounds();
+    var perspectiveCompensation = compositeBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+                                  Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
     // @public (read-only) {Property.<HorizontalSurface>} - surface upon which other objects can rest
     this.topSurfaceProperty.set(
       new HorizontalSurface(
         new Range(
-          self.getOutlineRect().getMinX() - perspectiveCompensation,
-          self.getOutlineRect().maxX + perspectiveCompensation
+          compositeBounds.minX - perspectiveCompensation,
+          compositeBounds.maxX + perspectiveCompensation
         ),
-        self.getOutlineRect().maxY,
+        compositeBounds.maxY,
         this
       )
     );
-
-    // add position test bounds (see definition in base class for more info)
-    this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );
@@ -108,7 +109,7 @@ define( function( require ) {
      * @returns {Rectangle} - rectangle that defines the outline in model space.
      * @public
      */
-    getOutlineRect: function() {
+    getCompositeBounds: function() {
       // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.  Also should be bounds.
       return new Rectangle( this.position.x - SIDE_LENGTH / 2, this.position.y, SIDE_LENGTH, SIDE_LENGTH );
     },
@@ -164,7 +165,7 @@ define( function( require ) {
      * @public
      */
     inContactWith: function( thermalEnergyContainer ) {
-      var burnerRect = this.getOutlineRect();
+      var burnerRect = this.getCompositeBounds();
       var area = thermalEnergyContainer.getThermalContactArea();
       var xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
       var yContact = ( Math.abs( area.minY - burnerRect.maxY ) < CONTACT_DISTANCE );
@@ -337,7 +338,7 @@ define( function( require ) {
     getFlameIceRect: function() {
 
       // word of warning: this needs to stay consistent with the view
-      var outlineRect = this.getOutlineRect();
+      var outlineRect = this.getCompositeBounds();
       var width = outlineRect.width;
       var height = outlineRect.height;
       return new Rectangle( outlineRect.centerX - width / 4, outlineRect.centerY, width / 2, height / 2 );

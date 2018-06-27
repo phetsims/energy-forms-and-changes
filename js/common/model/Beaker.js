@@ -98,17 +98,18 @@ define( function( require ) {
     ) );
 
     // update the top and bottom surfaces whenever the position changes
+    // TODO: Make HorizontalSurface poolable and use pooling.
     this.positionProperty.link( function() {
-      var rectangle = self.getBounds();
+      var bounds = self.getCompositeBounds();
 
       self.topSurfaceProperty.set( new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.minY + MATERIAL_THICKNESS, self )
+        new Range( bounds.minX, bounds.maxX ),
+        bounds.minY + MATERIAL_THICKNESS, self )
       );
 
       self.bottomSurfaceProperty.set( new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.minY, self )
+        new Range( bounds.minX, bounds.maxX ),
+        bounds.minY, self )
       );
     } );
   }
