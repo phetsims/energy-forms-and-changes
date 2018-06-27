@@ -161,7 +161,7 @@ define( function( require ) {
     var grabNodeShape = beakerBody;
     this.grabNode.addChild( new Path( grabNodeShape, {
       fill: 'rgba( 0, 0, 0, 0 )'
-    } ) ); // Invisible, yet pickable.
+    } ) ); // invisible, yet pickable
     this.grabNode.addChild( new Path( topEllipse, {
       fill: 'rgba( 0, 0, 0, 0 )'
     } ) );
@@ -174,7 +174,6 @@ define( function( require ) {
         lineWidth: 2
       } ) );
       this.frontNode.addChild( new Rectangle( modelViewTransform.modelToViewBounds( beaker.getSliceBounds() ), {
-        // this.frontNode.addChild( new Rectangle( scaleTransform.transformShape( beaker.getSliceBounds() ), {
         fill: 'none',
         stroke: 'magenta',
         lineWidth: 2
@@ -190,7 +189,7 @@ define( function( require ) {
       self.backNode.translation = offset;
       self.grabNode.translation = offset;
 
-      // vompensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
+      // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
       energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
     } );
 
