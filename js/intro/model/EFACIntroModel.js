@@ -665,17 +665,25 @@ define( function( require ) {
 
         // determine the motion in the X & Y directions that will "cure" the overlap
         var xOverlapCure = 0;
-        if ( movingElementBounds.maxX > stationaryElementBounds.minX && movingElementBounds.minX < stationaryElementBounds.minX ) {
+        if ( movingElementBounds.maxX >= stationaryElementBounds.minX &&
+             movingElementBounds.minX <= stationaryElementBounds.minX ) {
+
           xOverlapCure = stationaryElementBounds.minX - movingElementBounds.maxX;
         }
-        else if ( stationaryElementBounds.maxX > movingElementBounds.minX && stationaryElementBounds.minX < movingElementBounds.minX ) {
+        else if ( stationaryElementBounds.maxX >= movingElementBounds.minX &&
+                  stationaryElementBounds.minX <= movingElementBounds.minX ) {
+
           xOverlapCure = stationaryElementBounds.maxX - movingElementBounds.minX;
         }
         var yOverlapCure = 0;
-        if ( movingElementBounds.maxY > stationaryElementBounds.minY && movingElementBounds.minY < stationaryElementBounds.minY ) {
+        if ( movingElementBounds.maxY >= stationaryElementBounds.minY &&
+             movingElementBounds.minY <= stationaryElementBounds.minY ) {
+
           yOverlapCure = stationaryElementBounds.minY - movingElementBounds.maxY;
         }
-        else if ( stationaryElementBounds.maxY > movingElementBounds.minY && stationaryElementBounds.minY < movingElementBounds.minY ) {
+        else if ( stationaryElementBounds.maxY >= movingElementBounds.minY &&
+                  stationaryElementBounds.minY <= movingElementBounds.minY ) {
+
           yOverlapCure = stationaryElementBounds.maxY - movingElementBounds.minY;
         }
 
