@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -32,7 +33,6 @@ define( function( require ) {
   // constants
   var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINE_WIDTH = 3;
-  var SHOW_2D_REPRESENTATION = true; // TODO: Turn this into a query parameter.
   var PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
 
   /**
@@ -141,11 +141,17 @@ define( function( require ) {
     this.addChild( blockTop );
     this.addChild( blockSide );
 
-    if ( SHOW_2D_REPRESENTATION ) {
-      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( block.getRawShape(), {
-        fill: 'red',
-        lineWidth: 1
-      } ) ) );
+    if ( EFACQueryParameters.show2DBlockBounds ) {
+      var blockBounds = scaleTransform.transformBounds2( block.getRawShape() );
+
+      // compensate for inverted Y axis when creating view representation
+      this.addChild( new Rectangle(
+        blockBounds.minX,
+        blockBounds.minY - blockBounds.height,
+        blockBounds.width,
+        blockBounds.height,
+        { fill: 'red', lineWidth: 1 }
+      ) );
     }
 
     // position and add the label

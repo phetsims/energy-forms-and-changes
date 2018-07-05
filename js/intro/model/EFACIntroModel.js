@@ -45,15 +45,6 @@ define( function( require ) {
   // with air.
   var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // in degrees K, empirically determined
 
-  // flag that can be turned on in order to print out some profiling info - TODO: Make this a query param is retained
-  var ENABLE_INTERNAL_PROFILING = false;
-
-  // local variables for the class to be used when internal profiling is enabled
-  var previousTime = 0;
-  var TIME_ARRAY_LENGTH = 100;
-  var times = [];
-  var countUnderMin = 0;
-
   /**
    * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
    * @constructor
@@ -226,18 +217,6 @@ define( function( require ) {
     stepModel: function( dt ) {
 
       var self = this;
-
-      if ( ENABLE_INTERNAL_PROFILING ) {
-        var time = new Date().getTime();
-        if ( previousTime !== 0 && time - previousTime > 48 || countUnderMin + 1 >= TIME_ARRAY_LENGTH ) {
-          console.log( '----------------------' );
-          for ( var i = 0; i < countUnderMin; i++ ) {
-            console.log( times[ i ] + ' ' );
-          }
-          countUnderMin = 0;
-        }
-        previousTime = time;
-      }
 
       // cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
       // towards the nearest supporting surface

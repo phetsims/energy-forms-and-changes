@@ -47,7 +47,6 @@ define( function( require ) {
 
   // constants
   var EDGE_INSET = 10;
-  var SHOW_LAYOUT_BOUNDS = false;
   var SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
 
   // TODO: I (jbphet) came across the code immediately below during code cleanup in early May 2018, not sure what it is or whether it is still needed.
@@ -166,13 +165,6 @@ define( function( require ) {
 
     // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
-
-    // TODO: convert this into a query parameter
-    if ( SHOW_LAYOUT_BOUNDS ) {
-      this.addChild( new Rectangle( this.layoutBounds, {
-        stroke: 'rgba( 255, 0, 0, 0.9 )'
-      } ) );
-    }
 
     // define a closure that will limit the model element motion based on both view and model constraints
     function constrainMovableElementMotion( modelElement, proposedPosition ) {
