@@ -9,14 +9,12 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-
-  // constants
-  var SHOW_BOUNDS = false; // useful for debugging
 
   /**
    * @param {Air} air - model of the air
@@ -28,9 +26,9 @@ define( function( require ) {
     var self = this;
     Node.call( this );
 
-    if ( SHOW_BOUNDS ) {
+    if ( EFACQueryParameters.showAirBounds ) {
       this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.getThermalContactArea() ), {
-        fill: 'red',
+        fill: 'rgba( 255, 0, 0, 0.5 )',
         lineWidth: 1
       } ) );
     }

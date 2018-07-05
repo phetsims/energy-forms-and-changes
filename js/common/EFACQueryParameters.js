@@ -14,7 +14,10 @@ define( function( require ) {
   var EFACQueryParameters = QueryStringMachine.getAll( {
 
     // show the 2D bounds of the block, which is what is actually modeled
-    show2DBlockBounds: { type: 'flag' }
+    show2DBlockBounds: { type: 'flag' },
+
+    // show the bounds of the air
+    showAirBounds: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );
