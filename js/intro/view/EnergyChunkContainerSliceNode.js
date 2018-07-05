@@ -12,14 +12,12 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-
-  // constants
-  var ALWAYS_SHOW_OUTLINE = false; // TODO: convert this into a query parameter
 
   /**
    * @param {EnergyChunkContainerSlice} slice
@@ -51,7 +49,7 @@ define( function( require ) {
     slice.energyChunkList.addItemAddedListener( addEnergyChunkNode );
 
     // for debug
-    if ( ALWAYS_SHOW_OUTLINE ) {
+    if ( EFACQueryParameters.showContainerSlices ) {
       this.addChild( new Path( modelViewTransform.modelToViewShape( slice.shape ), {
         lineWidth: 1,
         stroke: 'red'

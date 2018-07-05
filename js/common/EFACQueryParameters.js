@@ -17,7 +17,10 @@ define( function( require ) {
     show2DBlockBounds: { type: 'flag' },
 
     // show the bounds of the air
-    showAirBounds: { type: 'flag' }
+    showAirBounds: { type: 'flag' },
+
+    // show the energy chunk container slice outlines
+    showContainerSlices: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );
