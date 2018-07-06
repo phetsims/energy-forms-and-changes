@@ -20,7 +20,10 @@ define( function( require ) {
     showAirBounds: { type: 'flag' },
 
     // show the energy chunk container slice outlines
-    showContainerSlices: { type: 'flag' }
+    showContainerSlices: { type: 'flag' },
+
+    // show the 2D bounds of the beaker
+    show2DBeakerBounds: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );

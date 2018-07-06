@@ -14,6 +14,7 @@ define( function( require ) {
 
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -36,7 +37,6 @@ define( function( require ) {
   var OUTLINE_COLOR = 'rgb( 160, 160, 160 )';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 32 );
-  var SHOW_MODEL_RECT = false;
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 
   /**
@@ -167,15 +167,10 @@ define( function( require ) {
     } ) );
 
     // if enabled (for debug), show the outline of the rectangle that represents the beaker's position in the model
-    if ( SHOW_MODEL_RECT ) {
+    if ( EFACQueryParameters.show2DBeakerBounds ) {
       this.frontNode.addChild( new Rectangle( beakerBounds, {
-        fill: 'none',
+        fill: 'red',
         stroke: 'lime',
-        lineWidth: 2
-      } ) );
-      this.frontNode.addChild( new Rectangle( modelViewTransform.modelToViewBounds( beaker.getSliceBounds() ), {
-        fill: 'none',
-        stroke: 'magenta',
         lineWidth: 2
       } ) );
     }
