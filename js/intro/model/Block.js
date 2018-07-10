@@ -136,26 +136,10 @@ define( function( require ) {
     },
 
     /**
-     * @returns {HorizontalSurface}
-     * @public
-     */
-    getTopSurfaceProperty: function() {
-      return this.topSurfaceProperty;
-    },
-
-    /**
-     * @returns {HorizontalSurface}
-     * @public
-     */
-    getBottomSurfaceProperty: function() {
-      return this.bottomSurfaceProperty;
-    },
-
-    /**
      * @returns {ThermalContactArea}
      * @public
      */
-    getThermalContactArea: function() {
+    get thermalContactArea() {
       return new ThermalContactArea( this.getBounds(), false );
     },
 
@@ -167,7 +151,7 @@ define( function( require ) {
       // the slices for the block are intended to match the projection used in the view
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
       var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / (NUM_ENERGY_CHUNK_SLICES - 1 );
-      var rect = this.getRect();
+      var rect = this.rect;
       var rectShape = Shape.rect( rect.x, rect.y, rect.width, rect.height );
 
       for ( var i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
@@ -187,7 +171,7 @@ define( function( require ) {
      * @returns {Dot.Rectangle} rectangle that defines this item's 2D shape
      * @public
      */
-    getRect: function() {
+    get rect() {
       return new Rectangle(
         this.positionProperty.value.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
         this.positionProperty.value.y,
@@ -203,7 +187,7 @@ define( function( require ) {
      * @public
      */
     getBounds: function() {
-      var rect = this.getRect();
+      var rect = this.rect;
       return new Bounds2( rect.x, rect.y, rect.x + rect.width, rect.y + rect.height );
     },
 

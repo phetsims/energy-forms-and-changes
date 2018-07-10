@@ -305,7 +305,7 @@ define( function( require ) {
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
-      if ( destinationShape.intersectsBounds( this.getThermalContactArea() ) ) {
+      if ( destinationShape.intersectsBounds( this.thermalContactArea ) ) {
 
         // this element's shape is contained by the destination - pick a chunk near our right or left edge
         var closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
@@ -321,7 +321,7 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( this.getThermalContactArea().containsBounds( destinationShape.bounds ) ) {
+      else if ( this.thermalContactArea.containsBounds( destinationShape.bounds ) ) {
 
         // this element's shape encloses the destination shape - choose a chunk that is close but doesn't overlap with
         // the destination shape
@@ -372,7 +372,7 @@ define( function( require ) {
     addEnergyChunkSlices: function() {
       assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
 
-      var rect = this.getRect();
+      var rect = this.rect;
       var rectShape = Shape.rect( rect.x, rect.y, rect.width, rect.height );
 
       // defaults to a single slice matching the outline rectangle, override for more sophisticated behavior
@@ -390,7 +390,7 @@ define( function( require ) {
 
       var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
 
-      var energyChunkBounds = this.getThermalContactArea();
+      var energyChunkBounds = this.thermalContactArea;
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
         // Add a chunk at a random location in the block.
         var location = EnergyChunkDistributor.generateRandomLocation( energyChunkBounds );
@@ -428,8 +428,8 @@ define( function( require ) {
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 
       var thermalContactLength = this
-        .getThermalContactArea()
-        .getThermalContactLength( otherEnergyContainer.getThermalContactArea() );
+        .thermalContactArea
+        .getThermalContactLength( otherEnergyContainer.thermalContactArea );
 
       if ( thermalContactLength > 0 ) {
         var deltaT = otherEnergyContainer.getTemperature() - this.getTemperature();

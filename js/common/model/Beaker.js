@@ -133,7 +133,7 @@ define( function( require ) {
      * @returns {Dot.Rectangle} - rectangle that defines this item's 2D shape
      * @public
      */
-    getRect: function() {
+    get rect() {
       return new Rectangle(
         this.positionProperty.value.x - this.width / 2,
         this.positionProperty.value.y,
@@ -255,7 +255,7 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      * @public
      */
-    getThermalContactArea: function() {
+    get thermalContactArea() {
 
       var currentPosition = this.positionProperty.get();
 

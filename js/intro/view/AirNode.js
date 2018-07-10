@@ -27,7 +27,7 @@ define( function( require ) {
     Node.call( this );
 
     if ( EFACQueryParameters.showAirBounds ) {
-      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.getThermalContactArea() ), {
+      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.thermalContactArea ), {
         fill: 'rgba( 255, 0, 0, 0.5 )',
         lineWidth: 1
       } ) );

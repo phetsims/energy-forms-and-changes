@@ -294,14 +294,14 @@ define( function( require ) {
       self.thermalContainers.forEach( function( container1, index ) {
         self.thermalContainers.slice( index + 1,
           self.thermalContainers.length ).forEach( function( container2 ) {
-          if ( container1.getThermalContactArea().getThermalContactLength( container2.getThermalContactArea() ) > 0 ) {
+          if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
 
             // exchange one or more chunks if appropriate
             if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance < 0 ) {
-              container2.addEnergyChunk( container1.extractClosestEnergyChunk( container2.getThermalContactArea() ) );
+              container2.addEnergyChunk( container1.extractClosestEnergyChunk( container2.thermalContactArea ) );
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
-              container1.addEnergyChunk( container2.extractClosestEnergyChunk( container1.getThermalContactArea() ) );
+              container1.addEnergyChunk( container2.extractClosestEnergyChunk( container1.thermalContactArea ) );
             }
           }
         } );
@@ -320,14 +320,14 @@ define( function( require ) {
           if ( container2 === container1 ) {
             return;
           }
-          if ( container1.getThermalContactArea().getThermalContactLength( container2.getThermalContactArea() ) > 0 ) {
+          if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
             contactWithOtherMovableElement = true;
             maxTemperatureDifference = Math.max( Math.abs( container1.getTemperature() - container2.getTemperature() ),
               maxTemperatureDifference );
           }
         } );
 
-        if ( self.beaker.getThermalContactArea().containsPoint( container1.getBounds() ) ) {
+        if ( self.beaker.thermalContactArea.containsPoint( container1.getBounds() ) ) {
 
           // this model element is immersed in the beaker
           immersedInBeaker = true;
@@ -880,7 +880,7 @@ define( function( require ) {
       }
 
       // test if this point is in the water or steam associated with the beaker
-      if ( !temperatureAndColor && this.beaker.getThermalContactArea().containsPoint( position ) ) {
+      if ( !temperatureAndColor && this.beaker.thermalContactArea.containsPoint( position ) ) {
         temperatureAndColor = new TemperatureAndColor(
           this.beaker.temperatureProperty.get(),
           EFACConstants.WATER_COLOR_IN_BEAKER

@@ -49,7 +49,7 @@ define( function( require ) {
         } );
 
         // stick to the beaker
-        if ( model.beaker.getThermalContactArea().containsPoint( self.positionProperty.value ) ) {
+        if ( model.beaker.thermalContactArea.containsPoint( self.positionProperty.value ) ) {
           self.elementFollower.startFollowing( model.beaker.positionProperty );
         }
       }

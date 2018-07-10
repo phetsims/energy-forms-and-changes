@@ -149,7 +149,7 @@ define( function( require ) {
      * @public
      */
     exchangeEnergyWith: function( energyContainer, dt ) {
-      var thermalContactLength = this.getThermalContactArea().getThermalContactLength( energyContainer.getThermalContactArea() );
+      var thermalContactLength = this.thermalContactArea.getThermalContactLength( energyContainer.thermalContactArea );
       if ( thermalContactLength > 0 ) {
         var excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
         if ( excessEnergy === 0 ) {
@@ -218,7 +218,7 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      * @public
      */
-    getThermalContactArea: function() {
+    get thermalContactArea() {
       return THERMAL_CONTACT_AREA;
     },
 

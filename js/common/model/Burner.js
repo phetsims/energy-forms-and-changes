@@ -166,7 +166,7 @@ define( function( require ) {
      */
     inContactWith: function( thermalEnergyContainer ) {
       var burnerRect = this.getCompositeBounds();
-      var area = thermalEnergyContainer.getThermalContactArea();
+      var area = thermalEnergyContainer.thermalContactArea;
       var xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
       var yContact = ( Math.abs( area.minY - burnerRect.maxY ) < CONTACT_DISTANCE );
       return ( xContact && yContact );
