@@ -437,8 +437,8 @@ define( function( require ) {
         // exchange energy between this and the other energy container
         if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
 
-          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(),
-            otherEnergyContainer.getEnergyContainerCategory() );
+          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.energyContainerCategory,
+            otherEnergyContainer.energyContainerCategory );
 
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 

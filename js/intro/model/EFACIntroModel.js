@@ -13,15 +13,15 @@ define( function( require ) {
   var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  var BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
-  var Brick = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Brick' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IronBlock = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/IronBlock' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
@@ -70,11 +70,11 @@ define( function( require ) {
     this.rightBurner = new Burner( new Vector2( 0.18, 0 ), this.energyChunksVisibleProperty );
     this.leftBurner = new Burner( new Vector2( 0.08, 0 ), this.energyChunksVisibleProperty );
 
-    //  @public (read-only) {Brick}
-    this.brick = new Brick( new Vector2( -0.1, 0 ), this.energyChunksVisibleProperty );
+    //  @public (read-only) {Block}
+    this.brick = new Block( new Vector2( -0.1, 0 ), this.energyChunksVisibleProperty, BlockType.BRICK );
 
-    // @public (read-only) {IronBlock}
-    this.ironBlock = new IronBlock( new Vector2( -0.175, 0 ), this.energyChunksVisibleProperty );
+    // @public (read-only) {Block}
+    this.ironBlock = new Block( new Vector2( -0.175, 0 ), this.energyChunksVisibleProperty, BlockType.IRON );
 
     // @private {Block[]} - for convenience
     this.blocks = [ this.brick, this.ironBlock ];

@@ -5,14 +5,18 @@
  * so its shape is represented by a rectangle.
  *
  * @author John Blanco
+ * @author Chris Klusendorf
  */
 define( function( require ) {
   'use strict';
 
   // modules
+  var BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
+  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -30,26 +34,42 @@ define( function( require ) {
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
+  var BLOCK_COMPOSITION = {};
+  BLOCK_COMPOSITION[ BlockType.IRON ] = {
+    color: new Color( 150, 150, 150 ),
+    density: 7800,
+    specificHeat: 450,
+    energyContainerCategory: EnergyContainerCategory.IRON
+  };
+  BLOCK_COMPOSITION[ BlockType.BRICK ] = {
+    color: new Color( 223, 22, 12 ),
+    density: 3300,
+    specificHeat: 840,
+    energyContainerCategory: EnergyContainerCategory.BRICK
+  };
+
   /**
    * @param {Vector2} initialPosition
-   * @param {number} density
-   * @param {number} specificHeat
    * @param {Property} energyChunksVisibleProperty
+   * @param {BlockType} blockType
    * @constructor
    */
-  function Block( initialPosition, density, specificHeat, energyChunksVisibleProperty ) {
+  function Block( initialPosition, energyChunksVisibleProperty, blockType ) {
 
     RectangularThermalMovableModelElement.call(
       this,
       initialPosition,
       EFACConstants.BLOCK_SURFACE_WIDTH,
       EFACConstants.BLOCK_SURFACE_WIDTH,
-      Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * density,
-      specificHeat,
+      Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
+      BLOCK_COMPOSITION[ blockType ].specificHeat,
       energyChunksVisibleProperty
     );
 
     var self = this;
+
+    // @public
+    this.blockType = blockType;
 
     // add position test bounds (see definition in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2(
@@ -75,21 +95,18 @@ define( function( require ) {
 
     /**
      * @public
-     * @return {string}
+     * @return {Color}
      */
-    getColor: function() {
-      assert && assert( false, 'This function should not be called, getColor() needs to be implemented in a subclass' );
-      return 'pink';
-    },
     get color() {
-      return this.getColor();
+      return BLOCK_COMPOSITION[ this.blockType ].color;
     },
 
     /**
      * @public
+     * @return {EnergyContainerCategory}
      */
-    getLabel: function() {
-      assert && assert( false, 'Get label should be implemented in subclasses.' );
+    get energyContainerCategory() {
+      return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
     },
 
     // TODO: I (jbphet) noticed a number of unused methods below during code cleanup, and should delete any that are still not used when code is fully cleaned up.

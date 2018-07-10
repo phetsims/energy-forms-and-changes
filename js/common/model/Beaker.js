@@ -348,7 +348,7 @@ define( function( require ) {
      * get the energy container category, which is an enum that is used to determine heat transfer rates
      * @returns {EnergyContainerCategory}
      */
-    getEnergyContainerCategory: function() {
+    get energyContainerCategory() {
       return EnergyContainerCategory.WATER;
     },
 

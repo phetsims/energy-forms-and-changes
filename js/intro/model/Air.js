@@ -155,7 +155,7 @@ define( function( require ) {
         if ( excessEnergy === 0 ) {
 
           // container is below max temperature - exchange energy normally
-          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.getEnergyContainerCategory(), energyContainer.getEnergyContainerCategory() );
+          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.energyContainerCategory, energyContainer.energyContainerCategory );
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var i;
@@ -235,7 +235,7 @@ define( function( require ) {
      * @returns {EnergyContainerCategory}
      * @public
      */
-    getEnergyContainerCategory: function() {
+    get energyContainerCategory() {
       return EnergyContainerCategory.AIR;
     },
 

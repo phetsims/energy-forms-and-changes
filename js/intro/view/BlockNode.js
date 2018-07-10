@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
@@ -34,6 +35,9 @@ define( function( require ) {
   var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINE_WIDTH = 3;
   var PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
+  var BLOCK_ATTRIBUTES = {};
+  BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: require( 'string!ENERGY_FORMS_AND_CHANGES/iron' ) };
+  BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: require( 'string!ENERGY_FORMS_AND_CHANGES/brick' ) };
 
   /**
    * @param {Block} block
@@ -116,7 +120,7 @@ define( function( require ) {
       .moveToPoint( lowerLeftBackCorner )
       .lineTo( upperLeftBackCorner.x, upperLeftBackCorner.y + OUTLINE_LINE_WIDTH );
 
-    var edgeColor = block.getColor().darkerColor( 0.5 );
+    var edgeColor = block.color.darkerColor( 0.5 );
 
     // add the back of the block
     var blockBack = new Path( blockBackShape, {
@@ -134,9 +138,9 @@ define( function( require ) {
     }
 
     // add the face, top, and sides of the block
-    var blockFace = createSurface( blockFaceShape, block.getColor(), edgeColor, block.getFrontTextureImage() );
-    var blockTop = createSurface( blockTopShape, block.getColor(), edgeColor, block.getTopTextureImage() );
-    var blockSide = createSurface( blockSideShape, block.getColor(), edgeColor, block.getSideTextureImage() );
+    var blockFace = createSurface( blockFaceShape, block.color, edgeColor, block.getFrontTextureImage() );
+    var blockTop = createSurface( blockTopShape, block.color, edgeColor, block.getTopTextureImage() );
+    var blockSide = createSurface( blockSideShape, block.color, edgeColor, block.getSideTextureImage() );
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
@@ -155,7 +159,7 @@ define( function( require ) {
     }
 
     // position and add the label
-    var label = new Text( block.getLabel(), {
+    var label = new Text( BLOCK_ATTRIBUTES[ block.blockType ].label, {
       font: LABEL_FONT,
       maxWidth: modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ),
       centerX: ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2,
