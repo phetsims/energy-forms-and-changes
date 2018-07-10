@@ -24,12 +24,11 @@ define( function( require ) {
   var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
-  var FluorescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FluorescentBulbNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
-  var IncandescentBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/IncandescentBulbNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var JoistA11yStrings = require( 'JOIST/JoistA11yStrings' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
+  var LightBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightBulbNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -184,15 +183,17 @@ define( function( require ) {
       model.energyChunksVisibleProperty,
       modelViewTransform
     );
-    var incandescentBulbNode = new IncandescentBulbNode(
+    var incandescentBulbNode = new LightBulbNode(
       model.incandescentBulb,
       model.energyChunksVisibleProperty,
-      modelViewTransform
+      modelViewTransform,
+      { bulbType: 'incandescent' }
     );
-    var fluorescentBulbNode = new FluorescentBulbNode(
+    var fluorescentBulbNode = new LightBulbNode(
       model.fluorescentBulb,
       model.energyChunksVisibleProperty,
-      modelViewTransform
+      modelViewTransform,
+      { bulbType: 'fluorescent' }
     );
     this.addChild( this.beakerHeaterNode );
     this.addChild( incandescentBulbNode );
