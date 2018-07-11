@@ -112,30 +112,6 @@ define( function( require ) {
     // TODO: I (jbphet) noticed a number of unused methods below during code cleanup, and should delete any that are still not used when code is fully cleaned up.
 
     /**
-     * @return {Image|null}
-     * @public
-     */
-    getFrontTextureImage: function() {
-      return null;
-    },
-
-    /**
-     * @return {Image|null}
-     * @public
-     */
-    getTopTextureImage: function() {
-      return null;
-    },
-
-    /**
-     * @return {Image|null}
-     * @public
-     */
-    getSideTextureImage: function() {
-      return null;
-    },
-
-    /**
      * @returns {ThermalContactArea}
      * @public
      */

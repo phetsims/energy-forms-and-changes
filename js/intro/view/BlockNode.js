@@ -31,6 +31,25 @@ define( function( require ) {
   var Transform3 = require( 'DOT/Transform3' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // images
+  var brickTextureFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_front.png' );
+  var brickTextureRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_right.png' );
+  var brickTextureTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/brick_texture_top.png' );
+  var ironTextureFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_front.png' );
+  var ironTextureRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_right.png' );
+  var ironTextureTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_top.png' );
+  var BLOCK_IMAGES = {};
+  BLOCK_IMAGES[ BlockType.BRICK ] = {
+    front: brickTextureFrontImage,
+    side: brickTextureRightImage,
+    top: brickTextureTopImage
+  };
+  BLOCK_IMAGES[ BlockType.IRON ] = {
+    front: ironTextureFrontImage,
+    side: ironTextureRightImage,
+    top: ironTextureTopImage
+  };
+
   // constants
   var LABEL_FONT = new PhetFont( 32 );
   var OUTLINE_LINE_WIDTH = 3;
@@ -138,9 +157,23 @@ define( function( require ) {
     }
 
     // add the face, top, and sides of the block
-    var blockFace = createSurface( blockFaceShape, block.color, edgeColor, block.getFrontTextureImage() );
-    var blockTop = createSurface( blockTopShape, block.color, edgeColor, block.getTopTextureImage() );
-    var blockSide = createSurface( blockSideShape, block.color, edgeColor, block.getSideTextureImage() );
+    var blockFace = createSurface(
+      blockFaceShape,
+      block.color,
+      edgeColor,
+      BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].front : null
+    );
+    var blockTop = createSurface(
+      blockTopShape,
+      block.color, edgeColor,
+      BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].top : null
+    );
+    var blockSide = createSurface(
+      blockSideShape,
+      block.color,
+      edgeColor,
+      BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].side : null
+    );
     this.addChild( blockFace );
     this.addChild( blockTop );
     this.addChild( blockSide );
