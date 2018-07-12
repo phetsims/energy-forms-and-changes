@@ -199,16 +199,16 @@ define( function( require ) {
       { setApproachingEnergyChunkParentNode: airLayer }
     );
     blockLayer.addChild( ironBlockNode );
-    var beakerView = new BeakerContainerView(
+    this.beakerView = new BeakerContainerView(
       model,
       modelViewTransform,
       constrainMovableElementMotion
     );
 
     // add the beaker, which is composed of several pieces
-    beakerFrontLayer.addChild( beakerView.frontNode );
-    beakerBackLayer.addChild( beakerView.backNode );
-    beakerGrabLayer.addChild( beakerView.grabNode );
+    beakerFrontLayer.addChild( this.beakerView.frontNode );
+    beakerBackLayer.addChild( this.beakerView.backNode );
+    beakerGrabLayer.addChild( this.beakerView.grabNode );
 
     // the sensor layer needs to be above the movable objects
     var sensorLayer = new Node();
@@ -420,5 +420,15 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
 
-  return inherit( ScreenView, EFACIntroScreenView );
+  return inherit( ScreenView, EFACIntroScreenView, {
+
+    /**
+     * step this view element, called by the framework
+     * @param dt - time step, in seconds
+     * @public
+     */
+    step: function( dt ) {
+      this.beakerView.step( dt );
+    }
+  } );
 } );

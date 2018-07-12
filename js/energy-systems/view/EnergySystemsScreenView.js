@@ -246,7 +246,7 @@ define( function( require ) {
      */
     step: function( dt ) {
       this.teaKettleNode.steamNode.step( dt );
-      this.beakerHeaterNode.beakerView.water.step( dt );
+      this.beakerHeaterNode.step( dt );
     }
   } );
 } );

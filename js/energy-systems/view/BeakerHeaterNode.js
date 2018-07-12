@@ -75,5 +75,15 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
 
-  return inherit( MoveFadeModelElementNode, BeakerHeaterNode );
+  return inherit( MoveFadeModelElementNode, BeakerHeaterNode, {
+
+    /**
+     * step this view element, called by the framework
+     * @param dt - time step, in seconds
+     * @public
+     */
+    step: function( dt ) {
+      this.beakerView.step( dt );
+    }
+  } );
 } );

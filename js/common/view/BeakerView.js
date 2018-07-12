@@ -198,5 +198,15 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'BeakerView', BeakerView );
 
-  return inherit( Node, BeakerView );
+  return inherit( Node, BeakerView, {
+
+    /**
+     * step this view element, called by the framework
+     * @param dt - time step, in seconds
+     * @public
+     */
+    step: function( dt ) {
+      this.water.step( dt );
+    }
+  } );
 } );
