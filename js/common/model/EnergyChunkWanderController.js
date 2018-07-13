@@ -72,7 +72,7 @@ define( function( require ) {
         var proposedX = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) ).x;
         if ( proposedX < this.initialWanderConstraint.minX || proposedX > this.initialWanderConstraint.maxX ) {
           // Bounce in the x direction to prevent going outside initial bounds.
-          this.velocity.setComponents( -this.velocity.x, this.velocity.y );
+          this.velocity.setXY( -this.velocity.x, this.velocity.y );
         }
       }
 
