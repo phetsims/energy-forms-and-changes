@@ -19,7 +19,7 @@ define( function( require ) {
    * @param {number} direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
    * to the right, PI/2 is up, and so forth.
    */
-  function Energy( type, amount, direction ) {
+  function Energy( type, amount, direction, creationTime ) {
 
     // @public (read-only) {EnergyType}
     this.type = type;
@@ -29,6 +29,9 @@ define( function( require ) {
 
     // @public (read-only) {number}
     this.direction = direction;
+
+    // @public (read-only) {number}
+    this.creationTime = creationTime;
   }
 
   energyFormsAndChanges.register( 'Energy', Energy );

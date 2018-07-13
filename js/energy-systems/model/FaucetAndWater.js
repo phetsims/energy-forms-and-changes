@@ -35,6 +35,7 @@ define( function( require ) {
   var MAX_WATER_WIDTH = 0.01; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
+  var FALLING_WATER_DELAY = 0.2; // seconds
 
   // The following acceleration constant defines the rate at which the water flows from the faucet.  The value used is
   // not the actual value in Earth's gravitational field - it has been tweaked for optimal visual effect.
@@ -67,6 +68,9 @@ define( function( require ) {
 
     // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
     this.exemptFromTransferEnergyChunks = [];
+
+    // @private {Energy[]} - list of Energy to be sent after a delay has passed
+    this.flowEnergyDelay = [];
 
     // @private {number}
     this.energySinceLastChunk = 0;
@@ -199,7 +203,17 @@ define( function( require ) {
 
       // generate the appropriate amount of energy
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value * dt;
-      return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
+
+      // add incoming energy to delay queue
+      this.flowEnergyDelay.push( new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2, new Date().getTime() ) );
+
+      // send along saved energy values if enough time has passed
+      if ( this.flowEnergyDelay[ 0 ].creationTime + FALLING_WATER_DELAY * 1000 <= new Date().getTime() ) {
+        return this.flowEnergyDelay.shift();
+      }
+      else {
+        return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      }
     },
 
     /**
