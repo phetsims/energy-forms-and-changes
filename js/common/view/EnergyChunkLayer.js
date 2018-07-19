@@ -42,6 +42,7 @@ define( function( require ) {
       var itemRemovedListener = function( removedChunk ) {
         if ( removedChunk === energyChunk ) {
           self.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
 
           // remove this listener to avoid leaking memory
           energyChunkList.removeItemRemovedListener( itemRemovedListener );

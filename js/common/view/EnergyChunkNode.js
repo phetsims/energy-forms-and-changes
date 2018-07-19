@@ -73,27 +73,42 @@ define( function( require ) {
     var self = this;
 
     // control the overall visibility of this node
-    energyChunk.visibleProperty.link( function( visible ) {
+    function handleVisibilityChanged( visible ) {
       self.setVisible( visible );
-    } );
+    }
+
+    energyChunk.visibleProperty.link( handleVisibilityChanged );
 
     // set up updating of transparency based on Z position
-    energyChunk.zPositionProperty.link( function( zPosition ) {
+    function handleZPositionChanged( zPosition ) {
       self.updateTransparency( zPosition );
-    } );
+    }
+
+    energyChunk.zPositionProperty.link( handleZPositionChanged );
 
     // monitor the energy type and update the image if a change occurs
-    energyChunk.energyTypeProperty.link( function( energyType ) {
+    function handleEnergyTypeChanged( energyType ) {
       self.removeAllChildren();
       self.addChild( createEnergyChunkNode( energyType ) );
-    } );
+    }
+
+    energyChunk.energyTypeProperty.link( handleEnergyTypeChanged );
 
     // set this node's position when the corresponding model element moves
-    energyChunk.positionProperty.link( function( position ) {
+    function handlePositionChanged( position ) {
       assert && assert( !_.isNaN( position.x ), 'position.x = ' + position.x );
       assert && assert( !_.isNaN( position.y ), 'position.y = ' + position.y );
       self.translation = modelViewTransform.modelToViewPosition( position );
-    } );
+    }
+
+    energyChunk.positionProperty.link( handlePositionChanged );
+
+    this.disposeEnergyChunkNode = function() {
+      energyChunk.visibleProperty.unlink( handleVisibilityChanged );
+      energyChunk.zPositionProperty.unlink( handleZPositionChanged );
+      energyChunk.energyTypeProperty.unlink( handleEnergyTypeChanged );
+      energyChunk.positionProperty.unlink( handlePositionChanged );
+    };
   }
 
   energyFormsAndChanges.register( 'EnergyChunkNode', EnergyChunkNode );
@@ -111,6 +126,12 @@ define( function( require ) {
         zFadeValue = Math.max( ( Z_DISTANCE_WHERE_FULLY_FADED + zPosition ) / Z_DISTANCE_WHERE_FULLY_FADED, 0 );
       }
       this.setOpacity( zFadeValue );
+    },
+
+    // @public
+    dispose: function() {
+      this.disposeEnergyChunkNode();
+      Node.prototype.dispose.call( this );
     }
   }, {
 

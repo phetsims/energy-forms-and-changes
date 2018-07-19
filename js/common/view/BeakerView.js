@@ -152,6 +152,7 @@ define( function( require ) {
       beaker.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           energyChunkRootNode.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
           beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
       } );

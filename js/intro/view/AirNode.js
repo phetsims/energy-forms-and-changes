@@ -40,6 +40,7 @@ define( function( require ) {
       air.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           self.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
           air.energyChunkList.removeItemRemovedListener( removalListener );
         }
       } );

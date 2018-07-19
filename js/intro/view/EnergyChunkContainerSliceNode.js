@@ -37,6 +37,7 @@ define( function( require ) {
       slice.energyChunkList.addItemRemovedListener( function removalListener( removedChunk ) {
         if ( removedChunk === addedChunk ) {
           self.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
           slice.energyChunkList.removeItemRemovedListener( removalListener );
         }
       } );

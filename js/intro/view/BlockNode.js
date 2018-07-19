@@ -212,6 +212,7 @@ define( function( require ) {
       block.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           parentNode.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
           block.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
       } );
