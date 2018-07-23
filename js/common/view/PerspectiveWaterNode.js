@@ -76,9 +76,7 @@ define( function( require ) {
 
     // update the appearance of the water as the level changes
     this.waterLevelProperty.link( function( waterLevel ) {
-      var temperature = self.temperatureProperty.get();
-      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
-      self.updateAppearance( waterLevel, beakerOutlineRect, temperature, dt );
+      self.updateWaterAppearance( waterLevel, beakerOutlineRect );
     } );
   }
 
@@ -100,23 +98,17 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.updateAppearance( this.waterLevelProperty.value, this.beakerOutlineRect, this.temperatureProperty.value, dt );
+      this.updateSteamAppearance( this.waterLevelProperty.value, this.beakerOutlineRect, this.temperatureProperty.value, dt );
     },
 
     /**
      * update the appearance of the water
      * @param {number} fluidLevel
      * @param {Rectangle} beakerOutlineRect
-     * @param {number} temperature
-     * @param {number} dt
      * @private
      */
-    updateAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
-
-      var self = this; // extend scope for nested callbacks.
-
+    updateWaterAppearance: function( fluidLevel, beakerOutlineRect ) {
       var waterHeight = beakerOutlineRect.height * fluidLevel;
-
       var liquidWaterRect = new DotRectangle(
         beakerOutlineRect.minX,
         beakerOutlineRect.maxY - waterHeight,
@@ -136,10 +128,6 @@ define( function( require ) {
         false
       );
 
-      //----------------------------------------------------------------
-      // update the liquid water
-      //----------------------------------------------------------------
-
       var halfWidth = liquidWaterRect.width / 2;
       var halfHeight = ellipseHeight / 2;
       var liquidWaterBodyShape = new Shape()
@@ -151,10 +139,27 @@ define( function( require ) {
 
       this.liquidWaterBodyNode.setShape( liquidWaterBodyShape );
       this.liquidWaterTopNode.setShape( liquidWaterTopEllipse );
+    },
 
-      //----------------------------------------------------------------
-      // update the steam
-      //----------------------------------------------------------------
+    /**
+     * update the appearance of the steam
+     * @param {number} fluidLevel
+     * @param {Rectangle} beakerOutlineRect
+     * @param {number} temperature
+     * @param {number} dt
+     * @private
+     */
+    updateSteamAppearance: function( fluidLevel, beakerOutlineRect, temperature, dt ) {
+
+      var self = this; // extend scope for nested callbacks.
+
+      var waterHeight = beakerOutlineRect.height * fluidLevel;
+      var liquidWaterRect = new DotRectangle(
+        beakerOutlineRect.minX,
+        beakerOutlineRect.maxY - waterHeight,
+        beakerOutlineRect.width,
+        waterHeight
+      );
 
       var steamingProportion = 0;
       if ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature < STEAMING_RANGE ) {
