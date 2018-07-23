@@ -296,6 +296,7 @@ define( function( require ) {
      */
     reset: function() {
       this.cloudinessProperty.reset();
+      this.energyChunksPassingThroughClouds = [];
     }
 
   }, {
