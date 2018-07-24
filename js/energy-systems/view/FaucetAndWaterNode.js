@@ -55,6 +55,7 @@ define( function( require ) {
       var itemRemovedListener = function( removedDroplet ) {
         if ( removedDroplet === droplet ) {
           waterLayer.removeChild( waterDropNode );
+          waterDropNode.dispose();
 
           // remove this listener to reclaim memory
           faucet.waterDrops.removeItemRemovedListener( itemRemovedListener );

@@ -70,6 +70,11 @@ define( function( require ) {
     this.steamBubbleNodes = new ObservableArray();
     this.steamNode = new Node();
 
+    // dispose steam bubble when removed from observable array
+    this.steamBubbleNodes.addItemRemovedListener( function( steamBubble ) {
+      steamBubble.dispose();
+    } );
+
     // @private
     this.bubbleProductionRemainder = 0; //@private
 
@@ -98,8 +103,8 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      this.steamBubbleNodes.clear();
       this.steamNode.removeAllChildren();
+      this.steamBubbleNodes.clear();
     },
 
     /**
@@ -208,8 +213,8 @@ define( function( require ) {
 
         // remove bubbles that have floated out of view
         if ( beakerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
-          self.steamBubbleNodes.remove( steamBubble );
           self.steamNode.removeChild( steamBubble );
+          self.steamBubbleNodes.remove( steamBubble );
         }
 
         // update position of floating bubbles

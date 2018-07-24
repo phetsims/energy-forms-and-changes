@@ -38,14 +38,27 @@ define( function( require ) {
     this.addChild( waterDropNode );
 
     // update offset as it changes
-    waterDrop.offsetFromParentProperty.link( function( offset ) {
+    function handleOffsetChanged( offset ) {
       var x = modelViewTransform.modelToViewDeltaX( offset.x );
       var y = modelViewTransform.modelToViewDeltaY( offset.y );
       self.translate( x, y );
-    } );
+    }
+
+    waterDrop.offsetFromParentProperty.link( handleOffsetChanged );
+
+    this.disposeWaterDropNode = function() {
+      waterDrop.offsetFromParentProperty.unlink( handleOffsetChanged );
+    };
   }
 
   energyFormsAndChanges.register( 'WaterDropNode', WaterDropNode );
 
-  return inherit( Node, WaterDropNode );
+  return inherit( Node, WaterDropNode, {
+    // @public
+    dispose: function() {
+      this.disposeWaterDropNode();
+      Node.prototype.dispose.call( this );
+    }
+  } );
+
 } );
