@@ -136,8 +136,11 @@ define( function( require ) {
         var transform = Matrix3.translation( projectionToFront.x + projectionOffsetVector.x,
           projectionToFront.y + projectionOffsetVector.y );
 
-        this.slices.push( new EnergyChunkContainerSlice( rectShape.transformed( transform ), -i * sliceWidth,
-          this.positionProperty ) );
+        this.slices.push( new EnergyChunkContainerSlice(
+          rectShape.transformed( transform ),
+          -i * sliceWidth,
+          this.positionProperty
+        ) );
       }
     },
 
