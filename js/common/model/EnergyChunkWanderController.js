@@ -115,7 +115,7 @@ define( function( require ) {
      * @public
      */
     isDestinationReached: function() {
-      return this.destinationProperty.value.distance( this.energyChunk.positionProperty.value ) < 1E-7;
+      return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
     }
   } );
 } );

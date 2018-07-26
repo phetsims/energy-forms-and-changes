@@ -31,7 +31,7 @@ define( function( require ) {
 
   // 2D size of the air.  It is sized such that it will extend off the left, right, and top edges of screen for the
   // most common aspect ratios of the view.
-  var SIZE = new Dimension2( 0.7, 0.3 );
+  var SIZE = new Dimension2( 0.7, 0.5 );
 
   // The thickness of the slice of air being modeled.  This is basically the z dimension, and is used solely for
   // volume calculations.
