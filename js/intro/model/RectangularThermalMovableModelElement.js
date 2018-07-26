@@ -124,7 +124,6 @@ define( function( require ) {
       UserMovableModelElement.prototype.reset.call( this );
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
       this.addInitialEnergyChunks();
-      this.energyChunksVisibleProperty.reset();
       this.approachingEnergyChunks.reset();
     },
 
