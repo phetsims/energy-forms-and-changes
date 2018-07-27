@@ -35,6 +35,15 @@ define( function( require ) {
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
+  // left edge of the available sim space
+  var LEFT_EDGE = -0.23;
+
+  // space left between edges of floor area and side of beaker
+  var EDGE_PAD = 0.006;
+
+  // number of snap-to spots on the ground, should match number of thermal containers
+  var NUM_GROUND_SPOTS = 3;
+
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
 
@@ -70,11 +79,31 @@ define( function( require ) {
     this.rightBurner = new Burner( new Vector2( 0.18, 0 ), this.energyChunksVisibleProperty );
     this.leftBurner = new Burner( new Vector2( 0.08, 0 ), this.energyChunksVisibleProperty );
 
+    // how much space is in between the center points of the snap-to spots on the ground
+    var spaceBetweenSpotCenters = ( this.leftBurner.translatedPositionTestingBoundsList[ 0 ].minX
+                                    - LEFT_EDGE - ( EDGE_PAD * 3.5 ) - BEAKER_WIDTH )
+                                  / ( NUM_GROUND_SPOTS - 1 );
+    this.groundSpotXPositions = [];
+
+    // determine the locations of the snap-to ground spots
+    var leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
+    for ( var i = 0; i < NUM_GROUND_SPOTS; i++ ) {
+      this.groundSpotXPositions.push( spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad );
+    }
+
     //  @public (read-only) {Block}
-    this.brick = new Block( new Vector2( -0.1, 0 ), this.energyChunksVisibleProperty, BlockType.BRICK );
+    this.brick = new Block(
+      new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
+      this.energyChunksVisibleProperty,
+      BlockType.BRICK
+    );
 
     // @public (read-only) {Block}
-    this.ironBlock = new Block( new Vector2( -0.175, 0 ), this.energyChunksVisibleProperty, BlockType.IRON );
+    this.ironBlock = new Block(
+      new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
+      this.energyChunksVisibleProperty,
+      BlockType.IRON
+    );
 
     // @private {Block[]} - for convenience
     this.blocks = [ this.brick, this.ironBlock ];
@@ -83,7 +112,7 @@ define( function( require ) {
 
     // @public (read-only) {BeakerContainer)
     this.beaker = new BeakerContainer(
-      new Vector2( -0.015, 0 ),
+      new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
       listOfThingsThatCanGoInBeaker,
@@ -415,6 +444,10 @@ define( function( require ) {
         targetY = modelElement.positionProperty.value.y;
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
+      else {
+        var groundSpotX = self.getBestGroundSpot( modelElement );
+        modelElement.positionProperty.set( new Vector2( groundSpotX, modelElement.positionProperty.value.y ) );
+      }
 
       // calculate a proposed Y position based on gravitational falling
       var velocity = modelElement.verticalVelocityProperty.value + acceleration * dt;
@@ -433,6 +466,35 @@ define( function( require ) {
         modelElement.verticalVelocityProperty.set( velocity );
       }
       modelElement.positionProperty.set( new Vector2( modelElement.positionProperty.value.x, proposedYPos ) );
+    },
+
+    /**
+     * get a list of the thermal blocks
+     * @return {Block[]}
+     */
+    getBestGroundSpot: function( modelElement ) {
+      var groundSpot = 0;
+      var distance;
+      var closestDistance;
+
+      if ( this.groundSpotXPositions.includes( modelElement.positionProperty.value.x ) ) {
+        groundSpot = modelElement.positionProperty.value.x;
+      }
+      else {
+        this.groundSpotXPositions.forEach( function( position ) {
+          distance = Math.abs( position - modelElement.positionProperty.value.x );
+          if ( !closestDistance ) {
+            closestDistance = distance;
+            groundSpot = position;
+          }
+          else if ( distance < closestDistance ) {
+            closestDistance = distance;
+            groundSpot = position;
+          }
+        } );
+      }
+
+      return groundSpot;
     },
 
     /**
