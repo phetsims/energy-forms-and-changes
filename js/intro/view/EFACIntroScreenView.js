@@ -225,7 +225,23 @@ define( function( require ) {
         dragBounds: modelViewTransform.viewToModelBounds( self.layoutBounds ),
         draggable: true
       } );
-      sensorLayer.addChild( temperatureAndColorSensorNode );
+
+      // sensors need to be behind blocks and beakers while in storage, but in front when them while in use
+      sensor.activeProperty.link( function( active ) {
+        if ( active ) {
+          if ( backLayer.hasChild( temperatureAndColorSensorNode ) ) {
+            backLayer.removeChild( temperatureAndColorSensorNode );
+          }
+          sensorLayer.addChild( temperatureAndColorSensorNode );
+        }
+        else {
+          if ( sensorLayer.hasChild( temperatureAndColorSensorNode ) ) {
+            sensorLayer.removeChild( temperatureAndColorSensorNode );
+          }
+          backLayer.addChild( temperatureAndColorSensorNode );
+        }
+      } );
+
       temperatureAndColorSensorNodes.push( temperatureAndColorSensorNode );
 
       // update the variables that will be used to create the storage area
@@ -251,6 +267,7 @@ define( function( require ) {
       }
     );
     backLayer.addChild( sensorStorageArea );
+    sensorStorageArea.moveToBack(); // move behind the temperatureAndColorSensorNodes when they are being stored
 
     // set initial positions for sensors in the storage area, hook up listeners to handle interaction with storage area
     var interSensorSpacing = ( sensorStorageArea.width - sumOfSensorNodeWidths ) / 4;
