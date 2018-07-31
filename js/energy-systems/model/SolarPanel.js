@@ -10,10 +10,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
@@ -27,27 +26,13 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
-  var CONNECTOR = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var SOLAR_PANEL = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' );
-  var SOLAR_PANEL_GEN = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' );
   var SOLAR_PANEL_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' );
-  var SOLAR_PANEL_POST_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
-  var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // constants
-  var SOLAR_PANEL_OFFSET = new Vector2( 0, 0.044 );
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
-
-  var SOLAR_PANEL_IMAGE = new EFACModelImage( SOLAR_PANEL, SOLAR_PANEL_OFFSET, { width: 0.15 } );
-  var CONVERTER_IMAGE = new EFACModelImage( SOLAR_PANEL_GEN, CONVERTER_IMAGE_OFFSET );
-  var CURVED_WIRE_IMAGE = new EFACModelImage( WIRE_BLACK_LEFT, CONVERTER_IMAGE_OFFSET.plusXY( 0.009, 0.024 ) );
-  var POST_IMAGE = new EFACModelImage( SOLAR_PANEL_POST_2, CONVERTER_IMAGE_OFFSET.plusXY( 0, 0.04 ) );
-  var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR_IMAGE_OFFSET );
-
-  var halfWidth = SOLAR_PANEL_IMAGE.width / 2;
-  var halfHeight = SOLAR_PANEL_IMAGE.getHeight() / 2;
-  var PANEL_IMAGE_BOUNDS = new Bounds2( -halfWidth, -halfHeight, halfWidth, halfHeight );
+  var SOLAR_PANEL_SIZE = new Dimension2( 0.2, 0.1 );
+  var PANEL_SKEW_ANGLE = 0;
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
@@ -81,18 +66,12 @@ define( function( require ) {
     // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
 
-    var zoneWidth = 0.7 * PANEL_IMAGE_BOUNDS.width;
-    var minX = PANEL_IMAGE_BOUNDS.minX;
-    var minY = PANEL_IMAGE_BOUNDS.minY;
-    var maxX = PANEL_IMAGE_BOUNDS.maxX;
-    var maxY = PANEL_IMAGE_BOUNDS.maxY;
-
     // @private - shape used when determining if a given chunk of light energy should be absorbed
     this.absorptionShape = new Shape()
-      .moveTo( maxX - zoneWidth, maxY )
-      .lineTo( maxX, maxY )
-      .lineTo( minX + zoneWidth, minY )
-      .lineTo( minX, minY )
+      .lineTo( SOLAR_PANEL_SIZE.width, 0 )
+      .lineToPoint( new Vector2( SOLAR_PANEL_SIZE.width, SOLAR_PANEL_SIZE.height ).rotated( PANEL_SKEW_ANGLE ) )
+      .lineToRelative( -SOLAR_PANEL_SIZE.width, 0 )
+      .lineTo( 0, 0 )
       .close();
   }
 
@@ -363,14 +342,6 @@ define( function( require ) {
       return this.absorptionShape;
     }
 
-  }, {
-
-    // statics
-    CURVED_WIRE_IMAGE: CURVED_WIRE_IMAGE,
-    POST_IMAGE: POST_IMAGE,
-    SOLAR_PANEL_IMAGE: SOLAR_PANEL_IMAGE,
-    CONVERTER_IMAGE: CONVERTER_IMAGE,
-    CONNECTOR_IMAGE: CONNECTOR_IMAGE
   } );
 } );
 

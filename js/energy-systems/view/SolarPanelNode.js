@@ -11,11 +11,21 @@ define( function( require ) {
 
   // modules
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
-  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  // var Path = require( 'SCENERY/nodes/Path' );
+
+  // images
+  var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
+  var solarPanelImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' );
+  var solarPanelGenImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' );
+  var solarPanelPostImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
+  var wireBlackLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
+
+  // constants
+  var WIRE_WIDTH = 20;
 
   /**
    * @param {SolarPanel} solarPanel From the model
@@ -26,13 +36,31 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, solarPanel, modelViewTransform );
 
-    // add the images and the node that will manage the energy chunks in the order needed for the desired layering
-    this.addChild( new EFACModelImageNode( SolarPanel.CURVED_WIRE_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( SolarPanel.POST_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( SolarPanel.SOLAR_PANEL_IMAGE, modelViewTransform ) );
+    // these are manually positioned so that they match the energy chunk flow defined in the model
+    // the center of the node is at (0,0), so these are all positioned around that
+    // the positions will have to be carefully repositioned if the images change
+    var panelNode = new Image( solarPanelImage, { left: -195, top: -190 } );
+    var postNode = new Image( solarPanelPostImage, { top: panelNode.bottom - 5 } );
+    var windowNode = new Image( solarPanelGenImage, {
+      centerX: postNode.centerX,
+      top: postNode.centerY
+    } );
+    var wireNode = new Image( wireBlackLeftImage, {
+      right: windowNode.right - 20,
+      bottom: windowNode.centerY + WIRE_WIDTH / 2
+    } );
+    var connectorNode = new Image( connectorImage, { left: windowNode.right, centerY: windowNode.centerY } );
+
+    // add in correct order for layering effect
+    this.addChild( wireNode );
+    this.addChild( postNode );
+    this.addChild( panelNode );
     this.addChild( new EnergyChunkLayer( solarPanel.energyChunkList, solarPanel.positionProperty, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( SolarPanel.CONVERTER_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( SolarPanel.CONNECTOR_IMAGE, modelViewTransform ) );
+    this.addChild( windowNode );
+    this.addChild( connectorNode );
+
+    // shapes from model can be shown to adjust image position
+    // this.addChild( new Path( modelViewTransform.modelToViewShape( solarPanel.absorptionShape ), { stroke: 'red' } ) );
   }
 
   energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );
