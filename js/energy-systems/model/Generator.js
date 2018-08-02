@@ -13,7 +13,6 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -29,13 +28,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
-  var CONNECTOR = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var GENERATOR = require( 'image!ENERGY_FORMS_AND_CHANGES/generator.png' );
   var GENERATOR_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_icon.png' );
-  var GENERATOR_WHEEL_HUB_2 = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_hub_2.png' );
-  var GENERATOR_WHEEL_PADDLES_SHORT = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_paddles_short.png' );
-  var GENERATOR_WHEEL_SPOKES = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );
-  var WIRE_BLACK_LEFT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
 
   // constants
 
@@ -48,14 +41,7 @@ define( function( require ) {
   var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
   var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
   var CONNECTOR_OFFSET = new Vector2( 0.057, -0.04 );
-
-  var HOUSING_IMAGE = new EFACModelImage( GENERATOR, new Vector2( 0, 0 ) );
-  var WHEEL_PADDLES_IMAGE = new EFACModelImage( GENERATOR_WHEEL_PADDLES_SHORT, WHEEL_CENTER_OFFSET );
-  var WHEEL_HUB_IMAGE = new EFACModelImage( GENERATOR_WHEEL_HUB_2, WHEEL_CENTER_OFFSET );
-  var SHORT_SPOKES_IMAGE = new EFACModelImage( GENERATOR_WHEEL_SPOKES, WHEEL_CENTER_OFFSET );
-  var CONNECTOR_IMAGE = new EFACModelImage( CONNECTOR, CONNECTOR_OFFSET );
-  var WIRE_CURVED_IMAGE = new EFACModelImage( WIRE_BLACK_LEFT, new Vector2( 0.0185, -0.015 ) );
-  var WHEEL_RADIUS = WHEEL_HUB_IMAGE.width / 2;
+  var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
 
   // offsets used to create the paths followed by the energy chunks
   var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.01, -0.05 );
@@ -422,16 +408,9 @@ define( function( require ) {
       this.wheelRotationalAngleProperty.reset();
       this.directCouplingModeProperty.reset();
     }
-
   }, {
 
     // statics
-    SHORT_SPOKES_IMAGE: SHORT_SPOKES_IMAGE,
-    WHEEL_PADDLES_IMAGE: WHEEL_PADDLES_IMAGE,
-    WIRE_CURVED_IMAGE: WIRE_CURVED_IMAGE,
-    HOUSING_IMAGE: HOUSING_IMAGE,
-    CONNECTOR_IMAGE: CONNECTOR_IMAGE,
-    WHEEL_HUB_IMAGE: WHEEL_HUB_IMAGE,
     WHEEL_CENTER_OFFSET: WHEEL_CENTER_OFFSET,
     WHEEL_RADIUS: WHEEL_RADIUS
   } );
