@@ -13,6 +13,7 @@ define( function( require ) {
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -45,7 +46,8 @@ define( function( require ) {
     } );
     var generatorWheelHubNode = new Image( generatorWheelHubImage, {
       centerX: paddlesNode.centerX,
-      centerY: paddlesNode.centerY
+      centerY: paddlesNode.centerY,
+      maxWidth: modelViewTransform.modelToViewDeltaX( Generator.WHEEL_RADIUS * 2 )
     } );
     var wireBlackLeftNode = new Image( wireBlackLeftImage, {
       right: generatorNode.right - 29,
