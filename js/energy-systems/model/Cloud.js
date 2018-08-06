@@ -10,25 +10,14 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberProperty = require( 'AXON/NumberProperty' );
   var Shape = require( 'KITE/Shape' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CLOUD_WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
   var CLOUD_HEIGHT = CLOUD_WIDTH;
-
-  // images
-  // TODO: I (jbphet) have seen this in some other places, and I should investigate: Why are images here and not in the view?
-  var CLOUD_1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
-
-  var CLOUD_IMAGE = new EFACModelImage( CLOUD_1, new Vector2( 0, 0 ), {
-    width: CLOUD_WIDTH,
-    scale: 0.5
-  } );
 
   /**
    * @param {Vector2} offsetFromParent
@@ -80,8 +69,7 @@ define( function( require ) {
   }, {
 
     // statics
-    CLOUD_1: CLOUD_1,
-    CLOUD_IMAGE: CLOUD_IMAGE
+    CLOUD_WIDTH: CLOUD_WIDTH
   } );
 } );
 

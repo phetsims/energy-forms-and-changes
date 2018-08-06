@@ -14,7 +14,6 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -34,6 +33,9 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // images
+  var cloudImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
 
   // strings
   var cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
@@ -121,7 +123,7 @@ define( function( require ) {
       font: CONTROL_PANEL_TITLE_FONT
     } );
 
-    var iconNode = new Image( Cloud.CLOUD_1, { scale: 0.25 } );
+    var iconNode = new Image( cloudImage, { scale: 0.25 } );
     iconNode.setScaleMagnitude( 0.25 );
 
     var titleBox = new HBox( {
@@ -213,8 +215,11 @@ define( function( require ) {
   function CloudNode( cloud, modelViewTransform ) {
     Node.call( this );
     var self = this;
-
-    this.addChild( new EFACModelImageNode( Cloud.CLOUD_IMAGE, modelViewTransform ) );
+    var cloudNode = new Image( cloudImage, {
+      width: Cloud.CLOUD_WIDTH,
+      scale: 0.5
+    } );
+    this.addChild( cloudNode );
 
     var x = modelViewTransform.modelToViewDeltaX( cloud.offsetFromParent.x );
     var y = modelViewTransform.modelToViewDeltaY( cloud.offsetFromParent.y );
