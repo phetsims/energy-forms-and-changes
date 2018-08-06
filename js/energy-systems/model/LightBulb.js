@@ -11,7 +11,6 @@ define( function( require ) {
 
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -22,18 +21,6 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
-
-  // images
-  var ELEMENT_BASE_BACK = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
-  var ELEMENT_BASE_FRONT = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
-  var WIRE_BLACK_62 = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
-  var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
-
-  // constants
-  var WIRE_FLAT_IMAGE = new EFACModelImage( WIRE_BLACK_62, new Vector2( -0.036, -0.04 ) );
-  var WIRE_CURVE_IMAGE = new EFACModelImage( WIRE_BLACK_RIGHT, new Vector2( -0.009, -0.016 ) );
-  var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, new Vector2( 0, 0.0 ) );
-  var ELEMENT_BASE_BACK_IMAGE = new EFACModelImage( ELEMENT_BASE_BACK, new Vector2( 0, 0.0 ) );
 
   var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
   var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
@@ -416,19 +403,6 @@ define( function( require ) {
     reset: function() {
       this.litProportionProperty.reset();
     }
-
-  }, {
-
-    // static
-    WIRE_BLACK_RIGHT: WIRE_BLACK_RIGHT,
-    WIRE_BLACK_62: WIRE_BLACK_62,
-    ELEMENT_BASE_FRONT: ELEMENT_BASE_FRONT,
-    ELEMENT_BASE_BACK: ELEMENT_BASE_BACK,
-
-    WIRE_FLAT_IMAGE: WIRE_FLAT_IMAGE,
-    WIRE_CURVE_IMAGE: WIRE_CURVE_IMAGE,
-    ELEMENT_BASE_FRONT_IMAGE: ELEMENT_BASE_FRONT_IMAGE,
-    ELEMENT_BASE_BACK_IMAGE: ELEMENT_BASE_BACK_IMAGE
   } );
 } );
 
