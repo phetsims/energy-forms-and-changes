@@ -61,6 +61,7 @@ define( function( require ) {
       var maxX = Number.NEGATIVE_INFINITY;
       var maxY = Number.NEGATIVE_INFINITY;
 
+      // determine the collective bounds of all the slices
       slices.forEach( function( slice ) {
         minX = Math.min( slice.shape.bounds.minX, minX );
         maxX = Math.max( slice.shape.bounds.maxX, maxX );
