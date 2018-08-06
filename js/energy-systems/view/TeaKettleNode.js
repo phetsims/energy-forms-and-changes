@@ -14,17 +14,19 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
-  var TeaKettle = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/TeaKettle' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // images
+  var teapotImage = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
 
   // constants
   var BURNER_MODEL_BOUNDS = new Bounds2( -0.0375, 0, 0.0375, 0.075 ); // From Burner.getBoundingRect()
@@ -41,7 +43,7 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, teaKettle, modelViewTransform );
 
-    var teaKettleImageNode = new EFACModelImageNode( TeaKettle.TEAPOT_IMAGE, modelViewTransform );
+    var teaKettleImageNode = new Image( teapotImage, { right: 114, bottom: 53 } );
 
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
     var heaterCoolerBack = new HeaterCoolerBack( {

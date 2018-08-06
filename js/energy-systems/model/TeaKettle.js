@@ -12,7 +12,6 @@ define( function( require ) {
   // modules
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
@@ -27,11 +26,8 @@ define( function( require ) {
 
   // images
   var TEAPOT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_icon.png' );
-  var TEAPOT_LARGE = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
 
   // constants
-  var TEAPOT_OFFSET = new Vector2( 0.0, 0.015 );
-  var TEAPOT_IMAGE = new EFACModelImage( TEAPOT_LARGE, TEAPOT_OFFSET );
 
   // Offsets and other constants used for energy paths.  These are mostly
   // empirically determined and coordinated with the image.
@@ -361,9 +357,6 @@ define( function( require ) {
       this.energyProductionRateProperty.reset();
     }
 
-  }, {
-    // Expose the following as public static members
-    TEAPOT_IMAGE: TEAPOT_IMAGE
   } );
 } );
 
