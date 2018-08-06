@@ -5,6 +5,7 @@
  *
  * @author John Blanco
  * @author Andrew Adare
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -13,13 +14,21 @@ define( function( require ) {
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/BeakerHeater' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
-  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // images
+  var elementBaseBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
+  var elementBaseFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
+  var heaterElementOnImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element.png' );
+  var heaterElementOffImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element_dark.png' );
+  var wireCurveImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
+  var wireFlatImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
 
   /**
    * @param {BeakerHeater} beakerHeater
@@ -31,16 +40,35 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, beakerHeater, modelViewTransform );
 
-    var energizedCoil = new EFACModelImageNode( BeakerHeater.HEATER_ELEMENT_ON_IMAGE, modelViewTransform );
+    var wireFlatNode = new Image( wireFlatImage, { left: -112, top: 77 } );
+    var wireCurveNode = new Image( wireCurveImage, { left: wireFlatNode.right - 1, bottom: wireFlatNode.bottom + 1 } );
+    var elementBaseBackNode = new Image( elementBaseBackImage, {
+      right: wireCurveNode.right + 24,
+      top: wireCurveNode.top - 2
+    } );
+    var elementBaseFrontNode = new Image( elementBaseFrontImage, {
+      centerX: elementBaseBackNode.centerX,
+      top: wireCurveNode.top - 3
+    } );
+    var energizedCoilNode = new Image( heaterElementOnImage, {
+      maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
+      centerX: elementBaseFrontNode.centerX - 4,
+      bottom: elementBaseFrontNode.top + 15
+    } );
+    var nonEnergizedCoilNode = new Image( heaterElementOffImage, {
+      maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
+      centerX: elementBaseFrontNode.centerX - 4,
+      bottom: elementBaseFrontNode.top + 15
+    } );
 
     // add the images that are used to depict this element along with the layer that will contain the energy chunks
-    this.addChild( new EFACModelImageNode( BeakerHeater.WIRE_STRAIGHT_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( BeakerHeater.WIRE_CURVE_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_BACK_IMAGE, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( BeakerHeater.HEATER_ELEMENT_OFF_IMAGE, modelViewTransform ) );
-    this.addChild( energizedCoil );
+    this.addChild( wireFlatNode );
+    this.addChild( wireCurveNode );
+    this.addChild( elementBaseBackNode );
+    this.addChild( nonEnergizedCoilNode );
+    this.addChild( energizedCoilNode );
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
-    this.addChild( new EFACModelImageNode( BeakerHeater.ELEMENT_BASE_FRONT_IMAGE, modelViewTransform ) );
+    this.addChild( elementBaseFrontNode );
 
     // create a scale-only MVT, since several sub-elements are relatively positioned
     var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
@@ -69,7 +97,7 @@ define( function( require ) {
 
     // update the transparency of the hot element to make the dark element appear to heat up
     beakerHeater.heatProportionProperty.link( function( litProportion ) {
-      energizedCoil.opacity = litProportion;
+      energizedCoilNode.opacity = litProportion;
     } );
   }
 

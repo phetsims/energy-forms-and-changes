@@ -12,7 +12,6 @@ define( function( require ) {
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -28,24 +27,9 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
-  var ELEMENT_BASE_BACK = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
-  var ELEMENT_BASE_FRONT = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
-  var HEATER_ELEMENT = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element.png' );
-  var HEATER_ELEMENT_DARK = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element_dark.png' );
   var WATER_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/water_icon.png' );
-  var WIRE_BLACK_62 = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
-  var WIRE_BLACK_RIGHT = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
 
   // constants
-
-  // image nodes for various pieces of the energy systems
-  var HEATER_ELEMENT_OFFSET = new Vector2( -0.002, 0.022 );
-  var WIRE_STRAIGHT_IMAGE = new EFACModelImage( WIRE_BLACK_62, new Vector2( -0.036, -0.04 ) );
-  var WIRE_CURVE_IMAGE = new EFACModelImage( WIRE_BLACK_RIGHT, new Vector2( -0.009, -0.016 ) );
-  var ELEMENT_BASE_BACK_IMAGE = new EFACModelImage( ELEMENT_BASE_BACK, new Vector2( 0, 0 ) );
-  var ELEMENT_BASE_FRONT_IMAGE = new EFACModelImage( ELEMENT_BASE_FRONT, new Vector2( 0, 0.0005 ) );
-  var HEATER_ELEMENT_OFF_IMAGE = new EFACModelImage( HEATER_ELEMENT_DARK, HEATER_ELEMENT_OFFSET );
-  var HEATER_ELEMENT_ON_IMAGE = new EFACModelImage( HEATER_ELEMENT, HEATER_ELEMENT_OFFSET );
 
   // position and size constants, empirically determined
   var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.04 );
@@ -59,7 +43,7 @@ define( function( require ) {
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
-  var HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_OFF_IMAGE.getHeight();
+  var HEATER_ELEMENT_2D_HEIGHT = 0.027; // height of image
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
   var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // In meters.
   var HEAT_ENERGY_CHANGE_RATE = 0.5; // In proportion per second.
@@ -441,11 +425,6 @@ define( function( require ) {
   }, {
 
     // statics
-    WIRE_STRAIGHT_IMAGE: WIRE_STRAIGHT_IMAGE,
-    WIRE_CURVE_IMAGE: WIRE_CURVE_IMAGE,
-    ELEMENT_BASE_BACK_IMAGE: ELEMENT_BASE_BACK_IMAGE,
-    HEATER_ELEMENT_OFF_IMAGE: HEATER_ELEMENT_OFF_IMAGE,
-    HEATER_ELEMENT_ON_IMAGE: HEATER_ELEMENT_ON_IMAGE,
-    ELEMENT_BASE_FRONT_IMAGE: ELEMENT_BASE_FRONT_IMAGE
+    HEATER_ELEMENT_2D_HEIGHT: HEATER_ELEMENT_2D_HEIGHT
   } );
 } );
