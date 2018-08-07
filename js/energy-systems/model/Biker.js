@@ -3,8 +3,6 @@
 /**
  * model of a bicycle being pedaled by a rider in order to generate energy
  *
- * TODO: It's a bit odd that the images are handled here in the view.  Consider moving them to the view or explain why they need to be here.
- *
  * @author John Blanco
  * @author Andrew Adare
  */
@@ -15,7 +13,6 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImage = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EFACModelImage' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergyChunkPathMover' );
@@ -36,6 +33,7 @@ define( function( require ) {
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
+  var NUM_LEG_IMAGES = 24; // must match number of leg images in view
 
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
@@ -45,88 +43,8 @@ define( function( require ) {
   var BOTTOM_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.03 );
   var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.13, -0.01 );
 
-  // offset of the bike frame center - most other image offsets are relative to this one
-  var FRAME_CENTER_OFFSET = new Vector2( 0.0, 0.01 );
-
-  // other image offsets
-  var LEG_IMAGE_OFFSET = new Vector2( 0.009, 0.002 );
-  var LEG_OFFSET = FRAME_CENTER_OFFSET.plus( LEG_IMAGE_OFFSET );
-
   // images
-  var BACK_LEG_IMAGES = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_18.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_19.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_20.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_21.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_22.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_23.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_24.png' )
-  ];
-  var FRONT_LEG_IMAGES = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_18.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_19.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_20.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_21.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_22.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_23.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_24.png' )
-  ];
-  var BICYCLE_FRAME_3 = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame_3.png' );
   var BICYCLE_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_icon.png' );
-  var BICYCLE_RIDER = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider.png' );
-  var BICYCLE_RIDER_TIRED = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider_tired.png' );
-  var BICYCLE_SPOKES = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
-
-  // populate image node arrays used for animation
-  var FRONT_LEG_IMAGE_NODES = [];
-  var BACK_LEG_IMAGE_NODES = [];
-  for ( var i = 1; i < 25; i++ ) {
-    BACK_LEG_IMAGE_NODES.push( new EFACModelImage( BACK_LEG_IMAGES[ i - 1 ], LEG_OFFSET ) );
-    FRONT_LEG_IMAGE_NODES.push( new EFACModelImage( FRONT_LEG_IMAGES[ i - 1 ], LEG_OFFSET ) );
-  }
-  var NUM_LEG_IMAGES = FRONT_LEG_IMAGE_NODES.length;
-
-  // Image nodes used when representing this model element in the view.  The offsets, which are in meters, were
-  // empirically determined.  The values aren't really to scale, since there are so many things in this model with very
-  // different scales.
-  var FRAME_IMAGE = new EFACModelImage( BICYCLE_FRAME_3, FRAME_CENTER_OFFSET );
-  var REAR_WHEEL_SPOKES_IMAGE = new EFACModelImage( BICYCLE_SPOKES, FRAME_CENTER_OFFSET.plus( new Vector2( 0.035, -0.020 ) ) );
-  var RIDER_NORMAL_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0025, 0.062 ) ) );
-  var RIDER_TIRED_UPPER_BODY_IMAGE = new EFACModelImage( BICYCLE_RIDER_TIRED, FRAME_CENTER_OFFSET.plus( new Vector2( -0.0032, 0.056 ) ) );
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
@@ -608,15 +526,9 @@ define( function( require ) {
   }, {
 
     // statics
-    BACK_LEG_IMAGES: BACK_LEG_IMAGE_NODES,
     CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
-    FRAME_IMAGE: FRAME_IMAGE,
-    FRONT_LEG_IMAGES: FRONT_LEG_IMAGE_NODES,
     MAX_ANGULAR_VELOCITY_OF_CRANK: MAX_ANGULAR_VELOCITY_OF_CRANK,
     NUM_LEG_IMAGES: NUM_LEG_IMAGES,
-    REAR_WHEEL_SPOKES_IMAGE: REAR_WHEEL_SPOKES_IMAGE,
-    RIDER_NORMAL_UPPER_BODY_IMAGE: RIDER_NORMAL_UPPER_BODY_IMAGE,
-    RIDER_TIRED_UPPER_BODY_IMAGE: RIDER_TIRED_UPPER_BODY_IMAGE,
     REAR_WHEEL_RADIUS: REAR_WHEEL_RADIUS
   } );
 } );

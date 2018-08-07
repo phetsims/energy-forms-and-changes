@@ -5,6 +5,7 @@
  *
  * @author John Blanco
  * @author Andrew Adare
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -14,16 +15,81 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACModelImageNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EFACModelImageNode' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HSlider = require( 'SUN/HSlider' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Text = require( 'SCENERY/nodes/Text' );
+
+  // images
+  var backLegImages = [
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_01.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_02.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_03.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_04.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_05.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_06.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_07.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_08.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_09.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_10.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_11.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_12.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_13.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_14.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_15.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_16.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_17.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_18.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_19.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_20.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_21.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_22.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_23.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_24.png' )
+  ];
+  var frontLegImages = [
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_01.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_02.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_03.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_04.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_05.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_06.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_07.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_08.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_09.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_10.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_11.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_12.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_13.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_14.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_15.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_16.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_17.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_18.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_19.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_20.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_21.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_22.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_23.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_24.png' )
+  ];
+  var NUM_LEG_IMAGES = frontLegImages.length;
+  var bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame_3.png' );
+  var bicycleRiderImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider.png' );
+  var bicycleRiderTiredImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider_tired.png' );
+  var bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
+
+  // constants
+  var BICYCLE_FRAME_RIGHT_OFFSET = 120;
+  var BICYCLE_FRAME_TOP_OFFSET = -112;
+  var LEG_RIGHT_OFFSET = BICYCLE_FRAME_RIGHT_OFFSET - 33;
+  var LEG_TOP_OFFSET = BICYCLE_FRAME_TOP_OFFSET - 10;
 
   // strings
   var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
@@ -38,27 +104,37 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, biker, modelViewTransform );
 
-    var spokesImage = new EFACModelImageNode( Biker.REAR_WHEEL_SPOKES_IMAGE, modelViewTransform );
+    // bike part image nodes
+    var frameNode = new Image( bicycleFrameImage, {
+      right: BICYCLE_FRAME_RIGHT_OFFSET,
+      top: BICYCLE_FRAME_TOP_OFFSET
+    } );
+    var spokesNode = new Image( bicycleSpokesImage, { right: frameNode.right - 14, bottom: frameNode.bottom - 14 } );
+    var upperBodyNormalNode = new Image( bicycleRiderImage, {
+      centerX: frameNode.centerX - 5,
+      bottom: frameNode.top + 25
+    } );
+    var upperBodyTiredNode = new Image( bicycleRiderTiredImage, {
+      centerX: frameNode.centerX - 5,
+      bottom: frameNode.top + 25
+    } );
     var backLegRootNode = new Node();
     var frontLegRootNode = new Node();
     var backLegImageNodes = [];
     var frontLegImageNodes = [];
 
-    for ( var i = 0; i < Biker.NUM_LEG_IMAGES; i++ ) {
+    for ( var i = 0; i < NUM_LEG_IMAGES; i++ ) {
 
       // back leg image nodes
-      backLegImageNodes.push( new EFACModelImageNode( Biker.BACK_LEG_IMAGES[ i ], modelViewTransform ) );
+      backLegImageNodes.push( new Image( backLegImages[ i ], { right: LEG_RIGHT_OFFSET, top: LEG_TOP_OFFSET } ) );
       backLegImageNodes[ i ].setVisible( false );
       backLegRootNode.addChild( backLegImageNodes[ i ] );
 
       // front leg image nodes
-      frontLegImageNodes.push( new EFACModelImageNode( Biker.FRONT_LEG_IMAGES[ i ], modelViewTransform ) );
+      frontLegImageNodes.push( new Image( frontLegImages[ i ], { right: LEG_RIGHT_OFFSET, top: LEG_TOP_OFFSET } ) );
       frontLegImageNodes[ i ].setVisible( false );
       frontLegRootNode.addChild( frontLegImageNodes[ i ] );
     }
-
-    var upperBodyNormal = new EFACModelImageNode( Biker.RIDER_NORMAL_UPPER_BODY_IMAGE, modelViewTransform );
-    var upperBodyTired = new EFACModelImageNode( Biker.RIDER_TIRED_UPPER_BODY_IMAGE, modelViewTransform );
 
     // animate legs by setting image visibility based on crank arm angle
     var visibleBackLeg = backLegImageNodes[ 0 ];
@@ -81,28 +157,28 @@ define( function( require ) {
         biker.replenishEnergyChunks();
       },
       baseColor: 'rgba(0,220,0,1)',
-      centerX: upperBodyNormal.centerTop.x,
-      centerY: upperBodyNormal.centerTop.y - 40
+      centerX: upperBodyNormalNode.centerTop.x,
+      centerY: upperBodyNormalNode.centerTop.y - 40
     } );
     this.addChild( feedMeButton );
 
     // control the visibility of the "feed me" button the the position of the upper body based on the energy level
     biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
       feedMeButton.setVisible( !hasEnergy );
-      upperBodyNormal.setVisible( hasEnergy );
-      upperBodyTired.setVisible( !hasEnergy );
+      upperBodyNormalNode.setVisible( hasEnergy );
+      upperBodyTiredNode.setVisible( !hasEnergy );
     } );
 
     // add a listener that will turn the back wheel
-    var wheelRotationPoint = spokesImage.bounds.center;
+    var wheelRotationPoint = spokesNode.bounds.center;
     biker.rearWheelAngleProperty.link( function( angle ) {
       assert && assert( angle < 2 * Math.PI, 'Angle is out of bounds' );
 
       // Scenery doesn't use the convention in physics where a positive rotation is counter-clockwise, so we have to
       // invert the angle in the following calculation.
-      var compensatedAngle = ( 2 * Math.PI - spokesImage.getRotation() ) % ( 2 * Math.PI );
+      var compensatedAngle = ( 2 * Math.PI - spokesNode.getRotation() ) % ( 2 * Math.PI );
       var delta = angle - compensatedAngle;
-      spokesImage.rotateAround( wheelRotationPoint, -delta );
+      spokesNode.rotateAround( wheelRotationPoint, -delta );
     } );
 
     // slider to control crank speed
@@ -129,12 +205,12 @@ define( function( require ) {
     } ) );
 
     // add the other images used
-    this.addChild( spokesImage );
+    this.addChild( spokesNode );
     this.addChild( backLegRootNode );
-    this.addChild( new EFACModelImageNode( Biker.FRAME_IMAGE, modelViewTransform ) );
+    this.addChild( frameNode );
     this.addChild( frontLegRootNode );
-    this.addChild( upperBodyNormal );
-    this.addChild( upperBodyTired );
+    this.addChild( upperBodyNormalNode );
+    this.addChild( upperBodyTiredNode );
 
     // add the energy chunk layer
     this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
