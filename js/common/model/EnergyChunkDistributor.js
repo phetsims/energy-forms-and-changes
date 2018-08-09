@@ -158,7 +158,10 @@ define( function( require ) {
         var lengthRange = new Range( 0, maxDistance );
         for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
           var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
-          if ( containerShape.containsPoint( chunk.positionProperty.value.plus( vectorToEdge ) ) ) {
+          if ( containerShape.bounds.containsCoordinates(
+            chunk.positionProperty.value.x + vectorToEdge.x,
+            chunk.positionProperty.value.y + vectorToEdge.y
+          ) ) {
             lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
           }
           else {
