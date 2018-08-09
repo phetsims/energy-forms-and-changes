@@ -128,7 +128,7 @@ define( function( require ) {
           slice.energyChunkList.forEach( function( chunk ) {
             // Reset accumulated forces.
             chunkForces[ chunk.id ] = ZERO_VECTOR;
-            if ( containerShape.containsPoint( chunk.positionProperty.value ) ) {
+            if ( containerShape.bounds.containsCoordinates( chunk.positionProperty.value.x, chunk.positionProperty.value.y ) ) {
               self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
               self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
             }
