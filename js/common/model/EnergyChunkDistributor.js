@@ -17,7 +17,6 @@ define( function( require ) {
 
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
