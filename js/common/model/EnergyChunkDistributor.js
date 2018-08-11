@@ -79,7 +79,7 @@ define( function( require ) {
       var chunkMap = {}; // Map of chunkID (number) => chunk (EnergyChunk)
       slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( chunk ) {
-          chunkForces[ chunk.id ] = ZERO_VECTOR;
+          chunkForces[ chunk.id ] = Vector2.createFromPool( 0, 0 );
           chunkMap[ chunk.id ] = chunk;
         } );
       } );
@@ -122,19 +122,20 @@ define( function( require ) {
 
           // Determine the max possible distance to an edge.
           var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) +
-            Math.pow( containerShape.bounds.height, 2 ) );
+                                             Math.pow( containerShape.bounds.height, 2 ) );
 
           // Determine forces on each energy chunk.
           slice.energyChunkList.forEach( function( chunk ) {
             // Reset accumulated forces.
-            chunkForces[ chunk.id ] = ZERO_VECTOR;
+            chunkForces[ chunk.id ].setXY( 0, 0 );
             if ( containerShape.bounds.containsCoordinates( chunk.positionProperty.value.x, chunk.positionProperty.value.y ) ) {
               self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
               self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
             }
             else {
               // Point is outside container, move it towards center of shape.
-              var vectorToCenter = new Vector2( boundingRect.centerX, boundingRect.centerY ).minus( chunk.positionProperty.value );
+              chunkForces[ chunk.id ].freeToPool();
+              var vectorToCenter = Vector2.createFromPool( boundingRect.centerX, boundingRect.centerY ).subtract( chunk.positionProperty.value );
               chunkForces[ chunk.id ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
@@ -152,33 +153,28 @@ define( function( require ) {
     },
 
     computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerShape ) {
-      // Loop on several angles, calculating the forces from the edges at the given angle.
-      for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-        var edgeDetectSteps = 8;
-        var lengthRange = new Range( 0, maxDistance );
-        for ( var edgeDetectStep = 0; edgeDetectStep < edgeDetectSteps; edgeDetectStep++ ) {
-          var vectorToEdge = new Vector2( lengthRange.getCenter(), 0 ).rotated( angle );
-          if ( containerShape.bounds.containsCoordinates(
-            chunk.positionProperty.value.x + vectorToEdge.x,
-            chunk.positionProperty.value.y + vectorToEdge.y
-          ) ) {
-            lengthRange = new Range( lengthRange.getCenter(), lengthRange.max );
-          }
-          else {
-            lengthRange = new Range( lengthRange.min, lengthRange.getCenter() );
-          }
-        }
+      // Get the distance to the four different edges.
+      var rightLength = Math.max( containerShape.bounds.maxX - chunk.positionProperty.value.x, minDistance );
+      var bottomLength = Math.max( containerShape.bounds.maxY - chunk.positionProperty.value.y, minDistance );
+      var leftLength = Math.max( chunk.positionProperty.value.x - containerShape.bounds.minX, minDistance );
+      var topLength = Math.max( chunk.positionProperty.value.y - containerShape.bounds.minY, minDistance );
 
-        // Handle case where point is too close to the container's edge.
-        if ( lengthRange.getCenter() < minDistance ) {
-          lengthRange = new Range( minDistance, minDistance );
-        }
+      // Calculate the force from the edge at the given angle.
+      var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( rightLength, 2 ), 0 ).rotated( Math.PI );
+      var bottomEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( bottomLength, 2 ), 0 ).rotated( Math.PI * 1.5 );
+      var leftEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( leftLength, 2 ), 0 ).rotated( 0 );
+      var topEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( topLength, 2 ), 0 ).rotated( Math.PI / 2 );
 
-        // Apply the force due to this edge.
-        var edgeForce = new Vector2( forceConstant / Math.pow( lengthRange.getCenter(), 2 ), 0 ).rotated( angle + Math.PI );
-
-        chunkForces[ chunk.id ] = chunkForces[ chunk.id ].plus( edgeForce );
-      }
+      // Apply the forces.
+      chunkForces[ chunk.id ] = chunkForces[ chunk.id ]
+        .add( rightEdgeForce )
+        .add( bottomEdgeForce )
+        .add( leftEdgeForce )
+        .add( topEdgeForce );
+      rightEdgeForce.freeToPool();
+      bottomEdgeForce.freeToPool();
+      leftEdgeForce.freeToPool();
+      topEdgeForce.freeToPool();
     },
 
     // TODO: This was factored from updatePositions and requires further cleanup, probably more refactoring, bug fixes, and docs.
@@ -208,7 +204,7 @@ define( function( require ) {
           var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
 
           // Add the force to the accumulated forces on this energy chunk.
-          chunkForces[ chunk.id ] = chunkForces[ chunk.id ].plus( forceToOther );
+          chunkForces[ chunk.id ] = chunkForces[ chunk.id ].add( forceToOther );
         }
       }
     },
