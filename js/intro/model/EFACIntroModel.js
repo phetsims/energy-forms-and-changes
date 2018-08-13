@@ -261,6 +261,11 @@ define( function( require ) {
         if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
           self.fallToSurface( movableModelElement, dt );
         }
+        else if ( !movableModelElement.userControlledProperty.value &&
+                  unsupported &&
+                  !self.groundSpotXPositions.includes( movableModelElement.positionProperty.value.x ) ) {
+          self.snapElementToGroundSpot( movableModelElement );
+        }
       } );
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
@@ -445,8 +450,7 @@ define( function( require ) {
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
       else {
-        var groundSpotX = self.getBestGroundSpot( modelElement );
-        modelElement.positionProperty.set( new Vector2( groundSpotX, modelElement.positionProperty.value.y ) );
+        self.snapElementToGroundSpot( modelElement );
       }
 
       // calculate a proposed Y position based on gravitational falling
@@ -469,8 +473,18 @@ define( function( require ) {
     },
 
     /**
-     * get a list of the thermal blocks
-     * @return {Block[]}
+     * snap a model element to a ground spot
+     * @private
+     */
+    snapElementToGroundSpot: function( modelElement ) {
+      var groundSpotX = this.getBestGroundSpot( modelElement );
+      modelElement.positionProperty.set( new Vector2( groundSpotX, modelElement.positionProperty.value.y ) );
+    },
+
+    /**
+     * get the closest ground spot x-coordinate
+     * @return {number}
+     * @private
      */
     getBestGroundSpot: function( modelElement ) {
       var groundSpot = 0;
