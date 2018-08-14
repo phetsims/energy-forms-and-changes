@@ -14,6 +14,7 @@ define( function( require ) {
   // modules
   var Color = require( 'SCENERY/util/Color' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var ScreenView = require( 'JOIST/ScreenView' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -142,7 +143,10 @@ define( function( require ) {
 
     // constants used for creating projections that have a 3D-ish look
     Z_TO_X_OFFSET_MULTIPLIER: Z_TO_X_OFFSET_MULTIPLIER,
-    Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER
+    Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER,
+
+    // use the default layout bounds
+    SCREEN_LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS
   };
 
   energyFormsAndChanges.register( 'EFACConstants', EFACConstants );
