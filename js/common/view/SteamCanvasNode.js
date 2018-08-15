@@ -4,6 +4,7 @@
  * A node for the column of steam that appears when the temperature is high enough.
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -24,6 +25,7 @@ define( function( require ) {
   var STEAM_BUBBLE_RATE_RANGE = new Range( 20, 40 ); // bubbles per second
   var STEAM_BUBBLE_GROWTH_RATE = 0.2; // proportion per second
   var MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
+  var STEAM_BUBBLE_COLOR = 'white';
 
   /**
    * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
@@ -47,6 +49,26 @@ define( function( require ) {
     this.dt = 0;
     this.steamOrigin = 0;
     this.steamBubbles = [];
+
+    // @private
+    // canvas where steam bubble images will reside
+    this.steamBubbleImageCanvas = document.createElement( 'canvas' );
+    this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
+    this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
+    var context = this.steamBubbleImageCanvas.getContext( '2d' );
+
+    // draw a steam bubble centered in the steam bubble image canvas
+    context.fillStyle = STEAM_BUBBLE_COLOR;
+    context.beginPath();
+    context.arc(
+      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+      0,
+      Math.PI * 2,
+      true
+    );
+    context.fill();
 
     // update the appearance of the water as the level changes
     this.fluidLevelProperty.link( function( fluidLevel ) {
@@ -133,7 +155,7 @@ define( function( require ) {
           steamBubble.x += distanceFromCenterX * 0.2 * self.dt;
 
           // fade the bubble as it reaches the end of its range
-          var heightFraction = ( self.steamOrigin - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT;
+          var heightFraction = ( self.containerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT;
           steamBubble.opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
         }
 
@@ -154,12 +176,15 @@ define( function( require ) {
      * @private
      */
     drawSteamBubble: function( context, steamBubble ) {
-      context.beginPath();
-      context.arc( steamBubble.x, steamBubble.y, steamBubble.radius, 0, Math.PI * 2, true );
-      context.fillStyle = 'rgba(255, 255, 255, ' + steamBubble.opacity + ' )';
-      context.fill();
+      context.globalAlpha = steamBubble.opacity;
+      context.drawImage(
+        this.steamBubbleImageCanvas,
+        steamBubble.x - steamBubble.radius,
+        steamBubble.y - steamBubble.radius,
+        steamBubble.radius * 2,
+        steamBubble.radius * 2
+      );
     },
-
 
     /**
      * Paints the steam on the canvas node.
