@@ -38,10 +38,11 @@ define( function( require ) {
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
   var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.007, 0.015 );
-  var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.006 );
+  var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.002 );
   var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.01 );
-  var BOTTOM_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.03 );
-  var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.13, -0.01 );
+  var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.006 ); // where the top chain meets the back wheel cassette
+  var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.024, 0.007 );
+  var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.107, 0.066 );
 
   // images
   var BICYCLE_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_icon.png' );
@@ -420,7 +421,8 @@ define( function( require ) {
     createMechanicalEnergyChunkPath: function( centerPosition ) {
       var path = [];
       path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
-      path.push( centerPosition.plus( BOTTOM_OF_BACK_WHEEL_OFFSET ) );
+      path.push( centerPosition.plus( UPPER_CENTER_OF_BACK_WHEEL_OFFSET ) );
+      path.push( centerPosition.plus( TOP_TANGENT_OF_BACK_WHEEL_OFFSET ) );
       path.push( centerPosition.plus( NEXT_ENERGY_SYSTEM_OFFSET ) );
       return path;
     },
