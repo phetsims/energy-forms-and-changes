@@ -26,7 +26,6 @@ define( function( require ) {
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var JoistA11yStrings = require( 'JOIST/JoistA11yStrings' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var LightBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightBulbNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -66,8 +65,6 @@ define( function( require ) {
     this.addChild( new Node( {
       tagName: 'div',
       innerContent: EFACA11yStrings.energySystemsSceneInteractionHint.value,
-      labelTagName: 'h2',
-      labelContent: JoistA11yStrings.sceneSummary.value,
       descriptionContent: EFACA11yStrings.energySystemsSceneSummaryDescription.value
     } ) );
 
