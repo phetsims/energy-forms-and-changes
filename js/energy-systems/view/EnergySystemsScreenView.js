@@ -64,8 +64,8 @@ define( function( require ) {
     // a11y - the scene summary to be read by assistive technology
     this.addChild( new Node( {
       tagName: 'div',
-      innerContent: EFACA11yStrings.energySystemsSceneInteractionHint.value,
-      descriptionContent: EFACA11yStrings.energySystemsSceneSummaryDescription.value
+      innerContent: EFACA11yStrings.energySystemsScreenInteractionHint.value,
+      descriptionContent: EFACA11yStrings.energySystemsScreenSummaryDescription.value
     } ) );
 
     // a11y - a description of the current configuration of the energy system to be read by assistive technology
