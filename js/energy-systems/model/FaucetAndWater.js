@@ -20,7 +20,6 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -63,8 +62,8 @@ define( function( require ) {
     // @public {BooleanProperty} proportion of full available flow that is occurring
     this.flowProportionProperty = new Property( 0 );
 
-    // @public {read-only) {ObservableArray.<WaterDrop>} - water drops that comprise the stream of water
-    this.waterDrops = new ObservableArray();
+    // @public {read-only) {WaterDrop[]} - water drops that comprise the stream of water
+    this.waterDrops = [];
 
     // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
     this.exemptFromTransferEnergyChunks = [];
@@ -132,26 +131,27 @@ define( function( require ) {
 
       // add water droplets as needed based on flow rate
       if ( this.flowProportionProperty.value > 0 ) {
-        var initialOffset = new Vector2( 0, 0 );
+        var initialPosition = new Vector2( 0, 0 );
         var initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
                            ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
         var initialSize = new Dimension2( initialWidth, initialWidth );
-        this.waterDrops.push( new WaterDrop( initialOffset, new Vector2( 0, 0 ), initialSize ) );
+        this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
       }
 
       // make the water droplets fall
       this.waterDrops.forEach( function( drop ) {
         var v = drop.velocityProperty.value;
         drop.velocityProperty.set( v.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
-        drop.offsetFromParentProperty.set( drop.offsetFromParentProperty.value.plus( v.times( dt ) ) );
+        drop.position.set( drop.position.plus( v.times( dt ) ) );
       } );
 
       // remove drops that have run their course by iterating over a copy and checking for matches
-      var waterDropsCopy = this.waterDrops.getArray().slice( 0 );
+      var waterDropsCopy = this.waterDrops;
       waterDropsCopy.forEach( function( drop ) {
-        if ( drop.offsetFromParentProperty.value.distance( self.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
-          if ( self.waterDrops.contains( drop ) ) {
-            self.waterDrops.remove( drop );
+        if ( drop.position.distance( self.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+          var index = self.waterDrops.indexOf( drop );
+          if ( index !== -1 ) {
+            self.waterDrops.splice( index, 1 );
           }
         }
       } );
@@ -293,6 +293,7 @@ define( function( require ) {
   }, {
 
     // statics
-    OFFSET_FROM_CENTER_TO_WATER_ORIGIN: OFFSET_FROM_CENTER_TO_WATER_ORIGIN
+    OFFSET_FROM_CENTER_TO_WATER_ORIGIN: OFFSET_FROM_CENTER_TO_WATER_ORIGIN,
+    MAX_WATER_WIDTH: MAX_WATER_WIDTH
   } );
 } );

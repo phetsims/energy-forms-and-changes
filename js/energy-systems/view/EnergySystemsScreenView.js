@@ -205,12 +205,12 @@ define( function( require ) {
     this.addChild( solarPanelNode );
 
     // create the energy source nodes
-    var faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
     this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
     var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
     this.addChild( sunNode );
-    this.addChild( faucetNode );
+    this.addChild( this.faucetNode );
     this.addChild( bikerNode );
     this.addChild( this.teaKettleNode );
 
@@ -244,6 +244,7 @@ define( function( require ) {
     step: function( dt ) {
       this.teaKettleNode.steamNode.step( dt );
       this.beakerHeaterNode.step( dt );
+      this.faucetNode.step( dt );
     }
   } );
 } );

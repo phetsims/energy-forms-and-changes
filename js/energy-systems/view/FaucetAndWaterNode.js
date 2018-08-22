@@ -4,19 +4,21 @@
  * a scenery node that represents a faucet from which water flows
  *
  * @author John Blanco
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
 
   // modules
-  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var FallingWaterCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FallingWaterCanvasNode' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var WaterDropNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/WaterDropNode' );
+  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
 
   // constants
   var FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long enough that end is generally not seen
@@ -44,39 +46,37 @@ define( function( require ) {
     faucetNode.bottom = faucetToWater.y;
 
     // create the water, which consists of a set of water drops
-    var waterLayer = new Node();
-    waterLayer.translate( faucetToWater );
-
-    function addDroplet( droplet ) {
-      var waterDropNode = new WaterDropNode( droplet, modelViewTransform );
-      waterLayer.addChild( waterDropNode );
-
-      // when droplet is removed from the model, remove its node from the view
-      var itemRemovedListener = function( removedDroplet ) {
-        if ( removedDroplet === droplet ) {
-          waterLayer.removeChild( waterDropNode );
-          waterDropNode.dispose();
-
-          // remove this listener to reclaim memory
-          faucet.waterDrops.removeItemRemovedListener( itemRemovedListener );
-        }
-      };
-
-      // link itemRemovedListener to the waterDrops ObservableArray
-      faucet.waterDrops.addItemRemovedListener( itemRemovedListener );
-    }
-
-    faucet.waterDrops.addItemAddedListener( addDroplet );
+    this.fallingWaterCanvasNode = new FallingWaterCanvasNode(
+      faucet.waterDrops,
+      modelViewTransform,
+      {
+        canvasBounds: new Bounds2(
+          -modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
+          0,
+          modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
+          EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY
+        )
+      }
+    );
+    this.fallingWaterCanvasNode.translate( faucetToWater.addXY( 0, -40 ) );
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
 
-    this.addChild( waterLayer );
+    this.addChild( this.fallingWaterCanvasNode );
     this.addChild( energyChunkLayer );
     this.addChild( faucetNode );
   }
 
   energyFormsAndChanges.register( 'FaucetAndWaterNode', FaucetAndWaterNode );
 
-  return inherit( MoveFadeModelElementNode, FaucetAndWaterNode );
+  return inherit( MoveFadeModelElementNode, FaucetAndWaterNode, {
+    /**
+     * @public
+     * @param {number} dt - the change in time
+     */
+    step: function( dt ) {
+      this.fallingWaterCanvasNode.step( dt );
+    }
+  } );
 } );

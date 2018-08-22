@@ -1,10 +1,11 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 /**
  * a model of a drop of water, generally used to create a stream of water coming from, say, a faucet
  *
  * @author John Blanco
  * @author Andrew Adare
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -16,32 +17,31 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   // the following constant is used to adjust the way in which the drop elongates as its velocity increases
-  var WIDTH_CHANGE_TWEAK_FACTOR = 2;
+  var WIDTH_CHANGE_TWEAK_FACTOR = 0.15;
 
   /**
-   * @param {Vector2} initialOffsetFromParent - (x,y) offset in model space
+   * @param {Vector2} initialPosition - (x,y) position in model space
    * @param {Vector2} initialVelocity - 2D velocity at initialization
    * @param {Dimension2} size - droplet dimensions
    */
-  function WaterDrop( initialOffsetFromParent, initialVelocity, size ) {
+  function WaterDrop( initialPosition, initialVelocity, size ) {
 
     var self = this;
 
-    // @public {Property.<Vector2>} - offset from... TODO: Describe what exactly this offset is
-    this.offsetFromParentProperty = new Property( initialOffsetFromParent );
+    // @public {Vector2} - after being transformed to view coordinates, this position is the distance from the faucet head
+    this.position = initialPosition;
 
     // @public {Property.<Vector2>}
     this.velocityProperty = new Property( initialVelocity );
 
-    // @public (read-only) {Property.<Dimension2>}
-    this.sizeProperty = new Property( size );
+    // @public (read-only) {Dimension2}
+    this.size = size;
 
     // adjust the size as the velocity changes, mimicking how water drops thin out as they fall through air
     this.velocityProperty.link( function( velocity ) {
-      var size = self.sizeProperty.value;
-      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * size.width;
-      var newHeight = ( size.height * size.width ) / newWidth;
-      self.sizeProperty.set( new Dimension2( newWidth, newHeight ) );
+      var newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * self.size.width;
+      var newHeight = ( self.size.height * self.size.width ) / newWidth;
+      self.size.set( new Dimension2( newWidth, newHeight ) );
     } );
   }
 
