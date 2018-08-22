@@ -61,7 +61,7 @@ define( function( require ) {
 
     ScreenView.call( this );
 
-    // a11y - the scene summary to be read by assistive technology
+    // a11y - the screen summary to be read by assistive technology
     this.addChild( new Node( {
       tagName: 'div',
       innerContent: EFACA11yStrings.energySystemsScreenInteractionHint.value,
