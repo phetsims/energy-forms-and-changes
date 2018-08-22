@@ -269,7 +269,7 @@ define( function( require ) {
      */
     deactivate: function() {
       this.flowProportionProperty.reset();
-      this.waterDrops.clear();
+      this.waterDrops = [];
       EnergySource.prototype.deactivate.call( this );
     },
 
