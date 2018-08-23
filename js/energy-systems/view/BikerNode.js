@@ -162,7 +162,7 @@ define( function( require ) {
     } );
     this.addChild( feedMeButton );
 
-    // control the visibility of the "feed me" button the the position of the upper body based on the energy level
+    // control the visibility of the "feed me" button the position of the upper body based on the energy level
     biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
       feedMeButton.setVisible( !hasEnergy );
       upperBodyNormalNode.setVisible( hasEnergy );

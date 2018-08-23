@@ -38,7 +38,7 @@ define( function( require ) {
     this.bottomSurfaceProperty = new Property( null );
 
     // @public (read-only) {ObservableArray.<Bounds2>} - A list of bounds that are used for determining if this model
-    // element is in a valid position, i.e. whether it is within the the play area and is not overlapping other model
+    // element is in a valid position, i.e. whether it is within the play area and is not overlapping other model
     // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
     // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the
     // element's position, which by convention in this sim is at the center bottom of the model element.
