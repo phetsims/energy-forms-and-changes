@@ -29,9 +29,9 @@ define( function( require ) {
   var FAUCET_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/faucet_icon.png' );
 
   // constants
-  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.072, 0.09 );
+  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.069, 0.083 );
   var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
-  var MAX_WATER_WIDTH = 0.01; // In meters.
+  var MAX_WATER_WIDTH = 0.014; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
   var FALLING_WATER_DELAY = 0.2; // time to pass before wheel starts turning after faucet starts, in seconds

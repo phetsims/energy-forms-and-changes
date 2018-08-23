@@ -32,18 +32,18 @@ define( function( require ) {
     // @private
     // canvas where the water drop image is drawn
     this.waterDropImageCanvas = document.createElement( 'canvas' );
-    this.waterDropImageCanvas.width = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ) * 2;
-    this.waterDropImageCanvas.height = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ) * 2;
+    this.waterDropImageCanvas.width = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH );
+    this.waterDropImageCanvas.height = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH );
     var context = this.waterDropImageCanvas.getContext( '2d' );
 
     // draw a water drop centered in the water drop image canvas
     context.fillStyle = EFACConstants.WATER_COLOR_OPAQUE.toCSS();
-    context.globalAlpha = 0.2;
+    context.globalAlpha = 0.25;
     context.beginPath();
     context.arc(
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
+      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
+      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
+      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
       0,
       Math.PI * 2,
       true
@@ -78,10 +78,10 @@ define( function( require ) {
     drawWaterDrop: function( context, drop ) {
       context.drawImage(
         this.waterDropImageCanvas,
-        this.modelViewTransform.modelToViewDeltaX( drop.position.x - drop.size.width ),
-        this.modelViewTransform.modelToViewDeltaY( drop.position.y - drop.size.height ),
-        this.modelViewTransform.modelToViewDeltaX( drop.size.width ) * 2,
-        -this.modelViewTransform.modelToViewDeltaY( drop.size.height ) * 2
+        this.modelViewTransform.modelToViewDeltaX( drop.position.x - drop.size.width / 2 ),
+        this.modelViewTransform.modelToViewDeltaY( drop.position.y - drop.size.height / 2 ),
+        this.modelViewTransform.modelToViewDeltaX( drop.size.width ),
+        -this.modelViewTransform.modelToViewDeltaY( drop.size.height )
       );
     },
 

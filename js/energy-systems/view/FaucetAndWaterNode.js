@@ -58,7 +58,7 @@ define( function( require ) {
         )
       }
     );
-    this.fallingWaterCanvasNode.translate( faucetToWater.addXY( 0, -40 ) );
+    this.fallingWaterCanvasNode.translate( faucetToWater.addXY( 0, -60 ) );
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
