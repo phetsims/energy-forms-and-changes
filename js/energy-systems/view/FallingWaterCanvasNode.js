@@ -31,26 +31,30 @@ define( require => {
       this.waterDrops = waterDrops;
       this.modelViewTransform = modelViewTransform;
 
-    // @private
-    // canvas where the water drop image is drawn
-    this.waterDropImageCanvas = document.createElement( 'canvas' );
-    this.waterDropImageCanvas.width = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH );
-    this.waterDropImageCanvas.height = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH );
-    var context = this.waterDropImageCanvas.getContext( '2d' );
+      // @private
+      // canvas where the water drop image is drawn
+      this.waterDropImageCanvas = document.createElement( 'canvas' );
 
-    // draw a water drop centered in the water drop image canvas
-    context.fillStyle = EFACConstants.WATER_COLOR_OPAQUE.toCSS();
-    context.globalAlpha = 0.25;
-    context.beginPath();
-    context.arc(
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
-      modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 ),
-      0,
-      Math.PI * 2,
-      true
-    );
-    context.fill();
+      // initial drop image is a circle of size MAX_WATER_WIDTH for width and height
+      const waterDropImageCanvasWidthHeight = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH );
+      const waterDropImageCanvasRadius = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 );
+      this.waterDropImageCanvas.width = waterDropImageCanvasWidthHeight;
+      this.waterDropImageCanvas.height = waterDropImageCanvasWidthHeight;
+      const context = this.waterDropImageCanvas.getContext( '2d' );
+
+      // draw a water drop centered in the water drop image canvas
+      context.fillStyle = EFACConstants.WATER_COLOR_OPAQUE.toCSS();
+      context.globalAlpha = 0.25;
+      context.beginPath();
+      context.arc(
+        waterDropImageCanvasRadius,
+        waterDropImageCanvasRadius,
+        waterDropImageCanvasRadius,
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.fill();
 
       this.mutate( options );
     }
