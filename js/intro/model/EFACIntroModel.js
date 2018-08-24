@@ -35,10 +35,11 @@ define( function( require ) {
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
-  // left edge of the available sim space
+  // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
   var LEFT_EDGE = -0.23;
 
-  // space left between edges of floor area and side of beaker
+  // this is the space between the the edges of the ground (sim left edge or left edge of left burner stand) and the edge
+  // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters,
   var EDGE_PAD = 0.006;
 
   // number of snap-to spots on the ground, should match number of thermal containers
