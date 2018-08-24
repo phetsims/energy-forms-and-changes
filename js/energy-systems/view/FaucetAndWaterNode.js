@@ -55,10 +55,11 @@ define( function( require ) {
           0,
           modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
           EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY
-        )
+        ),
+        x: faucetToWater.x,
+        y: faucetToWater.y - 60
       }
     );
-    this.fallingWaterCanvasNode.translate( faucetToWater.addXY( 0, -60 ) );
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
