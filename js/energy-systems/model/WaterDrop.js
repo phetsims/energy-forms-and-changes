@@ -17,7 +17,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   // the following constant is used to adjust the way in which the drop elongates as its velocity increases
-  var WIDTH_CHANGE_TWEAK_FACTOR = 0.1;
+  var WIDTH_CHANGE_TWEAK_FACTOR = 0.05;
 
   /**
    * @param {Vector2} initialPosition - (x,y) position in model space
