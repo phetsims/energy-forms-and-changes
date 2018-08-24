@@ -1,7 +1,8 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * A node for water droplets falling out of the faucet.
+ * A node for water droplets falling out of the faucet. This canvas node exists because the water drops can be rendered
+ * faster as canvas images than as individual nodes.
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
