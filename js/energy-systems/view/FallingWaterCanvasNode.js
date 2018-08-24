@@ -6,28 +6,29 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
 
-  /**
-   * @param {WaterDrop[]} waterDrops - the falling water drops to be rendered
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options] that can be passed on to the underlying node
-   * @constructor
-   */
-  function FallingWaterCanvasNode( waterDrops, modelViewTransform, options ) {
-    CanvasNode.call( this, options );
+  class FallingWaterCanvasNode extends CanvasNode {
 
-    // @private
-    this.waterDrops = waterDrops;
-    this.modelViewTransform = modelViewTransform;
+    /**
+     * @param {WaterDrop[]} waterDrops - the falling water drops to be rendered
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {Object} [options] that can be passed on to the underlying node
+     * @constructor
+     */
+    constructor( waterDrops, modelViewTransform, options ) {
+      super( options );
+
+      // @private
+      this.waterDrops = waterDrops;
+      this.modelViewTransform = modelViewTransform;
 
     // @private
     // canvas where the water drop image is drawn
@@ -50,24 +51,20 @@ define( function( require ) {
     );
     context.fill();
 
-    this.mutate( options );
-  }
-
-  energyFormsAndChanges.register( 'FallingWaterCanvasNode', FallingWaterCanvasNode );
-
-  return inherit( CanvasNode, FallingWaterCanvasNode, {
+      this.mutate( options );
+    }
 
     /**
      * Renders water drops on the canvas node.
      * @param {CanvasRenderingContext2D} context
      * @private
      */
-    renderFallingWater: function( context ) {
-      var self = this;
-      this.waterDrops.forEach( function( drop ) {
-        self.drawWaterDrop( context, drop );
-      } );
-    },
+    renderFallingWater( context ) {
+      const numWaterDrops = this.waterDrops.length;
+      for ( let i = 0; i < numWaterDrops; i++ ) {
+        this.drawWaterDrop( context, this.waterDrops[ i ] );
+      }
+    }
 
     /*
      * Draws a water drop.
@@ -75,7 +72,7 @@ define( function( require ) {
      * @param {WaterDrop} drop
      * @private
      */
-    drawWaterDrop: function( context, drop ) {
+    drawWaterDrop( context, drop ) {
       context.drawImage(
         this.waterDropImageCanvas,
         this.modelViewTransform.modelToViewDeltaX( drop.position.x - drop.size.width / 2 ),
@@ -83,23 +80,25 @@ define( function( require ) {
         this.modelViewTransform.modelToViewDeltaX( drop.size.width ),
         -this.modelViewTransform.modelToViewDeltaY( drop.size.height )
       );
-    },
+    }
 
     /**
      * Paints the water drops on the canvas node.
      * @param {CanvasRenderingContext2D} context
      * @public
      */
-    paintCanvas: function( context ) {
+    paintCanvas( context ) {
       this.renderFallingWater( context );
-    },
+    }
 
     /**
      * @public
      * @param {number} dt - the change in time
      */
-    step: function( dt ) {
+    step( dt ) {
       this.invalidatePaint();
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'FallingWaterCanvasNode', FallingWaterCanvasNode );
 } );
