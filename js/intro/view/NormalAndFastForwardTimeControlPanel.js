@@ -39,7 +39,7 @@ define( function( require ) {
 
     // add the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
-      playingProperty: model.playProperty,
+      isPlayingProperty: model.playProperty,
       listener: function() { model.manualStep(); },
       radius: 15,
       centerX: playPauseButton.centerX
