@@ -25,6 +25,7 @@ define( function( require ) {
    * @constructor
    */
   function Cloud( offsetFromParent, parentPositionProperty ) {
+    var self = this;
 
     // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
     this.existenceStrengthProperty = new NumberProperty( 1.0 );
@@ -34,6 +35,13 @@ define( function( require ) {
 
     // @private {number} - used to calculate this cloud's position
     this.parentPositionProperty = parentPositionProperty;
+
+    this.cloudEllipse = null;
+
+    this.parentPositionProperty.link( function( parentPosition ) {
+      var center = parentPosition.plus( self.offsetFromParent ).minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
+      self.cloudEllipse = Shape.ellipse( center.x, center.y, CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2, 0, 0, 0, false );
+    } );
   }
 
   energyFormsAndChanges.register( 'Cloud', Cloud );
@@ -46,8 +54,7 @@ define( function( require ) {
      * @public
      */
     getCloudAbsorptionReflectionShape: function() {
-      var center = this.getCenterPosition().minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
-      return Shape.ellipse( center.x, center.y, CLOUD_WIDTH/2, CLOUD_HEIGHT/2, 0, 0, 0, false );
+      return this.cloudEllipse;
     },
 
     /**
