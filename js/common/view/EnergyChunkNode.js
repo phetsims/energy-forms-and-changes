@@ -5,6 +5,7 @@
  *
  * @author John Blanco
  * @author Jesse Greenberg
+ * @author Chris Klusendorf (Phet Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -34,10 +35,18 @@ define( function( require ) {
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
   var WIDTH = 24; // in screen coords, which are close to pixels
 
+  // convenience array that collects all energy types
+  var energyTypes = [
+    EnergyType.THERMAL,
+    EnergyType.ELECTRICAL,
+    EnergyType.MECHANICAL,
+    EnergyType.LIGHT,
+    EnergyType.CHEMICAL,
+    EnergyType.HIDDEN
+  ];
+
   // convenience map that links energy types to their representing images
   var mapEnergyTypeToImage = {};
-  // TODO: As an optimization, try making these nodes, and the factory function below just wraps each in a new Node(),
-  // taking advantage of Scenery's DAG support.
   mapEnergyTypeToImage[ EnergyType.THERMAL ] = thermalEnergyImage;
   mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = electricalEnergyImage;
   mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = mechanicalEnergyImage;
@@ -45,13 +54,11 @@ define( function( require ) {
   mapEnergyTypeToImage[ EnergyType.CHEMICAL ] = chemicalEnergyImage;
   mapEnergyTypeToImage[ EnergyType.HIDDEN ] = hiddenEnergyImage;
 
-  /**
-   * Helper function that returns the correct image for an EnergyChunkNode.  This function is needed in both static and
-   * local scopes and is declared here so that it can be used in both as necessary.
-   * @param {EnergyType} energyType
-   * @returns {Image}
-   */
-  function createEnergyChunkNode( energyType ) {
+  // array that holds the created energy chunk image nodes
+  var energyChunkImageNodes = {};
+
+  // loop over each type of energy and create the image node chunk for that type
+  energyTypes.forEach( function( energyType ) {
     var background = new Image( mapEnergyTypeToImage[ energyType ] );
     var energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
     energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.95 );
@@ -59,7 +66,20 @@ define( function( require ) {
     background.addChild( energyText );
     background.scale( WIDTH / background.width );
     background.center = ( new Vector2( -background.width / 2, -background.height / 2 ) );
-    return background;
+    var backgroundBounds = background.bounds;
+    assert && background.on( 'bounds', function( bounds ) {
+      assert( backgroundBounds === bounds, 'Energy chunk node bounds should not change: ' + bounds );
+    } );
+    energyChunkImageNodes[ energyType ] = background;
+  } );
+
+  /**
+   * Helper function that returns the correct image for an EnergyChunkNode.
+   * @param {EnergyType} energyType
+   * @returns {Image}
+   */
+  function getEnergyChunkNode( energyType ) {
+    return energyChunkImageNodes[ energyType ];
   }
 
   /**
@@ -89,7 +109,7 @@ define( function( require ) {
     // monitor the energy type and update the image if a change occurs
     function handleEnergyTypeChanged( energyType ) {
       self.removeAllChildren();
-      self.addChild( createEnergyChunkNode( energyType ) );
+      self.addChild( getEnergyChunkNode( energyType ) );
     }
 
     energyChunk.energyTypeProperty.link( handleEnergyTypeChanged );
@@ -136,19 +156,6 @@ define( function( require ) {
   }, {
 
     // statics
-    WIDTH: WIDTH,
-
-    /**
-     * A function that returns the correct image for the provided energy type. This is a static function so that an
-     * image node can be generated without an EnergyChunkNode instance.  This is mostly useful for button icons that
-     * should not have visibility properties linked to the model.
-     * @static
-     * @param {EnergyType} energyType
-     * @returns {Image}
-     * @public
-     */
-    createEnergyChunkNode: function( energyType ) {
-      return createEnergyChunkNode( energyType );
-    }
+    WIDTH: WIDTH
   } );
 } );

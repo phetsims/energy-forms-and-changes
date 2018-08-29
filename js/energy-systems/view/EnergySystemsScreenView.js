@@ -18,6 +18,7 @@ define( function( require ) {
   var Checkbox = require( 'SUN/Checkbox' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkLegend = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergyChunkLegend' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -117,11 +118,16 @@ define( function( require ) {
     this.addChild( backLayer );
 
     // create the checkbox that controls the visibility of the energy chunks
+    // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
+    // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
     var showEnergyChunksCheckbox = new Checkbox(
       new LayoutBox( {
         children: [
           new Text( energySymbolsString, { font: new PhetFont( 20 ) } ),
-          EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL )
+          new EnergyChunkNode(
+            new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+            modelViewTransform
+          )
         ],
         orientation: 'horizontal',
         spacing: 5
@@ -140,10 +146,11 @@ define( function( require ) {
     self.addChild( showEnergyChunksPanel );
 
     // add the energy chunk legend
-    var energyChunkLegend = new EnergyChunkLegend( {
-      right: layoutBounds.maxX - EDGE_INSET,
-      top: showEnergyChunksPanel.bottom + 10
-    } );
+    var energyChunkLegend = new EnergyChunkLegend( modelViewTransform,
+      {
+        right: layoutBounds.maxX - EDGE_INSET,
+        top: showEnergyChunksPanel.bottom + 10
+      } );
     this.addChild( energyChunkLegend );
 
     // only show the energy chunk legend when energy chunks are visible

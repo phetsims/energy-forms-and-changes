@@ -21,6 +21,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
@@ -32,6 +33,7 @@ define( function( require ) {
   var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -370,8 +372,12 @@ define( function( require ) {
     model.ironBlock.positionProperty.link( blockChangeListener );
 
     // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
-    // each to be independently scaled.
-    var energyChunkNode = EnergyChunkNode.createEnergyChunkNode( EnergyType.THERMAL );
+    // each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
+    // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
+    var energyChunkNode = new EnergyChunkNode(
+      new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+      modelViewTransform
+    );
     energyChunkNode.pickable = false;
     var label = new Text( energySymbolsString, {
       font: new PhetFont( 20 )
