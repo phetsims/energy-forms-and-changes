@@ -71,14 +71,14 @@ define( function( require ) {
     this.addChild( elementBaseFrontNode );
 
     // create a scale-only MVT, since several sub-elements are relatively positioned
-    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      Vector2.ZERO,
+    var scaleAndTranslateMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2( beakerHeater.beaker.positionProperty.value.x, 0 ),
       Vector2.ZERO,
       modelViewTransform.getMatrix().getScaleVector().x
     );
 
     // @public (read-only) {BeakerView}
-    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleOnlyMVT );
+    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT );
 
     this.addChild( this.beakerView.backNode );
     this.addChild( new EnergyChunkLayer(
@@ -87,6 +87,13 @@ define( function( require ) {
       modelViewTransform
     ) );
     this.addChild( this.beakerView.frontNode );
+
+    // create a scale-only MVT, since several sub-elements are relatively positioned
+    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      Vector2.ZERO,
+      modelViewTransform.getMatrix().getScaleVector().x
+    );
 
     // Add the thermometer that will indicate the beaker water temperature.  Since the position of the thermometer is
     // relative to the beaker heater, the model view transform must be compensated

@@ -53,6 +53,7 @@ define( function( require ) {
    * @constructor
    */
   function BeakerHeater( energyChunksVisibleProperty ) {
+    var self = this;
 
     EnergyUser.call( this, new Image( WATER_ICON ) );
 
@@ -76,7 +77,12 @@ define( function( require ) {
     this.radiatedEnergyChunkList = new ObservableArray();
 
     // @public {Beaker} (read-only) - note that its position is relative to this model element as a whole, not absolute
-    this.beaker = new Beaker( BEAKER_OFFSET, BEAKER_WIDTH, BEAKER_HEIGHT, energyChunksVisibleProperty );
+    this.beaker = new Beaker(
+      this.positionProperty.value.plus( BEAKER_OFFSET ),
+      BEAKER_WIDTH,
+      BEAKER_HEIGHT,
+      energyChunksVisibleProperty
+    );
 
     // @public {TemperatureAndColorSensor} (read-only)
     this.temperatureAndColorSensor = new TemperatureAndColorSensor(
@@ -87,6 +93,10 @@ define( function( require ) {
 
     // @private, for convenience
     this.random = phet.joist.random;
+
+    this.positionProperty.link( function( position ) {
+      self.beaker.positionProperty.value = position.plus( BEAKER_OFFSET );
+    } );
   }
 
   energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
