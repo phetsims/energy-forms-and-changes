@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * a Scenery Node that represents the sun, clouds, and a slider to control the level of cloudiness in the view
@@ -17,7 +17,6 @@ define( function( require ) {
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HBox = require( 'SCENERY/nodes/HBox' );
-  var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LightRays = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightRays' );
@@ -33,6 +32,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
+  var VSlider = require( 'SUN/VSlider' );
 
   // images
   var cloudImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
@@ -100,20 +100,16 @@ define( function( require ) {
     } );
 
     // add slider panel to control cloudiness
-    var slider = new HSlider(
+    var slider = new VSlider(
       sun.cloudinessProperty,
       { min: 0, max: 1 },
       { top: 0, left: 0 }
     );
 
-    slider.rotate( -Math.PI / 2 );
-
     function tickLabel( label ) {
-      var labelText = new Text( label, {
+      return new Text( label, {
         font: SLIDER_LABEL_FONT
       } );
-      labelText.rotate( Math.PI / 2 );
-      return labelText;
     }
 
     slider.addMajorTick( 0, tickLabel( noneString ) );
