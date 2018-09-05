@@ -16,6 +16,7 @@ define( function( require ) {
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Biker' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/EnergySystemElementCarousel' );
+  var Fan = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Fan' );
   var FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FaucetAndWater' );
   var FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/FluorescentBulb' );
   var Generator = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Generator' );
@@ -77,12 +78,14 @@ define( function( require ) {
     this.energySourcesCarousel.add( this.biker );
 
     // energy users
+    this.fan = new Fan( this.energyChunksVisibleProperty );
     this.incandescentBulb = new IncandescentBulb( this.energyChunksVisibleProperty );
     this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisibleProperty );
     this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty );
     this.energyUsersCarousel.add( this.beakerHeater );
     this.energyUsersCarousel.add( this.incandescentBulb );
     this.energyUsersCarousel.add( this.fluorescentBulb );
+    this.energyUsersCarousel.add( this.fan );
 
     this.carousels = [
       this.energySourcesCarousel,
