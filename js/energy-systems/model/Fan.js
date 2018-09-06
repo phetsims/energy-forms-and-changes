@@ -16,7 +16,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   // constants
-  var VELOCITY_DIVISOR = 5.7; // empirically determined, maxes out fan speed at 10PI rads/sec
+  var VELOCITY_DIVISOR = 3; // empirically determined, lower number = faster fan speed
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
