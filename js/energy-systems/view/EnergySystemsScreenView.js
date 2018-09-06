@@ -24,6 +24,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementSelector = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/EnergySystemElementSelector' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var FanNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FanNode' );
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/FaucetAndWaterNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/GeneratorNode' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -199,9 +200,15 @@ define( function( require ) {
       modelViewTransform,
       { bulbType: 'fluorescent' }
     );
+    var fanNode = new FanNode(
+      model.fan,
+      model.energyChunksVisibleProperty,
+      modelViewTransform
+    );
     this.addChild( this.beakerHeaterNode );
     this.addChild( incandescentBulbNode );
     this.addChild( fluorescentBulbNode );
+    this.addChild( fanNode );
 
     // create the energy converter nodes
     var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
