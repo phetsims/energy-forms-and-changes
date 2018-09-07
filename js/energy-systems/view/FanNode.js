@@ -30,7 +30,6 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' )
   ];
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var wireFlatImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
   var wireCurveBottomImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
   var wireCurveTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right_top.png' );
 
