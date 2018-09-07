@@ -20,12 +20,14 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var VELOCITY_DIVISOR = 3; // empirically determined, lower number = faster fan speed
+  var VELOCITY_DIVISOR = 2.7; // empirically determined, lower number = faster fan speed
   var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
   var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
   var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.12; // in meters
   var BLOWN_ENERGY_CHUNK_VELOCITY = EFACConstants.ENERGY_CHUNK_VELOCITY * 2; // empirically determined
-  var CHANCE_ENERGY_LOST_TO_MOTOR_HEAT = 0.1;
+  var CHANCE_ENERGY_LOST_TO_MOTOR_HEAT = 0.1; // empirically determined
+  var INCOMING_ENERGY_FAN_THRESHOLD = 4; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
+  var MAX_INCOMING_ENERGY = 150;
 
   // energy chunk path offsets
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.035, -0.0375 );
@@ -34,8 +36,8 @@ define( function( require ) {
   var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.025, 0.011 );
   var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0225, 0.02 );
   var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0125, 0.031 );
-  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.033 );
-  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.033 );
+  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.034 );
+  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.034 );
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
@@ -53,6 +55,7 @@ define( function( require ) {
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunkIncomingEnergy = 0;
 
     // @private - movers that control how the energy chunks move towards and through the fan
     this.electricalEnergyChunkMovers = [];
@@ -101,12 +104,27 @@ define( function( require ) {
       this.moveRadiatedEnergyChunks( dt );
       this.moveBlownEnergyChunks( dt );
 
+      // when energy chunks are not entering the motor, chip away at the remaining energy from the last chunk
+      this.energyChunkIncomingEnergy = this.energyChunkIncomingEnergy === 0 ? 0 : this.energyChunkIncomingEnergy - 0.3;
+
       // set how fast the fan is turning
       if ( this.energyChunksVisibleProperty.get() ) {
-        // handle case where fan only turns when energy chunks get to it
+        // handle case where fan only turns when energy chunks are getting to the motor
+        this.setBladePosition( dt, this.energyChunkIncomingEnergy );
       }
       else {
-        var angularVelocity = incomingEnergy.amount / VELOCITY_DIVISOR;
+        this.setBladePosition( dt, incomingEnergy.amount );
+      }
+    },
+
+    /**
+     * @param  {number} dt - time step, in seconds
+     * @param {number} incomingEnergyAmount
+     * @private
+     */
+    setBladePosition: function( dt, incomingEnergyAmount ) {
+      if ( incomingEnergyAmount > INCOMING_ENERGY_FAN_THRESHOLD ) {
+        var angularVelocity = incomingEnergyAmount / VELOCITY_DIVISOR;
         var newAngle = ( this.bladePositionProperty.value + angularVelocity * dt ) % ( 2 * Math.PI );
         this.bladePositionProperty.set( newAngle );
       }
@@ -127,9 +145,13 @@ define( function( require ) {
 
           // the electrical energy chunk has reached the motor, so it needs to change into mechanical or thermal energy
           _.pull( self.electricalEnergyChunkMovers, mover );
+          self.hasEnergy = true;
 
-          if ( phet.joist.random.nextDouble() > CHANCE_ENERGY_LOST_TO_MOTOR_HEAT ) {
+          if ( phet.joist.random.nextDouble() > CHANCE_ENERGY_LOST_TO_MOTOR_HEAT || self.energyChunkIncomingEnergy < MAX_INCOMING_ENERGY / 2 ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+            self.energyChunkIncomingEnergy = self.energyChunkIncomingEnergy < MAX_INCOMING_ENERGY / 4 ?
+                                             self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY / 2 :
+                                             self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY;
 
             // release the energy chunk as mechanical to blow away
             self.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
@@ -214,7 +236,7 @@ define( function( require ) {
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 4; // Empirically chosen.
+      var numDirectionChanges = 8; // Empirically chosen.
       var nominalTravelVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
 
       // The first point is straight above the starting point.  This is done because it looks good, making the chunk
@@ -240,7 +262,7 @@ define( function( require ) {
      */
     createBlownEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 6; // Empirically chosen.
+      var numDirectionChanges = 6; // empirically determined
       var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges, 0 );
 
       // The first point is straight right the starting point.  This is done because it makes the chunk
@@ -264,6 +286,10 @@ define( function( require ) {
      */
     reset: function() {
       this.bladePositionProperty.reset();
+      this.energyChunkIncomingEnergy = 0;
+      this.electricalEnergyChunkMovers = [];
+      this.radiatedEnergyChunkMovers = [];
+      this.mechanicalEnergyChunkMovers = [];
     }
   } );
 } );
