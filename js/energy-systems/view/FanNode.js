@@ -48,11 +48,10 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, fan, modelViewTransform );
 
     // add the images and the layer that will contain the energy chunks
-    var wireFlatNode = new Image( wireFlatImage, { left: -112, top: 77 } );
     var wireCurveBottomNode = new Image( wireCurveBottomImage,
       {
-        left: wireFlatNode.right - 1,
-        bottom: wireFlatNode.bottom + 1
+        left: -106,
+        bottom: 99
       } );
     var wireCurveTopNode = new Image( wireCurveTopImage, {
       left: wireCurveBottomNode.right - 24,
@@ -63,11 +62,8 @@ define( function( require ) {
       top: wireCurveTopNode.top - 25
     } );
 
-    this.addChild( wireFlatNode );
     this.addChild( wireCurveBottomNode );
     this.addChild( wireCurveTopNode );
-    this.addChild( new EnergyChunkLayer( fan.energyChunkList, fan.positionProperty, modelViewTransform ) );
-    this.addChild( connectorNode );
 
     var fanBladeRootNode = new Node();
     var fanBladeImageNodes = [];
@@ -93,6 +89,9 @@ define( function( require ) {
       visibleFanNode.setVisible( true );
     } );
     this.addChild( fanBladeRootNode );
+
+    this.addChild( new EnergyChunkLayer( fan.energyChunkList, fan.positionProperty, modelViewTransform ) );
+    this.addChild( connectorNode );
   }
 
   energyFormsAndChanges.register( 'FanNode', FanNode );

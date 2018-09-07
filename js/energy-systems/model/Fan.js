@@ -23,15 +23,14 @@ define( function( require ) {
   var VELOCITY_DIVISOR = 3; // empirically determined, lower number = faster fan speed
 
   // energy chunk path offsets
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.04 );
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( 0, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( 0, 0.011 );
-  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( 0.0025, 0.02 );
-  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( 0.0125, 0.031 );
-  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( 0.02, 0.033 );
-  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.03, 0.033 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.035, -0.0375 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.026, -0.025 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.025, -0.0175 );
+  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.025, 0.011 );
+  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0225, 0.02 );
+  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0125, 0.031 );
+  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.033 );
+  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.033 );
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
@@ -120,7 +119,7 @@ define( function( require ) {
 
         if ( mover.pathFullyTraversed ) {
 
-          // the electrical energy chunk has reached the burner, so it needs to change into thermal energy
+          // the electrical energy chunk has reached the motor, so it needs to change into mechanical or thermal energy
           _.pull( self.electricalEnergyChunkMovers, mover );
           mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
         }
@@ -128,6 +127,7 @@ define( function( require ) {
     },
 
     /**
+     * create a path for chunks to follow when traveling along the wire to the motor
      * @param  {Vector2} center
      * @returns {Vector2[]}
      * @private
@@ -135,7 +135,6 @@ define( function( require ) {
     createElectricalEnergyChunkPath: function( center ) {
       var path = [];
 
-      path.push( center.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND ) );
       path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
@@ -152,7 +151,7 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      this.bladePositionProperty.set( 0 );
+      this.bladePositionProperty.reset();
     }
   } );
 } );
