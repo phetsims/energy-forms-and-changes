@@ -21,6 +21,11 @@ define( function( require ) {
 
   // constants
   var VELOCITY_DIVISOR = 3; // empirically determined, lower number = faster fan speed
+  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
+  var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
+  var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.12; // in meters
+  var BLOWN_ENERGY_CHUNK_VELOCITY = EFACConstants.ENERGY_CHUNK_VELOCITY * 2; // empirically determined
+  var CHANCE_ENERGY_LOST_TO_MOTOR_HEAT = 0.1;
 
   // energy chunk path offsets
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.035, -0.0375 );
@@ -49,11 +54,10 @@ define( function( require ) {
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @private - movers and flags that control how the energy chunks move through the fan
+    // @private - movers that control how the energy chunks move towards and through the fan
     this.electricalEnergyChunkMovers = [];
-    // this.bladeEnergyChunkMovers = [];
-    // this.radiatedEnergyChunkMovers = [];
-    // this.goUpNextTime = true;
+    this.radiatedEnergyChunkMovers = [];
+    this.mechanicalEnergyChunkMovers = [];
   }
 
   energyFormsAndChanges.register( 'Fan', Fan );
@@ -94,6 +98,8 @@ define( function( require ) {
         this.incomingEnergyChunks.length = 0;
       }
       this.moveElectricalEnergyChunks( dt );
+      this.moveRadiatedEnergyChunks( dt );
+      this.moveBlownEnergyChunks( dt );
 
       // set how fast the fan is turning
       if ( this.energyChunksVisibleProperty.get() ) {
@@ -121,7 +127,61 @@ define( function( require ) {
 
           // the electrical energy chunk has reached the motor, so it needs to change into mechanical or thermal energy
           _.pull( self.electricalEnergyChunkMovers, mover );
-          mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+
+          if ( phet.joist.random.nextDouble() > CHANCE_ENERGY_LOST_TO_MOTOR_HEAT ) {
+            mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+
+            // release the energy chunk as mechanical to blow away
+            self.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+              self.createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
+              BLOWN_ENERGY_CHUNK_VELOCITY ) );
+          }
+          else {
+            mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
+
+            // release the energy chunk as thermal to radiate away
+            self.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+              self.createRadiatedEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+          }
+        }
+      } );
+    },
+
+    /**
+     * @param  {number} dt - time step, in seconds
+     * @private
+     */
+    moveRadiatedEnergyChunks: function( dt ) {
+      var self = this;
+      var movers = _.clone( this.radiatedEnergyChunkMovers );
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        if ( mover.pathFullyTraversed ) {
+
+          // remove this energy chunk entirely
+          _.pull( self.radiatedEnergyChunkMovers, mover );
+        }
+      } );
+    },
+
+    /**
+     * @param  {number} dt - time step, in seconds
+     * @private
+     */
+    moveBlownEnergyChunks: function( dt ) {
+      var self = this;
+      var movers = _.clone( this.mechanicalEnergyChunkMovers );
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        if ( mover.pathFullyTraversed ) {
+
+          // remove this energy chunk entirely
+          _.pull( self.mechanicalEnergyChunkMovers, mover );
         }
       } );
     },
@@ -143,6 +203,58 @@ define( function( require ) {
       path.push( center.plus( OFFSET_TO_FIFTH_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_SIXTH_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_FAN_MOTOR_INTERIOR ) );
+      return path;
+    },
+
+    /**
+     * create a path for chunks to follow when radiated from the motor. originally from BeakerHeater.js
+     * @param  {Vector2} startingPoint
+     * @returns {Vector2[]}
+     * @private
+     */
+    createRadiatedEnergyChunkPath: function( startingPoint ) {
+      var path = [];
+      var numDirectionChanges = 4; // Empirically chosen.
+      var nominalTravelVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
+
+      // The first point is straight above the starting point.  This is done because it looks good, making the chunk
+      // move straight up out of the motor.
+      var currentPosition = startingPoint.plus( nominalTravelVector );
+      path.push( currentPosition );
+
+      // add the remaining points in the path
+      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+        var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+        currentPosition = currentPosition.plus( movement );
+        path.push( currentPosition );
+      }
+
+      return path;
+    },
+
+    /**
+     * create a path for chunks to follow when blown out of the fan.
+     * @param  {Vector2} startingPoint
+     * @returns {Vector2[]}
+     * @private
+     */
+    createBlownEnergyChunkPath: function( startingPoint ) {
+      var path = [];
+      var numDirectionChanges = 6; // Empirically chosen.
+      var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges, 0 );
+
+      // The first point is straight right the starting point.  This is done because it makes the chunk
+      // move straight out of the fan center cone.
+      var currentPosition = startingPoint.plus( new Vector2( INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE, 0 ) );
+      path.push( currentPosition );
+
+      // add the remaining points in the path
+      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+        var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+        currentPosition = currentPosition.plus( movement );
+        path.push( currentPosition );
+      }
+
       return path;
     },
 
