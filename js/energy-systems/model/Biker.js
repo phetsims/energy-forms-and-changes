@@ -193,7 +193,7 @@ define( function( require ) {
 
         // less energy is produced if not hooked up to generator
         var maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE;
-        if ( this.mechanicalPoweredSystemIsNext ) {
+        if ( this.mechanicalPoweredSystemIsNextProperty.value ) {
           maxEnergyProductionRate = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR;
         }
         this.energyProducedSinceLastChunkEmitted += maxEnergyProductionRate * fractionalVelocity * dt;
