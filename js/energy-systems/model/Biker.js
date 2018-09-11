@@ -475,7 +475,7 @@ define( function( require ) {
     },
 
     /**
-     * find a non-moving CHEMICAL energy chunk, returns null if none is found
+     * find a non-moving CHEMICAL energy chunk, returns null if none are found
      * @returns {EnergyChunk}
      * @private
      */
@@ -487,17 +487,11 @@ define( function( require ) {
         movingEnergyChunks.push( mover.energyChunk );
       } );
 
-      this.energyChunkList.forEach( function( ec ) {
+      this.energyChunkList.forEach( function( chunk ) {
 
-        // only interested in CHEMICAL energy chunks
-        if ( ec.energyTypeProperty.value !== EnergyType.CHEMICAL ) {
-          return;
-        }
-
-        if ( !_.includes( movingEnergyChunks, function( chunk ) {
-          return chunk === ec;
-        } ) ) {
-          nonMovingEnergyChunk = ec;
+        // only interested in CHEMICAL energy chunks that are not moving
+        if ( chunk.energyTypeProperty.value === EnergyType.CHEMICAL && movingEnergyChunks.indexOf( chunk ) === -1 ) {
+          nonMovingEnergyChunk = chunk;
         }
       } );
       return nonMovingEnergyChunk;
