@@ -166,7 +166,7 @@ define( function( require ) {
 
         // remove the chunk and its mover
         if ( mover.pathFullyTraversed ) {
-          _.pull( self.energyChunkList, mover.energyChunk );
+          self.energyChunkList.remove( mover.energyChunk );
           _.pull( self.radiatedEnergyChunkMovers, mover );
         }
       } );

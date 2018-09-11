@@ -181,9 +181,9 @@ define( function( require ) {
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
+        // remove this energy chunk entirely
         if ( mover.pathFullyTraversed ) {
-
-          // remove this energy chunk entirely
+          self.energyChunkList.remove( mover.energyChunk );
           _.pull( self.radiatedEnergyChunkMovers, mover );
         }
       } );
@@ -200,9 +200,9 @@ define( function( require ) {
       movers.forEach( function( mover ) {
         mover.moveAlongPath( dt );
 
+        // remove this energy chunk entirely
         if ( mover.pathFullyTraversed ) {
-
-          // remove this energy chunk entirely
+          self.energyChunkList.remove( mover.energyChunk );
           _.pull( self.mechanicalEnergyChunkMovers, mover );
         }
       } );
