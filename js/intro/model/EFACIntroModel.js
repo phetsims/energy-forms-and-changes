@@ -39,7 +39,7 @@ define( function( require ) {
   var LEFT_EDGE = -0.23;
 
   // this is the space between the edges of the ground (sim left edge or left edge of left burner stand) and the edge
-  // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters,
+  // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
   var EDGE_PAD = 0.006;
 
   // number of snap-to spots on the ground, should match number of thermal containers
