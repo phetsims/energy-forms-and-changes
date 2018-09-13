@@ -113,7 +113,7 @@ define( function( require ) {
     WATER_COLOR_IN_BEAKER: new Color( 175, 238, 238, NOMINAL_WATER_OPACITY ),
     FIRST_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
     SECOND_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
-    CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
+    CONTROL_PANEL_BACKGROUND_COLOR: new Color( 229, 236, 255 ), // Pale gray purple. AP, AR, and CK like this.
 
     // appearance of controls
     CONTROL_PANEL_OUTLINE_LINE_WIDTH: 1.5,
@@ -133,7 +133,7 @@ define( function( require ) {
     BRICK_SPECIFIC_HEAT: 840, // in J/kg-K, source = design document
     BLOCK_SURFACE_WIDTH: 0.045,
     BLOCK_PERSPECTIVE_EDGE_PROPORTION: Math.sqrt( Math.pow( Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
-      Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
+                                                  Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
     BLOCK_PERSPECTIVE_ANGLE: Math.atan2( -Z_TO_Y_OFFSET_MULTIPLIER, -Z_TO_X_OFFSET_MULTIPLIER ),
 
     // constants for the burners.
