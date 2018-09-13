@@ -49,7 +49,7 @@ define( function( require ) {
 
   // colors
   var NOMINAL_WATER_OPACITY = 0.75;
-  var FIRST_SCREEN_BACKGROUND_COLOR = new Color( 245, 235, 175 );
+  var FIRST_SCREEN_BACKGROUND_COLOR = new Color( 255, 255, 225 );
 
   // mapping function that maps the energy to the number of energy chunks
   var MAP_ENERGY_TO_NUM_CHUNKS = new LinearFunction(
@@ -111,7 +111,7 @@ define( function( require ) {
     NOMINAL_WATER_OPACITY: 0.7,
     WATER_COLOR_OPAQUE: new Color( 175, 238, 238 ),
     WATER_COLOR_IN_BEAKER: new Color( 175, 238, 238, NOMINAL_WATER_OPACITY ),
-    FIRST_SCREEN_BACKGROUND_COLOR: new Color( 245, 235, 175 ),
+    FIRST_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
     SECOND_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 199, 229, 199 ), // Pale gray green.  JB, NP, and AP voted on this as a fave.  Maybe too close to water though.
 
