@@ -76,7 +76,7 @@ define( function( require ) {
         Math.round( self.layoutBounds.width * 0.5 ),
         Math.round( self.layoutBounds.height * 0.85 )
       ),
-      2200 // zoom factor - smaller zooms out, larger zooms in
+      1700 // zoom factor - smaller zooms out, larger zooms in
     );
 
     // create nodes that will act as layers in order to create the needed Z-order behavior
@@ -131,39 +131,51 @@ define( function( require ) {
       model.leftBurner.getCompositeBounds().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO
     );
 
+    // create left burner node
+    var leftBurnerStand = new BurnerStandNode(
+      modelViewTransform.modelToViewShape( model.leftBurner.getCompositeBounds() ),
+      burnerProjectionAmount );
+
     // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
     var leftHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
-      bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY )
+      bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY ),
+      minWidth: leftBurnerStand.width / 1.7,
+      maxWidth: leftBurnerStand.width / 1.7
     } );
     var leftHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
-      leftTop: leftHeaterCoolerBack.getHeaterFrontPosition()
+      leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
+      minWidth: leftBurnerStand.width / 1.7,
+      maxWidth: leftBurnerStand.width / 1.7
     } );
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
-    backLayer.addChild( new BurnerStandNode(
-      modelViewTransform.modelToViewShape( model.leftBurner.getCompositeBounds() ),
-      burnerProjectionAmount )
-    );
+    backLayer.addChild( leftBurnerStand );
+
+    // create right burner node
+    var rightBurnerStand = new BurnerStandNode(
+      modelViewTransform.modelToViewShape( model.rightBurner.getCompositeBounds() ),
+      burnerProjectionAmount );
 
     // set up right heater-cooler node
     var rightHeaterCoolerBack = new HeaterCoolerBack( {
       heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
       centerX: modelViewTransform.modelToViewX( model.rightBurner.getCompositeBounds().centerX ),
-      bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY )
+      bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY ),
+      minWidth: rightBurnerStand.width / 1.7,
+      maxWidth: rightBurnerStand.width / 1.7
     } );
     var rightHeaterCoolerFront = new HeaterCoolerFront( {
       heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
-      leftTop: rightHeaterCoolerBack.getHeaterFrontPosition()
+      leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
+      minWidth: rightBurnerStand.width / 1.7,
+      maxWidth: rightBurnerStand.width / 1.7
     } );
     heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
-    backLayer.addChild( new BurnerStandNode(
-      modelViewTransform.modelToViewShape( model.rightBurner.getCompositeBounds() ),
-      burnerProjectionAmount )
-    );
+    backLayer.addChild( rightBurnerStand );
 
     // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );

@@ -36,14 +36,14 @@ define( function( require ) {
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
-  var LEFT_EDGE = -0.23;
+  var LEFT_EDGE = -0.30;
 
   // this is the space between the edges of the ground (sim left edge or left edge of left burner stand) and the edge
   // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
   var EDGE_PAD = 0.006;
 
   // number of snap-to spots on the ground, should match number of thermal containers
-  var NUM_GROUND_SPOTS = 3;
+  var NUM_GROUND_SPOTS = 4;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
@@ -77,8 +77,8 @@ define( function( require ) {
     this.air = new Air( this.energyChunksVisibleProperty );
 
     // @public (read-only) {Burner} - right and left burners
-    this.rightBurner = new Burner( new Vector2( 0.18, 0 ), this.energyChunksVisibleProperty );
-    this.leftBurner = new Burner( new Vector2( 0.08, 0 ), this.energyChunksVisibleProperty );
+    this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
+    this.leftBurner = new Burner( new Vector2( 0.14, 0 ), this.energyChunksVisibleProperty );
 
     // how much space is in between the center points of the snap-to spots on the ground
     var spaceBetweenSpotCenters = ( this.leftBurner.translatedPositionTestingBoundsList[ 0 ].minX
