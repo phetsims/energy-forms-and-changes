@@ -26,12 +26,13 @@ define( function( require ) {
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {number} height
+   * @param {Color} fluidColor - the color of the fluid in the beaker
    * @param {Array.<Block>} potentiallyContainedElements
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @constructor
    */
-  function BeakerContainer( initialPosition, width, height, potentiallyContainedElements, energyChunksVisibleProperty ) {
-    Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty );
+  function BeakerContainer( initialPosition, width, height, fluidColor, potentiallyContainedElements, energyChunksVisibleProperty ) {
+    Beaker.call( this, initialPosition, width, height, fluidColor, energyChunksVisibleProperty );
 
     // @public (read-only) {string} - id of this beaker
     this.id = 'beaker-container-' + idCounter++;

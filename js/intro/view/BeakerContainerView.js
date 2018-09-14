@@ -21,14 +21,15 @@ define( function( require ) {
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
 
   /**
+   * @param {Beaker} beaker
    * @param {EFACIntroModel} model
    * @param {ModelViewTransform2} modelViewTransform
    * @param {function} constrainPosition
    */
-  function BeakerContainerView( model, modelViewTransform, constrainPosition ) {
+  function BeakerContainerView( beaker, model, modelViewTransform, constrainPosition ) {
 
     var self = this;
-    BeakerView.call( this, model.beaker, model.energyChunksVisibleProperty, modelViewTransform );
+    BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform );
 
     // For each block that can go in the beaker we need to add a listener that will update the clipping mask.  The
     // clipping mask hides energy chunks that overlap with blocks.  TODO: Clarify this.
@@ -39,12 +40,12 @@ define( function( require ) {
     } );
 
     // update the clipping mask when the position of the beaker moves
-    model.beaker.positionProperty.link( function( position ) {
+    beaker.positionProperty.link( function( position ) {
       self.updateEnergyChunkClipMask( model, self.energyChunkClipNode );
     } );
 
     this.grabNode.addInputListener( new ThermalElementDragHandler(
-      model.beaker,
+      beaker,
       this.grabNode,
       modelViewTransform,
       constrainPosition

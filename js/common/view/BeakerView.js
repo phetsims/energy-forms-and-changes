@@ -79,9 +79,9 @@ define( function( require ) {
     var topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, halfWidth, halfHeight, 0 );
     var bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0 );
 
-    // Add the water.  It will adjust its size based on the fluid level.
-    this.water = new PerspectiveWaterNode( beakerBounds, beaker.fluidLevelProperty, beaker.temperatureProperty );
-    this.frontNode.addChild( this.water );
+    // Add the fluid.  It will adjust its size based on the fluid level.
+    this.fluid = new PerspectiveWaterNode( beakerBounds, beaker.fluidColor, beaker.fluidLevelProperty, beaker.temperatureProperty );
+    this.frontNode.addChild( this.fluid );
 
     // create and add the node for the body of the beaker
     var beakerBody = new Shape()
@@ -193,7 +193,7 @@ define( function( require ) {
     energyChunksVisibleProperty.link( function( energyChunksVisible ) {
       label.opacity = energyChunksVisible ? 0.5 : 1;
       var opacity = EFACConstants.NOMINAL_WATER_OPACITY;
-      self.water.opacity = energyChunksVisible ? opacity / 2 : opacity;
+      self.fluid.opacity = energyChunksVisible ? opacity / 2 : opacity;
     } );
   }
 
@@ -207,7 +207,7 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.water.step( dt );
+      this.fluid.step( dt );
     }
   } );
 } );

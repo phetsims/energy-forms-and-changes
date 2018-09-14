@@ -116,6 +116,7 @@ define( function( require ) {
       new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
+      EFACConstants.WATER_COLOR_IN_BEAKER,
       listOfThingsThatCanGoInBeaker,
       this.energyChunksVisibleProperty
     );

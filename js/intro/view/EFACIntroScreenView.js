@@ -214,6 +214,7 @@ define( function( require ) {
     );
     blockLayer.addChild( ironBlockNode );
     this.beakerView = new BeakerContainerView(
+      model.beaker,
       model,
       modelViewTransform,
       constrainMovableElementMotion

@@ -22,21 +22,22 @@ define( function( require ) {
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
 
   // constants for the PerspectiveWaterNode
-  var LIQUID_WATER_OUTLINE_COLOR = EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsDarker( 0.2 );
-  var WATER_LINE_WIDTH = 2;
+  var FLUID_LINE_WIDTH = 2;
 
   /**
    * @param {Rectangle} beakerOutlineRect
+   * @param {Color} fluidColor - the color of the fluid in the beaker
    * @param {Property.<number>} waterLevelProperty
    * @param {Property.<number>} temperatureProperty
    */
-  function PerspectiveWaterNode( beakerOutlineRect, waterLevelProperty, temperatureProperty ) {
+  function PerspectiveWaterNode( beakerOutlineRect, fluidColor, waterLevelProperty, temperatureProperty ) {
 
     Node.call( this );
     var self = this;
 
     // @private
     this.beakerOutlineRect = beakerOutlineRect;
+    this.fluidColor = fluidColor;
     this.waterLevelProperty = waterLevelProperty;
     this.temperatureProperty = temperatureProperty;
 
@@ -45,14 +46,14 @@ define( function( require ) {
 
     // @private - nodes that represent the top and body of the water
     this.liquidWaterTopNode = new Path( null, {
-      fill: EFACConstants.WATER_COLOR_IN_BEAKER.colorUtilsBrighter( 0.25 ),
-      lineWidth: WATER_LINE_WIDTH,
-      stroke: LIQUID_WATER_OUTLINE_COLOR
+      fill: this.fluidColor.colorUtilsBrighter( 0.25 ),
+      lineWidth: FLUID_LINE_WIDTH,
+      stroke: this.fluidColor.colorUtilsDarker( 0.2 )
     } );
     this.liquidWaterBodyNode = new Path( null, {
-      fill: EFACConstants.WATER_COLOR_IN_BEAKER,
-      lineWidth: WATER_LINE_WIDTH,
-      stroke: LIQUID_WATER_OUTLINE_COLOR
+      fill: this.fluidColor,
+      lineWidth: FLUID_LINE_WIDTH,
+      stroke: this.fluidColor.colorUtilsDarker( 0.2 )
     } );
 
     this.steamCanvasNode = new SteamCanvasNode(
