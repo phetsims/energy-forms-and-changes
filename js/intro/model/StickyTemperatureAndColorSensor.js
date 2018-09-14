@@ -48,10 +48,12 @@ define( function( require ) {
           }
         } );
 
-        // stick to the beaker
-        if ( model.beaker.thermalContactArea.containsPoint( self.positionProperty.value ) ) {
-          self.elementFollower.startFollowing( model.beaker.positionProperty );
-        }
+        // stick to a beaker
+        model.beakers.forEach( function( beaker ) {
+          if ( beaker.thermalContactArea.containsPoint( self.positionProperty.value ) ) {
+            self.elementFollower.startFollowing( beaker.positionProperty );
+          }
+        } );
       }
     } );
   }

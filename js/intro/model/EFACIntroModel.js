@@ -121,6 +121,8 @@ define( function( require ) {
       this.energyChunksVisibleProperty
     );
 
+    this.beakers = [ this.beaker ];
+
     // @private - put all the thermal containers on a list for easy iteration
     this.thermalContainers = [ this.brick, this.ironBlock, this.beaker ];
 
@@ -141,25 +143,27 @@ define( function( require ) {
       // beaker temperature. This was requested after interviews.
       sensor.sensedElementColorProperty.link( function( newColor, oldColor ) {
 
-        var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
+        self.beakers.forEach( function( beaker ) {
+          var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
 
-        var xRange = new Range(
-          self.beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
-          self.beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
-        );
-
-        if ( oldColor === EFACConstants.WATER_COLOR_IN_BEAKER &&
-             !sensor.userControlledProperty.get() &&
-             xRange.contains( sensor.positionProperty.value.x ) ) {
-
-          // fake a movement by the user to a point in the beaker where the sensor is not over a brick
-          sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
-          sensor.position = new Vector2(
-            self.beaker.getBounds().maxX - 0.01,
-            self.beaker.getBounds().minY + self.beaker.getBounds().height * 0.33
+          var xRange = new Range(
+            beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
+            beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
-          sensor.userControlledProperty.set( false );
-        }
+
+          if ( oldColor === beaker.fluidColor &&
+               !sensor.userControlledProperty.get() &&
+               xRange.contains( sensor.positionProperty.value.x ) ) {
+
+            // fake a movement by the user to a point in the beaker where the sensor is not over a brick
+            sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+            sensor.position = new Vector2(
+              beaker.getBounds().maxX - 0.01,
+              beaker.getBounds().minY + beaker.getBounds().height * 0.33
+            );
+            sensor.userControlledProperty.set( false );
+          }
+        } );
       } );
     } );
 
@@ -271,7 +275,9 @@ define( function( require ) {
       } );
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
-      this.beaker.updateFluidLevel( [ this.brick.getBounds(), this.ironBlock.getBounds() ] );
+      this.beakers.forEach( function( beaker ) {
+        beaker.updateFluidLevel( [ self.brick.getBounds(), self.ironBlock.getBounds() ] );
+      } );
 
       //=====================================================================
       // Energy and Energy Chunk Exchange
@@ -363,11 +369,13 @@ define( function( require ) {
           }
         } );
 
-        if ( self.beaker.thermalContactArea.containsPoint( container1.getBounds() ) ) {
+        self.beakers.forEach( function( beaker ) {
+          if ( beaker.thermalContactArea.containsPoint( container1.getBounds() ) ) {
 
-          // this model element is immersed in the beaker
-          immersedInBeaker = true;
-        }
+            // this model element is immersed in the beaker
+            immersedInBeaker = true;
+          }
+        } );
 
         // exchange energy and energy chunks with the air if appropriate conditions are met
         if ( !contactWithOtherMovableElement ||
@@ -957,21 +965,23 @@ define( function( require ) {
         }
       }
 
-      // test if this point is in the water or steam associated with the beaker
-      if ( !temperatureAndColor && this.beaker.thermalContactArea.containsPoint( position ) ) {
-        temperatureAndColor = new TemperatureAndColor(
-          this.beaker.temperatureProperty.get(),
-          EFACConstants.WATER_COLOR_IN_BEAKER
-        );
-      }
-      else if ( !temperatureAndColor &&
-                this.beaker.getSteamArea().containsPoint( position ) &&
-                this.beaker.steamingProportion > 0 ) {
-        temperatureAndColor = new TemperatureAndColor(
-          this.beaker.getSteamTemperature( position.y - this.beaker.getSteamArea().minY ),
-          'white'
-        );
-      }
+      this.beakers.forEach( function( beaker ) {
+        // test if this point is in the water or steam associated with the beaker
+        if ( !temperatureAndColor && beaker.thermalContactArea.containsPoint( position ) ) {
+          temperatureAndColor = new TemperatureAndColor(
+            beaker.temperatureProperty.get(),
+            beaker.fluidColor
+          );
+        }
+        else if ( !temperatureAndColor &&
+                  beaker.getSteamArea().containsPoint( position ) &&
+                  beaker.steamingProportion > 0 ) {
+          temperatureAndColor = new TemperatureAndColor(
+            beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ),
+            'white'
+          );
+        }
+      } );
 
       // test if the point is a burner
       for ( i = 0; i < this.burners.length && !temperatureAndColor; i++ ) {
