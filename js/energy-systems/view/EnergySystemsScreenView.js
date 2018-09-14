@@ -50,7 +50,7 @@ define( function( require ) {
 
   // constants
   var EDGE_INSET = 10;
-  var SELECTOR_SPACING = 81;
+  var SELECTOR_SPACING = 82;
   var BOTTOM_CONTROL_PANEL_HEIGHT = 49; // manually coordinated to match similar panel on 1st screen
 
   /**
