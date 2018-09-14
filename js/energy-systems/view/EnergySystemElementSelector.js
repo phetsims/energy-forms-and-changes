@@ -4,23 +4,24 @@
  * a Scenery Node that allows the user to select the various elements contained within a carousel by presenting a set of
  * radio-style push buttons, each with an icon image of the selection that it represents
  *
- * @author  John Blanco
- * @author  Andrew Adare
- * @author  Jesse Greenberg
+ * @author John Blanco
+ * @author Andrew Adare
+ * @author Jesse Greenberg
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
 
   // modules
+  var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Panel = require( 'SUN/Panel' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // constants
-  var BUTTON_IMAGE_HEIGHT_OR_WIDTH = 50; // In screen coordinates, which is close to pixels.
+  var BUTTON_IMAGE_HEIGHT_OR_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
   /**
    * @param {EnergySystemElementCarousel} carousel
@@ -29,7 +30,11 @@ define( function( require ) {
   function EnergySystemElementSelector( carousel, options ) {
 
     options = _.extend( {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      xMargin: 10,
+      yMargin: 10,
+      stroke: Color.LIGHT_GRAY,
+      lineWidth: 2
     }, options );
 
     var buttonElementList = [];
@@ -44,26 +49,16 @@ define( function( require ) {
       assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
 
       iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
-
-      var imageBounds = iconImage.bounds.dilated( 5 );
-      var buttonRect = new Rectangle( imageBounds, 4, 4, {
-        fill: 'white',
-        stroke: 'black'
-      } );
-
-      buttonRect.addChild( iconImage );
-
       buttonElementList.push( {
         value: i,
-        node: buttonRect
+        node: iconImage
       } );
     }
 
     var buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
-      baseColor: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      baseColor: Color.WHITE,
       orientation: 'horizontal',
-      selectedStroke: null,
-      deselectedStroke: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR
+      spacing: 15
     } );
 
     Panel.call( this, buttonGroup, options );
