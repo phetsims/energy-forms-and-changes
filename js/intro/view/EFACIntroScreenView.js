@@ -213,7 +213,7 @@ define( function( require ) {
       { setApproachingEnergyChunkParentNode: airLayer }
     );
     blockLayer.addChild( ironBlockNode );
-    this.beakerView = new BeakerContainerView(
+    this.waterBeakerView = new BeakerContainerView(
       model.waterBeaker,
       model,
       modelViewTransform,
@@ -221,9 +221,9 @@ define( function( require ) {
     );
 
     // add the beaker, which is composed of several pieces
-    beakerFrontLayer.addChild( this.beakerView.frontNode );
-    beakerBackLayer.addChild( this.beakerView.backNode );
-    beakerGrabLayer.addChild( this.beakerView.grabNode );
+    beakerFrontLayer.addChild( this.waterBeakerView.frontNode );
+    beakerBackLayer.addChild( this.waterBeakerView.backNode );
+    beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
 
     // the sensor layer needs to be above the movable objects
     var sensorLayer = new Node();
@@ -464,7 +464,7 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.beakerView.step( dt );
+      this.waterBeakerView.step( dt );
     }
   } );
 } );
