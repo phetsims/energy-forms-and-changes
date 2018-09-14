@@ -21,7 +21,7 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
 
   // constants
-  var BUTTON_IMAGE_HEIGHT_OR_WIDTH = 44; // In screen coordinates, which is close to pixels.
+  var BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
   /**
    * @param {EnergySystemElementCarousel} carousel
@@ -48,7 +48,7 @@ define( function( require ) {
 
       assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
 
-      iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_OR_WIDTH / denominator );
+      iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
       buttonElementList.push( {
         value: i,
         node: iconImage
