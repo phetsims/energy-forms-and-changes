@@ -112,7 +112,7 @@ define( function( require ) {
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
     // @public (read-only) {BeakerContainer)
-    this.beaker = new BeakerContainer(
+    this.waterBeaker = new BeakerContainer(
       new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
@@ -121,16 +121,16 @@ define( function( require ) {
       this.energyChunksVisibleProperty
     );
 
-    this.beakers = [ this.beaker ];
+    this.beakers = [ this.waterBeaker ];
 
     // @private - put all the thermal containers on a list for easy iteration
-    this.thermalContainers = [ this.brick, this.ironBlock, this.beaker ];
+    this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker ];
 
     // @private - put burners into a list for easy iteration
     this.burners = [ this.rightBurner, this.leftBurner ];
 
     // @private - put all of the model elements on a list for easy iteration
-    this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.beaker ];
+    this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker ];
 
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.temperatureAndColorSensors = [];
@@ -215,7 +215,7 @@ define( function( require ) {
       this.rightBurner.reset();
       this.ironBlock.reset();
       this.brick.reset();
-      this.beaker.reset();
+      this.waterBeaker.reset();
       this.temperatureAndColorSensors.forEach( function( sensor ) {
         sensor.reset();
       } );
@@ -604,10 +604,10 @@ define( function( require ) {
       // }
 
       // validate this model element's position against the beaker
-      if ( modelElement !== this.beaker ) {
+      if ( modelElement !== this.waterBeaker ) {
 
         // get the bounds set that describes the shape of the beaker
-        var beakerBoundsList = this.beaker.translatedPositionTestingBoundsList;
+        var beakerBoundsList = this.waterBeaker.translatedPositionTestingBoundsList;
 
         // since this model element isn't the beaker, it must be a block, so both x and y perspective comp must be used
         var modelElementBoundsWithTopAndSidePerspective = new Bounds2(
@@ -618,7 +618,7 @@ define( function( require ) {
         );
 
         // don't restrict the motion based on the beaker if the beaker is on top of this model element
-        if ( !this.beaker.isStackedUpon( modelElement ) ) {
+        if ( !this.waterBeaker.isStackedUpon( modelElement ) ) {
 
           // TODO: This is less than ideal because it assumes the bottom of the beaker is the 2nd bounds entry
           allowedTranslation = self.determineAllowedTranslation(
@@ -657,7 +657,7 @@ define( function( require ) {
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
         var modelElementBounds = modelElement.getCompositeBounds();
-        if ( modelElement === self.beaker ) {
+        if ( modelElement === self.waterBeaker ) {
 
           // Special handling for the beaker: Use the perspective-compensated edge of the block instead of the model
           // edge in order to simplify z-order handling.
@@ -671,8 +671,8 @@ define( function( require ) {
 
         // Clamp the translation based on the test block's position, but handle the case where the block is immersed
         // in the beaker.
-        if ( !( modelElement === self.beaker &&
-                self.beaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
+        if ( !( modelElement === self.waterBeaker &&
+                self.waterBeaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
 
           allowedTranslation = self.determineAllowedTranslation(
             modelElementBounds,
