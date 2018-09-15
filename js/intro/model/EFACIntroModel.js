@@ -116,9 +116,6 @@ define( function( require ) {
       new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
-      EFACConstants.WATER_COLOR_IN_BEAKER,
-      EFACConstants.WATER_SPECIFIC_HEAT,
-      EFACConstants.WATER_DENSITY,
       listOfThingsThatCanGoInBeaker,
       this.energyChunksVisibleProperty
     );
@@ -128,11 +125,12 @@ define( function( require ) {
       new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
-      EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
-      EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
-      EFACConstants.OLIVE_OIL_DENSITY,
       listOfThingsThatCanGoInBeaker,
-      this.energyChunksVisibleProperty
+      this.energyChunksVisibleProperty, {
+        fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+        fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
+        fluidDensity: EFACConstants.OLIVE_OIL_DENSITY
+      }
     );
 
     // @public (read-only) {BeakerContainer[]}

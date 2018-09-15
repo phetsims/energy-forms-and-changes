@@ -39,20 +39,24 @@ define( function( require ) {
    * @param {Vector2} initialPosition - location where center bottom of beaker will be in model space
    * @param {number} width
    * @param {number} height
-   * @param {Color} fluidColor - the color of the fluid in the beaker
-   * @param {number} fluidSpecificHeat
-   * @param {number} fluidDensity
    * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {Object} [options]
    * @constructor
    */
-  function Beaker( initialPosition, width, height, fluidColor, fluidSpecificHeat, fluidDensity, energyChunksVisibleProperty ) {
+  function Beaker( initialPosition, width, height, energyChunksVisibleProperty, options ) {
+
+    options = _.extend( {
+      fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
+      fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
+      fluidDensity: EFACConstants.WATER_DENSITY
+    }, options );
 
     RectangularThermalMovableModelElement.call( this,
       initialPosition,
       width,
       height,
-      this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL, fluidDensity ),
-      fluidSpecificHeat,
+      this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL, options.fluidDensity ),
+      options.fluidSpecificHeat,
       energyChunksVisibleProperty
     );
 
@@ -63,7 +67,7 @@ define( function( require ) {
     this.height = height;
 
     // @public {Color) - the color of the fluid in the beaker
-    this.fluidColor = fluidColor;
+    this.fluidColor = options.fluidColor;
 
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );

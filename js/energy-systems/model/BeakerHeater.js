@@ -81,9 +81,6 @@ define( function( require ) {
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
-      EFACConstants.WATER_COLOR_IN_BEAKER,
-      EFACConstants.WATER_SPECIFIC_HEAT,
-      EFACConstants.WATER_DENSITY,
       energyChunksVisibleProperty
     );
 
