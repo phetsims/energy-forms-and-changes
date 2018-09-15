@@ -121,10 +121,21 @@ define( function( require ) {
       this.energyChunksVisibleProperty
     );
 
-    this.beakers = [ this.waterBeaker ];
+    // @public (read-only) {BeakerContainer)
+    this.oliveOilBeaker = new BeakerContainer(
+      new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
+      BEAKER_WIDTH,
+      BEAKER_HEIGHT,
+      EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+      listOfThingsThatCanGoInBeaker,
+      this.energyChunksVisibleProperty
+    );
+
+    // @public (read-only) {BeakerContainer[]}
+    this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
 
     // @private - put all the thermal containers on a list for easy iteration
-    this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker ];
+    this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
     // @private - put burners into a list for easy iteration
     this.burners = [ this.rightBurner, this.leftBurner ];
@@ -216,6 +227,7 @@ define( function( require ) {
       this.ironBlock.reset();
       this.brick.reset();
       this.waterBeaker.reset();
+      this.oliveOilBeaker.reset();
       this.temperatureAndColorSensors.forEach( function( sensor ) {
         sensor.reset();
       } );

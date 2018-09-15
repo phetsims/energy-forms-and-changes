@@ -219,11 +219,20 @@ define( function( require ) {
       modelViewTransform,
       constrainMovableElementMotion
     );
+    this.oliveOilBeakerView = new BeakerContainerView(
+      model.oliveOilBeaker,
+      model,
+      modelViewTransform,
+      constrainMovableElementMotion
+    );
 
-    // add the beaker, which is composed of several pieces
+    // add the beakers, which are composed of several pieces
     beakerFrontLayer.addChild( this.waterBeakerView.frontNode );
+    beakerFrontLayer.addChild( this.oliveOilBeakerView.frontNode );
     beakerBackLayer.addChild( this.waterBeakerView.backNode );
+    beakerBackLayer.addChild( this.oliveOilBeakerView.backNode );
     beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
+    beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
 
     // the sensor layer needs to be above the movable objects
     var sensorLayer = new Node();
@@ -465,6 +474,7 @@ define( function( require ) {
      */
     step: function( dt ) {
       this.waterBeakerView.step( dt );
+      this.oliveOilBeakerView.step( dt );
     }
   } );
 } );
