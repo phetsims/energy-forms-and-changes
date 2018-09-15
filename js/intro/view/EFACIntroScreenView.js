@@ -43,6 +43,7 @@ define( function( require ) {
 
   // strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
+  var oliveOilString = require( 'string!ENERGY_FORMS_AND_CHANGES/oliveOil' );
 
   // images
   var shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' );
@@ -223,7 +224,9 @@ define( function( require ) {
       model.oliveOilBeaker,
       model,
       modelViewTransform,
-      constrainMovableElementMotion
+      constrainMovableElementMotion, {
+        label: oliveOilString
+      }
     );
 
     // add the beakers, which are composed of several pieces

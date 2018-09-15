@@ -25,11 +25,12 @@ define( function( require ) {
    * @param {EFACIntroModel} model
    * @param {ModelViewTransform2} modelViewTransform
    * @param {function} constrainPosition
+   * @param {Object} [options]
    */
-  function BeakerContainerView( beaker, model, modelViewTransform, constrainPosition ) {
+  function BeakerContainerView( beaker, model, modelViewTransform, constrainPosition, options ) {
 
     var self = this;
-    BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform );
+    BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
     // For each block that can go in the beaker we need to add a listener that will update the clipping mask.  The
     // clipping mask hides energy chunks that overlap with blocks.  TODO: Clarify this.

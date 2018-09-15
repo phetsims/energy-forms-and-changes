@@ -43,9 +43,14 @@ define( function( require ) {
    * @param {Beaker} beaker - model of a beaker
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
    * @constructor
    */
-  function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform ) {
+  function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
+
+    options = _.extend( {
+      label: waterString
+    }, options );
 
     Node.call( this );
     var self = this;
@@ -122,7 +127,7 @@ define( function( require ) {
     this.backNode.pickable = false;
 
     // add the label, positioning it just below the front, top water line
-    var label = new Text( waterString, {
+    var label = new Text( options.label, {
       font: LABEL_FONT
     } );
     label.translation = new Vector2(
