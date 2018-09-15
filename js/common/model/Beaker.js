@@ -35,27 +35,24 @@ define( function( require ) {
   var NUM_SLICES = 6;
   var STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
 
-  // constants that control the nature of the fluid in the beaker.
-  var WATER_SPECIFIC_HEAT = 3000; // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
-                                  // aren't too many chunks and so that a chunk is needed as soon as heating starts.
-  var WATER_DENSITY = 1000.0; // In kg/m^3, source = design document (and common knowledge).
-
   /**
    * @param {Vector2} initialPosition - location where center bottom of beaker will be in model space
    * @param {number} width
    * @param {number} height
    * @param {Color} fluidColor - the color of the fluid in the beaker
+   * @param {number} fluidSpecificHeat
+   * @param {number} fluidDensity
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @constructor
    */
-  function Beaker( initialPosition, width, height, fluidColor, energyChunksVisibleProperty ) {
+  function Beaker( initialPosition, width, height, fluidColor, fluidSpecificHeat, fluidDensity, energyChunksVisibleProperty ) {
 
     RectangularThermalMovableModelElement.call( this,
       initialPosition,
       width,
       height,
-      this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL ),
-      WATER_SPECIFIC_HEAT,
+      this.calculateWaterMass( width, height * EFACConstants.INITIAL_FLUID_LEVEL, fluidDensity ),
+      fluidSpecificHeat,
       energyChunksVisibleProperty
     );
 
@@ -64,6 +61,8 @@ define( function( require ) {
     // @private
     this.width = width;
     this.height = height;
+
+    // @public {Color) - the color of the fluid in the beaker
     this.fluidColor = fluidColor;
 
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
@@ -245,11 +244,12 @@ define( function( require ) {
     /**
      * @param {number} width
      * @param {number} height
+     * @param {number} fluidDensity
      * @returns {number}
      * @private
      */
-    calculateWaterMass: function( width, height ) {
-      return Math.PI * Math.pow( width / 2, 2 ) * height * WATER_DENSITY;
+    calculateWaterMass: function( width, height, fluidDensity ) {
+      return Math.PI * Math.pow( width / 2, 2 ) * height * fluidDensity;
     },
 
     /**

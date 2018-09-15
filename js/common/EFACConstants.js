@@ -130,6 +130,11 @@ define( function( require ) {
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
 
     // constants that define physical parameters of various rectangular objects
+    WATER_SPECIFIC_HEAT: 3000, // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
+                               // aren't too many chunks and so that a chunk is needed as soon as heating starts.
+    WATER_DENSITY: 1000.0, // In kg/m^3, source = design document (and common knowledge).
+    OLIVE_OIL_SPECIFIC_HEAT: 1411, // In J/kg-K. real value is 1970 (need to confirm) but this is scaled to match water
+    OLIVE_OIL_DENSITY: 916.0, // In kg/m^3, need to confirm with design doc
     BRICK_DENSITY: 3300, // in kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable
     BRICK_SPECIFIC_HEAT: 840, // in J/kg-K, source = design document
     BLOCK_SURFACE_WIDTH: 0.045,
