@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.0-dev.6 Tue Sep 18 2018 18:48:49 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.0-dev.7 Wed Sep 19 2018 17:47:55 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "928741cfc8fe804334d5b35292140314511f8678",
     "branch": "master"
@@ -13,7 +13,7 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "30a93bda89e56427404858db9162cab9e4614682",
+    "sha": "9f3ebd5a981f0cb26f7b881637d4fe028bac178e",
     "branch": "master"
   },
   "dot": {
@@ -21,11 +21,11 @@
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "7b8b71eb6ef5132f971f936cd15eff747955964a",
+    "sha": "090d658419cc83db1d147a565fd795ed910c7a5d",
     "branch": "master"
   },
   "joist": {
-    "sha": "3a5842ccc5e81805544d3237579950bf8e5a88d6",
+    "sha": "8bf93a3f244fda3df8e4e49c6a00894abf4db9af",
     "branch": "master"
   },
   "kite": {
@@ -49,11 +49,11 @@
     "branch": "master"
   },
   "phet-io-wrapper-lab-book": {
-    "sha": "ef0b0b0ce2f9342a8753283e068025505c0b4f80",
+    "sha": "186d07deaefc008157f49931e846d931793122d7",
     "branch": "master"
   },
   "phet-io-wrappers": {
-    "sha": "2de3e415f71db4d0fdda6714f0816e8bfeb5bc89",
+    "sha": "00b4b4f4b9c3117ff103d8e7a2d18291c2b707af",
     "branch": "master"
   },
   "phetcommon": {
@@ -65,23 +65,23 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "3335ad8527b8d300240ba4e1b2106476d321cb83",
+    "sha": "97294620020fa71debdb3141406fb956ad9edc9e",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "f37c8aabc42d0e462dc6bfa2d2e14fb4edab29b7",
+    "sha": "00fb8755091b29ceb2797666b8d8c5c2cc541c72",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "e8793b142927b58a8f1301867ec30c44fa36a44a",
+    "sha": "f73d2e09d1969e7c42d284acf4cb7d7269efa7e0",
     "branch": "master"
   },
   "sun": {
-    "sha": "750ef412ab024c8fb6e3f5fec55d8c3d337405c7",
+    "sha": "e0d88b50e81577f6f943885b2484301ad48f4c99",
     "branch": "master"
   },
   "tambo": {
-    "sha": "3d41afe1c940b741168d62ef6b480e770c9d9ffe",
+    "sha": "fa00a7a281ad619755da04d0a56c0f09f62837c8",
     "branch": "master"
   },
   "tandem": {
