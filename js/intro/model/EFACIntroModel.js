@@ -496,22 +496,26 @@ define( function( require ) {
 
         if ( modelElementsInSpot.length > 0 ) {
           var highestSurface = modelElementsInSpot[ 0 ];
-          var beakerInSpot = highestSurface instanceof Beaker;
+          var beakerFoundInSpot = highestSurface instanceof Beaker;
 
           // if more than one model element is in the spot, find the highest surface and flag any beakers that are present
-          for ( var j = 1; j < modelElementsInSpot.length && !beakerInSpot; j++ ) {
-            beakerInSpot = beakerInSpot || modelElementsInSpot[ j ] instanceof Beaker;
+          for ( var j = 1; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
+            beakerFoundInSpot = beakerFoundInSpot || modelElementsInSpot[ j ] instanceof Beaker;
             if ( modelElementsInSpot[ j ].topSurfaceProperty.value.yPos > highestSurface.topSurfaceProperty.value.yPos ) {
               highestSurface = modelElementsInSpot[ j ];
             }
           }
 
-          if ( !( beakerInSpot && (
-            modelElement instanceof Beaker // ||
-            // TODO: investigate why getElementOnSurface() is returning null - a beaker on a block can be placed in a beaker until this is fixed
-            // modelElement.topSurfaceProperty.value.getElementOnSurface() instanceof Beaker ||
-            // modelElement.topSurfaceProperty.value.getElementOnSurface().topSurfaceProperty.value.getElementOnSurface() instanceof Beaker
-          ) ) ) {
+          var currentModelElementInStack = modelElement;
+          var beakerFoundInStack = currentModelElementInStack instanceof Beaker;
+
+          // iterate through the stack of model elements being held and flag if any beakers are in it
+          while ( currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface() && !beakerFoundInStack ) {
+            beakerFoundInStack = beakerFoundInStack || currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface() instanceof Beaker;
+            currentModelElementInStack = currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface();
+          }
+
+          if ( !( beakerFoundInSpot && beakerFoundInStack ) ) {
             destinationSurfaceProperty = highestSurface.topSurfaceProperty;
           }
         }

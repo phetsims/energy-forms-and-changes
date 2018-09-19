@@ -126,7 +126,7 @@ define( function( require ) {
 
       // the slices for the block are intended to match the projection used in the view
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
-      var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / (NUM_ENERGY_CHUNK_SLICES - 1 );
+      var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 );
       var rect = this.rect;
       var rectShape = Shape.rect( rect.x, rect.y, rect.width, rect.height );
 
@@ -175,7 +175,14 @@ define( function( require ) {
      */
     updateTopSurfaceProperty: function() {
       var rectangle = this.getBounds();
-      this.topSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.maxY, this ) );
+      var elementOnTopSurface = this.getTopSurfaceProperty().value ?
+                                this.getTopSurfaceProperty().value.getElementOnSurface() : null;
+      this.topSurfaceProperty.set( new HorizontalSurface(
+        new Range( rectangle.minX, rectangle.maxX ),
+        rectangle.maxY,
+        this,
+        elementOnTopSurface
+      ) );
     },
 
     /**
@@ -183,7 +190,14 @@ define( function( require ) {
      */
     updateBottomSurfaceProperty: function() {
       var rectangle = this.getBounds();
-      this.bottomSurfaceProperty.set( new HorizontalSurface( new Range( rectangle.minX, rectangle.maxX ), rectangle.minY, this ) );
+      var elementOnBottomSurface = this.getBottomSurfaceProperty().value ?
+                                   this.getBottomSurfaceProperty().value.getElementOnSurface() : null;
+      this.bottomSurfaceProperty.set( new HorizontalSurface(
+        new Range( rectangle.minX, rectangle.maxX ),
+        rectangle.minY,
+        this,
+        elementOnBottomSurface
+      ) );
     },
 
     /**
@@ -197,7 +211,8 @@ define( function( require ) {
         EFACConstants.BLOCK_SURFACE_WIDTH,
         EFACConstants.BLOCK_SURFACE_WIDTH
       );
-    },
+    }
+    ,
 
     /**
      * @returns {number}
@@ -206,5 +221,6 @@ define( function( require ) {
     getEnergyBeyondMaxTemperature: function() {
       return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     }
-  } );
+  } )
+    ;
 } );

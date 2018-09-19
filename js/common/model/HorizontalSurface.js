@@ -19,9 +19,10 @@ define( function( require ) {
    * @param {Range} xRange
    * @param {number} yPos
    * @param {ModelElement} owner
+   * @param {ModelElement} [elementOnSurface]
    * @constructor
    */
-  function HorizontalSurface( xRange, yPos, owner ) {
+  function HorizontalSurface( xRange, yPos, owner, elementOnSurface ) {
 
     // @public (read-only) {number}
     this.yPos = yPos;
@@ -32,7 +33,7 @@ define( function( require ) {
     // TODO: Consider having the code directly access these values rather than using getter/setter methods once port is nearly complete.
     // @private - this should be accessed through getter/setter methods
     this.owner = owner;
-    this.elementOnSurface = null;
+    this.elementOnSurface = typeof elementOnSurface === 'undefined' ? null : elementOnSurface;
   }
 
   energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
