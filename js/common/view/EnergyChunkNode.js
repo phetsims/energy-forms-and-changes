@@ -35,16 +35,6 @@ define( function( require ) {
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
   var WIDTH = 24; // in screen coords, which are close to pixels
 
-  // convenience array that collects all energy types
-  var energyTypes = [
-    EnergyType.THERMAL,
-    EnergyType.ELECTRICAL,
-    EnergyType.MECHANICAL,
-    EnergyType.LIGHT,
-    EnergyType.CHEMICAL,
-    EnergyType.HIDDEN
-  ];
-
   // convenience map that links energy types to their representing images
   var mapEnergyTypeToImage = {};
   mapEnergyTypeToImage[ EnergyType.THERMAL ] = thermalEnergyImage;
@@ -57,8 +47,12 @@ define( function( require ) {
   // array that holds the created energy chunk image nodes
   var energyChunkImageNodes = {};
 
-  // loop over each type of energy and create the image node chunk for that type
-  energyTypes.forEach( function( energyType ) {
+  /**
+   * Helper function that creates the image for an EnergyChunkNode.
+   * @param {EnergyType} energyType
+   * @returns {Image}
+   */
+  function createEnergyChunkImageNode( energyType ) {
     var background = new Image( mapEnergyTypeToImage[ energyType ] );
     var energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
     energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.95 );
@@ -70,8 +64,8 @@ define( function( require ) {
     assert && background.on( 'bounds', function( bounds ) {
       assert( backgroundBounds === bounds, 'Energy chunk node bounds should not change: ' + bounds );
     } );
-    energyChunkImageNodes[ energyType ] = background;
-  } );
+    return background;
+  }
 
   /**
    * Helper function that returns the correct image for an EnergyChunkNode.
@@ -79,6 +73,12 @@ define( function( require ) {
    * @returns {Image}
    */
   function getEnergyChunkNode( energyType ) {
+
+    // these need to be lazily created because the images are not decoded fast enough in the built version to be
+    // available right away
+    if ( !energyChunkImageNodes[ energyType ] ) {
+      energyChunkImageNodes[ energyType ] = createEnergyChunkImageNode( energyType );
+    }
     return energyChunkImageNodes[ energyType ];
   }
 
