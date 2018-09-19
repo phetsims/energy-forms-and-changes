@@ -487,7 +487,8 @@ define( function( require ) {
         // get a list of what's currently in the spot being checked
         self.modelElementList.forEach( function( potentialRestingModelElement ) {
           if ( potentialRestingModelElement !== modelElement &&
-               Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= EPSILON &&
+               // TODO: explain these two conditons fully, they are both important
+               Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= modelElement.width / 2 &&
                potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
           ) {
             modelElementsInSpot.push( potentialRestingModelElement );
