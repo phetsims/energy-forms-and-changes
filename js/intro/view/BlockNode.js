@@ -51,7 +51,7 @@ define( function( require ) {
   };
 
   // constants
-  var LABEL_FONT = new PhetFont( 32 );
+  var LABEL_FONT = new PhetFont( 26 );
   var OUTLINE_LINE_WIDTH = 3;
   var PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
   var BLOCK_ATTRIBUTES = {};

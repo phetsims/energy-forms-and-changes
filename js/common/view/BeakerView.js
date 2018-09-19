@@ -36,7 +36,7 @@ define( function( require ) {
   // constants
   var OUTLINE_COLOR = 'rgb( 160, 160, 160 )';
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
-  var LABEL_FONT = new PhetFont( 32 );
+  var LABEL_FONT = new PhetFont( 26 );
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 
   /**
