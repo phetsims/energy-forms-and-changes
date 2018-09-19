@@ -5,6 +5,7 @@
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
@@ -31,6 +32,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
+  var EPSILON = .0001;
   var NUM_THERMOMETERS = 3;
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
@@ -77,8 +79,8 @@ define( function( require ) {
     this.air = new Air( this.energyChunksVisibleProperty );
 
     // @public (read-only) {Burner} - right and left burners
-    this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
     this.leftBurner = new Burner( new Vector2( 0.14, 0 ), this.energyChunksVisibleProperty );
+    this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
 
     // how much space is in between the center points of the snap-to spots on the ground
     var spaceBetweenSpotCenters = ( this.leftBurner.translatedPositionTestingBoundsList[ 0 ].minX
@@ -86,11 +88,13 @@ define( function( require ) {
                                   / ( NUM_GROUND_SPOTS - 1 );
     this.groundSpotXPositions = [];
 
-    // determine the locations of the snap-to ground spots
+    // determine the locations of the snap-to spots, and round them to a few decimal places
     var leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
     for ( var i = 0; i < NUM_GROUND_SPOTS; i++ ) {
-      this.groundSpotXPositions.push( spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad );
+      this.groundSpotXPositions.push( Math.round( ( spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
     }
+    this.groundSpotXPositions.push( this.leftBurner.getCenterPoint().x );
+    this.groundSpotXPositions.push( this.rightBurner.getCenterPoint().x );
 
     //  @public (read-only) {Block}
     this.brick = new Block(
@@ -143,7 +147,7 @@ define( function( require ) {
     this.burners = [ this.rightBurner, this.leftBurner ];
 
     // @private - put all of the model elements on a list for easy iteration
-    this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker ];
+    this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.temperatureAndColorSensors = [];
@@ -284,7 +288,7 @@ define( function( require ) {
         else if ( !movableModelElement.userControlledProperty.value &&
                   unsupported &&
                   !self.groundSpotXPositions.includes( movableModelElement.positionProperty.value.x ) ) {
-          self.snapElementToGroundSpot( movableModelElement );
+          self.fallToSurface( movableModelElement, dt );
         }
       } );
 
@@ -463,18 +467,68 @@ define( function( require ) {
       var targetY = 0;
       var acceleration = -9.8; // meters/s/s
 
-      // determine whether there is something below this element that it can land upon
-      var potentialSupportingSurface = self.findBestSupportSurface( modelElement );
+      // sort list of ground spots in order, with the closest spot to modelElement first
+      this.groundSpotXPositions.sort( function( a, b ) {
+        var distanceA = Math.abs( a - modelElement.positionProperty.value.x );
+        var distanceB = Math.abs( b - modelElement.positionProperty.value.x );
+        return distanceA - distanceB;
+      } );
+
+      var destinationXSpot = null;
+      var destinationSurfaceProperty = null;
+
+      // check out each spot
+      for ( var i = 0; i < this.groundSpotXPositions.length &&
+                       destinationXSpot === null &&
+                       destinationSurfaceProperty === null; i++
+      ) {
+        var modelElementsInSpot = [];
+
+        // get a list of what's currently in the spot being checked
+        self.modelElementList.forEach( function( potentialRestingModelElement ) {
+          if ( potentialRestingModelElement !== modelElement &&
+               Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= EPSILON &&
+               potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
+          ) {
+            modelElementsInSpot.push( potentialRestingModelElement );
+          }
+        } );
+
+        if ( modelElementsInSpot.length > 0 ) {
+          var highestSurface = modelElementsInSpot[ 0 ];
+          var beakerInSpot = highestSurface instanceof Beaker;
+
+          // if more than one model element is in the spot, find the highest surface and flag any beakers that are present
+          for ( var j = 1; j < modelElementsInSpot.length && !beakerInSpot; j++ ) {
+            beakerInSpot = beakerInSpot || modelElementsInSpot[ j ] instanceof Beaker;
+            if ( modelElementsInSpot[ j ].topSurfaceProperty.value.yPos > highestSurface.topSurfaceProperty.value.yPos ) {
+              highestSurface = modelElementsInSpot[ j ];
+            }
+          }
+
+          if ( !( beakerInSpot && (
+            modelElement instanceof Beaker // ||
+            // TODO: investigate why getElementOnSurface() is returning null - a beaker on a block can be placed in a beaker until this is fixed
+            // modelElement.topSurfaceProperty.value.getElementOnSurface() instanceof Beaker ||
+            // modelElement.topSurfaceProperty.value.getElementOnSurface().topSurfaceProperty.value.getElementOnSurface() instanceof Beaker
+          ) ) ) {
+            destinationSurfaceProperty = highestSurface.topSurfaceProperty;
+          }
+        }
+        else {
+          destinationXSpot = this.groundSpotXPositions[ i ];
+        }
+      }
 
       // if so, center the model element above its new supporting element
-      if ( potentialSupportingSurface !== null ) {
-        minYPos = potentialSupportingSurface.value.yPos;
-        targetX = potentialSupportingSurface.value.getCenterX();
+      if ( destinationSurfaceProperty !== null ) {
+        minYPos = destinationSurfaceProperty.value.yPos;
+        targetX = destinationSurfaceProperty.value.getCenterX();
         targetY = modelElement.positionProperty.value.y;
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
       else {
-        self.snapElementToGroundSpot( modelElement );
+        modelElement.positionProperty.set( new Vector2( destinationXSpot, modelElement.positionProperty.value.y ) );
       }
 
       // calculate a proposed Y position based on gravitational falling
@@ -485,54 +539,15 @@ define( function( require ) {
         // the element has landed on the ground or some other surface
         proposedYPos = minYPos;
         modelElement.verticalVelocityProperty.set( 0 );
-        if ( potentialSupportingSurface !== null ) {
-          modelElement.setSupportingSurfaceProperty( potentialSupportingSurface );
-          potentialSupportingSurface.value.addElementToSurface( modelElement );
+        if ( destinationSurfaceProperty !== null ) {
+          modelElement.setSupportingSurfaceProperty( destinationSurfaceProperty );
+          destinationSurfaceProperty.value.addElementToSurface( modelElement );
         }
       }
       else {
         modelElement.verticalVelocityProperty.set( velocity );
       }
       modelElement.positionProperty.set( new Vector2( modelElement.positionProperty.value.x, proposedYPos ) );
-    },
-
-    /**
-     * snap a model element to a ground spot
-     * @private
-     */
-    snapElementToGroundSpot: function( modelElement ) {
-      var groundSpotX = this.getBestGroundSpot( modelElement );
-      modelElement.positionProperty.set( new Vector2( groundSpotX, modelElement.positionProperty.value.y ) );
-    },
-
-    /**
-     * get the closest ground spot x-coordinate
-     * @return {number}
-     * @private
-     */
-    getBestGroundSpot: function( modelElement ) {
-      var groundSpot = 0;
-      var distance;
-      var closestDistance;
-
-      if ( this.groundSpotXPositions.includes( modelElement.positionProperty.value.x ) ) {
-        groundSpot = modelElement.positionProperty.value.x;
-      }
-      else {
-        this.groundSpotXPositions.forEach( function( position ) {
-          distance = Math.abs( position - modelElement.positionProperty.value.x );
-          if ( !closestDistance ) {
-            closestDistance = distance;
-            groundSpot = position;
-          }
-          else if ( distance < closestDistance ) {
-            closestDistance = distance;
-            groundSpot = position;
-          }
-        } );
-      }
-
-      return groundSpot;
     },
 
     /**
@@ -617,13 +632,18 @@ define( function( require ) {
       //   }
       // }
 
-      // validate this model element's position against the beaker
-      if ( modelElement !== this.waterBeaker ) {
+      // now check the model element's motion against each of the beakers
+      this.beakers.forEach( function( beaker ) {
+
+        if ( beaker === modelElement ) {
+          // don't test against self
+          return;
+        }
 
         // get the bounds set that describes the shape of the beaker
-        var beakerBoundsList = this.waterBeaker.translatedPositionTestingBoundsList;
+        var beakerBoundsList = beaker.translatedPositionTestingBoundsList;
 
-        // since this model element isn't the beaker, it must be a block, so both x and y perspective comp must be used
+        // if the modelElement is a block, it has x and y perspective comp that need to be used
         var modelElementBoundsWithTopAndSidePerspective = new Bounds2(
           modelElementBounds.minX - modelElement.perspectiveCompensation.x,
           modelElementBounds.minY - modelElement.perspectiveCompensation.y,
@@ -632,7 +652,7 @@ define( function( require ) {
         );
 
         // don't restrict the motion based on the beaker if the beaker is on top of this model element
-        if ( !this.waterBeaker.isStackedUpon( modelElement ) ) {
+        if ( !beaker.isStackedUpon( modelElement ) ) {
 
           // TODO: This is less than ideal because it assumes the bottom of the beaker is the 2nd bounds entry
           allowedTranslation = self.determineAllowedTranslation(
@@ -654,7 +674,7 @@ define( function( require ) {
             true
           );
         }
-      }
+      } );
 
       // now check the model element's motion against each of the blocks
       this.blocks.forEach( function( block ) {
@@ -671,30 +691,33 @@ define( function( require ) {
         var restrictPositiveY = !block.isStackedUpon( modelElement );
 
         var modelElementBounds = modelElement.getCompositeBounds();
-        if ( modelElement === self.waterBeaker ) {
 
-          // Special handling for the beaker: Use the perspective-compensated edge of the block instead of the model
-          // edge in order to simplify z-order handling.
-          blockBounds = new Bounds2(
-            blockBounds.minX - self.brick.perspectiveCompensation.x,
-            blockBounds.minY,
-            blockBounds.maxX + self.brick.perspectiveCompensation.x,
-            blockBounds.maxY
-          );
-        }
+        self.beakers.forEach( function( beaker ) {
+          if ( modelElement === beaker ) {
 
-        // Clamp the translation based on the test block's position, but handle the case where the block is immersed
-        // in the beaker.
-        if ( !( modelElement === self.waterBeaker &&
-                self.waterBeaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
+            // Special handling for the beaker: Use the perspective-compensated edge of the block instead of the model
+            // edge in order to simplify z-order handling.
+            blockBounds = new Bounds2(
+              blockBounds.minX - self.brick.perspectiveCompensation.x,
+              blockBounds.minY,
+              blockBounds.maxX + self.brick.perspectiveCompensation.x,
+              blockBounds.maxY
+            );
+          }
 
-          allowedTranslation = self.determineAllowedTranslation(
-            modelElementBounds,
-            blockBounds,
-            allowedTranslation,
-            restrictPositiveY
-          );
-        }
+          // Clamp the translation based on the test block's position, but handle the case where the block is immersed
+          // in the beaker.
+          if ( !( modelElement === beaker &&
+                  beaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
+
+            allowedTranslation = self.determineAllowedTranslation(
+              modelElementBounds,
+              blockBounds,
+              allowedTranslation,
+              restrictPositiveY
+            );
+          }
+        } );
       } );
 
       return modelElement.positionProperty.get().plus( allowedTranslation );
@@ -866,72 +889,6 @@ define( function( require ) {
      */
     isDirectlyAbove: function( surface1, surface2 ) {
       return surface2.xRange.contains( surface1.getCenterX() ) && surface1.yPos > surface2.yPos;
-    },
-
-    /**
-     * @param {UserMovableModelElement} element
-     * @returns {Property.<HorizontalSurface>}
-     * @private
-     */
-    findBestSupportSurface: function( element ) {
-      var self = this;
-      var bestOverlappingSurface = null;
-
-      // check each of the possible supporting elements in the model to see if this element can go on top of it
-      this.modelElementList.forEach( function( potentialSupportingElement ) {
-
-        if ( potentialSupportingElement === element || potentialSupportingElement.isStackedUpon( element ) ) {
-
-          // The potential supporting element is either the same as the test element or is sitting on top of the test
-          // element.  In either case, it can't be used to support the test element, so skip it.
-          return;
-        }
-
-        var bottom = element.bottomSurfaceProperty;
-        var top = potentialSupportingElement.topSurfaceProperty;
-
-        assert && assert( top.value === null || top.value.owner === potentialSupportingElement );
-
-        if ( top.value && bottom.value.overlapsWith( top.value ) ) {
-
-          // there is at least some overlap, so determine if this surface is the best one so far
-          var surfaceOverlap = self.getHorizontalOverlap( top.value, bottom.value );
-
-          // The following nasty 'if' clause determines if the potential supporting surface is a better one than we
-          // currently have based on whether we have one at all, or has more overlap than the previous best choice, or
-          // is directly above the current one.
-          if ( bestOverlappingSurface === null ||
-               ( surfaceOverlap > self.getHorizontalOverlap( bestOverlappingSurface.value, bottom.value ) &&
-                 !self.isDirectlyAbove( bestOverlappingSurface.value, top.value ) ) ||
-               ( self.isDirectlyAbove( top.value, bestOverlappingSurface.value ) ) ) {
-            bestOverlappingSurface = top;
-          }
-        }
-      } );
-
-      // Make sure that the best supporting surface isn't at the bottom of a stack, which can happen in cases where the
-      // model element being tested isn't directly above the best surface's center.
-      if ( bestOverlappingSurface !== null ) {
-        while ( bestOverlappingSurface.value.getElementOnSurface() !== null ) {
-          // TODO: The commented-out code was helpful in starting to track down some issues related to reset that was
-          // causing failures of the automated testing, see
-          // https://github.com/phetsims/energy-forms-and-changes/issues/25.  I (jblanco) am leaving it here so that
-          // I can more easily pick this up again when the sim becomes more of a priority.
-          //assert && assert(
-          //  bestOverlappingSurface.getElementOnSurface().topSurfaceProperty.get() !== null,
-          //  'top surface is not set on model element, this should not happen'
-          //);
-          //console.log( '--------------' );
-          //console.log( 'best overlapping surface was owned by ' + bestOverlappingSurface.owner.id );
-          bestOverlappingSurface = bestOverlappingSurface.value.getElementOnSurface().topSurfaceProperty;
-          //console.log( 'best overlapping surface now owned by ' + bestOverlappingSurface.owner.id );
-          //if ( bestOverlappingSurface && bestOverlappingSurface.owner === element ){
-          //  debugger;
-          //}
-        }
-      }
-
-      return bestOverlappingSurface;
     },
 
     /**
