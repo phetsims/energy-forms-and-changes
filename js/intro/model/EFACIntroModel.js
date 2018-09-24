@@ -485,11 +485,35 @@ define( function( require ) {
         var modelElementsInSpot = [];
 
         // get a list of what's currently in the spot being checked
-        self.modelElementList.forEach( function( potentialRestingModelElement ) {
-          if ( potentialRestingModelElement !== modelElement &&
-               // TODO: explain these two conditons fully, they are both important
-               Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= modelElement.width / 2 &&
-               potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
+        this.modelElementList.forEach( function( potentialRestingModelElement ) {
+          if (
+            potentialRestingModelElement !== modelElement &&
+
+            // this if statement is checking each potentialRestingModelElement to see which ones are already in the spot
+            // that modelElement is falling to.
+            //
+            // the following first condition usually just needs to check if potentialRestingModelElement's center x
+            // coordinate matches the current ground spot x coordinate, but instead it considers any
+            // potentialRestingModelElement's to be in this spot if its center x coordinate is within half a spot's
+            // width of the ground spot x coordinate. this handles the multitouch case where modelElement is falling and
+            // a user drags a different model element somewhere underneath it (which is likely not located at a ground
+            // x coordinate), because instead of not detecting that user-held model element as occupying this spot
+            // (and therefore falling through it and overlapping), it does detect it, and then falls to the model elements
+            // surface instead of all the way down to the ground spot.
+            //
+            // the first condition of the or clause checks that potentialRestingModelElement is below modelElement
+            // because in the case where a beaker with a block inside is being dropped, we don't want the beaker to
+            // think that its block is in the spot below it. however, because of floating point errors, sometimes when
+            // a block is dragged onto a burner surface next to another block, it is actually slightly lower than the
+            // resting block, so it still needs to detect that the resting block is in that spot. otherwise, it will
+            // jump inside of it instead of on top of it. that is solved by the second condition of the or clause, which
+            // makes sure that the approaching block is far enough away in the x direction that it couldn't be a block
+            // inside a beaker, since the a block in a beaker share the same x coordinate. for that reason, that minimum
+            // distance away was arbitrarily chosen.
+            Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= self.spaceBetweenSpotCenters / 2 &&
+            ( potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ||
+              Math.abs( potentialRestingModelElement.positionProperty.value.x - modelElement.positionProperty.value.x ) > modelElement.width / 2
+            )
           ) {
             modelElementsInSpot.push( potentialRestingModelElement );
           }
@@ -506,7 +530,6 @@ define( function( require ) {
               highestSurface = modelElementsInSpot[ j ];
             }
           }
-
           var currentModelElementInStack = modelElement;
           var beakerFoundInStack = currentModelElementInStack instanceof Beaker;
 
