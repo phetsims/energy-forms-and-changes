@@ -678,6 +678,35 @@ define( function( require ) {
             true
           );
         }
+        else {
+          // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there are
+          // currently only two beakers. this will need to be generalized to check for each other beaker that is not
+          // stacked on this modelElement if the time comes when more than two beakers exist.
+          var otherBeaker = self.beakers[ 1 - self.beakers.indexOf( beaker ) ];
+
+          // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
+          var otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
+          var currentBeakerBounds = beaker.getBounds();
+
+          allowedTranslation = self.determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 0 ],
+            allowedTranslation,
+            true
+          );
+          allowedTranslation = self.determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 1 ],
+            allowedTranslation,
+            true
+          );
+          allowedTranslation = self.determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 2 ],
+            allowedTranslation,
+            true
+          );
+        }
       } );
 
       // now check the model element's motion against each of the blocks
