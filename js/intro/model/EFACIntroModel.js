@@ -508,8 +508,8 @@ define( function( require ) {
             // resting block, so it still needs to detect that the resting block is in that spot. otherwise, it will
             // jump inside of it instead of on top of it. that is solved by the second condition of the or clause, which
             // makes sure that the approaching block is far enough away in the x direction that it couldn't be a block
-            // inside a beaker, since the a block in a beaker share the same x coordinate. for that reason, that minimum
-            // distance away was arbitrarily chosen.
+            // inside a beaker, since a block and its containing beaker share the same x coordinate. for that reason,
+            // the minimum distance away was arbitrarily chosen.
             Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= self.spaceBetweenSpotCenters / 2 &&
             ( potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ||
               Math.abs( potentialRestingModelElement.positionProperty.value.x - modelElement.positionProperty.value.x ) > modelElement.width / 2
@@ -817,10 +817,10 @@ define( function( require ) {
       if ( this.exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
 
         // the bounds already overlap - are they right on top of one another in both dimensions?
-        if ( movingElementBounds.centerX === stationaryElementBounds.centerX && movingElementBounds.centerY === stationaryElementBounds.centerY ) {
-          console.log( 'Warning: Rectangle centers in same location, returning zero vector.' );
-          return new Vector2( 0, 0 );
-        }
+        // if ( movingElementBounds.centerX === stationaryElementBounds.centerX && movingElementBounds.centerY === stationaryElementBounds.centerY ) {
+        //   console.log( 'Warning: Rectangle centers in same location, returning zero vector.' );
+        //   return new Vector2( 0, 0 );
+        // }
 
         // determine the motion in the X & Y directions that will "cure" the overlap
         var xOverlapCure = 0;
