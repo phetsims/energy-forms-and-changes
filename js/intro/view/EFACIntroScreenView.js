@@ -396,6 +396,24 @@ define( function( require ) {
     model.brick.positionProperty.link( blockChangeListener );
     model.ironBlock.positionProperty.link( blockChangeListener );
 
+    // function that updates the Z-order of the beakers when the user-controlled state changes
+    var beakerChangeListener = function() {
+      if ( model.waterBeaker.getBounds().minY >= model.oliveOilBeaker.getBounds().maxY ) {
+        self.waterBeakerView.frontNode.moveToFront();
+        self.waterBeakerView.backNode.moveToFront();
+        self.waterBeakerView.grabNode.moveToFront();
+      }
+      else if ( model.oliveOilBeaker.getBounds().minY >= model.waterBeaker.getBounds().maxY ) {
+        self.oliveOilBeakerView.frontNode.moveToFront();
+        self.oliveOilBeakerView.backNode.moveToFront();
+        self.oliveOilBeakerView.grabNode.moveToFront();
+      }
+    };
+
+    // update the Z-order of the beakers whenever the "userControlled" state of either changes
+    model.waterBeaker.positionProperty.link( beakerChangeListener );
+    model.oliveOilBeaker.positionProperty.link( beakerChangeListener );
+
     // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
     // each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
     // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
