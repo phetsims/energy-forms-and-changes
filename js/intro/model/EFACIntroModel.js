@@ -38,13 +38,14 @@ define( function( require ) {
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
   var LEFT_EDGE = -0.30;
+  var RIGHT_EDGE = 0.30;
 
-  // this is the space between the edges of the ground (sim left edge or left edge of left burner stand) and the edge
+  // this is the desired space between the edges of the sim ( left edge or right edge) and the edge
   // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
-  var EDGE_PAD = 0.006;
+  var EDGE_PAD = 0.016;
 
   // number of snap-to spots on the ground, should match number of thermal containers
-  var NUM_GROUND_SPOTS = 4;
+  var NUM_GROUND_SPOTS = 6;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
@@ -77,23 +78,19 @@ define( function( require ) {
     // energy
     this.air = new Air( this.energyChunksVisibleProperty );
 
-    // @public (read-only) {Burner} - right and left burners
-    this.leftBurner = new Burner( new Vector2( 0.14, 0 ), this.energyChunksVisibleProperty );
-    this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
+    // // @public (read-only) {Burner} - right and left burners
+    // this.leftBurner = new Burner( new Vector2( 0.14, 0 ), this.energyChunksVisibleProperty );
+    // this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
 
-    // how much space is in between the center points of the snap-to spots on the ground
-    var spaceBetweenSpotCenters = ( this.leftBurner.translatedPositionTestingBoundsList[ 0 ].minX
-                                    - LEFT_EDGE - ( EDGE_PAD * 3.5 ) - BEAKER_WIDTH )
-                                  / ( NUM_GROUND_SPOTS - 1 );
+    // @private - calculate space in between the center points of the snap-to spots on the ground
+    this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) / ( NUM_GROUND_SPOTS - 1 );
     this.groundSpotXPositions = [];
 
     // determine the locations of the snap-to spots, and round them to a few decimal places
     var leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
     for ( var i = 0; i < NUM_GROUND_SPOTS; i++ ) {
-      this.groundSpotXPositions.push( Math.round( ( spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
+      this.groundSpotXPositions.push( Math.round( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
     }
-    this.groundSpotXPositions.push( this.leftBurner.getCenterPoint().x );
-    this.groundSpotXPositions.push( this.rightBurner.getCenterPoint().x );
 
     //  @public (read-only) {Block}
     this.brick = new Block(
@@ -135,6 +132,10 @@ define( function( require ) {
         fluidDensity: EFACConstants.OLIVE_OIL_DENSITY
       }
     );
+
+    // @public (read-only) {Burner} - right and left burners
+    this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 4 ], 0 ), this.energyChunksVisibleProperty );
+    this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 5 ], 0 ), this.energyChunksVisibleProperty );
 
     // @public (read-only) {BeakerContainer[]}
     this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
