@@ -91,10 +91,10 @@ define( function( require ) {
       var self = this; // extend scope for nested callbacks.
 
       var steamingProportion = 0;
-      if ( EFACConstants.BOILING_POINT_TEMPERATURE - self.temperatureProperty.value < STEAMING_RANGE ) {
+      if ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - self.temperatureProperty.value < STEAMING_RANGE ) {
 
         // the water is emitting some amount of steam - set the proportionate amount
-        steamingProportion = 1 - ( ( EFACConstants.BOILING_POINT_TEMPERATURE - self.temperatureProperty.value ) / STEAMING_RANGE );
+        steamingProportion = 1 - ( ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - self.temperatureProperty.value ) / STEAMING_RANGE );
         steamingProportion = Util.clamp( steamingProportion, 0, 1 );
       }
 

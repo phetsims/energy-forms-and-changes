@@ -24,8 +24,7 @@ define( function( require ) {
 
   // physical temperature constants
   var ROOM_TEMPERATURE = 296; // in degrees Kelvin
-  var FREEZING_POINT_TEMPERATURE = 273.15; // in degrees Kelvin
-  //var BOILING_POINT_TEMPERATURE = 373.15; // in degrees Kelvin
+  var WATER_FREEZING_POINT_TEMPERATURE = 273.15; // in degrees Kelvin
 
   // constants that define physical parameters of various rectangular objects.
   var BRICK_DENSITY = 3300; // in kg/m^3, source = design document plus some tweaking to keep chunk numbers reasonable
@@ -34,7 +33,7 @@ define( function( require ) {
 
   // brick constants needed for energy chunk mapping
   var BRICK_ENERGY_AT_ROOM_TEMPERATURE = Math.pow( BLOCK_SURFACE_WIDTH, 3 ) * BRICK_DENSITY * BRICK_SPECIFIC_HEAT * ROOM_TEMPERATURE; // In joules.
-  var BRICK_ENERGY_AT_FREEZING_TEMPERATURE = Math.pow( BLOCK_SURFACE_WIDTH, 3 ) * BRICK_DENSITY * BRICK_SPECIFIC_HEAT * FREEZING_POINT_TEMPERATURE; // In joules.
+  var BRICK_ENERGY_AT_FREEZING_TEMPERATURE = Math.pow( BLOCK_SURFACE_WIDTH, 3 ) * BRICK_DENSITY * BRICK_SPECIFIC_HEAT * WATER_FREEZING_POINT_TEMPERATURE; // In joules.
 
   // constants for temperature-energy mapping functions
   var LOW_ENERGY_FOR_MAP_FUNCTION = BRICK_ENERGY_AT_FREEZING_TEMPERATURE;
@@ -71,8 +70,9 @@ define( function( require ) {
 
     // physical temperature constants
     ROOM_TEMPERATURE: 296, // in degrees Kelvin
-    FREEZING_POINT_TEMPERATURE: 273.15, // in degrees Kelvin
-    BOILING_POINT_TEMPERATURE: 373.15, // in degrees Kelvin
+    WATER_FREEZING_POINT_TEMPERATURE: WATER_FREEZING_POINT_TEMPERATURE, // in degrees Kelvin
+    WATER_BOILING_POINT_TEMPERATURE: 373.15, // in degrees Kelvin
+    OLIVE_OIL_BOILING_POINT_TEMPERATURE: 572.04, // in degrees Kelvin, need to confirm
 
     // mapping function that maps the energy to the number of energy chunks
     MAP_ENERGY_TO_NUM_CHUNKS: MAP_ENERGY_TO_NUM_CHUNKS,

@@ -134,7 +134,7 @@ define( function( require ) {
       var deltaEnergy = 0;
 
       if ( this.inContactWith( thermalEnergyContainer ) ) {
-        if ( thermalEnergyContainer.getTemperature() > EFACConstants.FREEZING_POINT_TEMPERATURE ) {
+        if ( thermalEnergyContainer.getTemperature() > EFACConstants.WATER_FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevelProperty.value * dt;
         }
         thermalEnergyContainer.changeEnergy( deltaEnergy );
@@ -351,7 +351,7 @@ define( function( require ) {
      */
     getTemperature: function() {
       var temperature = EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevelProperty.value * 100;
-      return Math.max( temperature, EFACConstants.FREEZING_POINT_TEMPERATURE );
+      return Math.max( temperature, EFACConstants.WATER_FREEZING_POINT_TEMPERATURE );
     },
 
     /**

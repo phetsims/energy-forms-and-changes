@@ -170,11 +170,11 @@ define( function( require ) {
     step: function( dt ) {
       this.temperatureProperty.set( this.getTemperature() );
       var temperature = this.temperatureProperty.get();
-      if ( temperature > EFACConstants.BOILING_POINT_TEMPERATURE - STEAMING_RANGE ) {
+      if ( temperature > EFACConstants.WATER_BOILING_POINT_TEMPERATURE - STEAMING_RANGE ) {
 
         // water is emitting some amount of steam - set the proportionate amount
         this.steamingProportion = Util.clamp(
-          1 - ( EFACConstants.BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE,
+          1 - ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE,
           0,
           1
         );
@@ -364,7 +364,7 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyBeyondMaxTemperature: function() {
-      return Math.max( this.energy - ( EFACConstants.BOILING_POINT_TEMPERATURE * this.mass * this.specificHeat ), 0 );
+      return Math.max( this.energy - ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     },
 
     /**
@@ -376,7 +376,7 @@ define( function( require ) {
     getTemperature: function() {
       var temperature = RectangularThermalMovableModelElement.prototype.getTemperature.call( this );
       assert && assert( temperature >= 0, 'Invalid temperature: ' + temperature );
-      return Math.min( temperature, EFACConstants.BOILING_POINT_TEMPERATURE );
+      return Math.min( temperature, EFACConstants.WATER_BOILING_POINT_TEMPERATURE );
     },
 
     /**

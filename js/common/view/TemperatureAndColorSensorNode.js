@@ -76,8 +76,8 @@ define( function( require ) {
     // @public (read-only) {ThermometerNode} - thermometer node, public so that it can be used for bounds intersection
     // testing
     this.thermometerNode = new ThermometerNode(
-      EFACConstants.FREEZING_POINT_TEMPERATURE,
-      EFACConstants.BOILING_POINT_TEMPERATURE,
+      EFACConstants.WATER_FREEZING_POINT_TEMPERATURE,
+      EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
       temperatureAndColorSensor.sensedTemperatureProperty,
       {
         bulbDiameter: 30,
