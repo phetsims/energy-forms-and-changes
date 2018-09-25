@@ -26,11 +26,12 @@ define( function( require ) {
 
   /**
    * @param {Rectangle} beakerOutlineRect
-   * @param {Color} fluidColor - the color of the fluid in the beaker
+   * @param {Color} fluidColor
+   * @param {number} fluidBoilingPoint
    * @param {Property.<number>} waterLevelProperty
    * @param {Property.<number>} temperatureProperty
    */
-  function PerspectiveWaterNode( beakerOutlineRect, fluidColor, waterLevelProperty, temperatureProperty ) {
+  function PerspectiveWaterNode( beakerOutlineRect, fluidColor, fluidBoilingPoint, waterLevelProperty, temperatureProperty ) {
 
     Node.call( this );
     var self = this;
@@ -38,6 +39,7 @@ define( function( require ) {
     // @private
     this.beakerOutlineRect = beakerOutlineRect;
     this.fluidColor = fluidColor;
+    this.fluidBoilingPoint = fluidBoilingPoint;
     this.waterLevelProperty = waterLevelProperty;
     this.temperatureProperty = temperatureProperty;
 
@@ -57,6 +59,7 @@ define( function( require ) {
     } );
 
     this.steamCanvasNode = new SteamCanvasNode(
+      fluidBoilingPoint,
       waterLevelProperty,
       temperatureProperty,
       this.beakerOutlineRect, {

@@ -48,7 +48,8 @@ define( function( require ) {
     options = _.extend( {
       fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
       fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
-      fluidDensity: EFACConstants.WATER_DENSITY
+      fluidDensity: EFACConstants.WATER_DENSITY,
+      fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE
     }, options );
 
     RectangularThermalMovableModelElement.call( this,
@@ -68,6 +69,9 @@ define( function( require ) {
 
     // @public {Color) - the color of the fluid in the beaker
     this.fluidColor = options.fluidColor;
+
+    // @public {number} - the boiling point temperature of the fluid in the beaker
+    this.fluidBoilingPoint = options.fluidBoilingPoint;
 
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
@@ -170,11 +174,11 @@ define( function( require ) {
     step: function( dt ) {
       this.temperatureProperty.set( this.getTemperature() );
       var temperature = this.temperatureProperty.get();
-      if ( temperature > EFACConstants.WATER_BOILING_POINT_TEMPERATURE - STEAMING_RANGE ) {
+      if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
         // water is emitting some amount of steam - set the proportionate amount
         this.steamingProportion = Util.clamp(
-          1 - ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - temperature ) / STEAMING_RANGE,
+          1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE,
           0,
           1
         );
@@ -364,7 +368,7 @@ define( function( require ) {
      * @returns {number}
      */
     getEnergyBeyondMaxTemperature: function() {
-      return Math.max( this.energy - ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE * this.mass * this.specificHeat ), 0 );
+      return Math.max( this.energy - ( this.fluidBoilingPoint * this.mass * this.specificHeat ), 0 );
     },
 
     /**
@@ -376,7 +380,7 @@ define( function( require ) {
     getTemperature: function() {
       var temperature = RectangularThermalMovableModelElement.prototype.getTemperature.call( this );
       assert && assert( temperature >= 0, 'Invalid temperature: ' + temperature );
-      return Math.min( temperature, EFACConstants.WATER_BOILING_POINT_TEMPERATURE );
+      return Math.min( temperature, this.fluidBoilingPoint );
     },
 
     /**

@@ -85,7 +85,13 @@ define( function( require ) {
     var bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0 );
 
     // Add the fluid.  It will adjust its size based on the fluid level.
-    this.fluid = new PerspectiveWaterNode( beakerBounds, beaker.fluidColor, beaker.fluidLevelProperty, beaker.temperatureProperty );
+    this.fluid = new PerspectiveWaterNode(
+      beakerBounds,
+      beaker.fluidColor,
+      beaker.fluidBoilingPoint,
+      beaker.fluidLevelProperty,
+      beaker.temperatureProperty
+    );
     this.frontNode.addChild( this.fluid );
 
     // create and add the node for the body of the beaker

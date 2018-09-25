@@ -11,7 +11,6 @@ define( function( require ) {
 
   // modules
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Range = require( 'DOT/Range' );
@@ -28,18 +27,20 @@ define( function( require ) {
   var STEAM_BUBBLE_COLOR = 'white';
 
   /**
+   * @param {number} fluidBoilingPoint
    * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
    * @param {Property<number>} temperatureProperty - the temperature of the liquid
    * @param {Rectangle} containerOutlineRect - the outline of the container
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function SteamCanvasNode( fluidLevelProperty, temperatureProperty, containerOutlineRect, options ) {
+  function SteamCanvasNode( fluidBoilingPoint, fluidLevelProperty, temperatureProperty, containerOutlineRect, options ) {
 
     var self = this;
     CanvasNode.call( this, options );
 
     // @private
+    this.fluidBoilingPoint = fluidBoilingPoint;
     this.fluidLevelProperty = fluidLevelProperty;
     this.temperatureProperty = temperatureProperty;
 
@@ -91,10 +92,10 @@ define( function( require ) {
       var self = this; // extend scope for nested callbacks.
 
       var steamingProportion = 0;
-      if ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - self.temperatureProperty.value < STEAMING_RANGE ) {
+      if ( this.fluidBoilingPoint - self.temperatureProperty.value < STEAMING_RANGE ) {
 
         // the water is emitting some amount of steam - set the proportionate amount
-        steamingProportion = 1 - ( ( EFACConstants.WATER_BOILING_POINT_TEMPERATURE - self.temperatureProperty.value ) / STEAMING_RANGE );
+        steamingProportion = 1 - ( ( this.fluidBoilingPoint - self.temperatureProperty.value ) / STEAMING_RANGE );
         steamingProportion = Util.clamp( steamingProportion, 0, 1 );
       }
 

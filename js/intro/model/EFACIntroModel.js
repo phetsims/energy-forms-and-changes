@@ -129,7 +129,8 @@ define( function( require ) {
       this.energyChunksVisibleProperty, {
         fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
         fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
-        fluidDensity: EFACConstants.OLIVE_OIL_DENSITY
+        fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
+        fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
       }
     );
 
