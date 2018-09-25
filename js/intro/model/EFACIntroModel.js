@@ -169,7 +169,8 @@ define( function( require ) {
             beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
 
-          if ( oldColor === beaker.fluidColor &&
+          if ( newColor !== sensor.sensedElementColorProperty.initialValue &&
+               oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
                xRange.contains( sensor.positionProperty.value.x ) ) {
 
