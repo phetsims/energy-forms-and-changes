@@ -15,6 +15,7 @@ define( function( require ) {
     IRON: 'iron',
     BRICK: 'brick',
     WATER: 'water',
+    OLIVE_OIL: 'olive_oil',
     AIR: 'air'
   };
 

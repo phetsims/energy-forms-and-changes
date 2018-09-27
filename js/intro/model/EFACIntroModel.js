@@ -19,6 +19,7 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
+  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -130,7 +131,8 @@ define( function( require ) {
         fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
         fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
         fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
-        fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
+        fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
+        energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
       }
     );
 

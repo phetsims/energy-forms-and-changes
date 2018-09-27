@@ -49,7 +49,8 @@ define( function( require ) {
       fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
       fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
       fluidDensity: EFACConstants.WATER_DENSITY,
-      fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE
+      fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
+      energyContainerCategory: EnergyContainerCategory.WATER
     }, options );
 
     RectangularThermalMovableModelElement.call( this,
@@ -66,6 +67,7 @@ define( function( require ) {
     // @private
     this.width = width;
     this.height = height;
+    this._energyContainerCategory = options.energyContainerCategory;
 
     // @public {Color) - the color of the fluid in the beaker
     this.fluidColor = options.fluidColor;
@@ -359,7 +361,7 @@ define( function( require ) {
      * @returns {EnergyContainerCategory}
      */
     get energyContainerCategory() {
-      return EnergyContainerCategory.WATER;
+      return this._energyContainerCategory;
     },
 
     /**
