@@ -21,11 +21,11 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
-  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var Shape = require( 'KITE/Shape' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
@@ -78,11 +78,27 @@ define( function( require ) {
       EFACConstants.BLOCK_SURFACE_WIDTH / 2,
       EFACConstants.BLOCK_SURFACE_WIDTH
     ) );
+    var rectangle = this.getBounds();
+
+    // @public - see base class for description
+    this.topSurface = new HorizontalSurface(
+      new Vector2( initialPosition.x, rectangle.maxY ),
+      EFACConstants.BLOCK_SURFACE_WIDTH,
+      this
+    );
+
+    // @public - see base class for description
+    this.bottomSurface = new HorizontalSurface(
+      new Vector2( initialPosition.x, rectangle.minY ),
+      EFACConstants.BLOCK_SURFACE_WIDTH,
+      this
+    );
 
     // update the top and bottom surfaces whenever the position changes
-    this.positionProperty.link( function() {
-      self.updateTopSurfaceProperty();
-      self.updateBottomSurfaceProperty();
+    this.positionProperty.link( function( position ) {
+      var rectangle = self.getBounds();
+      self.topSurface.positionProperty.value = new Vector2( position.x, rectangle.maxY );
+      self.bottomSurface.positionProperty.value = new Vector2( position.x, rectangle.minY );
     } );
 
     // add perspective information, used for validating positions
@@ -168,36 +184,6 @@ define( function( require ) {
     getBounds: function() {
       var rect = this.rect;
       return new Bounds2( rect.x, rect.y, rect.x + rect.width, rect.y + rect.height );
-    },
-
-    /**
-     * @private
-     */
-    updateTopSurfaceProperty: function() {
-      var rectangle = this.getBounds();
-      var elementOnTopSurface = this.getTopSurfaceProperty().value ?
-                                this.getTopSurfaceProperty().value.getElementOnSurface() : null;
-      this.topSurfaceProperty.set( new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.maxY,
-        this,
-        elementOnTopSurface
-      ) );
-    },
-
-    /**
-     * @private
-     */
-    updateBottomSurfaceProperty: function() {
-      var rectangle = this.getBounds();
-      var elementOnBottomSurface = this.getBottomSurfaceProperty().value ?
-                                   this.getBottomSurfaceProperty().value.getElementOnSurface() : null;
-      this.bottomSurfaceProperty.set( new HorizontalSurface(
-        new Range( rectangle.minX, rectangle.maxX ),
-        rectangle.minY,
-        this,
-        elementOnBottomSurface
-      ) );
     },
 
     /**

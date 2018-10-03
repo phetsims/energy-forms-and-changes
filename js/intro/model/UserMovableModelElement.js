@@ -29,10 +29,9 @@ define( function( require ) {
     // @public {BooleanProperty}
     this.userControlledProperty = new BooleanProperty( false );
 
-    // @protected {Property<HorizontalSurface>|null} - The surface upon which this model element is resting.  This is
-    // null (and note that it is the reference itself, not the wrapped value, that can be null) if the element is not
-    // resting on a movable surface.  This should only be set through the getter/setter methods below.
-    this.supportingSurfaceProperty = null;
+    // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
+    // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
+    this.supportingSurface = null;
 
     // @public {Property.<number>}
     this.verticalVelocityProperty = new Property( 0 );
@@ -47,8 +46,8 @@ define( function( require ) {
     } );
 
     // @private - observer that moves this model element if and when the surface that is supporting it moves
-    this.surfaceMotionObserver = function( horizontalSurface ) {
-      self.positionProperty.value = new Vector2( horizontalSurface.getCenterX(), horizontalSurface.yPos );
+    this.surfaceMotionObserver = function( position ) {
+      self.positionProperty.value = position;
     };
   }
 
@@ -68,25 +67,25 @@ define( function( require ) {
     },
 
     /**
-     * assign the surface property
-     * @param {Property.<HorizontalSurface>} supportingSurfaceProperty
+     * Set the supporting surface of this model element
+     * @param {HorizontalSurface} supportingSurface
      * @override
      * @public
      */
-    setSupportingSurfaceProperty: function( supportingSurfaceProperty ) {
+    setSupportingSurface: function( supportingSurface ) {
 
       // state and parameter checking
       assert && assert(
-        supportingSurfaceProperty !== null,
+        supportingSurface !== null,
         'this method should not be used to clear the supporting surface'
       );
       assert && assert(
-        this.supportingSurfaceProperty === null,
+        this.supportingSurface === null,
         'a supporting surface was already set'
       );
 
-      supportingSurfaceProperty.link( this.surfaceMotionObserver );
-      this.supportingSurfaceProperty = supportingSurfaceProperty;
+      supportingSurface.positionProperty.link( this.surfaceMotionObserver );
+      this.supportingSurface = supportingSurface;
     },
 
     /**
@@ -96,10 +95,10 @@ define( function( require ) {
     clearSupportingSurface: function() {
 
       // only do something if the supporting surface was set
-      if ( this.supportingSurfaceProperty !== null ) {
-        this.supportingSurfaceProperty.unlink( this.surfaceMotionObserver );
-        this.supportingSurfaceProperty.get().clearSurface();
-        this.supportingSurfaceProperty = null;
+      if ( this.supportingSurface !== null ) {
+        this.supportingSurface.positionProperty.unlink( this.surfaceMotionObserver );
+        this.supportingSurface.clearSurface();
+        this.supportingSurface = null;
       }
     },
 
@@ -112,7 +111,7 @@ define( function( require ) {
      * @override
      */
     isStackedUpon: function( element ) {
-      var surface = this.supportingSurfaceProperty ? this.supportingSurfaceProperty.get() : null;
+      var surface = this.supportingSurface ? this.supportingSurface : null;
       return ( surface !== null ) && ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
     }
 

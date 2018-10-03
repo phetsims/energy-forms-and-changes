@@ -14,21 +14,30 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
 
   /**
-   * @param {Range} xRange
-   * @param {number} yPos
+   * @param {Vector2} initialPosition
+   * @param {number} width
    * @param {ModelElement} owner
    * @param {ModelElement} [elementOnSurface]
    * @constructor
    */
-  function HorizontalSurface( xRange, yPos, owner, elementOnSurface ) {
+  function HorizontalSurface( initialPosition, width, owner, elementOnSurface ) {
+    var self = this;
+
+    // @public {Property.<Vector2>}
+    this.positionProperty = new Property( initialPosition );
 
     // @public (read-only) {number}
-    this.yPos = yPos;
+    this.width = width;
 
     // @public (read-only) {Range}
-    this.xRange = xRange;
+    this.xRange = new Range( initialPosition.x - this.width / 2, initialPosition.x + this.width / 2 );
+    this.positionProperty.link( function( position ) {
+      self.xRange.setMinMax( position.x - self.width / 2, position.x + self.width / 2 );
+    } );
 
     // TODO: Consider having the code directly access these values rather than using getter/setter methods once port is nearly complete.
     // @private - this should be accessed through getter/setter methods
@@ -46,6 +55,9 @@ define( function( require ) {
      * @public
      */
     overlapsWith: function( surface ) {
+      // if used when the position of a surface is changing (which is probably the only use case), the accuracy of this
+      // could be questionable because xRange is set on link to this surface's position property. as of the writing of
+      // this comment, this function was no longer needed and is not being used anywhere in efac.
       return ( this.xRange.intersectsExclusive( surface.xRange ) );
     },
 
@@ -54,7 +66,7 @@ define( function( require ) {
      * @public
      */
     getCenterX: function() {
-      return this.xRange.getCenter();
+      return this.positionProperty.value.x;
     },
 
     /**
@@ -80,7 +92,7 @@ define( function( require ) {
     addElementToSurface: function( modelElement ) {
       // TODO: The commented out assertion is helpful when element interaction is being developed, but breaks fuzz
       // testing when enabled because weird cases are reached. @jbphet and @chrisklus are happy with how things are
-      // performing in the wild, so the assertion has been removed to stop beaking continous testing.
+      // performing in the wild, so the assertion has been removed to stop breaking continuous testing.
       // assert && assert( this.elementOnSurface === null, 'Only one thing on surface allowed at a time' );
       assert && assert( modelElement !== this.owner, 'an element cannot sit upon its own surface' );
       this.elementOnSurface = modelElement;
@@ -92,7 +104,6 @@ define( function( require ) {
     clearSurface: function() {
       this.elementOnSurface = null;
     }
-
   } );
 } );
 

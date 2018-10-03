@@ -29,13 +29,13 @@ define( function( require ) {
     // @public {Property.<Vector2>} - position of the center bottom of this model element
     this.positionProperty = new Property( initialPosition );
 
-    // @public {Property<HorizontalSurface>|null} - The top surface of this model element, the enclosed value will be
-    // null if other elements can't rest upon the surface.  This is updated when the model element is moved.
-    this.topSurfaceProperty = new Property( null );
+    // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
+    // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.
+    this.topSurface = null;
 
-    // @protected {Property<HorizontalSurface|null>} - The bottom surface of this model element, the value will be null if
+    // @protected {HorizontalSurface|null} - The bottom surface of this model element, the value will be null if
     // this model element can't rest on another surface.
-    this.bottomSurfaceProperty = new Property( null );
+    this.bottomSurface = null;
 
     // @public (read-only) {ObservableArray.<Bounds2>} - A list of bounds that are used for determining if this model
     // element is in a valid position, i.e. whether it is within the play area and is not overlapping other model
@@ -90,19 +90,19 @@ define( function( require ) {
      * Get the bottom surface of this model element.  Only model elements that can rest on top of other model elements
      * have bottom surfaces.
      * @public read-only
-     * @returns {Property.<HorizontalSurface|null>} The bottom surface of this model element, null if this element never
+     * @returns {HorizontalSurface|null} The bottom surface of this model element, null if this element never
      * rests upon other model elements.
      */
-    getBottomSurfaceProperty: function() {
-      return this.bottomSurfaceProperty;
+    getBottomSurface: function() {
+      return this.bottomSurface;
     },
 
     /**
-     * @returns {Property.<HorizontalSurface|null>} Surface upon which this element is resting, null if there is none.
+     * @returns {HorizontalSurface|null} Surface upon which this element is resting, null if there is none.
      * @public
      */
-    getTopSurfaceProperty: function() {
-      return this.topSurfaceProperty;
+    getTopSurface: function() {
+      return this.topSurface;
     },
 
     /**

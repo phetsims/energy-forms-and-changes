@@ -24,7 +24,6 @@ define( function( require ) {
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -87,16 +86,11 @@ define( function( require ) {
     var perspectiveCompensation = compositeBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                   Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
-    // @public (read-only) {Property.<HorizontalSurface>} - surface upon which other objects can rest
-    this.topSurfaceProperty.set(
-      new HorizontalSurface(
-        new Range(
-          compositeBounds.minX - perspectiveCompensation,
-          compositeBounds.maxX + perspectiveCompensation
-        ),
-        compositeBounds.maxY,
-        this
-      )
+    // @public - see base class for description
+    this.topSurface = new HorizontalSurface(
+      new Vector2( this.position.x, compositeBounds.maxY ),
+      compositeBounds.maxX + perspectiveCompensation - ( compositeBounds.minX - perspectiveCompensation ),
+      this
     );
   }
 
@@ -115,11 +109,11 @@ define( function( require ) {
     },
 
     /**
-     * @returns {Property}
+     * @returns {HorizontalSurface}
      * @public
      */
-    getTopSurfaceProperty: function() {
-      return this.topSurfaceProperty;
+    getTopSurface: function() {
+      return this.topSurface;
     },
 
     /**

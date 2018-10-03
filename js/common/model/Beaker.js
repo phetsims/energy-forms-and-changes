@@ -22,7 +22,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var Shape = require( 'KITE/Shape' );
@@ -107,21 +106,27 @@ define( function( require ) {
       width / 2 + MATERIAL_THICKNESS / 2,
       height
     ) );
+    var bounds = self.getCompositeBounds();
+
+    // @public - see base class for description
+    this.topSurface = new HorizontalSurface(
+      new Vector2( initialPosition.x, bounds.minY + MATERIAL_THICKNESS ),
+      width,
+      this
+    );
+
+    // @public - see base class for description
+    this.bottomSurface = new HorizontalSurface(
+      new Vector2( initialPosition.x, bounds.minY ),
+      width,
+      this
+    );
 
     // update the top and bottom surfaces whenever the position changes
-    // TODO: Make HorizontalSurface poolable and use pooling.
-    this.positionProperty.link( function() {
+    this.positionProperty.link( function( position ) {
       var bounds = self.getCompositeBounds();
-
-      self.topSurfaceProperty.set( new HorizontalSurface(
-        new Range( bounds.minX, bounds.maxX ),
-        bounds.minY + MATERIAL_THICKNESS, self )
-      );
-
-      self.bottomSurfaceProperty.set( new HorizontalSurface(
-        new Range( bounds.minX, bounds.maxX ),
-        bounds.minY, self )
-      );
+      self.topSurface.positionProperty.value = new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS );
+      self.bottomSurface.positionProperty.value = new Vector2( position.x, bounds.minY );
     } );
   }
 

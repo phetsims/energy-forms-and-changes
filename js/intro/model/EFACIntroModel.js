@@ -284,7 +284,7 @@ define( function( require ) {
         if ( y !== 0 && !y ) {
           assert && assert( false, 'NaN value in position' );
         }
-        unsupported = movableModelElement.supportingSurfaceProperty === null;
+        unsupported = movableModelElement.supportingSurface === null;
         raised = ( movableModelElement.positionProperty.value.y !== 0 );
         if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
           self.fallToSurface( movableModelElement, dt );
@@ -477,14 +477,13 @@ define( function( require ) {
         var distanceB = Math.abs( b - modelElement.positionProperty.value.x );
         return distanceA - distanceB;
       } );
-
       var destinationXSpot = null;
-      var destinationSurfaceProperty = null;
+      var destinationSurface = null;
 
       // check out each spot
       for ( var i = 0; i < this.groundSpotXPositions.length &&
                        destinationXSpot === null &&
-                       destinationSurfaceProperty === null; i++
+                       destinationSurface === null; i++
       ) {
         var modelElementsInSpot = [];
 
@@ -524,27 +523,27 @@ define( function( require ) {
         } );
 
         if ( modelElementsInSpot.length > 0 ) {
-          var highestSurface = modelElementsInSpot[ 0 ];
-          var beakerFoundInSpot = highestSurface instanceof Beaker;
+          var highestElement = modelElementsInSpot[ 0 ];
+          var beakerFoundInSpot = highestElement instanceof Beaker;
 
           // if more than one model element is in the spot, find the highest surface and flag any beakers that are present
           for ( var j = 1; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
             beakerFoundInSpot = beakerFoundInSpot || modelElementsInSpot[ j ] instanceof Beaker;
-            if ( modelElementsInSpot[ j ].topSurfaceProperty.value.yPos > highestSurface.topSurfaceProperty.value.yPos ) {
-              highestSurface = modelElementsInSpot[ j ];
+            if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y > highestElement.topSurface.positionProperty.value.y ) {
+              highestElement = modelElementsInSpot[ j ];
             }
           }
           var currentModelElementInStack = modelElement;
           var beakerFoundInStack = currentModelElementInStack instanceof Beaker;
 
           // iterate through the stack of model elements being held and flag if any beakers are in it
-          while ( currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface() && !beakerFoundInStack ) {
-            beakerFoundInStack = beakerFoundInStack || currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface() instanceof Beaker;
-            currentModelElementInStack = currentModelElementInStack.topSurfaceProperty.value.getElementOnSurface();
+          while ( currentModelElementInStack.topSurface.getElementOnSurface() && !beakerFoundInStack ) {
+            beakerFoundInStack = beakerFoundInStack || currentModelElementInStack.topSurface.getElementOnSurface() instanceof Beaker;
+            currentModelElementInStack = currentModelElementInStack.topSurface.getElementOnSurface();
           }
 
           if ( !( beakerFoundInSpot && beakerFoundInStack ) ) {
-            destinationSurfaceProperty = highestSurface.topSurfaceProperty;
+            destinationSurface = highestElement.topSurface;
           }
         }
         else {
@@ -553,9 +552,9 @@ define( function( require ) {
       }
 
       // if so, center the model element above its new supporting element
-      if ( destinationSurfaceProperty !== null ) {
-        minYPos = destinationSurfaceProperty.value.yPos;
-        targetX = destinationSurfaceProperty.value.getCenterX();
+      if ( destinationSurface !== null ) {
+        minYPos = destinationSurface.positionProperty.value.y;
+        targetX = destinationSurface.getCenterX();
         targetY = modelElement.positionProperty.value.y;
         modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
       }
@@ -571,9 +570,9 @@ define( function( require ) {
         // the element has landed on the ground or some other surface
         proposedYPos = minYPos;
         modelElement.verticalVelocityProperty.set( 0 );
-        if ( destinationSurfaceProperty !== null ) {
-          modelElement.setSupportingSurfaceProperty( destinationSurfaceProperty );
-          destinationSurfaceProperty.value.addElementToSurface( modelElement );
+        if ( destinationSurface !== null ) {
+          modelElement.setSupportingSurface( destinationSurface );
+          destinationSurface.addElementToSurface( modelElement );
         }
       }
       else {
@@ -940,28 +939,6 @@ define( function( require ) {
       }
 
       return new Vector2( xTranslation, yTranslation );
-    },
-
-    /**
-     * returns true if surface1 is above surface 2 such that they overlap in the x (horizontal) direction
-     * @param {HorizontalSurface} surface1
-     * @param {HorizontalSurface} surface2
-     * @private
-     */
-    isDirectlyAbove: function( surface1, surface2 ) {
-      return surface2.xRange.contains( surface1.getCenterX() ) && surface1.yPos > surface2.yPos;
-    },
-
-    /**
-     * get the amount of overlap in the x direction between two horizontal surfaces
-     * @param {HorizontalSurface} surface1
-     * @param {HorizontalSurface} surface2
-     * @public
-     */
-    getHorizontalOverlap: function( surface1, surface2 ) {
-      var lowestMax = Math.min( surface1.xRange.max, surface2.xRange.max );
-      var highestMin = Math.max( surface1.xRange.min, surface2.xRange.min );
-      return Math.max( lowestMax - highestMin, 0 );
     },
 
     /**
