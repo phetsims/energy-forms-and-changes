@@ -14,7 +14,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var Property = require( 'AXON/Property' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * {Vector2} initialPosition
