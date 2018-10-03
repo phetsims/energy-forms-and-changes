@@ -207,6 +207,5 @@ define( function( require ) {
     getEnergyBeyondMaxTemperature: function() {
       return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     }
-  } )
-    ;
+  } );
 } );
