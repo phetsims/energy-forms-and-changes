@@ -60,6 +60,7 @@ define( function( require ) {
      *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
+      var self = this;
 
       // calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles
       var fluidRectangle = new Rectangle(
@@ -86,11 +87,13 @@ define( function( require ) {
       this.slices.forEach( function( slice ) {
         var originalShape = slice.shape;
         var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, proportionateIncrease ) );
-        var translationTransform = Matrix3.translation(
-          originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
-          originalShape.bounds.y - expandedOrCompressedShape.bounds.y
-        );
-        slice.shape = expandedOrCompressedShape.transformed( translationTransform );
+        if ( expandedOrCompressedShape.bounds.height < self.height ) {
+          var translationTransform = Matrix3.translation(
+            originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
+            originalShape.bounds.y - expandedOrCompressedShape.bounds.y
+          );
+          slice.shape = expandedOrCompressedShape.transformed( translationTransform );
+        }
       } );
     },
 
