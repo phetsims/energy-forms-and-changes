@@ -167,7 +167,7 @@ define( function( require ) {
         else {
 
           // decelerate
-          this.crankAngularVelocity = Math.min( this.crankAngularVelocity - change, 0 );
+          this.crankAngularVelocity = Math.max( this.crankAngularVelocity - change, 0 );
         }
       }
 
