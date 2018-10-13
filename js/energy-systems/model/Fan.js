@@ -26,7 +26,6 @@ define( function( require ) {
   var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
   var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.12; // in meters
   var BLOWN_ENERGY_CHUNK_VELOCITY = EFACConstants.ENERGY_CHUNK_VELOCITY * 2; // empirically determined
-  var CHANCE_ENERGY_LOST_TO_MOTOR_HEAT = 0.1; // empirically determined
   var INCOMING_ENERGY_FAN_THRESHOLD = 6; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
   var MAX_INCOMING_ENERGY = 170;
 
