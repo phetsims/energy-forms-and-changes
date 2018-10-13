@@ -63,6 +63,9 @@ define( function( require ) {
     this.electricalEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
     this.mechanicalEnergyChunkMovers = [];
+
+    // counter for number of mechanical chunks that have passed through the fan
+    this.numberOfChunksPassed = 0;
   }
 
   energyFormsAndChanges.register( 'Fan', Fan );
@@ -106,6 +109,9 @@ define( function( require ) {
       this.moveRadiatedEnergyChunks( dt );
       this.moveBlownEnergyChunks( dt );
       var targetVelocity = 0;
+
+      // if there is a break in incoming energy chunks, reset the count for motor heat loss to 0
+      self.numberOfChunksPassed = this.motorRecentlyReceivedEnergy() ? self.numberOfChunksPassed : 0;
 
       // set how fast the fan is turning
       if ( this.energyChunksVisibleProperty.get() ) {
@@ -170,7 +176,8 @@ define( function( require ) {
           _.pull( self.electricalEnergyChunkMovers, mover );
           self.hasEnergy = true;
 
-          if ( phet.joist.random.nextDouble() > CHANCE_ENERGY_LOST_TO_MOTOR_HEAT || self.energyChunkIncomingEnergy < MAX_INCOMING_ENERGY / 2 ) {
+          if ( self.numberOfChunksPassed < 9 ) {
+            self.numberOfChunksPassed++;
             mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
             // release the energy chunk as mechanical to blow away
@@ -180,6 +187,7 @@ define( function( require ) {
             self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY;
           }
           else {
+            self.numberOfChunksPassed = 0;
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
             // release the energy chunk as thermal to radiate away
@@ -309,6 +317,7 @@ define( function( require ) {
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
       this.energyChunkIncomingEnergy = 0;
+      this.numberOfChunksPassed = 0;
       this.electricalEnergyChunkMovers = [];
       this.radiatedEnergyChunkMovers = [];
       this.mechanicalEnergyChunkMovers = [];
