@@ -41,7 +41,7 @@ define( function( require ) {
   var SUN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/sun_icon.png' );
 
   /**
-   * @param {SolarPanal} solarPanel
+   * @param {SolarPanel} solarPanel
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @constructor
    */
@@ -146,7 +146,7 @@ define( function( require ) {
         var distanceFromSun = chunk.positionProperty.value.distance( self.sunPosition.plus( OFFSET_TO_CENTER_OF_SUN ) );
 
         // this energy chunk was absorbed by the solar panel, so put it on the list of outgoing chunks
-        if ( self.solarPanel.active && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.positionProperty.value ) ) {
+        if ( self.solarPanel.activeProperty.value && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.positionProperty.value ) ) {
           self.outgoingEnergyChunks.push( chunk );
         }
 

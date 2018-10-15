@@ -21,8 +21,8 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var Shape = require( 'KITE/Shape' );
-  var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -31,8 +31,8 @@ define( function( require ) {
   // constants
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
-  var SOLAR_PANEL_SIZE = new Dimension2( 0.2, 0.1 );
-  var PANEL_SKEW_ANGLE = 0;
+  var SOLAR_PANEL_SIZE = new Dimension2( 0.12, 0.083 );
+  var PANEL_SKEW_OFFSET = 0.056;
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
@@ -42,9 +42,9 @@ define( function( require ) {
   var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, CONNECTOR_IMAGE_OFFSET.y );
   var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
 
-  // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.  It is
-  // intended to approximately match the rate at which the sun emits energy chunks.  In seconds.
-  var MIN_INTER_CHUNK_TIME = 1 / ( SunEnergySource.ENERGY_CHUNK_EMISSION_PERIOD * SunEnergySource.NUM_EMISSION_SECTORS );
+  // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
+  // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
+  var MIN_INTER_CHUNK_TIME = 0.6;
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
@@ -69,10 +69,15 @@ define( function( require ) {
     // @private - shape used when determining if a given chunk of light energy should be absorbed
     this.absorptionShape = new Shape()
       .lineTo( SOLAR_PANEL_SIZE.width, 0 )
-      .lineToPoint( new Vector2( SOLAR_PANEL_SIZE.width, SOLAR_PANEL_SIZE.height ).rotated( PANEL_SKEW_ANGLE ) )
+      .lineToRelative( PANEL_SKEW_OFFSET, SOLAR_PANEL_SIZE.height )
       .lineToRelative( -SOLAR_PANEL_SIZE.width, 0 )
       .lineTo( 0, 0 )
       .close();
+
+    // TODO: Figure out why the shape is in approximately the right spot, but the view is showing it in the wrong spot.
+    // The commented out translation is the correct spot for the view, but incorrect for the model.
+    // this.absorptionShape = this.absorptionShape.transformed( Matrix3.translation( -0.321, 0.136 ) );
+    this.absorptionShape = this.absorptionShape.transformed( Matrix3.translation( -0.085, 0 ) );
   }
 
   energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
@@ -160,9 +165,9 @@ define( function( require ) {
           _.pull( self.energyChunkMovers, mover );
 
           // energy chunk has reached the bottom of the panel and now needs to move through the converter
-          if ( mover.energyChunk.positionProperty.value.equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+          if ( mover.energyChunk.positionProperty.value.equals( self.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              self.createPathThroughConverter( self.position ),
+              self.createPathThroughConverter( self.positionProperty.value ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
 
@@ -231,9 +236,10 @@ define( function( require ) {
           this.energyChunkList.push( newEnergyChunk );
 
           // add a "mover" that will move this energy chunk to the bottom of the solar panel
-          this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
+          this.energyChunkMovers.push( new EnergyChunkPathMover(
+            newEnergyChunk,
             this.createPathToPanelBottom( this.positionProperty.get() ),
-            this.chooseChunkVelocityOnPanel( newEnergyChunk ) )
+            this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
           );
 
           // update energy since last chunk
@@ -274,14 +280,14 @@ define( function( require ) {
       var self = this;
 
       this.energyChunkMovers.forEach( function( mover ) {
-        if ( mover.getFinalDestination().equals( self.position.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+        if ( mover.getFinalDestination().equals( self.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
           numChunksOnPanel++;
         }
       } );
 
       // compute the projected time of arrival at the convergence point
       var distanceToConvergencePoint =
-        incomingEnergyChunk.positionProperty.get().distance( this.position.plus( OFFSET_TO_CONVERGENCE_POINT ) );
+        incomingEnergyChunk.positionProperty.get().distance( this.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) );
       var travelTime = distanceToConvergencePoint / chunkSpeed;
       var projectedArrivalTime = this.simulationTime + travelTime;
 
