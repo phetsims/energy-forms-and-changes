@@ -33,8 +33,8 @@ define( function( require ) {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       xMargin: 10,
       yMargin: 10,
-      stroke: Color.LIGHT_GRAY,
-      lineWidth: 2
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
     }, options );
 
     var buttonElementList = [];
