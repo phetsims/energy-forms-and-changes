@@ -135,6 +135,8 @@ define( function( require ) {
 
     this.addChild( new Panel( panelContent, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       centerX: 0,
       centerY: 0,
       cornerRadius: 8,
