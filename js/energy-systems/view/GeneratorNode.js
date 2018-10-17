@@ -24,7 +24,7 @@ define( function( require ) {
   var generatorWheelHubImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_hub_2.png' );
   var generatorWheelPaddlesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_paddles_short.png' );
   var generatorWheelSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );
-  var wireBlackLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
+  var wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
 
   /**
    * @param {Generator} generator EnergyConverter
@@ -49,16 +49,16 @@ define( function( require ) {
       centerY: paddlesNode.centerY,
       maxWidth: modelViewTransform.modelToViewDeltaX( Generator.WHEEL_RADIUS * 2 )
     } );
-    var wireBlackLeftNode = new Image( wireBlackLeftImage, {
+    var wireBottomLeftNode = new Image( wireBottomLeftImage, {
       right: generatorNode.right - 29,
-      top: generatorNode.centerY - 34
+      top: generatorNode.centerY - 30
     } );
     var connectorNode = new Image( connectorImage, {
       left: generatorNode.right - 3,
-      centerY: generatorNode.centerY + 88
+      centerY: generatorNode.centerY + 90
     } );
 
-    this.addChild( wireBlackLeftNode );
+    this.addChild( wireBottomLeftNode );
     this.addChild( new EnergyChunkLayer( generator.electricalEnergyChunks, generator.positionProperty, modelViewTransform ) );
     this.addChild( generatorNode );
     this.addChild( connectorNode );
