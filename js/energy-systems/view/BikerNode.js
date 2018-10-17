@@ -200,9 +200,9 @@ define( function( require ) {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       centerX: 0,
       centerY: 110,
-      cornerRadius: 8,
       resize: false
     } ) );
 

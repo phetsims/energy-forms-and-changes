@@ -31,10 +31,11 @@ define( function( require ) {
 
     options = _.extend( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      xMargin: 10,
-      yMargin: 10,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      xMargin: 10,
+      yMargin: 10
     }, options );
 
     var buttonElementList = [];

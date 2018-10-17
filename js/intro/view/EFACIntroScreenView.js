@@ -435,7 +435,7 @@ define( function( require ) {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
       rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
     } );
     this.addChild( controlPanel );
