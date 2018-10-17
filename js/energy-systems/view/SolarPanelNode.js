@@ -22,10 +22,7 @@ define( function( require ) {
   var solarPanelImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' );
   var solarPanelGenImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' );
   var solarPanelPostImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
-  var wireBlackLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_left.png' );
-
-  // constants
-  var WIRE_WIDTH = 20;
+  var wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
 
   /**
    * @param {SolarPanel} solarPanel From the model
@@ -45,14 +42,14 @@ define( function( require ) {
       centerX: postNode.centerX,
       top: postNode.centerY
     } );
-    var wireNode = new Image( wireBlackLeftImage, {
+    var wireBottomLeftNode = new Image( wireBottomLeftImage, {
       right: windowNode.right - 20,
-      bottom: windowNode.centerY + WIRE_WIDTH / 2
+      bottom: windowNode.centerY + 13
     } );
     var connectorNode = new Image( connectorImage, { left: windowNode.right, centerY: windowNode.centerY } );
 
     // add in correct order for layering effect
-    this.addChild( wireNode );
+    this.addChild( wireBottomLeftNode );
     this.addChild( postNode );
     this.addChild( panelNode );
     this.addChild( new EnergyChunkLayer( solarPanel.energyChunkList, solarPanel.positionProperty, modelViewTransform ) );
