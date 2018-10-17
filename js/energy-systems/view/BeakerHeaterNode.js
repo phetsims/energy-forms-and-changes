@@ -27,8 +27,8 @@ define( function( require ) {
   var elementBaseFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
   var heaterElementOnImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element.png' );
   var heaterElementOffImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element_dark.png' );
-  var wireCurveImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
-  var wireFlatImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_62.png' );
+  var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
+  var wireStraightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_straight.png' );
 
   /**
    * @param {BeakerHeater} beakerHeater
@@ -40,15 +40,18 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, beakerHeater, modelViewTransform );
 
-    var wireFlatNode = new Image( wireFlatImage, { left: -112, top: 77 } );
-    var wireCurveNode = new Image( wireCurveImage, { left: wireFlatNode.right - 1, bottom: wireFlatNode.bottom + 1 } );
+    var wireStraightNode = new Image( wireStraightImage, { left: -112, top: 78 } );
+    var wireBottomRightNode = new Image( wireBottomRightImage, {
+      left: wireStraightNode.right - 4,
+      bottom: wireStraightNode.bottom + 2.5
+    } );
     var elementBaseBackNode = new Image( elementBaseBackImage, {
-      right: wireCurveNode.right + 24,
-      top: wireCurveNode.top - 2
+      right: wireBottomRightNode.right + 21,
+      top: wireBottomRightNode.top - 2.5
     } );
     var elementBaseFrontNode = new Image( elementBaseFrontImage, {
       centerX: elementBaseBackNode.centerX,
-      top: wireCurveNode.top - 3
+      top: wireBottomRightNode.top - 3
     } );
     var energizedCoilNode = new Image( heaterElementOnImage, {
       maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
@@ -62,8 +65,8 @@ define( function( require ) {
     } );
 
     // add the images that are used to depict this element along with the layer that will contain the energy chunks
-    this.addChild( wireFlatNode );
-    this.addChild( wireCurveNode );
+    this.addChild( wireStraightNode );
+    this.addChild( wireBottomRightNode );
     this.addChild( elementBaseBackNode );
     this.addChild( nonEnergizedCoilNode );
     this.addChild( energizedCoilNode );
