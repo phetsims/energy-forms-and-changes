@@ -871,36 +871,36 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "wire_black_62.png": {
+  "wire_straight.png": {
     "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
+      "Copyright 2018 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
+    "notes": "created by Amy Rouinfar"
   },
-  "wire_black_left.png": {
+  "wire_bottom_left.png": {
     "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
+      "Copyright 2018 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
+    "notes": "created by Amy Rouinfar"
   },
-  "wire_black_right.png": {
+  "wire_bottom_right.png": {
     "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
+      "Copyright 2018 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
+    "notes": "created by Amy Rouinfar"
   },
-  "wire_black_right_top.png": {
+  "wire_top_right.png": {
     "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
+      "Copyright 2018 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
+    "notes": "created by Amy Rouinfar"
   }
 }
