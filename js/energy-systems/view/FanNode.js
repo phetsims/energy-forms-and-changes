@@ -30,8 +30,8 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' )
   ];
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var wireCurveBottomImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right.png' );
-  var wireCurveTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_black_right_top.png' );
+  var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
+  var wireTopRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_top_right.png' );
 
   // constants
   var NUM_FAN_IMAGES = fanImages.length;
@@ -47,22 +47,18 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, fan, modelViewTransform );
 
     // add the images and the layer that will contain the energy chunks
-    var wireCurveBottomNode = new Image( wireCurveBottomImage,
-      {
-        left: -106,
-        bottom: 99
-      } );
-    var wireCurveTopNode = new Image( wireCurveTopImage, {
-      left: wireCurveBottomNode.right - 24,
-      bottom: wireCurveBottomNode.top + 77
+    var wireBottomRightNode = new Image( wireBottomRightImage, { left: -107, bottom: 105 } );
+    var wireTopRightNode = new Image( wireTopRightImage, {
+      left: wireBottomRightNode.right - 27,
+      bottom: wireBottomRightNode.top + 77
     } );
     var connectorNode = new Image( connectorImage, {
-      left: wireCurveTopNode.right - 2,
-      top: wireCurveTopNode.top - 25
+      left: wireTopRightNode.right - 4,
+      top: wireTopRightNode.top - 23
     } );
 
-    this.addChild( wireCurveBottomNode );
-    this.addChild( wireCurveTopNode );
+    this.addChild( wireBottomRightNode );
+    this.addChild( wireTopRightNode );
 
     var fanBladeRootNode = new Node();
     var fanBladeImageNodes = [];
@@ -71,7 +67,7 @@ define( function( require ) {
     for ( var i = 0; i < NUM_FAN_IMAGES; i++ ) {
       fanBladeImageNodes.push( new Image( fanImages[ i ], {
         left: connectorNode.right - 2,
-        centerY: connectorNode.centerY - 1.3,
+        centerY: connectorNode.centerY,
         scale: 0.74
       } ) );
       fanBladeImageNodes[ i ].setVisible( false );
