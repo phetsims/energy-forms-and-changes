@@ -40,13 +40,13 @@ define( function( require ) {
   // Images used to represent this model element in the view. Offsets empirically determined
   var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
   var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
-  var CONNECTOR_OFFSET = new Vector2( 0.057, -0.04 );
+  var CONNECTOR_OFFSET = new Vector2( 0.057, -0.041 );
   var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
 
   // offsets used to create the paths followed by the energy chunks
   var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.01, -0.05 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.06 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.03, -0.07 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.062 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.03, -0.071 );
   var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
 
   /**
