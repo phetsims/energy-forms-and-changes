@@ -47,7 +47,7 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, fan, modelViewTransform );
 
     // add the images and the layer that will contain the energy chunks
-    var wireBottomRightNode = new Image( wireBottomRightImage, { left: -107, bottom: 105 } );
+    var wireBottomRightNode = new Image( wireBottomRightImage, { left: -110, bottom: 105 } );
     var wireTopRightNode = new Image( wireTopRightImage, {
       left: wireBottomRightNode.right - 27,
       bottom: wireBottomRightNode.top + 77

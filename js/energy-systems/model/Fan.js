@@ -30,13 +30,14 @@ define( function( require ) {
   var MAX_INCOMING_ENERGY = 170;
 
   // energy chunk path offsets
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.035, -0.0375 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.026, -0.025 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.025, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.025, 0.011 );
-  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0225, 0.02 );
-  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0125, 0.031 );
-  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.034 );
+  var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.042 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
+  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.0265, 0.011 );
+  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0235, 0.022 );
+  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0135, 0.031 );
+  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.033 );
   var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.034 );
 
   // images
@@ -245,6 +246,7 @@ define( function( require ) {
     createElectricalEnergyChunkPath: function( center ) {
       var path = [];
 
+      path.push( center.plus( OFFSET_TO_WIRE_START ) );
       path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
