@@ -30,7 +30,7 @@ define( function( require ) {
 
   // constants
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
-  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.04 );
+  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.039 );
   var SOLAR_PANEL_SIZE = new Dimension2( 0.12, 0.083 );
   var PANEL_SKEW_OFFSET = 0.056;
 

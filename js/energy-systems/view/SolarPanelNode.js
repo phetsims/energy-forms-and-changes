@@ -46,7 +46,7 @@ define( function( require ) {
       right: windowNode.right - 20,
       bottom: windowNode.centerY + 13
     } );
-    var connectorNode = new Image( connectorImage, { left: windowNode.right, centerY: windowNode.centerY } );
+    var connectorNode = new Image( connectorImage, { left: windowNode.right - 2, centerY: windowNode.centerY } );
 
     // add in correct order for layering effect
     this.addChild( wireBottomLeftNode );
