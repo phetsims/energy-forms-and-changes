@@ -46,7 +46,7 @@ define( function( require ) {
       bottom: wireStraightNode.bottom + 2.5
     } );
     var elementBaseBackNode = new Image( elementBaseBackImage, {
-      right: wireBottomRightNode.right + 21,
+      right: wireBottomRightNode.right + 22,
       top: wireBottomRightNode.top - 2.5
     } );
     var elementBaseFrontNode = new Image( elementBaseFrontImage, {
