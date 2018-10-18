@@ -30,7 +30,7 @@ define( function( require ) {
 
   // constants
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
-  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.039 );
+  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.041 );
   var SOLAR_PANEL_SIZE = new Dimension2( 0.12, 0.083 );
   var PANEL_SKEW_OFFSET = 0.056;
 
@@ -39,7 +39,7 @@ define( function( require ) {
   var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.01 );
   var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.025 );
   var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.033 );
-  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, CONNECTOR_IMAGE_OFFSET.y );
+  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, -0.039 );
   var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
