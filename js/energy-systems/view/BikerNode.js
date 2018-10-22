@@ -124,7 +124,6 @@ define( function( require ) {
       cyclistTorsoNodes[ i ].setVisible( false );
       cyclistTorsoRootNode.addChild( cyclistTorsoNodes[ i ] );
     }
-
     var cyclistBackLegRootNode = new Node();
     var cyclistFrontLegRootNode = new Node();
     var cyclistBackLegNodes = [];
