@@ -10,7 +10,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var Energy = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Energy' );
@@ -30,10 +29,10 @@ define( function( require ) {
   var MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR = EFACConstants.MAX_ENERGY_PRODUCTION_RATE; // In joules / sec
   var MAX_ENERGY_OUTPUT_WHEN_RUNNING_FREE = MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR / 5; // In joules / sec
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
-  var INITIAL_NUM_ENERGY_CHUNKS = 15;
+  var INITIAL_NUMBER_OF_ENERGY_CHUNKS = 21;
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
-  var NUM_LEG_IMAGES = 18; // must match number of leg images in view
+  var NUMBER_OF_LEG_IMAGES = 18; // must match number of leg images in view
 
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
@@ -66,8 +65,8 @@ define( function( require ) {
     // @public (read-only) {NumberProperty} - angle of the rear wheel on the bike, in radians
     this.rearWheelAngleProperty = new NumberProperty( 0 );
 
-    // @public (read-only) {BooleanProperty} - flag that indicates whether the biker has enough energy to pedal
-    this.bikerHasEnergyProperty = new BooleanProperty( true );
+    // @public (read-only) {NumberProperty} - number of energy chunks remaining in the biker's body
+    this.energyChunksRemainingProperty = new NumberProperty( 0 );
 
     // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians
     this.targetCrankAngularVelocityProperty = new NumberProperty( 0 );
@@ -143,11 +142,11 @@ define( function( require ) {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
-      // update energy state state
-      this.bikerHasEnergyProperty.set( this.bikerCanPedal() );
+      // update property by reading how many chunks remain in the biker's body
+      this.energyChunksRemainingProperty.set( this.energyChunkList.length - this.energyChunkMovers.length );
 
       // if there is no energy, the target speed is 0, otherwise it is the current set point
-      var target = this.bikerHasEnergyProperty.value ? this.targetCrankAngularVelocityProperty.value : 0;
+      var target = this.bikerHasEnergy() ? this.targetCrankAngularVelocityProperty.value : 0;
 
       // speed up or slow down the angular velocity of the crank
       var previousAngularVelocity = this.crankAngularVelocity;
@@ -204,7 +203,7 @@ define( function( require ) {
            this.targetCrankAngularVelocityProperty.value > 0 ) {
 
         // start a new chunk moving
-        if ( this.bikerCanPedal() ) {
+        if ( this.bikerHasEnergy() ) {
           var energyChunk = this.findNonMovingEnergyChunk();
           this.energyChunkMovers.push( new EnergyChunkPathMover(
             energyChunk,
@@ -333,8 +332,8 @@ define( function( require ) {
      */
     setCrankToPoisedPosition: function() {
       var currentIndex = this.mapAngleToImageIndex( this.crankAngleProperty.value );
-      var radiansPerImage = 2 * Math.PI / NUM_LEG_IMAGES;
-      this.crankAngleProperty.set( ( currentIndex % NUM_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
+      var radiansPerImage = 2 * Math.PI / NUMBER_OF_LEG_IMAGES;
+      this.crankAngleProperty.set( ( currentIndex % NUMBER_OF_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
       assert && assert( this.crankAngleProperty.value >= 0 && this.crankAngleProperty.value <= 2 * Math.PI );
     },
 
@@ -375,7 +374,7 @@ define( function( require ) {
     replenishEnergyChunks: function() {
       var nominalInitialOffset = new Vector2( 0.019, 0.05 );
 
-      for ( var i = 0; i < INITIAL_NUM_ENERGY_CHUNKS; i++ ) {
+      for ( var i = 0; i < INITIAL_NUMBER_OF_ENERGY_CHUNKS; i++ ) {
         var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
         var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
@@ -396,8 +395,8 @@ define( function( require ) {
      * @private
      */
     mapAngleToImageIndex: function( angle ) {
-      var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_LEG_IMAGES ) );
-      assert && assert( i >= 0 && i < NUM_LEG_IMAGES );
+      var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_LEG_IMAGES ) );
+      assert && assert( i >= 0 && i < NUMBER_OF_LEG_IMAGES );
       return i;
     },
 
@@ -498,12 +497,11 @@ define( function( require ) {
     },
 
     /**
-     * Say whether the biker has energy to pedal. Renamed from bikerHasEnergy() to avoid collision with the identically-
-     * named property.
+     * Say whether the biker has energy to pedal.
      * @returns {boolean}
      * @private
      */
-    bikerCanPedal: function() {
+    bikerHasEnergy: function() {
       var nChunks = this.energyChunkList.length;
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     },
@@ -515,7 +513,7 @@ define( function( require ) {
     reset: function() {
       this.crankAngleProperty.reset();
       this.rearWheelAngleProperty.reset();
-      this.bikerHasEnergyProperty.reset();
+      this.energyChunksRemainingProperty.reset();
       this.targetCrankAngularVelocityProperty.reset();
     }
 
@@ -523,8 +521,9 @@ define( function( require ) {
 
     // statics
     CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
+    INITIAL_NUMBER_OF_ENERGY_CHUNKS: INITIAL_NUMBER_OF_ENERGY_CHUNKS,
     MAX_ANGULAR_VELOCITY_OF_CRANK: MAX_ANGULAR_VELOCITY_OF_CRANK,
-    NUM_LEG_IMAGES: NUM_LEG_IMAGES,
+    NUMBER_OF_LEG_IMAGES: NUMBER_OF_LEG_IMAGES,
     REAR_WHEEL_RADIUS: REAR_WHEEL_RADIUS
   } );
 } );

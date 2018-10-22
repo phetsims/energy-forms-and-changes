@@ -27,7 +27,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // images
-  var backLegImages = [
+  var cyclistBackLegImages = [
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_01.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_02.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_03.png' ),
@@ -47,7 +47,7 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_17.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_18.png' )
   ];
-  var frontLegImages = [
+  var cyclistFrontLegImages = [
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_01.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_02.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_03.png' ),
@@ -67,13 +67,19 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_17.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_18.png' )
   ];
-  var NUM_LEG_IMAGES = frontLegImages.length;
+  var cyclistTorsoImages = [
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_1.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_2.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_3.png' )
+  ];
+  assert && assert( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
+    'NUMBER_OF_LEG_IMAGES in Biker.js must match the number of images used for the legs in BikerNode.js'
+  );
+  var NUMBER_OF_LEG_IMAGES = cyclistFrontLegImages.length;
+  var NUMBER_OF_TORSO_IMAGES = cyclistTorsoImages.length;
   var bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame.png' );
   var bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
-  var cyclistTorsoImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso.png' );
-  var cyclistTorsoTired1Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_1.png' );
-  var cyclistTorsoTired2Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_2.png' );
-  var cyclistTorsoTired3Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_3.png' );
 
   // constants
   var BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
@@ -104,53 +110,58 @@ define( function( require ) {
       bottom: bicycleFrameNode.bottom - 14,
       scale: BICYCLE_SYSTEM_SCALE
     } );
-    var cyclistTorsoNode = new Image( cyclistTorsoImage, {
-      centerX: bicycleFrameNode.centerX,
-      bottom: bicycleFrameNode.bottom,
-      scale: BICYCLE_SYSTEM_SCALE
-    } );
-    var cyclistTorsoTired3Node = new Image( cyclistTorsoTired3Image, {
-      centerX: bicycleFrameNode.centerX,
-      bottom: bicycleFrameNode.bottom,
-      scale: BICYCLE_SYSTEM_SCALE
-    } );
-    var cyclistBackLegRootNode = new Node();
     var cyclistTorsoRootNode = new Node();
-    var cyclistFrontLegRootNode = new Node();
-    var backLegImageNodes = [];
-    var frontLegImageNodes = [];
+    var cyclistTorsoNodes = [];
+    var i;
 
-    for ( var i = 0; i < NUM_LEG_IMAGES; i++ ) {
+    // create the torso image nodes
+    for ( i = 0; i < NUMBER_OF_TORSO_IMAGES; i++ ) {
+      cyclistTorsoNodes.push( new Image( cyclistTorsoImages[ i ], {
+        centerX: bicycleFrameNode.centerX,
+        bottom: bicycleFrameNode.bottom,
+        scale: BICYCLE_SYSTEM_SCALE
+      } ) );
+      cyclistTorsoNodes[ i ].setVisible( false );
+      cyclistTorsoRootNode.addChild( cyclistTorsoNodes[ i ] );
+    }
+
+    var cyclistBackLegRootNode = new Node();
+    var cyclistFrontLegRootNode = new Node();
+    var cyclistBackLegNodes = [];
+    var cyclistFrontLegNodes = [];
+
+    // create the leg image nodes
+    for ( i = 0; i < NUMBER_OF_LEG_IMAGES; i++ ) {
 
       // back leg image nodes
-      backLegImageNodes.push( new Image( backLegImages[ i ], {
+      cyclistBackLegNodes.push( new Image( cyclistBackLegImages[ i ], {
         right: BICYCLE_SYSTEM_RIGHT_OFFSET,
         top: BICYCLE_SYSTEM_TOP_OFFSET,
         scale: BICYCLE_SYSTEM_SCALE
       } ) );
-      backLegImageNodes[ i ].setVisible( false );
-      cyclistBackLegRootNode.addChild( backLegImageNodes[ i ] );
+      cyclistBackLegNodes[ i ].setVisible( false );
+      cyclistBackLegRootNode.addChild( cyclistBackLegNodes[ i ] );
 
       // front leg image nodes
-      frontLegImageNodes.push( new Image( frontLegImages[ i ], {
+      cyclistFrontLegNodes.push( new Image( cyclistFrontLegImages[ i ], {
         right: BICYCLE_SYSTEM_RIGHT_OFFSET,
         top: BICYCLE_SYSTEM_TOP_OFFSET,
         scale: BICYCLE_SYSTEM_SCALE
       } ) );
-      frontLegImageNodes[ i ].setVisible( false );
-      cyclistFrontLegRootNode.addChild( frontLegImageNodes[ i ] );
+      cyclistFrontLegNodes[ i ].setVisible( false );
+      cyclistFrontLegRootNode.addChild( cyclistFrontLegNodes[ i ] );
     }
 
     // animate legs by setting image visibility based on crank arm angle
-    var visibleBackLeg = backLegImageNodes[ 0 ];
-    var visibleFrontLeg = frontLegImageNodes[ 0 ];
+    var visibleBackLeg = cyclistBackLegNodes[ 0 ];
+    var visibleFrontLeg = cyclistFrontLegNodes[ 0 ];
     biker.crankAngleProperty.link( function( angle ) {
       assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
       var i = biker.mapAngleToImageIndex( angle );
       visibleFrontLeg.setVisible( false );
       visibleBackLeg.setVisible( false );
-      visibleFrontLeg = frontLegImageNodes[ i ];
-      visibleBackLeg = backLegImageNodes[ i ];
+      visibleFrontLeg = cyclistFrontLegNodes[ i ];
+      visibleBackLeg = cyclistBackLegNodes[ i ];
       visibleFrontLeg.setVisible( true );
       visibleBackLeg.setVisible( true );
     } );
@@ -162,16 +173,32 @@ define( function( require ) {
         biker.replenishEnergyChunks();
       },
       baseColor: 'rgba(0,220,0,1)',
-      centerX: cyclistTorsoNode.centerTop.x,
-      centerY: cyclistTorsoNode.centerTop.y - 40
+      centerX: cyclistTorsoNodes[ 0 ].centerTop.x,
+      centerY: cyclistTorsoNodes[ 0 ].centerTop.y - 15
     } );
     this.addChild( feedMeButton );
 
-    // control the visibility of the "feed me" button the position of the upper body based on the energy level
-    biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
-      feedMeButton.setVisible( !hasEnergy );
-      cyclistTorsoNode.setVisible( hasEnergy );
-      cyclistTorsoTired3Node.setVisible( !hasEnergy );
+    // control the visibility of the "feed me" button and the tiredness of the upper body based on the energy level
+    var visibleTorso = cyclistTorsoNodes[ 0 ];
+    biker.energyChunksRemainingProperty.link( function( numberOfChunksRemaining ) {
+
+      // only set the state by numberOfChunksRemaining if the biker is active, otherwise set initial state. this is
+      // needed for the biker to initially look correct when selected from the carousel
+      if ( biker.activeProperty.get() ) {
+        var percentageOfChunksRemaining = numberOfChunksRemaining / Biker.INITIAL_NUMBER_OF_ENERGY_CHUNKS;
+        visibleTorso.setVisible( false );
+
+        // select how tired the cyclist appears by how much energy the have remaining
+        visibleTorso = percentageOfChunksRemaining > 0.67 ? cyclistTorsoNodes[ 0 ] :
+                       percentageOfChunksRemaining > 0.33 ? cyclistTorsoNodes[ 1 ] :
+                       percentageOfChunksRemaining > 0 ? cyclistTorsoNodes[ 2 ] : cyclistTorsoNodes[ 3 ];
+        visibleTorso.setVisible( true );
+        feedMeButton.setVisible( numberOfChunksRemaining === 0 );
+      }
+      else {
+        visibleTorso.setVisible( true );
+        feedMeButton.setVisible( false );
+      }
     } );
 
     // add a listener that will turn the back wheel
@@ -215,8 +242,7 @@ define( function( require ) {
     this.addChild( cyclistBackLegRootNode );
     this.addChild( bicycleSpokesNode );
     this.addChild( bicycleFrameNode );
-    this.addChild( cyclistTorsoNode );
-    this.addChild( cyclistTorsoTired3Node );
+    this.addChild( cyclistTorsoRootNode );
     this.addChild( cyclistFrontLegRootNode );
 
     // add the energy chunk layer
