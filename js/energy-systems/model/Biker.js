@@ -372,7 +372,7 @@ define( function( require ) {
      * @public
      */
     replenishEnergyChunks: function() {
-      var nominalInitialOffset = new Vector2( 0.019, 0.05 );
+      var nominalInitialOffset = new Vector2( 0.019, 0.055 );
 
       for ( var i = 0; i < INITIAL_NUMBER_OF_ENERGY_CHUNKS; i++ ) {
         var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
