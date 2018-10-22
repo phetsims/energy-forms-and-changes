@@ -33,7 +33,7 @@ define( function( require ) {
   var INITIAL_NUM_ENERGY_CHUNKS = 15;
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
   var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
-  var NUM_LEG_IMAGES = 24; // must match number of leg images in view
+  var NUM_LEG_IMAGES = 18; // must match number of leg images in view
 
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );

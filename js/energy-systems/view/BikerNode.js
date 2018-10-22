@@ -28,68 +28,57 @@ define( function( require ) {
 
   // images
   var backLegImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_18.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_19.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_20.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_21.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_22.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_23.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/back_leg_24.png' )
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_01.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_02.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_03.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_04.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_05.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_06.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_07.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_08.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_09.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_10.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_11.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_12.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_13.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_14.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_15.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_16.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_17.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_18.png' )
   ];
   var frontLegImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_18.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_19.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_20.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_21.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_22.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_23.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/front_leg_24.png' )
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_01.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_02.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_03.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_04.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_05.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_06.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_07.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_08.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_09.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_10.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_11.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_12.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_13.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_14.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_15.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_16.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_17.png' ),
+    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_18.png' )
   ];
   var NUM_LEG_IMAGES = frontLegImages.length;
-  var bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame_3.png' );
-  var bicycleRiderImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider.png' );
-  var bicycleRiderTiredImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_rider_tired.png' );
+  var bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame.png' );
   var bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
+  var cyclistTorsoImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso.png' );
+  var cyclistTorsoTired1Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_1.png' );
+  var cyclistTorsoTired2Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_2.png' );
+  var cyclistTorsoTired3Image = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_3.png' );
 
   // constants
-  var BICYCLE_FRAME_RIGHT_OFFSET = 120;
-  var BICYCLE_FRAME_TOP_OFFSET = -112;
-  var LEG_RIGHT_OFFSET = BICYCLE_FRAME_RIGHT_OFFSET - 33;
-  var LEG_TOP_OFFSET = BICYCLE_FRAME_TOP_OFFSET - 10;
+  var BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
+  var BICYCLE_SYSTEM_TOP_OFFSET = -249;
+  var BICYCLE_SYSTEM_SCALE = 0.490;
 
   // strings
   var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
@@ -105,35 +94,51 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, biker, modelViewTransform );
 
     // bike part image nodes
-    var frameNode = new Image( bicycleFrameImage, {
-      right: BICYCLE_FRAME_RIGHT_OFFSET,
-      top: BICYCLE_FRAME_TOP_OFFSET
+    var bicycleFrameNode = new Image( bicycleFrameImage, {
+      right: BICYCLE_SYSTEM_RIGHT_OFFSET,
+      top: BICYCLE_SYSTEM_TOP_OFFSET,
+      scale: BICYCLE_SYSTEM_SCALE
     } );
-    var spokesNode = new Image( bicycleSpokesImage, { right: frameNode.right - 14, bottom: frameNode.bottom - 14 } );
-    var upperBodyNormalNode = new Image( bicycleRiderImage, {
-      centerX: frameNode.centerX - 5,
-      bottom: frameNode.top + 25
+    var bicycleSpokesNode = new Image( bicycleSpokesImage, {
+      right: bicycleFrameNode.right - 14,
+      bottom: bicycleFrameNode.bottom - 14,
+      scale: BICYCLE_SYSTEM_SCALE
     } );
-    var upperBodyTiredNode = new Image( bicycleRiderTiredImage, {
-      centerX: frameNode.centerX - 5,
-      bottom: frameNode.top + 25
+    var cyclistTorsoNode = new Image( cyclistTorsoImage, {
+      centerX: bicycleFrameNode.centerX,
+      bottom: bicycleFrameNode.bottom,
+      scale: BICYCLE_SYSTEM_SCALE
     } );
-    var backLegRootNode = new Node();
-    var frontLegRootNode = new Node();
+    var cyclistTorsoTired3Node = new Image( cyclistTorsoTired3Image, {
+      centerX: bicycleFrameNode.centerX,
+      bottom: bicycleFrameNode.bottom,
+      scale: BICYCLE_SYSTEM_SCALE
+    } );
+    var cyclistBackLegRootNode = new Node();
+    var cyclistTorsoRootNode = new Node();
+    var cyclistFrontLegRootNode = new Node();
     var backLegImageNodes = [];
     var frontLegImageNodes = [];
 
     for ( var i = 0; i < NUM_LEG_IMAGES; i++ ) {
 
       // back leg image nodes
-      backLegImageNodes.push( new Image( backLegImages[ i ], { right: LEG_RIGHT_OFFSET, top: LEG_TOP_OFFSET } ) );
+      backLegImageNodes.push( new Image( backLegImages[ i ], {
+        right: BICYCLE_SYSTEM_RIGHT_OFFSET,
+        top: BICYCLE_SYSTEM_TOP_OFFSET,
+        scale: BICYCLE_SYSTEM_SCALE
+      } ) );
       backLegImageNodes[ i ].setVisible( false );
-      backLegRootNode.addChild( backLegImageNodes[ i ] );
+      cyclistBackLegRootNode.addChild( backLegImageNodes[ i ] );
 
       // front leg image nodes
-      frontLegImageNodes.push( new Image( frontLegImages[ i ], { right: LEG_RIGHT_OFFSET, top: LEG_TOP_OFFSET } ) );
+      frontLegImageNodes.push( new Image( frontLegImages[ i ], {
+        right: BICYCLE_SYSTEM_RIGHT_OFFSET,
+        top: BICYCLE_SYSTEM_TOP_OFFSET,
+        scale: BICYCLE_SYSTEM_SCALE
+      } ) );
       frontLegImageNodes[ i ].setVisible( false );
-      frontLegRootNode.addChild( frontLegImageNodes[ i ] );
+      cyclistFrontLegRootNode.addChild( frontLegImageNodes[ i ] );
     }
 
     // animate legs by setting image visibility based on crank arm angle
@@ -157,28 +162,28 @@ define( function( require ) {
         biker.replenishEnergyChunks();
       },
       baseColor: 'rgba(0,220,0,1)',
-      centerX: upperBodyNormalNode.centerTop.x,
-      centerY: upperBodyNormalNode.centerTop.y - 40
+      centerX: cyclistTorsoNode.centerTop.x,
+      centerY: cyclistTorsoNode.centerTop.y - 40
     } );
     this.addChild( feedMeButton );
 
     // control the visibility of the "feed me" button the position of the upper body based on the energy level
     biker.bikerHasEnergyProperty.link( function( hasEnergy ) {
       feedMeButton.setVisible( !hasEnergy );
-      upperBodyNormalNode.setVisible( hasEnergy );
-      upperBodyTiredNode.setVisible( !hasEnergy );
+      cyclistTorsoNode.setVisible( hasEnergy );
+      cyclistTorsoTired3Node.setVisible( !hasEnergy );
     } );
 
     // add a listener that will turn the back wheel
-    var wheelRotationPoint = spokesNode.bounds.center;
+    var wheelRotationPoint = bicycleSpokesNode.bounds.center;
     biker.rearWheelAngleProperty.link( function( angle ) {
       assert && assert( angle < 2 * Math.PI, 'Angle is out of bounds' );
 
       // Scenery doesn't use the convention in physics where a positive rotation is counter-clockwise, so we have to
       // invert the angle in the following calculation.
-      var compensatedAngle = ( 2 * Math.PI - spokesNode.getRotation() ) % ( 2 * Math.PI );
+      var compensatedAngle = ( 2 * Math.PI - bicycleSpokesNode.getRotation() ) % ( 2 * Math.PI );
       var delta = angle - compensatedAngle;
-      spokesNode.rotateAround( wheelRotationPoint, -delta );
+      bicycleSpokesNode.rotateAround( wheelRotationPoint, -delta );
     } );
 
     // slider to control crank speed
@@ -207,12 +212,12 @@ define( function( require ) {
     } ) );
 
     // add the other images used
-    this.addChild( spokesNode );
-    this.addChild( backLegRootNode );
-    this.addChild( frameNode );
-    this.addChild( frontLegRootNode );
-    this.addChild( upperBodyNormalNode );
-    this.addChild( upperBodyTiredNode );
+    this.addChild( cyclistBackLegRootNode );
+    this.addChild( bicycleSpokesNode );
+    this.addChild( bicycleFrameNode );
+    this.addChild( cyclistTorsoNode );
+    this.addChild( cyclistTorsoTired3Node );
+    this.addChild( cyclistFrontLegRootNode );
 
     // add the energy chunk layer
     this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
