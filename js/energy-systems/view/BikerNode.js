@@ -85,6 +85,7 @@ define( function( require ) {
   var BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
   var BICYCLE_SYSTEM_TOP_OFFSET = -249;
   var BICYCLE_SYSTEM_SCALE = 0.490;
+  var SPOKES_OFFSET = -14;
 
   // strings
   var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
@@ -106,8 +107,8 @@ define( function( require ) {
       scale: BICYCLE_SYSTEM_SCALE
     } );
     var bicycleSpokesNode = new Image( bicycleSpokesImage, {
-      right: bicycleFrameNode.right - 14,
-      bottom: bicycleFrameNode.bottom - 14,
+      right: bicycleFrameNode.right + SPOKES_OFFSET,
+      bottom: bicycleFrameNode.bottom + SPOKES_OFFSET,
       scale: BICYCLE_SYSTEM_SCALE
     } );
     var cyclistTorsoRootNode = new Node();
