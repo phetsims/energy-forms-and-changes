@@ -30,6 +30,10 @@ define( function( require ) {
   var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
   var wireStraightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_straight.png' );
 
+  // constants
+  var COIL_NODE_CENTER_X_OFFSET = -4;
+  var COIL_NODE_TOP_OFFSET = 15;
+
   /**
    * @param {BeakerHeater} beakerHeater
    * @param {Property.<boolean>} energyChunksVisibleProperty
@@ -55,13 +59,13 @@ define( function( require ) {
     } );
     var energizedCoilNode = new Image( heaterElementOnImage, {
       maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
-      centerX: elementBaseFrontNode.centerX - 4,
-      bottom: elementBaseFrontNode.top + 15
+      centerX: elementBaseFrontNode.centerX + COIL_NODE_CENTER_X_OFFSET,
+      bottom: elementBaseFrontNode.top + COIL_NODE_TOP_OFFSET
     } );
     var nonEnergizedCoilNode = new Image( heaterElementOffImage, {
       maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
-      centerX: elementBaseFrontNode.centerX - 4,
-      bottom: elementBaseFrontNode.top + 15
+      centerX: elementBaseFrontNode.centerX + COIL_NODE_CENTER_X_OFFSET,
+      bottom: elementBaseFrontNode.top + COIL_NODE_TOP_OFFSET
     } );
 
     // add the images that are used to depict this element along with the layer that will contain the energy chunks
