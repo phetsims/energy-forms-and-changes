@@ -33,6 +33,10 @@ define( function( require ) {
   var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
   var wireStraightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_straight.png' );
 
+  // constants
+  var FLUORESCENT_BULB_TOP_OFFSET = 28;
+  var INCANDESCENT_BULB_TOP_OFFSET = 31;
+
   /**
    * @param {FluorescentBulb} lightBulb
    * @param {BooleanProperty} energyChunksVisibleProperty
@@ -87,19 +91,19 @@ define( function( require ) {
     if ( options.bulbType === 'fluorescent' ) {
       var fluorescentOffBackNode = new Image( fluorescentOffBackImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 28
+        bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
       var fluorescentOnBackNode = new Image( fluorescentOnBackImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 28
+        bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
       var fluorescentOffFrontNode = new Image( fluorescentOffFrontImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 28
+        bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
       var fluorescentOnFrontNode = new Image( fluorescentOnFrontImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 28
+        bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
 
       this.addChild( fluorescentOffBackNode );
@@ -128,11 +132,11 @@ define( function( require ) {
     else {
       var incandescentOffNode = new Image( incandescentOffImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 31
+        bottom: elementBaseFrontNode.top + INCANDESCENT_BULB_TOP_OFFSET
       } );
       var incandescentOnNode = new Image( incandescentOnImage, {
         centerX: elementBaseFrontNode.centerX,
-        bottom: elementBaseFrontNode.top + 31
+        bottom: elementBaseFrontNode.top + INCANDESCENT_BULB_TOP_OFFSET
       } );
       this.addChild( incandescentOffNode );
       this.addChild( incandescentOnNode );
