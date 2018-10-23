@@ -26,6 +26,9 @@ define( function( require ) {
   var generatorWheelSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );
   var wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
 
+  // constants
+  var SPOKES_AND_PADDLES_CENTER_Y_OFFSET = -65;
+
   /**
    * @param {Generator} generator EnergyConverter
    * @param {ModelViewTransform2} modelViewTransform
@@ -38,11 +41,11 @@ define( function( require ) {
     var generatorNode = new Image( generatorImage, { left: -107, top: -165 } );
     var spokesNode = new Image( generatorWheelSpokesImage, {
       centerX: generatorNode.centerX,
-      centerY: generatorNode.centerY - 65
+      centerY: generatorNode.centerY + SPOKES_AND_PADDLES_CENTER_Y_OFFSET
     } );
     var paddlesNode = new Image( generatorWheelPaddlesImage, {
       centerX: generatorNode.centerX,
-      centerY: generatorNode.centerY - 65
+      centerY: generatorNode.centerY + SPOKES_AND_PADDLES_CENTER_Y_OFFSET
     } );
     var generatorWheelHubNode = new Image( generatorWheelHubImage, {
       centerX: paddlesNode.centerX,
