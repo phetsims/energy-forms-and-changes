@@ -25,11 +25,11 @@ define( function( require ) {
 
   var simOptions = {
     credits: {
-      leadDesign: 'Noah Podolefsky',
-      softwareDevelopment: 'John Blanco',
-      team: 'Ariel Paul, Emily Moore, Katherine Perkins, Trish Loeblein, and in cooperation with the Next-Lab project',
-      qualityAssurance: '', //TODO
-      graphicArts: '', //TODO
+      leadDesign: 'Noah Podolefsky, Amy Rouinfar',
+      softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
+      team: 'Trish Loeblein, Emily Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
+      qualityAssurance: 'Steele Dalton, Jacob Romero, Kathryn Woessner, Bryan Yoelin',
+      graphicArts: 'Mariah Hermsmeyer, Megan Lai',
       thanks: ''
     }
   };
