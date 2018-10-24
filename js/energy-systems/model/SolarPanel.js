@@ -31,8 +31,12 @@ define( function( require ) {
   // constants
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.041 );
-  var SOLAR_PANEL_SIZE = new Dimension2( 0.12, 0.083 );
-  var PANEL_SKEW_OFFSET = 0.056;
+
+  // The size of the solar panel image that is created in the view is scaled down to the height in this dimension,
+  // which was empirically determined to give the solar panel the correct size. The width in this dimension was derived
+  // from the height by maintaining the same aspect ratio that the image has. Note that the width is the overall width
+  // of the solar panel, not the length of the bottom or top edge.
+  var SOLAR_PANEL_SIZE = new Dimension2( 0.155, 0.073 );
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
@@ -53,6 +57,7 @@ define( function( require ) {
   function SolarPanel( energyChunksVisibleProperty ) {
 
     EnergyConverter.call( this, new Image( SOLAR_PANEL_ICON ) );
+    var self = this;
 
     // @public {string} - a11y name
     this.a11yName = EFACA11yStrings.solarPanel.value;
@@ -66,18 +71,21 @@ define( function( require ) {
     // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
 
-    // @private - shape used when determining if a given chunk of light energy should be absorbed
-    this.absorptionShape = new Shape()
-      .lineTo( SOLAR_PANEL_SIZE.width, 0 )
-      .lineToRelative( PANEL_SKEW_OFFSET, SOLAR_PANEL_SIZE.height )
-      .lineToRelative( -SOLAR_PANEL_SIZE.width, 0 )
-      .lineTo( 0, 0 )
+    // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
+    // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
+    // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
+    // to see if they are located within this shape, so it needs a global position as well.
+    var untranslatedAbsorptionShape = new Shape()
+      .moveTo( 0, 0 )
+      .lineToRelative( -SOLAR_PANEL_SIZE.width / 2, 0 )
+      .lineToRelative( SOLAR_PANEL_SIZE.width, SOLAR_PANEL_SIZE.height )
       .close();
 
-    // TODO: Figure out why the shape is in approximately the right spot, but the view is showing it in the wrong spot.
-    // The commented out translation is the correct spot for the view, but incorrect for the model.
-    // this.absorptionShape = this.absorptionShape.transformed( Matrix3.translation( -0.321, 0.136 ) );
-    this.absorptionShape = this.absorptionShape.transformed( Matrix3.translation( -0.085, 0 ) );
+    this.positionProperty.link( function( position ) {
+
+      // @public {Shape}
+      self.absorptionShape = untranslatedAbsorptionShape.transformed( Matrix3.translation( position.x, position.y ) );
+    } );
   }
 
   energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
@@ -220,11 +228,12 @@ define( function( require ) {
             initialPosition = lowerLeftOfPanel.plus(
               new Vector2( crossLineLength * 0.5, 0 ).rotated( crossLineAngle )
             );
-          } else {
+          }
+          else {
 
             // choose a random location along the center portion of the cross line
             initialPosition = lowerLeftOfPanel.plus(
-              new Vector2( crossLineLength * (0.5 * phet.joist.random.nextDouble() + 0.25), 0 ).rotated( crossLineAngle ) );
+              new Vector2( crossLineLength * ( 0.5 * phet.joist.random.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle ) );
           }
 
           var newEnergyChunk = new EnergyChunk(
@@ -293,8 +302,8 @@ define( function( require ) {
 
       // calculate the minimum spacing based on the number of chunks on the panel
       var minArrivalTimeSpacing = numChunksOnPanel <= 3 ?
-        MIN_INTER_CHUNK_TIME :
-        MIN_INTER_CHUNK_TIME / ( numChunksOnPanel - 2 );
+                                  MIN_INTER_CHUNK_TIME :
+                                  MIN_INTER_CHUNK_TIME / ( numChunksOnPanel - 2 );
 
       // if the projected arrival time is too close to the current last chunk, slow down so that the minimum spacing is
       // maintained
@@ -347,7 +356,10 @@ define( function( require ) {
     getAbsorptionShape: function() {
       return this.absorptionShape;
     }
+  }, {
 
+    // statics
+    SOLAR_PANEL_SIZE: SOLAR_PANEL_SIZE
   } );
 } );
 

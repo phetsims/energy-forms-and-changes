@@ -15,7 +15,10 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
+  // var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   // var Path = require( 'SCENERY/nodes/Path' );
+  var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
+  // var Vector2 = require( 'DOT/Vector2' );
 
   // images
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
@@ -36,7 +39,11 @@ define( function( require ) {
     // these are manually positioned so that they match the energy chunk flow defined in the model
     // the center of the node is at (0,0), so these are all positioned around that
     // the positions will have to be carefully repositioned if the images change
-    var panelNode = new Image( solarPanelImage, { left: -195, top: -190 } );
+    var panelNode = new Image( solarPanelImage, {
+      centerX: 0,
+      bottom: 0,
+      maxHeight: modelViewTransform.modelToViewDeltaX( SolarPanel.SOLAR_PANEL_SIZE.height )
+    } );
     var postNode = new Image( solarPanelPostImage, { top: panelNode.bottom - 5 } );
     var windowNode = new Image( solarPanelGenImage, {
       centerX: postNode.centerX,
@@ -56,8 +63,15 @@ define( function( require ) {
     this.addChild( windowNode );
     this.addChild( connectorNode );
 
+    // create a scale-only MVT since the absorption shape is relatively positioned
+    // var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+    //   Vector2.ZERO,
+    //   Vector2.ZERO,
+    //   modelViewTransform.getMatrix().getScaleVector().x
+    // );
+
     // shapes from model can be shown to adjust image position
-    // this.addChild( new Path( modelViewTransform.modelToViewShape( solarPanel.absorptionShape ), { stroke: 'red' } ) );
+    // this.addChild( new Path( scaleOnlyMVT.modelToViewShape( solarPanel.absorptionShape ), { stroke: 'red' } ) );
   }
 
   energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );

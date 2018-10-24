@@ -146,7 +146,7 @@ define( function( require ) {
         var distanceFromSun = chunk.positionProperty.value.distance( self.sunPosition.plus( OFFSET_TO_CENTER_OF_SUN ) );
 
         // this energy chunk was absorbed by the solar panel, so put it on the list of outgoing chunks
-        if ( self.solarPanel.activeProperty.value && self.solarPanel.getAbsorptionShape().bounds.containsPoint( chunk.positionProperty.value ) ) {
+        if ( self.solarPanel.activeProperty.value && self.solarPanel.getAbsorptionShape().containsPoint( chunk.positionProperty.value ) ) {
           self.outgoingEnergyChunks.push( chunk );
         }
 
@@ -160,7 +160,7 @@ define( function( require ) {
         else {
           self.clouds.forEach( function( cloud ) {
 
-            var inClouds = cloud.getCloudAbsorptionReflectionShape().bounds.containsPoint( chunk.positionProperty.value );
+            var inClouds = cloud.getCloudAbsorptionReflectionShape().containsPoint( chunk.positionProperty.value );
             var inList = _.includes( self.energyChunksPassingThroughClouds, chunk );
             var deltaPhi = chunk.velocity.angle() - chunk.positionProperty.value.minus( self.sunPosition ).angle();
 
