@@ -36,7 +36,7 @@ define( function( require ) {
   // which was empirically determined to give the solar panel the correct size. The width in this dimension was derived
   // from the height by maintaining the same aspect ratio that the image has. Note that the width is the overall width
   // of the solar panel, not the length of the bottom or top edge.
-  var SOLAR_PANEL_SIZE = new Dimension2( 0.155, 0.073 );
+  var SOLAR_PANEL_SIZE = new Dimension2( 0.151, 0.073 );
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
