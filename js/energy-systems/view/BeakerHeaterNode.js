@@ -77,7 +77,7 @@ define( function( require ) {
     this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
     this.addChild( elementBaseFrontNode );
 
-    // create a scale-only MVT, since several sub-elements are relatively positioned
+    // create a scale-and-translate MVT
     var scaleAndTranslateMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( beakerHeater.beaker.positionProperty.value.x, 0 ),
       Vector2.ZERO,
