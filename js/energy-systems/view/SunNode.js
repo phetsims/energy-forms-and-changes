@@ -27,6 +27,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
   var SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SunEnergySource' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -102,7 +103,7 @@ define( function( require ) {
     // add slider panel to control cloudiness
     var slider = new VSlider(
       sun.cloudinessProperty,
-      { min: 0, max: 1 },
+      new Range( 0, 1 ),
       { top: 0, left: 0 }
     );
 
