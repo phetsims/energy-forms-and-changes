@@ -23,6 +23,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Range = require( 'DOT/Range' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -216,10 +217,7 @@ define( function( require ) {
     // slider to control crank speed
     var crankSlider = new HSlider(
       biker.targetCrankAngularVelocityProperty,
-      {
-        min: 0,
-        max: Biker.MAX_ANGULAR_VELOCITY_OF_CRANK
-      },
+      new Range( 0, Biker.MAX_ANGULAR_VELOCITY_OF_CRANK ),
       {
         trackSize: new Dimension2( 200, 5 ),
         thumbSize: new Dimension2( 20, 40 ),
