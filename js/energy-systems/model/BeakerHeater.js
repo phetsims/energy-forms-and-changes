@@ -76,7 +76,7 @@ define( function( require ) {
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = new ObservableArray();
 
-    // @public {Beaker} (read-only) - note that its position is relative to this model element as a whole, not absolute
+    // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
     this.beaker = new Beaker(
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
@@ -94,6 +94,7 @@ define( function( require ) {
     // @private, for convenience
     this.random = phet.joist.random;
 
+    // move the beaker as the overall position changes
     this.positionProperty.link( function( position ) {
       self.beaker.positionProperty.value = position.plus( BEAKER_OFFSET );
     } );
@@ -347,8 +348,9 @@ define( function( require ) {
      */
     deactivate: function() {
       EnergyUser.prototype.deactivate.call( this );
-      this.heatProportionProperty.set( 0 );
       this.beaker.reset();
+      this.beaker.positionProperty.value = this.positionProperty.value.plus( BEAKER_OFFSET );
+      this.heatProportionProperty.set( 0 );
     },
 
     /**
