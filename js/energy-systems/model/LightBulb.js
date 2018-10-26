@@ -394,14 +394,6 @@ define( function( require ) {
       this.filamentEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;
       this.incomingEnergyChunks.length = 0;
-    },
-
-    /**
-     * restore the initial state
-     * @public
-     */
-    reset: function() {
-      this.litProportionProperty.reset();
     }
   } );
 } );

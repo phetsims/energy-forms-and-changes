@@ -288,14 +288,6 @@ define( function( require ) {
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
       this.cloudinessProperty.reset();
-    },
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.cloudinessProperty.reset();
       this.energyChunksPassingThroughClouds = [];
     }
 

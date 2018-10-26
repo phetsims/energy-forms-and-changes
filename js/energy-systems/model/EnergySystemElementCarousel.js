@@ -189,14 +189,7 @@ define( function( require ) {
     atTargetPosition: function() {
       var targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.value );
       return this.currentCarouselOffset.equals( targetCarouselOffset );
-    },
-
-    /**
-     * @public
-     */
-    reset: function() {
-      this.targetIndexProperty.reset();
-      this.animationInProgressProperty.reset();
     }
+
   } );
 } );

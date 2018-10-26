@@ -350,11 +350,6 @@ define( function( require ) {
       EnergySource.prototype.clearEnergyChunks.call( this );
       this.exemptFromTransferEnergyChunks.length = 0;
       this.energyChunkMovers.length = 0;
-    },
-
-    reset: function() {
-      this.heatCoolAmountProperty.reset();
-      this.energyProductionRateProperty.reset();
     }
 
   } );

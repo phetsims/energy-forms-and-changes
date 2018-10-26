@@ -354,7 +354,8 @@ define( function( require ) {
      */
     deactivate: function() {
       EnergySource.prototype.deactivate.call( this );
-      this.targetCrankAngularVelocityProperty.set( 0.0 );
+      this.targetCrankAngularVelocityProperty.reset();
+      this.rearWheelAngleProperty.reset();
       this.crankAngularVelocity = this.targetCrankAngularVelocityProperty.value;
     },
 
@@ -504,17 +505,6 @@ define( function( require ) {
     bikerHasEnergy: function() {
       var nChunks = this.energyChunkList.length;
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
-    },
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.crankAngleProperty.reset();
-      this.rearWheelAngleProperty.reset();
-      this.energyChunksRemainingProperty.reset();
-      this.targetCrankAngularVelocityProperty.reset();
     }
 
   }, {

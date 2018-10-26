@@ -26,15 +26,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
 
-  return inherit( Object, PositionableModelElement, {
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.positionProperty.reset();
-    }
-  } );
+  return inherit( Object, PositionableModelElement );
 } );
 

@@ -280,16 +280,8 @@ define( function( require ) {
     clearEnergyChunks: function() {
       EnergySource.prototype.clearEnergyChunks.call( this );
       this.exemptFromTransferEnergyChunks.length = 0;
-    },
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.flowProportionProperty.reset();
-      this.waterDrops.length = 0;
     }
+
 
   }, {
 

@@ -398,16 +398,8 @@ define( function( require ) {
       this.outgoingEnergyChunks.length = 0;
 
       return chunks;
-    },
-
-    /**
-     * restore the initial state
-     * @public
-     */
-    reset: function() {
-      this.wheelRotationalAngleProperty.reset();
-      this.directCouplingModeProperty.reset();
     }
+
   }, {
 
     // statics

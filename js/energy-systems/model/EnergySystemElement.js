@@ -76,14 +76,6 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
       this.energyChunkList.clear();
-    },
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.activeProperty.reset();
     }
   } );
 } );

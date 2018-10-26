@@ -29,15 +29,6 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
 
-  return inherit( Object, PositionableFadableModelElement, {
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.opacityProperty.reset();
-    }
-  } );
+  return inherit( Object, PositionableFadableModelElement );
 } );
 

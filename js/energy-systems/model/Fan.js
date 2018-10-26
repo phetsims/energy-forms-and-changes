@@ -311,10 +311,11 @@ define( function( require ) {
     },
 
     /**
-     * restore the initial state
+     * deactivate this energy system element
      * @public
+     * @override
      */
-    reset: function() {
+    deactivate: function() {
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
       this.energyChunkIncomingEnergy = 0;

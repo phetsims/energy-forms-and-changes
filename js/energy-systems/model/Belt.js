@@ -36,15 +36,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'Belt', Belt );
 
-  return inherit( Object, Belt, {
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.isVisibleProperty.reset();
-    }
-
-  } );
+  return inherit( Object, Belt );
 } );

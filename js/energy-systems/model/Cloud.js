@@ -63,14 +63,6 @@ define( function( require ) {
      */
     getCenterPosition: function() {
       return this.parentPositionProperty.get().plus( this.offsetFromParent );
-    },
-
-    /**
-     * restore initial state
-     * @public
-     */
-    reset: function() {
-      this.existenceStrengthProperty.reset();
     }
 
   }, {

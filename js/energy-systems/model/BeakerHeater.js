@@ -341,13 +341,6 @@ define( function( require ) {
     },
 
     /**
-     * @public
-     */
-    reset: function() {
-      this.heatProportionProperty.reset();
-    },
-
-    /**
      * reset some variables/properties when deactivated by carousel
      * @public
      * @override
