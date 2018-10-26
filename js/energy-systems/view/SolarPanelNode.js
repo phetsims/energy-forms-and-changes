@@ -10,15 +10,16 @@ define( function( require ) {
   'use strict';
 
   // modules
-  // var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  // var Path = require( 'SCENERY/nodes/Path' );
-  // var Vector2 = require( 'DOT/Vector2' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // images
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
@@ -63,15 +64,22 @@ define( function( require ) {
     this.addChild( windowNode );
     this.addChild( connectorNode );
 
-    // create a scale-only MVT since the absorption shape is relatively positioned
-    // var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-    //   Vector2.ZERO,
-    //   Vector2.ZERO,
-    //   modelViewTransform.getMatrix().getScaleVector().x
-    // );
+    // for debug
+    if ( EFACQueryParameters.showHelperShapes ) {
 
-    // shapes from model can be shown to adjust image position
-    // this.addChild( new Path( scaleOnlyMVT.modelToViewShape( solarPanel.absorptionShape ), { stroke: 'red' } ) );
+      // create a scale-only MVT since the absorption shape is relatively positioned
+      var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+        Vector2.ZERO,
+        Vector2.ZERO,
+        modelViewTransform.getMatrix().getScaleVector().x
+      );
+
+      // add a shape that shows where light energy chunks should be absorbed
+      this.addChild( new Path( scaleOnlyMVT.modelToViewShape( solarPanel.untranslatedAbsorptionShape ), {
+          stroke: 'red'
+        } )
+      );
+    }
   }
 
   energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );

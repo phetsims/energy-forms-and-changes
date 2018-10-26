@@ -50,7 +50,7 @@ define( function( require ) {
     slice.energyChunkList.addItemAddedListener( addEnergyChunkNode );
 
     // for debug
-    if ( EFACQueryParameters.showContainerSlices ) {
+    if ( EFACQueryParameters.showHelperShapes ) {
       this.addChild( new Path( modelViewTransform.modelToViewShape( slice.shape ), {
         lineWidth: 1,
         stroke: 'red'

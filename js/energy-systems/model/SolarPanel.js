@@ -75,7 +75,7 @@ define( function( require ) {
     // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
     // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
     // to see if they are located within this shape, so it needs a global position as well.
-    var untranslatedAbsorptionShape = new Shape()
+    this.untranslatedAbsorptionShape = new Shape()
       .moveTo( 0, 0 )
       .lineToRelative( -SOLAR_PANEL_SIZE.width / 2, 0 )
       .lineToRelative( SOLAR_PANEL_SIZE.width, SOLAR_PANEL_SIZE.height )
@@ -84,7 +84,7 @@ define( function( require ) {
     this.positionProperty.link( function( position ) {
 
       // @public {Shape}
-      self.absorptionShape = untranslatedAbsorptionShape.transformed( Matrix3.translation( position.x, position.y ) );
+      self.absorptionShape = self.untranslatedAbsorptionShape.transformed( Matrix3.translation( position.x, position.y ) );
     } );
   }
 

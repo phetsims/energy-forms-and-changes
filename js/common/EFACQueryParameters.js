@@ -19,8 +19,8 @@ define( function( require ) {
     // show the bounds of the air
     showAirBounds: { type: 'flag' },
 
-    // show the energy chunk container slice outlines
-    showContainerSlices: { type: 'flag' },
+    // show some shapes that are helpful for debugging, such as the container slices
+    showHelperShapes: { type: 'flag' },
 
     // show the 2D bounds of the beaker
     show2DBeakerBounds: { type: 'flag' }
