@@ -225,9 +225,8 @@ define( function( require ) {
     },
 
     /**
-     * set whether this node should follow its beaker position. if this node is a child of BeakerHeaterNode, then the
-     * beaker's position is set by BeakerHeater, and so this node does not need to move relative to its parent,
-     * which is BeakerHeaterNode
+     * set whether this node should follow its beaker position. this is useful for the case where its parent node is
+     * handling its position
      * @param {boolean} followPosition
      * @public
      */
