@@ -58,6 +58,7 @@ define( function( require ) {
     // @private
     this.modelViewTransform = modelViewTransform;
     this.energyChunkClipNode = new Node();
+    this.followPosition = true;
 
     // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
     // the header comment for info about how these are used.
@@ -190,11 +191,13 @@ define( function( require ) {
     // update the offset if and when the model position changes
     beaker.positionProperty.link( function( position ) {
 
-      var offset = modelViewTransform.modelToViewPosition( position );
+      if ( self.followPosition ) {
+        var offset = modelViewTransform.modelToViewPosition( position );
 
-      self.frontNode.translation = offset;
-      self.backNode.translation = offset;
-      self.grabNode.translation = offset;
+        self.frontNode.translation = offset;
+        self.backNode.translation = offset;
+        self.grabNode.translation = offset;
+      }
 
       // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
       energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
@@ -219,6 +222,17 @@ define( function( require ) {
      */
     step: function( dt ) {
       this.fluid.step( dt );
+    },
+
+    /**
+     * set whether this node should follow its beaker position. if this node is a child of BeakerHeaterNode, then the
+     * beaker's position is set by BeakerHeater, and so this node does not need to move relative to its parent,
+     * which is BeakerHeaterNode
+     * @param {boolean} followPosition
+     * @public
+     */
+    setFollowPosition: function( followPosition ) {
+      this.followPosition = followPosition;
     }
   } );
 } );

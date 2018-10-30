@@ -343,18 +343,6 @@ define( function( require ) {
         var sliceWidth = ( -Math.pow( ( 2 * proportion - 1 ), 2 ) + 1 ) * fluidRect.width;
         var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
 
-        // TODO: this code is broken. It produces skewed parallelogram-looking shapes.
-        // TODO: Using Shape.rect instead for now.
-        // var topY = bottomY + fluidRect.height;
-        // var centerX = fluidRect.centerX;
-        // var controlPointYOffset = ( bottomY - fluidRect.minY ) * 0.5;
-        // var sliceShape = new Shape();
-        // sliceShape.moveTo( centerX - sliceWidth / 2, bottomY )
-        //   .quadraticCurveTo( centerX - sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth * 0.33, bottomY + controlPointYOffset, centerX + sliceWidth / 2, bottomY )
-        //   .lineTo( centerX + sliceWidth / 2, topY )
-        //   .quadraticCurveTo( centerX + sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth * 0.33, topY + controlPointYOffset, centerX - sliceWidth / 2, topY )
-        //   .lineTo( centerX - sliceWidth / 2, bottomY );
-
         var zPosition = -proportion * this.width;
         var sliceShape = Shape.rect( fluidRect.centerX - 0.44 * sliceWidth, bottomY, sliceWidth, fluidRect.height );
         this.slices.push( new EnergyChunkContainerSlice( sliceShape, zPosition, this.positionProperty ) );

@@ -87,6 +87,9 @@ define( function( require ) {
     // @public (read-only) {BeakerView}
     this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT );
 
+    // from here on, the beakerView's position is updated by this, BeakerHeater
+    this.beakerView.setFollowPosition( false );
+
     this.addChild( this.beakerView.backNode );
     this.addChild( new EnergyChunkLayer(
       beakerHeater.radiatedEnergyChunkList,
