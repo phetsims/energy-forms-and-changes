@@ -192,7 +192,8 @@ define( function( require ) {
           this.radiatedEnergyChunkList.push( ec );
           this.radiatedEnergyChunkMovers.push(
             new EnergyChunkPathMover( ec, this.createRadiatedEnergyChunkPath( ec.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY )
+          );
         }
       }
 
