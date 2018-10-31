@@ -30,6 +30,7 @@ define( function( require ) {
 
     // @public {Shape} - 2D shape of this slice
     this.shape = shape;
+    this.anchorPointProperty = anchorPointProperty;
 
     // @private {number}
     this.zPosition = zPosition;
@@ -38,7 +39,7 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
 
     // monitor the "anchor point" position and move the contained energy chunks to match
-    anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+    this.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
       var translation = newPosition.minus( oldPosition );
 
       self.shape = self.shape.transformed( Matrix3.translationFromVector( translation ) );

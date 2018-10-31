@@ -51,11 +51,20 @@ define( function( require ) {
 
     // for debug
     if ( EFACQueryParameters.showHelperShapes ) {
-      this.addChild( new Path( modelViewTransform.modelToViewShape( slice.shape ), {
+      this.shapeNode = new Path( modelViewTransform.modelToViewShape( slice.shape ), {
         lineWidth: 1,
         stroke: 'red'
-      } ) );
+      } );
+      this.addChild( this.shapeNode );
     }
+
+    // for debug, move slice outlines when their position moves
+    slice.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+      if ( EFACQueryParameters.showHelperShapes ) {
+        var translation = modelViewTransform.modelToViewDelta( newPosition.minus( oldPosition ) );
+        self.shapeNode.translate( translation.x, translation.y );
+      }
+    } );
   }
 
   energyFormsAndChanges.register( 'EnergyChunkContainerSliceNode', EnergyChunkContainerSliceNode );
