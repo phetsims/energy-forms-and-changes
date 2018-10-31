@@ -11,6 +11,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Circle = require( 'SCENERY/nodes/Circle' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -59,7 +61,7 @@ define( function( require ) {
     energyText.center = background.center;
     background.addChild( energyText );
     background.scale( WIDTH / background.width );
-    background.center = ( new Vector2( -background.width / 2, -background.height / 2 ) );
+    background.center = ( Vector2.ZERO );
     var backgroundBounds = background.bounds;
     assert && background.on( 'bounds', function( bounds ) {
       assert( backgroundBounds === bounds, 'Energy chunk node bounds should not change: ' + bounds );
@@ -110,6 +112,10 @@ define( function( require ) {
     function handleEnergyTypeChanged( energyType ) {
       self.removeAllChildren();
       self.addChild( getEnergyChunkNode( energyType ) );
+
+      if ( EFACQueryParameters.showHelperShapes ) {
+        self.addChild( new Circle( 6, { fill: 'pink' } ) );
+      }
     }
 
     energyChunk.energyTypeProperty.link( handleEnergyTypeChanged );
