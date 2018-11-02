@@ -15,7 +15,8 @@ define( function( require ) {
 
   /**
    * @param {Belt} belt
-   * @param {modelViewTransform2} modelViewTransform
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
    */
   function BeltNode( belt, modelViewTransform, options ) {
 
