@@ -174,6 +174,7 @@ define( function( require ) {
           if ( newColor !== sensor.sensedElementColorProperty.initialValue &&
                oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
+               !beaker.userControlledProperty.get() &&
                xRange.contains( sensor.positionProperty.value.x ) ) {
 
             // fake a movement by the user to a point in the beaker where the sensor is not over a brick
