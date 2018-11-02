@@ -28,7 +28,7 @@ define( function( require ) {
     // @private {Property<Vector2>} - position property of element that will follow another
     this.followerProperty = trackedPositionProperty;
 
-    // @private {Property<Vector2>|null} - location of the thing being followed
+    // @private {Property<Vector2>|null} - location of the thing being followed, null if not following anything
     this.locationBeingFollowedProperty = null;
 
     // @private {Vector2} - offset from following position
@@ -45,14 +45,21 @@ define( function( require ) {
   return inherit( Object, ElementFollower, {
 
     /**
-     * @param {Property<Vector2>} - locationToFollowProperty
+     * start following the provided property
+     * @param {Property<Vector2>} locationToFollowProperty - location Property to follow
      * @public
      */
     startFollowing: function( locationToFollowProperty ) {
-      if ( this.locationBeingFollowedProperty && this.locationBeingFollowedProperty.hasListener( this.followerFunction ) ) {
+
+      // if this was previously following something else, un-follow it
+      if ( this.locationBeingFollowedProperty ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
       }
+
+      // keep track of the offset based on where the following started, allows following from anywhere on element
       this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
+
+      // hook up the listener
       locationToFollowProperty.link( this.followerFunction );
       this.locationBeingFollowedProperty = locationToFollowProperty;
     },
@@ -62,10 +69,8 @@ define( function( require ) {
      */
     stopFollowing: function() {
       if ( this.locationBeingFollowedProperty ) {
-        if ( this.locationBeingFollowedProperty.hasListener( this.followerFunction ) ) {
-          this.locationBeingFollowedProperty.unlink( this.followerFunction );
-        }
-        this.locationBeingFollowed = null;
+        this.locationBeingFollowedProperty.unlink( this.followerFunction );
+        this.locationBeingFollowedProperty = null;
       }
     },
 
