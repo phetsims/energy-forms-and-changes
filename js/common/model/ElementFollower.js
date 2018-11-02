@@ -79,7 +79,7 @@ define( function( require ) {
      * @return {boolean}
      */
     isFollowing: function() {
-      return this.locationBeingFollowed !== null;
+      return this.locationBeingFollowedProperty !== null;
     },
 
     /**
