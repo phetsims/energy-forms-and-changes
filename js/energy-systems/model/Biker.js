@@ -31,7 +31,7 @@ define( function( require ) {
   var CRANK_TO_REAR_WHEEL_RATIO = 1;
   var INITIAL_NUMBER_OF_ENERGY_CHUNKS = 21;
   var MECHANICAL_TO_THERMAL_CHUNK_RATIO = 5;
-  var REAR_WHEEL_RADIUS = 0.02; // In meters, must be worked out with the image.
+  var REAR_WHEEL_RADIUS = 0.021; // In meters, must be worked out with the image.
   var NUMBER_OF_LEG_IMAGES = 18; // must match number of leg images in view
 
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
