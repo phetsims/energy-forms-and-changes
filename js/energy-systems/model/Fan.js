@@ -28,6 +28,10 @@ define( function( require ) {
   var BLOWN_ENERGY_CHUNK_VELOCITY = EFACConstants.ENERGY_CHUNK_VELOCITY * 2; // empirically determined
   var INCOMING_ENERGY_FAN_THRESHOLD = 6; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
   var MAX_INCOMING_ENERGY = 170;
+  var ROOM_TEMPERATURE = 22; // in Celsius
+  var TEMPERATURE_GAIN_PER_ENERGY_CHUNK = 2.5; // in Celsius
+  var THERMAL_RELEASE_TEMPERATURE = 38; // in Celsius
+  var COOLING_RATE = 0.25; // in degrees Celsius per second
 
   // energy chunk path offsets
   var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.042 );
@@ -64,8 +68,9 @@ define( function( require ) {
     this.radiatedEnergyChunkMovers = [];
     this.mechanicalEnergyChunkMovers = [];
 
-    // counter for number of mechanical chunks that have passed through the fan
-    this.numberOfChunksPassed = 0;
+    // @private {number} - a temperature value used to decide when to release thermal energy chunks, very roughly in
+    // degrees Celsius
+    this.internalTemperature = ROOM_TEMPERATURE;
   }
 
   energyFormsAndChanges.register( 'Fan', Fan );
@@ -110,8 +115,9 @@ define( function( require ) {
       this.moveBlownEnergyChunks( dt );
       var targetVelocity = 0;
 
-      // if there is a break in incoming energy chunks, reset the count for motor heat loss to 0
-      self.numberOfChunksPassed = this.motorRecentlyReceivedEnergy() ? self.numberOfChunksPassed : 0;
+      // Cool down a bit on each step.  If the fan doesn't cool off fast enough, thermal energy will be released.  The
+      // cooling is linear rather than differential, which isn't very realistic, but works for our purposes here.
+      this.internalTemperature = Math.max( this.internalTemperature - dt * COOLING_RATE, ROOM_TEMPERATURE );
 
       // set how fast the fan is turning
       if ( this.energyChunksVisibleProperty.get() ) {
@@ -176,8 +182,11 @@ define( function( require ) {
           _.pull( self.electricalEnergyChunkMovers, mover );
           self.hasEnergy = true;
 
-          if ( self.numberOfChunksPassed < 9 ) {
-            self.numberOfChunksPassed++;
+          if ( self.internalTemperature < THERMAL_RELEASE_TEMPERATURE ) {
+
+            // increase the temperature a little, since this energy chunk is going to move the fan
+            self.internalTemperature += TEMPERATURE_GAIN_PER_ENERGY_CHUNK;
+
             mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
             // release the energy chunk as mechanical to blow away
@@ -187,13 +196,17 @@ define( function( require ) {
             self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY;
           }
           else {
-            self.numberOfChunksPassed = 0;
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
             // release the energy chunk as thermal to radiate away
-            self.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+            self.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
+              mover.energyChunk,
               self.createRadiatedEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY
+            ) );
+
+            // cool back to room temperature, since some thermal energy was released
+            self.internalTemperature = ROOM_TEMPERATURE;
           }
         }
       } );
@@ -319,7 +332,7 @@ define( function( require ) {
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
       this.energyChunkIncomingEnergy = 0;
-      this.numberOfChunksPassed = 0;
+      this.internalTemperature = ROOM_TEMPERATURE;
       this.electricalEnergyChunkMovers = [];
       this.radiatedEnergyChunkMovers = [];
       this.mechanicalEnergyChunkMovers = [];
