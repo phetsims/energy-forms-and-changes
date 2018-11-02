@@ -38,9 +38,9 @@ define( function( require ) {
   var MAX_ROTATIONAL_VELOCITY = Math.PI / 2; // In radians/sec, empirically determined.
 
   // Images used to represent this model element in the view. Offsets empirically determined
-  var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
-  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
-  var CONNECTOR_OFFSET = new Vector2( 0.057, -0.041 );
+  var WHEEL_CENTER_OFFSET = new Vector2( -0.0055, 0.0355 );
+  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.0355, 0.0355 );
+  var CONNECTOR_OFFSET = new Vector2( 0.0515, -0.0355 );
   var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
 
   // offsets used to create the paths followed by the energy chunks
