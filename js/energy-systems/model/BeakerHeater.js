@@ -32,13 +32,13 @@ define( function( require ) {
   // constants
 
   // position and size constants, empirically determined
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.041 );
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.041 );
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0005, -0.0176 );
-  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0, -0.011 );
-  var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.0455, -0.0355 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.0255, -0.0355 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0155, -0.0320 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0065, -0.0195 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.006, -0.0121 );
+  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( -0.0055, -0.0055 );
+  var OFFSET_TO_CONVERSION_POINT = new Vector2( -0.0055, 0.0175 );
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
