@@ -22,13 +22,13 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.041 );
-  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.041 );
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0003, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0.0002, -0.01 );
-  var OFFSET_TO_RADIATE_POINT = new Vector2( 0.0002, 0.066 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.0455, -0.0355 );
+  var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.0255, -0.0355 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0155, -0.0330 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0065, -0.0195 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0058, -0.0120 );
+  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( -0.0053, -0.0045 );
+  var OFFSET_TO_RADIATE_POINT = new Vector2( -0.0053, 0.0715 );
 
   var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
   var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
