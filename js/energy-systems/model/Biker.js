@@ -35,13 +35,13 @@ define( function( require ) {
   var NUMBER_OF_LEG_IMAGES = 18; // must match number of leg images in view
 
   // offsets used for creating energy chunk paths - these need to be coordinated with the images
-  var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
-  var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.007, 0.015 );
-  var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.002 );
-  var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.03, -0.01 );
-  var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.006 ); // where the top chain meets the back wheel cassette
-  var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.024, 0.007 );
-  var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.107, 0.066 );
+  var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.0145, 0.0455 );
+  var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.0015, 0.0205 );
+  var BIKE_CRANK_OFFSET = new Vector2( -0.0003, 0.0035 );
+  var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0245, -0.0045 );
+  var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0295, -0.0005 ); // where the top chain meets the back wheel cassette
+  var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0185, 0.0125 );
+  var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.1015, 0.0715 );
 
   // images
   var BICYCLE_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_icon.png' );
@@ -373,7 +373,7 @@ define( function( require ) {
      * @public
      */
     replenishEnergyChunks: function() {
-      var nominalInitialOffset = new Vector2( 0.019, 0.055 );
+      var nominalInitialOffset = new Vector2( 0.0135, 0.0605 );
 
       for ( var i = 0; i < INITIAL_NUMBER_OF_ENERGY_CHUNKS; i++ ) {
         var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
