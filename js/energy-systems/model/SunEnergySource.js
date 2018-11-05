@@ -63,9 +63,9 @@ define( function( require ) {
     // @public {Cloud[]} - clouds that can potentially block the sun's rays.  The positions are set so that they appear
     // between the sun and the solar panel, and must not overlap with one another.
     this.clouds = [
-      new Cloud( new Vector2( -0.0045, 0.0745 ), this.positionProperty ),
-      new Cloud( new Vector2( 0.0225, 0.082 ), this.positionProperty ),
-      new Cloud( new Vector2( 0.0255, 0.0995 ), this.positionProperty )
+      new Cloud( new Vector2( -0.0155, 0.0855 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.0115, 0.093 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.0145, 0.1105 ), this.positionProperty )
     ];
 
     // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
