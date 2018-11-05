@@ -26,7 +26,7 @@ define( function( require ) {
 
   // constants
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
-  var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
+  var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.0555, 0.1255 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
   var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
 
@@ -63,9 +63,9 @@ define( function( require ) {
     // @public {Cloud[]} - clouds that can potentially block the sun's rays.  The positions are set so that they appear
     // between the sun and the solar panel, and must not overlap with one another.
     this.clouds = [
-      new Cloud( new Vector2( -0.01, 0.08 ), this.positionProperty ),
-      new Cloud( new Vector2( 0.017, 0.0875 ), this.positionProperty ),
-      new Cloud( new Vector2( 0.02, 0.105 ), this.positionProperty )
+      new Cloud( new Vector2( -0.0045, 0.0745 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.0225, 0.082 ), this.positionProperty ),
+      new Cloud( new Vector2( 0.0255, 0.0995 ), this.positionProperty )
     ];
 
     // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
