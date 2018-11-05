@@ -29,8 +29,8 @@ define( function( require ) {
   var SOLAR_PANEL_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' );
 
   // constants
-  var CONVERTER_IMAGE_OFFSET = new Vector2( 0.015, -0.040 );
-  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.057, -0.041 );
+  var CONVERTER_IMAGE_OFFSET = new Vector2( 0.0095, -0.0345 );
+  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.0515, -0.0355 );
 
   // The size of the solar panel image that is created in the view is scaled down to the height in this dimension,
   // which was empirically determined to give the solar panel the correct size. The width in this dimension was derived
@@ -40,11 +40,11 @@ define( function( require ) {
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
-  var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.01 );
-  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.025 );
-  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.033 );
-  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, -0.039 );
-  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
+  var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.0155 );
+  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.0195 );
+  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.0275 );
+  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, -0.034 );
+  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
