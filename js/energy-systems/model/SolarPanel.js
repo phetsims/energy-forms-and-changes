@@ -44,7 +44,7 @@ define( function( require ) {
   var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.0195 );
   var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.0275 );
   var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, -0.034 );
-  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET
+  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
