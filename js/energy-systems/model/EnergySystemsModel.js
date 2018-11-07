@@ -63,19 +63,20 @@ define( function( require ) {
     this.energyConvertersCarousel.add( this.generator );
     this.energyConvertersCarousel.add( this.solarPanel );
 
-    this.faucet = new FaucetAndWater( this.energyChunksVisibleProperty, this.generator.activeProperty );
-
     // energy sources
-    var wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET ).plusXY( 0.005, 0 );
-    var wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
+    this.faucet = new FaucetAndWater( this.energyChunksVisibleProperty, this.generator.activeProperty );
     this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisibleProperty );
     this.teaKettle = new TeaKettle( this.energyChunksVisibleProperty, this.generator.activeProperty );
-    this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
     this.biker = new Biker( this.energyChunksVisibleProperty, this.generator.activeProperty );
     this.energySourcesCarousel.add( this.faucet );
     this.energySourcesCarousel.add( this.sun );
     this.energySourcesCarousel.add( this.teaKettle );
     this.energySourcesCarousel.add( this.biker );
+
+    // belt that connects biker to generator, which is not on a carousel
+    var wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
+    var wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
+    this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
     // energy users
     this.fan = new Fan( this.energyChunksVisibleProperty );

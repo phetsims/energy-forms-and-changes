@@ -38,7 +38,7 @@ define( function( require ) {
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.0145, 0.0455 );
   var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.0015, 0.0205 );
   var BIKE_CRANK_OFFSET = new Vector2( -0.0003, 0.0035 );
-  var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0245, -0.0045 );
+  var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.01 );
   var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0295, -0.0005 ); // where the top chain meets the back wheel cassette
   var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.0185, 0.0125 );
   var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.1015, 0.0715 );
@@ -48,7 +48,7 @@ define( function( require ) {
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {Property.<boolean>} mechanicalPoweredSystemIsNext
+   * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty
    * @constructor
    */
   function Biker( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty ) {
@@ -95,7 +95,7 @@ define( function( require ) {
 
     // add a handler for the situation when energy chunks were in transit to the next energy system and that system is
     // swapped out
-    this.mechanicalPoweredSystemIsNextProperty.link( function( isNext ) {
+    this.mechanicalPoweredSystemIsNextProperty.link( function() {
 
       var movers = self.energyChunkMovers.slice();
       var hubPosition = self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET );
@@ -116,9 +116,11 @@ define( function( require ) {
             // make sure that this energy chunk turns into thermal energy
             _.pull( self.energyChunkMovers, mover );
 
-            self.energyChunkMovers.push( new EnergyChunkPathMover( ec,
+            self.energyChunkMovers.push( new EnergyChunkPathMover(
+              ec,
               self.createMechanicalToThermalEnergyChunkPath( self.positionProperty.value, ec.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY
+            ) );
           }
         }
       } );

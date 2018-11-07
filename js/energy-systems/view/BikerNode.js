@@ -85,8 +85,7 @@ define( function( require ) {
   // constants
   var BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
   var BICYCLE_SYSTEM_TOP_OFFSET = -249;
-  var BICYCLE_SYSTEM_SCALE = 0.490;
-  var SPOKES_OFFSET = -14;
+  var IMAGE_SCALE = 0.490; // scale factor used to size the images, empirically determined
 
   // strings
   var feedMeString = require( 'string!ENERGY_FORMS_AND_CHANGES/feedMe' );
@@ -105,12 +104,11 @@ define( function( require ) {
     var bicycleFrameNode = new Image( bicycleFrameImage, {
       right: BICYCLE_SYSTEM_RIGHT_OFFSET,
       top: BICYCLE_SYSTEM_TOP_OFFSET,
-      scale: BICYCLE_SYSTEM_SCALE
+      scale: IMAGE_SCALE
     } );
     var bicycleSpokesNode = new Image( bicycleSpokesImage, {
-      right: bicycleFrameNode.right + SPOKES_OFFSET,
-      bottom: bicycleFrameNode.bottom + SPOKES_OFFSET,
-      scale: BICYCLE_SYSTEM_SCALE
+      center: modelViewTransform.modelToViewDelta( Biker.CENTER_OF_BACK_WHEEL_OFFSET ),
+      scale: IMAGE_SCALE
     } );
     var cyclistTorsoRootNode = new Node();
     var cyclistTorsoNodes = [];
@@ -121,7 +119,7 @@ define( function( require ) {
       cyclistTorsoNodes.push( new Image( cyclistTorsoImages[ i ], {
         centerX: bicycleFrameNode.centerX,
         bottom: bicycleFrameNode.bottom,
-        scale: BICYCLE_SYSTEM_SCALE
+        scale: IMAGE_SCALE
       } ) );
       cyclistTorsoNodes[ i ].setVisible( false );
       cyclistTorsoRootNode.addChild( cyclistTorsoNodes[ i ] );
@@ -138,7 +136,7 @@ define( function( require ) {
       cyclistBackLegNodes.push( new Image( cyclistBackLegImages[ i ], {
         right: BICYCLE_SYSTEM_RIGHT_OFFSET,
         top: BICYCLE_SYSTEM_TOP_OFFSET,
-        scale: BICYCLE_SYSTEM_SCALE
+        scale: IMAGE_SCALE
       } ) );
       cyclistBackLegNodes[ i ].setVisible( false );
       cyclistBackLegRootNode.addChild( cyclistBackLegNodes[ i ] );
@@ -147,7 +145,7 @@ define( function( require ) {
       cyclistFrontLegNodes.push( new Image( cyclistFrontLegImages[ i ], {
         right: BICYCLE_SYSTEM_RIGHT_OFFSET,
         top: BICYCLE_SYSTEM_TOP_OFFSET,
-        scale: BICYCLE_SYSTEM_SCALE
+        scale: IMAGE_SCALE
       } ) );
       cyclistFrontLegNodes[ i ].setVisible( false );
       cyclistFrontLegRootNode.addChild( cyclistFrontLegNodes[ i ] );

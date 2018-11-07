@@ -111,7 +111,9 @@ define( function( require ) {
     var mvtOriginX = Math.round( layoutBounds.width * 0.5 );
     var mvtOriginY = Math.round( layoutBounds.height * 0.475 );
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      Vector2.ZERO, new Vector2( mvtOriginX, mvtOriginY ), 2200
+      Vector2.ZERO,
+      new Vector2( mvtOriginX, mvtOriginY ),
+      2200
     );
 
     // layer node for back-most layer
