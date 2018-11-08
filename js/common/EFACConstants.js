@@ -48,7 +48,8 @@ define( function( require ) {
 
   // colors
   var NOMINAL_WATER_OPACITY = 0.75;
-  var FIRST_SCREEN_BACKGROUND_COLOR = new Color( 255, 255, 225 );
+  var FIRST_SCREEN_BACKGROUND_COLOR = new Color( 255, 255, 255 );
+  var SECOND_SCREEN_BACKGROUND_COLOR = new Color( 255, 255, 225 );
 
   // mapping function that maps the energy to the number of energy chunks
   var MAP_ENERGY_TO_NUM_CHUNKS = new LinearFunction(
@@ -113,7 +114,7 @@ define( function( require ) {
     WATER_COLOR_IN_BEAKER: new Color( 175, 238, 238, NOMINAL_WATER_OPACITY ),
     OLIVE_OIL_COLOR_IN_BEAKER: new Color( 227, 207, 88 ),
     FIRST_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
-    SECOND_SCREEN_BACKGROUND_COLOR: FIRST_SCREEN_BACKGROUND_COLOR,
+    SECOND_SCREEN_BACKGROUND_COLOR: SECOND_SCREEN_BACKGROUND_COLOR,
     CONTROL_PANEL_BACKGROUND_COLOR: new Color( 229, 236, 255 ), // Pale gray purple. AP, AR, and CK like this.
 
     // appearance of controls
