@@ -19,6 +19,7 @@ define( function( require ) {
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
+  var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -54,7 +55,10 @@ define( function( require ) {
     panelNode.center = scaleOnlyMVT.modelToViewPosition( solarPanel.untranslatedPanelBounds.center );
 
     // add the other portions of the solar panel assembly
-    var postNode = new Image( solarPanelPostImage, { top: panelNode.bottom - 5 } );
+    var postNode = new Image( solarPanelPostImage, {
+      centerX: modelViewTransform.modelToViewDeltaX( SolarPanel.PANEL_CONNECTOR_OFFSET.x ),
+      top: panelNode.bottom - 5
+    } );
     var windowNode = new Image( solarPanelGenImage, {
       centerX: postNode.centerX,
       top: postNode.centerY

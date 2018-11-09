@@ -59,8 +59,8 @@ define( function( require ) {
     // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position that
     // is offset from the parent in order to be in the correct location in the view.
     parentPositionProperty.link( function( position ) {
-      self.x = -modelViewTransform.modelToViewX( position.x ) + EnergyChunkNode.WIDTH / 2;
-      self.y = -modelViewTransform.modelToViewY( position.y ) + EnergyChunkNode.WIDTH / 2;
+      self.x = -modelViewTransform.modelToViewX( position.x );
+      self.y = -modelViewTransform.modelToViewY( position.y );
     } );
   }
 

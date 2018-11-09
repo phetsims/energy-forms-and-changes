@@ -32,17 +32,17 @@ define( function( require ) {
   var SOLAR_PANEL_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_icon.png' );
 
   // constants
-  var CONVERTER_IMAGE_OFFSET = new Vector2( 0.0095, -0.0345 );
-  var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.0515, -0.0355 );
-  var SOLAR_PANEL_SIZE = new Dimension2( 0.15, 0.07 ); // size of the panel, in meters
+  var PANEL_SIZE = new Dimension2( 0.15, 0.07 ); // size of the panel-only portion (no connectors), in meters
 
-  // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
-  // determined based on the images, and will need to be updated if the images change.
-  var OFFSET_TO_CONVERGENCE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, 0.0155 );
-  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x, -0.0195 );
-  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.005, -0.0275 );
-  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( CONVERTER_IMAGE_OFFSET.x + 0.015, -0.034 );
-  var OFFSET_TO_CONNECTOR_CENTER = CONNECTOR_IMAGE_OFFSET;
+  // Constants used for creating the path followed by the energy chunks and for positioning the wire and connector
+  // images in the view.  Many of these numbers were empirically determined based on the images, and will need to be
+  // updated if the images change.  All values are in meters.
+  var PANEL_CONNECTOR_OFFSET = new Vector2( 0.015, 0 ); // where the bottom of the panel connects to the wires & such
+  var OFFSET_TO_CONVERGENCE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, 0.006 );
+  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x, -0.0195 );
+  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x + 0.005, -0.0275 );
+  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x + 0.015, -0.034 );
+  var OFFSET_TO_OUTGOING_CONNECTOR = new Vector2( 0.0515, -0.0355 );
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
@@ -72,10 +72,10 @@ define( function( require ) {
     // A shape used to describe where the collection area is relative to the model postion.  The collection area is at
     // the top, and the energy chunks flow through wires and connectors below.
     this.untranslatedPanelBounds = new Bounds2(
-      -SOLAR_PANEL_SIZE.width / 2,
+      -PANEL_SIZE.width / 2,
       0,
-      SOLAR_PANEL_SIZE.width / 2,
-      SOLAR_PANEL_SIZE.height
+      PANEL_SIZE.width / 2,
+      PANEL_SIZE.height
     );
 
     // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
@@ -84,8 +84,8 @@ define( function( require ) {
     // to see if they are located within this shape, so it needs a global position as well.
     this.untranslatedAbsorptionShape = new Shape()
       .moveTo( 0, 0 )
-      .lineToRelative( -SOLAR_PANEL_SIZE.width / 2, 0 )
-      .lineToRelative( SOLAR_PANEL_SIZE.width, SOLAR_PANEL_SIZE.height )
+      .lineToRelative( -PANEL_SIZE.width / 2, 0 )
+      .lineToRelative( PANEL_SIZE.width, PANEL_SIZE.height )
       .close();
 
     this.positionProperty.link( function( position ) {
@@ -352,7 +352,7 @@ define( function( require ) {
       path.push( panelPosition.plus( OFFSET_TO_FIRST_CURVE_POINT ) );
       path.push( panelPosition.plus( OFFSET_TO_SECOND_CURVE_POINT ) );
       path.push( panelPosition.plus( OFFSET_TO_THIRD_CURVE_POINT ) );
-      path.push( panelPosition.plus( OFFSET_TO_CONNECTOR_CENTER ) );
+      path.push( panelPosition.plus( OFFSET_TO_OUTGOING_CONNECTOR ) );
       return path;
     },
 
@@ -366,7 +366,7 @@ define( function( require ) {
   }, {
 
     // statics
-    SOLAR_PANEL_SIZE: SOLAR_PANEL_SIZE
+    PANEL_CONNECTOR_OFFSET: PANEL_CONNECTOR_OFFSET
   } );
 } );
 
