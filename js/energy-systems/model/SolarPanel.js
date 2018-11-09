@@ -1,7 +1,9 @@
 // Copyright 2016-2018, University of Colorado Boulder
 
 /**
- * a type that represents a model of a solar panel that converts light energy to electrical energy
+ * A type that represents a model of a solar panel that converts light energy to electrical energy.  The panel actually
+ * consists of an actual panel but also is meant to have a lower assembly through which energy chunks move.  The
+ * appearance needs to be tightly coordinated with the images used in the view.
  *
  * @author John Blanco
  * @author Andrew Adare
@@ -10,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -31,12 +34,7 @@ define( function( require ) {
   // constants
   var CONVERTER_IMAGE_OFFSET = new Vector2( 0.0095, -0.0345 );
   var CONNECTOR_IMAGE_OFFSET = new Vector2( 0.0515, -0.0355 );
-
-  // The size of the solar panel image that is created in the view is scaled down to the height in this dimension,
-  // which was empirically determined to give the solar panel the correct size. The width in this dimension was derived
-  // from the height by maintaining the same aspect ratio that the image has. Note that the width is the overall width
-  // of the solar panel, not the length of the bottom or top edge.
-  var SOLAR_PANEL_SIZE = new Dimension2( 0.151, 0.073 );
+  var SOLAR_PANEL_SIZE = new Dimension2( 0.15, 0.07 ); // size of the panel, in meters
 
   // Constants used for creating the path followed by the energy chunks. Many of these numbers were empirically
   // determined based on the images, and will need to be updated if the images change.
@@ -70,6 +68,15 @@ define( function( require ) {
 
     // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
+
+    // A shape used to describe where the collection area is relative to the model postion.  The collection area is at
+    // the top, and the energy chunks flow through wires and connectors below.
+    this.untranslatedPanelBounds = new Bounds2(
+      -SOLAR_PANEL_SIZE.width / 2,
+      0,
+      SOLAR_PANEL_SIZE.width / 2,
+      SOLAR_PANEL_SIZE.height
+    );
 
     // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
     // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot

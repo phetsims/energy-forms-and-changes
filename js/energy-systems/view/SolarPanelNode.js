@@ -18,7 +18,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/SolarPanel' );
+  var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -29,7 +29,7 @@ define( function( require ) {
   var wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
 
   /**
-   * @param {SolarPanel} solarPanel From the model
+   * @param {SolarPanel} solarPanel - model of a solar panel
    * @param {ModelViewTransform2} modelViewTransform
    * @constructor
    */
@@ -37,14 +37,23 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, solarPanel, modelViewTransform );
 
-    // these are manually positioned so that they match the energy chunk flow defined in the model
-    // the center of the node is at (0,0), so these are all positioned around that
-    // the positions will have to be carefully repositioned if the images change
-    var panelNode = new Image( solarPanelImage, {
-      centerX: 0,
-      bottom: 0,
-      maxHeight: modelViewTransform.modelToViewDeltaX( SolarPanel.SOLAR_PANEL_SIZE.height )
-    } );
+    // create a scale-only MVT since the absorption shape is relatively positioned
+    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      Vector2.ZERO,
+      modelViewTransform.getMatrix().getScaleVector().x
+    );
+
+    // Add an image for the actual panel portion, i.e. the part that collects the solar energy.  The aspect ratio of
+    // the image should be reasonably close to the shape described by the model to avoid visual distortion.
+    var panelNode = new Image( solarPanelImage );
+    panelNode.scale(
+      modelViewTransform.modelToViewDeltaX( solarPanel.untranslatedPanelBounds.width ) / panelNode.width,
+      -modelViewTransform.modelToViewDeltaY( solarPanel.untranslatedPanelBounds.height ) / panelNode.height
+    );
+    panelNode.center = scaleOnlyMVT.modelToViewPosition( solarPanel.untranslatedPanelBounds.center );
+
+    // add the other portions of the solar panel assembly
     var postNode = new Image( solarPanelPostImage, { top: panelNode.bottom - 5 } );
     var windowNode = new Image( solarPanelGenImage, {
       centerX: postNode.centerX,
@@ -67,18 +76,36 @@ define( function( require ) {
     // for debug
     if ( EFACQueryParameters.showHelperShapes ) {
 
-      // create a scale-only MVT since the absorption shape is relatively positioned
-      var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-        Vector2.ZERO,
-        Vector2.ZERO,
-        modelViewTransform.getMatrix().getScaleVector().x
+      // add a shape that shows the bounds of the collection area
+      var panelBoundsShape = Shape.rect(
+        solarPanel.untranslatedPanelBounds.minX,
+        solarPanel.untranslatedPanelBounds.minY,
+        solarPanel.untranslatedPanelBounds.width,
+        solarPanel.untranslatedPanelBounds.height
       );
+      this.addChild( new Path( scaleOnlyMVT.modelToViewShape( panelBoundsShape ), {
+        stroke: 'green'
+      } ) );
 
       // add a shape that shows where light energy chunks should be absorbed
       this.addChild( new Path( scaleOnlyMVT.modelToViewShape( solarPanel.untranslatedAbsorptionShape ), {
-          stroke: 'red'
-        } )
-      );
+        stroke: 'red',
+        lineJoin: 'round'
+      } ) );
+
+      // create a marker the shows where the center of the node is
+      var crossLength = 15;
+      var crossShape = new Shape()
+        .moveTo( -crossLength / 2, 0 )
+        .lineTo( crossLength / 2, 0 )
+        .moveTo( 0, -crossLength / 2 )
+        .lineTo( 0, crossLength / 2 );
+      this.addChild( new Path( crossShape, {
+        stroke: 'red',
+        lineWidth: 3
+      } ) );
+
+
     }
   }
 
