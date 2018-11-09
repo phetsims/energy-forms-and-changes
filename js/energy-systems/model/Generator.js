@@ -36,18 +36,16 @@ define( function( require ) {
   var WHEEL_MOMENT_OF_INERTIA = 5; // In kg.
   var RESISTANCE_CONSTANT = 3; // Controls max speed and rate of slow down, empirically determined.
   var MAX_ROTATIONAL_VELOCITY = Math.PI / 2; // In radians/sec, empirically determined.
-
-  // Images used to represent this model element in the view. Offsets empirically determined
-  var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
-  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.0355, 0.0355 );
-  var CONNECTOR_OFFSET = new Vector2( 0.0515, -0.0355 );
   var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
+  var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
+  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
 
   // offsets used to create the paths followed by the energy chunks
-  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.01, -0.05 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.063 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.03, -0.0705 );
-  var CENTER_OF_CONNECTOR_OFFSET = CONNECTOR_OFFSET;
+  var WHEEL_CENTER_EC_OFFSET = WHEEL_CENTER_OFFSET.plusXY( -0.0055, 0.0055 );
+  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.01, -0.05 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.015, -0.063 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.03, -0.0708 );
+  var CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.0570, -0.0710 );
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
@@ -323,7 +321,7 @@ define( function( require ) {
      */
     createMechanicalEnergyChunkPath: function( panelPosition ) {
       var path = [];
-      path.push( panelPosition.plus( WHEEL_CENTER_OFFSET ) );
+      path.push( panelPosition.plus( WHEEL_CENTER_EC_OFFSET ) );
       return path;
     },
 
