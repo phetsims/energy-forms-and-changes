@@ -34,15 +34,15 @@ define( function( require ) {
   var COOLING_RATE = 0.25; // in degrees Celsius per second
 
   // energy chunk path offsets
-  var OFFSET_TO_WIRE_START = new Vector2( -0.0495, -0.0355 );
-  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0420, -0.0330 );
-  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0330, -0.0195 );
-  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0320, -0.0120 );
-  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.0320, 0.0165 );
-  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0290, 0.0275 );
-  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0190, 0.0365 );
-  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.0105, 0.0380 );
-  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0005, 0.0385 );
+  var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.042 );
+  var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
+  var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
+  var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
+  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.0265, 0.011 );
+  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0235, 0.022 );
+  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0135, 0.031 );
+  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.033 );
+  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.034 );
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
