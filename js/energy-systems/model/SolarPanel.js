@@ -38,11 +38,11 @@ define( function( require ) {
   // images in the view.  Many of these numbers were empirically determined based on the images, and will need to be
   // updated if the images change.  All values are in meters.
   var PANEL_CONNECTOR_OFFSET = new Vector2( 0.015, 0 ); // where the bottom of the panel connects to the wires & such
-  var OFFSET_TO_CONVERGENCE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, 0.006 );
-  var OFFSET_TO_FIRST_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x, -0.0195 );
-  var OFFSET_TO_SECOND_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x + 0.005, -0.0275 );
-  var OFFSET_TO_THIRD_CURVE_POINT = new Vector2( PANEL_CONNECTOR_OFFSET.x + 0.015, -0.034 );
-  var OFFSET_TO_OUTGOING_CONNECTOR = new Vector2( 0.0515, -0.0355 );
+  var OFFSET_TO_CONVERGENCE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, 0.0065 );
+  var OFFSET_TO_FIRST_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, -0.025 );
+  var OFFSET_TO_SECOND_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.005, -0.033 );
+  var OFFSET_TO_THIRD_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.015, -0.040 );
+  var OFFSET_TO_OUTGOING_CONNECTOR = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.

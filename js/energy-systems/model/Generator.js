@@ -38,14 +38,13 @@ define( function( require ) {
   var MAX_ROTATIONAL_VELOCITY = Math.PI / 2; // In radians/sec, empirically determined.
   var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
   var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
-  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.030, 0.03 );
+  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.03, 0.03 );
 
   // offsets used to create the paths followed by the energy chunks
-  var WHEEL_CENTER_EC_OFFSET = WHEEL_CENTER_OFFSET.plusXY( -0.0055, 0.0055 );
-  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.01, -0.05 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.015, -0.063 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.03, -0.0708 );
-  var CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_EC_OFFSET.plusXY( 0.0570, -0.0710 );
+  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.010, -0.050 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.063 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
+  var CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
@@ -321,7 +320,7 @@ define( function( require ) {
      */
     createMechanicalEnergyChunkPath: function( panelPosition ) {
       var path = [];
-      path.push( panelPosition.plus( WHEEL_CENTER_EC_OFFSET ) );
+      path.push( panelPosition.plus( WHEEL_CENTER_OFFSET ) );
       return path;
     },
 
