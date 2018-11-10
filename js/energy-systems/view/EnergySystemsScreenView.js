@@ -138,7 +138,7 @@ define( function( require ) {
       model.energyChunksVisibleProperty
     );
 
-    // add the checkbox that controls the visibility of the energy chunks to a panel and then add it to the scene graph
+    // add the checkbox that controls the visibility of the energy chunks to a panel
     var showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
@@ -147,7 +147,6 @@ define( function( require ) {
       right: layoutBounds.maxX - EDGE_INSET,
       top: EDGE_INSET
     } );
-    self.addChild( showEnergyChunksPanel );
 
     // add the energy chunk legend
     var energyChunkLegend = new EnergyChunkLegend( modelViewTransform,
@@ -247,6 +246,10 @@ define( function( require ) {
     this.addChild( energySourceSelector );
     this.addChild( energyConverterSelector );
     this.addChild( energyUserSelector );
+
+    // add the showEnergyChunksPanel to the scene graph after everything else so that all energy chunks and light rays
+    // pass beneath the panel
+    self.addChild( showEnergyChunksPanel );
   }
 
   energyFormsAndChanges.register( 'EnergySystemsScreenView', EnergySystemsScreenView );
