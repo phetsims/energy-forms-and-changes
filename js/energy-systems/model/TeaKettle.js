@@ -31,12 +31,12 @@ define( function( require ) {
 
   // Offsets and other constants used for energy paths.  These are mostly
   // empirically determined and coordinated with the image.
-  var SPOUT_BOTTOM_OFFSET = new Vector2( 0.0245, 0.0255 );
-  var SPOUT_TIP_OFFSET = new Vector2( 0.2445, 0.3055 );
+  var SPOUT_BOTTOM_OFFSET = new Vector2( 0.03, 0.02 );
+  var SPOUT_TIP_OFFSET = new Vector2( 0.25, 0.3 );
   var DISTANT_TARGET_OFFSET = new Vector2( 1, 1 );
   var WATER_SURFACE_HEIGHT_OFFSET = 0; // From tea kettle position, in meters.
-  var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.0445; // Meters. Coordinated with heater position.
-  var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.0205, 0.0095 ); // Meters. Coordinated with heater position.
+  var THERMAL_ENERGY_CHUNK_Y_ORIGIN = -0.05; // Meters. Coordinated with heater position.
+  var THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE = new Range( -0.015, 0.015 ); // Meters. Coordinated with heater position.
 
   // Miscellaneous other constants.
   var MAX_ENERGY_CHANGE_RATE = EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 5; // In joules/second
