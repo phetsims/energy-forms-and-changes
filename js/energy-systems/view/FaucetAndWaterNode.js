@@ -33,19 +33,9 @@ define( function( require ) {
 
     MoveFadeModelElementNode.call( this, faucet, modelViewTransform );
 
-    var maxFlowProportion = 1.0;
-    var faucetNode = new FaucetNode( maxFlowProportion, faucet.flowProportionProperty, faucet.activeProperty, {
-      horizontalPipeLength: FAUCET_NODE_HORIZONTAL_LENGTH,
-      verticalPipeLength: 40,
-      scale: 0.45
-    } );
+    var fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
 
-    // position faucet node such that the water will appear to come out of it
-    var faucetToWater = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
-    faucetNode.right = faucetToWater.x + 30;
-    faucetNode.bottom = faucetToWater.y;
-
-    // create the water, which consists of a set of water drops
+    // create the falling water drops and set position to its model offset
     this.fallingWaterCanvasNode = new FallingWaterCanvasNode(
       faucet.waterDrops,
       modelViewTransform,
@@ -56,10 +46,22 @@ define( function( require ) {
           modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH ),
           EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY
         ),
-        x: faucetToWater.x,
-        y: faucetToWater.y - 60
+        x: fallingWaterOrigin.x,
+        y: fallingWaterOrigin.y
       }
     );
+
+    var faucetHeadOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD );
+    var maxFlowProportion = 1.0;
+
+    // create the faucet and set position to its model offset
+    var faucetNode = new FaucetNode( maxFlowProportion, faucet.flowProportionProperty, faucet.activeProperty, {
+      horizontalPipeLength: FAUCET_NODE_HORIZONTAL_LENGTH,
+      verticalPipeLength: 40,
+      scale: 0.45,
+      x: faucetHeadOrigin.x,
+      y: faucetHeadOrigin.y
+    } );
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );

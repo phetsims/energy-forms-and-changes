@@ -29,12 +29,17 @@ define( function( require ) {
   var FAUCET_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/faucet_icon.png' );
 
   // constants
-  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.069, 0.083 );
   var FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
   var MAX_WATER_WIDTH = 0.014; // In meters.
   var MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
-  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.05, 0.06 );
+  var ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.07, 0.08 );
   var FALLING_WATER_DELAY = 0.4; // time to pass before wheel starts turning after faucet starts, in seconds
+
+  // where the water and energy chunks originate inside the faucet head, not where they emerge from the faucet
+  var OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.069, 0.105 );
+
+  // center-x, bottom-y of the faucet head - where the water and energy chunks emerge from
+  var OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plusXY( 0, -0.022 );
 
   // The following acceleration constant defines the rate at which the water flows from the faucet.  The value used is
   // not the actual value in Earth's gravitational field - it has been tweaked for optimal visual effect.
@@ -91,8 +96,7 @@ define( function( require ) {
     createNewChunk: function() {
 
       // random x value within water column for "watery" appearance
-      var x = ( phet.joist.random.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2 +
-              MAX_WATER_WIDTH / 2;
+      var x = ( phet.joist.random.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2;
 
       var initialPosition = this.positionProperty.value
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
@@ -287,6 +291,7 @@ define( function( require ) {
 
     // statics
     OFFSET_FROM_CENTER_TO_WATER_ORIGIN: OFFSET_FROM_CENTER_TO_WATER_ORIGIN,
+    OFFSET_FROM_CENTER_TO_FAUCET_HEAD: OFFSET_FROM_CENTER_TO_FAUCET_HEAD,
     MAX_WATER_WIDTH: MAX_WATER_WIDTH
   } );
 } );

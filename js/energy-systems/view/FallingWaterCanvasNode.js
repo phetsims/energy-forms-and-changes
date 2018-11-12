@@ -81,7 +81,7 @@ define( require => {
       context.drawImage(
         this.waterDropImageCanvas,
         this.modelViewTransform.modelToViewDeltaX( drop.position.x - drop.size.width / 2 ),
-        this.modelViewTransform.modelToViewDeltaY( drop.position.y - drop.size.height / 2 ),
+        this.modelViewTransform.modelToViewDeltaY( drop.position.y + drop.size.height / 2 ),
         this.modelViewTransform.modelToViewDeltaX( drop.size.width ),
         -this.modelViewTransform.modelToViewDeltaY( drop.size.height )
       );

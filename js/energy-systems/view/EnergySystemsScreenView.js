@@ -212,6 +212,10 @@ define( function( require ) {
     this.addChild( fluorescentBulbNode );
     this.addChild( fanNode );
 
+    // create the faucet node
+    this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    this.addChild( this.faucetNode );
+
     // create the energy converter nodes
     var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
     var beltNode = new BeltNode( model.belt, modelViewTransform );
@@ -220,13 +224,11 @@ define( function( require ) {
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // create the energy source nodes
-    this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    // create the energy source nodes (except the faucet, which has already been created)
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
     this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
     var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
     this.addChild( sunNode );
-    this.addChild( this.faucetNode );
     this.addChild( bikerNode );
     this.addChild( this.teaKettleNode );
 
