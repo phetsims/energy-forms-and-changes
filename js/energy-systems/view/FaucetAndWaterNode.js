@@ -35,7 +35,7 @@ define( function( require ) {
 
     var fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
 
-    // create the falling water drops and position to its model offset
+    // create the falling water drops and set position to its model offset
     this.fallingWaterCanvasNode = new FallingWaterCanvasNode(
       faucet.waterDrops,
       modelViewTransform,
