@@ -84,9 +84,9 @@ define( function( require ) {
     );
 
     this.addChild( heaterCoolerBack );
+    this.addChild( energyChunkLayer );
     this.addChild( heaterCoolerFront );
     this.addChild( burnerStandNode );
-    this.addChild( energyChunkLayer );
     this.addChild( teaKettleImageNode );
     this.addChild( this.steamNode );
   }
