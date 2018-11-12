@@ -32,7 +32,7 @@ define( function( require ) {
 
     // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
     // when chunks are removed from the model.
-    function chunkListObserver( energyChunk ) {
+    function chunkAddedListener( energyChunk ) {
 
       // create and add a node to represent the energy chunk
       var energyChunkNode = new EnergyChunkNode( energyChunk, modelViewTransform );
@@ -54,7 +54,7 @@ define( function( require ) {
     }
 
     // add the named observer function
-    energyChunkList.addItemAddedListener( chunkListObserver );
+    energyChunkList.addItemAddedListener( chunkAddedListener );
 
     // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position that
     // is offset from the parent in order to be in the correct location in the view.

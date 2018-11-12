@@ -2,8 +2,9 @@
 
 /**
  * A node that represents a 2D surface on which energy chunks reside.  The surface contains z-dimension information,
- * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance.  The slice itself
- * is generally invisible, but can be shown using when needed for debugging.
+ * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance when used in
+ * conjunction with other slices.  The slice itself is generally invisible, but can be shown using when needed for
+ * debugging.
  *
  * @author John Blanco
  * @author Andrew Adare

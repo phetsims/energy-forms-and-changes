@@ -74,7 +74,11 @@ define( function( require ) {
     this.addChild( elementBaseBackNode );
     this.addChild( nonEnergizedCoilNode );
     this.addChild( energizedCoilNode );
-    this.addChild( new EnergyChunkLayer( beakerHeater.energyChunkList, beakerHeater.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer(
+      beakerHeater.energyChunkList,
+      beakerHeater.positionProperty,
+      modelViewTransform
+    ) );
     this.addChild( elementBaseFrontNode );
 
     // create a scale-and-translate MVT
@@ -90,12 +94,17 @@ define( function( require ) {
     // from here on, the beakerView's position is updated by this, BeakerHeater
     this.beakerView.setFollowPosition( false );
 
+    // back of the beaker
     this.addChild( this.beakerView.backNode );
+
+    // between the front and back of the beaker we put a layer that will hold the radiated energy chunks
     this.addChild( new EnergyChunkLayer(
       beakerHeater.radiatedEnergyChunkList,
-      beakerHeater.beaker.positionProperty,
+      beakerHeater.positionProperty,
       modelViewTransform
     ) );
+
+    // front of the beaker
     this.addChild( this.beakerView.frontNode );
 
     // create a scale-only MVT, since several sub-elements are relatively positioned

@@ -232,7 +232,8 @@ define( function( require ) {
     },
 
     /**
-     * add an energy chunk to the next horizontal slice
+     * Add an energy chunk to one of the "energy chunk slices" managed by the beaker.  This attempts to keep the
+     * energy chunks evenly distributed between the different slices.
      * @param {EnergyChunk} energyChunk
      * @protected
      * @override
@@ -416,6 +417,7 @@ define( function( require ) {
         return null;
       }
 
+      // find the chunk in the chosen slice with the most energy and extract that one
       var highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
       assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
       densestSlice.energyChunkList.forEach( function( energyChunk ) {

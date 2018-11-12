@@ -33,13 +33,13 @@ define( function( require ) {
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
-  var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // In meters/sec, quite slow.
+  var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // in meters/sec, quite slow
   var HEATER_ELEMENT_2D_HEIGHT = 0.027; // height of image
-  var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy.
-  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // In meters.
-  var HEAT_ENERGY_CHANGE_RATE = 0.5; // In proportion per second.
+  var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy
+  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
+  var HEAT_ENERGY_CHANGE_RATE = 0.5; // in proportion per second
 
-  // energy chunk path offsets
+  // energy chunk path offsets, empirically determined such that they move through the view in a way that looks good
   var OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.041 );
   var OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.041 );
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
@@ -191,8 +191,11 @@ define( function( require ) {
           ec.zPositionProperty.set( 0.0 ); // Move to front of z order.
           this.radiatedEnergyChunkList.push( ec );
           this.radiatedEnergyChunkMovers.push(
-            new EnergyChunkPathMover( ec, this.createRadiatedEnergyChunkPath( ec.positionProperty.get() ),
-              EFACConstants.ENERGY_CHUNK_VELOCITY )
+            new EnergyChunkPathMover(
+              ec,
+              this.createRadiatedEnergyChunkPath( ec.positionProperty.value ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY
+            )
           );
         }
       }
@@ -409,23 +412,23 @@ define( function( require ) {
      * @private
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {
-      var path = [];
-      var numDirectionChanges = 4; // Empirically chosen.
-      var nominalTravelVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
+      var energyChunkTravelPath = [];
+      var numDirectionChanges = 4; // empirically chosen
+      var segmentVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
 
-      // The first point is straight above the starting point.  This is done because it looks good, making the chunk
-      // move straight up out of the beaker.
-      var currentPosition = startingPoint.plus( nominalTravelVector );
-      path.push( currentPosition );
+      // The first segment is is straight above the starting point.  This is done because it looks good, making the
+      // chunk move straight up out of the beaker.
+      var nextPoint = startingPoint.plus( segmentVector );
+      energyChunkTravelPath.push( nextPoint );
 
       // add the remaining points in the path
       for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
-        var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
-        currentPosition = currentPosition.plus( movement );
-        path.push( currentPosition );
+        var movement = segmentVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+        nextPoint = nextPoint.plus( movement );
+        energyChunkTravelPath.push( nextPoint );
       }
 
-      return path;
+      return energyChunkTravelPath;
     }
 
   }, {
