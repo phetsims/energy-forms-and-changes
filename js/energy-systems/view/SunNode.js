@@ -13,6 +13,7 @@ define( function( require ) {
   var Cloud = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/model/Cloud' );
   var Color = require( 'SCENERY/util/Color' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -20,6 +21,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LightRays = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/LightRays' );
   var Matrix3 = require( 'DOT/Matrix3' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/energy-systems/view/MoveFadeModelElementNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -150,37 +152,50 @@ define( function( require ) {
 
     // add/remove the light-absorbing shape for the solar panel
     var currentLightAbsorbingShape = null;
+
+    // create a scale-only MVT since translation of the absorption shape is done separately
+    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      Vector2.ZERO,
+      modelViewTransform.getMatrix().getScaleVector().x
+    );
+
+    // visible absorption shape used for debugging
+    var helperAbsorptionShape = null;
+
     Property.multilink(
       [ sun.activeProperty, sun.solarPanel.activeProperty ],
       function( sunActive, solarPanelActive ) {
 
         if ( sunActive && solarPanelActive ) {
           var absorptionShape = sun.solarPanel.getAbsorptionShape();
-          absorptionShape = modelViewTransform.modelToViewShape( absorptionShape );
-
-          // This line seems consistent with the Java, but doesn't seem to work.
-          // absorptionShape = absorptionShape.transformed( Matrix3.translationFromVector( modelViewTransform.modelToViewXY( 2*sun.position.x, -sun.position.y ) ) );
-          //
-          // Hard-coding an approx. shift until a better solution can be found.
-          absorptionShape = absorptionShape.transformed( Matrix3.translation( -240, -420 ) );
-          currentLightAbsorbingShape = new LightAbsorbingShape( absorptionShape, 1 );
+          var translatedAbsorptionShape = absorptionShape.transformed( Matrix3.translation(
+            -sun.positionProperty.value.x,
+            -sun.positionProperty.value.y
+          ) );
+          var scaledAndTranslatedAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedAbsorptionShape );
+          currentLightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedAbsorptionShape, 1 );
 
           lightRays.addLightAbsorbingShape( currentLightAbsorbingShape );
 
-          // TODO: Is the commented out code below still needed?
-          // DEBUG: Show absorption shape outline with wide line visible behind image.
-          // var path = new Path( absorptionShape, {
-          //   stroke: 'lime',
-          //   lineWidth: 50
-          // } );
-          // self.addChild( path );
+          // for debug, show absorption shape outline with dotted line visible on top of SolarPanel's helper shape
+          if ( EFACQueryParameters.showHelperShapes ) {
+            helperAbsorptionShape = new Path( scaledAndTranslatedAbsorptionShape, {
+              stroke: 'lime',
+              lineDash: [ 4, 8 ]
+            } );
+            self.addChild( helperAbsorptionShape );
+          }
         }
         else if ( currentLightAbsorbingShape !== null ) {
           lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
           currentLightAbsorbingShape = null;
 
-          // TODO: I (jbphet) came across the commented-out code below during initial code cleanup in mid-May 2018.  Is it needed?
-          // self.removeChild(path);
+          // for debug
+          if ( EFACQueryParameters.showHelperShapes && helperAbsorptionShape ) {
+            self.removeChild( helperAbsorptionShape );
+            helperAbsorptionShape = null;
+          }
         }
       }
     );

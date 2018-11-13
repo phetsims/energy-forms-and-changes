@@ -69,8 +69,9 @@ define( function( require ) {
     // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
 
-    // A shape used to describe where the collection area is relative to the model postion.  The collection area is at
+    // A shape used to describe where the collection area is relative to the model position.  The collection area is at
     // the top, and the energy chunks flow through wires and connectors below.
+    // @public - (read-only)
     this.untranslatedPanelBounds = new Bounds2(
       -PANEL_SIZE.width / 2,
       0,
@@ -78,10 +79,7 @@ define( function( require ) {
       PANEL_SIZE.height
     );
 
-    // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
-    // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
-    // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
-    // to see if they are located within this shape, so it needs a global position as well.
+    // @public - (read-only)
     this.untranslatedAbsorptionShape = new Shape()
       .moveTo( 0, 0 )
       .lineToRelative( -PANEL_SIZE.width / 2, 0 )
@@ -90,7 +88,12 @@ define( function( require ) {
 
     this.positionProperty.link( function( position ) {
 
-      // @public {Shape}
+      // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
+      // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
+      // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
+      // to see if they are located within this shape, so it needs a global position as well. The untranslated version of
+      // this shape is needed to draw the helper shape node in SolarPanelNode.
+      // @private {Shape}
       self.absorptionShape = self.untranslatedAbsorptionShape.transformed( Matrix3.translation( position.x, position.y ) );
     } );
   }

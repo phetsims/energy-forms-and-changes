@@ -70,10 +70,10 @@ define( function( require ) {
      */
     addLightAbsorbingShape: function( lightAbsorbingShape ) {
       var self = this;
+      this.lightAbsorbingShapes.push( lightAbsorbingShape );
       lightAbsorbingShape.absorptionCoefficientProperty.link( function() {
         self.updateRays();
       } );
-      this.lightAbsorbingShapes.push( lightAbsorbingShape );
     },
 
     /**
