@@ -11,6 +11,8 @@
 define( function( require ) {
   'use strict';
 
+  // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -41,6 +43,13 @@ define( function( require ) {
    * @constructor
    */
   function EnergyChunkLegend( modelViewTransform, options ) {
+
+    options = _.extend( {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS
+    }, options );
 
     // title that appears at the top of the legend
     var titleText = new Text( formsOfEnergyString, {
