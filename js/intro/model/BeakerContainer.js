@@ -113,7 +113,7 @@ define( function( require ) {
 
         // this chunk is being transferred from a container in the beaker to the fluid, so move it sideways
         if ( self.isEnergyChunkObscured( ec ) ) {
-          var xVel = 0.05 * dt * ( self.getCenterPoint().getX() > ec.positionProperty.value.x ? -1 : 1 );
+          var xVel = 0.05 * dt * ( self.getCenterPoint().x > ec.positionProperty.value.x ? -1 : 1 );
           var motionVector = new Vector2( xVel, 0 );
           ec.translate( motionVector );
         }
@@ -139,8 +139,8 @@ define( function( require ) {
 
         // the chunk is obscured by a model element in the beaker, so move it to the front of the z-order
         energyChunk.zPositionProperty.set( 0.0 );
-        this.approachingEnergyChunks.add( energyChunk );
-        this.energyChunkWanderControllers.add(
+        this.approachingEnergyChunks.push( energyChunk );
+        this.energyChunkWanderControllers.push(
           new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ )
         );
       } else {

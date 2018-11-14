@@ -276,15 +276,11 @@ define( function( require ) {
 
       var self = this;
 
-      // cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
-      // towards the nearest supporting surface
+      // Cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
+      // towards the nearest supporting surface.
       var unsupported;
       var raised;
       this.thermalContainers.forEach( function( movableModelElement ) {
-        var y = movableModelElement.positionProperty.value.y;
-        if ( y !== 0 && !y ) {
-          assert && assert( false, 'NaN value in position' );
-        }
         unsupported = movableModelElement.supportingSurface === null;
         raised = ( movableModelElement.positionProperty.value.y !== 0 );
         if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
@@ -308,13 +304,12 @@ define( function( require ) {
 
       // Note: The original intent was to design all the energy containers such that the order of the exchange didn't
       // matter, nor who was exchanging with whom.  This turned out to be a lot of extra work to maintain, and was
-      // eventually abandoned.  So, the order and nature of the exchanged below should be maintained unless there is a
+      // eventually abandoned.  So, the order and nature of the exchanges below should be maintained unless there is a
       // good reason not to, and any changes should be well tested.
 
       // loop through all the movable thermal energy containers and have them exchange energy with one another
       self.thermalContainers.forEach( function( container1, index ) {
-        self.thermalContainers.slice( index + 1,
-          self.thermalContainers.length ).forEach( function( container2 ) {
+        self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
           container1.exchangeEnergyWith( container2, dt );
         } );
       } );
@@ -357,12 +352,11 @@ define( function( require ) {
 
       // exchange energy chunks between movable thermal energy containers
       self.thermalContainers.forEach( function( container1, index ) {
-        self.thermalContainers.slice( index + 1,
-          self.thermalContainers.length ).forEach( function( container2 ) {
+        self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
 
             // exchange one or more chunks if appropriate
-            if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance < 0 ) {
+            if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance() < 0 ) {
               container2.addEnergyChunk( container1.extractEnergyChunkClosestToShape( container2.thermalContactArea ) );
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
