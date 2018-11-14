@@ -57,7 +57,7 @@ define( function( require ) {
      * @param {Rectangle[]} potentiallyDisplacingRectangles
      * @public
      */
-    updateFluidLevel: function( potentiallyDisplacingRectangles ) {
+    updateFluidDisplacement: function( potentiallyDisplacingRectangles ) {
 
       // calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles
       var fluidRectangle = new Rectangle(

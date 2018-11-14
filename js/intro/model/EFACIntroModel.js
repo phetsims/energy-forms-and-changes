@@ -299,7 +299,7 @@ define( function( require ) {
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beakers.forEach( function( beaker ) {
-        beaker.updateFluidLevel( [ self.brick.getBounds(), self.ironBlock.getBounds() ] );
+        beaker.updateFluidDisplacement( [ self.brick.getBounds(), self.ironBlock.getBounds() ] );
       } );
 
       //=====================================================================
