@@ -21,6 +21,7 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
@@ -127,6 +128,22 @@ define( function( require ) {
       var bounds = self.getCompositeBounds();
       self.topSurface.positionProperty.value = new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS );
       self.bottomSurface.positionProperty.value = new Vector2( position.x, bounds.minY );
+    } );
+
+    // update the slice shapes as the fluid level changes
+    this.fluidLevelProperty.lazyLink( function( newFluidLevel, oldFluidLevel ) {
+      var changeProportion = newFluidLevel / oldFluidLevel;
+      self.slices.forEach( function( slice ) {
+        var originalShape = slice.shape;
+        var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, changeProportion ) );
+        if ( expandedOrCompressedShape.bounds.height < self.height ) {
+          var translationTransform = Matrix3.translation(
+            originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
+            originalShape.bounds.y - expandedOrCompressedShape.bounds.y
+          );
+          slice.shape = expandedOrCompressedShape.transformed( translationTransform );
+        }
+      } );
     } );
   }
 
@@ -397,7 +414,7 @@ define( function( require ) {
 
       // If point is below water surface, call the superclass version.
       if ( !pointIsAboveWaterSurface ) {
-        return this.extractEnergyChunkClosestToPoint( point );
+        return RectangularThermalMovableModelElement.prototype.extractEnergyChunkClosestToPoint.call( this, point );
       }
 
       // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the

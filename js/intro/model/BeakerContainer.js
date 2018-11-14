@@ -15,7 +15,6 @@ define( function( require ) {
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -57,10 +56,8 @@ define( function( require ) {
      * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
      * @param {Rectangle[]} potentiallyDisplacingRectangles
      * @public
-     *
      */
     updateFluidLevel: function( potentiallyDisplacingRectangles ) {
-      var self = this;
 
       // calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles
       var fluidRectangle = new Rectangle(
@@ -78,23 +75,9 @@ define( function( require ) {
         }
       } );
 
-      // Map the overlap to a new fluid height.  The scaling factor was empirically determined to look good.
+      // Map the overlap to a new fluid level.  The scaling factor was empirically determined to look good.
       var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
-      var proportionateIncrease = newFluidLevel / this.fluidLevelProperty.value;
       this.fluidLevelProperty.set( newFluidLevel );
-
-      // update the shapes of the energy chunk slices
-      this.slices.forEach( function( slice ) {
-        var originalShape = slice.shape;
-        var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, proportionateIncrease ) );
-        if ( expandedOrCompressedShape.bounds.height < self.height ) {
-          var translationTransform = Matrix3.translation(
-            originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
-            originalShape.bounds.y - expandedOrCompressedShape.bounds.y
-          );
-          slice.shape = expandedOrCompressedShape.transformed( translationTransform );
-        }
-      } );
     },
 
     /**

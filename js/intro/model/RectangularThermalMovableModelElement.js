@@ -340,6 +340,7 @@ define( function( require ) {
         } );
       }
       else {
+
         // there is no or limited overlap, so use center points
         chunkToExtract = this.extractEnergyChunkClosestToPoint(
           new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
