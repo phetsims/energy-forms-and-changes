@@ -386,7 +386,7 @@ define( function( require ) {
      * @param {Vector2} point
      * @override
      */
-    extractClosestEnergyChunk: function( point ) {
+    extractEnergyChunkClosestToPoint: function( point ) {
       var pointIsAboveWaterSurface = true;
       for ( var i = 0; i < this.slices.length; i++ ) {
         if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
@@ -397,7 +397,7 @@ define( function( require ) {
 
       // If point is below water surface, call the superclass version.
       if ( !pointIsAboveWaterSurface ) {
-        return this.extractClosestEnergyChunkToPoint( point );
+        return this.extractEnergyChunkClosestToPoint( point );
       }
 
       // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the

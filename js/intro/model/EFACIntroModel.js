@@ -341,11 +341,11 @@ define( function( require ) {
 
             if ( burner.canSupplyEnergyChunk() && ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) ) {
               // Push an energy chunk into the item on the burner.
-              element.addEnergyChunk( burner.extractClosestEnergyChunk( element.getCenterPoint() ) );
+              element.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( element.getCenterPoint() ) );
             }
             else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
               // Extract an energy chunk from the model element
-              var energyChunk = element.extractClosestEnergyChunk( burner.getFlameIceRect() );
+              var energyChunk = element.extractEnergyChunkClosestToShape( burner.getFlameIceRect() );
 
               if ( energyChunk !== null ) {
                 burner.addEnergyChunk( energyChunk );
@@ -363,10 +363,10 @@ define( function( require ) {
 
             // exchange one or more chunks if appropriate
             if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance < 0 ) {
-              container2.addEnergyChunk( container1.extractClosestEnergyChunk( container2.thermalContactArea ) );
+              container2.addEnergyChunk( container1.extractEnergyChunkClosestToShape( container2.thermalContactArea ) );
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
-              container1.addEnergyChunk( container2.extractClosestEnergyChunk( container1.thermalContactArea ) );
+              container1.addEnergyChunk( container2.extractEnergyChunkClosestToShape( container1.thermalContactArea ) );
             }
           }
         } );
@@ -407,9 +407,11 @@ define( function( require ) {
           self.air.exchangeEnergyWith( container1, dt );
 
           if ( container1.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2( phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
-              container1.getBounds().maxY );
-            var energyChunk = container1.extractClosestEnergyChunkToPoint( pointAbove );
+            var pointAbove = new Vector2(
+              phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
+              container1.getBounds().maxY
+            );
+            var energyChunk = container1.extractEnergyChunkClosestToPoint( pointAbove );
 
             if ( energyChunk ) {
               var energyChunkMotionConstraints = null;
@@ -437,10 +439,10 @@ define( function( require ) {
       // exchange energy chunks between the air and the burners
       this.burners.forEach( function( burner ) {
         if ( burner.getEnergyChunkCountForAir() > 0 ) {
-          self.air.addEnergyChunk( burner.extractClosestEnergyChunk( burner.getCenterPoint() ), null );
+          self.air.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( burner.getCenterPoint() ), null );
         }
         else if ( burner.getEnergyChunkCountForAir() < 0 ) {
-          burner.addEnergyChunk( self.air.requestEnergyChunk( burner.getCenterPoint() ) );
+          burner.addEnergyChunk( self.air.extractEnergyChunkClosestToPoint( burner.getCenterPoint() ) );
         }
       } );
 

@@ -261,13 +261,13 @@ define( function( require ) {
     },
 
     /**
-     * Extract the closest energy chunk to the provided point.  Compensate distances for the z-offset so that
-     * z-positioning doesn't skew the results, since the provided point is 2D.
+     * Locate, remove, and return the energy chunk that is closed to the provided point.  Compensate distances for the
+     * z-offset so that z-positioning doesn't skew the results, since the provided point is 2D.
      * @param {Vector2} point - comparison point
      * @returns {EnergyChunk||null} closestEnergyChunk, null if there are none available
      * @public
      */
-    extractClosestEnergyChunkToPoint: function( point ) {
+    extractEnergyChunkClosestToPoint: function( point ) {
 
       var closestEnergyChunk = null;
       var closestCompensatedDistance = Number.POSITIVE_INFINITY;
@@ -295,12 +295,12 @@ define( function( require ) {
     /**
      * Extract an energy chunk that is a good choice for being transferred to the provided shape.  Generally, this means
      * that it is close to the shape. This routine is not hugely general - it makes some assumptions that make it work
-     * for blocks in beakers.  If support for other shapes is needed, it will need some work.
-     * @param destinationShape
-     * @returns {EnergyChunk||null} return null if none are available
+     * for blocks in beakers.  If support for other shapes is needed, it will likely need some work.
+     * @param {Shape} destinationShape
+     * @returns {EnergyChunk|null} - a suitable energy chunk or null if no energy chunks are available
      * @public
      */
-    extractClosestEnergyChunk: function( destinationShape ) {
+    extractEnergyChunkClosestToShape: function( destinationShape ) {
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
@@ -341,7 +341,7 @@ define( function( require ) {
       }
       else {
         // there is no or limited overlap, so use center points
-        chunkToExtract = this.extractClosestEnergyChunkToPoint(
+        chunkToExtract = this.extractEnergyChunkClosestToPoint(
           new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
       }
 

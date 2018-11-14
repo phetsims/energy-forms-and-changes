@@ -182,7 +182,7 @@ define( function( require ) {
         // remove an energy chunk from the beaker and start it floating away, a.k.a. make it "radiate"
         var bounds = this.beaker.getBounds();
         var extractionPoint = new Vector2( bounds.minX + phet.joist.random.nextDouble() * bounds.width, bounds.maxY );
-        var ec = this.beaker.extractClosestEnergyChunk( extractionPoint );
+        var ec = this.beaker.extractEnergyChunkClosestToPoint( extractionPoint );
 
         if ( ec ) {
           ec.zPositionProperty.set( 0.0 ); // move to front of z order

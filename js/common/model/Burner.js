@@ -204,7 +204,7 @@ define( function( require ) {
      * @returns {EnergyChunk} - closest energy chunk, null if none are contained
      * @public
      */
-    extractClosestEnergyChunk: function( point ) {
+    extractEnergyChunkClosestToPoint: function( point ) {
       var self = this;
       var closestEnergyChunk = null;
       if ( this.energyChunkList.length > 0 ) {
