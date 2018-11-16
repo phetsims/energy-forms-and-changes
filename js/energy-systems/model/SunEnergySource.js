@@ -275,6 +275,7 @@ define( function( require ) {
     activate: function() {
       EnergySource.prototype.activate.call( this );
 
+      // step a few times to get some energy chunks out
       for ( var i = 0; i < 100; i++ ) {
         this.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       }

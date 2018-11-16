@@ -40,9 +40,9 @@ define( function( require ) {
   var EnergyChunkDistributor = {
 
     /**
-     * Redistribute a set of energy chunks that are contained in energy chunk "slices".  This is done in this way
-     * because all of the energy chunks in a set of slices interact with each other, but the container for each is
-     * defined by the boundary of its containing slice.
+     * Redistribute a set of energy chunks that are contained in energy chunk "slices".  The distribution is done taking
+     * all nearby slices into account so that the chunks can be distributed in a way that looks good in the view, i.e.
+     * the chunks don't overlap with each other.
      * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
      * @param {number} dt - change in time
      * @public
@@ -71,8 +71,8 @@ define( function( require ) {
 
       // Create a map that tracks the force applied to each energy chunk and a map that tracks each energyChunk with a
       // unique ID.
-      var chunkForces = {}; // Map of chunkID (number) => force (Vector2)
-      var chunkMap = {}; // Map of chunkID (number) => chunk (EnergyChunk)
+      var chunkForces = {}; // map of chunkID (number) => force (Vector2)
+      var chunkMap = {}; // map of chunkID (number) => chunk (EnergyChunk)
       slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( chunk ) {
           chunkForces[ chunk.id ] = Vector2.createFromPool( 0, 0 );
@@ -102,7 +102,7 @@ define( function( require ) {
       // adjusted if needed.
       var forceConstant = ENERGY_CHUNK_MASS * boundingRect.width * boundingRect.height * 0.1 / mapSize;
 
-      // loop once for each max time step plus any remainder
+      // divide the time step up into the largest value known to work consistently for the algorithm
       var particlesRedistributed = false;
       var numForceCalcSteps = Math.floor( dt / MAX_TIME_STEP );
       var extraTime = dt - numForceCalcSteps * MAX_TIME_STEP;
@@ -110,20 +110,21 @@ define( function( require ) {
         var timeStep = forceCalcStep < numForceCalcSteps ? MAX_TIME_STEP : extraTime;
 
         // update the forces acting on the particle due to its bounding container, other particles, and drag
-        slices.forEach( function( slice ) {
-          var containerShape = slice.shape;
+        for ( var i = 0; i < slices.length; i++ ) {
+          var slice = slices[ i ];
+          var containerShapeBounds = slice.shape.bounds;
 
           // determine the max possible distance to an edge
-          var maxDistanceToEdge = Math.sqrt( Math.pow( containerShape.bounds.width, 2 ) +
-                                             Math.pow( containerShape.bounds.height, 2 ) );
+          var maxDistanceToEdge = Math.sqrt( Math.pow( containerShapeBounds.width, 2 ) +
+                                             Math.pow( containerShapeBounds.height, 2 ) );
 
           // determine forces on each energy chunk
           slice.energyChunkList.forEach( function( chunk ) {
 
             // reset accumulated forces
             chunkForces[ chunk.id ].setXY( 0, 0 );
-            if ( containerShape.bounds.containsCoordinates( chunk.positionProperty.value.x, chunk.positionProperty.value.y ) ) {
-              self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShape );
+            if ( containerShapeBounds.containsCoordinates( chunk.positionProperty.value.x, chunk.positionProperty.value.y ) ) {
+              self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShapeBounds );
               self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
             }
             else {
@@ -134,26 +135,26 @@ define( function( require ) {
               chunkForces[ chunk.id ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
-        } );
+        }
 
         var maxEnergy = this.updateVelocities( chunkMap, chunkForces, timeStep );
 
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
 
         if ( particlesRedistributed ) {
-          this.stepChunks( chunkMap, dt );
+          this.stepChunks( chunkMap, timeStep );
         }
       }
       return particlesRedistributed;
     },
 
-    computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerShape ) {
+    computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerBounds ) {
 
       // get the distance to the four different edges
-      var rightLength = Math.max( containerShape.bounds.maxX - chunk.positionProperty.value.x, minDistance );
-      var bottomLength = Math.max( containerShape.bounds.maxY - chunk.positionProperty.value.y, minDistance );
-      var leftLength = Math.max( chunk.positionProperty.value.x - containerShape.bounds.minX, minDistance );
-      var topLength = Math.max( chunk.positionProperty.value.y - containerShape.bounds.minY, minDistance );
+      var rightLength = Math.max( containerBounds.maxX - chunk.positionProperty.value.x, minDistance );
+      var bottomLength = Math.max( containerBounds.maxY - chunk.positionProperty.value.y, minDistance );
+      var leftLength = Math.max( chunk.positionProperty.value.x - containerBounds.minX, minDistance );
+      var topLength = Math.max( chunk.positionProperty.value.y - containerBounds.minY, minDistance );
 
       // calculate the force from the edge at the given angle
       var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( rightLength, 2 ), 0 ).rotated( Math.PI );
@@ -187,10 +188,13 @@ define( function( require ) {
           var vectorToOther = chunk.positionProperty.value.minus( chunkMap[ otherEnergyChunkID ].positionProperty.value );
           if ( vectorToOther.magnitude() < minDistance ) {
             if ( vectorToOther.magnitude() === 0 ) {
-              // Create a random vector of min distance.
+
+              // create a random vector of min distance
               var randomAngle = phet.joist.random.nextDouble() * Math.PI * 2;
-              vectorToOther = new Vector2( minDistance * Math.cos( randomAngle ),
-                minDistance * Math.sin( randomAngle ) );
+              vectorToOther = new Vector2(
+                minDistance * Math.cos( randomAngle ),
+                minDistance * Math.sin( randomAngle )
+              );
             }
             else {
               vectorToOther = vectorToOther.setMagnitude( minDistance );

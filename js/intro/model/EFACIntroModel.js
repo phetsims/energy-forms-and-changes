@@ -261,9 +261,7 @@ define( function( require ) {
       if ( this.playProperty.get() ) {
         var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 :
                          EFACConstants.FAST_FORWARD_MULTIPLIER;
-        // TODO: This uses a fixed step instead of dt, this will need to be changed, see https://github.com/phetsims/energy-forms-and-changes/issues/42
-        // this.stepModel( dt * multiplier );
-        this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL * multiplier );
+        this.stepModel( dt * multiplier );
       }
     },
 
