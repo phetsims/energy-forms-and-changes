@@ -24,7 +24,7 @@ define( function( require ) {
   var ZERO_VECTOR = Vector2.ZERO;
 
   // parameters that can be adjusted to change the nature of the redistribution
-  var MAX_TIME_STEP = 5E-3; // in seconds, for algorithm that moves the points
+  var MAX_TIME_STEP = ( 1 / 60 ) / 3; // in seconds, for algorithm that moves the points, best if a multiple of nominal frame rate
   var ENERGY_CHUNK_MASS = 1E-3; // in kilograms, chosen arbitrarily
   var FLUID_DENSITY = 1000; // in kg / m ^ 3, same as water, used for drag
   var ENERGY_CHUNK_DIAMETER = 1E-3; // in meters, chosen empirically
