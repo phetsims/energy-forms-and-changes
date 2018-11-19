@@ -31,7 +31,7 @@ define( function( require ) {
 
   // position and size constants, empirically determined
   var BEAKER_WIDTH = 0.075; // In meters.
-  var BEAKER_HEIGHT = BEAKER_WIDTH * 0.9;
+  var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
   var BEAKER_OFFSET = new Vector2( 0, 0.025 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // in meters/sec, quite slow
   var HEATER_ELEMENT_2D_HEIGHT = 0.027; // height of image
