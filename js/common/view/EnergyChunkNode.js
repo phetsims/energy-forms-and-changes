@@ -35,7 +35,7 @@ define( function( require ) {
 
   // constants
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
-  var WIDTH = 24; // in screen coords, which are close to pixels
+  var WIDTH = 19; // in screen coords, which are close to pixels. Empirically determined to look nice.
 
   // convenience map that links energy types to their representing images
   var mapEnergyTypeToImage = {};
