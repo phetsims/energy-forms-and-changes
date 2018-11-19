@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 /**
  * a convenience type that collects together several things often needed about a unit of energy that is being produced

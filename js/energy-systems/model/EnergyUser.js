@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 /**
  * base type for energy users, i.e. model elements that take energy from an energy converter and do something with it,

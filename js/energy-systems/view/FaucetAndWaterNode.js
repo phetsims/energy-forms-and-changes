@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 /**
  * a scenery node that represents a faucet from which water flows

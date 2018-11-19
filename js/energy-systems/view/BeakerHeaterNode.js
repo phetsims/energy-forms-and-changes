@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2018, University of Colorado Boulder
 
 /**
  * a Scenery Node representing the beaker heater in the view
