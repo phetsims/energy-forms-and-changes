@@ -24,8 +24,7 @@ define( function( require ) {
   var VELOCITY_DIVISOR = 2.7; // empirically determined, lower number = faster fan speed
   var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
   var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
-  var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.12; // in meters
-  var BLOWN_ENERGY_CHUNK_VELOCITY = EFACConstants.ENERGY_CHUNK_VELOCITY * 2; // empirically determined
+  var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
   var INCOMING_ENERGY_FAN_THRESHOLD = 6; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
   var MAX_INCOMING_ENERGY = 170;
   var ROOM_TEMPERATURE = 22; // in Celsius
@@ -38,11 +37,7 @@ define( function( require ) {
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
   var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND = new Vector2( -0.0265, 0.011 );
-  var OFFSET_TO_FOURTH_WIRE_CURVE_POINT = new Vector2( -0.0235, 0.022 );
-  var OFFSET_TO_FIFTH_WIRE_CURVE_POINT = new Vector2( -0.0135, 0.031 );
-  var OFFSET_TO_SIXTH_WIRE_CURVE_POINT = new Vector2( -0.005, 0.033 );
-  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( 0.005, 0.034 );
+  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.028 );
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
@@ -192,7 +187,7 @@ define( function( require ) {
             // release the energy chunk as mechanical to blow away
             self.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
-              BLOWN_ENERGY_CHUNK_VELOCITY ) );
+              EFACConstants.ENERGY_CHUNK_VELOCITY ) );
             self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY;
           }
           else {
@@ -263,10 +258,6 @@ define( function( require ) {
       path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_BOTTOM_OF_SECOND_WIRE_BEND ) );
-      path.push( center.plus( OFFSET_TO_FOURTH_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_FIFTH_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_SIXTH_WIRE_CURVE_POINT ) );
       path.push( center.plus( OFFSET_TO_FAN_MOTOR_INTERIOR ) );
       return path;
     },
@@ -305,7 +296,7 @@ define( function( require ) {
      */
     createBlownEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 6; // empirically determined
+      var numDirectionChanges = 20; // empirically determined
       var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges, 0 );
 
       // The first point is straight right the starting point.  This is done because it makes the chunk

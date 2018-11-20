@@ -31,7 +31,6 @@ define( function( require ) {
   ];
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
   var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
-  var wireTopRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_top_right.png' );
 
   // constants
   var NUM_FAN_IMAGES = fanImages.length;
@@ -48,17 +47,12 @@ define( function( require ) {
 
     // add the images and the layer that will contain the energy chunks
     var wireBottomRightNode = new Image( wireBottomRightImage, { left: -110, bottom: 105 } );
-    var wireTopRightNode = new Image( wireTopRightImage, {
-      left: wireBottomRightNode.right - 27,
-      bottom: wireBottomRightNode.top + 77
-    } );
     var connectorNode = new Image( connectorImage, {
-      left: wireTopRightNode.right - 4,
-      top: wireTopRightNode.top - 23
+      right: wireBottomRightNode.right + 9,
+      bottom: wireBottomRightNode.top + 3
     } );
 
     this.addChild( wireBottomRightNode );
-    this.addChild( wireTopRightNode );
 
     var fanBladeRootNode = new Node();
     var fanBladeImageNodes = [];
