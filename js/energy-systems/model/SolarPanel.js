@@ -43,6 +43,7 @@ define( function( require ) {
   var OFFSET_TO_SECOND_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.005, -0.033 );
   var OFFSET_TO_THIRD_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.015, -0.040 );
   var OFFSET_TO_OUTGOING_CONNECTOR = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
+  var OFFSET_TO_REFLECTION_DESTINATION = new Vector2( 0.25, 0.4 ); // when a chunk gets reflected, send it away from the panel
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
@@ -61,9 +62,11 @@ define( function( require ) {
     this.a11yName = EFACA11yStrings.solarPanel.value;
 
     // @private
-    this.energyChunkMovers = [];
+    this.electricalEnergyChunkMovers = [];
+    this.lightEnergyChunkMovers = [];
     this.latestChunkArrivalTime = 0;
     this.energyOutputRate = 0;
+    this.numberOfConvertedChunks = 0;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     // @private - counter to mimic function of IClock in original Java code
@@ -122,16 +125,35 @@ define( function( require ) {
 
             if ( incomingChunk.energyTypeProperty.get() === EnergyType.LIGHT ) {
 
-              // convert this chunk to electrical energy and add it to the list of energy chunks being managed
-              incomingChunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
-              self.energyChunkList.push( incomingChunk );
+              if ( self.numberOfConvertedChunks < 4 ) {
 
-              // add a "mover" that will move this energy chunk to the bottom of the solar panel
-              self.energyChunkMovers.push( new EnergyChunkPathMover(
-                incomingChunk,
-                self.createPathToPanelBottom( self.positionProperty.get() ),
-                self.chooseChunkSpeedOnPanel( incomingChunk ) )
-              );
+                // convert this chunk to electrical energy and add it to the list of energy chunks being managed
+                incomingChunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
+                self.energyChunkList.push( incomingChunk );
+
+                // add a "mover" that will move this energy chunk to the bottom of the solar panel
+                self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+                  incomingChunk,
+                  self.createPathToPanelBottom( self.positionProperty.get() ),
+                  self.chooseChunkSpeedOnPanel( incomingChunk ) )
+                );
+
+                self.numberOfConvertedChunks++;
+              }
+              else {
+
+                // leave this chunk as light energy and add it to the list of energy chunks being managed
+                self.energyChunkList.push( incomingChunk );
+
+                // add a "mover" that will reflect this energy chunk up and away from the panel
+                self.lightEnergyChunkMovers.push( new EnergyChunkPathMover(
+                  incomingChunk,
+                  self.createReflectedLightPath( incomingChunk.positionProperty.get() ),
+                  EFACConstants.ENERGY_CHUNK_VELOCITY )
+                );
+
+                self.numberOfConvertedChunks = 0;
+              }
             }
 
             // by design, this shouldn't happen, so raise an error if it does
@@ -147,7 +169,8 @@ define( function( require ) {
         }
 
         // move the energy chunks that are currently under management
-        this.moveEnergyChunks( dt );
+        this.moveElectricalEnergyChunks( dt );
+        this.moveReflectedEnergyChunks( dt );
       }
 
       // produce the appropriate amount of energy
@@ -163,14 +186,14 @@ define( function( require ) {
     },
 
     /**
-     * update energy chunk positions
+     * update electrical energy chunk positions
      * @param  {number} dt - time step, in seconds
      * @private
      */
-    moveEnergyChunks: function( dt ) {
+    moveElectricalEnergyChunks: function( dt ) {
 
       // iterate over a copy to mutate original without problems
-      var movers = _.clone( this.energyChunkMovers );
+      var movers = _.clone( this.electricalEnergyChunkMovers );
 
       var self = this;
 
@@ -180,11 +203,11 @@ define( function( require ) {
 
         if ( mover.pathFullyTraversed ) {
 
-          _.pull( self.energyChunkMovers, mover );
+          _.pull( self.electricalEnergyChunkMovers, mover );
 
           // energy chunk has reached the bottom of the panel and now needs to move through the converter
           if ( mover.energyChunk.positionProperty.value.equals( self.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
-            self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+            self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createPathThroughConverter( self.positionProperty.value ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
@@ -195,6 +218,29 @@ define( function( require ) {
             self.outgoingEnergyChunks.push( mover.energyChunk );
             self.energyChunkList.remove( mover.energyChunk );
           }
+        }
+      } );
+    },
+
+    /**
+     * update light energy chunk positions
+     * @param  {number} dt - time step, in seconds
+     * @private
+     */
+    moveReflectedEnergyChunks: function( dt ) {
+
+      // iterate over a copy to mutate original without problems
+      var movers = _.clone( this.lightEnergyChunkMovers );
+
+      var self = this;
+
+      movers.forEach( function( mover ) {
+        mover.moveAlongPath( dt );
+
+        // remove this energy chunk entirely
+        if ( mover.pathFullyTraversed ) {
+          _.pull( self.lightEnergyChunkMovers, mover );
+          self.energyChunkList.remove( mover.energyChunk );
         }
       } );
     },
@@ -255,7 +301,7 @@ define( function( require ) {
           this.energyChunkList.push( newEnergyChunk );
 
           // add a "mover" that will move this energy chunk to the bottom of the solar panel
-          this.energyChunkMovers.push( new EnergyChunkPathMover(
+          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
             newEnergyChunk,
             this.createPathToPanelBottom( this.positionProperty.get() ),
             this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
@@ -265,7 +311,7 @@ define( function( require ) {
           energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
         }
 
-        this.moveEnergyChunks( dt );
+        this.moveElectricalEnergyChunks( dt );
 
         if ( this.outgoingEnergyChunks.length > 0 ) {
 
@@ -298,7 +344,7 @@ define( function( require ) {
 
       var self = this;
 
-      this.energyChunkMovers.forEach( function( mover ) {
+      this.electricalEnergyChunkMovers.forEach( function( mover ) {
         if ( mover.getFinalDestination().equals( self.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
           numChunksOnPanel++;
         }
@@ -332,7 +378,7 @@ define( function( require ) {
      */
     clearEnergyChunks: function() {
       EnergyConverter.prototype.clearEnergyChunks.call( this );
-      this.energyChunkMovers.length = 0;
+      this.electricalEnergyChunkMovers.length = 0;
       this.latestChunkArrivalTime = 0;
     },
 
@@ -356,6 +402,16 @@ define( function( require ) {
       path.push( panelPosition.plus( OFFSET_TO_SECOND_CURVE_POINT ) );
       path.push( panelPosition.plus( OFFSET_TO_THIRD_CURVE_POINT ) );
       path.push( panelPosition.plus( OFFSET_TO_OUTGOING_CONNECTOR ) );
+      return path;
+    },
+
+    /**
+     * @param {Vector2} panelPosition
+     * @private
+     */
+    createReflectedLightPath: function( chunkPosition ) {
+      var path = [];
+      path.push( chunkPosition.plus( OFFSET_TO_REFLECTION_DESTINATION ) );
       return path;
     },
 
