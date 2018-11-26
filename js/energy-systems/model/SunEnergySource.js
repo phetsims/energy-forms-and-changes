@@ -88,7 +88,7 @@ define( function( require ) {
       for ( var i = 0; i < nClouds; i++ ) {
 
         // stagger the existence strength of the clouds
-        var value = Util.clamp( cloudiness * ( nClouds - i ), 0, 1 );
+        var value = Util.clamp( cloudiness * nClouds - i, 0, 1 );
         self.clouds[ i ].existenceStrengthProperty.set( value );
       }
     } );
