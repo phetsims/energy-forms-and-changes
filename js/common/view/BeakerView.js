@@ -38,6 +38,7 @@ define( function( require ) {
   var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
   var LABEL_FONT = new PhetFont( 26 );
   var BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
+  var NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
   /**
    * @param {Beaker} beaker - model of a beaker
@@ -80,10 +81,10 @@ define( function( require ) {
 
     // Create the shapes for the top and bottom of the beaker.  These are ellipses in order to create a 3D-ish look.
     var ellipseHeight = beakerBounds.getWidth() * PERSPECTIVE_PROPORTION;
-    var halfWidth = beakerBounds.width / 2;
-    var halfHeight = ellipseHeight / 2;
-    var topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, halfWidth, halfHeight, 0 );
-    var bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0 );
+    var beakerHalfWidth = beakerBounds.width / 2;
+    var beakerEllipseHalfHeight = ellipseHeight / 2;
+    var topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
+    var bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
 
     // Add the fluid.  It will adjust its size based on the fluid level.
     this.fluid = new PerspectiveWaterNode(
@@ -97,16 +98,57 @@ define( function( require ) {
 
     // create and add the node for the body of the beaker
     var beakerBody = new Shape()
-      .moveTo( beakerBounds.minX, beakerBounds.minY ) // Top let of the beaker body.
-      .ellipticalArc( beakerBounds.centerX, beakerBounds.minY, halfWidth, halfHeight, 0, Math.PI, 0, true )
+      .moveTo( beakerBounds.minX, beakerBounds.minY ) // Top left of the beaker body.
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0, Math.PI, 0, true )
       .lineTo( beakerBounds.maxX, beakerBounds.maxY ) // Bottom right of the beaker body.
-      .ellipticalArc( beakerBounds.centerX, beakerBounds.maxY, halfWidth, halfHeight, 0, 0, Math.PI, false )
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0, 0, Math.PI, false )
       .close();
 
     this.frontNode.addChild( new Path( beakerBody, {
       fill: BEAKER_COLOR,
       lineWidth: 3,
       stroke: OUTLINE_COLOR
+    } ) );
+
+    // vars used for drawing the tick marks
+    var numberOfMajorTicks = Math.floor( beaker.height / beaker.majorTickMarkDistance );
+    var numberOfTicks = numberOfMajorTicks * ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ); // total number of ticks
+    var majorTickLengthAngle = 0.13 * Math.PI; // empirically determined
+    var minorTickLengthAngle = majorTickLengthAngle / 2; // empirically determined
+    var spaceBetweenEachTickMark = Math.abs( modelViewTransform.modelToViewDeltaY( beaker.majorTickMarkDistance ) /
+                                             ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) );
+
+    // x-distance between the left edge of the beaker and the start of the ticks along an ellipse, in radians
+    var xOriginAngle = 0.1 * Math.PI;
+    var yPosition = beakerBounds.maxY;
+
+    // create the tick marks shape
+    var tickMarks = new Shape().moveTo( beakerBounds.minX, beakerBounds.maxY ); // bottom left of the beaker body
+
+    // draw the tick marks
+    for ( var tickIndex = 0; tickIndex < numberOfTicks; tickIndex++ ) {
+      yPosition -= spaceBetweenEachTickMark;
+      var startAngle = Math.PI - xOriginAngle;
+      var tickLengthAngle = ( tickIndex + 1 ) % ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) === 0 ? majorTickLengthAngle : minorTickLengthAngle;
+      var endAngle = startAngle - tickLengthAngle;
+
+      tickMarks.newSubpath(); // don't connect the tick marks with additional lines
+      tickMarks.ellipticalArc(
+        beakerBounds.centerX,
+        yPosition,
+        beakerHalfWidth,
+        beakerEllipseHalfHeight,
+        0,
+        startAngle,
+        endAngle,
+        true
+      );
+    }
+
+    // add the tick marks
+    this.frontNode.addChild( new Path( tickMarks, {
+      lineWidth: 1,
+      stroke: 'black'
     } ) );
 
     // add the bottom ellipse

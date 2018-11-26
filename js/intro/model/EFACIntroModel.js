@@ -36,6 +36,7 @@ define( function( require ) {
   var NUM_THERMOMETERS = 3;
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
+  var MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
   var LEFT_EDGE = -0.30;
@@ -118,7 +119,9 @@ define( function( require ) {
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
       listOfThingsThatCanGoInBeaker,
-      this.energyChunksVisibleProperty
+      this.energyChunksVisibleProperty, {
+        majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+      }
     );
 
     // @public (read-only) {BeakerContainer)
@@ -132,7 +135,8 @@ define( function( require ) {
         fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
         fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
         fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-        energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
+        energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
+        majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
       }
     );
 

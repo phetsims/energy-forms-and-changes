@@ -50,7 +50,8 @@ define( function( require ) {
       fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
       fluidDensity: EFACConstants.WATER_DENSITY,
       fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
-      energyContainerCategory: EnergyContainerCategory.WATER
+      energyContainerCategory: EnergyContainerCategory.WATER,
+      majorTickMarkDistance: height * 0.95 / 2 // empirically determined
     }, options );
 
     RectangularThermalMovableModelElement.call( this,
@@ -74,6 +75,9 @@ define( function( require ) {
 
     // @public {number} - the boiling point temperature of the fluid in the beaker
     this.fluidBoilingPoint = options.fluidBoilingPoint;
+
+    // @public {number} - the distance between major tick marks on the side of the beaker
+    this.majorTickMarkDistance = options.majorTickMarkDistance;
 
     // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
     this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
