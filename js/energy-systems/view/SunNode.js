@@ -111,6 +111,12 @@ define( function( require ) {
       var cloudNode = new CloudNode( cloud, modelViewTransform );
       cloudNode.opacity = 0;
       self.addChild( cloudNode );
+
+      if ( EFACQueryParameters.showHelperShapes ) {
+        self.addChild( new Path( scaledAndTranslatedCloudAbsorptionShape, {
+          stroke: 'red'
+        } ) );
+      }
     } );
 
     // add slider panel to control cloudiness
