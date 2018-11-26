@@ -16,8 +16,8 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   // constants
-  var CLOUD_WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
-  var CLOUD_HEIGHT = CLOUD_WIDTH;
+  var WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
+  var HEIGHT = WIDTH * 0.55; // determined from the approximate aspect ratio of the image
 
   /**
    * @param {Vector2} offsetFromParent
@@ -39,8 +39,8 @@ define( function( require ) {
     this.cloudEllipse = null;
 
     this.parentPositionProperty.link( function( parentPosition ) {
-      var center = parentPosition.plus( self.offsetFromParent ).minusXY( CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2 );
-      self.cloudEllipse = Shape.ellipse( center.x, center.y, CLOUD_WIDTH / 2, CLOUD_HEIGHT / 2, 0, 0, 0, false );
+      var center = parentPosition.plus( self.offsetFromParent );
+      self.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0, 0, 0, false );
     } );
   }
 
@@ -68,7 +68,8 @@ define( function( require ) {
   }, {
 
     // statics
-    CLOUD_WIDTH: CLOUD_WIDTH
+    WIDTH: WIDTH,
+    HEIGHT: HEIGHT
   } );
 } );
 

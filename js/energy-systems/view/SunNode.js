@@ -83,14 +83,24 @@ define( function( require ) {
 
     sunPath.setTranslation( sunCenter );
 
+    // create a scale-only MVT since translation of the absorption shapes is done separately
+    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      Vector2.ZERO,
+      modelViewTransform.getMatrix().getScaleVector().x
+    );
+
     // add clouds, initially transparent
     sun.clouds.forEach( function( cloud ) {
-      var cloudNode = new CloudNode( cloud, modelViewTransform );
 
-      // make a crude light-absorbing shape from the rectangular cloud boundary
-      var b = cloudNode.bounds;
-      var cloudShape = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
-      var lightAbsorbingShape = new LightAbsorbingShape( cloudShape, 0 );
+      // make a light-absorbing shape from the cloud's absorption ellipse
+      var cloudAbsorptionShape = cloud.getCloudAbsorptionReflectionShape();
+      var translatedCloudAbsorptionShape = cloudAbsorptionShape.transformed( Matrix3.translation(
+        -sun.positionProperty.value.x,
+        -sun.positionProperty.value.y
+      ) );
+      var scaledAndTranslatedCloudAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedCloudAbsorptionShape );
+      var lightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedCloudAbsorptionShape, 0 );
 
       cloud.existenceStrengthProperty.link( function( existenceStrength ) {
         lightAbsorbingShape.absorptionCoefficientProperty.set( existenceStrength / 10 );
@@ -98,6 +108,7 @@ define( function( require ) {
 
       lightRays.addLightAbsorbingShape( lightAbsorbingShape );
 
+      var cloudNode = new CloudNode( cloud, modelViewTransform );
       cloudNode.opacity = 0;
       self.addChild( cloudNode );
     } );
@@ -153,15 +164,8 @@ define( function( require ) {
     // add/remove the light-absorbing shape for the solar panel
     var currentLightAbsorbingShape = null;
 
-    // create a scale-only MVT since translation of the absorption shape is done separately
-    var scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      Vector2.ZERO,
-      Vector2.ZERO,
-      modelViewTransform.getMatrix().getScaleVector().x
-    );
-
     // visible absorption shape used for debugging
-    var helperAbsorptionShape = null;
+    var helperAbsorptionNode = null;
 
     Property.multilink(
       [ sun.activeProperty, sun.solarPanel.activeProperty ],
@@ -180,11 +184,11 @@ define( function( require ) {
 
           // for debug, show absorption shape outline with dotted line visible on top of SolarPanel's helper shape
           if ( EFACQueryParameters.showHelperShapes ) {
-            helperAbsorptionShape = new Path( scaledAndTranslatedAbsorptionShape, {
+            helperAbsorptionNode = new Path( scaledAndTranslatedAbsorptionShape, {
               stroke: 'lime',
               lineDash: [ 4, 8 ]
             } );
-            self.addChild( helperAbsorptionShape );
+            self.addChild( helperAbsorptionNode );
           }
         }
         else if ( currentLightAbsorbingShape !== null ) {
@@ -192,9 +196,9 @@ define( function( require ) {
           currentLightAbsorbingShape = null;
 
           // for debug
-          if ( EFACQueryParameters.showHelperShapes && helperAbsorptionShape ) {
-            self.removeChild( helperAbsorptionShape );
-            helperAbsorptionShape = null;
+          if ( EFACQueryParameters.showHelperShapes && helperAbsorptionNode ) {
+            self.removeChild( helperAbsorptionNode );
+            helperAbsorptionNode = null;
           }
         }
       }
@@ -229,15 +233,15 @@ define( function( require ) {
   function CloudNode( cloud, modelViewTransform ) {
     Node.call( this );
     var self = this;
-    var cloudNode = new Image( cloudImage, {
-      width: Cloud.CLOUD_WIDTH,
-      scale: 0.5
-    } );
+
+    var cloudNode = new Image( cloudImage );
+    cloudNode.scale(
+      modelViewTransform.modelToViewDeltaX( Cloud.WIDTH ) / cloudNode.width,
+      -modelViewTransform.modelToViewDeltaY( Cloud.HEIGHT ) / cloudNode.height
+    );
     this.addChild( cloudNode );
 
-    var x = modelViewTransform.modelToViewDeltaX( cloud.offsetFromParent.x );
-    var y = modelViewTransform.modelToViewDeltaY( cloud.offsetFromParent.y );
-    this.center = new Vector2( x, y );
+    this.center = modelViewTransform.modelToViewDelta( cloud.offsetFromParent );
 
     cloud.existenceStrengthProperty.link( function( opacity ) {
       self.opacity = opacity;
