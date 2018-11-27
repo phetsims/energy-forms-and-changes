@@ -125,8 +125,9 @@ define( function( require ) {
     CONTROL_PANEL_CORNER_RADIUS: 10,
     RESET_ALL_BUTTON_RADIUS: 20,
 
-    // model-view transform scale factor for Energy Systems tab
-    ENERGY_SYSTEMS_MVT_SCALE_FACTOR: 2200,
+    //TODO: This is not being used anywhere. Should it be?
+    // model-view transform scale factor for the Systems screen
+    SYSTEMS_MVT_SCALE_FACTOR: 2200,
 
     // constants that control the speed of the energy chunks
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
