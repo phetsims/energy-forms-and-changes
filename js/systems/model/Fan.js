@@ -147,15 +147,19 @@ define( function( require ) {
     },
 
     /**
-     * check if a blown energy chunk is within a certain proximity to the fan
+     * check if a blown energy chunk is within a certain proximity to the fan. if true is returned, the most recent
+     * energy chunk to pass through the motor is still "powering" the motor.
+     * @returns {boolean}
      * @private
      */
     motorRecentlyReceivedEnergy: function() {
       var recentEnergy = false;
       var fanPositionX = this.positionProperty.value.x;
       for ( var i = 0; i < this.mechanicalEnergyChunkMovers.length; i++ ) {
+
+        // "recent energy" distance empirically determined to look correct, see function description above
         recentEnergy = this.mechanicalEnergyChunkMovers[ i ].energyChunk.positionProperty.value.x - fanPositionX <
-                       BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / 1.2 ? true : recentEnergy;
+                       INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE ? true : recentEnergy;
       }
       return recentEnergy;
     },
