@@ -19,13 +19,14 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var Shape = require( 'KITE/Shape' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var BLOCK_PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
-
+  var BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
 
   /**
    * @param {Beaker} beaker
@@ -38,6 +39,28 @@ define( function( require ) {
 
     var self = this;
     BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
+
+    // variables for creating reusable shapes for doing the updates to the clipping areas
+    var beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
+    var beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
+
+    // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
+    // clip area.  It is extended a bit up and down for chunks that go to the rim of the beaker and for those that
+    // go between the beaker and the heater/cooler.
+    this.untransformedBeakerClipShape = new Shape.rect(
+      -beakerRectangleWidthInView / 2,
+      -beakerRectangleHeightInView * 1.5,
+      beakerRectangleWidthInView,
+      beakerRectangleHeightInView * 2
+    );
+
+    // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
+    // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
+    // This assumes the blocks are all the same size and do not change size.
+    this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.brick.width );
+    this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
+    var perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+    this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
     // For each block that can go in the beaker we need to add a listener that will update the clipping area when that
     // block is moved.  The clipping area hides energy chunks that overlap with blocks, making it look much less
@@ -75,24 +98,13 @@ define( function( require ) {
      */
     updateEnergyChunkClipArea: function( beaker, blocks, modelViewTransform ) {
 
-      var beakerPosition = beaker.positionProperty.get();
-
-      var beakerUpperLeftInViewCoords = modelViewTransform.modelToViewXY(
-        beakerPosition.x - beaker.width / 2,
-        beakerPosition.y + beaker.height
-      );
-
       // The clip area is defined by an outer rectangle that is basically the entire beaker area and then some inner
       // rectangles for the blocks if they overlap with the beaker.  The inner pieces have to be drawn with the opposite
       // winding order from the outer ones in order to create the "hole" effect.  The outer shape extends above and
       // below the basic beaker model rectangle in order to prevent clipping of energy chunks that are positioned at
       // the upper and lower rim of the beaker and energy chunks moving between the beaker and the heater/cooler.
-      var beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
-      var clipArea = new Shape.rect(
-        beakerUpperLeftInViewCoords.x,
-        beakerUpperLeftInViewCoords.y - beakerRectangleHeightInView * 0.5,
-        modelViewTransform.modelToViewDeltaX( beaker.width ),
-        beakerRectangleHeightInView * 2
+      var clipArea = this.untransformedBeakerClipShape.transformed(
+        Matrix3.translationFromVector( modelViewTransform.modelToViewPosition( beaker.positionProperty.get() ) )
       );
 
       // add the "holes" in the clip mask that correspond to the blocks
@@ -107,24 +119,18 @@ define( function( require ) {
      * used for the blocks.  This essentially creates "holes" in the clip mask preventing anything in the parent node
      * (generally energy chunks) from being rendered in the same place as the blocks.
      * @param {Block[]} blocks
-     * @param {Shape} shape
+     * @param {Shape} clipAreaShape
      * @param {ModelViewTransform2} modelViewTransform
      * @private
      */
-    addProjectedBlocksToClipArea: function( blocks, shape, modelViewTransform ) {
+    addProjectedBlocksToClipArea: function( blocks, clipAreaShape, modelViewTransform ) {
 
       // Make sure there aren't more blocks than this method can deal with.  There are some assumptions built in that
       // would not work for more than two blocks, see the code and comments below for details.
       assert && assert( blocks.length <= 2, 'number of blocks exceeds what this method is designed to handle' );
 
       // use the bounds of the shape for faster tests, assumes that it is rectangular
-      var shapeBounds = shape.bounds;
-
-      // vars used for projections, only calculated if needed
-      var perspectiveEdgeSize;
-      var forwardProjectionVector;
-      var blockWidthInView;
-      var blockHeightInView;
+      var chipAreaShapeBounds = clipAreaShape.bounds;
 
       // determine whether the blocks are stacked upon each other
       var blocksAreStacked = blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) || blocks[ 1 ].isStackedUpon( blocks[ 0 ] );
@@ -132,7 +138,8 @@ define( function( require ) {
       if ( blocksAreStacked ) {
 
         // When the blocks are stacked, draw a single shape the encompasses both.  This is necessary because if the
-        // shapes overlap in the clipping area, a space is created where the energy chunks aren't occluded.
+        // shapes are drawn separately and the overlap in the clipping area, a space is created where the energy chunks
+        // aren't occluded.
         var bottomBlock;
         if ( blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) ) {
           bottomBlock = blocks[ 1 ];
@@ -142,22 +149,18 @@ define( function( require ) {
         }
 
         var bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
-        blockWidthInView = modelViewTransform.modelToViewDeltaX( bottomBlock.width );
-        blockHeightInView = -modelViewTransform.modelToViewDeltaY( bottomBlock.height );
-        perspectiveEdgeSize = blockWidthInView * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
-        forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
-        if ( shapeBounds.containsPoint( bottomBlockPositionInView ) ) {
-          shape.moveTo(
-            bottomBlockPositionInView.x - blockWidthInView / 2 + forwardProjectionVector.x,
-            bottomBlockPositionInView.y + forwardProjectionVector.y
+        if ( chipAreaShapeBounds.containsPoint( bottomBlockPositionInView ) ) {
+          clipAreaShape.moveTo(
+            bottomBlockPositionInView.x - this.blockWidthInView / 2 + this.forwardProjectionVector.x,
+            bottomBlockPositionInView.y + this.forwardProjectionVector.y
           );
-          shape.lineToRelative( blockWidthInView, 0 );
-          shape.lineToRelative( -forwardProjectionVector.x * 2, -forwardProjectionVector.y * 2 );
-          shape.lineToRelative( 0, -blockHeightInView * 2 );
-          shape.lineToRelative( -blockWidthInView, 0 );
-          shape.lineToRelative( forwardProjectionVector.x * 2, forwardProjectionVector.y * 2 );
-          shape.lineToRelative( 0, blockHeightInView * 2 );
+          clipAreaShape.lineToRelative( this.blockWidthInView, 0 );
+          clipAreaShape.lineToRelative( -this.forwardProjectionVector.x * 2, -this.forwardProjectionVector.y * 2 );
+          clipAreaShape.lineToRelative( 0, -this.blockHeightInView * 2 );
+          clipAreaShape.lineToRelative( -this.blockWidthInView, 0 );
+          clipAreaShape.lineToRelative( this.forwardProjectionVector.x * 2, this.forwardProjectionVector.y * 2 );
+          clipAreaShape.lineToRelative( 0, this.blockHeightInView * 2 );
         }
       }
       else {
@@ -166,25 +169,21 @@ define( function( require ) {
         for ( var i = 0; i < blocks.length; i++ ) {
           var block = blocks[ i ];
           var blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
-          blockWidthInView = modelViewTransform.modelToViewDeltaX( block.width );
-          blockHeightInView = -modelViewTransform.modelToViewDeltaY( block.height );
-          perspectiveEdgeSize = blockWidthInView * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
-          forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
-          // The following code makes some assumptions that are known to be true for the EFAC simulation but which wouldn't
-          // necessarily true for a generalized version of this.  Those assumptions are that the provided shape is
-          // rectangular and that the position of the block is the bottom center.
-          if ( shapeBounds.containsPoint( blockPositionInView ) ) {
-            shape.moveTo(
-              blockPositionInView.x - blockWidthInView / 2 + forwardProjectionVector.x,
-              blockPositionInView.y + forwardProjectionVector.y
+          // The following code makes some assumptions that are known to be true for the EFAC simulation but which
+          // wouldn't necessarily true for a generalized version of this.  Those assumptions are that the provided shape
+          // is rectangular and that the position of the block is the bottom center.
+          if ( chipAreaShapeBounds.containsPoint( blockPositionInView ) ) {
+            clipAreaShape.moveTo(
+              blockPositionInView.x - this.blockWidthInView / 2 + this.forwardProjectionVector.x,
+              blockPositionInView.y + this.forwardProjectionVector.y
             );
-            shape.lineToRelative( blockWidthInView, 0 );
-            shape.lineToRelative( -forwardProjectionVector.x * 2, -forwardProjectionVector.y * 2 );
-            shape.lineToRelative( 0, -blockHeightInView );
-            shape.lineToRelative( -blockWidthInView, 0 );
-            shape.lineToRelative( forwardProjectionVector.x * 2, forwardProjectionVector.y * 2 );
-            shape.lineToRelative( 0, blockHeightInView );
+            clipAreaShape.lineToRelative( this.blockWidthInView, 0 );
+            clipAreaShape.lineToRelative( -this.forwardProjectionVector.x * 2, -this.forwardProjectionVector.y * 2 );
+            clipAreaShape.lineToRelative( 0, -this.blockHeightInView );
+            clipAreaShape.lineToRelative( -this.blockWidthInView, 0 );
+            clipAreaShape.lineToRelative( this.forwardProjectionVector.x * 2, this.forwardProjectionVector.y * 2 );
+            clipAreaShape.lineToRelative( 0, this.blockHeightInView );
           }
         }
       }
