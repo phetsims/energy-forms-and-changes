@@ -40,7 +40,7 @@ define( function( require ) {
 
       // if the thermometer was dropped, see if it was dropped over something that it should follow
       else {
-        model.getBlockList().forEach( function( block ) {
+        model.blocks.forEach( function( block ) {
           if ( block.getProjectedShape().containsPoint( self.positionProperty.value ) ) {
 
             // stick to this block

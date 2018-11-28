@@ -58,7 +58,6 @@ define( function( require ) {
 
     // @private
     this.modelViewTransform = modelViewTransform;
-    this.energyChunkClipNode = new Node();
     this.followPosition = true;
 
     // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
@@ -186,26 +185,24 @@ define( function( require ) {
     label.pickable = false;
     this.frontNode.addChild( label );
 
-    // Create the layers where the contained energy chunks will be placed. A clipping node is used to enable occlusion
-    // when interacting with other model elements.
-    // TODO: Work this one out with BeakerContainerView.
-    var energyChunkRootNode = new Node();
-    this.backNode.addChild( energyChunkRootNode );
+    // @protected {Node} - the layer where the contained energy chunk nodes will be placed
+    this.energyChunkRootNode = new Node();
+    this.backNode.addChild( this.energyChunkRootNode );
 
-    // The original Java code used a PClip. Not clear what that was for, so adding the sliceNodes directly to the root node instead.
-    for ( var i = beaker.slices.length - 1; i >= 0; i-- ) {
-      energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( beaker.slices[ i ], modelViewTransform ) );
-    }
+    // add the energy chunk container slice nodes to the energy chunk layer
+    beaker.slices.forEach( function( slice ) {
+      self.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( slice, modelViewTransform ) );
+    } );
 
     // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
     // needed.
     beaker.approachingEnergyChunks.addItemAddedListener( function( addedEnergyChunk ) {
       var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      energyChunkRootNode.addChild( energyChunkNode );
+      self.energyChunkRootNode.addChild( energyChunkNode );
 
       beaker.approachingEnergyChunks.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
         if ( removedEnergyChunk === addedEnergyChunk ) {
-          energyChunkRootNode.removeChild( energyChunkNode );
+          self.energyChunkRootNode.removeChild( energyChunkNode );
           energyChunkNode.dispose();
           beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
@@ -242,7 +239,7 @@ define( function( require ) {
       }
 
       // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
-      energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
+      self.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
     } );
 
     // adjust the transparency of the water and label based on energy chunk visibility

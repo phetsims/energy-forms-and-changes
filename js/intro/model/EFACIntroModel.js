@@ -80,10 +80,6 @@ define( function( require ) {
     // energy
     this.air = new Air( this.energyChunksVisibleProperty );
 
-    // // @public (read-only) {Burner} - right and left burners
-    // this.leftBurner = new Burner( new Vector2( 0.14, 0 ), this.energyChunksVisibleProperty );
-    // this.rightBurner = new Burner( new Vector2( 0.24, 0 ), this.energyChunksVisibleProperty );
-
     // @private - calculate space in between the center points of the snap-to spots on the ground
     this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) / ( NUM_GROUND_SPOTS - 1 );
     this.groundSpotXPositions = [];
@@ -94,7 +90,7 @@ define( function( require ) {
       this.groundSpotXPositions.push( Math.round( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
     }
 
-    //  @public (read-only) {Block}
+    // @public (read-only) {Block}
     this.brick = new Block(
       new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
       this.energyChunksVisibleProperty,
@@ -108,7 +104,7 @@ define( function( require ) {
       BlockType.IRON
     );
 
-    // @private {Block[]} - for convenience
+    // @public (read-only) {Block[]} - list of all blocks in sim
     this.blocks = [ this.brick, this.ironBlock ];
 
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
@@ -581,14 +577,6 @@ define( function( require ) {
     },
 
     /**
-     * get a list of the thermal blocks
-     * @return {Block[]}
-     */
-    getBlockList: function() {
-      return [ this.ironBlock, this.brick ];
-    },
-
-    /**
      * Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by
      * the code that detects potential collisions between the 2D objects in model space.
      * @param {Line} edge
@@ -953,7 +941,7 @@ define( function( require ) {
       var temperatureAndColor = null;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-      var copyOfBlockList = this.getBlockList().slice( 0 );
+      var copyOfBlockList = this.blocks.slice( 0 );
 
       copyOfBlockList.sort( function( block1, block2 ) {
         if ( block1.position === block2.position ) {
