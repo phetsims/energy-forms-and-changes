@@ -95,49 +95,98 @@ define( function( require ) {
         beakerRectangleHeightInView * 2
       );
 
-      // c-style loop for best performance
-      for ( var i = 0; i < blocks.length; i++ ) {
-        this.addProjectedBlockToShape( blocks[ i ], clipArea, modelViewTransform );
-      }
+      // add the "holes" in the clip mask that correspond to the blocks
+      this.addProjectedBlocksToClipArea( blocks, clipArea, modelViewTransform );
 
       // set the updated clip area
       this.energyChunkRootNode.clipArea = clipArea;
     },
 
     /**
-     * Add a projected and transformed block shape to the provided shape.  This is a convenience method for essentially
-     * making "holes" that match the block in the clip area inside the beaker.
-     * @param {Block} block
+     * Add shapes corresponded to the provided blocks to the provide clip area shape, accounting for any 3D projection
+     * used for the blocks.  This essentially creates "holes" in the clip mask preventing anything in the parent node
+     * (generally energy chunks) from being rendered in the same place as the blocks.
+     * @param {Block[]} blocks
      * @param {Shape} shape
      * @param {ModelViewTransform2} modelViewTransform
      * @private
      */
-    addProjectedBlockToShape: function( block, shape, modelViewTransform ) {
+    addProjectedBlocksToClipArea: function( blocks, shape, modelViewTransform ) {
 
-      var blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
-      var blockWidthInView = modelViewTransform.modelToViewDeltaX( block.width );
-      var blockHeightInView = -modelViewTransform.modelToViewDeltaY( block.height );
+      // Make sure there aren't more blocks than this method can deal with.  There are some assumptions built in that
+      // would not work for more than two blocks, see the code and comments below for details.
+      assert && assert( blocks.length <= 2, 'number of blocks exceeds what this method is designed to handle' );
+
+      // use the bounds of the shape for faster tests, assumes that it is rectangular
       var shapeBounds = shape.bounds;
 
-      var perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX(
-        block.width * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION
-      );
-      var forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+      // vars used for projections, only calculated if needed
+      var perspectiveEdgeSize;
+      var forwardProjectionVector;
+      var blockWidthInView;
+      var blockHeightInView;
 
-      // The following code makes some assumptions that are known to be true for the EFAC simulation but which wouldn't
-      // necessarily true for a generalized version of this.  Those assumptions are that the provided shape is
-      // rectangular and that the position of the block is the bottom center.
-      if ( shapeBounds.containsPoint( blockPositionInView ) ) {
-        shape.moveTo(
-          blockPositionInView.x - blockWidthInView / 2 + forwardProjectionVector.x,
-          blockPositionInView.y + forwardProjectionVector.y
-        );
-        shape.lineToRelative( blockWidthInView, 0 );
-        shape.lineToRelative( -forwardProjectionVector.x * 2, -forwardProjectionVector.y * 2 );
-        shape.lineToRelative( 0, -blockHeightInView );
-        shape.lineToRelative( -blockWidthInView, 0 );
-        shape.lineToRelative( forwardProjectionVector.x * 2, forwardProjectionVector.y * 2 );
-        shape.lineToRelative( 0, blockHeightInView );
+      // determine whether the blocks are stacked upon each other
+      var blocksAreStacked = blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) || blocks[ 1 ].isStackedUpon( blocks[ 0 ] );
+
+      if ( blocksAreStacked ) {
+
+        // When the blocks are stacked, draw a single shape the encompasses both.  This is necessary because if the
+        // shapes overlap in the clipping area, a space is created where the energy chunks aren't occluded.
+        var bottomBlock;
+        if ( blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) ) {
+          bottomBlock = blocks[ 1 ];
+        }
+        else {
+          bottomBlock = blocks[ 0 ];
+        }
+
+        var bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
+        blockWidthInView = modelViewTransform.modelToViewDeltaX( bottomBlock.width );
+        blockHeightInView = -modelViewTransform.modelToViewDeltaY( bottomBlock.height );
+        perspectiveEdgeSize = blockWidthInView * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+        forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+
+        if ( shapeBounds.containsPoint( bottomBlockPositionInView ) ) {
+          shape.moveTo(
+            bottomBlockPositionInView.x - blockWidthInView / 2 + forwardProjectionVector.x,
+            bottomBlockPositionInView.y + forwardProjectionVector.y
+          );
+          shape.lineToRelative( blockWidthInView, 0 );
+          shape.lineToRelative( -forwardProjectionVector.x * 2, -forwardProjectionVector.y * 2 );
+          shape.lineToRelative( 0, -blockHeightInView * 2 );
+          shape.lineToRelative( -blockWidthInView, 0 );
+          shape.lineToRelative( forwardProjectionVector.x * 2, forwardProjectionVector.y * 2 );
+          shape.lineToRelative( 0, blockHeightInView * 2 );
+        }
+      }
+      else {
+
+        // C-style loop for best performance
+        for ( var i = 0; i < blocks.length; i++ ) {
+          var block = blocks[ i ];
+          var blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
+          blockWidthInView = modelViewTransform.modelToViewDeltaX( block.width );
+          blockHeightInView = -modelViewTransform.modelToViewDeltaY( block.height );
+          perspectiveEdgeSize = blockWidthInView * EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+          forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+
+          // The following code makes some assumptions that are known to be true for the EFAC simulation but which wouldn't
+          // necessarily true for a generalized version of this.  Those assumptions are that the provided shape is
+          // rectangular and that the position of the block is the bottom center.
+          if ( shapeBounds.containsPoint( blockPositionInView ) ) {
+            shape.moveTo(
+              blockPositionInView.x - blockWidthInView / 2 + forwardProjectionVector.x,
+              blockPositionInView.y + forwardProjectionVector.y
+            );
+            shape.lineToRelative( blockWidthInView, 0 );
+            shape.lineToRelative( -forwardProjectionVector.x * 2, -forwardProjectionVector.y * 2 );
+            shape.lineToRelative( 0, -blockHeightInView );
+            shape.lineToRelative( -blockWidthInView, 0 );
+            shape.lineToRelative( forwardProjectionVector.x * 2, forwardProjectionVector.y * 2 );
+            shape.lineToRelative( 0, blockHeightInView );
+          }
+        }
       }
     }
   } );
