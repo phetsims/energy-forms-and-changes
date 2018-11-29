@@ -71,8 +71,8 @@ define( function( require ) {
 
     var energyChunkLayer = new EnergyChunkLayer(
       teaKettle.energyChunkList,
-      teaKettle.positionProperty,
-      modelViewTransform
+      modelViewTransform,
+      { parentPositionProperty: teaKettle.positionProperty }
     );
 
     var spoutXY = new Vector2( teaKettleImageNode.bounds.maxX - 5, teaKettleImageNode.bounds.minY + 16 );
@@ -154,7 +154,7 @@ define( function( require ) {
         var startPoint = new Vector2( -stemBaseWidth / 2, 0 ).rotated( Math.PI / 4 );
 
         // opening angle of steam stream (/2)
-        var stemHalfAngle = 0.5 * Math.PI / 4 * ( 1 + 0.3 * ( phet.joist.random.nextDouble() - 0.5));
+        var stemHalfAngle = 0.5 * Math.PI / 4 * ( 1 + 0.3 * ( phet.joist.random.nextDouble() - 0.5 ) );
 
         var stemEdge = new Vector2( heightAndWidth / 2, -heightAndWidth / 2 );
 
@@ -173,7 +173,7 @@ define( function( require ) {
         var cloudCenter = new Vector2( heightAndWidth - cloudSize / 2, -cloudSize / 2 );
         var nPoints = 16;
         for ( var i = 0; i < nPoints; i++ ) {
-          var radiusVector = new Vector2( cloudSize / 2 * ( 1 + 0.1 * ( phet.joist.random.nextDouble() - 0.5)), 0 );
+          var radiusVector = new Vector2( cloudSize / 2 * ( 1 + 0.1 * ( phet.joist.random.nextDouble() - 0.5 ) ), 0 );
           var point = cloudCenter.plus( radiusVector.rotated( i * Math.PI * 2 / nPoints ) );
           i ? cloudBody.lineToPoint( point ) : cloudBody.moveToPoint( point );
         }

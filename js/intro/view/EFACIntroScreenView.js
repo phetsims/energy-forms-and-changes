@@ -20,6 +20,7 @@ define( function( require ) {
   var Checkbox = require( 'SUN/Checkbox' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -91,6 +92,10 @@ define( function( require ) {
     this.addChild( blockLayer );
     var airLayer = new Node();
     this.addChild( airLayer );
+    var leftBurnerEnergyChunkLayer = new EnergyChunkLayer( model.leftBurner.energyChunkList, modelViewTransform );
+    this.addChild( leftBurnerEnergyChunkLayer );
+    var rightBurnerEnergyChunkLayer = new EnergyChunkLayer( model.rightBurner.energyChunkList, modelViewTransform );
+    this.addChild( rightBurnerEnergyChunkLayer );
     var heaterCoolerFrontLayer = new Node();
     this.addChild( heaterCoolerFrontLayer );
     var beakerFrontLayer = new Node();
@@ -135,7 +140,8 @@ define( function( require ) {
     // create left burner node
     var leftBurnerStand = new BurnerStandNode(
       modelViewTransform.modelToViewShape( model.leftBurner.getCompositeBounds() ),
-      burnerProjectionAmount );
+      burnerProjectionAmount
+    );
 
     // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
     var leftHeaterCoolerBack = new HeaterCoolerBack( {

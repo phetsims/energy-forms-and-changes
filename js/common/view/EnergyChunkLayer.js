@@ -21,14 +21,24 @@ define( function( require ) {
 
   /**
    * @param {ObservableArray} energyChunkList
-   * @param {Property.<Vector2>} parentPositionProperty
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} options
+   * @param {Property.<Vector2>} parentPositionProperty
    * @constructor
    */
-  function EnergyChunkLayer( energyChunkList, parentPositionProperty, modelViewTransform ) {
+  function EnergyChunkLayer( energyChunkList, modelViewTransform, options ) {
     Node.call( this );
 
     var self = this;
+
+    options = _.extend( {
+
+      // Property.<Vector2> - a position property that will be used to compensate the energy chunk layer's position
+      // such that it stays in untranslated screen-view coordinates.  This is often used for an energy chunk layer that
+      // is the child of a node that is itself being placed in the view according to its position value.
+      parentPositionProperty: null
+
+    }, options );
 
     // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
     // when chunks are removed from the model.
@@ -56,12 +66,15 @@ define( function( require ) {
     // add the named observer function
     energyChunkList.addItemAddedListener( chunkAddedListener );
 
-    // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position that
-    // is offset from the parent in order to be in the correct location in the view.
-    parentPositionProperty.link( function( position ) {
-      self.x = -modelViewTransform.modelToViewX( position.x );
-      self.y = -modelViewTransform.modelToViewY( position.y );
-    } );
+    if ( options.parentPositionProperty ) {
+
+      // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
+      // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
+      options.parentPositionProperty.link( function( position ) {
+        self.x = -modelViewTransform.modelToViewX( position.x );
+        self.y = -modelViewTransform.modelToViewY( position.y );
+      } );
+    }
   }
 
   energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );

@@ -62,14 +62,20 @@ define( function( require ) {
     } );
 
     this.addChild( wireBottomLeftNode );
-    this.addChild( new EnergyChunkLayer( generator.electricalEnergyChunks, generator.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( generator.electricalEnergyChunks, modelViewTransform, {
+      parentPositionProperty: generator.positionProperty
+    } ) );
     this.addChild( generatorNode );
     this.addChild( connectorNode );
     this.addChild( spokesNode );
     this.addChild( paddlesNode );
     this.addChild( generatorWheelHubNode );
-    this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, generator.positionProperty, modelViewTransform ) );
-    this.addChild( new EnergyChunkLayer( generator.energyChunkList, generator.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, modelViewTransform, {
+      parentPositionProperty: generator.positionProperty
+    } ) );
+    this.addChild( new EnergyChunkLayer( generator.energyChunkList, modelViewTransform, {
+      parentPositionProperty: generator.positionProperty
+    } ) );
 
     // update the rotation of the wheel image based on model value
     var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );

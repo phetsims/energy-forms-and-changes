@@ -64,7 +64,9 @@ define( function( require ) {
     } );
 
     // create the energy chunk layer
-    var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, faucet.positionProperty, modelViewTransform );
+    var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, modelViewTransform, {
+      parentPositionProperty: faucet.positionProperty
+    } );
 
     this.addChild( this.fallingWaterCanvasNode );
     this.addChild( energyChunkLayer );

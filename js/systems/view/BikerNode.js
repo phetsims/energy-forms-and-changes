@@ -242,7 +242,9 @@ define( function( require ) {
     this.addChild( cyclistFrontLegRootNode );
 
     // add the energy chunk layer
-    this.addChild( new EnergyChunkLayer( biker.energyChunkList, biker.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( biker.energyChunkList, modelViewTransform, {
+      parentPositionProperty: biker.positionProperty
+    } ) );
   }
 
   energyFormsAndChanges.register( 'BikerNode', BikerNode );

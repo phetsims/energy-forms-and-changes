@@ -76,8 +76,8 @@ define( function( require ) {
     this.addChild( energizedCoilNode );
     this.addChild( new EnergyChunkLayer(
       beakerHeater.energyChunkList,
-      beakerHeater.positionProperty,
-      modelViewTransform
+      modelViewTransform,
+      { parentPositionProperty: beakerHeater.positionProperty }
     ) );
     this.addChild( elementBaseFrontNode );
 
@@ -100,8 +100,8 @@ define( function( require ) {
     // between the front and back of the beaker we put a layer that will hold the radiated energy chunks
     this.addChild( new EnergyChunkLayer(
       beakerHeater.radiatedEnergyChunkList,
-      beakerHeater.positionProperty,
-      modelViewTransform
+      modelViewTransform,
+      { parentPositionProperty: beakerHeater.positionProperty }
     ) );
 
     // front of the beaker

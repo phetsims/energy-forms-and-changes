@@ -79,7 +79,9 @@ define( function( require ) {
     } );
     this.addChild( fanBladeRootNode );
 
-    this.addChild( new EnergyChunkLayer( fan.energyChunkList, fan.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( fan.energyChunkList, modelViewTransform, {
+      parentPositionProperty: fan.positionProperty
+    } ) );
     this.addChild( connectorNode );
   }
 

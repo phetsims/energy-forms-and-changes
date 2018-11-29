@@ -85,7 +85,9 @@ define( function( require ) {
     this.addChild( wireStraightNode );
     this.addChild( wireBottomRightNode );
     this.addChild( elementBaseBackNode );
-    this.addChild( new EnergyChunkLayer( lightBulb.energyChunkList, lightBulb.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( lightBulb.energyChunkList, modelViewTransform, {
+      parentPositionProperty: lightBulb.positionProperty
+    } ) );
     this.addChild( elementBaseFrontNode );
 
     if ( options.bulbType === 'fluorescent' ) {

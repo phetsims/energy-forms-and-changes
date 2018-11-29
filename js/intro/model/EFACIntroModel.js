@@ -333,11 +333,13 @@ define( function( require ) {
             var elementChunkBalance = element.getEnergyChunkBalance();
 
             if ( burner.canSupplyEnergyChunk() && ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) ) {
-              // Push an energy chunk into the item on the burner.
+
+              // push an energy chunk into the item on the burner
               element.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( element.getCenterPoint() ) );
             }
             else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
-              // Extract an energy chunk from the model element
+
+              // extract an energy chunk from the model element
               var energyChunk = element.extractEnergyChunkClosestToShape( burner.getFlameIceRect() );
 
               if ( energyChunk !== null ) {

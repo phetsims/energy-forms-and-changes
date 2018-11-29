@@ -164,7 +164,9 @@ define( function( require ) {
     } ) );
 
     // add the energy chunks, which reside on their own layer
-    this.addChild( new EnergyChunkLayer( sun.energyChunkList, sun.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( sun.energyChunkList, modelViewTransform, {
+      parentPositionProperty: sun.positionProperty
+    } ) );
     this.addChild( sunPath );
 
     // add/remove the light-absorbing shape for the solar panel

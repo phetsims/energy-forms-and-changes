@@ -73,7 +73,9 @@ define( function( require ) {
     this.addChild( wireBottomLeftNode );
     this.addChild( postNode );
     this.addChild( panelNode );
-    this.addChild( new EnergyChunkLayer( solarPanel.energyChunkList, solarPanel.positionProperty, modelViewTransform ) );
+    this.addChild( new EnergyChunkLayer( solarPanel.energyChunkList, modelViewTransform, {
+      parentPositionProperty: solarPanel.positionProperty
+    } ) );
     this.addChild( windowNode );
     this.addChild( connectorNode );
 

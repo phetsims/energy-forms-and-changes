@@ -58,6 +58,7 @@ define( function( require ) {
       // Destination reached.
       if ( distanceToDestination < this.velocity.magnitude() * dt &&
         !this.energyChunk.positionProperty.value.equals( this.destinationProperty.value ) ) {
+
         this.energyChunk.positionProperty.set( this.destinationProperty.value );
         this.velocity.setMagnitude( 0 );
       }

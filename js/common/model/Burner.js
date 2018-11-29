@@ -310,7 +310,7 @@ define( function( require ) {
      */
     step: function( dt ) {
       var self = this;
-      var controllers = this.energyChunkWanderControllers.splice();
+      var controllers = this.energyChunkWanderControllers.slice();
 
       controllers.forEach( function( controller ) {
 
@@ -318,7 +318,6 @@ define( function( require ) {
 
         if ( controller.isDestinationReached() ) {
           self.energyChunkList.remove( controller.energyChunk );
-
           _.pull( self.energyChunkWanderControllers, controller );
         }
       } );
