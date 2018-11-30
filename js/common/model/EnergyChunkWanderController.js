@@ -1,7 +1,7 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * This class is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
+ * This type is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
  * destination.
  *
  * @author John Blanco
@@ -26,16 +26,32 @@ define( function( require ) {
   /**
    * @param {EnergyChunk} energyChunk
    * @param {Property.<Vector2>} destinationProperty
-   * @param {Rectangle} initialWanderConstraint // TODO: Can this become a Bounds2?  Seems like that'd be better.
+   * @param {Object} options
    * @constructor
    */
-  function EnergyChunkWanderController( energyChunk, destinationProperty, initialWanderConstraint ) {
+  function EnergyChunkWanderController( energyChunk, destinationProperty, options ) {
+
+    options = _.extend( {
+
+      // {Bounds2} - bounding area within which the energy chunk's motion should be constrained
+      initialWanderConstraint: null
+    }, options );
+
+    // parameter checking
+    assert && options.initialWanderConstraint && assert(
+      options.initialWanderConstraint.containsPoint( energyChunk.positionProperty.value ),
+      'energy chunk starting position is not within the wander constraint'
+    );
+    assert && options.initialWanderConstraint && assert(
+      options.initialWanderConstraint.containsPoint( destinationProperty.value ),
+      'energy chunk destination is not within the wander constraint'
+    );
 
     // @public (read-only) {EnergyChunk)
     this.energyChunk = energyChunk;
 
     // @private
-    this.initialWanderConstraint = initialWanderConstraint;
+    this.initialWanderConstraint = options.initialWanderConstraint;
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, MAX_VELOCITY );
     this.resetCountdownTimer();
@@ -57,7 +73,7 @@ define( function( require ) {
 
       // Destination reached.
       if ( distanceToDestination < this.velocity.magnitude() * dt &&
-        !this.energyChunk.positionProperty.value.equals( this.destinationProperty.value ) ) {
+           !this.energyChunk.positionProperty.value.equals( this.destinationProperty.value ) ) {
 
         this.energyChunk.positionProperty.set( this.destinationProperty.value );
         this.velocity.setMagnitude( 0 );

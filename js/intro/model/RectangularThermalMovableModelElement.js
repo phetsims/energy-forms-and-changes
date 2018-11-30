@@ -178,7 +178,7 @@ define( function( require ) {
         energyChunk.zPosition = 0;
         this.approachingEnergyChunks.push( energyChunk );
         this.energyChunkWanderControllers.push(
-          new EnergyChunkWanderController( energyChunk, this.positionProperty, null )
+          new EnergyChunkWanderController( energyChunk, this.positionProperty )
         );
       }
     },
@@ -323,8 +323,8 @@ define( function( require ) {
       }
       else if ( this.thermalContactArea.containsBounds( destinationShape.bounds ) ) {
 
-        // this element's shape encloses the destination shape - choose a chunk that is close but doesn't overlap with
-        // the destination shape
+        // This element's shape encloses the destination shape - choose a chunk that is close but doesn't overlap with
+        // the destination shape.
         var closestDistanceToDestinationEdge = Number.POSITIVE_INFINITY;
         var destinationBounds = destinationShape.bounds;
         this.slices.forEach( function( slice ) {

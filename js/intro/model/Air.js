@@ -110,7 +110,7 @@ define( function( require ) {
         var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
         _.times( numFullTimeStepExchanges + 1, function( index ) {
           var timeStep = index < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
-          var thermalEnergyLost = (self.getTemperature() - EFACConstants.ROOM_TEMPERATURE) *
+          var thermalEnergyLost = ( self.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) *
                                   HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
           self.changeEnergy( -thermalEnergyLost );
 
@@ -165,7 +165,8 @@ define( function( require ) {
             energyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
           }
-        } else {
+        }
+        else {
 
           // item is at max temperature - shed all excess energy into the air
           energyContainer.changeEnergy( -excessEnergy );
@@ -184,8 +185,8 @@ define( function( require ) {
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController(
         energyChunk,
         new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
-        initialWanderConstraint )
-      );
+        { initialWanderConstraint: initialWanderConstraint }
+      ) );
     },
 
     /**
@@ -228,7 +229,7 @@ define( function( require ) {
      * @public
      */
     getTemperature: function() {
-      return this.energy / (MASS * SPECIFIC_HEAT);
+      return this.energy / ( MASS * SPECIFIC_HEAT );
     },
 
     /**
