@@ -284,6 +284,7 @@ define( function( require ) {
           var compensatedDistance = compensatedEnergyChunkPosition.distance( point );
           if ( compensatedDistance < closestCompensatedDistance ) {
             closestEnergyChunk = energyChunk;
+            closestCompensatedDistance = compensatedDistance;
           }
         } );
       } );
