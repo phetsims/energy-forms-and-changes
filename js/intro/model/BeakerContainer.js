@@ -141,7 +141,7 @@ define( function( require ) {
         energyChunk.zPositionProperty.set( 0.0 );
         this.approachingEnergyChunks.push( energyChunk );
         this.energyChunkWanderControllers.push(
-          new EnergyChunkWanderController( energyChunk, this.positionProperty, null /* no motion restraint */ )
+          new EnergyChunkWanderController( energyChunk, this.positionProperty )
         );
       } else {
         Beaker.prototype.addEnergyChunk.call( this, energyChunk );

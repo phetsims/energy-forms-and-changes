@@ -25,7 +25,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
-  var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
@@ -320,7 +319,8 @@ define( function( require ) {
           } );
         }
         else {
-          // Nothing on a burner, so heat/cool the air.
+
+          // nothing on a burner, so heat/cool the air
           burner.addOrRemoveEnergyToFromAir( self.air, dt );
         }
       } );
@@ -340,7 +340,7 @@ define( function( require ) {
             else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
 
               // extract an energy chunk from the model element
-              var energyChunk = element.extractEnergyChunkClosestToShape( burner.getFlameIceRect() );
+              var energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
 
               if ( energyChunk !== null ) {
                 burner.addEnergyChunk( energyChunk );
@@ -415,10 +415,12 @@ define( function( require ) {
                 // bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
                 // center, stay in bounds.
                 var energyChunkWidth = 0.01;
-                energyChunkMotionConstraints = new Rectangle( container1.getBounds().minX + energyChunkWidth / 2,
+                energyChunkMotionConstraints = new Bounds2(
+                  container1.getBounds().minX + energyChunkWidth / 2,
                   container1.getBounds().minY,
-                  container1.getBounds().width - energyChunkWidth,
-                  container1.getBounds().height );
+                  container1.getBounds().minX + container1.getBounds().width - energyChunkWidth / 2,
+                  container1.getBounds().minY + 1 // the width is what matters here, so use a large value for the height
+                );
               }
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }

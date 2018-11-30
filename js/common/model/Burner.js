@@ -68,6 +68,14 @@ define( function( require ) {
     // @private {EnergyChunkWanderController[]}
     this.energyChunkWanderControllers = [];
 
+    // @private {Bounds2} - bounds used to keep incoming energy chunks from wandering very far to the left or right
+    this.incomingEnergyChunkWanderBounds = new Bounds2(
+      position.x - SIDE_LENGTH / 4,
+      position.y,
+      position.x + SIDE_LENGTH / 4,
+      position.y + SIDE_LENGTH * 4 // the width is what matters here, so we use a fairly large height
+    );
+
     // @private {Property.<boolean>}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
@@ -118,13 +126,13 @@ define( function( require ) {
 
     /**
      * Interact with a thermal energy container, adding or removing energy based on the current heat/cool setting.
+     * NOTE: this shouldn't be used for air - there is a specific method for that
      * @param {ThermalEnergyContainer} thermalEnergyContainer - model object that will get or give energy
      * @param {number} dt - amount of time (delta time)
      * @public
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
 
-      // this shouldn't be used for air - there is a specific method for that
       var deltaEnergy = 0;
 
       if ( this.inContactWith( thermalEnergyContainer ) ) {
@@ -172,11 +180,14 @@ define( function( require ) {
      */
     addEnergyChunk: function( energyChunk ) {
 
+      // make sure the chunk is at the front (which makes it fully opaque in the view)
+      energyChunk.zPositionProperty.value = 0;
+
       // create a controller that will move this energy chunk around
       var controller = new EnergyChunkWanderController(
         energyChunk,
-        new Property( this.getEnergyChunkStartEndPoint() ),
-        null
+        new Property( this.getCenterPoint() ),
+        this.incomingEnergyChunkWanderBounds
       );
 
       energyChunk.zPosition = 0;
@@ -188,14 +199,6 @@ define( function( require ) {
       // reset energy transfer accumulators
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
-    },
-
-    /**
-     * @returns {Vector2}
-     * @private
-     */
-    getEnergyChunkStartEndPoint: function() {
-      return this.getCenterPoint();
     },
 
     /**
@@ -230,8 +233,12 @@ define( function( require ) {
       if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
 
         // create an energy chunk
-        closestEnergyChunk = new EnergyChunk( EnergyType.THERMAL, this.getEnergyChunkStartEndPoint(),
-          new Vector2( 0, 0 ), this.energyChunksVisibleProperty );
+        closestEnergyChunk = new EnergyChunk(
+          EnergyType.THERMAL,
+          this.getCenterPoint(), // will originate from the center of this burner
+          new Vector2( 0, 0 ),
+          this.energyChunksVisibleProperty
+        );
       }
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -349,7 +356,7 @@ define( function( require ) {
 
     /**
      * get the (signed) number of energy chunks for interaction with thermal objects (as opposed to air)
-     * @return {number} - The umber of energy chunks that could be supplied or consumed. Negative value indicates that
+     * @return {number} - The number of energy chunks that could be supplied or consumed. Negative value indicates that
      * chunks should come in.
      * @public
      */
