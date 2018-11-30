@@ -71,7 +71,7 @@ define( function( require ) {
     this.energyChunksVisibleProperty = new BooleanProperty( false );
 
     // @public (read-only) {BooleanProperty} - is the sim running or paused?
-    this.playProperty = new BooleanProperty( true );
+    this.isPlayingProperty = new Property( true );
 
     // @public (read-only) {BooleanProperty} - true indicates normal speed, false is fast-forward
     this.normalSimSpeedProperty = new Property( SimSpeed.NORMAL );
@@ -230,7 +230,7 @@ define( function( require ) {
      */
     reset: function() {
       this.energyChunksVisibleProperty.reset();
-      this.playProperty.reset();
+      this.isPlayingProperty.reset();
       this.normalSimSpeedProperty.reset();
       this.air.reset();
       this.leftBurner.reset();
@@ -258,7 +258,7 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      if ( this.playProperty.get() ) {
+      if ( this.isPlayingProperty.get() ) {
         var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 :
                          EFACConstants.FAST_FORWARD_MULTIPLIER;
         this.stepModel( dt * multiplier );

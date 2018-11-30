@@ -35,11 +35,11 @@ define( function( require ) {
   function NormalAndFastForwardTimeControlPanel( model ) {
 
     // add play/pause button
-    var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
+    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, { radius: 20 } );
 
     // add the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
-      isPlayingProperty: model.playProperty,
+      isPlayingProperty: model.isPlayingProperty,
       listener: function() { model.manualStep(); },
       radius: 15,
       centerX: playPauseButton.centerX

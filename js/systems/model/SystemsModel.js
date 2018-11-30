@@ -39,6 +39,8 @@ define( function( require ) {
     this.energyChunksVisibleProperty = new Property( false );
     this.steamPowerableElementInPlaceProperty = new Property( false );
     this.waterPowerableElementInPlaceProperty = new Property( false );
+
+    // @public (read-only) {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new Property( true );
 
     var self = this;
