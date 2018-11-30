@@ -50,7 +50,7 @@ define( function( require ) {
     // group the play and pause buttons into their own panel for correct layout in the HBox
     var playPauseButtonGroup = new HBox( {
       children: [ playPauseButton, stepButton ],
-      spacing: 10,
+      spacing: 10
     } );
 
     var radioButtonContent = [
