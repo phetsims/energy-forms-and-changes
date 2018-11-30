@@ -124,6 +124,8 @@ define( function( require ) {
     ENERGY_SYMBOLS_PANEL_CORNER_RADIUS: 6,
     CONTROL_PANEL_CORNER_RADIUS: 10,
     RESET_ALL_BUTTON_RADIUS: 20,
+    PLAY_PAUSE_BUTTON_RADIUS: 20,
+    STEP_FORWARD_BUTTON_RADIUS: 15,
 
     //TODO: This is not being used anywhere. Should it be?
     // model-view transform scale factor for the Systems screen

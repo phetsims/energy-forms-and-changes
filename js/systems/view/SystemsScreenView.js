@@ -189,14 +189,14 @@ define( function( require ) {
 
     // create the play pause button
     var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
-      radius: 20
+      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
     } );
 
     // create the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
       isPlayingProperty: model.isPlayingProperty,
       listener: function() { model.manualStep(); },
-      radius: 15
+      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
     } );
 
     // group the play and pause buttons into their own panel for correct layout in the HBox

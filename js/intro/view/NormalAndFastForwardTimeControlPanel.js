@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -35,14 +36,15 @@ define( function( require ) {
   function NormalAndFastForwardTimeControlPanel( model ) {
 
     // add play/pause button
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, { radius: 20 } );
+    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
+      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
+    } );
 
     // add the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
       isPlayingProperty: model.isPlayingProperty,
       listener: function() { model.manualStep(); },
-      radius: 15,
-      centerX: playPauseButton.centerX
+      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
     } );
 
     // group the play and pause buttons into their own panel for correct layout in the HBox
