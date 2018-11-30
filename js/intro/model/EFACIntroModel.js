@@ -319,7 +319,8 @@ define( function( require ) {
           } );
         }
         else {
-          // Nothing on a burner, so heat/cool the air.
+
+          // nothing on a burner, so heat/cool the air
           burner.addOrRemoveEnergyToFromAir( self.air, dt );
         }
       } );

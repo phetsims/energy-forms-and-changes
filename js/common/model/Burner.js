@@ -126,13 +126,13 @@ define( function( require ) {
 
     /**
      * Interact with a thermal energy container, adding or removing energy based on the current heat/cool setting.
+     * NOTE: this shouldn't be used for air - there is a specific method for that
      * @param {ThermalEnergyContainer} thermalEnergyContainer - model object that will get or give energy
      * @param {number} dt - amount of time (delta time)
      * @public
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
 
-      // this shouldn't be used for air - there is a specific method for that
       var deltaEnergy = 0;
 
       if ( this.inContactWith( thermalEnergyContainer ) ) {
@@ -356,7 +356,7 @@ define( function( require ) {
 
     /**
      * get the (signed) number of energy chunks for interaction with thermal objects (as opposed to air)
-     * @return {number} - The umber of energy chunks that could be supplied or consumed. Negative value indicates that
+     * @return {number} - The number of energy chunks that could be supplied or consumed. Negative value indicates that
      * chunks should come in.
      * @public
      */
