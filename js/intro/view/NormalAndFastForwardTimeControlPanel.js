@@ -11,9 +11,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
@@ -35,21 +36,21 @@ define( function( require ) {
   function NormalAndFastForwardTimeControlPanel( model ) {
 
     // add play/pause button
-    var playPauseButton = new PlayPauseButton( model.playProperty, { radius: 20 } );
+    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
+      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
+    } );
 
     // add the step button, used to manually step the simulation
     var stepButton = new StepForwardButton( {
-      isPlayingProperty: model.playProperty,
+      isPlayingProperty: model.isPlayingProperty,
       listener: function() { model.manualStep(); },
-      radius: 15,
-      centerX: playPauseButton.centerX
+      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
     } );
 
-    // group the play and pause buttons into their own panel for correct layout in the LayoutBox
-    var playPauseButtonGroup = new LayoutBox( {
+    // group the play and pause buttons into their own panel for correct layout in the HBox
+    var playPauseButtonGroup = new HBox( {
       children: [ playPauseButton, stepButton ],
-      spacing: 10,
-      orientation: 'horizontal'
+      spacing: 10
     } );
 
     var radioButtonContent = [
@@ -61,15 +62,14 @@ define( function( require ) {
       selectedLineWidth: 4
     } );
 
-    LayoutBox.call( this, {
+    HBox.call( this, {
       children: [ radioButtonGroup, playPauseButtonGroup ],
-      orientation: 'horizontal',
       spacing: 35
     } );
   }
 
   energyFormsAndChanges.register( 'NormalAndFastForwardTimeControlPanel', NormalAndFastForwardTimeControlPanel );
 
-  return inherit( LayoutBox, NormalAndFastForwardTimeControlPanel );
+  return inherit( HBox, NormalAndFastForwardTimeControlPanel );
 } );
 

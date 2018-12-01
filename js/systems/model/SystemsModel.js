@@ -14,6 +14,7 @@ define( function( require ) {
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/BeakerHeater' );
   var Belt = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Belt' );
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Biker' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElementCarousel' );
   var Fan = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Fan' );
@@ -39,6 +40,8 @@ define( function( require ) {
     this.energyChunksVisibleProperty = new Property( false );
     this.steamPowerableElementInPlaceProperty = new Property( false );
     this.waterPowerableElementInPlaceProperty = new Property( false );
+
+    // @public (read-only) {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new Property( true );
 
     var self = this;
@@ -132,8 +135,16 @@ define( function( require ) {
     },
 
     /**
-     * step the model in time
-     * @param  {number} dt - time step in seconds
+     * step the sim forward by one fixed nominal frame time
+     * @public
+     */
+    manualStep: function() {
+      this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+    },
+
+    /**
+     * step function or this model, automatically called by joist
+     * @param {number} dt - delta time, in seconds
      * @public
      */
     step: function( dt ) {
@@ -143,20 +154,29 @@ define( function( require ) {
         carousel.step( dt );
       } );
 
-      if ( this.isPlayingProperty.value ) {
-        var source = this.energySourcesCarousel.getSelectedElement();
-        var converter = this.energyConvertersCarousel.getSelectedElement();
-        var user = this.energyUsersCarousel.getSelectedElement();
-
-        // step the currently selected energy system elements
-        var energyFromSource = source.step( dt );
-        var energyFromConverter = converter.step( dt, energyFromSource );
-        user.step( dt, energyFromConverter );
-
-        // transfer energy chunks between the elements
-        converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
-        user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
+      if ( this.isPlayingProperty.get() ) {
+        this.stepModel( dt );
       }
+    },
+
+    /**
+     * step the model in time
+     * @param  {number} dt - time step in seconds
+     * @public
+     */
+    stepModel: function( dt ) {
+      var source = this.energySourcesCarousel.getSelectedElement();
+      var converter = this.energyConvertersCarousel.getSelectedElement();
+      var user = this.energyUsersCarousel.getSelectedElement();
+
+      // step the currently selected energy system elements
+      var energyFromSource = source.step( dt );
+      var energyFromConverter = converter.step( dt, energyFromSource );
+      user.step( dt, energyFromConverter );
+
+      // transfer energy chunks between the elements
+      converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
+      user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
     },
 
     /**
