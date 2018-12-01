@@ -42,6 +42,8 @@ define( function( require ) {
     // TODO: Consider having the code directly access these values rather than using getter/setter methods once port is nearly complete.
     // @private - this should be accessed through getter/setter methods
     this.owner = owner;
+
+    // TODO: Since this is a dynamic thing, consider making it a property
     this.elementOnSurface = typeof elementOnSurface === 'undefined' ? null : elementOnSurface;
   }
 

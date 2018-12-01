@@ -29,10 +29,11 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var SIDE_LENGTH = 0.075; // In meters.
-  var MAX_ENERGY_GENERATION_RATE = 5000; // joules/sec, empirically chosen.
-  var CONTACT_DISTANCE = 0.001; // In meters.
-  var ENERGY_CHUNK_CAPTURE_DISTANCE = 0.2; // In meters, empirically chosen.
+  var SIDE_LENGTH = 0.075; // in meters
+  var MAX_ENERGY_GENERATION_RATE = 5000; // joules/sec, empirically chosen
+  var CONTACT_DISTANCE = 0.001; // in meters
+  var ENERGY_CHUNK_CAPTURE_DISTANCE = 0.2; // in meters, empirically chosen
+  var MAX_ENERGY_CHUNK_SUPPLY_RATE = MAX_ENERGY_GENERATION_RATE / EFACConstants.ENERGY_PER_CHUNK;
 
   // Because of the way that energy chunks are exchanged between thermal modeling elements within this simulation,
   // things can end up looking a bit odd if a burner is turned on with nothing on it.  To account for this, a separate
@@ -100,6 +101,9 @@ define( function( require ) {
       compositeBounds.maxX + perspectiveCompensation - ( compositeBounds.minX - perspectiveCompensation ),
       this
     );
+
+    // @private - used to prevent energy chunks from being supplied too quickly
+    this.energyChunkLockoutTimer = 0;
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );
@@ -230,7 +234,7 @@ define( function( require ) {
         } );
       }
 
-      if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
+      if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 && this.energyChunkLockoutTimer === 0 ) {
 
         // create an energy chunk
         closestEnergyChunk = new EnergyChunk(
@@ -239,7 +243,11 @@ define( function( require ) {
           new Vector2( 0, 0 ),
           this.energyChunksVisibleProperty
         );
+
+        // prevent another energy chunk from being created for a while
+        this.energyChunkLockoutTimer = 1 / MAX_ENERGY_CHUNK_SUPPLY_RATE;
       }
+
       if ( closestEnergyChunk !== null ) {
         this.energyExchangedWithAirSinceLastChunkTransfer = 0;
         this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
@@ -268,6 +276,7 @@ define( function( require ) {
       this.energyChunkList.clear();
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
+      this.energyChunkLockoutTimer = 0;
       this.heatCoolLevelProperty.reset();
     },
 
@@ -328,6 +337,9 @@ define( function( require ) {
           _.pull( self.energyChunkWanderControllers, controller );
         }
       } );
+
+      // update the lockout time for supplying energy chunks
+      this.energyChunkLockoutTimer = Math.max( this.energyChunkLockoutTimer - dt, 0 );
     },
 
     /**
@@ -372,7 +384,7 @@ define( function( require ) {
      * @public
      */
     canSupplyEnergyChunk: function() {
-      return this.heatCoolLevelProperty.value > 0;
+      return this.heatCoolLevelProperty.value > 0 && this.energyChunkLockoutTimer === 0;
     },
 
     /**

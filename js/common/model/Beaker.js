@@ -204,12 +204,8 @@ define( function( require ) {
       var temperature = this.temperatureProperty.get();
       if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
-        // water is emitting some amount of steam - set the proportionate amount
-        this.steamingProportion = Util.clamp(
-          1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE,
-          0,
-          1
-        );
+        // the fluid is emitting some amount of steam - set the proportionate amount
+        this.steamingProportion = Util.clamp( 1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE, 0, 1 );
       }
       else {
         this.steamingProportion = 0;

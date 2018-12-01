@@ -334,7 +334,7 @@ define( function( require ) {
 
             if ( burner.canSupplyEnergyChunk() && ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) ) {
 
-              // push an energy chunk into the item on the burner
+              // add an energy chunk to the model element on the burner
               element.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( element.getCenterPoint() ) );
             }
             else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
@@ -381,8 +381,10 @@ define( function( require ) {
           }
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
             contactWithOtherMovableElement = true;
-            maxTemperatureDifference = Math.max( Math.abs( container1.getTemperature() - container2.getTemperature() ),
-              maxTemperatureDifference );
+            maxTemperatureDifference = Math.max(
+              Math.abs( container1.getTemperature() - container2.getTemperature() ),
+              maxTemperatureDifference
+            );
           }
         } );
 
