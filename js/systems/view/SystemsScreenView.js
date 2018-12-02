@@ -64,6 +64,9 @@ define( function( require ) {
 
     var self = this;
 
+    // @private
+    this.model = model;
+
     ScreenView.call( this );
 
     // a11y - the screen summary to be read by assistive technology
@@ -287,9 +290,11 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.teaKettleNode.steamNode.step( dt );
-      this.beakerHeaterNode.step( dt );
-      this.faucetNode.step( dt );
+      if ( this.model.isPlayingProperty.get() ) {
+        this.teaKettleNode.steamNode.step( dt );
+        this.beakerHeaterNode.step( dt );
+        this.faucetNode.step( dt );
+      }
     }
   } );
 } );

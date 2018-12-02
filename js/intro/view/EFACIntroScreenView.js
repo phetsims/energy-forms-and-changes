@@ -69,6 +69,9 @@ define( function( require ) {
 
     var self = this;
 
+    // @private
+    this.model = model;
+
     // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.
     // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model appears in the
     // view.
@@ -500,8 +503,10 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.waterBeakerView.step( dt );
-      this.oliveOilBeakerView.step( dt );
+      if ( this.model.isPlayingProperty.get() ) {
+        this.waterBeakerView.step( dt );
+        this.oliveOilBeakerView.step( dt );
+      }
     }
   } );
 } );
