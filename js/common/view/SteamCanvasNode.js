@@ -198,6 +198,13 @@ define( function( require ) {
 
     /**
      * @public
+     */
+    reset: function() {
+      this.steamBubbles.length = 0;
+    },
+
+    /**
+     * @public
      * @param {number} dt - the change in time
      */
     step: function( dt ) {

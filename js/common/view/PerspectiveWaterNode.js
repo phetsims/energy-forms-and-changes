@@ -95,8 +95,7 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      this.steamNode.removeAllChildren();
-      this.steamBubbleNodes.clear();
+      this.steamCanvasNode.reset();
     },
 
     /**

@@ -248,11 +248,23 @@ define( function( require ) {
       var opacity = EFACConstants.NOMINAL_WATER_OPACITY;
       self.fluid.opacity = energyChunksVisible ? opacity / 2 : opacity;
     } );
+
+    // listen to the resetEmitter in the beaker model
+    beaker.resetEmitter.addListener( function() {
+      self.reset();
+    } );
   }
 
   energyFormsAndChanges.register( 'BeakerView', BeakerView );
 
   return inherit( Node, BeakerView, {
+
+    /**
+     * @public
+     */
+    reset: function() {
+      this.fluid.reset();
+    },
 
     /**
      * step this view element, called by the framework

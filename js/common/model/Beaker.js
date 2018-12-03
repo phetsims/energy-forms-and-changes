@@ -12,6 +12,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Emitter = require( 'AXON/Emitter' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
   var EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkDistributor' );
@@ -126,6 +127,9 @@ define( function( require ) {
       width,
       this
     );
+
+    // @public - used to notify the view that reset was called
+    this.resetEmitter = new Emitter();
 
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function( position ) {
@@ -454,6 +458,7 @@ define( function( require ) {
     reset: function() {
       this.fluidLevelProperty.reset();
       this.temperatureProperty.reset();
+      this.resetEmitter.emit();
       RectangularThermalMovableModelElement.prototype.reset.call( this );
     }
 
