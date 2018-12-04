@@ -19,6 +19,7 @@ define( function( require ) {
   var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -105,12 +106,7 @@ define( function( require ) {
     this.activeProperty = activeProperty;
 
     // create paths from shapes
-    this.stemPath = new Path( null, {
-      fill: Color.WHITE,
-      lineWidth: 1,
-      stroke: Color.WHITE,
-      opacity: 0.5
-    } );
+    this.stemPath = new Path( null );
 
     // create paths from shapes
     this.bodyPath = new Path( null, {
@@ -152,14 +148,14 @@ define( function( require ) {
         // opening angle of steam stream (/2)
         var stemHalfAngle = 0.5 * Math.PI / 4 * ( 1 + 0.3 * ( phet.joist.random.nextDouble() - 0.5 ) );
 
-        var stemEdge = new Vector2( heightAndWidth / 2, -heightAndWidth / 2 );
+        var stemEdge = new Vector2( heightAndWidth / 4, -heightAndWidth / 4 );
 
         cloudStem.moveToPoint( startPoint );
 
         // point at bottom of tea kettle spout
         cloudStem.lineToPoint( new Vector2( stemBaseWidth / 2, stemBaseWidth / 2 ).rotated( -Math.PI / 4 ) );
 
-        // points furthest from spout
+        // points farthest from spout
         cloudStem.lineToPoint( stemEdge.rotated( stemHalfAngle ) );
         cloudStem.lineToPoint( stemEdge.rotated( -stemHalfAngle ) );
         cloudStem.lineToPoint( startPoint );
@@ -175,6 +171,10 @@ define( function( require ) {
         }
 
         this.stemPath.setShape( cloudStem );
+        this.stemPath.fill = new LinearGradient( startPoint.x, startPoint.y, stemEdge.x, stemEdge.y )
+          .addColorStop( 0, new Color( 255, 255, 255, 0.7 ) )
+          .addColorStop( 0.7, new Color( 255, 255, 255, 0.5 ) )
+          .addColorStop( 1, new Color( 255, 255, 255, 0 ) );
         this.bodyPath.setShape( cloudBody );
 
         this.stemPath.setVisible( true );
