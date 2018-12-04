@@ -130,6 +130,7 @@ define( function( require ) {
      * @param  {number} dt - time step, in seconds
      * @public
      */
+    //TODO: This animation should use dt so that it looks consistent across all platforms
     step: function( dt ) {
       if ( this.activeProperty.get() ) {
 
