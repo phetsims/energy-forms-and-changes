@@ -147,15 +147,13 @@ define( function( require ) {
     );
 
     // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
-    var leftHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
+    var leftHeaterCoolerBack = new HeaterCoolerBack( model.leftBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY ),
       minWidth: leftBurnerStand.width / 1.7,
       maxWidth: leftBurnerStand.width / 1.7
     } );
-    var leftHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: model.leftBurner.heatCoolLevelProperty,
+    var leftHeaterCoolerFront = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.7,
       maxWidth: leftBurnerStand.width / 1.7
@@ -170,15 +168,13 @@ define( function( require ) {
       burnerProjectionAmount );
 
     // set up right heater-cooler node
-    var rightHeaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
+    var rightHeaterCoolerBack = new HeaterCoolerBack( model.rightBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.rightBurner.getCompositeBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY ),
       minWidth: rightBurnerStand.width / 1.7,
       maxWidth: rightBurnerStand.width / 1.7
     } );
-    var rightHeaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: model.rightBurner.heatCoolLevelProperty,
+    var rightHeaterCoolerFront = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: rightBurnerStand.width / 1.7,
       maxWidth: rightBurnerStand.width / 1.7

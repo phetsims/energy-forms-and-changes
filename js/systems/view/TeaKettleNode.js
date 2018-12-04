@@ -46,12 +46,8 @@ define( function( require ) {
     var teaKettleImageNode = new Image( teapotImage, { right: 114, bottom: 53 } );
 
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
-    var heaterCoolerBack = new HeaterCoolerBack( {
-      heatCoolAmountProperty: teaKettle.heatCoolAmountProperty
-    } );
-    var heaterCoolerFront = new HeaterCoolerFront( {
-      heatCoolAmountProperty: teaKettle.heatCoolAmountProperty
-    } );
+    var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty );
+    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty );
 
     // burner stand node
     var burnerSize = modelViewTransform.modelToViewShape( BURNER_MODEL_BOUNDS );
