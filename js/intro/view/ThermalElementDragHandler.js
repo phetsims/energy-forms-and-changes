@@ -9,32 +9,32 @@ define( function( require ) {
 
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var DragListener = require( 'SCENERY/listeners/DragListener' );
 
   /**
    * @param {UserMovableModelElement} modelElement
-   * @param {Node} node TODO: I (jbphet) don't think I need node, right?
+   * @param {Node} screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
    * @param {ModelViewTransform2} modelViewTransform
    * @param {function} constrainPosition
    */
-  function ThermalElementDragHandler( modelElement, node, modelViewTransform, constrainPosition ) {
+  function ThermalElementDragHandler( modelElement, screenViewChildNode, modelViewTransform, constrainPosition ) {
 
     var dragStartOffset = null;
 
-    SimpleDragHandler.call( this, {
+    DragListener.call( this, {
 
-      // allow moving a finger (touch) across a node to pick it up
+      // allow moving a finger (touch) across a screenViewChildNode to pick it up
       allowTouchSnag: true,
 
-      start: function( event, trail ) {
+      start: function( event ) {
         modelElement.userControlledProperty.set( true );
         var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
-        var dragStartPosition = trail.globalToLocalPoint( event.pointer.point );
+        var dragStartPosition = screenViewChildNode.globalToParentPoint( event.pointer.point ).minus( screenViewChildNode.translation );
         dragStartOffset = dragStartPosition.minus( modelElementViewPosition );
       },
 
-      drag: function( event, trail ) {
-        var dragPosition = trail.globalToLocalPoint( event.pointer.point );
+      drag: function( event ) {
+        var dragPosition = screenViewChildNode.globalToParentPoint( event.pointer.point );
         var modelElementViewPosition = dragPosition.minus( dragStartOffset );
         var modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
         modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
@@ -49,5 +49,5 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
 
-  return inherit( SimpleDragHandler, ThermalElementDragHandler );
+  return inherit( DragListener, ThermalElementDragHandler );
 } );
