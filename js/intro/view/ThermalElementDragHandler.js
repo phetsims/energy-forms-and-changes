@@ -29,7 +29,7 @@ define( function( require ) {
       start: function( event ) {
         modelElement.userControlledProperty.set( true );
         var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
-        var dragStartPosition = screenViewChildNode.globalToParentPoint( event.pointer.point ).minus( screenViewChildNode.translation );
+        var dragStartPosition = screenViewChildNode.globalToParentPoint( event.pointer.point );
         dragStartOffset = dragStartPosition.minus( modelElementViewPosition );
       },
 
