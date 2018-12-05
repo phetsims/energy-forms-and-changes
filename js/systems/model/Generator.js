@@ -41,9 +41,10 @@ define( function( require ) {
   var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.03, 0.03 );
 
   // offsets used to create the paths followed by the energy chunks
-  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.010, -0.050 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.063 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
+  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.011, -0.050 );
+  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.012, -0.055 );
+  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.016, -0.063 );
+  var WIRE_CURVE_POINT_3_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
   var CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
   /**
@@ -333,6 +334,7 @@ define( function( require ) {
       path.push( panelPosition.plus( START_OF_WIRE_CURVE_OFFSET ) );
       path.push( panelPosition.plus( WIRE_CURVE_POINT_1_OFFSET ) );
       path.push( panelPosition.plus( WIRE_CURVE_POINT_2_OFFSET ) );
+      path.push( panelPosition.plus( WIRE_CURVE_POINT_3_OFFSET ) );
       path.push( panelPosition.plus( CENTER_OF_CONNECTOR_OFFSET ) );
       return path;
     },

@@ -162,6 +162,7 @@ define( function( require ) {
   }, {
 
     // statics
-    WIDTH: WIDTH
+    WIDTH: WIDTH,
+    Z_DISTANCE_WHERE_FULLY_FADED: Z_DISTANCE_WHERE_FULLY_FADED
   } );
 } );
