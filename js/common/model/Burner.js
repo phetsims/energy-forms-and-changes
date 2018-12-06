@@ -104,6 +104,13 @@ define( function( require ) {
 
     // @private - used to prevent energy chunks from being supplied too quickly
     this.energyChunkLockoutTimer = 0;
+
+    // reset the internal state variable that moderates energy flow when it changes when the element on top changes
+    this.topSurface.elementOnSurfaceProperty.link( function( element ) {
+      if ( element ) {
+        self.energyChunkLockoutTimer = 0;
+      }
+    } );
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );

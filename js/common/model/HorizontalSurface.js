@@ -21,19 +21,23 @@ define( function( require ) {
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {ModelElement} owner
-   * @param {ModelElement} [elementOnSurface]
+   * @param {ModelElement} [initialElementOnSurface] - model element that is already on this surface
    * @constructor
    */
-  function HorizontalSurface( initialPosition, width, owner, elementOnSurface ) {
+  function HorizontalSurface( initialPosition, width, owner, initialElementOnSurface ) {
     var self = this;
 
-    // @public {Property.<Vector2>}
+    // @public (read-write) {Property.<Vector2>}
     this.positionProperty = new Property( initialPosition );
+
+    // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
+    // one, null if nothing there, use the API below to update
+    this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null );
 
     // @public (read-only) {number}
     this.width = width;
 
-    // @public (read-only) {Range}
+    // @public (read-only) {Range} - the range of space in the horizontal direction occupied by this surface
     this.xRange = new Range( initialPosition.x - this.width / 2, initialPosition.x + this.width / 2 );
     this.positionProperty.link( function( position ) {
       self.xRange.setMinMax( position.x - self.width / 2, position.x + self.width / 2 );
@@ -42,9 +46,6 @@ define( function( require ) {
     // TODO: Consider having the code directly access these values rather than using getter/setter methods once port is nearly complete.
     // @private - this should be accessed through getter/setter methods
     this.owner = owner;
-
-    // TODO: Since this is a dynamic thing, consider making it a property
-    this.elementOnSurface = typeof elementOnSurface === 'undefined' ? null : elementOnSurface;
   }
 
   energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
@@ -84,7 +85,7 @@ define( function( require ) {
      * @public
      */
     getElementOnSurface: function() {
-      return this.elementOnSurface;
+      return this.elementOnSurfaceProperty.get();
     },
 
     /**
@@ -97,14 +98,14 @@ define( function( require ) {
       // performing in the wild, so the assertion has been removed to stop breaking continuous testing.
       // assert && assert( this.elementOnSurface === null, 'Only one thing on surface allowed at a time' );
       assert && assert( modelElement !== this.owner, 'an element cannot sit upon its own surface' );
-      this.elementOnSurface = modelElement;
+      this.elementOnSurfaceProperty.set( modelElement );
     },
 
     /**
      * @public
      */
     clearSurface: function() {
-      this.elementOnSurface = null;
+      this.elementOnSurfaceProperty.set( null );
     }
   } );
 } );
