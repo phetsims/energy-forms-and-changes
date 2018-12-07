@@ -346,7 +346,10 @@ define( function( require ) {
       } );
 
       // update the lockout time for supplying energy chunks
-      this.energyChunkLockoutTimer = Math.max( this.energyChunkLockoutTimer - dt, 0 );
+      this.energyChunkLockoutTimer = Math.max(
+        this.energyChunkLockoutTimer - dt * Math.abs( this.heatCoolLevelProperty.value ),
+        0
+      );
     },
 
     /**
