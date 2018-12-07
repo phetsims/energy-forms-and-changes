@@ -468,8 +468,6 @@ define( function( require ) {
     fallToSurface: function( modelElement, dt ) {
       var self = this;
       var minYPos = 0;
-      var targetX = 0;
-      var targetY = 0;
       var acceleration = -9.8; // meters/s/s
 
       // sort list of ground spots in order, with the closest spot to modelElement first
@@ -538,9 +536,10 @@ define( function( require ) {
           var beakerFoundInStack = currentModelElementInStack instanceof Beaker;
 
           // iterate through the stack of model elements being held and flag if any beakers are in it
-          while ( currentModelElementInStack.topSurface.getElementOnSurface() && !beakerFoundInStack ) {
-            beakerFoundInStack = beakerFoundInStack || currentModelElementInStack.topSurface.getElementOnSurface() instanceof Beaker;
-            currentModelElementInStack = currentModelElementInStack.topSurface.getElementOnSurface();
+          while ( currentModelElementInStack.topSurface.elementOnSurfaceProperty.value && !beakerFoundInStack ) {
+            beakerFoundInStack = beakerFoundInStack ||
+                                 currentModelElementInStack.topSurface.elementOnSurfaceProperty.value instanceof Beaker;
+            currentModelElementInStack = currentModelElementInStack.topSurface.elementOnSurfaceProperty.value;
           }
 
           if ( !( beakerFoundInSpot && beakerFoundInStack ) ) {
@@ -555,9 +554,7 @@ define( function( require ) {
       // if so, center the model element above its new supporting element
       if ( destinationSurface !== null ) {
         minYPos = destinationSurface.positionProperty.value.y;
-        targetX = destinationSurface.getCenterX();
-        targetY = modelElement.positionProperty.value.y;
-        modelElement.positionProperty.set( new Vector2( targetX, targetY ) );
+        modelElement.positionProperty.set( destinationSurface.positionProperty.value );
       }
       else {
         modelElement.positionProperty.set( new Vector2( destinationXSpot, modelElement.positionProperty.value.y ) );
@@ -573,7 +570,7 @@ define( function( require ) {
         modelElement.verticalVelocityProperty.set( 0 );
         if ( destinationSurface !== null ) {
           modelElement.setSupportingSurface( destinationSurface );
-          destinationSurface.addElementToSurface( modelElement );
+          destinationSurface.elementOnSurfaceProperty.set( modelElement );
         }
       }
       else {
