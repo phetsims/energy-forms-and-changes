@@ -20,10 +20,8 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
-  var Shape = require( 'KITE/Shape' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -144,16 +142,17 @@ define( function( require ) {
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
       var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 );
       var rect = this.rect;
-      var rectShape = Shape.rect( rect.x, rect.y, rect.width, rect.height );
 
       for ( var i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
         var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( -i * sliceWidth );
-
-        var transform = Matrix3.translation( projectionToFront.x + projectionOffsetVector.x,
-          projectionToFront.y + projectionOffsetVector.y );
+        var sliceBounds = new Bounds2.rect( rect.x, rect.y, rect.width, rect.height );
+        sliceBounds.shift(
+          projectionToFront.x + projectionOffsetVector.x,
+          projectionToFront.y + projectionOffsetVector.y
+        );
 
         this.slices.push( new EnergyChunkContainerSlice(
-          rectShape.transformed( transform ),
+          sliceBounds,
           -i * sliceWidth,
           this.positionProperty
         ) );

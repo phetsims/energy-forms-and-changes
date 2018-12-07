@@ -18,7 +18,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   /**
    * @param {EnergyChunkContainerSlice} slice
@@ -50,22 +50,23 @@ define( function( require ) {
     // listen for the arrival of new energy chunks and create a node for each
     slice.energyChunkList.addItemAddedListener( addEnergyChunkNode );
 
-    // for debug
     if ( EFACQueryParameters.showHelperShapes ) {
-      this.shapeNode = new Path( modelViewTransform.modelToViewShape( slice.shape ), {
+
+      // for debug - add an outline of the slice bounds, note that this does not update if the slice's bounds change
+      var outlineNode = new Rectangle( modelViewTransform.modelToViewBounds( slice.bounds ), {
         lineWidth: 1,
         stroke: 'red'
       } );
-      this.addChild( this.shapeNode );
-    }
+      this.addChild( outlineNode );
 
-    // for debug, move slice outlines when their position moves
-    slice.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
-      if ( EFACQueryParameters.showHelperShapes ) {
-        var translation = modelViewTransform.modelToViewDelta( newPosition.minus( oldPosition ) );
-        self.shapeNode.translate( translation.x, translation.y );
-      }
-    } );
+      // move the outlines as the slice moves
+      slice.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+        outlineNode.translate(
+          modelViewTransform.modelToViewDeltaX( newPosition.x - oldPosition.x ),
+          modelViewTransform.modelToViewDeltaY( newPosition.y - oldPosition.y )
+        );
+      } );
+    }
   }
 
   energyFormsAndChanges.register( 'EnergyChunkContainerSliceNode', EnergyChunkContainerSliceNode );

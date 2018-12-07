@@ -22,11 +22,9 @@ define( function( require ) {
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
-  var Shape = require( 'KITE/Shape' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -141,19 +139,11 @@ define( function( require ) {
       self.bottomSurface.positionProperty.value = new Vector2( position.x, bounds.minY );
     } );
 
-    // update the slice shapes as the fluid level changes
+    // update the bounds of the energy chunk slices as the fluid level changes
     this.fluidLevelProperty.lazyLink( function( newFluidLevel, oldFluidLevel ) {
       var changeProportion = newFluidLevel / oldFluidLevel;
       self.slices.forEach( function( slice ) {
-        var originalShape = slice.shape;
-        var expandedOrCompressedShape = originalShape.transformed( Matrix3.scaling( 1, changeProportion ) );
-        if ( expandedOrCompressedShape.bounds.height < self.height ) {
-          var translationTransform = Matrix3.translation(
-            originalShape.bounds.minX - expandedOrCompressedShape.bounds.minX,
-            originalShape.bounds.y - expandedOrCompressedShape.bounds.y
-          );
-          slice.shape = expandedOrCompressedShape.transformed( translationTransform );
-        }
+        slice.updateHeight( changeProportion );
       } );
     } );
   }
@@ -265,14 +255,14 @@ define( function( require ) {
     addEnergyChunkToNextSlice: function( energyChunk ) {
       var totalSliceArea = 0;
       this.slices.forEach( function( slice ) {
-        totalSliceArea += slice.shape.bounds.width * slice.shape.bounds.height;
+        totalSliceArea += slice.bounds.width * slice.bounds.height;
       } );
 
       var sliceSelectionValue = phet.joist.random.nextDouble();
       var chosenSlice = this.slices[ 0 ];
       var accumulatedArea = 0;
       for ( var i = 0; i < this.slices.length; i++ ) {
-        accumulatedArea += this.slices[ i ].shape.bounds.width * this.slices[ i ].shape.bounds.height;
+        accumulatedArea += this.slices[ i ].bounds.width * this.slices[ i ].bounds.height;
         if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
           chosenSlice = this.slices[ i ];
           break;
@@ -369,8 +359,8 @@ define( function( require ) {
         var bottomY = fluidRect.minY - ( widthYProjection / 2 ) + ( proportion * widthYProjection );
 
         var zPosition = -proportion * this.width;
-        var sliceShape = Shape.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
-        this.slices.push( new EnergyChunkContainerSlice( sliceShape, zPosition, this.positionProperty ) );
+        var sliceBounds = Bounds2.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
+        this.slices.push( new EnergyChunkContainerSlice( sliceBounds, zPosition, this.positionProperty ) );
       }
     },
 
@@ -413,7 +403,7 @@ define( function( require ) {
     extractEnergyChunkClosestToPoint: function( point ) {
       var pointIsAboveWaterSurface = true;
       for ( var i = 0; i < this.slices.length; i++ ) {
-        if ( point.y < this.slices[ i ].shape.bounds.maxY ) {
+        if ( point.y < this.slices[ i ].bounds.maxY ) {
           pointIsAboveWaterSurface = false;
           break;
         }
@@ -429,7 +419,7 @@ define( function( require ) {
       var maxSliceDensity = 0;
       var densestSlice = null;
       this.slices.forEach( function( slice ) {
-        var sliceDensity = slice.energyChunkList.length / ( slice.shape.bounds.width * slice.shape.bounds.height );
+        var sliceDensity = slice.energyChunkList.length / ( slice.bounds.width * slice.bounds.height );
         if ( sliceDensity > maxSliceDensity ) {
           maxSliceDensity = sliceDensity;
           densestSlice = slice;

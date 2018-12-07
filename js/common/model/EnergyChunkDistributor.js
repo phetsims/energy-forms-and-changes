@@ -59,10 +59,10 @@ define( function( require ) {
 
       // determine the collective bounds of all the slices
       slices.forEach( function( slice ) {
-        minX = Math.min( slice.shape.bounds.minX, minX );
-        maxX = Math.max( slice.shape.bounds.maxX, maxX );
-        minY = Math.min( slice.shape.bounds.minY, minY );
-        maxY = Math.max( slice.shape.bounds.maxY, maxY );
+        minX = Math.min( slice.bounds.minX, minX );
+        maxX = Math.max( slice.bounds.maxX, maxX );
+        minY = Math.min( slice.bounds.minY, minY );
+        maxY = Math.max( slice.bounds.maxY, maxY );
       } );
 
       var width = maxX - minX;
@@ -112,7 +112,7 @@ define( function( require ) {
         // update the forces acting on the particle due to its bounding container, other particles, and drag
         for ( var i = 0; i < slices.length; i++ ) {
           var slice = slices[ i ];
-          var containerShapeBounds = slice.shape.bounds;
+          var containerShapeBounds = slice.bounds;
 
           // determine the max possible distance to an edge
           var maxDistanceToEdge = Math.sqrt( Math.pow( containerShapeBounds.width, 2 ) +
@@ -289,7 +289,7 @@ define( function( require ) {
 
       // update the positions of the energy chunks
       slices.forEach( function( slice ) {
-        var sliceCenter = new Vector2( slice.shape.bounds.centerX, slice.shape.bounds.centerY );
+        var sliceCenter = new Vector2( slice.bounds.centerX, slice.bounds.centerY );
         slice.energyChunkList.forEach( function( energyChunk ) {
           energyChunk.positionProperty.value = sliceCenter;
         } );
