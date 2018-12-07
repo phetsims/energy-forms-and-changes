@@ -31,7 +31,7 @@ define( function( require ) {
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var NormalAndFastForwardTimeControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/NormalAndFastForwardTimeControlPanel' );
+  var PlayPauseAndSpeedControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/PlayPauseAndSpeedControlPanel' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
@@ -131,9 +131,9 @@ define( function( require ) {
     var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
     // add the clock controls
-    var clockControlPanel = new NormalAndFastForwardTimeControlPanel( model );
-    clockControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
-    backLayer.addChild( clockControlPanel );
+    var playPauseAndSpeedControlPanel = new PlayPauseAndSpeedControlPanel( model );
+    playPauseAndSpeedControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
+    backLayer.addChild( playPauseAndSpeedControlPanel );
 
     // add the burners
     var burnerProjectionAmount = modelViewTransform.modelToViewDeltaX(
