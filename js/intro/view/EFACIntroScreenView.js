@@ -153,13 +153,13 @@ define( function( require ) {
     var leftHeaterCoolerBack = new HeaterCoolerBack( model.leftBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY ),
-      minWidth: leftBurnerStand.width / 1.7,
-      maxWidth: leftBurnerStand.width / 1.7
+      minWidth: leftBurnerStand.width / 1.5,
+      maxWidth: leftBurnerStand.width / 1.5
     } );
     var leftLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
-      minWidth: leftBurnerStand.width / 1.7,
-      maxWidth: leftBurnerStand.width / 1.7
+      minWidth: leftBurnerStand.width / 1.5,
+      maxWidth: leftBurnerStand.width / 1.5
     } );
     heaterCoolerFrontLayer.addChild( leftLinkableHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
@@ -174,13 +174,13 @@ define( function( require ) {
     var rightHeaterCoolerBack = new HeaterCoolerBack( model.rightBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.rightBurner.getCompositeBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY ),
-      minWidth: rightBurnerStand.width / 1.7,
-      maxWidth: rightBurnerStand.width / 1.7
+      minWidth: rightBurnerStand.width / 1.5,
+      maxWidth: rightBurnerStand.width / 1.5
     } );
     var rightLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
-      minWidth: rightBurnerStand.width / 1.7,
-      maxWidth: rightBurnerStand.width / 1.7
+      minWidth: rightBurnerStand.width / 1.5,
+      maxWidth: rightBurnerStand.width / 1.5
     } );
     heaterCoolerFrontLayer.addChild( rightLinkableHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
