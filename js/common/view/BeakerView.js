@@ -50,7 +50,12 @@ define( function( require ) {
   function BeakerView( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
 
     options = _.extend( {
-      label: waterString
+      label: waterString,
+
+      // This option controls whether this is being constructed as a standalone node that will itself be added as a
+      // child to another node, or as a set of individual nodes that are added separately as children to an external
+      // parent.  The latter is used when it is necessary to put portions of the beaker on separate layers.
+      composited: true
     }, options );
 
     Node.call( this );
@@ -66,9 +71,11 @@ define( function( require ) {
     this.backNode = new Node();
     this.grabNode = new Node( { cursor: 'pointer' } );
 
-    this.addChild( this.frontNode );
-    this.addChild( this.backNode );
-    this.addChild( this.grabNode );
+    if ( options.composited ) {
+      this.addChild( this.frontNode );
+      this.addChild( this.backNode );
+      this.addChild( this.grabNode );
+    }
 
     // extract the scale transform from the MVT so that we can separate the shape from the position
     var scaleTransform = new Transform3(

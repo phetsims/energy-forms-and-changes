@@ -78,7 +78,7 @@ define( function( require ) {
 
     this.grabNode.addInputListener( new ThermalElementDragHandler(
       beaker,
-      this,
+      this.grabNode,
       modelViewTransform,
       constrainPosition
     ) );
