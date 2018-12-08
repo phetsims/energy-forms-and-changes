@@ -14,6 +14,7 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
 
@@ -34,6 +35,19 @@ define( function( require ) {
     // one, null if nothing there, use the API below to update
     this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null );
 
+    // monitor the element on the surface for legitimate settings
+    assert && this.elementOnSurfaceProperty.link( function( elementOnSurface, previousElementOnSurface ) {
+      assert( elementOnSurface === null || elementOnSurface instanceof ModelElement );
+      assert( elementOnSurface !== self, 'can\'t sit on top of ourself' );
+
+      // TODO: The following assertion is commented out because it fails during fuzz testing.  We should figure out why,
+      // but this is lower priority than most of the other work at the moment.  -jbphet, 12/7/2018
+      assert(
+        elementOnSurface === null || previousElementOnSurface === null,
+        'one element should be removed before another is added'
+      );
+    } );
+
     // @public (read-only) {number}
     this.width = width;
 
@@ -43,70 +57,12 @@ define( function( require ) {
       self.xRange.setMinMax( position.x - self.width / 2, position.x + self.width / 2 );
     } );
 
-    // TODO: Consider having the code directly access these values rather than using getter/setter methods once port is nearly complete.
-    // @private - this should be accessed through getter/setter methods
+    // @public (read-only) {ModelElement} - this should be accessed through getter/setter methods
     this.owner = owner;
   }
 
   energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
 
-  return inherit( Object, HorizontalSurface, {
-
-    /**
-     * @param {HorizontalSurface} surface
-     * @returns {boolean}
-     * @public
-     */
-    overlapsWith: function( surface ) {
-      // if used when the position of a surface is changing (which is probably the only use case), the accuracy of this
-      // could be questionable because xRange is set on link to this surface's position property. as of the writing of
-      // this comment, this function was no longer needed and is not being used anywhere in efac.
-      return ( this.xRange.intersectsExclusive( surface.xRange ) );
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getCenterX: function() {
-      return this.positionProperty.value.x;
-    },
-
-    /**
-     * @returns {ModelElement}
-     * @public read-only
-     */
-    getOwner: function() {
-      return this.owner;
-    },
-
-    /**
-     * @returns {ModelElement}
-     * @public
-     */
-    getElementOnSurface: function() {
-      return this.elementOnSurfaceProperty.get();
-    },
-
-    /**
-     * @param {ModelElement} modelElement
-     * @public
-     */
-    addElementToSurface: function( modelElement ) {
-      // TODO: The commented out assertion is helpful when element interaction is being developed, but breaks fuzz
-      // testing when enabled because weird cases are reached. @jbphet and @chrisklus are happy with how things are
-      // performing in the wild, so the assertion has been removed to stop breaking continuous testing.
-      // assert && assert( this.elementOnSurface === null, 'Only one thing on surface allowed at a time' );
-      assert && assert( modelElement !== this.owner, 'an element cannot sit upon its own surface' );
-      this.elementOnSurfaceProperty.set( modelElement );
-    },
-
-    /**
-     * @public
-     */
-    clearSurface: function() {
-      this.elementOnSurfaceProperty.set( null );
-    }
-  } );
+  return inherit( Object, HorizontalSurface );
 } );
 

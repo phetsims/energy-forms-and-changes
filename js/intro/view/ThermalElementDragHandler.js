@@ -10,6 +10,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {UserMovableModelElement} modelElement
@@ -19,7 +20,8 @@ define( function( require ) {
    */
   function ThermalElementDragHandler( modelElement, screenViewChildNode, modelViewTransform, constrainPosition ) {
 
-    var dragStartOffset = null;
+    var dragStartOffset = new Vector2();
+    var currentTarget = null;
 
     DragListener.call( this, {
 
@@ -29,12 +31,16 @@ define( function( require ) {
       start: function( event ) {
         modelElement.userControlledProperty.set( true );
         var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
-        var dragStartPosition = screenViewChildNode.globalToParentPoint( event.pointer.point );
-        dragStartOffset = dragStartPosition.minus( modelElementViewPosition );
+        currentTarget = event.currentTarget;
+        var dragStartPosition = currentTarget.globalToParentPoint( event.pointer.point );
+        dragStartOffset.setXY(
+          dragStartPosition.x - modelElementViewPosition.x,
+          dragStartPosition.y - modelElementViewPosition.y
+        );
       },
 
       drag: function( event ) {
-        var dragPosition = screenViewChildNode.globalToParentPoint( event.pointer.point );
+        var dragPosition = currentTarget.globalToParentPoint( event.pointer.point );
         var modelElementViewPosition = dragPosition.minus( dragStartOffset );
         var modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
         modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
@@ -42,6 +48,7 @@ define( function( require ) {
 
       end: function( event ) {
         modelElement.userControlledProperty.set( false );
+        currentTarget = null;
       }
 
     } );

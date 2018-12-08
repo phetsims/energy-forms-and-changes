@@ -243,14 +243,17 @@ define( function( require ) {
       model.waterBeaker,
       model,
       modelViewTransform,
-      constrainMovableElementMotion
+      constrainMovableElementMotion,
+      { composited: false }
     );
     this.oliveOilBeakerView = new BeakerContainerView(
       model.oliveOilBeaker,
       model,
       modelViewTransform,
-      constrainMovableElementMotion, {
-        label: oliveOilString
+      constrainMovableElementMotion,
+      {
+        label: oliveOilString,
+        composited: false
       }
     );
 
@@ -260,6 +263,7 @@ define( function( require ) {
     beakerBackLayer.addChild( this.waterBeakerView.backNode );
     beakerBackLayer.addChild( this.oliveOilBeakerView.backNode );
     beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
+    this.waterBeakerView.grabNode.jbID = 'water beaker grab node';
     beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
 
     // the sensor layer needs to be above the movable objects

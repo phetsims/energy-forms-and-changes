@@ -96,7 +96,7 @@ define( function( require ) {
       // only do something if the supporting surface was set
       if ( this.supportingSurface !== null ) {
         this.supportingSurface.positionProperty.unlink( this.surfaceMotionObserver );
-        this.supportingSurface.clearSurface();
+        this.supportingSurface.elementOnSurfaceProperty.set( null );
         this.supportingSurface = null;
       }
     },
@@ -111,7 +111,7 @@ define( function( require ) {
      */
     isStackedUpon: function( element ) {
       var surface = this.supportingSurface ? this.supportingSurface : null;
-      return ( surface !== null ) && ( surface.getOwner() === element || surface.getOwner().isStackedUpon( element ) );
+      return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
     }
 
   } );

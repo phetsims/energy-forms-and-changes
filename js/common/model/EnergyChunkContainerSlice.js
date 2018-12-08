@@ -5,6 +5,11 @@
  * some limited 3D capabilities by having some z-dimension information.  The slice consists of a 2D shape and a Z value
  * representing its position in Z space.
  *
+ * Note to maintainers: In the original Java of this simulation, these slices where shapes that could be more elaborate
+ * than a simple rectangle.  Translating these shapes proved to be a performance problem in the JavaScript version, so
+ * the shapes were simplified to be bounds.  This is not quite as nice in doing things like distributing the energy
+ * chunks in the beaker, but works well enough, and performs far better.
+ *
  * @author John Blanco
  * @author Jesse Greenberg
  * @author Martin Veillette
@@ -15,37 +20,42 @@ define( function( require ) {
   // modules
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * @param {Shape} shape
+   * @param {Bounds2} bounds
    * @param {number} zPosition - used to give appearance of depth
    * @param {Property.<Vector2>} anchorPointProperty
    * @constructor
    */
-  function EnergyChunkContainerSlice( shape, zPosition, anchorPointProperty ) {
+  function EnergyChunkContainerSlice( bounds, zPosition, anchorPointProperty ) {
 
     var self = this;
 
-    // @public {Shape} - 2D shape of this slice
-    this.shape = shape;
+    // @public {Property.<Vector2>} - position of this slice in model space
     this.anchorPointProperty = anchorPointProperty;
+
+    // @public (read-only) {Bounds2} - 2D bounds of this slice in model space, translates with the anchor point
+    this.bounds = bounds;
 
     // @private {number}
     this.zPosition = zPosition;
 
-    // @private {ObservableArray.<EnergyChunk>}
+    // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
     this.energyChunkList = new ObservableArray();
 
-    // monitor the "anchor point" position and move the contained energy chunks to match
-    this.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
-      var translation = newPosition.minus( oldPosition );
+    var reusableTranslationVector = new Vector2();
 
-      self.shape = self.shape.transformed( Matrix3.translationFromVector( translation ) );
+    // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
+    this.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+
+      reusableTranslationVector.setXY( newPosition.x - oldPosition.x, newPosition.y - oldPosition.y );
+
+      self.bounds.shift( reusableTranslationVector.x, reusableTranslationVector.y );
 
       self.energyChunkList.forEach( function( energyChunk ) {
-        energyChunk.translate( translation );
+        energyChunk.translate( reusableTranslationVector );
       } );
     } );
   }
@@ -61,6 +71,15 @@ define( function( require ) {
     addEnergyChunk: function( energyChunk ) {
       energyChunk.zPositionProperty.set( this.zPosition );
       this.energyChunkList.push( energyChunk );
+    },
+
+    /**
+     * expand or contract the bounds of this slice in the y-direction based on the provided proportion value
+     * @param {number} changeProportion
+     * @public
+     */
+    updateHeight: function( changeProportion ) {
+      this.bounds.maxY += this.bounds.height * changeProportion;
     },
 
     /**
