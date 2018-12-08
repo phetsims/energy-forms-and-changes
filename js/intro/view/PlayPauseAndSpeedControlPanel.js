@@ -69,7 +69,7 @@ define( function( require ) {
     } );
 
     HBox.call( this, {
-      children: [ normalFastForwardButtonGroup, playPauseStepButtonGroup ],
+      children: [ playPauseStepButtonGroup, normalFastForwardButtonGroup ],
       spacing: 25
     } );
   }
