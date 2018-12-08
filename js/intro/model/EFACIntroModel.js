@@ -134,6 +134,7 @@ define( function( require ) {
       listOfThingsThatCanGoInBeaker,
       this.energyChunksVisibleProperty, {
         fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+        steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
         fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
         fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
         fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,

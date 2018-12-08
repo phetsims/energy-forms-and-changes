@@ -24,29 +24,30 @@ define( function( require ) {
   var STEAM_BUBBLE_RATE_RANGE = new Range( 20, 40 ); // bubbles per second
   var STEAM_BUBBLE_GROWTH_RATE = 0.2; // proportion per second
   var MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
-  var STEAM_BUBBLE_COLOR = 'white';
 
   /**
-   * @param {number} fluidBoilingPoint
+   * @param {Rectangle} containerOutlineRect - the outline of the container
    * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
    * @param {Property<number>} temperatureProperty - the temperature of the liquid
-   * @param {Rectangle} containerOutlineRect - the outline of the container
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param {number} fluidBoilingPoint
+   * @param {Color} steamColor
+   * @param {Object} [options]
    * @constructor
    */
-  function SteamCanvasNode( fluidBoilingPoint, fluidLevelProperty, temperatureProperty, containerOutlineRect, options ) {
+  function SteamCanvasNode( containerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
 
     var self = this;
     CanvasNode.call( this, options );
 
     // @private
-    this.fluidBoilingPoint = fluidBoilingPoint;
+    this.containerOutlineRect = containerOutlineRect;
     this.fluidLevelProperty = fluidLevelProperty;
     this.temperatureProperty = temperatureProperty;
+    this.fluidBoilingPoint = fluidBoilingPoint;
+    this.steamColor = steamColor;
 
     // @private
     this.bubbleProductionRemainder = 0;
-    this.containerOutlineRect = containerOutlineRect;
     this.dt = 0;
     this.steamOrigin = 0;
     this.steamBubbles = [];
@@ -59,7 +60,7 @@ define( function( require ) {
     var context = this.steamBubbleImageCanvas.getContext( '2d' );
 
     // draw a steam bubble centered in the steam bubble image canvas
-    context.fillStyle = STEAM_BUBBLE_COLOR;
+    context.fillStyle = this.steamColor.toCSS();
     context.beginPath();
     context.arc(
       STEAM_BUBBLE_DIAMETER_RANGE.max / 2,

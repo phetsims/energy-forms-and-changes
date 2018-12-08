@@ -26,22 +26,24 @@ define( function( require ) {
 
   /**
    * @param {Rectangle} beakerOutlineRect
-   * @param {Color} fluidColor
-   * @param {number} fluidBoilingPoint
-   * @param {Property.<number>} waterLevelProperty
+   * @param {Property.<number>} fluidLevelProperty
    * @param {Property.<number>} temperatureProperty
+   * @param {number} fluidBoilingPoint
+   * @param {Color} fluidColor
+   * @param {Color} steamColor
    */
-  function PerspectiveWaterNode( beakerOutlineRect, fluidColor, fluidBoilingPoint, waterLevelProperty, temperatureProperty ) {
+  function PerspectiveWaterNode( beakerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
 
     Node.call( this );
     var self = this;
 
     // @private
     this.beakerOutlineRect = beakerOutlineRect;
-    this.fluidColor = fluidColor;
-    this.fluidBoilingPoint = fluidBoilingPoint;
-    this.waterLevelProperty = waterLevelProperty;
+    this.fluidLevelProperty = fluidLevelProperty;
     this.temperatureProperty = temperatureProperty;
+    this.fluidBoilingPoint = fluidBoilingPoint;
+    this.fluidColor = fluidColor;
+    this.steamColor = steamColor;
 
     // @private - a rectangle that defines the size of the fluid within the beaker
     this.fluidBounds = Bounds2.NOTHING.copy();
@@ -59,10 +61,11 @@ define( function( require ) {
     } );
 
     this.steamCanvasNode = new SteamCanvasNode(
-      fluidBoilingPoint,
-      waterLevelProperty,
-      temperatureProperty,
-      this.beakerOutlineRect, {
+      this.beakerOutlineRect,
+      this.fluidLevelProperty,
+      this.temperatureProperty,
+      this.fluidBoilingPoint,
+      this.steamColor, {
         canvasBounds: new Bounds2(
           -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxX / 2,
           -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY,
@@ -75,11 +78,11 @@ define( function( require ) {
     this.addChild( this.steamCanvasNode );
 
     // update the appearance of the water as the level changes
-    this.waterLevelProperty.link( function( waterLevel ) {
-      var waterHeight = beakerOutlineRect.height * waterLevel;
+    this.fluidLevelProperty.link( function( fluidLevel ) {
+      var fluidHeight = beakerOutlineRect.height * fluidLevel;
       self.fluidBounds.setMinMax(
         beakerOutlineRect.minX,
-        beakerOutlineRect.maxY - waterHeight,
+        beakerOutlineRect.maxY - fluidHeight,
         beakerOutlineRect.maxX,
         0
       );

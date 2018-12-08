@@ -46,6 +46,7 @@ define( function( require ) {
 
     options = _.extend( {
       fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
+      steamColor: EFACConstants.WATER_STEAM_COLOR,
       fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
       fluidDensity: EFACConstants.WATER_DENSITY,
       fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
@@ -74,6 +75,9 @@ define( function( require ) {
 
     // @public {Color) - the color of the fluid in the beaker
     this.fluidColor = options.fluidColor;
+
+    // @public {Color) - the color of the steam that comes from the beaker
+    this.steamColor = options.steamColor;
 
     // @public {number} - the boiling point temperature of the fluid in the beaker
     this.fluidBoilingPoint = options.fluidBoilingPoint;

@@ -95,10 +95,11 @@ define( function( require ) {
     // Add the fluid.  It will adjust its size based on the fluid level.
     this.fluid = new PerspectiveWaterNode(
       beakerBounds,
-      beaker.fluidColor,
-      beaker.fluidBoilingPoint,
       beaker.fluidLevelProperty,
-      beaker.temperatureProperty
+      beaker.temperatureProperty,
+      beaker.fluidBoilingPoint,
+      beaker.fluidColor,
+      beaker.steamColor
     );
     this.frontNode.addChild( this.fluid );
 
