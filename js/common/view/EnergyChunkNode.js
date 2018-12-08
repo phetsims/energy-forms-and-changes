@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var Circle = require( 'SCENERY/nodes/Circle' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -35,7 +36,6 @@ define( function( require ) {
 
   // constants
   var Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
-  var WIDTH = 19; // in screen coords, which are close to pixels. Empirically determined to look nice.
 
   // convenience map that links energy types to their representing images
   var mapEnergyTypeToImage = {};
@@ -60,7 +60,7 @@ define( function( require ) {
     energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.95 );
     energyText.center = background.center;
     background.addChild( energyText );
-    background.scale( WIDTH / background.width );
+    background.scale( EFACConstants.ENERGY_CHUNK_WIDTH / background.width );
     background.center = ( Vector2.ZERO );
     var backgroundBounds = background.bounds;
     assert && background.on( 'bounds', function( bounds ) {
@@ -162,7 +162,6 @@ define( function( require ) {
   }, {
 
     // statics
-    WIDTH: WIDTH,
     Z_DISTANCE_WHERE_FULLY_FADED: Z_DISTANCE_WHERE_FULLY_FADED
   } );
 } );

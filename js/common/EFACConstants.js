@@ -131,8 +131,9 @@ define( function( require ) {
     // model-view transform scale factor for the Systems screen
     SYSTEMS_MVT_SCALE_FACTOR: 2200,
 
-    // constants that control the speed of the energy chunks
+    // constants for energy chunks
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
+    ENERGY_CHUNK_WIDTH: 19, // in screen coords, which are close to pixels. Empirically determined to look nice.
 
     // constants that define physical parameters of various rectangular objects
     WATER_SPECIFIC_HEAT: 3000, // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there

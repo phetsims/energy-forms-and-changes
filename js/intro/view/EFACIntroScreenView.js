@@ -24,11 +24,11 @@ define( function( require ) {
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
-  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
+  var LinkableHeaterCoolerFront = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/LinkableHeaterCoolerFront' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PlayPauseAndSpeedControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/PlayPauseAndSpeedControlPanel' );
@@ -40,14 +40,17 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
+  var linkHeatersString = require( 'string!ENERGY_FORMS_AND_CHANGES/linkHeaters' );
   var oliveOilString = require( 'string!ENERGY_FORMS_AND_CHANGES/oliveOil' );
 
   // images
   var shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' );
+  var flameImage = require( 'image!SCENERY_PHET/flame.png' );
 
   // constants
   var EDGE_INSET = 10;
@@ -153,12 +156,12 @@ define( function( require ) {
       minWidth: leftBurnerStand.width / 1.7,
       maxWidth: leftBurnerStand.width / 1.7
     } );
-    var leftHeaterCoolerFront = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
+    var leftLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.7,
       maxWidth: leftBurnerStand.width / 1.7
     } );
-    heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
+    heaterCoolerFrontLayer.addChild( leftLinkableHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( leftBurnerStand );
 
@@ -174,14 +177,31 @@ define( function( require ) {
       minWidth: rightBurnerStand.width / 1.7,
       maxWidth: rightBurnerStand.width / 1.7
     } );
-    var rightHeaterCoolerFront = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
+    var rightLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: rightBurnerStand.width / 1.7,
       maxWidth: rightBurnerStand.width / 1.7
     } );
-    heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
+    heaterCoolerFrontLayer.addChild( rightLinkableHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( rightBurnerStand );
+
+    // link the dragging Properties of the heater slider thumbs. if the heaters are linked and one is being dragged,
+    // tell the other heater to follow it, otherwise respect its own heating Property
+    Property.multilink(
+      [
+        leftLinkableHeaterCoolerFront.heatCoolSlider.isThumbDraggingProperty,
+        rightLinkableHeaterCoolerFront.heatCoolSlider.isThumbDraggingProperty
+      ],
+      function( isLeftThumbDragging, isRightThumbDragging ) {
+        if ( model.linkedHeatersProperty.get() ) {
+          isLeftThumbDragging ? rightLinkableHeaterCoolerFront.setFollowProperty( model.leftBurner.heatCoolLevelProperty ) :
+          rightLinkableHeaterCoolerFront.clearFollowProperty( model.leftBurner.heatCoolLevelProperty );
+          isRightThumbDragging ? leftLinkableHeaterCoolerFront.setFollowProperty( model.rightBurner.heatCoolLevelProperty ) :
+          leftLinkableHeaterCoolerFront.clearFollowProperty( model.rightBurner.heatCoolLevelProperty );
+        }
+      }
+    );
 
     // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
@@ -419,7 +439,7 @@ define( function( require ) {
     model.waterBeaker.positionProperty.link( beakerChangeListener );
     model.oliveOilBeaker.positionProperty.link( beakerChangeListener );
 
-    // Add the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
+    // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
     // each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
     // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
     var energyChunkNode = new EnergyChunkNode(
@@ -427,16 +447,36 @@ define( function( require ) {
       modelViewTransform
     );
     energyChunkNode.pickable = false;
-    var label = new Text( energySymbolsString, {
+    var energySymbolsText = new Text( energySymbolsString, {
       font: new PhetFont( 20 )
     } );
-    var showEnergyCheckbox = new Checkbox( new LayoutBox( {
-        children: [ label, energyChunkNode ],
-        orientation: 'horizontal',
+    var showEnergyCheckbox = new Checkbox( new HBox( {
+      children: [ energySymbolsText, energyChunkNode ],
         spacing: 5
       } ), model.energyChunksVisibleProperty
     );
-    var controlPanel = new Panel( showEnergyCheckbox, {
+
+    // Create the control for linking/un-linking the heaters
+    var flameNode = new Image( flameImage, {
+      maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
+      maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
+    } );
+    var linkHeatersText = new Text( linkHeatersString, {
+      font: new PhetFont( 20 )
+    } );
+    var linkHeatersCheckbox = new Checkbox( new HBox( {
+        children: [ linkHeatersText, flameNode ],
+        spacing: 5
+      } ), model.linkedHeatersProperty
+    );
+
+    // Add the checkbox controls
+    var controlPanelCheckboxes = new VBox( {
+      children: [ showEnergyCheckbox, linkHeatersCheckbox ],
+      spacing: 5,
+      align: 'left'
+    } );
+    var controlPanel = new Panel( controlPanelCheckboxes, {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,

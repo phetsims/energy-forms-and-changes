@@ -66,13 +66,16 @@ define( function( require ) {
 
     var self = this;
 
-    // @public (read-only) {BooleanProperty} - controls whether the energy chunks are visible in the view
+    // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
     this.energyChunksVisibleProperty = new BooleanProperty( false );
 
-    // @public (read-only) {BooleanProperty} - is the sim running or paused?
+    // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
+    this.linkedHeatersProperty = new BooleanProperty( false );
+
+    // @public {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new Property( true );
 
-    // @public (read-only) {BooleanProperty} - true indicates normal speed, false is fast-forward
+    // @public {BooleanProperty} - true indicates normal speed, false is fast-forward
     this.normalSimSpeedProperty = new Property( SimSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
@@ -229,6 +232,7 @@ define( function( require ) {
      */
     reset: function() {
       this.energyChunksVisibleProperty.reset();
+      this.linkedHeatersProperty.reset();
       this.isPlayingProperty.reset();
       this.normalSimSpeedProperty.reset();
       this.air.reset();
