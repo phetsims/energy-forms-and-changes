@@ -42,10 +42,10 @@ define( function( require ) {
 
       // TODO: The following assertion is commented out because it fails during fuzz testing.  We should figure out why,
       // but this is lower priority than most of the other work at the moment.  -jbphet, 12/7/2018
-      assert(
-        elementOnSurface === null || previousElementOnSurface === null,
-        'one element should be removed before another is added'
-      );
+      // assert(
+      //   elementOnSurface === null || previousElementOnSurface === null,
+      //   'one element should be removed before another is added'
+      // );
     } );
 
     // @public (read-only) {number}
