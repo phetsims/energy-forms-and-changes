@@ -93,27 +93,31 @@ define( function( require ) {
     }
 
     // @public (read-only) {Block}
-    this.brick = new Block(
-      new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
-      this.energyChunksVisibleProperty,
-      BlockType.BRICK
-    );
-
-    // @public (read-only) {Block}
     this.ironBlock = new Block(
       new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
       this.energyChunksVisibleProperty,
       BlockType.IRON
     );
 
+    // @public (read-only) {Block}
+    this.brick = new Block(
+      new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
+      this.energyChunksVisibleProperty,
+      BlockType.BRICK
+    );
+
     // @public (read-only) {Block[]} - list of all blocks in sim
     this.blocks = [ this.brick, this.ironBlock ];
+
+    // @public (read-only) {Burner} - right and left burners
+    this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 2 ], 0 ), this.energyChunksVisibleProperty );
+    this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 3 ], 0 ), this.energyChunksVisibleProperty );
 
     var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
     // @public (read-only) {BeakerContainer)
     this.waterBeaker = new BeakerContainer(
-      new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
+      new Vector2( this.groundSpotXPositions[ 4 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
       listOfThingsThatCanGoInBeaker,
@@ -124,7 +128,7 @@ define( function( require ) {
 
     // @public (read-only) {BeakerContainer)
     this.oliveOilBeaker = new BeakerContainer(
-      new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
+      new Vector2( this.groundSpotXPositions[ 5 ], 0 ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
       listOfThingsThatCanGoInBeaker,
@@ -137,10 +141,6 @@ define( function( require ) {
         majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
       }
     );
-
-    // @public (read-only) {Burner} - right and left burners
-    this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 4 ], 0 ), this.energyChunksVisibleProperty );
-    this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 5 ], 0 ), this.energyChunksVisibleProperty );
 
     // @public (read-only) {BeakerContainer[]}
     this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
