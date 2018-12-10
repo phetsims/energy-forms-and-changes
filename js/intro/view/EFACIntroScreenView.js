@@ -272,7 +272,6 @@ define( function( require ) {
 
     // create and add the temperature and color sensor nodes, which look like a thermometer with a triangle on the side
     var temperatureAndColorSensorNodes = [];
-    var sumOfSensorNodeWidths = 0;
     var sensorNodeWidth = 0;
     var sensorNodeHeight = 0;
     model.temperatureAndColorSensors.forEach( function( sensor ) {
@@ -301,7 +300,6 @@ define( function( require ) {
       temperatureAndColorSensorNodes.push( temperatureAndColorSensorNode );
 
       // update the variables that will be used to create the storage area
-      sumOfSensorNodeWidths += temperatureAndColorSensorNode.width;
       sensorNodeHeight = sensorNodeHeight || temperatureAndColorSensorNode.height;
       sensorNodeWidth = sensorNodeWidth || temperatureAndColorSensorNode.width;
     } );
@@ -310,7 +308,7 @@ define( function( require ) {
     var sensorStorageArea = new Rectangle(
       0,
       0,
-      sumOfSensorNodeWidths * 1.3,
+      sensorNodeWidth * 2,
       sensorNodeHeight * 1.15,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
       EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
@@ -325,24 +323,15 @@ define( function( require ) {
     backLayer.addChild( sensorStorageArea );
     sensorStorageArea.moveToBack(); // move behind the temperatureAndColorSensorNodes when they are being stored
 
-    // set initial positions for sensors in the storage area, hook up listeners to handle interaction with storage area
-    var interSensorSpacing = ( sensorStorageArea.width - sumOfSensorNodeWidths ) / 4;
+    // set initial position for sensors in the storage area, hook up listeners to handle interaction with storage area
+    var interSensorSpacing = ( sensorStorageArea.width - sensorNodeWidth ) / 2;
     var offsetFromBottomOfStorageArea = 25; // empirically determined
-    var sensorPositionsInStorageAreaMap = [];
-    var nextSensorViewPositionX = sensorStorageArea.left + interSensorSpacing;
+    var sensorNodePositionX = sensorStorageArea.left + interSensorSpacing;
+    var sensorPositionInStorageArea = new Vector2(
+      modelViewTransform.viewToModelX( sensorNodePositionX ),
+      modelViewTransform.viewToModelY( sensorStorageArea.bottom - offsetFromBottomOfStorageArea ) );
+
     model.temperatureAndColorSensors.forEach( function( sensor, index ) {
-
-      // define the storage position and put it into an object with a reference to the sensor
-      sensorPositionsInStorageAreaMap.push( {
-        sensor: sensor,
-        position: new Vector2(
-          modelViewTransform.viewToModelX( nextSensorViewPositionX ),
-          modelViewTransform.viewToModelY( sensorStorageArea.bottom - offsetFromBottomOfStorageArea )
-        )
-      } );
-
-      // update the horizontal placement to be used for the next sensor
-      nextSensorViewPositionX += interSensorSpacing + sensorNodeWidth;
 
       // add a listener for when the sensor is removed from or returned to the storage area
       sensor.userControlledProperty.link( function( userControlled ) {
@@ -378,16 +367,8 @@ define( function( require ) {
     // function to return a sensor to its initial position in the storage area
     function returnSensorToStorageArea( sensor ) {
 
-      // find and set the initial position for this sensor
-      var position = null;
-      for ( var i = 0; i < model.temperatureAndColorSensors.length; i++ ) {
-        if ( sensorPositionsInStorageAreaMap[ i ].sensor === sensor ) {
-          position = sensorPositionsInStorageAreaMap[ i ].position;
-          break;
-        }
-      }
-      assert && assert( position, 'position not found for specified sensor' );
-      sensor.positionProperty.set( position );
+      // set the initial position for this sensor
+      sensor.positionProperty.set( sensorPositionInStorageArea );
 
       // sensors are inactive when in the storage area
       sensor.activeProperty.set( false );

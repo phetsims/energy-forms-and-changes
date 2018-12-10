@@ -32,7 +32,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var NUM_THERMOMETERS = 3;
+  var NUM_THERMOMETERS = 4;
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
   var MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
