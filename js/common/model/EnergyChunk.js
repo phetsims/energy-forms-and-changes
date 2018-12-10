@@ -63,7 +63,7 @@ define( function( require ) {
      * @param {number} dt - delta time
      */
     translateBasedOnVelocity: function( dt ) {
-      this.translate( this.velocity.times( dt ) );
+      this.translate( this.velocity.x * dt, this.velocity.y * dt );
     },
 
     /**

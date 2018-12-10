@@ -44,7 +44,7 @@ define( function( require ) {
     this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
       var deltaPosition = newPosition.minus( oldPosition );
       self.energyChunkList.forEach( function( chunk ) {
-        chunk.translate( deltaPosition );
+        chunk.translate( deltaPosition.x, deltaPosition.y );
       } );
     } );
   }

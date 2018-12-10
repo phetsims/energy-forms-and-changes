@@ -16,7 +16,6 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Rectangle = require( 'DOT/Rectangle' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // counter used by constructor to create unique IDs
   var idCounter = 0;
@@ -114,8 +113,7 @@ define( function( require ) {
         // this chunk is being transferred from a container in the beaker to the fluid, so move it sideways
         if ( self.isEnergyChunkObscured( ec ) ) {
           var xVel = 0.05 * dt * ( self.getCenterPoint().x > ec.positionProperty.value.x ? -1 : 1 );
-          var motionVector = new Vector2( xVel, 0 );
-          ec.translate( motionVector );
+          ec.translate( xVel, 0 );
         }
 
         // wander chunk towards the container
