@@ -74,12 +74,12 @@ define( function( require ) {
     },
 
     /**
-     * expand or contract the bounds of this slice in the y-direction based on the provided proportion value
-     * @param {number} changeProportion
+     * expand or contract the bounds of this slice in the y-direction based on the provided multiplier value
+     * @param {number} multiplier
      * @public
      */
-    updateHeight: function( changeProportion ) {
-      this.bounds.maxY += this.bounds.height * changeProportion;
+    updateHeight: function( multiplier ) {
+      this.bounds.maxY = this.bounds.minY + this.bounds.height * multiplier;
     },
 
     /**

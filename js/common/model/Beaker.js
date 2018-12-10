@@ -145,9 +145,9 @@ define( function( require ) {
 
     // update the bounds of the energy chunk slices as the fluid level changes
     this.fluidLevelProperty.lazyLink( function( newFluidLevel, oldFluidLevel ) {
-      var changeProportion = newFluidLevel / oldFluidLevel;
+      var multiplier = newFluidLevel / oldFluidLevel;
       self.slices.forEach( function( slice ) {
-        slice.updateHeight( changeProportion );
+        slice.updateHeight( multiplier );
       } );
     } );
   }
