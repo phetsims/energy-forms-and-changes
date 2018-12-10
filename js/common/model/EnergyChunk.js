@@ -13,6 +13,7 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // static data
   var instanceCount = 0; // counter for creating unique IDs
@@ -44,12 +45,17 @@ define( function( require ) {
   return inherit( Object, EnergyChunk, {
 
     /**
-     * translate the energy chunk by amount specified in movement vector
-     * @param {Vector2} movement
+     * translate the energy chunk by amount specified
+     * @param {number} x
+     * @param {number} y
      * @public
      */
-    translate: function( movement ) {
-      this.positionProperty.value = this.positionProperty.value.plus( movement );
+    translate: function( x, y ) {
+
+      // for optimal sim performance we use vector pooling, since there are lots of energy chunks and they move frequently
+      var oldPosition = this.positionProperty.get();
+      this.positionProperty.set( Vector2.createFromPool( oldPosition.x + x, oldPosition.y + y ) );
+      oldPosition.freeToPool();
     },
 
     /**

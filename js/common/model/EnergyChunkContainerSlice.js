@@ -21,7 +21,6 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {Bounds2} bounds
@@ -45,18 +44,18 @@ define( function( require ) {
     // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
     this.energyChunkList = new ObservableArray();
 
-    var reusableTranslationVector = new Vector2();
-
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
     this.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
 
-      reusableTranslationVector.setXY( newPosition.x - oldPosition.x, newPosition.y - oldPosition.y );
+      var xTranslation = newPosition.x - oldPosition.x;
+      var yTranslation = newPosition.y - oldPosition.y;
 
-      self.bounds.shift( reusableTranslationVector.x, reusableTranslationVector.y );
+      self.bounds.shift( xTranslation, yTranslation );
 
-      self.energyChunkList.forEach( function( energyChunk ) {
-        energyChunk.translate( reusableTranslationVector );
-      } );
+      // c-style loop for best performance
+      for ( var i = 0; i < self.energyChunkList.length; i++ ) {
+        self.energyChunkList.get( i ).translate( xTranslation, yTranslation );
+      }
     } );
   }
 
