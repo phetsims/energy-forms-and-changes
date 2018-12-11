@@ -695,14 +695,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": ""
   },
-  "mockup_intro.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": ""
-  },
   "shelf_long.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
@@ -760,22 +752,6 @@
     "notes": "created by Noah Podolefsky"
   },
   "tea_kettle_large.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
-  },
-  "thermometer_medium_back.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Noah Podolefsky"
-  },
-  "thermometer_medium_front.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],

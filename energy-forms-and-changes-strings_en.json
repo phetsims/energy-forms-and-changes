@@ -32,12 +32,6 @@
   "none": {
     "value": "None"
   },
-  "heat": {
-    "value": "Heat"
-  },
-  "cool": {
-    "value": "Cool"
-  },
   "feedMe": {
     "value": "Feed Me"
   },
