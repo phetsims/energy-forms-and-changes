@@ -230,6 +230,8 @@ define( function( require ) {
      * @override
      */
     preloadEnergyChunks: function() {
+
+      var self = this;
       this.clearEnergyChunks();
 
       // define translation function here to avoid creating anonymous function inside loop
@@ -259,7 +261,7 @@ define( function( require ) {
 
       // now that they are positioned, add these to the 'real' list of energy chunks
       tempEnergyChunkList.forEach( function( ec ) {
-        this.energyChunkList.push( ec );
+        self.energyChunkList.push( ec );
       } );
     },
 
