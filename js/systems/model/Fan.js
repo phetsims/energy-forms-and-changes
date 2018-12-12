@@ -324,13 +324,23 @@ define( function( require ) {
      * @override
      */
     deactivate: function() {
+      EnergyUser.prototype.deactivate.call( this );
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
       this.energyChunkIncomingEnergy = 0;
       this.internalTemperature = ROOM_TEMPERATURE;
-      this.electricalEnergyChunkMovers = [];
-      this.radiatedEnergyChunkMovers = [];
-      this.mechanicalEnergyChunkMovers = [];
+    },
+
+    /**
+     * @public
+     * @override
+     */
+    clearEnergyChunks: function() {
+      EnergyUser.prototype.clearEnergyChunks.call( this );
+      this.electricalEnergyChunkMovers.length = 0;
+      this.radiatedEnergyChunkMovers.length = 0;
+      this.mechanicalEnergyChunkMovers.length = 0;
+      this.incomingEnergyChunks.length = 0;
     }
   } );
 } );
