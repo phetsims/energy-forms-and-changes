@@ -268,7 +268,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function( incomingEnergy ) {
+    preloadEnergyChunks: function( incomingEnergy ) {
       this.clearEnergyChunks();
 
       if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.MECHANICAL ) {
@@ -281,8 +281,8 @@ define( function( require ) {
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
 
       // simulate energy chunks moving through the system
-      var preLoadComplete = false;
-      while ( !preLoadComplete ) {
+      var preloadComplete = false;
+      while ( !preloadComplete ) {
         energySinceLastChunk += incomingEnergy.amount * dt;
 
         // determine if time to add a new chunk
@@ -310,7 +310,7 @@ define( function( require ) {
         if ( this.outgoingEnergyChunks.length > 0 ) {
 
           // an energy chunk has made it all the way through the system
-          preLoadComplete = true;
+          preloadComplete = true;
         }
       }
     },

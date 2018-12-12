@@ -235,7 +235,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function( incomingEnergy ) {
+    preloadEnergyChunks: function( incomingEnergy ) {
 
       this.clearEnergyChunks();
 
@@ -250,8 +250,8 @@ define( function( require ) {
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
 
       // simulate energy chunks moving through the system
-      var preLoadComplete = false;
-      while ( !preLoadComplete ) {
+      var preloadComplete = false;
+      while ( !preloadComplete ) {
         this.energySinceLastChunk += incomingEnergy.amount * dt;
 
         // determine if time to add a new chunk
@@ -281,7 +281,7 @@ define( function( require ) {
         if ( this.radiatedEnergyChunkMovers.length > 1 ) {
 
           // a couple of chunks are radiating, which completes the pre-load
-          preLoadComplete = true;
+          preloadComplete = true;
         }
       }
     },

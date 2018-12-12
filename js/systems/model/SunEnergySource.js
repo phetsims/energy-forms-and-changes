@@ -216,21 +216,21 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {
+    preloadEnergyChunks: function() {
       this.clearEnergyChunks();
-      var preLoadTime = 6; // in simulated seconds, empirically determined
+      var preloadTime = 6; // in simulated seconds, empirically determined
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       this.energyChunkEmissionCountdownTimer = 0;
 
       // simulate energy chunks moving through the system
-      while ( preLoadTime > 0 ) {
+      while ( preloadTime > 0 ) {
         this.energyChunkEmissionCountdownTimer -= dt;
         if ( this.energyChunkEmissionCountdownTimer <= 0 ) {
           this.emitEnergyChunk();
           this.energyChunkEmissionCountdownTimer += ENERGY_CHUNK_EMISSION_PERIOD;
         }
         this.updateEnergyChunkPositions( dt );
-        preLoadTime -= dt;
+        preloadTime -= dt;
       }
 
       // remove any chunks that actually made it to the solar panel

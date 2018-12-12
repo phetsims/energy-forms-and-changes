@@ -294,7 +294,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function( incomingEnergyRate ) {
+    preloadEnergyChunks: function( incomingEnergyRate ) {
       this.clearEnergyChunks();
 
       if ( incomingEnergyRate.amount === 0 || incomingEnergyRate.type !== EnergyType.ELECTRICAL ) {
@@ -306,8 +306,8 @@ define( function( require ) {
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
 
       // simulate energy chunks moving through the system
-      var preLoadComplete = false;
-      while ( !preLoadComplete ) {
+      var preloadComplete = false;
+      while ( !preloadComplete ) {
         energySinceLastChunk += incomingEnergyRate.amount * dt;
 
         // determine if time to add a new chunk
@@ -337,7 +337,7 @@ define( function( require ) {
         if ( this.heatingElementEnergyChunkMovers.length > 0 ) {
 
           // an energy chunk has made it to the heating element, which completes the preload
-          preLoadComplete = true;
+          preloadComplete = true;
         }
       }
     },

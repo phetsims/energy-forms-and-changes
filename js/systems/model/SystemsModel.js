@@ -184,14 +184,14 @@ define( function( require ) {
      * propagated into the elements.
      * @private
      */
-    preLoadEnergyChunks: function() {
+    preloadEnergyChunks: function() {
       var source = this.energySourcesCarousel.getSelectedElement();
       var converter = this.energyConvertersCarousel.getSelectedElement();
       var user = this.energyUsersCarousel.getSelectedElement();
 
-      source.preLoadEnergyChunks();
-      converter.preLoadEnergyChunks( source.getEnergyOutputRate() );
-      user.preLoadEnergyChunks( converter.getEnergyOutputRate() );
+      source.preloadEnergyChunks();
+      converter.preloadEnergyChunks( source.getEnergyOutputRate() );
+      user.preloadEnergyChunks( converter.getEnergyOutputRate() );
     }
   } );
 } );

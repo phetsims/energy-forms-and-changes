@@ -275,7 +275,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {
+    preloadEnergyChunks: function() {
       this.clearEnergyChunks();
 
       // Return if no chunks to add.
@@ -283,12 +283,12 @@ define( function( require ) {
         return;
       }
 
-      var preLoadComplete = false;
+      var preloadComplete = false;
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
 
       // Simulate energy chunks moving through the system.
-      while ( !preLoadComplete ) {
+      while ( !preloadComplete ) {
         energySinceLastChunk += this.energyProductionRateProperty.get() * dt;
 
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
@@ -317,7 +317,7 @@ define( function( require ) {
 
         if ( this.outgoingEnergyChunks.length > 0 ) {
           // An energy chunk has traversed to the output of this system, completing the preload.
-          preLoadComplete = true;
+          preloadComplete = true;
         }
       }
     },

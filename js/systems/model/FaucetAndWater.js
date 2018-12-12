@@ -224,7 +224,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {
+    preloadEnergyChunks: function() {
       this.clearEnergyChunks();
 
       // define translation function here to avoid creating anonymous function inside loop
@@ -234,12 +234,12 @@ define( function( require ) {
         } );
       }
 
-      var preLoadTime = 3; // In seconds, empirically determined.
+      var preloadTime = 3; // In seconds, empirically determined.
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       var tempEnergyChunkList = [];
 
       // simulate energy chunks moving through the system
-      while ( preLoadTime > 0 ) {
+      while ( preloadTime > 0 ) {
         this.energySinceLastChunk += this.getEnergyOutputRate().amount * dt;
         if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           tempEnergyChunkList.push( this.createNewChunk() );
@@ -249,7 +249,7 @@ define( function( require ) {
         // make the chunks fall
         translateChunks( tempEnergyChunkList, dt );
 
-        preLoadTime -= dt;
+        preloadTime -= dt;
       }
 
       // now that they are positioned, add these to the 'real' list of energy chunks

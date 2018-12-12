@@ -250,7 +250,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function( incomingEnergy ) {
+    preloadEnergyChunks: function( incomingEnergy ) {
 
       this.clearEnergyChunks();
 
@@ -267,10 +267,10 @@ define( function( require ) {
       var crossLineLength = lowerLeftOfPanel.distance( upperRightOfPanel );
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
-      var preLoadComplete = false;
+      var preloadComplete = false;
 
       // simulate energy chunks moving through the system
-      while ( !preLoadComplete ) {
+      while ( !preloadComplete ) {
 
         // full energy rate generates too many chunks, so an adjustment factor is used
         energySinceLastChunk += incomingEnergy.amount * dt * 0.4;
@@ -316,7 +316,7 @@ define( function( require ) {
         if ( this.outgoingEnergyChunks.length > 0 ) {
 
           // an energy chunk has made it all the way through the system, which completes the pre-load
-          preLoadComplete = true;
+          preloadComplete = true;
         }
       }
     },

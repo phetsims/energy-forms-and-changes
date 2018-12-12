@@ -311,7 +311,7 @@ define( function( require ) {
      * @public
      * @override
      */
-    preLoadEnergyChunks: function() {
+    preloadEnergyChunks: function() {
       // no-op for Biker
     },
 
