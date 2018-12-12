@@ -60,7 +60,8 @@ define( function( require ) {
       verticalPipeLength: 40,
       scale: 0.45,
       x: faucetHeadOrigin.x,
-      y: faucetHeadOrigin.y
+      y: faucetHeadOrigin.y,
+      closeOnRelease: false
     } );
 
     // create the energy chunk layer
