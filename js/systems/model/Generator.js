@@ -109,7 +109,8 @@ define( function( require ) {
           this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
         }
 
-      } else {
+      }
+      else {
 
         // treat the wheel like it is being moved from an external energy, such as water, and has inertia
         var torqueFromIncomingEnergy = 0;
@@ -210,7 +211,7 @@ define( function( require ) {
         }
 
         var chunk = mover.energyChunk;
-        switch ( chunk.energyTypeProperty.get() ) {
+        switch( chunk.energyTypeProperty.get() ) {
           case EnergyType.MECHANICAL:
 
             // This mechanical energy chunk has traveled to the end of its path, so change it to electrical and send it
@@ -282,11 +283,19 @@ define( function( require ) {
 
       // simulate energy chunks moving through the system
       var preloadComplete = false;
+
+      // skip every other visual chunk to match the usual rate of chunks flowing through the generator. this is needed
+      // because there is visual energy chunk loss (e.g. every other chunks from the faucet comes into the generator,
+      // but the actual incoming energy is constant so that the generator wheel spins at a constant speed). so, since
+      // more energy is being converted than visually shown, we need to stay consistent with that idea here and only
+      // preload chunks for about half as much energy that is incoming
+      var skipThisChunk = true;
+
       while ( !preloadComplete ) {
         energySinceLastChunk += incomingEnergy.amount * dt;
 
         // determine if time to add a new chunk
-        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK && !skipThisChunk ) {
           var newChunk = new EnergyChunk( EnergyType.MECHANICAL,
             this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
             Vector2.ZERO,
@@ -303,6 +312,11 @@ define( function( require ) {
 
           // update energy since last chunk
           energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+          skipThisChunk = true;
+        }
+        else if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+          skipThisChunk = false;
         }
 
         this.updateEnergyChunkPositions( dt );
