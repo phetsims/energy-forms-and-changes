@@ -287,7 +287,8 @@ define( function( require ) {
 
         // determine if time to add a new chunk
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-          var newChunk = new EnergyChunk( EnergyType.MECHANICAL,
+          var newChunk = new EnergyChunk(
+            EnergyType.MECHANICAL,
             this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
             Vector2.ZERO,
             this.energyChunksVisibleProperty

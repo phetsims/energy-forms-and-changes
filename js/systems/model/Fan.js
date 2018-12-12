@@ -4,12 +4,14 @@
  * A class for the fan, which is an energy user
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 define( function( require ) {
   'use strict';
 
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyChunkPathMover' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -349,15 +351,60 @@ define( function( require ) {
      * @override
      */
     preloadEnergyChunks: function( incomingEnergy ) {
+
       this.clearEnergyChunks();
 
-      if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+      if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
+           incomingEnergy.type !== EnergyType.ELECTRICAL ) {
 
         // no energy chunk pre-loading needed
         return;
       }
-    }
 
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99; // prime the pump
+      var timeSimulated = 0; // in seconds
+
+      // simulate energy chunks moving through the system, have a time limit to prevent infinite loops
+      var preloadComplete = false;
+      while ( !preloadComplete && timeSimulated < 10 ) {
+
+        energySinceLastChunk += incomingEnergy.amount * dt;
+        timeSimulated += dt;
+
+        // determine if time to add a new chunk
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          var newEnergyChunk = new EnergyChunk(
+            EnergyType.ELECTRICAL,
+            this.positionProperty.value.plus( OFFSET_TO_WIRE_START ),
+            Vector2.ZERO,
+            this.energyChunksVisibleProperty
+          );
+
+          this.energyChunkList.push( newEnergyChunk );
+
+          // add a "mover" that will move this energy chunk through the wire to the heating element
+          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+            newEnergyChunk,
+            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY
+          ) );
+
+          // update energy since last chunk
+          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        this.moveElectricalEnergyChunks( dt );
+        this.moveRadiatedEnergyChunks( dt );
+        this.moveBlownEnergyChunks( dt );
+
+        if ( this.mechanicalEnergyChunkMovers.length >= 4 ) {
+
+          // a few mechanical energy chunks are moving away from the fan, which completes the preload
+          preloadComplete = true;
+        }
+      }
+    }
   } );
 } );
 

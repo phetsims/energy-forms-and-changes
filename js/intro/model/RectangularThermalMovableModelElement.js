@@ -392,14 +392,14 @@ define( function( require ) {
 
       var energyChunkBounds = this.thermalContactArea;
       while ( this.getNumEnergyChunks() < targetNumChunks ) {
-        // Add a chunk at a random location in the block.
+
+        // add a chunk at a random location in the block
         var location = EnergyChunkDistributor.generateRandomLocation( energyChunkBounds );
         var chunk = new EnergyChunk( EnergyType.THERMAL, location, Vector2.ZERO, this.energyChunksVisibleProperty );
-        // console.log( 'RTMME: adding chunk at ', location );
         this.addEnergyChunk( chunk );
       }
 
-      // Distribute the energy chunks within the container.
+      // distribute the energy chunks within the container
       var i;
       for ( i = 0; i < 1000; i++ ) {
         if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
