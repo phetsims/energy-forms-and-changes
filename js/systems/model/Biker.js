@@ -385,7 +385,8 @@ define( function( require ) {
           EnergyType.CHEMICAL,
           position,
           Vector2.ZERO,
-          this.energyChunksVisibleProperty );
+          this.energyChunksVisibleProperty
+        );
 
         this.energyChunkList.add( newEnergyChunk );
       }

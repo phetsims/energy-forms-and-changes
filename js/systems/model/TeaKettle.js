@@ -128,7 +128,8 @@ define( function( require ) {
             EnergyType.THERMAL,
             initialPosition,
             Vector2.ZERO,
-            this.energyChunksVisibleProperty );
+            this.energyChunksVisibleProperty
+          );
 
           this.energyChunkList.push( energyChunk );
 
