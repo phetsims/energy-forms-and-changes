@@ -209,7 +209,12 @@ define( function( require ) {
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value * dt;
 
       // add incoming energy to delay queue
-      this.flowEnergyDelay.push( new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2, { creationTime: new Date().getTime() } ) );
+      this.flowEnergyDelay.push( new Energy(
+        EnergyType.MECHANICAL,
+        energyAmount,
+        -Math.PI / 2,
+        { creationTime: new Date().getTime() } )
+      );
 
       // send along saved energy values if enough time has passed
       if ( this.flowEnergyDelay[ 0 ].creationTime + FALLING_WATER_DELAY * 1000 <= new Date().getTime() ) {
@@ -276,6 +281,7 @@ define( function( require ) {
     deactivate: function() {
       this.flowProportionProperty.reset();
       this.waterDrops.length = 0;
+      this.flowEnergyDelay.length = 0;
       EnergySource.prototype.deactivate.call( this );
     },
 
