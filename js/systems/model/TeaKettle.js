@@ -299,7 +299,12 @@ define( function( require ) {
 
           var energyType = phet.joist.random.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
 
-          var newEnergyChunk = new EnergyChunk( energyType, initialPosition, this.energyChunksVisibleProperty );
+          var newEnergyChunk = new EnergyChunk(
+            energyType,
+            initialPosition,
+            Vector2.ZERO,
+            this.energyChunksVisibleProperty
+          );
           this.energyChunkList.push( newEnergyChunk );
 
           var travelDistance = newEnergyChunk.positionProperty.get().distance(
