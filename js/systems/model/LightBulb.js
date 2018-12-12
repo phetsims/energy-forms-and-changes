@@ -247,18 +247,19 @@ define( function( require ) {
       }
 
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
-      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99; // prime the pump
 
       // simulate energy chunks moving through the system
       var preloadComplete = false;
       while ( !preloadComplete ) {
-        this.energySinceLastChunk += incomingEnergy.amount * dt;
+        energySinceLastChunk += incomingEnergy.amount * dt;
 
         // determine if time to add a new chunk
-        if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           var newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
             this.positionProperty.value.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
+            Vector2.ZERO,
             this.energyChunksVisibleProperty
           );
 
@@ -278,13 +279,11 @@ define( function( require ) {
         this.moveElectricalEnergyChunks( dt );
         this.moveFilamentEnergyChunks( dt );
 
-        // TODO: This is short circuited while trying to get preloading to work, must be fixed.
-        preloadComplete = true;
-        // if ( this.radiatedEnergyChunkMovers.length > 1 ) {
-        //
-        //   // a couple of chunks are radiating, which completes the pre-load
-        //   preloadComplete = true;
-        // }
+        if ( this.radiatedEnergyChunkMovers.length > 1 ) {
+
+          // a couple of chunks are radiating, which completes the pre-load
+          preloadComplete = true;
+        }
       }
     },
 
