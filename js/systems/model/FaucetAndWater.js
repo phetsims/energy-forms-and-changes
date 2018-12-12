@@ -253,7 +253,9 @@ define( function( require ) {
       }
 
       // now that they are positioned, add these to the 'real' list of energy chunks
-      this.energyChunkList.concat( tempEnergyChunkList );
+      tempEnergyChunkList.forEach( function( ec ) {
+        this.energyChunkList.push( ec );
+      } );
     },
 
     /**
@@ -263,7 +265,7 @@ define( function( require ) {
      */
     getEnergyOutputRate: function() {
       var energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
-      assert && assert( energyAmount > 0, 'EnergyAmount is ' + energyAmount );
+      assert && assert( energyAmount >= 0, 'EnergyAmount is ' + energyAmount );
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     },
 

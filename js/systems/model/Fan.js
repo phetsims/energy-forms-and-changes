@@ -341,7 +341,23 @@ define( function( require ) {
       this.radiatedEnergyChunkMovers.length = 0;
       this.mechanicalEnergyChunkMovers.length = 0;
       this.incomingEnergyChunks.length = 0;
+    },
+
+    /**
+     * @param {Energy} incomingEnergy
+     * @public
+     * @override
+     */
+    preloadEnergyChunks: function( incomingEnergy ) {
+      this.clearEnergyChunks();
+
+      if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+
+        // no energy chunk pre-loading needed
+        return;
+      }
     }
+
   } );
 } );
 

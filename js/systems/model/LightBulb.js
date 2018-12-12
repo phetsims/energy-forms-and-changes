@@ -278,11 +278,13 @@ define( function( require ) {
         this.moveElectricalEnergyChunks( dt );
         this.moveFilamentEnergyChunks( dt );
 
-        if ( this.radiatedEnergyChunkMovers.length > 1 ) {
-
-          // a couple of chunks are radiating, which completes the pre-load
-          preloadComplete = true;
-        }
+        // TODO: This is short circuited while trying to get preloading to work, must be fixed.
+        preloadComplete = true;
+        // if ( this.radiatedEnergyChunkMovers.length > 1 ) {
+        //
+        //   // a couple of chunks are radiating, which completes the pre-load
+        //   preloadComplete = true;
+        // }
       }
     },
 

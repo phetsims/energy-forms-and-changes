@@ -109,8 +109,16 @@ define( function( require ) {
       self.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
       self.generator.directCouplingModeProperty.set( bikerAndGeneratorSelected );
     }
+
     this.energySourcesCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
     this.energyConvertersCarousel.animationInProgressProperty.link( beltVisibilityUpdated );
+
+    // monitor the visibility of the energy chunks and make sure they are in the right places when this changes
+    this.energyChunksVisibleProperty.link( function( energyChunksVisible ) {
+      if ( energyChunksVisible ) {
+        self.preloadEnergyChunks();
+      }
+    } );
   }
 
   energyFormsAndChanges.register( 'SystemsModel', SystemsModel );

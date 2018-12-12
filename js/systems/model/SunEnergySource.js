@@ -234,7 +234,7 @@ define( function( require ) {
       }
 
       // remove any chunks that actually made it to the solar panel
-      this.outgoingEnergyChunks.clear();
+      this.outgoingEnergyChunks.length = 0;
     },
 
     /**

@@ -289,12 +289,14 @@ define( function( require ) {
 
             // choose a random location along the center portion of the cross line
             initialPosition = lowerLeftOfPanel.plus(
-              new Vector2( crossLineLength * ( 0.5 * phet.joist.random.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle ) );
+              new Vector2( crossLineLength * ( 0.5 * phet.joist.random.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle )
+            );
           }
 
           var newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
             initialPosition,
+            Vector2.ZERO,
             this.energyChunksVisibleProperty
           );
 
