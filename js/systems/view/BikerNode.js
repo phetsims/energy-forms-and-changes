@@ -169,7 +169,7 @@ define( function( require ) {
     var feedMeButton = new RectangularPushButton( {
       content: new Text( feedMeString, { font: new PhetFont( 18 ), maxWidth: 100 } ),
       listener: function() {
-        biker.replenishEnergyChunks();
+        biker.replenishBikerEnergyChunks();
       },
       baseColor: 'rgba(0,220,0,1)',
       centerX: cyclistTorsoNodes[ 0 ].centerTop.x,

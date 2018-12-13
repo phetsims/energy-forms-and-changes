@@ -48,7 +48,7 @@ define( function( require ) {
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty
+   * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
    * @constructor
    */
   function Biker( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty ) {
@@ -88,7 +88,7 @@ define( function( require ) {
     }
 
     // add initial set of energy chunks
-    this.replenishEnergyChunks();
+    this.replenishBikerEnergyChunks();
 
     // get the crank into a position where animation will start right away
     this.setCrankToPoisedPosition();
@@ -306,13 +306,56 @@ define( function( require ) {
     },
 
     /**
-     * For the biker, pre-loading of energy chunks isn't necessary, since they are being maintained even when visibility
-     * is turned off.
      * @public
      * @override
      */
     preloadEnergyChunks: function() {
-      // no-op for Biker
+
+      // Return if biker is not pedaling, or is out of energy, or is not hooked up to a compatible system
+      if ( this.targetCrankAngularVelocityProperty.get() === 0 ||
+           !this.bikerHasEnergy() ||
+           !this.mechanicalPoweredSystemIsNextProperty.get() ) {
+        return;
+      }
+
+      var preloadComplete = false;
+      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+      var fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
+
+      // Simulate energy chunks moving through the system.
+      while ( !preloadComplete ) {
+
+        if ( this.outgoingEnergyChunks.length > 0 ) {
+
+          // An energy chunk has traversed to the output of this system, completing the preload. If enough chunks are
+          // already in the biker system, then we may not need to preload any, either, so check this condition before
+          // adding the first pre-loaded chunk.
+          preloadComplete = true;
+          break;
+        }
+
+        energySinceLastChunk += MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * fractionalVelocity * dt;
+
+        // decide if new chem energy chunk should start on its way
+        if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+
+          // we know the biker is not out of energy, so get one of the remaining chunks
+          var energyChunk = this.findNonMovingEnergyChunk();
+          this.energyChunkMovers.push( new EnergyChunkPathMover(
+            energyChunk,
+            this.createChemicalEnergyChunkPath( this.positionProperty.value ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY )
+          );
+          energySinceLastChunk = 0;
+
+          // add back what we just took from the biker's energy, since we want to preserve the biker's energy state.
+          this.addEnergyChunkToBiker();
+        }
+
+        // Update energy chunk positions.
+        this.moveEnergyChunks( dt );
+      }
     },
 
     /**
@@ -347,7 +390,7 @@ define( function( require ) {
      */
     activate: function() {
       EnergySource.prototype.activate.call( this );
-      this.replenishEnergyChunks();
+      this.replenishBikerEnergyChunks();
     },
 
     /**
@@ -374,23 +417,31 @@ define( function( require ) {
      * add/restore initial number of energy chunks to biker
      * @public
      */
-    replenishEnergyChunks: function() {
-      var nominalInitialOffset = new Vector2( 0.019, 0.055 );
-
+    replenishBikerEnergyChunks: function() {
       for ( var i = 0; i < INITIAL_NUMBER_OF_ENERGY_CHUNKS; i++ ) {
-        var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
-        var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
-
-        var newEnergyChunk = new EnergyChunk(
-          EnergyType.CHEMICAL,
-          position,
-          Vector2.ZERO,
-          this.energyChunksVisibleProperty
-        );
-
-        this.energyChunkList.add( newEnergyChunk );
+        this.addEnergyChunkToBiker();
       }
     },
+
+    /**
+     * add one energy chunk to biker
+     * @public
+     */
+    addEnergyChunkToBiker: function() {
+      var nominalInitialOffset = new Vector2( 0.019, 0.055 );
+      var displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
+      var position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
+
+      var newEnergyChunk = new EnergyChunk(
+        EnergyType.CHEMICAL,
+        position,
+        Vector2.ZERO,
+        this.energyChunksVisibleProperty
+      );
+
+      this.energyChunkList.add( newEnergyChunk );
+    },
+
 
     /**
      * find the image index corresponding to this angle in radians
