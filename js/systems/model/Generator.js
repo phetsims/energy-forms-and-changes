@@ -287,8 +287,8 @@ define( function( require ) {
       // skip every other visual chunk to match the usual rate of chunks flowing through the generator. this is needed
       // because there is visual energy chunk loss (e.g. every other chunks from the faucet comes into the generator,
       // but the actual incoming energy is constant so that the generator wheel spins at a constant speed). so, since
-      // more energy is being converted than visually shown, we need to stay consistent with that idea here and only
-      // preload chunks for about half as much energy that is incoming
+      // more energy is being converted than visually shown, we need to stay consistent with that practice here and only
+      // preload chunks for half as much energy that is incoming
       var skipThisChunk = true;
 
       while ( !preloadComplete ) {
