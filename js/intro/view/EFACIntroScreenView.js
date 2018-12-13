@@ -458,7 +458,7 @@ define( function( require ) {
     // Add the checkbox controls
     var controlPanelCheckboxes = new VBox( {
       children: [ showEnergyCheckbox, linkHeatersCheckbox ],
-      spacing: 5,
+      spacing: 8,
       align: 'left'
     } );
     var controlPanel = new Panel( controlPanelCheckboxes, {
@@ -466,7 +466,9 @@ define( function( require ) {
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
-      rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET )
+      rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
+      minWidth: 215,
+      maxWidth: 250
     } );
     this.addChild( controlPanel );
 
