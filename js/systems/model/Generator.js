@@ -270,18 +270,18 @@ define( function( require ) {
      * @override
      */
     preloadEnergyChunks: function( incomingEnergy ) {
-      this.clearEnergyChunks();
 
+      // in most system elements, we clear energy chunks before checking if incomingEnergy.amount === 0, but since the
+      // generator wheel has rotational inertia, we leave the remaining chunks on their way, which looks more accurate.
       if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.MECHANICAL ) {
 
         // no energy chunk pre-loading needed
         return;
       }
+      this.clearEnergyChunks();
 
       var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
-
-      // simulate energy chunks moving through the system
       var preloadComplete = false;
 
       // skip every other visual chunk to match the usual rate of chunks flowing through the generator. this is needed
@@ -291,6 +291,7 @@ define( function( require ) {
       // preload chunks for half as much energy that is incoming
       var skipThisChunk = true;
 
+      // simulate energy chunks moving through the system
       while ( !preloadComplete ) {
         energySinceLastChunk += incomingEnergy.amount * dt;
 
