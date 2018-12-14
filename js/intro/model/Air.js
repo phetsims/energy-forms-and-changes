@@ -155,20 +155,24 @@ define( function( require ) {
         if ( excessEnergy === 0 ) {
 
           // container is below max temperature - exchange energy normally
-          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.energyContainerCategory, energyContainer.energyContainerCategory );
+          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
+            this.energyContainerCategory,
+            energyContainer.energyContainerCategory
+          );
           var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
           var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-          var i;
-          for ( i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
+          for ( var i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
             var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
-            var thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) * thermalContactLength * heatTransferConstant * timeStep;
+            var thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) *
+                                      thermalContactLength * heatTransferConstant * timeStep;
             energyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
           }
         }
         else {
 
-          // item is at max temperature - shed all excess energy into the air
+          // Item is at max temperature - shed all excess energy into the air.  This is generally for the case where a
+          // fluid is boiling, and all energy beyond the boiling point is being release as steam.
           energyContainer.changeEnergy( -excessEnergy );
           this.changeEnergy( excessEnergy );
         }
