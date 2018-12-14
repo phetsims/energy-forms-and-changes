@@ -394,6 +394,13 @@ define( function( require ) {
         } );
 
         self.beakers.forEach( function( beaker ) {
+
+          if ( beaker === container1 ) {
+
+            // bail if testing against self
+            return;
+          }
+
           if ( beaker.thermalContactArea.containsPoint( container1.getBounds() ) ) {
 
             // this model element is immersed in the beaker
@@ -405,6 +412,7 @@ define( function( require ) {
         if ( !contactWithOtherMovableElement ||
              ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
                                       container1.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
+
           self.air.exchangeEnergyWith( container1, dt );
 
           if ( container1.getEnergyChunkBalance() > 0 ) {
