@@ -142,9 +142,7 @@ define( function( require ) {
       }
 
       // free allocations
-      _.values( chunkForces, function( chunkForceVector ) {
-        chunkForceVector.freeToPool();
-      } );
+      _.values( chunkForces ).forEach( function( chunkForceVector ) { chunkForceVector.freeToPool(); } );
       return particlesRedistributed;
     },
 
