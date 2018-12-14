@@ -335,7 +335,7 @@ define( function( require ) {
         this.temperatureProperty.value,
         EFACConstants.ROOM_TEMPERATURE
       );
-      return Math.max( mappingFunction.evaluate( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
+      return Math.max( mappingFunction( heightAboveWater ), EFACConstants.ROOM_TEMPERATURE );
     },
 
     /**
