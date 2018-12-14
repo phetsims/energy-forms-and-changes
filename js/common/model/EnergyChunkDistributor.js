@@ -2,7 +2,7 @@
 
 /**
  * A static object that contains methods for redistributing a set of energy chunks within a shape in order to make them
- * spready out fairly evenly in a way that looks dynamic and real.  The basic approach is to simulate a set of particles
+ * spread out fairly evenly in a way that looks dynamic and real.  The basic approach is to simulate a set of particles
  * embedded in a fluid, and each particle repels all others as well as the edges of the containers.
  *
  * Reuse Notes: This could probably be generalized fairly easily to distribute any number items within a container of
@@ -73,24 +73,18 @@ define( function( require ) {
       // unique ID.
       var chunkForces = {}; // map of chunkID (number) => force (Vector2)
       var chunkMap = {}; // map of chunkID (number) => chunk (EnergyChunk)
+      var mapSize = 0;
       slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( chunk ) {
           chunkForces[ chunk.id ] = Vector2.createFromPool( 0, 0 );
           chunkMap[ chunk.id ] = chunk;
+          mapSize++;
         } );
       } );
 
-      // get the size of the map above
-      var mapSize = 0;
-      for ( var force in chunkForces ) {
-        if ( chunkForces.hasOwnProperty( force ) ) {
-          mapSize++;
-        }
-      }
-
       // make sure that there is actually something to distribute
       if ( mapSize === 0 ) {
-        return false; // nothing to do - abort
+        return false; // nothing to do - bail out
       }
 
       // Determine the minimum distance that is allowed to be used in the force calculations.  This prevents hitting
@@ -99,7 +93,7 @@ define( function( require ) {
 
       // The particle repulsion force varies inversely with the density of particles so that we don't end up with hugely
       // repulsive forces that tend to push the particles out of the container.  This formula was made up, and can be
-      // adjusted if needed.
+      // adjusted or even replaced if needed.
       var forceConstant = ENERGY_CHUNK_MASS * boundingRect.width * boundingRect.height * 0.1 / mapSize;
 
       // divide the time step up into the largest value known to work consistently for the algorithm
@@ -131,7 +125,8 @@ define( function( require ) {
 
               // point is outside container, move it towards center of shape
               chunkForces[ chunk.id ].freeToPool();
-              var vectorToCenter = Vector2.createFromPool( boundingRect.centerX, boundingRect.centerY ).subtract( chunk.positionProperty.value );
+              var vectorToCenter = Vector2.createFromPool( boundingRect.centerX, boundingRect.centerY )
+                .subtract( chunk.positionProperty.value );
               chunkForces[ chunk.id ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
             }
           } );
@@ -145,6 +140,11 @@ define( function( require ) {
           this.stepChunks( chunkMap, timeStep );
         }
       }
+
+      // free allocations
+      _.values( chunkForces, function( chunkForceVector ) {
+        chunkForceVector.freeToPool();
+      } );
       return particlesRedistributed;
     },
 
@@ -157,10 +157,10 @@ define( function( require ) {
       var topLength = Math.max( chunk.positionProperty.value.y - containerBounds.minY, minDistance );
 
       // calculate the force from the edge at the given angle
-      var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( rightLength, 2 ), 0 ).rotated( Math.PI );
-      var bottomEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( bottomLength, 2 ), 0 ).rotated( Math.PI * 1.5 );
-      var leftEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( leftLength, 2 ), 0 ).rotated( 0 );
-      var topEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( topLength, 2 ), 0 ).rotated( Math.PI / 2 );
+      var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( rightLength, 2 ), 0 ).rotate( Math.PI );
+      var bottomEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( bottomLength, 2 ), 0 ).rotate( Math.PI * 1.5 );
+      var leftEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( leftLength, 2 ), 0 ).rotate( 0 );
+      var topEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( topLength, 2 ), 0 ).rotate( Math.PI / 2 );
 
       // apply the forces
       chunkForces[ chunk.id ] = chunkForces[ chunk.id ]
@@ -179,32 +179,43 @@ define( function( require ) {
 
       // apply the force from each of the other particles, but set some limits on the max force that can be applied
       for ( var otherEnergyChunkID in chunkForces ) {
+
         if ( chunkForces.hasOwnProperty( otherEnergyChunkID ) ) {
+
+          // skip self
           if ( chunk === chunkMap[ otherEnergyChunkID ] ) {
             continue;
           }
 
           // calculate force vector, but handle cases where too close
-          var vectorToOther = chunk.positionProperty.value.minus( chunkMap[ otherEnergyChunkID ].positionProperty.value );
-          if ( vectorToOther.magnitude() < minDistance ) {
-            if ( vectorToOther.magnitude() === 0 ) {
+          var vectorFromOther = Vector2.createFromPool(
+            chunk.positionProperty.value.x - chunkMap[ otherEnergyChunkID ].positionProperty.value.x,
+            chunk.positionProperty.value.y - chunkMap[ otherEnergyChunkID ].positionProperty.value.y
+          );
+          if ( vectorFromOther.magnitude() < minDistance ) {
+            if ( vectorFromOther.magnitude() === 0 ) {
 
               // create a random vector of min distance
               var randomAngle = phet.joist.random.nextDouble() * Math.PI * 2;
-              vectorToOther = new Vector2(
+              vectorFromOther.setXY(
                 minDistance * Math.cos( randomAngle ),
                 minDistance * Math.sin( randomAngle )
               );
             }
             else {
-              vectorToOther = vectorToOther.setMagnitude( minDistance );
+              vectorFromOther = vectorFromOther.setMagnitude( minDistance );
             }
           }
 
-          var forceToOther = vectorToOther.setMagnitude( forceConstant / vectorToOther.magnitudeSquared() );
+          var forceToOther = Vector2.createFromPool( vectorFromOther.x, vectorFromOther.y )
+            .setMagnitude( forceConstant / vectorFromOther.magnitudeSquared() );
 
           // add the force to the accumulated forces on this energy chunk
           chunkForces[ chunk.id ] = chunkForces[ chunk.id ].add( forceToOther );
+
+          // free allocations
+          vectorFromOther.freeToPool();
+          forceToOther.freeToPool();
         }
       }
     },
@@ -230,27 +241,47 @@ define( function( require ) {
           assert && assert( !_.isNaN( force.x ) && !_.isNaN( force.y ), 'force contains NaN value' );
 
           // current velocity
-          var v = chunkMap[ id ].velocity;
-          assert && assert( v.x !== Infinity && !_.isNaN( v.x ) && typeof v.x === 'number', 'v.x is ' + v.x );
-          assert && assert( v.y !== Infinity && !_.isNaN( v.y ) && typeof v.y === 'number', 'v.y is ' + v.y );
+          var velocity = chunkMap[ id ].velocity;
+          assert && assert(
+          velocity.x !== Infinity && !_.isNaN( velocity.x ) && typeof velocity.x === 'number',
+            'velocity.x is ' + velocity.x
+          );
+          assert && assert(
+          velocity.y !== Infinity && !_.isNaN( velocity.y ) && typeof velocity.y === 'number',
+            'velocity.y is ' + velocity.y
+          );
 
           // new velocity
-          v = v.plus( force.times( dt / ENERGY_CHUNK_MASS ) );
-          assert && assert( !_.isNaN( v.x ) && !_.isNaN( v.y ), 'New v contains NaN value' );
+          var forceMultiplier = dt / ENERGY_CHUNK_MASS;
+          velocity.addXY( force.x * forceMultiplier, force.y * forceMultiplier );
+          assert && assert( !_.isNaN( velocity.x ) && !_.isNaN( velocity.y ), 'New velocity contains NaN value' );
 
-          var v2 = v.magnitudeSquared();
-          assert && assert( v2 !== Infinity && !_.isNaN( v2 ) && typeof v2 === 'number', 'v^2 is ' + v2 );
+          var velocityMagnitudeSquared = velocity.magnitudeSquared();
+          assert && assert(
+          velocityMagnitudeSquared !== Infinity && !_.isNaN( velocityMagnitudeSquared ) && typeof velocityMagnitudeSquared === 'number',
+            'velocity^2 is ' + velocityMagnitudeSquared
+          );
 
           // calculate drag force using standard drag equation
-          var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * v2;
-          var dragForce = dragMagnitude > 0 ? v.rotated( Math.PI ).setMagnitude( dragMagnitude ) : ZERO_VECTOR;
+          var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * velocityMagnitudeSquared;
+          var dragForce = ZERO_VECTOR;
+          if ( dragMagnitude > 0 ) {
+            dragForce = Vector2.createFromPool(
+              -velocity.x,
+              -velocity.y
+            );
+            dragForce.setMagnitude( dragMagnitude );
+          }
           assert && assert( !_.isNaN( dragForce.x ) && !_.isNaN( dragForce.y ), 'dragForce contains NaN value' );
 
           // update velocity based on drag force
-          chunkMap[ id ].velocity = v.plus( dragForce.times( dt / ENERGY_CHUNK_MASS ) );
+          velocity.addXY( dragForce.x * forceMultiplier, dragForce.y * forceMultiplier );
+
+          // free allocations
+          dragForce.freeToPool();
 
           // update max energy
-          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * v2 + force.magnitude() * Math.PI / 2;
+          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocityMagnitudeSquared + force.magnitude() * Math.PI / 2;
           if ( totalParticleEnergy > maxEnergy ) {
             maxEnergy = totalParticleEnergy;
           }
@@ -289,9 +320,8 @@ define( function( require ) {
 
       // update the positions of the energy chunks
       slices.forEach( function( slice ) {
-        var sliceCenter = new Vector2( slice.bounds.centerX, slice.bounds.centerY );
         slice.energyChunkList.forEach( function( energyChunk ) {
-          energyChunk.positionProperty.value = sliceCenter;
+          energyChunk.setPosition( slice.bounds.centerX, slice.bounds.centerY );
         } );
       } );
     },

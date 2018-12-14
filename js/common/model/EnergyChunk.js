@@ -37,12 +37,24 @@ define( function( require ) {
     this.id = instanceCount++;
 
     // @public {Vector2}
-    this.velocity = initialVelocity;
+    this.velocity = Vector2.createFromPool( initialVelocity.x, initialVelocity.y );
   }
 
   energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 
   return inherit( Object, EnergyChunk, {
+
+    /**
+     * set the position, uses pooled vectors so the user should be careful to use this consistently
+     * @param {number} x
+     * @param {number} y
+     * @public
+     */
+    setPosition: function( x, y ) {
+      var oldPosition = this.positionProperty.get();
+      this.positionProperty.set( Vector2.createFromPool( x, y ) );
+      oldPosition.freeToPool();
+    },
 
     /**
      * translate the energy chunk by amount specified
