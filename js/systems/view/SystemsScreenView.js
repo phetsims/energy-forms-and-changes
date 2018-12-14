@@ -151,7 +151,9 @@ define( function( require ) {
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
       right: layoutBounds.maxX - EDGE_INSET,
-      top: EDGE_INSET
+      top: EDGE_INSET,
+      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
+      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MAX_WIDTH
     } );
 
     // add the energy chunk legend

@@ -467,8 +467,8 @@ define( function( require ) {
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
       rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
-      minWidth: 215,
-      maxWidth: 250
+      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
+      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MAX_WIDTH
     } );
     this.addChild( controlPanel );
 
