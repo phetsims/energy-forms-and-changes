@@ -40,6 +40,9 @@ define( function( require ) {
     var self = this;
     BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
+    // @private
+    this.beaker = beaker;
+
     // variables for creating reusable shapes for doing the updates to the clipping areas
     var beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
     var beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
@@ -129,11 +132,37 @@ define( function( require ) {
       // would not work for more than two blocks, see the code and comments below for details.
       assert && assert( blocks.length <= 2, 'number of blocks exceeds what this method is designed to handle' );
 
+      // index for C-style loops, which are used to maximize performance
+      var i;
+
+      // hoisted block variable
+      var block;
+
+      // if neither of the blocks is in the beaker then there are no "holes" to add
+      var blocksInBeaker = [];
+      for ( i = 0; i < blocks.length; i++ ) {
+        block = blocks[ i ];
+        if ( this.beaker.beakerBounds.containsPoint( block.positionProperty.value ) ||
+             this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
+          blocksInBeaker.push( block );
+          break;
+        }
+      }
+      if ( !blocksInBeaker.length === 0 ) {
+
+        // nothing to do, bail
+        return;
+      }
+
       // use the bounds of the shape for faster tests, assumes that it is rectangular
       var chipAreaShapeBounds = clipAreaShape.bounds;
 
       // determine whether the blocks are stacked upon each other
-      var blocksAreStacked = blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) || blocks[ 1 ].isStackedUpon( blocks[ 0 ] );
+      var blocksAreStacked = false;
+      if ( blocksInBeaker.length === 2 ) {
+        blocksAreStacked = blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ||
+                           blocksInBeaker[ 1 ].isStackedUpon( blocksInBeaker[ 0 ] );
+      }
 
       if ( blocksAreStacked ) {
 
@@ -141,11 +170,11 @@ define( function( require ) {
         // shapes are drawn separately and the overlap in the clipping area, a space is created where the energy chunks
         // aren't occluded.
         var bottomBlock;
-        if ( blocks[ 0 ].isStackedUpon( blocks[ 1 ] ) ) {
-          bottomBlock = blocks[ 1 ];
+        if ( blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ) {
+          bottomBlock = blocksInBeaker[ 1 ];
         }
         else {
-          bottomBlock = blocks[ 0 ];
+          bottomBlock = blocksInBeaker[ 0 ];
         }
 
         var bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
@@ -166,8 +195,8 @@ define( function( require ) {
       else {
 
         // C-style loop for best performance
-        for ( var i = 0; i < blocks.length; i++ ) {
-          var block = blocks[ i ];
+        for ( i = 0; i < blocksInBeaker.length; i++ ) {
+          block = blocksInBeaker[ i ];
           var blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
 
           // The following code makes some assumptions that are known to be true for the EFAC simulation but which
