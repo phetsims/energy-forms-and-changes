@@ -27,7 +27,7 @@ define( function( require ) {
 
   // constants
   var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
-  var MAX_TEMPERATURE = 450; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
+  var MAX_TEMPERATURE = 600; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
   var BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;

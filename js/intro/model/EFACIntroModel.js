@@ -56,7 +56,7 @@ define( function( require ) {
 
   // Threshold of temperature difference between the bodies in a multi-body system below which energy can be exchanged
   // with air.
-  var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 2.0; // in degrees K, empirically determined
+  var MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE = 5.0; // in degrees K, empirically determined
 
   /**
    * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
@@ -375,9 +375,9 @@ define( function( require ) {
       this.thermalContainers.forEach( function( container1 ) {
 
         // set up some variables that are used to decide whether or not energy should be exchanged with air
-        var contactWithOtherMovableElement = false;
+        var inContactWithOtherMovableElement = false;
         var immersedInBeaker = false;
-        var maxTemperatureDifference = 0;
+        var maxTemperatureDifferential = 0;
 
         // figure out the max temperature difference between touching energy containers
         self.thermalContainers.forEach( function( container2 ) {
@@ -385,10 +385,10 @@ define( function( require ) {
             return;
           }
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
-            contactWithOtherMovableElement = true;
-            maxTemperatureDifference = Math.max(
+            inContactWithOtherMovableElement = true;
+            maxTemperatureDifferential = Math.max(
               Math.abs( container1.getTemperature() - container2.getTemperature() ),
-              maxTemperatureDifference
+              maxTemperatureDifferential
             );
           }
         } );
@@ -408,9 +408,15 @@ define( function( require ) {
           }
         } );
 
-        // exchange energy and energy chunks with the air if appropriate conditions are met
-        if ( !contactWithOtherMovableElement ||
-             ( !immersedInBeaker && ( maxTemperatureDifference < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
+        // Exchange energy and energy chunks with the air if appropriate conditions are met.  The logic here is a little
+        // tricky, so here's the intent: If a thermal model element is on its own and not in contact with any other
+        // thermal model elements, go ahead and exchange energy with the air.  If a block is inside a beaker, it
+        // shouldn't exchange energy with the air (the beaker will do that, and the block will exchange with the
+        // beaker).  If blocks are stacked, or a beaker is on a block, allow them to equilibrate quite a bit before
+        // starting to exchange energy with the air.  This is a bit of "hollywooding" that is done to make it easier to
+        // observe the equilibration process.
+        if ( !inContactWithOtherMovableElement ||
+             ( !immersedInBeaker && ( maxTemperatureDifferential < MIN_TEMPERATURE_DIFF_FOR_MULTI_BODY_AIR_ENERGY_EXCHANGE ||
                                       container1.getEnergyBeyondMaxTemperature() > 0 ) ) ) {
 
           self.air.exchangeEnergyWith( container1, dt );
