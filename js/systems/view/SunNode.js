@@ -47,6 +47,7 @@ define( function( require ) {
 
   // constants
   var CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
+  var CONTROL_PANEL_TEXT_MAX_WIDTH = 50;
   var SLIDER_LABEL_FONT = new PhetFont( 12 );
 
   /**
@@ -128,7 +129,8 @@ define( function( require ) {
 
     function tickLabel( label ) {
       return new Text( label, {
-        font: SLIDER_LABEL_FONT
+        font: SLIDER_LABEL_FONT,
+        maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
       } );
     }
 
@@ -136,11 +138,11 @@ define( function( require ) {
     slider.addMajorTick( 1, tickLabel( lotsString ) );
 
     var titleText = new Text( cloudsString, {
-      font: CONTROL_PANEL_TITLE_FONT
+      font: CONTROL_PANEL_TITLE_FONT,
+      maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
     } );
 
     var iconNode = new Image( cloudImage, { scale: 0.25 } );
-    iconNode.setScaleMagnitude( 0.25 );
 
     var titleBox = new HBox( {
       children: [ titleText, iconNode ],
