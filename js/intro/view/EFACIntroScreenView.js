@@ -18,6 +18,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var Checkbox = require( 'SUN/Checkbox' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -159,7 +160,8 @@ define( function( require ) {
     var leftLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.5,
-      maxWidth: leftBurnerStand.width / 1.5
+      maxWidth: leftBurnerStand.width / 1.5,
+      thumbSize: new Dimension2( 18, 36 )
     } );
     heaterCoolerFrontLayer.addChild( leftLinkableHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
@@ -180,7 +182,8 @@ define( function( require ) {
     var rightLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: rightBurnerStand.width / 1.5,
-      maxWidth: rightBurnerStand.width / 1.5
+      maxWidth: rightBurnerStand.width / 1.5,
+      thumbSize: new Dimension2( 18, 36 )
     } );
     heaterCoolerFrontLayer.addChild( rightLinkableHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
