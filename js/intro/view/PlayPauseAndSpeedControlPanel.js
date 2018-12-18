@@ -29,6 +29,7 @@ define( function( require ) {
 
   // static data
   var RADIO_BUTTON_FONT = new PhetFont( 16 );
+  var SPEED_BUTTON_MAX_WIDTH = 200; // empirically determined
 
   /**
    * @param {EFACIntroModel} model
@@ -55,8 +56,14 @@ define( function( require ) {
     } );
 
     // create the text nodes for normal and fast forward buttons
-    var normalText = new Text( normalString, { font: RADIO_BUTTON_FONT } );
-    var fastForwardText = new Text( fastForwardString, { font: RADIO_BUTTON_FONT } );
+    var normalText = new Text( normalString, {
+      font: RADIO_BUTTON_FONT,
+      maxWidth: SPEED_BUTTON_MAX_WIDTH
+    } );
+    var fastForwardText = new Text( fastForwardString, {
+      font: RADIO_BUTTON_FONT,
+      maxWidth: SPEED_BUTTON_MAX_WIDTH
+    } );
 
     // create the normal and fast forward radio buttons
     var normalButton = new AquaRadioButton( model.normalSimSpeedProperty, SimSpeed.NORMAL, normalText );
