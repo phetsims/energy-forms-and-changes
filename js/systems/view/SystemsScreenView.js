@@ -132,7 +132,10 @@ define( function( require ) {
     var showEnergyChunksCheckbox = new Checkbox(
       new LayoutBox( {
         children: [
-          new Text( energySymbolsString, { font: new PhetFont( 20 ) } ),
+          new Text( energySymbolsString, {
+            font: new PhetFont( 20 ),
+            maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
+          } ),
           new EnergyChunkNode(
             new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
             modelViewTransform
@@ -152,8 +155,7 @@ define( function( require ) {
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
       right: layoutBounds.maxX - EDGE_INSET,
       top: EDGE_INSET,
-      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
-      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MAX_WIDTH
+      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
     } );
 
     // add the energy chunk legend

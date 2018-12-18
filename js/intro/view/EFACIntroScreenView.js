@@ -436,7 +436,8 @@ define( function( require ) {
     );
     energyChunkNode.pickable = false;
     var energySymbolsText = new Text( energySymbolsString, {
-      font: new PhetFont( 20 )
+      font: new PhetFont( 20 ),
+      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
     } );
     var showEnergyCheckbox = new Checkbox( new HBox( {
       children: [ energySymbolsText, energyChunkNode ],
@@ -450,7 +451,8 @@ define( function( require ) {
       maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
     } );
     var linkHeatersText = new Text( linkHeatersString, {
-      font: new PhetFont( 20 )
+      font: new PhetFont( 20 ),
+      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
     } );
     var linkHeatersCheckbox = new Checkbox( new HBox( {
         children: [ linkHeatersText, flameNode ],
@@ -470,8 +472,7 @@ define( function( require ) {
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
       rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
-      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
-      maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MAX_WIDTH
+      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
     } );
     this.addChild( controlPanel );
 
