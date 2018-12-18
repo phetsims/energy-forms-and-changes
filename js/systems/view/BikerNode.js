@@ -167,13 +167,17 @@ define( function( require ) {
 
     // add button to replenish the biker's energy (when she runs out)
     var feedMeButton = new RectangularPushButton( {
-      content: new Text( feedMeString, { font: new PhetFont( 18 ), maxWidth: 100 } ),
+      content: new Text( feedMeString, {
+        font: new PhetFont( 18 ),
+        maxWidth: 100
+      } ),
       listener: function() {
         biker.replenishBikerEnergyChunks();
       },
       baseColor: 'rgba(0,220,0,1)',
       centerX: cyclistTorsoNodes[ 0 ].centerTop.x,
-      centerY: cyclistTorsoNodes[ 0 ].centerTop.y - 15
+      centerY: cyclistTorsoNodes[ 0 ].centerTop.y - 15,
+      minHeight: 30
     } );
     this.addChild( feedMeButton );
 
