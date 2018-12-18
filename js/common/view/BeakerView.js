@@ -184,7 +184,8 @@ define( function( require ) {
 
     // add the label, positioning it just below the front, top water line
     var label = new Text( options.label, {
-      font: LABEL_FONT
+      font: LABEL_FONT,
+      maxWidth: beakerBounds.width * 0.7 // empirically determined to look nice
     } );
     label.translation = new Vector2(
       beakerBounds.centerX - label.bounds.width / 2,
