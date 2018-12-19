@@ -242,10 +242,11 @@ define( function( require ) {
       }
 
       // distribute the energy chunks within the beaker
-      // TODO: This loop uses an arbitrary values, and that value was 1000 in the Java version of the sim, but that
-      // increases load time to an unacceptable level, so this should probably be revisited.
-      for ( var i = 0; i < 50; i++ ) {
-        EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      for ( var i = 0; i < 500; i++ ) {
+        var distributed = EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        if ( !distributed ) {
+          break;
+        }
       }
     },
 

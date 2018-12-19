@@ -135,6 +135,9 @@ define( function( require ) {
         var maxEnergy = this.updateVelocities( chunkMap, chunkForces, timeStep );
 
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
+        if ( window.phet.jb ) {
+          console.log( 'particlesRedistributed = ' + particlesRedistributed );
+        }
 
         if ( particlesRedistributed ) {
           this.stepChunks( chunkMap, timeStep );
@@ -146,6 +149,27 @@ define( function( require ) {
       return particlesRedistributed;
     },
 
+
+    /**
+     * Redistribute a set of energy chunks that are contained in energy chunk "slices" until they have reached a state
+     * in which there is little or no movement of the chunks.
+     * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
+     * @public
+     */
+    updatePositionsUntilStill: function( slices ) {
+
+    },
+
+    /**
+     * compute the forces on an energy chunk based on the edges of the container in which it is contained
+     * @param {EnergyChunk} chunk
+     * @param {Vector2[]} chunkForces
+     * @param {number} forceConstant
+     * @param {number} minDistance
+     * @param {number} maxDistance
+     * @param {Bounds2} containerBounds
+     * @private
+     */
     computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerBounds ) {
 
       // get the distance to the four different edges
@@ -224,6 +248,7 @@ define( function( require ) {
      * @param  {Object} chunkForces - Id => Vector2 pairs
      * @param  {number} dt - timestep
      * @returns {number} maxEnergy - max total energy of all provided chunks
+     * @private
      */
     updateVelocities: function( chunkMap, chunkForces, dt ) {
 

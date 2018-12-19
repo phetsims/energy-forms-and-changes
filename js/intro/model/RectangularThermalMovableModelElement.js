@@ -400,9 +400,9 @@ define( function( require ) {
       }
 
       // distribute the energy chunks within the container
-      var i;
-      for ( i = 0; i < 1000; i++ ) {
-        if ( !EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL ) ) {
+      for ( var i = 0; i < 500; i++ ) {
+        var distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        if ( !distributed ) {
           break;
         }
       }
