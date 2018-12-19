@@ -27,7 +27,7 @@ define( function( require ) {
 
   // constants
   var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
-  var MAX_TEMPERATURE = 600; // Degrees Kelvin, value is pretty much arbitrary. Whatever works.
+  var MAX_TEMPERATURE = 620; // in degrees Kelvin, see usage below for where the value comes from
   var BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
@@ -200,6 +200,15 @@ define( function( require ) {
     ,
 
     /**
+     * This function originally existed primarily in support of boiling liquids, whose temperatures should not go up
+     * after reaching a certain temperature.  In the context of a block, it is less meaningful in a true physical sense
+     * (unless we're talking about the boiling point of iron I suppose).  However, it turns out to be useful to the sim
+     * to set a max temperature beyond which the block will exchange energy with the air more quickly thus limiting how
+     * hot it will get, because this effectively limits the number of energy chunks that can end up in the block.  So,
+     * this method does return a positive value when the block is above a certain temperature, bit this behavior is what
+     * we often call "Hollywooding", since it doesn't do this for physical reason.  The max temperature values is
+     * empirically determined to be higher than the value that maxes out the thermometers, and enough above that value
+     * that two stacked blocks can both reach the max value shown on the thermometer if heated long enough.
      * @returns {number}
      * @override
      */
