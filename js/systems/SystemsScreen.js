@@ -13,19 +13,18 @@ define( function( require ) {
   // modules
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var SystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SystemsModel' );
-  var SystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SystemsScreenView' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var Screen = require( 'JOIST/Screen' );
+  var SystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SystemsModel' );
+  var SystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SystemsScreenView' );
 
   // strings
   var systemsString = require( 'string!ENERGY_FORMS_AND_CHANGES/systems' );
 
-  // TODO: include icon for screen
   // images
-  //  var systemsIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/systems-icon.png' );
-
+  var systemsScreenIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/systems_screen_icon.png' );
 
   /**
    * @param {Tandem} tandem
@@ -36,7 +35,7 @@ define( function( require ) {
     var options = {
       name: systemsString,
       backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
-      //TODO add homeScreenIcon
+      homeScreenIcon: new Image( systemsScreenIcon ),
       tandem: tandem
     };
 
