@@ -131,6 +131,9 @@ define( function( require ) {
     PLAY_PAUSE_BUTTON_RADIUS: 20,
     STEP_FORWARD_BUTTON_RADIUS: 15,
 
+    // used to scale down the element base image, which is used in multiple system elements
+    ELEMENT_BASE_WIDTH: 72,
+
     //TODO: This is not being used anywhere. Should it be?
     // model-view transform scale factor for the Systems screen
     SYSTEMS_MVT_SCALE_FACTOR: 2200,

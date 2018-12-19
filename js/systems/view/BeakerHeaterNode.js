@@ -13,6 +13,7 @@ define( function( require ) {
   // modules
   var BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/BeakerHeater' );
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -50,10 +51,12 @@ define( function( require ) {
       bottom: wireStraightNode.bottom + 2.5
     } );
     var elementBaseBackNode = new Image( elementBaseBackImage, {
+      maxWidth: EFACConstants.ELEMENT_BASE_WIDTH,
       right: wireBottomRightNode.right + 22,
       top: wireBottomRightNode.top - 2.5
     } );
     var elementBaseFrontNode = new Image( elementBaseFrontImage, {
+      maxWidth: elementBaseBackNode.width,
       centerX: elementBaseBackNode.centerX,
       top: wireBottomRightNode.top - 3
     } );
