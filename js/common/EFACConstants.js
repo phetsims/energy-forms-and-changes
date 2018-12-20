@@ -142,7 +142,7 @@ define( function( require ) {
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
     ENERGY_CHUNK_WIDTH: 19, // in screen coords, which are close to pixels. Empirically determined to look nice.
 
-    // constants that define physical parameters of various rectangular objects
+    // constants that define physical parameters of various objects
     WATER_SPECIFIC_HEAT: 3000, // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there
                                // aren't too many chunks and so that a chunk is needed as soon as heating starts.
     WATER_DENSITY: 1000.0, // In kg/m^3, source = design document (and common knowledge).
@@ -154,6 +154,7 @@ define( function( require ) {
     BLOCK_PERSPECTIVE_EDGE_PROPORTION: Math.sqrt( Math.pow( Z_TO_X_OFFSET_MULTIPLIER, 2 ) +
                                                   Math.pow( Z_TO_Y_OFFSET_MULTIPLIER, 2 ) ),
     BLOCK_PERSPECTIVE_ANGLE: Math.atan2( -Z_TO_Y_OFFSET_MULTIPLIER, -Z_TO_X_OFFSET_MULTIPLIER ),
+    FADE_COEFFICIENT_IN_AIR: 0.005,
 
     // constants for the burners.
     INITIAL_FLUID_LEVEL: 0.5,

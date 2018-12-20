@@ -33,20 +33,6 @@ define( function( require ) {
       startPoint = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
       endPoint = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
 
-      // TODO: I (jbphet) found the following commented out code during code cleanup in mid-May 2018.  Can it be removed?
-      // var transparent = 'rgba(255,255,255,0)';
-
-      // var rayGradient = new LinearGradient( start.x, start.y, end.x, end.y )
-      //   .addColorStop( 0, color )
-      //   .addColorStop( 1, transparent );
-
-      // var line = new Line( start.x, start.y, end.x, end.y, {
-      //   stroke: rayGradient,
-      //   linewidth: 3
-      // } );
-
-      // this.addChild( line );
-
       var lightRayNode = new LightRayNode( startPoint, endPoint, color );
       this.lightRayNodes.push( lightRayNode );
       this.addChild( lightRayNode );

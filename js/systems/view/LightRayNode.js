@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var KiteLine = require( 'KITE/segments/Line' ); // eslint-disable-line require-statement-match
@@ -25,7 +26,6 @@ define( function( require ) {
   // constants
   var STROKE_THICKNESS = 2;
   var SEARCH_ITERATIONS = 10;
-  var FADE_COEFFICIENT_IN_AIR = 0.005;
 
   /**
    * @param {Vector2} origin
@@ -44,7 +44,7 @@ define( function( require ) {
 
     Node.call( this );
 
-    this.updateRays();
+    this.updateRay();
   }
 
   /**
@@ -72,7 +72,7 @@ define( function( require ) {
       var self = this;
       this.lightAbsorbingShapes.push( lightAbsorbingShape );
       lightAbsorbingShape.absorptionCoefficientProperty.link( function() {
-        self.updateRays();
+        self.updateRay();
       } );
     },
 
@@ -84,17 +84,17 @@ define( function( require ) {
       // TODO: This probably works, but is not quite correct, since it should really be unlinking the added listener, not everything.
       lightAbsorbingShape.absorptionCoefficientProperty.unlinkAll();
       _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
-      this.updateRays();
+      this.updateRay();
     },
 
     /**
      * @private
      */
-    updateRays: function() {
+    updateRay: function() {
       this.removeAllChildren();
       this.pointAndFadeValues.length = 0;
 
-      this.pointAndFadeValues.push( new PointAndFadeValue( this.origin, FADE_COEFFICIENT_IN_AIR ) );
+      this.pointAndFadeValues.push( new PointAndFadeValue( this.origin, EFACConstants.FADE_COEFFICIENT_IN_AIR ) );
       this.pointAndFadeValues.push( new PointAndFadeValue( this.endpoint, 0 ) );
 
       var self = this;
@@ -107,13 +107,13 @@ define( function( require ) {
           self.pointAndFadeValues.push( new PointAndFadeValue( entryPoint, fade ) );
           var exitPoint = self.getShapeExitPoint( self.origin, self.endpoint, absorbingShape.shape );
           if ( exitPoint !== null ) {
-            self.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, FADE_COEFFICIENT_IN_AIR ) );
+            self.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, EFACConstants.FADE_COEFFICIENT_IN_AIR ) );
           }
         }
       } );
 
       // sort the list of PointAndFadeValues by their distance from the origin, closest first
-      var sorted = _.sortBy( this.pointAndFadeValues, function( p ) {
+      var sortedPointAndFadeValues = _.sortBy( this.pointAndFadeValues, function( p ) {
         return p.point.distance( self.origin );
       } );
 
@@ -122,33 +122,31 @@ define( function( require ) {
       var rayGradient = new LinearGradient( this.origin.x, this.origin.y, this.endpoint.x, this.endpoint.y )
         .addColorStop( 0, this.color );
 
-      var prevIntensity = 255;
-      for ( var i = 0; i < sorted.length - 1; i++ ) {
-        var distance = this.origin.distance( sorted[ i + 1 ].point );
-        var fractionalLength = distance / rayLength;
+      var prevIntensity = this.color.alpha;
+      for ( var i = 0; i < sortedPointAndFadeValues.length - 1; i++ ) {
+        var distanceFromOrigin = this.origin.distance( sortedPointAndFadeValues[ i + 1 ].point );
+        var distanceFromPreviousPoint = sortedPointAndFadeValues[ i ].point.distance( sortedPointAndFadeValues[ i + 1 ].point );
 
-        // var opacity = Math.floor( 255 * ( 1 - fractionalLength ) );
-        // var opacity = Math.floor( 255 * ( 1 - sorted[ i + 1 ].fadeValue ) );
-        // var opacity = Math.floor( 255 * sorted[ i + 1 ].fadeValue );
+        var intensityAtEndPoint = prevIntensity * Math.pow( Math.E, -sortedPointAndFadeValues[ i ].fadeValue * distanceFromPreviousPoint );
+        intensityAtEndPoint = Math.round( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
 
-        var intensity = Math.round( prevIntensity * Math.pow( Math.E, -sorted[ i ].fadeValue * distance ) );
+        var endPointColor = this.color.copy().setAlpha( intensityAtEndPoint );
+        rayGradient.addColorStop( distanceFromOrigin / rayLength, endPointColor );
 
-        rayGradient.addColorStop( fractionalLength, 'rgba(255,255,0,' + intensity + ')' );
-
-        prevIntensity = intensity;
+        prevIntensity = intensityAtEndPoint;
       }
-      rayGradient.addColorStop( 1, 'rgba(255,255,255,0)' );
+      rayGradient.addColorStop( 1, this.color.copy().setAlpha( 0 ) );
 
-      var fadingLine = new Line( this.origin, this.endpoint, {
+      var fadingRay = new Line( this.origin, this.endpoint, {
         stroke: rayGradient,
         lineWidth: STROKE_THICKNESS
       } );
-      this.addChild( fadingLine );
+      this.addChild( fadingRay );
     },
 
     /**
-     * @param  {KiteLine} line1
-     * @param  {KiteLine} line2
+     * @param {KiteLine} line1
+     * @param {KiteLine} line2
      * @returns {Vector2}
      * @private
      */
