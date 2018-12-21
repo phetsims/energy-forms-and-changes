@@ -135,9 +135,6 @@ define( function( require ) {
         var maxEnergy = this.updateVelocities( chunkMap, chunkForces, timeStep );
 
         particlesRedistributed = maxEnergy > REDISTRIBUTION_THRESHOLD_ENERGY;
-        if ( window.phet.jb ) {
-          console.log( 'particlesRedistributed = ' + particlesRedistributed );
-        }
 
         if ( particlesRedistributed ) {
           this.stepChunks( chunkMap, timeStep );

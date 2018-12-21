@@ -229,16 +229,9 @@ define( function( require ) {
      * @protected
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
-      var self = this;
       this.approachingEnergyChunks.remove( energyChunk );
-      var energyChunkWanderControllersCopy = this.energyChunkWanderControllers.slice( 0 );
-      energyChunkWanderControllersCopy.forEach( function( energyChunkWanderController ) {
-        if ( energyChunkWanderController.energyChunk === energyChunk ) {
-          var index = self.energyChunkWanderControllers.indexOf( energyChunkWanderController );
-          if ( index > -1 ) {
-            self.energyChunkWanderControllers.splice( index, 1 );
-          }
-        }
+      this.energyChunkWanderControllers = _.filter( this.energyChunkWanderControllers, function( wanderController ) {
+        wanderController.energyChunk !== energyChunk;
       } );
       this.addEnergyChunkToNextSlice( energyChunk );
     },

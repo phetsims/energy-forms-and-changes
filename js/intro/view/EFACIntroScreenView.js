@@ -266,7 +266,6 @@ define( function( require ) {
     beakerBackLayer.addChild( this.waterBeakerView.backNode );
     beakerBackLayer.addChild( this.oliveOilBeakerView.backNode );
     beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
-    this.waterBeakerView.grabNode.jbID = 'water beaker grab node';
     beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
 
     // the sensor layer needs to be above the movable objects
