@@ -39,7 +39,7 @@ define( require => {
       if ( !property.hasListener( this.heatCoolAmountObserver ) ) {
         property.link( this.heatCoolAmountObserver );
       }
-      this.heatCoolSlider.pickable = false;
+      this.slider.pickable = false;
     }
 
     /**
@@ -52,7 +52,7 @@ define( require => {
         property.unlink( this.heatCoolAmountObserver );
       }
       this.heatCoolAmountProperty.set( 0 ); // this should be generalized if non-snappy sliders are desired
-      this.heatCoolSlider.pickable = true;
+      this.slider.pickable = true;
     }
   }
 

@@ -193,8 +193,8 @@ define( function( require ) {
     // tell the other heater to follow it, otherwise respect its own heating Property
     Property.multilink(
       [
-        leftLinkableHeaterCoolerFront.heatCoolSlider.isThumbDraggingProperty,
-        rightLinkableHeaterCoolerFront.heatCoolSlider.isThumbDraggingProperty
+        leftLinkableHeaterCoolerFront.slider.isThumbDraggingProperty,
+        rightLinkableHeaterCoolerFront.slider.isThumbDraggingProperty
       ],
       function( isLeftThumbDragging, isRightThumbDragging ) {
         if ( model.linkedHeatersProperty.get() ) {
