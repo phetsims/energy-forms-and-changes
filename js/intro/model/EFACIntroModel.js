@@ -29,6 +29,7 @@ define( function( require ) {
   var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -219,6 +220,16 @@ define( function( require ) {
     return color;
   }
 
+  /**
+   * helper function to determine if one thermal model element is immersed in another - tests if the first element is
+   * immersed in the second
+   */
+  function isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
+    return thermalModelElement1 !== thermalModelElement2 &&
+           thermalModelElement1.blockType !== undefined &&
+           thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
+  }
+
   energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
 
   return inherit( Object, EFACIntroModel, {
@@ -354,11 +365,19 @@ define( function( require ) {
       // exchange energy chunks between movable thermal energy containers
       self.thermalContainers.forEach( function( container1, index ) {
         self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
+
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
 
             // exchange one or more chunks if appropriate
-            if ( container1.getEnergyChunkBalance() > 0 && container2.getEnergyChunkBalance() < 0 ) {
-              container2.addEnergyChunk( container1.extractEnergyChunkClosestToShape( container2.thermalContactArea ) );
+            if ( container1.getEnergyChunkBalance() > 0 ) {
+
+              // If the 2nd thermal energy container is low on energy chunks, it's a no brainer, do the transfer.  If
+              // the 1st is immersed in the 2nd, do the transfer regardless, otherwise the 1st has no way to get rid of
+              // its excess chunks and odd behavior can result, see
+              // https://github.com/phetsims/energy-forms-and-changes/issues/115#issuecomment-448810473.
+              if ( container2.getEnergyChunkBalance() < 0 || isImmersedIn( container1, container2 ) ) {
+                container2.addEnergyChunk( container1.extractEnergyChunkClosestToShape( container2.thermalContactArea ) );
+              }
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
               container1.addEnergyChunk( container2.extractEnergyChunkClosestToShape( container1.thermalContactArea ) );
@@ -375,13 +394,7 @@ define( function( require ) {
 
         self.beakers.forEach( function( beaker ) {
 
-          if ( beaker === container1 ) {
-
-            // bail if testing against self
-            return;
-          }
-
-          if ( beaker.thermalContactArea.containsBounds( container1.getBounds() ) ) {
+          if ( isImmersedIn( container1, beaker ) ) {
 
             // this model element is immersed in the beaker
             immersedInBeaker = true;
@@ -408,12 +421,23 @@ define( function( require ) {
                 // bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
                 // center, stay in bounds.
                 var energyChunkWidth = 0.01;
+                var beakerBounds = container1.getBounds();
                 energyChunkMotionConstraints = new Bounds2(
-                  container1.getBounds().minX + energyChunkWidth / 2,
-                  container1.getBounds().minY,
-                  container1.getBounds().minX + container1.getBounds().width - energyChunkWidth / 2,
-                  container1.getBounds().minY + 1 // the width is what matters here, so use a large value for the height
+                  beakerBounds.minX + energyChunkWidth / 2,
+                  beakerBounds.minY,
+                  beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2,
+                  beakerBounds.minY + 1 // the width is what matters here, so use a large value for the height
                 );
+
+                // make sure the energy chunk's position is within the bounds
+                if ( !energyChunkMotionConstraints.containsPoint( energyChunk.positionProperty.value ) ) {
+                  var position = energyChunk.positionProperty.value.copy();
+                  position.setXY(
+                    Util.clamp( position.x, energyChunkMotionConstraints.minX, energyChunkMotionConstraints.maxX ),
+                    Util.clamp( position.y, energyChunkMotionConstraints.minY, energyChunkMotionConstraints.maxY )
+                  );
+                  energyChunk.positionProperty.set( position );
+                }
               }
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }

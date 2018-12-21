@@ -151,31 +151,32 @@ define( function( require ) {
     exchangeEnergyWith: function( energyContainer, dt ) {
       var thermalContactLength = this.thermalContactArea.getThermalContactLength( energyContainer.thermalContactArea );
       if ( thermalContactLength > 0 ) {
-        var excessEnergy = energyContainer.getEnergyBeyondMaxTemperature();
-        if ( excessEnergy === 0 ) {
 
-          // container is below max temperature - exchange energy normally
-          var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
-            this.energyContainerCategory,
-            energyContainer.energyContainerCategory
-          );
-          var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-          var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-          for ( var i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
-            var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
-            var thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) *
-                                      thermalContactLength * heatTransferConstant * timeStep;
-            energyContainer.changeEnergy( -thermalEnergyGained );
-            this.changeEnergy( thermalEnergyGained );
-          }
-        }
-        else {
+        var energyToExchange = 0;
 
-          // Item is at max temperature - shed all excess energy into the air.  This is generally for the case where a
-          // fluid is boiling, and all energy beyond the boiling point is being release as steam.
-          energyContainer.changeEnergy( -excessEnergy );
-          this.changeEnergy( excessEnergy );
+        // calculate the amount of energy to exchange based on the thermal differential
+        var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
+          this.energyContainerCategory,
+          energyContainer.energyContainerCategory
+        );
+        var numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        var leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        for ( var i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
+          var timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+          var thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) *
+                                    thermalContactLength * heatTransferConstant * timeStep;
+          energyToExchange += thermalEnergyGained;
         }
+
+        // If the container has "excess energy", which can happen in cases such as where energy has been added to water
+        // that is already at the boiling point, all of that energy should be dumped into the air.
+        if ( energyToExchange >= 0 ) {
+          energyToExchange = Math.max( energyToExchange, energyContainer.getEnergyBeyondMaxTemperature() );
+        }
+
+        // calculations are complete, do the actual exchange
+        energyContainer.changeEnergy( -energyToExchange );
+        this.changeEnergy( energyToExchange );
       }
     },
 
