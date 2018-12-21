@@ -311,8 +311,10 @@ define( function( require ) {
         var closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
-            var distanceToVerticalEdge = Math.min( Math.abs( myBounds.minX - energyChunk.positionProperty.value.x ),
-              Math.abs( myBounds.x - energyChunk.positionProperty.value.x ) );
+            var distanceToVerticalEdge = Math.min(
+              Math.abs( myBounds.minX - energyChunk.positionProperty.value.x ),
+              Math.abs( myBounds.maxX - energyChunk.positionProperty.value.x )
+            );
 
             if ( distanceToVerticalEdge < closestDistanceToVerticalEdge ) {
               chunkToExtract = energyChunk;
