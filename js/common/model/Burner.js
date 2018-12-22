@@ -149,6 +149,16 @@ define( function( require ) {
       if ( this.inContactWith( thermalEnergyContainer ) ) {
         if ( thermalEnergyContainer.getTemperature() > EFACConstants.WATER_FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevelProperty.value * dt;
+
+          // make sure we don't cool the object below its minimum allowed energy level
+          if ( this.heatCoolLevelProperty.value < 0 ) {
+            if ( Math.abs( deltaEnergy ) > thermalEnergyContainer.getEnergyAboveMinimum() ) {
+              deltaEnergy = -thermalEnergyContainer.getEnergyAboveMinimum();
+
+              // reset the energy exchange history so we don't lose chunks below the min temperature
+              this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
+            }
+          }
         }
         thermalEnergyContainer.changeEnergy( deltaEnergy );
         this.energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;

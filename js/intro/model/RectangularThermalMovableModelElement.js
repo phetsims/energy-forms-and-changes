@@ -54,6 +54,9 @@ define( function( require ) {
     // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = new ObservableArray();
 
+    // @private {number} - minimum amount of energy that this is allowed to have
+    this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
+
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = [];
 
@@ -99,6 +102,15 @@ define( function( require ) {
      */
     getEnergy: function() {
       return this.energy;
+    },
+
+    /**
+     * get the amount of energy above the minimum allowed
+     * @return {number}
+     * @public
+     */
+    getEnergyAboveMinimum: function() {
+      return this.energy - this.minEnergy;
     },
 
     /**
