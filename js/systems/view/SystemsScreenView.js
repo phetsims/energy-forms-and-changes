@@ -62,8 +62,6 @@ define( function( require ) {
    */
   function SystemsScreenView( model ) {
 
-    var self = this;
-
     // @private
     this.model = model;
 
@@ -122,10 +120,6 @@ define( function( require ) {
       2200
     );
 
-    // layer node for back-most layer
-    var backLayer = new Node();
-    this.addChild( backLayer );
-
     // create the checkbox that controls the visibility of the energy chunks
     // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
     // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
@@ -168,51 +162,6 @@ define( function( require ) {
 
     // only show the energy chunk legend when energy chunks are visible
     model.energyChunksVisibleProperty.linkAttribute( energyChunkLegend, 'visible' );
-
-    // create a background rectangle at the bottom of the screen where the play/pause controls will reside
-    var bottomPanel = new Rectangle(
-      0,
-      0,
-      layoutBounds.width * 2, // wide enough that users are unlikely to see the edge
-      layoutBounds.height, // tall enough that users are unlikely to see the bottom
-      {
-        centerX: layoutBounds.centerX,
-        top: layoutBounds.maxY - BOTTOM_CONTROL_PANEL_HEIGHT,
-        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
-      }
-    );
-    backLayer.addChild( bottomPanel );
-
-    // add the reset all button
-    var resetAllButton = new ResetAllButton( {
-      listener: function() {
-        model.reset();
-      },
-      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
-      right: layoutBounds.maxX - EDGE_INSET,
-      centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2
-    } );
-    this.addChild( resetAllButton );
-
-    // create the play pause button
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
-      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
-    } );
-
-    // create the step button, used to manually step the simulation
-    var stepButton = new StepForwardButton( {
-      isPlayingProperty: model.isPlayingProperty,
-      listener: function() { model.manualStep(); },
-      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
-    } );
-
-    // group the play and pause buttons into their own panel for correct layout in the HBox
-    var playPauseButtonGroup = new HBox( {
-      children: [ playPauseButton, stepButton ],
-      spacing: 10,
-      center: new Vector2( layoutBounds.centerX, resetAllButton.centerY )
-    } );
-    this.addChild( playPauseButtonGroup );
 
     // create the energy user nodes
     this.beakerHeaterNode = new BeakerHeaterNode(
@@ -262,6 +211,55 @@ define( function( require ) {
     this.addChild( bikerNode );
     this.addChild( this.teaKettleNode );
 
+    // add the showEnergyChunksPanel to the scene graph after any energy chunk layers so that all energy chunks and
+    //  light rays pass beneath the panel
+    this.addChild( showEnergyChunksPanel );
+
+    // create a background rectangle at the bottom of the screen where the play/pause controls will reside
+    var bottomPanel = new Rectangle(
+      0,
+      0,
+      layoutBounds.width * 2, // wide enough that users are unlikely to see the edge
+      layoutBounds.height, // tall enough that users are unlikely to see the bottom
+      {
+        centerX: layoutBounds.centerX,
+        top: layoutBounds.maxY - BOTTOM_CONTROL_PANEL_HEIGHT,
+        fill: EFACConstants.CLOCK_CONTROL_BACKGROUND_COLOR
+      }
+    );
+    this.addChild( bottomPanel );
+
+    // add the reset all button
+    var resetAllButton = new ResetAllButton( {
+      listener: function() {
+        model.reset();
+      },
+      radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
+      right: layoutBounds.maxX - EDGE_INSET,
+      centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2
+    } );
+    this.addChild( resetAllButton );
+
+    // create the play pause button
+    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
+      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
+    } );
+
+    // create the step button, used to manually step the simulation
+    var stepButton = new StepForwardButton( {
+      isPlayingProperty: model.isPlayingProperty,
+      listener: function() { model.manualStep(); },
+      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
+    } );
+
+    // group the play and pause buttons into their own panel for correct layout in the HBox
+    var playPauseButtonGroup = new HBox( {
+      children: [ playPauseButton, stepButton ],
+      spacing: 10,
+      center: new Vector2( layoutBounds.centerX, resetAllButton.centerY )
+    } );
+    this.addChild( playPauseButtonGroup );
+
     // add the energy system element selectors, which are sets of radio buttons
     var energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {
       left: EDGE_INSET,
@@ -278,10 +276,6 @@ define( function( require ) {
     this.addChild( energySourceSelector );
     this.addChild( energyConverterSelector );
     this.addChild( energyUserSelector );
-
-    // add the showEnergyChunksPanel to the scene graph after everything else so that all energy chunks and light rays
-    // pass beneath the panel
-    self.addChild( showEnergyChunksPanel );
   }
 
   energyFormsAndChanges.register( 'SystemsScreenView', SystemsScreenView );
