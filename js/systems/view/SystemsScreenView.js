@@ -120,49 +120,6 @@ define( function( require ) {
       2200
     );
 
-    // create the checkbox that controls the visibility of the energy chunks
-    // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
-    // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
-    var showEnergyChunksCheckbox = new Checkbox(
-      new LayoutBox( {
-        children: [
-          new Text( energySymbolsString, {
-            font: new PhetFont( 20 ),
-            maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
-          } ),
-          new EnergyChunkNode(
-            new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
-            modelViewTransform
-          )
-        ],
-        orientation: 'horizontal',
-        spacing: 5
-      } ),
-      model.energyChunksVisibleProperty
-    );
-
-    // add the checkbox that controls the visibility of the energy chunks to a panel
-    var showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-      cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
-      right: layoutBounds.maxX - EDGE_INSET,
-      top: EDGE_INSET,
-      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
-    } );
-
-    // add the energy chunk legend
-    var energyChunkLegend = new EnergyChunkLegend( modelViewTransform,
-      {
-        right: layoutBounds.maxX - EDGE_INSET,
-        top: showEnergyChunksPanel.bottom + 10
-      } );
-    this.addChild( energyChunkLegend );
-
-    // only show the energy chunk legend when energy chunks are visible
-    model.energyChunksVisibleProperty.linkAttribute( energyChunkLegend, 'visible' );
-
     // create the energy user nodes
     this.beakerHeaterNode = new BeakerHeaterNode(
       model.beakerHeater,
@@ -211,9 +168,49 @@ define( function( require ) {
     this.addChild( bikerNode );
     this.addChild( this.teaKettleNode );
 
-    // add the showEnergyChunksPanel to the scene graph after any energy chunk layers so that all energy chunks and
-    //  light rays pass beneath the panel
+    // create the checkbox that controls the visibility of the energy chunks
+    // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
+    // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
+    var showEnergyChunksCheckbox = new Checkbox(
+      new LayoutBox( {
+        children: [
+          new Text( energySymbolsString, {
+            font: new PhetFont( 20 ),
+            maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
+          } ),
+          new EnergyChunkNode(
+            new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+            modelViewTransform
+          )
+        ],
+        orientation: 'horizontal',
+        spacing: 5
+      } ),
+      model.energyChunksVisibleProperty
+    );
+
+    // add the checkbox that controls the visibility of the energy chunks to a panel
+    var showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
+      right: layoutBounds.maxX - EDGE_INSET,
+      top: EDGE_INSET,
+      minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
+    } );
     this.addChild( showEnergyChunksPanel );
+
+    // add the energy chunk legend
+    var energyChunkLegend = new EnergyChunkLegend( modelViewTransform,
+      {
+        right: layoutBounds.maxX - EDGE_INSET,
+        top: showEnergyChunksPanel.bottom + 10
+      } );
+    this.addChild( energyChunkLegend );
+
+    // only show the energy chunk legend when energy chunks are visible
+    model.energyChunksVisibleProperty.linkAttribute( energyChunkLegend, 'visible' );
 
     // create a background rectangle at the bottom of the screen where the play/pause controls will reside
     var bottomPanel = new Rectangle(
