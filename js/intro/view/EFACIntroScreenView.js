@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
+  var AnimationSpec = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/AnimationSpec' );
   var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
   var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -56,6 +57,8 @@ define( function( require ) {
   // constants
   var EDGE_INSET = 10;
   var SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
+  var SENSOR_ANIMATION_SPEED = 0.2; // in meters per second
+  var MAX_SENSOR_ANIMATION_TIME = 1; // max time for sensor return animation to complete
 
   // TODO: I (jbphet) came across the code immediately below during code cleanup in early May 2018, not sure what it is or whether it is still needed.
   // Boolean property for showing/hiding developer control for dumping energy levels.
@@ -360,17 +363,39 @@ define( function( require ) {
           var thermometerBounds = sensorNode.localToParentBounds( sensorNode.thermometerNode.bounds );
           if ( colorIndicatorBounds.intersectsBounds( sensorStorageArea.bounds ) ||
                thermometerBounds.intersectsBounds( sensorStorageArea.bounds ) ) {
-            returnSensorToStorageArea( sensor );
+            returnSensorToStorageArea( sensor, true );
           }
         }
       } );
     } );
 
-    // function to return a sensor to its initial position in the storage area
-    function returnSensorToStorageArea( sensor ) {
+    /**
+     * return a sensor to its initial position in the storage area
+     * @param {StickyTemperatureAndColorSensor} sensor
+     * @param {Boolean} doAnimation - whether the sensor animates back to the storage area
+     * @constructor
+     */
+    function returnSensorToStorageArea( sensor, doAnimation ) {
+      var currentPosition = sensor.positionProperty.get();
+      if ( !currentPosition.equals( sensorPositionInStorageArea ) && doAnimation ) {
 
-      // set the initial position for this sensor
-      sensor.positionProperty.set( sensorPositionInStorageArea );
+        // calculate the time needed to get to the destination
+        var animationDuration = Math.min(
+          sensor.positionProperty.get().distance( sensorPositionInStorageArea ) / SENSOR_ANIMATION_SPEED,
+          MAX_SENSOR_ANIMATION_TIME
+        );
+
+        sensor.inProgressAnimationProperty.set( new AnimationSpec(
+          currentPosition.copy(),
+          sensorPositionInStorageArea,
+          animationDuration
+        ) );
+      }
+      else if ( !currentPosition.equals( sensorPositionInStorageArea ) && !doAnimation ) {
+
+        // set the initial position for this sensor
+        sensor.positionProperty.set( sensorPositionInStorageArea );
+      }
 
       // sensors are inactive when in the storage area
       sensor.activeProperty.set( false );
@@ -379,7 +404,7 @@ define( function( require ) {
     // function to return all sensors to the storage area
     function returnAllSensorsToStorageArea() {
       model.temperatureAndColorSensors.forEach( function( sensor ) {
-        returnSensorToStorageArea( sensor );
+        returnSensorToStorageArea( sensor, false );
       } );
     }
 
