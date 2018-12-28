@@ -32,7 +32,7 @@ define( function( require ) {
   // position and size constants, empirically determined
   var BEAKER_WIDTH = 0.075; // In meters.
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
-  var BEAKER_OFFSET = new Vector2( 0, 0.025 );
+  var BEAKER_OFFSET = new Vector2( 0, 0.016 );
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // in meters/sec, quite slow
   var HEATER_ELEMENT_2D_HEIGHT = 0.027; // height of image
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy
@@ -45,8 +45,8 @@ define( function( require ) {
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
   var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0003, -0.0175 );
-  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0.0002, -0.01 );
-  var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.012 );
+  var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( -0.0003, -0.01 );
+  var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.003 );
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty

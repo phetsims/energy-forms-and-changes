@@ -28,7 +28,7 @@ define( function( require ) {
   var elementBaseFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
   var heaterElementOffImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element_dark.png' );
   var heaterElementOnImage = require( 'image!ENERGY_FORMS_AND_CHANGES/heater_element.png' );
-  var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
+  var wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
   var wireStraightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_straight.png' );
 
   // constants
@@ -46,7 +46,7 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, beakerHeater, modelViewTransform );
 
     var wireStraightNode = new Image( wireStraightImage, { left: -112, top: 78 } );
-    var wireBottomRightNode = new Image( wireBottomRightImage, {
+    var wireBottomRightNode = new Image( wireBottomRightShortImage, {
       left: wireStraightNode.right - 4,
       bottom: wireStraightNode.bottom + 2.5
     } );
