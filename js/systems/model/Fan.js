@@ -39,7 +39,7 @@ define( function( require ) {
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
   var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
-  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.028 );
+  var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.019 );
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );

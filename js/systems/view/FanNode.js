@@ -30,7 +30,7 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' )
   ];
   var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
+  var wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
 
   // constants
   var NUM_FAN_IMAGES = fanImages.length;
@@ -46,7 +46,7 @@ define( function( require ) {
     MoveFadeModelElementNode.call( this, fan, modelViewTransform );
 
     // add the images and the layer that will contain the energy chunks
-    var wireBottomRightNode = new Image( wireBottomRightImage, { left: -110, bottom: 105 } );
+    var wireBottomRightNode = new Image( wireBottomRightShortImage, { left: -110, bottom: 105 } );
     var connectorNode = new Image( connectorImage, {
       right: wireBottomRightNode.right + 9,
       bottom: wireBottomRightNode.top + 3
