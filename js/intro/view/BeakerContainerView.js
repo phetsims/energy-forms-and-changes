@@ -17,9 +17,11 @@ define( function( require ) {
   // modules
   var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -48,13 +50,13 @@ define( function( require ) {
     var beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
 
     // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
-    // clip area.  It is extended a bit up and down for chunks that go to the rim of the beaker and for those that
+    // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
     // go between the beaker and the heater/cooler.
     this.untransformedBeakerClipShape = new Shape.rect(
       -beakerRectangleWidthInView / 2,
-      -beakerRectangleHeightInView * 1.5,
+      -beakerRectangleHeightInView * 5,
       beakerRectangleWidthInView,
-      beakerRectangleHeightInView * 2
+      beakerRectangleHeightInView * 5.5
     );
 
     // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
@@ -64,6 +66,13 @@ define( function( require ) {
     this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
     var perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
     this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+
+    if ( EFACQueryParameters.showHelperShapes ) {
+      this.clipAreaHelperNode = new Path( this.untransformedBeakerClipShape, {
+        fill: 'rgba(255, 0, 0, 0.2)'
+      } );
+      this.energyChunkRootNode.addChild( this.clipAreaHelperNode );
+    }
 
     // For each block that can go in the beaker we need to add a listener that will update the clipping area when that
     // block is moved.  The clipping area hides energy chunks that overlap with blocks, making it look much less
@@ -115,6 +124,11 @@ define( function( require ) {
 
       // set the updated clip area
       this.energyChunkRootNode.clipArea = clipArea;
+      // this.energyChunkRootNode.clipArea = null;
+
+      if ( this.clipAreaHelperNode ) {
+        this.clipAreaHelperNode.setShape( clipArea );
+      }
     },
 
     /**
