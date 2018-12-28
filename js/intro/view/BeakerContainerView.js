@@ -159,7 +159,6 @@ define( function( require ) {
         if ( this.beaker.beakerBounds.containsPoint( block.positionProperty.value ) ||
              this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
           blocksInBeaker.push( block );
-          break;
         }
       }
       if ( !blocksInBeaker.length === 0 ) {
