@@ -442,7 +442,7 @@ define( function( require ) {
               self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
             }
           }
-          else if ( container1.getEnergyChunkBalance < 0 &&
+          else if ( container1.getEnergyChunkBalance() < 0 &&
                     container1.getTemperature() < self.air.getTemperature() ) {
             container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
           }
