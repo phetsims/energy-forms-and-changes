@@ -20,7 +20,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var OUTSIDE_CONTAINER_FORCE = 0.01; // In Newtons, empirically determined.
+  var OUTSIDE_SLICE_FORCE = 0.01; // In Newtons, empirically determined.
   var ZERO_VECTOR = Vector2.ZERO;
 
   // parameters that can be adjusted to change the nature of the redistribution
@@ -117,17 +117,17 @@ define( function( require ) {
 
             // reset accumulated forces
             chunkForces[ chunk.id ].setXY( 0, 0 );
-            if ( containerShapeBounds.containsCoordinates( chunk.positionProperty.value.x, chunk.positionProperty.value.y ) ) {
+            if ( containerShapeBounds.containsPoint( chunk.positionProperty.value ) ) {
               self.computeEdgeForces( chunk, chunkForces, forceConstant, minDistance, maxDistanceToEdge, containerShapeBounds );
               self.updateForces( chunk, chunkMap, chunkForces, minDistance, forceConstant );
             }
             else {
 
               // point is outside container, move it towards center of shape
-              chunkForces[ chunk.id ].freeToPool();
-              var vectorToCenter = Vector2.createFromPool( boundingRect.centerX, boundingRect.centerY )
-                .subtract( chunk.positionProperty.value );
-              chunkForces[ chunk.id ] = vectorToCenter.setMagnitude( OUTSIDE_CONTAINER_FORCE );
+              chunkForces[ chunk.id ].setXY(
+                containerShapeBounds.centerX - chunk.positionProperty.value.x,
+                containerShapeBounds.centerY - chunk.positionProperty.value.y
+              ).setMagnitude( OUTSIDE_SLICE_FORCE );
             }
           } );
         }
@@ -169,17 +169,21 @@ define( function( require ) {
      */
     computeEdgeForces: function( chunk, chunkForces, forceConstant, minDistance, maxDistance, containerBounds ) {
 
+      // this should only be called for chunks that are inside a container
+      var chunkPosition = chunk.positionProperty.value;
+      assert && assert( containerBounds.containsPoint( chunkPosition ) );
+
       // get the distance to the four different edges
-      var rightLength = Math.max( containerBounds.maxX - chunk.positionProperty.value.x, minDistance );
-      var bottomLength = Math.max( containerBounds.maxY - chunk.positionProperty.value.y, minDistance );
-      var leftLength = Math.max( chunk.positionProperty.value.x - containerBounds.minX, minDistance );
-      var topLength = Math.max( chunk.positionProperty.value.y - containerBounds.minY, minDistance );
+      var distanceFromRightSide = Math.max( containerBounds.maxX - chunkPosition.x, minDistance );
+      var distanceFromBottom = Math.max( chunkPosition.y - containerBounds.minY, minDistance );
+      var distanceFromLeftSide = Math.max( chunkPosition.x - containerBounds.minX, minDistance );
+      var distanceFromTop = Math.max( containerBounds.maxY - chunkPosition.y, minDistance );
 
       // calculate the force from the edge at the given angle
-      var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( rightLength, 2 ), 0 ).rotate( Math.PI );
-      var bottomEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( bottomLength, 2 ), 0 ).rotate( Math.PI * 1.5 );
-      var leftEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( leftLength, 2 ), 0 ).rotate( 0 );
-      var topEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( topLength, 2 ), 0 ).rotate( Math.PI / 2 );
+      var rightEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( distanceFromRightSide, 2 ), 0 ).rotate( Math.PI );
+      var bottomEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( distanceFromBottom, 2 ), 0 ).rotate( Math.PI / 2 );
+      var leftEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( distanceFromLeftSide, 2 ), 0 ).rotate( 0 );
+      var topEdgeForce = Vector2.createFromPool( forceConstant / Math.pow( distanceFromTop, 2 ), 0 ).rotate( Math.PI * 1.5 );
 
       // apply the forces
       chunkForces[ chunk.id ] = chunkForces[ chunk.id ]
@@ -271,18 +275,15 @@ define( function( require ) {
             'velocity.y is ' + velocity.y
           );
 
-          // new velocity
+          // velocity change is based on the formula v = (F/m)* t, so pre-compute the t/m part for use later
           var forceMultiplier = dt / ENERGY_CHUNK_MASS;
-          velocity.addXY( force.x * forceMultiplier, force.y * forceMultiplier );
-          assert && assert( !_.isNaN( velocity.x ) && !_.isNaN( velocity.y ), 'New velocity contains NaN value' );
 
+          // calculate drag force using standard drag equation
           var velocityMagnitudeSquared = velocity.magnitudeSquared();
           assert && assert(
           velocityMagnitudeSquared !== Infinity && !_.isNaN( velocityMagnitudeSquared ) && typeof velocityMagnitudeSquared === 'number',
             'velocity^2 is ' + velocityMagnitudeSquared
           );
-
-          // calculate drag force using standard drag equation
           var dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * velocityMagnitudeSquared;
           var dragForce = ZERO_VECTOR;
           if ( dragMagnitude > 0 ) {
@@ -294,11 +295,14 @@ define( function( require ) {
           }
           assert && assert( !_.isNaN( dragForce.x ) && !_.isNaN( dragForce.y ), 'dragForce contains NaN value' );
 
-          // update velocity based on drag force
-          velocity.addXY( dragForce.x * forceMultiplier, dragForce.y * forceMultiplier );
+          // update velocity based on the sum of forces acting on the particle
+          velocity.addXY( ( force.x + dragForce.x ) * forceMultiplier, ( force.y + dragForce.y ) * forceMultiplier );
+          assert && assert( !_.isNaN( velocity.x ) && !_.isNaN( velocity.y ), 'New velocity contains NaN value' );
 
           // free allocations
-          dragForce.freeToPool();
+          if ( dragForce !== ZERO_VECTOR ) {
+            dragForce.freeToPool();
+          }
 
           // update max energy
           var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocityMagnitudeSquared + force.magnitude() * Math.PI / 2;
