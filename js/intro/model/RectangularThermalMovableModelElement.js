@@ -242,8 +242,8 @@ define( function( require ) {
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
       this.approachingEnergyChunks.remove( energyChunk );
-      this.energyChunkWanderControllers = _.filter( this.energyChunkWanderControllers, function( wanderController ) {
-        wanderController.energyChunk !== energyChunk;
+      this.energyChunkWanderControllers = this.energyChunkWanderControllers.filter( function( wanderController ) {
+        return wanderController.energyChunk !== energyChunk;
       } );
       this.addEnergyChunkToNextSlice( energyChunk );
     },
