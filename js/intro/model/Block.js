@@ -46,6 +46,9 @@ define( function( require ) {
     energyContainerCategory: EnergyContainerCategory.BRICK
   };
 
+  // static data
+  var instanceCount = 0; // counter for creating unique IDs
+
   /**
    * @param {Vector2} initialPosition
    * @param {Property} energyChunksVisibleProperty
@@ -65,6 +68,9 @@ define( function( require ) {
     );
 
     var self = this;
+
+    // @public (read-only) {String} - unique ID for this block
+    this.id = 'block-' + instanceCount++;
 
     // @public
     this.blockType = blockType;

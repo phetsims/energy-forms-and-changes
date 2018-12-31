@@ -22,6 +22,7 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
@@ -54,6 +55,12 @@ define( function( require ) {
 
   // minimum distance allowed between two objects, used to prevent floating point issues
   var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
+
+  // A threshold value that is used to decide if an energy chunk should be exchanged between a thermal model element and
+  // the air.  It is empirically determined by heating and cooling objects on the burners, both individually and in
+  // stacks, and verifying that energy chunks are exchanged with the air, but not too easily.  See
+  // https://github.com/phetsims/energy-forms-and-changes/issues/146 for more information.
+  var AIR_EC_EXCHANGE_THRESHOLD = 80;
 
   /**
    * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
@@ -187,6 +194,15 @@ define( function( require ) {
           }
         } );
       } );
+    } );
+
+    // @private {Object} - this is used to track energy chunk exchanges with air, see usage for details
+    this.airECExchangeAccumulators = {};
+    this.blocks.forEach( function( block ) {
+      self.airECExchangeAccumulators[ block.id ] = 0;
+    } );
+    this.beakers.forEach( function( beaker ) {
+      self.airECExchangeAccumulators[ beaker.id ] = 0;
     } );
 
     // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
@@ -401,50 +417,77 @@ define( function( require ) {
           }
         } );
 
-        // Exchange energy and energy chunks with the air if not immersed in the beaker.
+        // exchange energy and energy chunks with the air if not immersed in the beaker
         if ( !immersedInBeaker ) {
 
+          // exchange energy with the air
           self.air.exchangeEnergyWith( container1, dt );
 
-          if ( container1.getEnergyChunkBalance() > 0 ) {
-            var pointAbove = new Vector2(
-              phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
-              container1.getBounds().maxY
+          // Exchange energy chunks with the air.  There are some accumulators that are used to track if the container
+          // has a surplus or deficit of energy chunks for a while before chunks are exchanged with the air.  This is
+          // done so that the thermal energy containers are more inclined to exchange chunks with each other than the
+          // air if possible.
+          if ( container1.getEnergyChunkBalance() !== 0 ) {
+            var heatTransferFactor = HeatTransferConstants.getHeatTransferFactor(
+              EnergyContainerCategory.AIR,
+              container1.energyContainerCategory
             );
-            var energyChunk = container1.extractEnergyChunkClosestToPoint( pointAbove );
+            self.airECExchangeAccumulators[ container1.id ] += container1.getEnergyChunkBalance() * dt * heatTransferFactor;
+            if ( self.airECExchangeAccumulators[ container1.id ] > AIR_EC_EXCHANGE_THRESHOLD ) {
 
-            if ( energyChunk ) {
-              var energyChunkMotionConstraints = null;
-              if ( container1 instanceof Beaker ) {
+              // surrender an energy chunk to the air
+              var pointAbove = new Vector2(
+                phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
+                container1.getBounds().maxY
+              );
+              var energyChunk = container1.extractEnergyChunkClosestToPoint( pointAbove );
 
-                // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is a
-                // bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
-                // center, stay in bounds.
-                var energyChunkWidth = 0.01;
-                var beakerBounds = container1.getBounds();
-                energyChunkMotionConstraints = new Bounds2(
-                  beakerBounds.minX + energyChunkWidth / 2,
-                  beakerBounds.minY,
-                  beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2,
-                  beakerBounds.minY + 1 // the width is what matters here, so use a large value for the height
-                );
+              if ( energyChunk ) {
+                var energyChunkMotionConstraints = null;
+                if ( container1 instanceof Beaker ) {
 
-                // make sure the energy chunk's position is within the bounds
-                if ( !energyChunkMotionConstraints.containsPoint( energyChunk.positionProperty.value ) ) {
-                  var position = energyChunk.positionProperty.value.copy();
-                  position.setXY(
-                    Util.clamp( position.x, energyChunkMotionConstraints.minX, energyChunkMotionConstraints.maxX ),
-                    Util.clamp( position.y, energyChunkMotionConstraints.minY, energyChunkMotionConstraints.maxY )
+                  // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is
+                  // a bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
+                  // center, stay in bounds.
+                  var energyChunkWidth = 0.01;
+                  var beakerBounds = container1.getBounds();
+                  energyChunkMotionConstraints = new Bounds2(
+                    beakerBounds.minX + energyChunkWidth / 2,
+                    beakerBounds.minY,
+                    beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2,
+                    beakerBounds.minY + 1 // the width is what matters here, so use a large value for the height
                   );
-                  energyChunk.positionProperty.set( position );
+
+                  // make sure the energy chunk's position is within the bounds
+                  if ( !energyChunkMotionConstraints.containsPoint( energyChunk.positionProperty.value ) ) {
+                    var position = energyChunk.positionProperty.value.copy();
+                    position.setXY(
+                      Util.clamp( position.x, energyChunkMotionConstraints.minX, energyChunkMotionConstraints.maxX ),
+                      Util.clamp( position.y, energyChunkMotionConstraints.minY, energyChunkMotionConstraints.maxY )
+                    );
+                    energyChunk.positionProperty.set( position );
+                  }
                 }
+                self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
+
+                // reset the accumulator
+                self.airECExchangeAccumulators[ container1.id ] = 0;
               }
-              self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
+            }
+            else if ( self.airECExchangeAccumulators[ container1.id ] < -AIR_EC_EXCHANGE_THRESHOLD &&
+                      container1.getTemperature() < self.air.getTemperature() ) {
+
+              // get an energy chunk from the air
+              container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
+
+              // reset the accumulator
+              self.airECExchangeAccumulators[ container1.id ] = 0;
             }
           }
-          else if ( container1.getEnergyChunkBalance() < 0 &&
-                    container1.getTemperature() < self.air.getTemperature() ) {
-            container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
+          else {
+
+            // reset the accumulator
+            self.airECExchangeAccumulators[ container1.id ] = 0;
           }
         }
       } );
