@@ -34,10 +34,11 @@ define( function( require ) {
   var REAR_WHEEL_RADIUS = 0.021; // In meters, must be worked out with the image.
   var NUMBER_OF_LEG_IMAGES = 18; // must match number of leg images in view
 
-  // offsets used for creating energy chunk paths - these need to be coordinated with the images
+  // offsets used for creating energy chunk paths and rotating images - these need to be coordinated with the images
   var BIKER_BUTTOCKS_OFFSET = new Vector2( 0.02, 0.04 );
   var TOP_TUBE_ABOVE_CRANK_OFFSET = new Vector2( 0.007, 0.015 );
   var BIKE_CRANK_OFFSET = new Vector2( 0.0052, -0.002 );
+  var CENTER_OF_GEAR_OFFSET = new Vector2( 0.0058, -0.006 );
   var CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.01 );
   var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.006 ); // where the top chain meets the back wheel cassette
   var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.024, 0.007 );
@@ -564,6 +565,7 @@ define( function( require ) {
   }, {
 
     // statics
+    CENTER_OF_GEAR_OFFSET: CENTER_OF_GEAR_OFFSET,
     CENTER_OF_BACK_WHEEL_OFFSET: CENTER_OF_BACK_WHEEL_OFFSET,
     INITIAL_NUMBER_OF_ENERGY_CHUNKS: INITIAL_NUMBER_OF_ENERGY_CHUNKS,
     MAX_ANGULAR_VELOCITY_OF_CRANK: MAX_ANGULAR_VELOCITY_OF_CRANK,

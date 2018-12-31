@@ -80,6 +80,7 @@ define( function( require ) {
   var NUMBER_OF_LEG_IMAGES = cyclistFrontLegImages.length;
   var NUMBER_OF_TORSO_IMAGES = cyclistTorsoImages.length;
   var bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame.png' );
+  var bicycleGearImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_gear.png' );
   var bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
 
   // constants
@@ -104,6 +105,10 @@ define( function( require ) {
     var bicycleFrameNode = new Image( bicycleFrameImage, {
       right: BICYCLE_SYSTEM_RIGHT_OFFSET,
       top: BICYCLE_SYSTEM_TOP_OFFSET,
+      scale: IMAGE_SCALE
+    } );
+    var bicycleGearNode = new Image( bicycleGearImage, {
+      center: modelViewTransform.modelToViewDelta( Biker.CENTER_OF_GEAR_OFFSET ),
       scale: IMAGE_SCALE
     } );
     var bicycleSpokesNode = new Image( bicycleSpokesImage, {
@@ -151,9 +156,11 @@ define( function( require ) {
       cyclistFrontLegRootNode.addChild( cyclistFrontLegNodes[ i ] );
     }
 
-    // animate legs by setting image visibility based on crank arm angle
+    // animate legs by setting image visibility based on crank arm angle. also animate the gear by mapping its angle of
+    // rotation to the crank arm angle
     var visibleBackLeg = cyclistBackLegNodes[ 0 ];
     var visibleFrontLeg = cyclistFrontLegNodes[ 0 ];
+    var gearRotationPoint = bicycleGearNode.bounds.center;
     biker.crankAngleProperty.link( function( angle ) {
       assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
       var i = biker.mapAngleToImageIndex( angle );
@@ -163,6 +170,12 @@ define( function( require ) {
       visibleBackLeg = cyclistBackLegNodes[ i ];
       visibleFrontLeg.setVisible( true );
       visibleBackLeg.setVisible( true );
+
+      // Scenery doesn't use the convention in physics where a positive rotation is counter-clockwise, so we have to
+      // invert the angle in the following calculation.
+      var compensatedAngle = ( 2 * Math.PI - bicycleGearNode.getRotation() ) % ( 2 * Math.PI );
+      var delta = angle - compensatedAngle;
+      bicycleGearNode.rotateAround( gearRotationPoint, -delta );
     } );
 
     // add button to replenish the biker's energy (when she runs out)
@@ -242,6 +255,7 @@ define( function( require ) {
     this.addChild( cyclistBackLegRootNode );
     this.addChild( bicycleSpokesNode );
     this.addChild( bicycleFrameNode );
+    this.addChild( bicycleGearNode );
     this.addChild( cyclistTorsoRootNode );
     this.addChild( cyclistFrontLegRootNode );
 
