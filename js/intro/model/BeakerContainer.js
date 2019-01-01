@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -141,8 +142,32 @@ define( function( require ) {
         this.energyChunkWanderControllers.push(
           new EnergyChunkWanderController( energyChunk, this.positionProperty )
         );
-      } else {
+      }
+      else {
         Beaker.prototype.addEnergyChunk.call( this, energyChunk );
+
+        // If the energy chunk is above the beaker, it's coming from the air, and must be constrained to the width of
+        // the beaker to avoid being clipped.
+        var ecPosition = energyChunk.positionProperty.get();
+        if ( ecPosition.y > this.beakerBounds.maxY &&
+             ecPosition.x > this.beakerBounds.minX &&
+             ecPosition.x < this.beakerBounds.maxX ) {
+
+          var wanderController = _.find( this.energyChunkWanderControllers, function( controller ) {
+            return controller.energyChunk === energyChunk;
+          } );
+
+          assert && assert( wanderController, 'no wander controller found for energy chunk' );
+
+          // Set the motion constraint to be a tall column straight above the beaker, slightly narrower than the beaker
+          // to account for the width of the energy chunks in the view.
+          wanderController.setWanderConstraint( new Bounds2(
+            this.beakerBounds.minX + this.beakerBounds.width * 0.1,
+            this.beakerBounds.minY,
+            this.beakerBounds.maxX - this.beakerBounds.width * 0.1,
+            Number.POSITIVE_INFINITY
+          ) );
+        }
       }
     }
   } );

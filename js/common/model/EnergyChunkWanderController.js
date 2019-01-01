@@ -38,12 +38,12 @@ define( function( require ) {
     }, options );
 
     // parameter checking
-    assert && options.initialWanderConstraint && assert(
-      options.initialWanderConstraint.containsPoint( energyChunk.positionProperty.value ),
+    assert && options.wanderConstraint && assert(
+      options.wanderConstraint.containsPoint( energyChunk.positionProperty.value ),
       'energy chunk starting position is not within the wander constraint'
     );
-    assert && options.initialWanderConstraint && assert(
-      options.initialWanderConstraint.containsPoint( destinationProperty.value ),
+    assert && options.wanderConstraint && assert(
+      options.wanderConstraint.containsPoint( destinationProperty.value ),
       'energy chunk destination is not within the wander constraint'
     );
 
@@ -51,7 +51,7 @@ define( function( require ) {
     this.energyChunk = energyChunk;
 
     // @private
-    this.initialWanderConstraint = options.initialWanderConstraint;
+    this.wanderConstraint = options.initialWanderConstraint;
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, MAX_VELOCITY );
     this.resetCountdownTimer();
@@ -85,10 +85,11 @@ define( function( require ) {
       }
 
       // Stay within the horizontal confines of the initial bounds.
-      if ( this.initialWanderConstraint !== null && this.energyChunk.positionProperty.value.y < this.initialWanderConstraint.maxY ) {
+      if ( this.wanderConstraint !== null && this.energyChunk.positionProperty.value.y < this.wanderConstraint.maxY ) {
         var proposedX = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) ).x;
-        if ( proposedX < this.initialWanderConstraint.minX || proposedX > this.initialWanderConstraint.maxX ) {
-          // Bounce in the x direction to prevent going outside initial bounds.
+        if ( proposedX < this.wanderConstraint.minX || proposedX > this.wanderConstraint.maxX ) {
+
+          // bounce in the x direction to prevent going outside initial bounds
           this.velocity.setXY( -this.velocity.x, this.velocity.y );
         }
       }
@@ -133,6 +134,14 @@ define( function( require ) {
      */
     isDestinationReached: function() {
       return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
+    },
+
+    /**
+     * set a new constraint on the wandering
+     * @param {Bounds2|null} wanderConstraint
+     */
+    setWanderConstraint: function( wanderConstraint ) {
+      this.wanderConstraint = wanderConstraint;
     }
   } );
 } );
