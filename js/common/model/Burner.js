@@ -16,7 +16,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
+  var EnergyChunkStraightLineMotionStrategy = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkStraightLineMotionStrategy' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
@@ -66,8 +66,8 @@ define( function( require ) {
     // @private {Vector2}
     this.position = position;
 
-    // @private {EnergyChunkWanderController[]}
-    this.energyChunkWanderControllers = [];
+    // @private {Object[]} - motion strategies that control the movement of the energy chunks owned by this burner
+    this.energyChunkMotionStrategies = [];
 
     // @private {Bounds2} - bounds used to keep incoming energy chunks from wandering very far to the left or right
     this.incomingEnergyChunkWanderBounds = new Bounds2(
@@ -204,8 +204,8 @@ define( function( require ) {
       // make sure the chunk is at the front (which makes it fully opaque in the view)
       energyChunk.zPositionProperty.value = 0;
 
-      // create a controller that will move this energy chunk around
-      var controller = new EnergyChunkWanderController(
+      // create a motion strategy that will move this energy chunk
+      var motionStrategy = new EnergyChunkStraightLineMotionStrategy(
         energyChunk,
         new Property( this.getCenterPoint() ),
         this.incomingEnergyChunkWanderBounds
@@ -213,9 +213,9 @@ define( function( require ) {
 
       energyChunk.zPosition = 0;
 
-      // add the chunk and its controller to this model
+      // add the chunk and its motion strategy to this model
       this.energyChunkList.add( energyChunk );
-      this.energyChunkWanderControllers.push( controller );
+      this.energyChunkMotionStrategies.push( motionStrategy );
 
       // reset energy transfer accumulators
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
@@ -244,9 +244,9 @@ define( function( require ) {
         } );
 
         this.energyChunkList.remove( closestEnergyChunk );
-        this.energyChunkWanderControllers.forEach( function( energyChunkWanderController, index ) {
+        this.energyChunkMotionStrategies.forEach( function( energyChunkWanderController, index ) {
           if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
-            self.energyChunkWanderControllers.splice( index, 1 );
+            self.energyChunkMotionStrategies.splice( index, 1 );
           }
         } );
       }
@@ -343,7 +343,7 @@ define( function( require ) {
      */
     step: function( dt ) {
       var self = this;
-      var controllers = this.energyChunkWanderControllers.slice();
+      var controllers = this.energyChunkMotionStrategies.slice();
 
       controllers.forEach( function( controller ) {
 
@@ -351,7 +351,7 @@ define( function( require ) {
 
         if ( controller.isDestinationReached() ) {
           self.energyChunkList.remove( controller.energyChunk );
-          _.pull( self.energyChunkWanderControllers, controller );
+          _.pull( self.energyChunkMotionStrategies, controller );
         }
       } );
 
