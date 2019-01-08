@@ -48,7 +48,7 @@ define( function( require ) {
 
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
     var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty );
-    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty );
+    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty, { snapToZero: false } );
 
     // burner stand node
     var burnerSize = modelViewTransform.modelToViewShape( BURNER_MODEL_BOUNDS );
