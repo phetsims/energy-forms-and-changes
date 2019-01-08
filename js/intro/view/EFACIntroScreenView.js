@@ -192,18 +192,18 @@ define( function( require ) {
     backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( rightBurnerStand );
 
-    // link the dragging Properties of the heater slider thumbs. if the heaters are linked and one is being dragged,
+    // link the slider dragging Properties of the heaters. if the heaters are linked and one is being dragged,
     // tell the other heater to follow it, otherwise respect its own heating Property
     Property.multilink(
       [
-        leftLinkableHeaterCoolerFront.slider.isThumbDraggingProperty,
-        rightLinkableHeaterCoolerFront.slider.isThumbDraggingProperty
+        leftLinkableHeaterCoolerFront.sliderBeingDraggedProperty,
+        rightLinkableHeaterCoolerFront.sliderBeingDraggedProperty
       ],
-      function( isLeftThumbDragging, isRightThumbDragging ) {
+      function( leftSliderBeingDragged, rightSliderBeingDragged ) {
         if ( model.linkedHeatersProperty.get() ) {
-          isLeftThumbDragging ? rightLinkableHeaterCoolerFront.setFollowProperty( model.leftBurner.heatCoolLevelProperty ) :
+          leftSliderBeingDragged ? rightLinkableHeaterCoolerFront.setFollowProperty( model.leftBurner.heatCoolLevelProperty ) :
           rightLinkableHeaterCoolerFront.clearFollowProperty( model.leftBurner.heatCoolLevelProperty );
-          isRightThumbDragging ? leftLinkableHeaterCoolerFront.setFollowProperty( model.rightBurner.heatCoolLevelProperty ) :
+          rightSliderBeingDragged ? leftLinkableHeaterCoolerFront.setFollowProperty( model.rightBurner.heatCoolLevelProperty ) :
           leftLinkableHeaterCoolerFront.clearFollowProperty( model.rightBurner.heatCoolLevelProperty );
         }
       }

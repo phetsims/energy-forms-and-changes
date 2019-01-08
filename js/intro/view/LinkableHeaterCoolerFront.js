@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * A HeaterCoolerFront Node that can be linked up with another HeaterCoolerNode.
+ * A HeaterCoolerFront Node that can be linked with another HeaterCoolerNode.
  *
  * @author Chris Klusendorf
  */
@@ -11,6 +11,7 @@ define( require => {
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
+  const Property = require( 'AXON/Property' );
 
   class LinkableHeaterCoolerFront extends HeaterCoolerFront {
     /**
@@ -19,11 +20,24 @@ define( require => {
      * @constructor
      */
     constructor( heatCoolAmountProperty, options ) {
+      const sliderBeingDraggedProperty = new Property( false );
+
+      options = _.extend( {
+        startDrag: () => {
+          sliderBeingDraggedProperty.set( true );
+        },
+        endDrag: () => {
+          sliderBeingDraggedProperty.set( false );
+        }
+      }, options );
+
       super( heatCoolAmountProperty, options );
 
       // @private
-      this.options = options;
       this.heatCoolAmountProperty = heatCoolAmountProperty;
+
+      // @public
+      this.sliderBeingDraggedProperty = sliderBeingDraggedProperty;
 
       this.heatCoolAmountObserver = heatCoolAmount => {
         this.heatCoolAmountProperty.value = heatCoolAmount;
