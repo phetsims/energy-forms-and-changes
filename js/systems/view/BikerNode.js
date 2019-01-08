@@ -175,7 +175,15 @@ define( function( require ) {
       // invert the angle in the following calculation.
       var compensatedAngle = ( 2 * Math.PI - bicycleGearNode.getRotation() ) % ( 2 * Math.PI );
       var delta = angle - compensatedAngle;
-      bicycleGearNode.rotateAround( gearRotationPoint, -delta );
+
+      // once the velocity of the biker has decelerated to 0, the crank angle Property is set to a value that aligns to
+      // the next closest biker animation frame so that there is no delay for the legs to start moving the next time the
+      // biker starts moving. this small change of angle causes the gear to jump a bit when the biker stops, but we can
+      // eliminate that jump by checking to see if the biker has any actual velocity, since the angle adjustment only
+      // happens when velocity is 0.
+      if ( biker.crankAngularVelocity > 0 ) {
+        bicycleGearNode.rotateAround( gearRotationPoint, -delta );
+      }
     } );
 
     // add button to replenish the biker's energy (when she runs out)

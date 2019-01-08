@@ -174,7 +174,6 @@ define( function( require ) {
       }
 
       var newAngle = ( this.crankAngleProperty.value + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
-
       this.crankAngleProperty.set( newAngle );
 
       this.rearWheelAngleProperty.set(
