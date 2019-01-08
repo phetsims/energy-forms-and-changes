@@ -47,7 +47,7 @@ define( function( require ) {
    * @param {number} topCenter
    * @param {number} height
    * @param {number} edgeLength
-   * @return {Path}
+   * @returns {Path}
    * @constructor
    */
   function createBurnerStandSide( topCenter, height, edgeLength ) {
@@ -84,7 +84,7 @@ define( function( require ) {
    * @param {number} leftCenter
    * @param {number} width
    * @param {number} edgeLength
-   * @return {Path}
+   * @returns {Path}
    */
   function createBurnerStandTop( leftCenter, width, edgeLength ) {
 

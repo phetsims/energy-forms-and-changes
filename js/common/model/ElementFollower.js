@@ -76,7 +76,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @return {boolean}
+     * @returns {boolean}
      */
     isFollowing: function() {
       return this.locationBeingFollowedProperty !== null;

@@ -419,7 +419,7 @@ define( function( require ) {
 
     /**
      * get the shape of the area where light can be absorbed
-     * @return {Shape}
+     * @returns {Shape}
      */
     getAbsorptionShape: function() {
       return this.absorptionShape;

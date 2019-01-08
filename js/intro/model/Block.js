@@ -115,7 +115,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @return {Color}
+     * @returns {Color}
      */
     get color() {
       return BLOCK_COMPOSITION[ this.blockType ].color;
@@ -123,7 +123,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @return {EnergyContainerCategory}
+     * @returns {EnergyContainerCategory}
      */
     get energyContainerCategory() {
       return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;

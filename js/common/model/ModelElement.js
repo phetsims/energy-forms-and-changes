@@ -109,7 +109,7 @@ define( function( require ) {
      * method to test whether this element is stacked upon another, always false for non-movable model elements,
      * override as needed in descendant types
      * @param {ModelElement} element - model element to be checked
-     * @return {boolean}
+     * @returns {boolean}
      * @public
      */
     isStackedUpon: function( element ) {

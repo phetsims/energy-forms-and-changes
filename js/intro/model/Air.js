@@ -205,7 +205,7 @@ define( function( require ) {
     /**
      * create a new energy chunk at the top of the air above the specified point
      * @param {Vector2} point
-     * @return {EnergyChunk}
+     * @returns {EnergyChunk}
      * @public
      */
     requestEnergyChunk: function( point ) {

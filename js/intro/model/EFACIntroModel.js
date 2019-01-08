@@ -835,7 +835,7 @@ define( function( require ) {
      * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
      * @param {Bounds2} bounds1
      * @param {Bounds2} bounds2
-     * @return {boolean}
+     * @returns {boolean}
      */
     exclusiveIntersectsBounds: function( bounds1, bounds2 ) {
       var minX = Math.max( bounds1.minX, bounds2.minX );

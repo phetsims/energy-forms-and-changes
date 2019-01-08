@@ -97,7 +97,7 @@ define( function( require ) {
 
     /**
      * get the current energy content
-     * @return {number}
+     * @returns {number}
      * @public
      */
     getEnergy: function() {
@@ -106,7 +106,7 @@ define( function( require ) {
 
     /**
      * get the amount of energy above the minimum allowed
-     * @return {number}
+     * @returns {number}
      * @public
      */
     getEnergyAboveMinimum: function() {

@@ -106,7 +106,7 @@ define( function( require ) {
     /**
      * step in time
      * @param dt - time step, in seconds
-     * @return {Energy}
+     * @returns {Energy}
      */
     step: function( dt ) {
       var energyProduced = 0;

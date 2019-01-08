@@ -32,7 +32,7 @@ define( function( require ) {
     /**
      * get the energy chunks that this source wants to transfer to the next energy system element, reading clears the
      * list
-     * @return {EnergyChunk[]}
+     * @returns {EnergyChunk[]}
      * @public
      */
     extractOutgoingEnergyChunks: function() {

@@ -89,7 +89,7 @@ define( function( require ) {
 
     /**
      * get the last point in the path that the energy chunk will follow
-     * @return {Vector2}
+     * @returns {Vector2}
      * @public
      */
     getFinalDestination: function() {

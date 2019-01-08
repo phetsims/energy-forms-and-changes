@@ -388,7 +388,7 @@ define( function( require ) {
 
     /**
      * get the (signed) number of energy chunks for interaction with thermal objects (as opposed to air)
-     * @return {number} - The number of energy chunks that could be supplied or consumed. Negative value indicates that
+     * @returns {number} - The number of energy chunks that could be supplied or consumed. Negative value indicates that
      * chunks should come in.
      * @public
      */
