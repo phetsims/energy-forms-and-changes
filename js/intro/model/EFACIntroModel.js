@@ -359,19 +359,35 @@ define( function( require ) {
           if ( burner.inContactWith( element ) ) {
             var burnerChunkBalance = burner.getEnergyChunkBalanceWithObjects();
             var elementChunkBalance = element.getEnergyChunkBalance();
+            var energyChunk;
 
-            if ( burner.canSupplyEnergyChunk() && ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) ) {
+            if ( ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) && burner.canSupplyEnergyChunk() ) {
 
               // add an energy chunk to the model element on the burner
               element.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( element.getCenterPoint() ) );
             }
-            else if ( burner.canAcceptEnergyChunk() && ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) ) {
+            else if ( ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) && burner.canAcceptEnergyChunk() ) {
 
               // extract an energy chunk from the model element
-              var energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
+              energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
 
               if ( energyChunk !== null ) {
                 burner.addEnergyChunk( energyChunk );
+              }
+            }
+            else if ( burner.heatCoolLevelProperty.value < 0 && elementChunkBalance === 0 ) {
+
+              // This is a bit of a tricky case, so it requires some explanation.  If the burner is attempting to cool
+              // the element directly on top of it, and that element doesn't have any excess energy chunks, but the
+              // element on top of THAT element does, the element on the burner should go ahead and surrender an energy
+              // chunk to the burner with the expectation that it will get one shortly from the element that is stacked
+              // on top of it.  Simple, right?
+              var elementOnTop = element.getTopSurface().elementOnSurfaceProperty.value;
+              if ( elementOnTop.getEnergyChunkBalance() > 0 ) {
+                energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
+                if ( energyChunk !== null ) {
+                  burner.addEnergyChunk( energyChunk );
+                }
               }
             }
           }
