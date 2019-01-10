@@ -20,6 +20,7 @@ define( function( require ) {
   var BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var DownUpListener = require( 'SCENERY/input/DownUpListener' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -28,7 +29,8 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
-  var LinkableHeaterCoolerFront = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/LinkableHeaterCoolerFront' );
+  var HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
+  var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -142,6 +144,27 @@ define( function( require ) {
     playPauseAndSpeedControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
     backLayer.addChild( playPauseAndSpeedControlPanel );
 
+    // make the heat cool levels equal if they become linked
+    model.linkedHeatersProperty.link( linked => {
+      if ( linked ) {
+        model.leftBurner.heatCoolLevelProperty.value = model.rightBurner.heatCoolLevelProperty.value;
+      }
+    } );
+
+    // if the heaters are linked, changing the left heater will change the right to match
+    model.leftBurner.heatCoolLevelProperty.link( leftHeatCoolAmount => {
+      if ( model.linkedHeatersProperty.value ) {
+        model.rightBurner.heatCoolLevelProperty.value = leftHeatCoolAmount;
+      }
+    } );
+
+    // if the heaters are linked, changing the right heater will change the left to match
+    model.rightBurner.heatCoolLevelProperty.link( rightHeatCoolAmount => {
+      if ( model.linkedHeatersProperty.value ) {
+        model.leftBurner.heatCoolLevelProperty.value = rightHeatCoolAmount;
+      }
+    } );
+
     // add the burners
     var burnerProjectionAmount = modelViewTransform.modelToViewDeltaX(
       model.leftBurner.getCompositeBounds().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO
@@ -160,13 +183,13 @@ define( function( require ) {
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5
     } );
-    var leftLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
+    var leftHeaterCoolerFront = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5,
       thumbSize: new Dimension2( 18, 36 )
     } );
-    heaterCoolerFrontLayer.addChild( leftLinkableHeaterCoolerFront );
+    heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( leftBurnerStand );
 
@@ -182,32 +205,79 @@ define( function( require ) {
       minWidth: rightBurnerStand.width / 1.5,
       maxWidth: rightBurnerStand.width / 1.5
     } );
-    var rightLinkableHeaterCoolerFront = new LinkableHeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
+    var rightHeaterCoolerFront = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: rightBurnerStand.width / 1.5,
       maxWidth: rightBurnerStand.width / 1.5,
       thumbSize: new Dimension2( 18, 36 )
     } );
-    heaterCoolerFrontLayer.addChild( rightLinkableHeaterCoolerFront );
+    heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
     backLayer.addChild( rightBurnerStand );
 
-    // link the slider dragging Properties of the heaters. if the heaters are linked and one is being dragged,
-    // tell the other heater to follow it, otherwise respect its own heating Property
-    Property.multilink(
-      [
-        leftLinkableHeaterCoolerFront.sliderBeingDraggedProperty,
-        rightLinkableHeaterCoolerFront.sliderBeingDraggedProperty
-      ],
-      function( leftSliderBeingDragged, rightSliderBeingDragged ) {
-        if ( model.linkedHeatersProperty.get() ) {
-          leftSliderBeingDragged ? rightLinkableHeaterCoolerFront.setFollowProperty( model.leftBurner.heatCoolLevelProperty ) :
-          rightLinkableHeaterCoolerFront.clearFollowProperty( model.leftBurner.heatCoolLevelProperty );
-          rightSliderBeingDragged ? leftLinkableHeaterCoolerFront.setFollowProperty( model.rightBurner.heatCoolLevelProperty ) :
-          leftLinkableHeaterCoolerFront.clearFollowProperty( model.rightBurner.heatCoolLevelProperty );
+    var leftHeaterCoolerDownInputAction = function() {
+
+      // make the right heater-cooler un-pickable if the heaters are linked
+      if ( model.linkedHeatersProperty.value ) {
+        rightHeaterCoolerFront.interruptSubtreeInput();
+        rightHeaterCoolerFront.pickable = false;
+      }
+    };
+    var leftHeaterCoolerUpInputAction = function() {
+      rightHeaterCoolerFront.pickable = true;
+    };
+
+    // listen to pointer events on the left heater-cooler
+    leftHeaterCoolerFront.addInputListener( new DownUpListener( {
+      down: leftHeaterCoolerDownInputAction,
+      up: leftHeaterCoolerUpInputAction
+    } ) );
+
+    // listen to keyboard events on the left heater-cooler
+    leftHeaterCoolerFront.addInputListener( {
+      keydown: ( event ) => {
+        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+          leftHeaterCoolerDownInputAction();
+        }
+      },
+      keyup: ( event ) => {
+        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+          leftHeaterCoolerUpInputAction();
         }
       }
-    );
+    } );
+
+    var rightHeaterCoolerDownInputAction = function() {
+
+      // make the left heater-cooler un-pickable if the heaters are linked
+      if ( model.linkedHeatersProperty.value ) {
+        leftHeaterCoolerFront.interruptSubtreeInput();
+        leftHeaterCoolerFront.pickable = false;
+      }
+    };
+    var rightHeaterCoolerUpInputAction = function() {
+      leftHeaterCoolerFront.pickable = true;
+    };
+
+    // listen to pointer events on the right heater-cooler
+    rightHeaterCoolerFront.addInputListener( new DownUpListener( {
+      down: rightHeaterCoolerDownInputAction,
+      up: rightHeaterCoolerUpInputAction
+    } ) );
+
+    // listen to keyboard events on the right heater-cooler
+    rightHeaterCoolerFront.addInputListener( {
+      keydown: ( event ) => {
+        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+          rightHeaterCoolerDownInputAction();
+        }
+      },
+      keyup: ( event ) => {
+        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+          rightHeaterCoolerUpInputAction();
+        }
+      }
+    } );
 
     // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
