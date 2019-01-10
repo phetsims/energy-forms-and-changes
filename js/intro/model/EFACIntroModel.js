@@ -514,7 +514,7 @@ define( function( require ) {
           self.air.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( burner.getCenterPoint() ), null );
         }
         else if ( burner.getEnergyChunkCountForAir() < 0 ) {
-          burner.addEnergyChunk( self.air.extractEnergyChunkClosestToPoint( burner.getCenterPoint() ) );
+          burner.addEnergyChunk( self.air.requestEnergyChunk( burner.getCenterPoint() ) );
         }
       } );
 
