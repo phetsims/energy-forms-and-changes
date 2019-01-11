@@ -385,12 +385,15 @@ define( function( require ) {
             else if ( burner.heatCoolLevelProperty.value < 0 && elementChunkBalance === 0 ) {
 
               // This is a bit of a tricky case, so it requires some explanation.  If the burner is attempting to cool
-              // the element directly on top of it, and that element doesn't have any excess energy chunks, but the
-              // element on top of THAT element does, the element on the burner should go ahead and surrender an energy
-              // chunk to the burner with the expectation that it will get one shortly from the element that is stacked
-              // on top of it.  Simple, right?
-              var elementOnTop = element.getTopSurface().elementOnSurfaceProperty.value;
-              if ( elementOnTop && elementOnTop.getEnergyChunkBalance() > 0 ) {
+              // the element directly on top of it, and that element doesn't have any excess energy chunks, but
+              // something in the stack on TOP of the element does, the element on the burner should go ahead and
+              // surrender an energy chunk to the burner with the expectation that it will get one shortly from the
+              // element(s) on top.  Simple, right?
+              var numExcessChunksAbove = 0;
+              for ( var nextElement = element.getElementOnTop(); nextElement !== null; nextElement = nextElement.getElementOnTop() ) {
+                numExcessChunksAbove += nextElement.getEnergyChunkBalance();
+              }
+              if ( numExcessChunksAbove > 0 ) {
                 energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
                 if ( energyChunk !== null ) {
                   burner.addEnergyChunk( energyChunk );
@@ -420,6 +423,7 @@ define( function( require ) {
             self.inThermalContactInfo[ container2.id ].push( container1.id );
 
             // exchange one or more chunks if appropriate
+            var ec = null;
             if ( container1.getEnergyChunkBalance() > 0 ) {
 
               // If the 2nd thermal energy container is low on energy chunks, it's a no brainer, do the transfer.  If
@@ -427,11 +431,13 @@ define( function( require ) {
               // its excess chunks and odd behavior can result, see
               // https://github.com/phetsims/energy-forms-and-changes/issues/115#issuecomment-448810473.
               if ( container2.getEnergyChunkBalance() < 0 || isImmersedIn( container1, container2 ) ) {
-                container2.addEnergyChunk( container1.extractEnergyChunkClosestToBounds( container2.thermalContactArea ) );
+                ec = container1.extractEnergyChunkClosestToBounds( container2.thermalContactArea );
+                ec && container2.addEnergyChunk( ec );
               }
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
-              container1.addEnergyChunk( container2.extractEnergyChunkClosestToBounds( container1.thermalContactArea ) );
+              ec = container2.extractEnergyChunkClosestToBounds( container1.thermalContactArea );
+              ec && container1.addEnergyChunk( ec );
             }
           }
         } );

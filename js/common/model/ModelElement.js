@@ -117,6 +117,14 @@ define( function( require ) {
     },
 
     /**
+     * get any element that is on top of this one, null if nothing there
+     * @returns {ModelElement|null}
+     */
+    getElementOnTop: function() {
+      return this.topSurface.elementOnSurfaceProperty.get();
+    },
+
+    /**
      * get the bounds list, which represents the model space occupied by this model element, translated to the supplied
      * position
      * @param {Vector2} position

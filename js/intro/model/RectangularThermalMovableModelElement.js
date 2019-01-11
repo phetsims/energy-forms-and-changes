@@ -413,6 +413,7 @@ define( function( require ) {
 
     /**
      * @returns {number}
+     * @public
      */
     getNumEnergyChunks: function() {
 
