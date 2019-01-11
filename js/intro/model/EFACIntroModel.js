@@ -153,6 +153,13 @@ define( function( require ) {
     // @private - put all the thermal containers on a list for easy iteration
     this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
+    // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
+    // each model step.
+    this.inThermalContactInfo = {};
+    this.thermalContainers.forEach( function( thermalContainer ) {
+      self.inThermalContactInfo[ thermalContainer.id ] = [];
+    } );
+
     // @private - put burners into a list for easy iteration
     this.burners = [ this.rightBurner, this.leftBurner ];
 
@@ -394,11 +401,23 @@ define( function( require ) {
         } );
       } );
 
-      // exchange energy chunks between movable thermal energy containers
-      self.thermalContainers.forEach( function( container1, index ) {
+      // clear the "in thermal contact" information
+      _.values( self.inThermalContactInfo ).forEach( function( inContactList ) {
+        inContactList.length = 0;
+      } );
+
+      // Exchange energy chunks between pairs of thermal energy containers that are in contact and have excess or
+      // deficits that warrant an exchange.
+      this.thermalContainers.forEach( function( container1, index ) {
+
+        // loop through all other containers and, if in contact, see if an exchange of energy chunks should occur
         self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
 
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
+
+            // update list of elements that are in contact
+            self.inThermalContactInfo[ container1.id ].push( container2.id );
+            self.inThermalContactInfo[ container2.id ].push( container1.id );
 
             // exchange one or more chunks if appropriate
             if ( container1.getEnergyChunkBalance() > 0 ) {
@@ -416,6 +435,36 @@ define( function( require ) {
             }
           }
         } );
+      } );
+
+      // Check for cases where energy chunks should be exchanged between thermal model elements that are in stacks,
+      // since there can be cases where there are matching surpluses and deficits at the ends of a stack with none in
+      // the middle.  NOTE: This is not fully general, and only handles stacks of 3 elements, which is all that is
+      // needed at the time of this writing.  More generalization would be required to handle larger stacks.
+      this.thermalContainers.forEach( function( container ) {
+        if ( self.inThermalContactInfo[ container.id ].length === 2 ) {
+          var neighbor1ID = self.inThermalContactInfo[ container.id ][ 0 ];
+          var neighbor2ID = self.inThermalContactInfo[ container.id ][ 1 ];
+          if ( self.inThermalContactInfo[ neighbor1ID ].length === 1 && self.inThermalContactInfo[ neighbor2ID ].length ) {
+
+            // This is the situation we're looking for, where a thermal container is in the center of a stack of thermal
+            // containers.  Test whether an energy chunk exchange can be brokered.
+            var neighbor1 = self.getThermalElementByID( neighbor1ID );
+            var neighbor2 = self.getThermalElementByID( neighbor2ID );
+            var neighbor1ECBalance = neighbor1.getEnergyChunkBalance();
+            var neighbor2ECBalance = neighbor2.getEnergyChunkBalance();
+            var energyChunk;
+            if ( neighbor1ECBalance > 0 && neighbor2ECBalance < 0 ) {
+              energyChunk = neighbor1.extractEnergyChunkClosestToShape( container.thermalContactArea );
+            }
+            else if ( neighbor2ECBalance > 0 && neighbor1ECBalance < 0 ) {
+              energyChunk = neighbor2.extractEnergyChunkClosestToShape( container.thermalContactArea );
+            }
+            if ( energyChunk ) {
+              container.addEnergyChunk( energyChunk );
+            }
+          }
+        }
       } );
 
       // Exchange energy and energy chunks between the movable thermal energy containers and the air.
@@ -1077,6 +1126,18 @@ define( function( require ) {
       }
 
       return temperatureAndColor;
+    },
+
+    /**
+     * get the thermal model element that has the provided ID
+     * @param {string} id
+     * @returns {RectangularThermalMovableModelElement}
+     * @private
+     */
+    getThermalElementByID: function( id ) {
+      return _.find( this.thermalContainers, function( container ) {
+        return container.id === id;
+      } );
     }
   } );
 } );
