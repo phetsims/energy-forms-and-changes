@@ -40,6 +40,9 @@ define( function( require ) {
 
     }, options );
 
+    // @private
+    this.parentPositionProperty = options.parentPositionProperty;
+
     // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
     // when chunks are removed from the model.
     function chunkAddedListener( energyChunk ) {
@@ -66,11 +69,11 @@ define( function( require ) {
     // add the named observer function
     energyChunkList.addItemAddedListener( chunkAddedListener );
 
-    if ( options.parentPositionProperty ) {
+    if ( this.parentPositionProperty ) {
 
       // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
       // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
-      options.parentPositionProperty.link( function( position ) {
+      this.parentPositionProperty.link( function( position ) {
         self.x = -modelViewTransform.modelToViewX( position.x );
         self.y = -modelViewTransform.modelToViewY( position.y );
       } );
@@ -79,5 +82,17 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );
 
-  return inherit( Node, EnergyChunkLayer );
+  return inherit( Node, EnergyChunkLayer, {
+    /**
+     * Removes the parent position property so that this energy chunk layer has no offset. This is helpful when adding
+     * energy chunk layers from outside of the node that they are for (because no position offset is needed).
+     *
+     * @public
+     */
+    removeParentPositionProperty: function() {
+      this.parentPositionProperty = null;
+      this.x = 0;
+      this.y = 0;
+    }
+  } );
 } );

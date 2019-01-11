@@ -148,10 +148,6 @@ define( function( require ) {
     this.addChild( fluorescentBulbNode );
     this.addChild( fanNode );
 
-    // create the faucet node
-    this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
-    this.addChild( this.faucetNode );
-
     // create the energy converter nodes
     var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
     var beltNode = new BeltNode( model.belt, modelViewTransform );
@@ -160,7 +156,18 @@ define( function( require ) {
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // create the energy source nodes (except the faucet, which has already been created)
+    // create the faucet nodes
+    this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+    this.addChild( this.faucetNode );
+
+    // remove the visible energy chunk layer from the generator and add it back in after the faucet has been created.
+    // this is desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks
+    // that are traveling on top of the falling water now remain in front of the water once the generator owns them.
+    var generatorVisibleEnergyChunkLayer = generatorNode.removeAndGetEnergyChunkLayer();
+    generatorVisibleEnergyChunkLayer.removeParentPositionProperty();
+    this.addChild( generatorVisibleEnergyChunkLayer );
+
+    // create the rest of the energy source nodes
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
     this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
     var bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
