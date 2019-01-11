@@ -48,7 +48,7 @@ define( function( require ) {
     var wireStraightNode = new Image( wireStraightImage, { left: -112, top: 78 } );
     var wireBottomRightNode = new Image( wireBottomRightShortImage, {
       left: wireStraightNode.right - 4,
-      bottom: wireStraightNode.bottom + 2.5
+      bottom: wireStraightNode.bottom + 1.7
     } );
     var elementBaseBackNode = new Image( elementBaseBackImage, {
       maxWidth: EFACConstants.ELEMENT_BASE_WIDTH,
