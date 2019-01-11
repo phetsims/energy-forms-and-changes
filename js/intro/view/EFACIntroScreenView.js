@@ -13,7 +13,7 @@ define( function( require ) {
 
   // modules
   var AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
-  var AnimationSpec = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/AnimationSpec' );
+  var Animation = require( 'TWIXT/Animation' );
   var BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
   var BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -21,6 +21,7 @@ define( function( require ) {
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var DownUpListener = require( 'SCENERY/input/DownUpListener' );
+  var Easing = require( 'TWIXT/Easing' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -433,7 +434,7 @@ define( function( require ) {
           var thermometerBounds = sensorNode.localToParentBounds( sensorNode.thermometerNode.bounds );
           if ( colorIndicatorBounds.intersectsBounds( sensorStorageArea.bounds ) ||
                thermometerBounds.intersectsBounds( sensorStorageArea.bounds ) ) {
-            returnSensorToStorageArea( sensor, true );
+            returnSensorToStorageArea( sensor, true, sensorNode );
           }
         }
       } );
@@ -443,9 +444,10 @@ define( function( require ) {
      * return a sensor to its initial position in the storage area
      * @param {StickyTemperatureAndColorSensor} sensor
      * @param {Boolean} doAnimation - whether the sensor animates back to the storage area
+     * @param {TemperatureAndColorSensorNode} [sensorNode]
      * @constructor
      */
-    function returnSensorToStorageArea( sensor, doAnimation ) {
+    function returnSensorToStorageArea( sensor, doAnimation, sensorNode ) {
       var currentPosition = sensor.positionProperty.get();
       if ( !currentPosition.equals( sensorPositionInStorageArea ) && doAnimation ) {
 
@@ -454,12 +456,19 @@ define( function( require ) {
           sensor.positionProperty.get().distance( sensorPositionInStorageArea ) / SENSOR_ANIMATION_SPEED,
           MAX_SENSOR_ANIMATION_TIME
         );
+        var animationOptions = {
+          property: sensor.positionProperty,
+          to: sensorPositionInStorageArea,
+          duration: animationDuration,
+          easing: Easing.CUBIC_IN_OUT
+        };
+        var translateAnimation = new Animation( animationOptions );
 
-        sensor.inProgressAnimationProperty.set( new AnimationSpec(
-          currentPosition.copy(),
-          sensorPositionInStorageArea,
-          animationDuration
-        ) );
+        // make the sensor unpickable while it's animating back to the storage area
+        translateAnimation.animatingProperty.link( function( isAnimating ) {
+          sensorNode && ( sensorNode.pickable = !isAnimating );
+        } );
+        translateAnimation.start();
       }
       else if ( !currentPosition.equals( sensorPositionInStorageArea ) && !doAnimation ) {
 
