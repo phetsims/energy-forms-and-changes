@@ -299,18 +299,16 @@ define( function( require ) {
     },
 
     /**
-     * Extract an energy chunk that is a good choice for being transferred to the provided shape.  Generally, this means
-     * that it is close to the shape. This routine is not hugely general - it makes some assumptions that make it work
-     * for blocks in beakers.  If support for other shapes is needed, it will likely need some work.
-     * @param {Shape} destinationShape
+     * extract an energy chunk that is a good choice for being transferred to the provided rectangular bounds
+     * @param {Bounds2} destinationBounds
      * @returns {EnergyChunk|null} - a suitable energy chunk or null if no energy chunks are available
      * @public
      */
-    extractEnergyChunkClosestToShape: function( destinationShape ) {
+    extractEnergyChunkClosestToBounds: function( destinationBounds ) {
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
-      if ( destinationShape.intersectsBounds( this.thermalContactArea ) ) {
+      if ( destinationBounds.containsBounds( this.thermalContactArea ) ) {
 
         // this element's shape is contained by the destination - pick a chunk near our right or left edge
         var closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
@@ -328,18 +326,17 @@ define( function( require ) {
           } );
         } );
       }
-      else if ( this.thermalContactArea.containsBounds( destinationShape.bounds ) ) {
+      else if ( this.thermalContactArea.containsBounds( destinationBounds ) ) {
 
         // This element's shape encloses the destination shape - choose a chunk that is close but doesn't overlap with
         // the destination shape.
         var closestDistanceToDestinationEdge = Number.POSITIVE_INFINITY;
-        var destinationBounds = destinationShape.bounds;
         this.slices.forEach( function( slice ) {
           slice.energyChunkList.forEach( function( energyChunk ) {
             var distanceToDestinationEdge =
               Math.min( Math.abs( destinationBounds.minX - energyChunk.positionProperty.value.x ),
                 Math.abs( destinationBounds.maxX - energyChunk.positionProperty.value.x ) );
-            if ( !destinationShape.containsPoint( energyChunk.positionProperty.value ) &&
+            if ( !destinationBounds.containsPoint( energyChunk.positionProperty.value ) &&
                  distanceToDestinationEdge < closestDistanceToDestinationEdge ) {
               chunkToExtract = energyChunk;
               closestDistanceToDestinationEdge = distanceToDestinationEdge;
@@ -350,13 +347,12 @@ define( function( require ) {
       else {
 
         // there is no or limited overlap, so use center points
-        chunkToExtract = this.extractEnergyChunkClosestToPoint(
-          new Vector2( destinationShape.bounds.centerX, destinationShape.bounds.centerY ) );
+        chunkToExtract = this.extractEnergyChunkClosestToPoint( destinationBounds.getCenter() );
       }
 
-      // tail safe - if nothing found, get the first chunk
+      // fail safe - if nothing found, get the first chunk
       if ( chunkToExtract === null ) {
-        console.log( ' - Warning: No energy chunk found by extraction algorithm, trying first available..' );
+        console.warn( 'No energy chunk found by extraction algorithm, trying first available..' );
         var length = this.slices.length;
         for ( var i = 0; i < length; i++ ) {
           if ( this.slices[ i ].energyChunkList.length > 0 ) {
@@ -365,7 +361,7 @@ define( function( require ) {
           }
         }
         if ( chunkToExtract === null ) {
-          console.log( ' - Warning: No chunks available for extraction.' );
+          console.warn( 'No chunks available for extraction.' );
         }
       }
       this.removeEnergyChunk( chunkToExtract );

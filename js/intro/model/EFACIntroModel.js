@@ -427,11 +427,11 @@ define( function( require ) {
               // its excess chunks and odd behavior can result, see
               // https://github.com/phetsims/energy-forms-and-changes/issues/115#issuecomment-448810473.
               if ( container2.getEnergyChunkBalance() < 0 || isImmersedIn( container1, container2 ) ) {
-                container2.addEnergyChunk( container1.extractEnergyChunkClosestToShape( container2.thermalContactArea ) );
+                container2.addEnergyChunk( container1.extractEnergyChunkClosestToBounds( container2.thermalContactArea ) );
               }
             }
             else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
-              container1.addEnergyChunk( container2.extractEnergyChunkClosestToShape( container1.thermalContactArea ) );
+              container1.addEnergyChunk( container2.extractEnergyChunkClosestToBounds( container1.thermalContactArea ) );
             }
           }
         } );
@@ -455,10 +455,10 @@ define( function( require ) {
             var neighbor2ECBalance = neighbor2.getEnergyChunkBalance();
             var energyChunk;
             if ( neighbor1ECBalance > 0 && neighbor2ECBalance < 0 ) {
-              energyChunk = neighbor1.extractEnergyChunkClosestToShape( container.thermalContactArea );
+              energyChunk = neighbor1.extractEnergyChunkClosestToBounds( container.thermalContactArea );
             }
             else if ( neighbor2ECBalance > 0 && neighbor1ECBalance < 0 ) {
-              energyChunk = neighbor2.extractEnergyChunkClosestToShape( container.thermalContactArea );
+              energyChunk = neighbor2.extractEnergyChunkClosestToBounds( container.thermalContactArea );
             }
             if ( energyChunk ) {
               container.addEnergyChunk( energyChunk );
