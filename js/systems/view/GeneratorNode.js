@@ -73,9 +73,12 @@ define( function( require ) {
     this.addChild( new EnergyChunkLayer( generator.hiddenEnergyChunks, modelViewTransform, {
       parentPositionProperty: generator.positionProperty
     } ) );
-    this.addChild( new EnergyChunkLayer( generator.energyChunkList, modelViewTransform, {
+
+    // @public (read-only)
+    this.visibleEnergyChunkLayer = new EnergyChunkLayer( generator.energyChunkList, modelViewTransform, {
       parentPositionProperty: generator.positionProperty
-    } ) );
+    } );
+    this.addChild( this.visibleEnergyChunkLayer );
 
     // update the rotation of the wheel image based on model value
     var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );
@@ -94,6 +97,18 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'GeneratorNode', GeneratorNode );
 
-  return inherit( MoveFadeModelElementNode, GeneratorNode );
+  return inherit( MoveFadeModelElementNode, GeneratorNode, {
+    /**
+     * Remove and return the visible energy chunk layer. This supports adding the energy chunk layer back in from
+     * outside of this node to change the layering order.
+     *
+     * @public
+     * @returns {EnergyChunkLayer}
+     */
+    removeAndGetEnergyChunkLayer: function() {
+      this.removeChild( this.visibleEnergyChunkLayer );
+      return this.visibleEnergyChunkLayer;
+    }
+  } );
 } );
 
