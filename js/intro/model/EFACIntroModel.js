@@ -390,7 +390,7 @@ define( function( require ) {
               // chunk to the burner with the expectation that it will get one shortly from the element that is stacked
               // on top of it.  Simple, right?
               var elementOnTop = element.getTopSurface().elementOnSurfaceProperty.value;
-              if ( elementOnTop.getEnergyChunkBalance() > 0 ) {
+              if ( elementOnTop && elementOnTop.getEnergyChunkBalance() > 0 ) {
                 energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
                 if ( energyChunk !== null ) {
                   burner.addEnergyChunk( energyChunk );
