@@ -146,21 +146,21 @@ define( function( require ) {
     backLayer.addChild( playPauseAndSpeedControlPanel );
 
     // make the heat cool levels equal if they become linked
-    model.linkedHeatersProperty.link( linked => {
+    model.linkedHeatersProperty.link( function( linked ) {
       if ( linked ) {
         model.leftBurner.heatCoolLevelProperty.value = model.rightBurner.heatCoolLevelProperty.value;
       }
     } );
 
     // if the heaters are linked, changing the left heater will change the right to match
-    model.leftBurner.heatCoolLevelProperty.link( leftHeatCoolAmount => {
+    model.leftBurner.heatCoolLevelProperty.link( function( leftHeatCoolAmount ) {
       if ( model.linkedHeatersProperty.value ) {
         model.rightBurner.heatCoolLevelProperty.value = leftHeatCoolAmount;
       }
     } );
 
     // if the heaters are linked, changing the right heater will change the left to match
-    model.rightBurner.heatCoolLevelProperty.link( rightHeatCoolAmount => {
+    model.rightBurner.heatCoolLevelProperty.link( function( rightHeatCoolAmount ) {
       if ( model.linkedHeatersProperty.value ) {
         model.leftBurner.heatCoolLevelProperty.value = rightHeatCoolAmount;
       }
@@ -236,12 +236,12 @@ define( function( require ) {
 
     // listen to keyboard events on the left heater-cooler
     leftHeaterCoolerFront.addInputListener( {
-      keydown: ( event ) => {
+      keydown: function( event ) {
         if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
           leftHeaterCoolerDownInputAction();
         }
       },
-      keyup: ( event ) => {
+      keyup: function( event ) {
         if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
           leftHeaterCoolerUpInputAction();
         }
@@ -268,12 +268,12 @@ define( function( require ) {
 
     // listen to keyboard events on the right heater-cooler
     rightHeaterCoolerFront.addInputListener( {
-      keydown: ( event ) => {
+      keydown: function( event ) {
         if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
           rightHeaterCoolerDownInputAction();
         }
       },
-      keyup: ( event ) => {
+      keyup: function( event ) {
         if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
           rightHeaterCoolerUpInputAction();
         }
