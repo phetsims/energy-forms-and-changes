@@ -1,9 +1,9 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
 /**
- * Scenery node that represents a beaker in the view.  This representation is split between a front node and a back
- * node, which must be separately added to the canvas.  This is done to allow a layering effect.  Hence, this cannot be
- * added directly to the scene graph, and the client must add each layer separately.
+ * Scenery node that represents a beaker in the view. This representation is split between a front node and a back
+ * node, which must be separately added to the scene graph. This is done to allow a layering effect. Hence, this cannot
+ * be added directly to the scene graph, and the client must add each layer separately.
  *
  * @author John Blanco
  * @author Andrew Adare
