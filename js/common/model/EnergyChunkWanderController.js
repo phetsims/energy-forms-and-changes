@@ -21,7 +21,7 @@ define( function( require ) {
   var MIN_TIME_IN_ONE_DIRECTION = 0.4;
   var MAX_TIME_IN_ONE_DIRECTION = 0.8;
   var DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // In meters, empirically chosen.
-  var MAX_ANGLE_VARIATION = Math.PI * 0.2; // Max deviation from angle to destination, in radians, empirically chosen.
+  var MAX_ANGLE_VARIATION = Math.PI * 0.1; // Max deviation from angle to destination, in radians, empirically chosen.
 
   /**
    * @param {EnergyChunk} energyChunk

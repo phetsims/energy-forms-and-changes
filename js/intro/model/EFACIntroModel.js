@@ -415,7 +415,7 @@ define( function( require ) {
 
           if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
 
-            // update list of elements that are in contact
+            // update list of elements that are in thermal contact
             self.inThermalContactInfo[ container1.id ].push( container2.id );
             self.inThermalContactInfo[ container2.id ].push( container1.id );
 
