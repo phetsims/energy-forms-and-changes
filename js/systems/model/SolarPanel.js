@@ -375,6 +375,24 @@ define( function( require ) {
     },
 
     /**
+     * @param {EnergyChunk[]} energyChunks
+     * @public
+     * @override
+     */
+    injectEnergyChunks: function( energyChunks ) {
+
+      // before adding all injected chunks into the solar panel's incoming energy chunks array, make sure that they are
+      // all light energy. if not, pull out the bad ones and pass the rest through.
+      // see https://github.com/phetsims/energy-forms-and-changes/issues/150
+      energyChunks.forEach( function( chunk ) {
+        if ( chunk.energyTypeProperty.value !== EnergyType.LIGHT ) {
+          energyChunks = _.pull( energyChunks, chunk );
+        }
+      } );
+      EnergyConverter.prototype.injectEnergyChunks.call( this, energyChunks );
+    },
+
+    /**
      * @public
      * @override
      */
