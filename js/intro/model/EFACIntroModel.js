@@ -410,7 +410,7 @@ define( function( require ) {
       } );
 
       // Exchange energy chunks between pairs of thermal energy containers that are in contact and have excess or
-      // deficits that warrant an exchange.
+      // deficits in their energy chunk balances that warrant an exchange.
       this.thermalContainers.forEach( function( container1, index ) {
 
         // loop through all other containers and, if in contact, see if an exchange of energy chunks should occur
@@ -473,7 +473,7 @@ define( function( require ) {
         }
       } );
 
-      // Exchange energy and energy chunks between the movable thermal energy containers and the air.
+      // exchange energy and energy chunks between the movable thermal energy containers and the air
       this.thermalContainers.forEach( function( container1 ) {
 
         // set up some variables that are used to decide whether or not energy should be exchanged with air
@@ -557,7 +557,7 @@ define( function( require ) {
           }
           else {
 
-            // reset the accumulator
+            // clear the accumulator
             self.airECExchangeAccumulators[ container1.id ] = 0;
           }
         }
