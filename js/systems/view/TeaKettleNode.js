@@ -30,9 +30,10 @@ define( function( require ) {
   var teapotImage = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
 
   // constants
-  var BURNER_MODEL_BOUNDS = new Bounds2( -0.0375, 0, 0.0375, 0.075 ); // From Burner.getBoundingRect()
-  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // Multiplier empirically determined for best look.
-  var MAX_HEIGHT_AND_WIDTH = 200; // For tea kettle steam node
+  var BURNER_MODEL_BOUNDS = new Bounds2( -0.037, -0.0075, 0.037, 0.0525 ); // in meters
+  var BURNER_EDGE_TO_HEIGHT_RATIO = 0.2; // multiplier empirically determined for best look
+  var MAX_HEIGHT_AND_WIDTH = 200; // for tea kettle steam node
+  var HEATER_COOLER_NODE_SCALE = 0.85; // empirically determined for best look
 
   /**
    * @param {TeaKettle} teaKettle
@@ -47,8 +48,11 @@ define( function( require ) {
     var teaKettleImageNode = new Image( teapotImage, { right: 114, bottom: 53 } );
 
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
-    var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty );
-    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty, { snapToZero: false } );
+    var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty, { scale: HEATER_COOLER_NODE_SCALE } );
+    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty, {
+      snapToZero: false,
+      scale: HEATER_COOLER_NODE_SCALE
+    } );
 
     // burner stand node
     var burnerSize = modelViewTransform.modelToViewShape( BURNER_MODEL_BOUNDS );
@@ -56,7 +60,8 @@ define( function( require ) {
     var burnerStandNode = new BurnerStandNode( burnerSize, burnerProjection );
 
     burnerStandNode.centerTop = teaKettleImageNode.centerBottom.plus( new Vector2( 0, -teaKettleImageNode.height / 4 ) );
-    heaterCoolerBack.centerTop = teaKettleImageNode.centerBottom.plus( new Vector2( 0, teaKettleImageNode.height / 4 ) );
+    heaterCoolerBack.centerX = burnerStandNode.centerX;
+    heaterCoolerBack.bottom = burnerStandNode.bottom - burnerProjection / 2;
     heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
 
     // make the tea kettle & stand transparent when the energy chunks are visible
