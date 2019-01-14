@@ -36,7 +36,6 @@ define( function( require ) {
   var HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY = 0.0075; // in meters/sec, quite slow
   var HEATER_ELEMENT_2D_HEIGHT = 0.027; // height of image
   var MAX_HEAT_GENERATION_RATE = 5000; // Joules/sec, not connected to incoming energy
-  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
   var HEAT_ENERGY_CHANGE_RATE = 0.5; // in proportion per second
 
   // energy chunk path offsets, empirically determined such that they move through the view in a way that looks good
@@ -411,7 +410,10 @@ define( function( require ) {
     createRadiatedEnergyChunkPath: function( startingPoint ) {
       var energyChunkTravelPath = [];
       var numDirectionChanges = 4; // empirically chosen
-      var segmentVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
+      var segmentVector = new Vector2(
+        0,
+        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numDirectionChanges
+      );
 
       // The first segment is is straight above the starting point.  This is done because it looks good, making the
       // chunk move straight up out of the beaker.
