@@ -35,7 +35,7 @@ define( function( require ) {
   var COOLING_RATE = 0.25; // in degrees Celsius per second
 
   // energy chunk path offsets
-  var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.042 );
+  var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.0435 );
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
   var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
