@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.0-dev.13 Fri Jan 11 2019 17:48:03 GMT-0700 (Mountain Standard Time)",
+  "comment": "# energy-forms-and-changes 1.0.0-dev.14 Mon Jan 14 2019 12:56:25 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "5407993d77f0bb5a1ad63c112103ed4d22dbd1b7",
     "branch": "master"
@@ -21,11 +21,11 @@
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "191f199364266f2d30d8ce9f2687350364a8214e",
+    "sha": "7a0ed4bcc0c2520bffa5ec57c73a6ff1aa75e1a2",
     "branch": "master"
   },
   "joist": {
-    "sha": "01103f1bd2be1def48fb8a4d6a13633b84c3ca34",
+    "sha": "2fbde2d5aebfcd02f4d1cf0afba58d52c0e03190",
     "branch": "master"
   },
   "kite": {
@@ -33,11 +33,11 @@
     "branch": "master"
   },
   "phet-core": {
-    "sha": "edd6b92a3a497ae28dee28e26fc89aac71f7a4e0",
+    "sha": "b477cbae4844815a92e8b28ba51fd72c3ad0f0c4",
     "branch": "master"
   },
   "phet-io": {
-    "sha": "70bf26f500043f2f1aed461869604af6588d2fd9",
+    "sha": "9b6c6ffb646d99caf18b4f7168f0d093ef80f9c4",
     "branch": "master"
   },
   "phet-io-wrapper-classroom-activity": {
@@ -53,7 +53,7 @@
     "branch": "master"
   },
   "phet-io-wrappers": {
-    "sha": "35bf7c197340dff7d43e2ca9f22888da56a2597c",
+    "sha": "c82b7f7ae8ba8030f2cbd1d4ed8e9e95b876ba17",
     "branch": "master"
   },
   "phetcommon": {
@@ -65,7 +65,7 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "c3c56b71381950a9a30829e0490d6f82c704131f",
+    "sha": "6ab6d1cc337b8e5bf7969c989d7b81c4c5951f4d",
     "branch": "master"
   },
   "scenery-phet": {
@@ -77,7 +77,7 @@
     "branch": "master"
   },
   "sun": {
-    "sha": "3cc5ace57f4789d7895c533ed3db051e475e4685",
+    "sha": "34f093b2cbdc582b7eddf344f1d8edd0dc5d7910",
     "branch": "master"
   },
   "tambo": {
@@ -85,7 +85,7 @@
     "branch": "master"
   },
   "tandem": {
-    "sha": "d3c3404e61db4ecc1c50e182e2fa06083c525c29",
+    "sha": "88ea2c1bb26e6e4355a7e2cca2880168e84dd6dd",
     "branch": "master"
   },
   "twixt": {

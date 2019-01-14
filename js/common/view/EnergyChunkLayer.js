@@ -69,14 +69,17 @@ define( function( require ) {
     // add the named observer function
     energyChunkList.addItemAddedListener( chunkAddedListener );
 
+    // @private
+    this.parentPositionListener = function( position ) {
+      self.x = -modelViewTransform.modelToViewX( position.x );
+      self.y = -modelViewTransform.modelToViewY( position.y );
+    };
+
     if ( this.parentPositionProperty ) {
 
       // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
       // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
-      this.parentPositionProperty.link( function( position ) {
-        self.x = -modelViewTransform.modelToViewX( position.x );
-        self.y = -modelViewTransform.modelToViewY( position.y );
-      } );
+      this.parentPositionProperty.link( this.parentPositionListener );
     }
   }
 
@@ -90,6 +93,7 @@ define( function( require ) {
      * @public
      */
     removeParentPositionProperty: function() {
+      this.parentPositionProperty.unlink( this.parentPositionListener );
       this.parentPositionProperty = null;
       this.x = 0;
       this.y = 0;
