@@ -182,15 +182,15 @@ define( function( require ) {
 
     /**
      * @param {EnergyChunk} energyChunk
-     * @param {Rectangle} initialWanderConstraint
+     * @param {Range} horizontalWanderConstraint
      */
-    addEnergyChunk: function( energyChunk, initialWanderConstraint ) {
+    addEnergyChunk: function( energyChunk, horizontalWanderConstraint ) {
       energyChunk.zPositionProperty.value = 0;
       this.energyChunkList.push( energyChunk );
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController(
         energyChunk,
         new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
-        { initialWanderConstraint: initialWanderConstraint }
+        { horizontalWanderConstraint: horizontalWanderConstraint }
       ) );
     },
 

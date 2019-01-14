@@ -16,7 +16,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-  var EnergyChunkStraightLineMotionStrategy = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkStraightLineMotionStrategy' );
+  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
@@ -24,6 +24,7 @@ define( function( require ) {
   var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -69,13 +70,8 @@ define( function( require ) {
     // @private {Object[]} - motion strategies that control the movement of the energy chunks owned by this burner
     this.energyChunkMotionStrategies = [];
 
-    // @private {Bounds2} - bounds used to keep incoming energy chunks from wandering very far to the left or right
-    this.incomingEnergyChunkWanderBounds = new Bounds2(
-      position.x - SIDE_LENGTH / 4,
-      position.y,
-      position.x + SIDE_LENGTH / 4,
-      position.y + SIDE_LENGTH * 4 // the width is what matters here, so we use a fairly large height
-    );
+    // @private {Range} - used to keep incoming energy chunks from wandering very far to the left or right
+    this.incomingEnergyChunkWanderBounds = new Range( position.x - SIDE_LENGTH / 4, position.x + SIDE_LENGTH / 4 );
 
     // @private {Property.<boolean>}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -205,10 +201,10 @@ define( function( require ) {
       energyChunk.zPositionProperty.value = 0;
 
       // create a motion strategy that will move this energy chunk
-      var motionStrategy = new EnergyChunkStraightLineMotionStrategy(
+      var motionStrategy = new EnergyChunkWanderController(
         energyChunk,
         new Property( this.getCenterPoint() ),
-        this.incomingEnergyChunkWanderBounds
+        { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
       );
 
       energyChunk.zPosition = 0;
@@ -320,8 +316,9 @@ define( function( require ) {
     getEnergyChunkCountForAir: function() {
       var self = this; // extend scope for nested loop function.
       var count = 0;
-      // If there are approaching chunks, and the mode has switched to off or to heating,
-      // the chunks should go back to the air (if they're not almost to the burner).
+
+      // If there are approaching chunks, and the mode has switched to off or to heating, the chunks should go back to
+      // the air (if they're not almost to the burner).
       if ( this.energyChunkList.length > 0 && this.heatCoolLevelProperty.value >= 0 ) {
         this.energyChunkList.forEach( function( energyChunk ) {
           if ( self.position.distance( energyChunk.positionProperty.value ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
@@ -330,7 +327,8 @@ define( function( require ) {
         } );
       }
       if ( count === 0 ) {
-        // See whether the energy exchanged with the air since the last chunk transfer warrants another chunk.
+
+        // see whether the energy exchanged with the air since the last chunk transfer warrants another chunk
         count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
       return count;

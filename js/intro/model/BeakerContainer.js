@@ -11,11 +11,11 @@ define( function( require ) {
 
   // modules
   var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-  var Bounds2 = require( 'DOT/Bounds2' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
 
   // counter used by constructor to create unique IDs
@@ -159,13 +159,11 @@ define( function( require ) {
 
           assert && assert( wanderController, 'no wander controller found for energy chunk' );
 
-          // Set the motion constraint to be a tall column straight above the beaker, slightly narrower than the beaker
-          // to account for the width of the energy chunks in the view.
-          wanderController.setWanderConstraint( new Bounds2(
+          // Set the horizontal motion constraint to be slightly narrower than the beaker to account for the width of
+          // the energy chunk nodes.
+          wanderController.setHorizontalWanderConstraint( new Range(
             this.beakerBounds.minX + this.beakerBounds.width * 0.1,
-            this.beakerBounds.minY,
-            this.beakerBounds.maxX - this.beakerBounds.width * 0.1,
-            Number.POSITIVE_INFINITY
+            this.beakerBounds.maxX - this.beakerBounds.width * 0.1
           ) );
         }
       }

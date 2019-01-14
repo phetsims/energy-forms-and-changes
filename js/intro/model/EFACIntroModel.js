@@ -514,7 +514,7 @@ define( function( require ) {
               var energyChunk = container1.extractEnergyChunkClosestToPoint( pointAbove );
 
               if ( energyChunk ) {
-                var energyChunkMotionConstraints = null;
+                var energyChunkXMotionConstraint = null;
                 if ( container1 instanceof Beaker ) {
 
                   // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is
@@ -522,24 +522,22 @@ define( function( require ) {
                   // center, stay in bounds.
                   var energyChunkWidth = 0.01;
                   var beakerBounds = container1.getBounds();
-                  energyChunkMotionConstraints = new Bounds2(
+                  energyChunkXMotionConstraint = new Range(
                     beakerBounds.minX + energyChunkWidth / 2,
-                    beakerBounds.minY,
                     beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2,
-                    beakerBounds.minY + 1 // the width is what matters here, so use a large value for the height
                   );
 
-                  // make sure the energy chunk's position is within the bounds
-                  if ( !energyChunkMotionConstraints.containsPoint( energyChunk.positionProperty.value ) ) {
+                  // make sure the energy chunk's position is within the motion constraint
+                  if ( !energyChunkXMotionConstraint.contains( energyChunk.positionProperty.value.x ) ) {
                     var position = energyChunk.positionProperty.value.copy();
                     position.setXY(
-                      Util.clamp( position.x, energyChunkMotionConstraints.minX, energyChunkMotionConstraints.maxX ),
-                      Util.clamp( position.y, energyChunkMotionConstraints.minY, energyChunkMotionConstraints.maxY )
+                      Util.clamp( position.x, energyChunkXMotionConstraint.minX, energyChunkXMotionConstraint.maxX ),
+                      position.y
                     );
                     energyChunk.positionProperty.set( position );
                   }
                 }
-                self.air.addEnergyChunk( energyChunk, energyChunkMotionConstraints );
+                self.air.addEnergyChunk( energyChunk, energyChunkXMotionConstraint );
 
                 // reset the accumulator
                 self.airECExchangeAccumulators[ container1.id ] = 0;

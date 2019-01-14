@@ -16,25 +16,29 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MIN_VELOCITY = 0.06; // In m/s.
-  var MAX_VELOCITY = 0.10; // In m/s.
+  var MIN_SPEED = 0.06; // In m/s.
+  var MAX_SPEED = 0.10; // In m/s.
   var MIN_TIME_IN_ONE_DIRECTION = 0.4;
   var MAX_TIME_IN_ONE_DIRECTION = 0.8;
-  var DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // In meters, empirically chosen.
-  var MAX_ANGLE_VARIATION = Math.PI * 0.1; // Max deviation from angle to destination, in radians, empirically chosen.
+  var DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chosen
+  var DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
 
   /**
    * @param {EnergyChunk} energyChunk
    * @param {Property.<Vector2>} destinationProperty
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, options ) {
 
     options = _.extend( {
 
-      // {Bounds2} - bounding area within which the energy chunk's motion should be constrained
-      initialWanderConstraint: null
+      // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
+      horizontalWanderConstraint: null,
+
+      // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
+      wanderAngleVariation: DEFAULT_ANGLE_VARIATION
+
     }, options );
 
     // parameter checking
@@ -46,14 +50,19 @@ define( function( require ) {
       options.wanderConstraint.containsPoint( destinationProperty.value ),
       'energy chunk destination is not within the wander constraint'
     );
+    assert && assert(
+    options.wanderAngleVariation <= Math.PI && options.wanderAngleVariation >= 0,
+      'wander angle must be from zero to PI (inclusive)'
+    );
 
     // @public (read-only) {EnergyChunk)
     this.energyChunk = energyChunk;
 
     // @private
-    this.wanderConstraint = options.initialWanderConstraint;
+    this.horizontalWanderConstraint = options.horizontalWanderConstraint;
+    this.wanderAngleVariation = options.wanderAngleVariation;
     this.destinationProperty = destinationProperty;
-    this.velocity = new Vector2( 0, MAX_VELOCITY );
+    this.velocity = new Vector2( 0, MAX_SPEED );
     this.resetCountdownTimer();
     this.changeVelocityVector();
   }
@@ -69,36 +78,49 @@ define( function( require ) {
      */
     updatePosition: function( dt ) {
 
-      var distanceToDestination = this.energyChunk.positionProperty.value.distance( this.destinationProperty.value );
+      var currentPosition = this.energyChunk.positionProperty.get();
+      var destination = this.destinationProperty.get();
+      var distanceToDestination = currentPosition.distance( destination );
+      var speed = this.velocity.magnitude();
 
-      // Destination reached.
-      if ( distanceToDestination < this.velocity.magnitude() * dt &&
-           !this.energyChunk.positionProperty.value.equals( this.destinationProperty.value ) ) {
+      // only do something if the energy chunk has not yet reached its destination
+      if ( speed > 0 || !currentPosition.equals( destination ) ) {
 
-        this.energyChunk.positionProperty.set( this.destinationProperty.value );
-        this.velocity.setMagnitude( 0 );
-      }
-
-      // Prevent overshoot.
-      else if ( this.energyChunk.positionProperty.value.distance( this.destinationProperty.value ) < dt * this.velocity.magnitude() ) {
-        this.velocity.times( this.energyChunk.positionProperty.value.distance( this.destinationProperty.value ) * dt );
-      }
-
-      // Stay within the horizontal confines of the initial bounds.
-      if ( this.wanderConstraint !== null && this.energyChunk.positionProperty.value.y < this.wanderConstraint.maxY ) {
-        var proposedX = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) ).x;
-        if ( proposedX < this.wanderConstraint.minX || proposedX > this.wanderConstraint.maxX ) {
-
-          // bounce in the x direction to prevent going outside initial bounds
-          this.velocity.setXY( -this.velocity.x, this.velocity.y );
+        // check if destination reached
+        if ( distanceToDestination <= this.velocity.magnitude() * dt ) {
+          this.energyChunk.positionProperty.set( destination );
+          this.velocity.setMagnitude( 0 );
         }
-      }
+        else {
 
-      this.energyChunk.positionProperty.value = this.energyChunk.positionProperty.value.plus( this.velocity.times( dt ) );
-      this.countdownTimer -= dt;
-      if ( this.countdownTimer <= 0 ) {
-        this.changeVelocityVector();
-        this.resetCountdownTimer();
+          if ( this.horizontalWanderConstraint ) {
+
+            // stay within the confines of the horizontal wander constraint
+            var proposedX = this.energyChunk.positionProperty.value.x + dt * this.velocity.x;
+            if ( proposedX < this.horizontalWanderConstraint.min && this.velocity.x < 0 ||
+                 proposedX > this.horizontalWanderConstraint.max && this.velocity.x > 0 ) {
+
+              // bounce in the x direction
+              this.velocity.setX( -this.velocity.x );
+            }
+          }
+
+          // update the position of the energy chunk based on its velocity
+          this.energyChunk.positionProperty.set( Vector2.createFromPool(
+            currentPosition.x + dt * this.velocity.x,
+            currentPosition.y + dt * this.velocity.y
+          ) );
+
+          // free the previous position for reuse
+          currentPosition.freeToPool();
+
+          // determine whether any updates to the motion are needed and make them if so
+          this.countdownTimer -= dt;
+          if ( this.countdownTimer <= 0 || distanceToDestination < DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
+            this.changeVelocityVector();
+            this.resetCountdownTimer();
+          }
+        }
       }
     },
 
@@ -112,10 +134,10 @@ define( function( require ) {
       if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
 
         // add some randomness to the direction of travel
-        angle = angle + ( phet.joist.random.nextDouble() - 0.5 ) * 2 * MAX_ANGLE_VARIATION;
+        angle = angle + ( ( phet.joist.random.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;
       }
-      var scalarVelocity = MIN_VELOCITY + ( MAX_VELOCITY - MIN_VELOCITY ) * phet.joist.random.nextDouble();
-      this.velocity.setXY( scalarVelocity * Math.cos( angle ), scalarVelocity * Math.sin( angle ) );
+      var speed = MIN_SPEED + ( MAX_SPEED - MIN_SPEED ) * phet.joist.random.nextDouble();
+      this.velocity.setXY( speed * Math.cos( angle ), speed * Math.sin( angle ) );
     },
 
     /**
@@ -138,10 +160,11 @@ define( function( require ) {
 
     /**
      * set a new constraint on the wandering
-     * @param {Bounds2|null} wanderConstraint
+     * @param {Range|null} horizontalWanderConstraint
      */
-    setWanderConstraint: function( wanderConstraint ) {
-      this.wanderConstraint = wanderConstraint;
+    setHorizontalWanderConstraint: function( horizontalWanderConstraint ) {
+      this.horizontalWanderConstraint = horizontalWanderConstraint;
     }
   } );
-} );
+} )
+;
