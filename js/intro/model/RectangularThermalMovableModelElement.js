@@ -41,6 +41,7 @@ define( function( require ) {
                                                   specificHeat,
                                                   energyChunksVisibleProperty ) {
 
+    var self = this;
     UserMovableModelElement.call( this, initialPosition );
 
     // @public (read-only)
@@ -54,11 +55,18 @@ define( function( require ) {
     // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = new ObservableArray();
 
-    // @private {number} - minimum amount of energy that this is allowed to have
-    this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
-
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = [];
+
+    // when an approaching energy chunk is removed from the list, make sure its wander controller goes away too
+    this.approachingEnergyChunks.addItemRemovedListener( function( removedEC ) {
+      self.energyChunkWanderControllers = self.energyChunkWanderControllers.filter( function( wanderController ) {
+        return wanderController.energyChunk !== removedEC;
+      } );
+    } );
+
+    // @private {number} - minimum amount of energy that this is allowed to have
+    this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
 
     // @public (read-only) {EnergyChunkContainerSlice[]} 2D "slices" of the container, used for 3D layering of energy
     // chunks in the view
@@ -160,12 +168,16 @@ define( function( require ) {
      * @private
      */
     animateNonContainedEnergyChunks: function( dt ) {
+
       var self = this;
-      var controllers = this.energyChunkWanderControllers.slice( 0 );
-      controllers.forEach( function( controller ) {
-        controller.updatePosition( dt );
-        if ( self.getSliceBounds().containsPoint( controller.energyChunk.positionProperty.value ) ) {
-          self.moveEnergyChunkToSlices( controller.energyChunk );
+
+      // work from a copy of the list of wander controllers in case the list ends up changing
+      var ecWanderControllers = this.energyChunkWanderControllers.slice();
+
+      ecWanderControllers.forEach( function( ecWanderController ) {
+        ecWanderController.updatePosition( dt );
+        if ( self.getSliceBounds().containsPoint( ecWanderController.energyChunk.positionProperty.value ) ) {
+          self.moveEnergyChunkToSlices( ecWanderController.energyChunk );
         }
       } );
     },
@@ -242,9 +254,6 @@ define( function( require ) {
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
       this.approachingEnergyChunks.remove( energyChunk );
-      this.energyChunkWanderControllers = this.energyChunkWanderControllers.filter( function( wanderController ) {
-        return wanderController.energyChunk !== energyChunk;
-      } );
       this.addEnergyChunkToNextSlice( energyChunk );
     },
 
