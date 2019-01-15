@@ -28,7 +28,7 @@ define( function( require ) {
   var RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
   var OFFSET_TO_CENTER_OF_SUN = new Vector2( -0.05, 0.12 );
   var ENERGY_CHUNK_EMISSION_PERIOD = 0.11; // In seconds.
-  var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.5; // In meters.
+  var MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN = 0.7; // In meters.
 
   // Constants that control the nature of the emission sectors.  These are used to make emission look random yet still
   // have a fairly steady rate within each sector.  One sector is intended to point at the solar panel.
@@ -151,7 +151,10 @@ define( function( require ) {
         }
 
         // this energy chunk is out of visible range, so remove it
-        else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ) {
+        else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ||
+                  chunk.positionProperty.value.x < -0.35 || // empirically determined
+                  chunk.positionProperty.value.y > EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
+        ) {
           self.energyChunkList.remove( chunk );
           _.pull( self.energyChunksPassingThroughClouds, chunk );
         }

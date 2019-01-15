@@ -43,7 +43,7 @@ define( function( require ) {
   var OFFSET_TO_SECOND_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.005, -0.033 );
   var OFFSET_TO_THIRD_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.015, -0.040 );
   var OFFSET_TO_OUTGOING_CONNECTOR = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
-  var OFFSET_TO_REFLECTION_DESTINATION = new Vector2( 0.25, 0.4 ); // when a chunk gets reflected, send it away from the panel
+  var REFLECTION_ANGLE = 1.012; // when a chunk gets reflected, send it away from the panel at this angle, in radians.
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
   // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
@@ -431,7 +431,13 @@ define( function( require ) {
      */
     createReflectedLightPath: function( chunkPosition ) {
       var path = [];
-      path.push( chunkPosition.plus( OFFSET_TO_REFLECTION_DESTINATION ) );
+
+      // calculate the travel vector based on how high the reflected chunk should go
+      var yDistance = EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - chunkPosition.y;
+      var xDistance = yDistance / Math.tan( REFLECTION_ANGLE ) + chunkPosition.x;
+      var reflectionTargetLocation = new Vector2( xDistance, yDistance );
+      path.push( reflectionTargetLocation );
+
       return path;
     },
 

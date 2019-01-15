@@ -23,7 +23,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var RADIATED_ENERGY_CHUNK_MAX_DISTANCE = 0.5;
   var THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
   var ENERGY_TO_FULLY_LIGHT = EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
   var LIGHT_CHUNK_LIT_BULB_RADIUS = 0.1; // In meters.
@@ -134,7 +133,8 @@ define( function( require ) {
 
             // light is on
             this.litProportionProperty.set( Math.min( 1, this.litProportionProperty.get() + LIGHT_CHANGE_RATE * dt ) );
-          } else {
+          }
+          else {
 
             // light is off
             this.litProportionProperty.set( Math.max( 0, this.litProportionProperty.get() - LIGHT_CHANGE_RATE * dt ) );
@@ -145,7 +145,8 @@ define( function( require ) {
         else {
           if ( this.activeProperty.value && incomingEnergy.type === EnergyType.ELECTRICAL ) {
             this.litProportionProperty.set( Util.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
-          } else {
+          }
+          else {
             this.litProportionProperty.set( 0.0 );
           }
         }
@@ -218,10 +219,10 @@ define( function( require ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
             var path = self.createThermalEnergyChunkPath( mover.energyChunk.positionProperty.value );
             var speed = self.getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
-              self.generateThermalChunkTimeOnFilament();
-
+                        self.generateThermalChunkTimeOnFilament();
             self.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
-          } else {
+          }
+          else {
 
             // there is no filament, so just radiate the chunk
             self.radiateEnergyChunk( mover.energyChunk );
@@ -240,7 +241,7 @@ define( function( require ) {
       this.clearEnergyChunks();
 
       if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
-        incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+           incomingEnergy.type !== EnergyType.ELECTRICAL ) {
 
         // no energy chunk pre-loading needed
         return;
@@ -294,7 +295,8 @@ define( function( require ) {
     radiateEnergyChunk: function( energyChunk ) {
       if ( phet.joist.random.nextDouble() > this.proportionOfThermalChunksRadiated ) {
         energyChunk.energyTypeProperty.set( EnergyType.LIGHT );
-      } else {
+      }
+      else {
         energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
       }
 
@@ -303,9 +305,10 @@ define( function( require ) {
 
       path.push( this.positionProperty.value
         .plus( OFFSET_TO_RADIATE_POINT )
-        .plus( new Vector2( 0, RADIATED_ENERGY_CHUNK_MAX_DISTANCE )
-          .rotated( ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 2 ) )
-        )
+        .plus( new Vector2(
+          ( phet.joist.random.nextDouble() - 0.5 ) * 0.3,
+          EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - OFFSET_TO_RADIATE_POINT.y - this.positionProperty.value.y
+        ) )
       );
 
       this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
@@ -323,7 +326,7 @@ define( function( require ) {
     createThermalEnergyChunkPath: function( startingPoint ) {
       var path = [];
       var filamentWidth = 0.03;
-      var x = (0.5 + phet.joist.random.nextDouble() / 2) * filamentWidth / 2 * (this.goRightNextTime ? 1 : -1);
+      var x = ( 0.5 + phet.joist.random.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
 
       path.push( startingPoint.plus( new Vector2( x, 0 ) ) );
       this.goRightNextTime = !this.goRightNextTime;

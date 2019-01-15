@@ -506,23 +506,26 @@ define( function( require ) {
      * @private
      */
     createThermalEnergyChunkPath: function( centerPosition ) {
+      var startingPoint = centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET );
       var path = [];
-      var segmentLength = 0.05;
-      var maxAngle = Math.PI / 8;
-      var numSegments = 3;
+      path.push( startingPoint );
 
-      var offset = centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET );
-      path.push( offset );
+      var numberOfSegments = 4;
+      var segmentVector = new Vector2(
+        0,
+        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfSegments
+      );
 
       // the chuck needs to move up and to the right to avoid overlapping with the biker
-      offset = offset.plus( new Vector2( segmentLength, 0 ).rotated( Math.PI * 0.4 ) );
+      var nextPoint = startingPoint.plus( segmentVector.rotated( Math.PI * -0.1 ) );
 
       // add a set of path segments that make the chunk move up in a somewhat random path
-      path.push( offset );
+      path.push( nextPoint );
 
-      for ( var i = 0; i < numSegments; i++ ) {
-        offset = offset.plus( new Vector2( 0, segmentLength ).rotated( ( phet.joist.random.nextDouble() - 0.5 ) * maxAngle ) );
-        path.push( offset );
+      for ( var i = 0; i < numberOfSegments - 1; i++ ) {
+        var movement = segmentVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+        nextPoint = nextPoint.plus( movement );
+        path.push( nextPoint );
       }
 
       return path;

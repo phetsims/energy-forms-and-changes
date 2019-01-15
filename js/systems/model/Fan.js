@@ -24,7 +24,6 @@ define( function( require ) {
   // constants
   var ANGULAR_ACCELERATION = Math.PI * 4; // In radians/(sec^2).
   var VELOCITY_DIVISOR = 2.7; // empirically determined, lower number = faster fan speed
-  var RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.2; // in meters
   var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
   var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
   var INCOMING_ENERGY_FAN_THRESHOLD = 6; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
@@ -276,8 +275,11 @@ define( function( require ) {
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 8; // Empirically chosen.
-      var nominalTravelVector = new Vector2( 0, RADIATED_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges );
+      var numberOfDirectionChanges = 4; // Empirically chosen.
+      var nominalTravelVector = new Vector2(
+        0,
+        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfDirectionChanges
+      );
 
       // The first point is straight above the starting point.  This is done because it looks good, making the chunk
       // move straight up out of the motor.
@@ -285,7 +287,7 @@ define( function( require ) {
       path.push( currentPosition );
 
       // add the remaining points in the path
-      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
         var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
         currentPosition = currentPosition.plus( movement );
         path.push( currentPosition );
@@ -302,8 +304,8 @@ define( function( require ) {
      */
     createBlownEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 20; // empirically determined
-      var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges, 0 );
+      var numberOfDirectionChanges = 20; // empirically determined
+      var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numberOfDirectionChanges, 0 );
 
       // The first point is straight right the starting point.  This is done because it makes the chunk
       // move straight out of the fan center cone.
@@ -311,7 +313,7 @@ define( function( require ) {
       path.push( currentPosition );
 
       // add the remaining points in the path
-      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
         var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
         currentPosition = currentPosition.plus( movement );
         path.push( currentPosition );
