@@ -23,7 +23,10 @@ define( function( require ) {
     showHelperShapes: { type: 'flag' },
 
     // show the 2D bounds of the beaker
-    show2DBeakerBounds: { type: 'flag' }
+    show2DBeakerBounds: { type: 'flag' },
+
+    // make the first screen burners sticky
+    stickyBurners: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );

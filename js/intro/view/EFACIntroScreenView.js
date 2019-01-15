@@ -23,6 +23,7 @@ define( function( require ) {
   var DownUpListener = require( 'SCENERY/input/DownUpListener' );
   var Easing = require( 'TWIXT/Easing' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -177,6 +178,9 @@ define( function( require ) {
       burnerProjectionAmount
     );
 
+    // for testing - option to keep the heater coolers sticky
+    var snapToZero = !EFACQueryParameters.stickyBurners;
+
     // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
     var leftHeaterCoolerBack = new HeaterCoolerBack( model.leftBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
@@ -188,7 +192,8 @@ define( function( require ) {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5,
-      thumbSize: new Dimension2( 18, 36 )
+      thumbSize: new Dimension2( 18, 36 ),
+      snapToZero: snapToZero
     } );
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
@@ -210,7 +215,8 @@ define( function( require ) {
       leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: rightBurnerStand.width / 1.5,
       maxWidth: rightBurnerStand.width / 1.5,
-      thumbSize: new Dimension2( 18, 36 )
+      thumbSize: new Dimension2( 18, 36 ),
+      snapToZero: snapToZero
     } );
     heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
     backLayer.addChild( rightHeaterCoolerBack );
