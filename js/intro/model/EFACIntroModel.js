@@ -681,7 +681,9 @@ define( function( require ) {
       // if so, center the model element above its new supporting element
       if ( destinationSurface !== null ) {
         minYPos = destinationSurface.positionProperty.value.y;
-        modelElement.positionProperty.set( destinationSurface.positionProperty.value );
+        modelElement.positionProperty.set(
+          new Vector2( destinationSurface.positionProperty.value.x, modelElement.positionProperty.value.y )
+        );
       }
       else {
         modelElement.positionProperty.set( new Vector2( destinationXSpot, modelElement.positionProperty.value.y ) );
