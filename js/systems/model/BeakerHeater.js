@@ -409,10 +409,10 @@ define( function( require ) {
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {
       var energyChunkTravelPath = [];
-      var numDirectionChanges = 4; // empirically chosen
+      var numberOfDirectionChanges = 4; // empirically chosen
       var segmentVector = new Vector2(
         0,
-        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numDirectionChanges
+        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfDirectionChanges
       );
 
       // The first segment is is straight above the starting point.  This is done because it looks good, making the
@@ -421,7 +421,7 @@ define( function( require ) {
       energyChunkTravelPath.push( nextPoint );
 
       // add the remaining points in the path
-      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
         var movement = segmentVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
         nextPoint = nextPoint.plus( movement );
         energyChunkTravelPath.push( nextPoint );

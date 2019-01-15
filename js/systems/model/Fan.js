@@ -275,10 +275,10 @@ define( function( require ) {
      */
     createRadiatedEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 4; // Empirically chosen.
+      var numberOfDirectionChanges = 4; // Empirically chosen.
       var nominalTravelVector = new Vector2(
         0,
-        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numDirectionChanges
+        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfDirectionChanges
       );
 
       // The first point is straight above the starting point.  This is done because it looks good, making the chunk
@@ -287,7 +287,7 @@ define( function( require ) {
       path.push( currentPosition );
 
       // add the remaining points in the path
-      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
         var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
         currentPosition = currentPosition.plus( movement );
         path.push( currentPosition );
@@ -304,8 +304,8 @@ define( function( require ) {
      */
     createBlownEnergyChunkPath: function( startingPoint ) {
       var path = [];
-      var numDirectionChanges = 20; // empirically determined
-      var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numDirectionChanges, 0 );
+      var numberOfDirectionChanges = 20; // empirically determined
+      var nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numberOfDirectionChanges, 0 );
 
       // The first point is straight right the starting point.  This is done because it makes the chunk
       // move straight out of the fan center cone.
@@ -313,7 +313,7 @@ define( function( require ) {
       path.push( currentPosition );
 
       // add the remaining points in the path
-      for ( var i = 0; i < numDirectionChanges - 1; i++ ) {
+      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
         var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
         currentPosition = currentPosition.plus( movement );
         path.push( currentPosition );
