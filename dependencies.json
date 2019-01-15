@@ -1,11 +1,11 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.0-dev.14 Mon Jan 14 2019 12:56:25 GMT-0700 (Mountain Standard Time)",
+  "comment": "# energy-forms-and-changes 1.0.0-dev.15 Tue Jan 15 2019 13:47:12 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "5407993d77f0bb5a1ad63c112103ed4d22dbd1b7",
     "branch": "master"
   },
   "axon": {
-    "sha": "78b0dfc4c54df032325c30523c8c9640635a0b8a",
+    "sha": "0d4f72c2287122eb3a7a04fb08b0280b4c6044f3",
     "branch": "master"
   },
   "brand": {
@@ -13,7 +13,7 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "c8f3764d8b0846df485123ab158058147d70eeb7",
+    "sha": "68fb1c9277df7b5703065eb06990fe86e09459cf",
     "branch": "master"
   },
   "dot": {
@@ -21,11 +21,11 @@
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "7a0ed4bcc0c2520bffa5ec57c73a6ff1aa75e1a2",
+    "sha": "42a3944fc973f55c8ad80eb314e43e172f8ccc65",
     "branch": "master"
   },
   "joist": {
-    "sha": "2fbde2d5aebfcd02f4d1cf0afba58d52c0e03190",
+    "sha": "3a787db65c7a36d379572e062602847c6e2f2839",
     "branch": "master"
   },
   "kite": {
@@ -65,19 +65,19 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "6ab6d1cc337b8e5bf7969c989d7b81c4c5951f4d",
+    "sha": "3176bc25204ba8abcaa5fd9c7b08b91a39676e1d",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "75e3607015dc5d981fe611740bfe046fd4d8c9c3",
+    "sha": "df5f5ec0112932aaacbce66232f03571c3c9cd84",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "948995d1c635f8738c9c9a5cbfb624e0d8fd2de0",
+    "sha": "b898c26cb5284c17868c53e342f7dc8096f5ff00",
     "branch": "master"
   },
   "sun": {
-    "sha": "34f093b2cbdc582b7eddf344f1d8edd0dc5d7910",
+    "sha": "c926db18dfa2f21bab6db7c02a69ed09514295a5",
     "branch": "master"
   },
   "tambo": {
