@@ -106,13 +106,10 @@ define( function( require ) {
           }
 
           // update the position of the energy chunk based on its velocity
-          this.energyChunk.positionProperty.set( Vector2.createFromPool(
+          this.energyChunk.positionProperty.set( new Vector2(
             currentPosition.x + dt * this.velocity.x,
             currentPosition.y + dt * this.velocity.y
           ) );
-
-          // free the previous position for reuse
-          currentPosition.freeToPool();
 
           // determine whether any updates to the motion are needed and make them if so
           this.countdownTimer -= dt;
