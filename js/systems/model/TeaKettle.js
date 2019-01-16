@@ -105,7 +105,8 @@ define( function( require ) {
           rate = Math.min( rate, EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
 
           this.energyProductionRateProperty.set( rate );
-        } else {
+        }
+        else {
           // Clamp the energy production rate to zero so that it doesn't
           // trickle on forever.
           this.energyProductionRateProperty.set( 0 );
@@ -163,8 +164,7 @@ define( function( require ) {
 
           // This is a thermal chunk that is coming out of the water.
           if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
-            chunk.positionProperty.get().y === self.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
-
+               chunk.positionProperty.get().y === self.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
             if ( phet.joist.random.nextDouble() > 0.2 ) {
 
               // Turn the chunk into mechanical energy.
@@ -198,9 +198,9 @@ define( function( require ) {
           // See if this energy chunks should be transferred to the
           // next energy system.
           if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
-            self.steamPowerableElementInPlaceProperty.get() &&
-            ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( self.positionProperty.value.distance( chunk.positionProperty.get() ) ) &&
-            !_.includes( self.exemptFromTransferEnergyChunks, chunk ) ) {
+               self.steamPowerableElementInPlaceProperty.get() &&
+               ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( self.positionProperty.value.distance( chunk.positionProperty.get() ) ) &&
+               !_.includes( self.exemptFromTransferEnergyChunks, chunk ) ) {
 
             // Send this chunk to the next energy system.
             if ( self.transferNextAvailableChunk ) {
@@ -221,6 +221,15 @@ define( function( require ) {
             }
           }
 
+          // if a chunk has reached the position where it should transfer to the next system, but no steam powerable
+          // element is in place, add the chunk to the list of non transfers
+          else if ( !self.steamPowerableElementInPlaceProperty.get() &&
+                    ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains(
+                      self.positionProperty.value.distance( chunk.positionProperty.get() )
+                    ) &&
+                    !_.includes( self.exemptFromTransferEnergyChunks, chunk ) ) {
+            self.exemptFromTransferEnergyChunks.push( chunk );
+          }
         }
 
       } );
@@ -323,8 +332,9 @@ define( function( require ) {
         // Update energy chunk positions.
         this.moveEnergyChunks( dt );
 
-        if ( this.outgoingEnergyChunks.length > 0 ) {
-          // An energy chunk has traversed to the output of this system, completing the preload.
+        if ( this.outgoingEnergyChunks.length > 0 || this.exemptFromTransferEnergyChunks.length > 0 ) {
+
+          // An energy chunk has traversed to the output of this system, or passed the point of moving to the next system.
           preloadComplete = true;
         }
       }
