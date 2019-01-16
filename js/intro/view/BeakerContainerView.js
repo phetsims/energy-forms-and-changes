@@ -22,6 +22,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -74,20 +75,20 @@ define( function( require ) {
       this.energyChunkRootNode.addChild( this.clipAreaHelperNode );
     }
 
-    // For each block that can go in the beaker we need to add a listener that will update the clipping area when that
-    // block is moved.  The clipping area hides energy chunks that overlap with blocks, making it look much less
-    // visually distracting, as though the energy chunks in the beaker are behind the blocks.
+    // Update the clipping area based on the motion of this beaker, the blocks, and whether the energy chunks are
+    // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
+    // distracting, as though the energy chunks in the beaker are behind the blocks.
+    var propertiesThatInfluenceClipArea = [];
     model.blocks.forEach( function( block ) {
-      block.positionProperty.link( function() {
-        self.updateEnergyChunkClipArea( beaker, model.blocks, modelViewTransform );
-      } );
+      propertiesThatInfluenceClipArea.push( block.positionProperty );
+    } );
+    propertiesThatInfluenceClipArea.push( beaker.positionProperty );
+    propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
+    Property.multilink( propertiesThatInfluenceClipArea, function() {
+      self.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
 
-    // update the clipping mask when the position of the beaker moves
-    beaker.positionProperty.link( function() {
-      self.updateEnergyChunkClipArea( beaker, model.blocks, modelViewTransform );
-    } );
-
+    // add an input listener to make this draggable
     this.grabNode.addInputListener( new ThermalElementDragHandler(
       beaker,
       this.grabNode,
@@ -105,29 +106,39 @@ define( function( require ) {
      * are ALSO in the beaker.
      * @param {Beaker} beaker
      * @param {Block[]} blocks
+     * @param {boolean} energyChunksVisible
      * @param {ModelViewTransform2} modelViewTransform
      * @private
      */
-    updateEnergyChunkClipArea: function( beaker, blocks, modelViewTransform ) {
+    updateEnergyChunkClipArea: function( beaker, blocks, energyChunksVisible, modelViewTransform ) {
 
-      // The clip area is defined by an outer rectangle that is basically the entire beaker area and then some inner
-      // rectangles for the blocks if they overlap with the beaker.  The inner pieces have to be drawn with the opposite
-      // winding order from the outer ones in order to create the "hole" effect.  The outer shape extends above and
-      // below the basic beaker model rectangle in order to prevent clipping of energy chunks that are positioned at
-      // the upper and lower rim of the beaker and energy chunks moving between the beaker and the heater/cooler.
-      var clipArea = this.untransformedBeakerClipShape.transformed(
-        Matrix3.translationFromVector( modelViewTransform.modelToViewPosition( beaker.positionProperty.get() ) )
-      );
+      if ( energyChunksVisible ) {
 
-      // add the "holes" in the clip mask that correspond to the blocks
-      this.addProjectedBlocksToClipArea( blocks, clipArea, modelViewTransform );
+        // The clip area is defined by an outer rectangle that is basically the entire beaker area and then some inner
+        // rectangles for the blocks if they overlap with the beaker.  The inner pieces have to be drawn with the opposite
+        // winding order from the outer ones in order to create the "hole" effect.  The outer shape extends above and
+        // below the basic beaker model rectangle in order to prevent clipping of energy chunks that are positioned at
+        // the upper and lower rim of the beaker and energy chunks moving between the beaker and the heater/cooler.
+        var clipArea = this.untransformedBeakerClipShape.transformed(
+          Matrix3.translationFromVector( modelViewTransform.modelToViewPosition( beaker.positionProperty.get() ) )
+        );
 
-      // set the updated clip area
-      this.energyChunkRootNode.clipArea = clipArea;
-      // this.energyChunkRootNode.clipArea = null;
+        // add the "holes" in the clip mask that correspond to the blocks
+        this.addProjectedBlocksToClipArea( blocks, clipArea, modelViewTransform );
 
-      if ( this.clipAreaHelperNode ) {
-        this.clipAreaHelperNode.setShape( clipArea );
+        // set the updated clip area
+        this.energyChunkRootNode.clipArea = clipArea;
+
+        if ( this.clipAreaHelperNode ) {
+          this.clipAreaHelperNode.setShape( clipArea );
+        }
+      }
+      else {
+
+        // If the energy chunks aren't visible, don't have a clip area at all.  This was found to be necessary because
+        // on Firefox, not setting it to null would cause the energy chunks to still be visible when they shouldn't be,
+        // see https://github.com/phetsims/energy-forms-and-changes/issues/173.
+        this.energyChunkRootNode.clipArea = null;
       }
     },
 

@@ -195,7 +195,7 @@ define( function( require ) {
     this.frontNode.addChild( label );
 
     // @protected {Node} - the layer where the contained energy chunk nodes will be placed
-    this.energyChunkRootNode = new Node();
+    this.energyChunkRootNode = new Node( { layerSplit: true } );
     this.backNode.addChild( this.energyChunkRootNode );
 
     // add the energy chunk container slice nodes to the energy chunk layer
