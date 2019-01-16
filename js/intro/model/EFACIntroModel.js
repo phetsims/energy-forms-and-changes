@@ -297,6 +297,11 @@ define( function( require ) {
                          EFACConstants.FAST_FORWARD_MULTIPLIER;
         this.stepModel( dt * multiplier );
       }
+
+      // step the sensors regardless of whether the sim is paused
+      this.temperatureAndColorSensors.forEach( function( thermometer ) {
+        thermometer.step( dt );
+      } );
     },
 
     /**
@@ -579,10 +584,6 @@ define( function( require ) {
 
       this.thermalContainers.forEach( function( thermalEnergyContainer ) {
         thermalEnergyContainer.step( dt );
-      } );
-
-      this.temperatureAndColorSensors.forEach( function( thermometer ) {
-        thermometer.step( dt );
       } );
     },
 
