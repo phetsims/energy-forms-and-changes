@@ -56,7 +56,8 @@ define( function( require ) {
       font: new PhetFont( {
         size: 14,
         weight: 'bold'
-      } )
+      } ),
+      maxWidth: 130
     } );
 
     // add an entry for each type of energy that can appear in the sim
@@ -85,7 +86,8 @@ define( function( require ) {
    */
   function createEnergyChunkSymbol( labelString, energyType, modelViewTransform ) {
     var labelText = new Text( labelString, {
-      font: LEGEND_ENTRY_FONT
+      font: LEGEND_ENTRY_FONT,
+      maxWidth: 100
     } );
 
     // The EnergyChunks that are created here are not going to be used in the simulation, they are only needed for the
