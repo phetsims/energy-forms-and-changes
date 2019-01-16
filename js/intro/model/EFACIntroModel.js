@@ -287,7 +287,7 @@ define( function( require ) {
     },
 
     /**
-     * step function or this model, automatically called by joist
+     * step function for this model, automatically called by joist
      * @param {number} dt - delta time, in seconds
      * @public
      */
