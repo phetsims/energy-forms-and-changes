@@ -27,7 +27,7 @@ define( function( require ) {
    * @constructor
    */
   function EnergyChunkLayer( energyChunkList, modelViewTransform, options ) {
-    Node.call( this, { renderer: 'webgl' } );
+    Node.call( this );
 
     var self = this;
 
