@@ -37,7 +37,7 @@ define( function( require ) {
     this.id = instanceCount++;
 
     // @public {Vector2}
-    this.velocity = Vector2.createFromPool( initialVelocity.x, initialVelocity.y );
+    this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
   }
 
   energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
@@ -51,9 +51,7 @@ define( function( require ) {
      * @public
      */
     setPosition: function( x, y ) {
-      var oldPosition = this.positionProperty.get();
-      this.positionProperty.set( Vector2.createFromPool( x, y ) );
-      oldPosition.freeToPool();
+      this.positionProperty.set( new Vector2( x, y ) );
     },
 
     /**
@@ -63,11 +61,8 @@ define( function( require ) {
      * @public
      */
     translate: function( x, y ) {
-
-      // for optimal sim performance we use vector pooling, since there are lots of energy chunks and they move frequently
       var oldPosition = this.positionProperty.get();
-      this.positionProperty.set( Vector2.createFromPool( oldPosition.x + x, oldPosition.y + y ) );
-      oldPosition.freeToPool();
+      this.positionProperty.set( new Vector2( oldPosition.x + x, oldPosition.y + y ) );
     },
 
     /**
