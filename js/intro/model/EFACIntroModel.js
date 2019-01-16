@@ -325,7 +325,7 @@ define( function( require ) {
         }
         else if ( !movableModelElement.userControlledProperty.value &&
                   unsupported &&
-                  !self.groundSpotXPositions.includes( movableModelElement.positionProperty.value.x ) ) {
+                  !_.includes( self.groundSpotXPositions, movableModelElement.positionProperty.value.x ) ) {
           self.fallToSurface( movableModelElement, dt );
         }
       } );
@@ -529,7 +529,7 @@ define( function( require ) {
                   var beakerBounds = container1.getBounds();
                   energyChunkXMotionConstraint = new Range(
                     beakerBounds.minX + energyChunkWidth / 2,
-                    beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2,
+                    beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2
                   );
 
                   // make sure the energy chunk's position is within the motion constraint
