@@ -25,11 +25,11 @@ define( function( require ) {
     // show the 2D bounds of the beaker
     show2DBeakerBounds: { type: 'flag' },
 
-    // make the first screen burners sticky
-    stickyBurners: { type: 'flag' },
+    // show the normal/fast forward buttons on the first screen
+    showSpeedControls: { type: 'flag' },
 
-    // make the intro screen go into fast forward mode
-    fastForward: { type: 'flag' }
+    // make the first screen burners sticky
+    stickyBurners: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );

@@ -80,8 +80,10 @@ define( function( require ) {
     // @public {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new Property( true );
 
-    // @public {BooleanProperty} - true indicates normal speed, false is fast-forward
-    this.normalSimSpeedProperty = new Property( SimSpeed.NORMAL );
+    // @public {Property.<SimSpeed>} - controls the speed of the sim
+    this.simSpeedProperty = new Property( SimSpeed.NORMAL, {
+      validValues: [ SimSpeed.NORMAL, SimSpeed.FAST_FORWARD ]
+    } );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
@@ -266,7 +268,7 @@ define( function( require ) {
       this.energyChunksVisibleProperty.reset();
       this.linkedHeatersProperty.reset();
       this.isPlayingProperty.reset();
-      this.normalSimSpeedProperty.reset();
+      this.simSpeedProperty.reset();
       this.air.reset();
       this.leftBurner.reset();
       this.rightBurner.reset();
@@ -296,7 +298,7 @@ define( function( require ) {
 
       // only step the model if not paused
       if ( this.isPlayingProperty.get() ) {
-        var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
+        var multiplier = this.simSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
         this.stepModel( dt * multiplier );
       }
 

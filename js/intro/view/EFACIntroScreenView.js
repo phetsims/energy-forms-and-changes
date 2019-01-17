@@ -44,7 +44,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
+  var SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
   var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -142,13 +142,25 @@ define( function( require ) {
     // for layout.
     var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
-    // add the play/pause and step buttons
+    // create the play/pause and step buttons
     var playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
-    playPauseStepButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
-    this.addChild( playPauseStepButtonGroup );
 
-    // for testing - option to go into fast forward mode
-    model.normalSimSpeedProperty.value = EFACQueryParameters.fastForward ? SimSpeed.FAST_FORWARD : SimSpeed.NORMAL;
+    // for testing - option to add fast forward controls
+    if ( EFACQueryParameters.showSpeedControls ) {
+      var simSpeedButtonGroup = new SimSpeedButtonGroup( model.simSpeedProperty );
+      var playPauseStepAndSpeedButtonGroup = new HBox( {
+        children: [ playPauseStepButtonGroup, simSpeedButtonGroup ],
+        spacing: 25
+      } );
+      playPauseStepAndSpeedButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
+      backLayer.addChild( playPauseStepAndSpeedButtonGroup );
+    }
+    else {
+
+      // only play/pause and step are being added, so center them below the lab bench
+      playPauseStepButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
+      backLayer.addChild( playPauseStepButtonGroup );
+    }
 
     // make the heat cool levels equal if they become linked
     model.linkedHeatersProperty.link( function( linked ) {
