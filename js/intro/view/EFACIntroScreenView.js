@@ -44,6 +44,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -145,6 +146,9 @@ define( function( require ) {
     var playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
     playPauseStepButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
     this.addChild( playPauseStepButtonGroup );
+
+    // for testing - option to go into fast forward mode
+    model.normalSimSpeedProperty.value = EFACQueryParameters.fastForward ? SimSpeed.FAST_FORWARD : SimSpeed.NORMAL;
 
     // make the heat cool levels equal if they become linked
     model.linkedHeatersProperty.link( function( linked ) {

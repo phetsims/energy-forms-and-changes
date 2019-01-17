@@ -26,7 +26,10 @@ define( function( require ) {
     show2DBeakerBounds: { type: 'flag' },
 
     // make the first screen burners sticky
-    stickyBurners: { type: 'flag' }
+    stickyBurners: { type: 'flag' },
+
+    // make the intro screen go into fast forward mode
+    fastForward: { type: 'flag' }
   } );
 
   energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );
