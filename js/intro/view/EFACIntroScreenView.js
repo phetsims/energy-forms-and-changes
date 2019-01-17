@@ -37,9 +37,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var PlayPauseAndSpeedControlPanel = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/PlayPauseAndSpeedControlPanel' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PlayPauseStepButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PlayPauseStepButtonGroup' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -141,10 +141,10 @@ define( function( require ) {
     // for layout.
     var centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
-    // add the clock controls
-    var playPauseAndSpeedControlPanel = new PlayPauseAndSpeedControlPanel( model );
-    playPauseAndSpeedControlPanel.center = new Vector2( this.layoutBounds.width / 2, centerYBelowSurface );
-    backLayer.addChild( playPauseAndSpeedControlPanel );
+    // add the play/pause and step buttons
+    var playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
+    playPauseStepButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
+    this.addChild( playPauseStepButtonGroup );
 
     // make the heat cool levels equal if they become linked
     model.linkedHeatersProperty.link( function( linked ) {

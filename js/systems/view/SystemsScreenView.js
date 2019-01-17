@@ -27,7 +27,6 @@ define( function( require ) {
   var FanNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/FanNode' );
   var FaucetAndWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/FaucetAndWaterNode' );
   var GeneratorNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/GeneratorNode' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LayoutBox = require( 'SCENERY/nodes/LayoutBox' );
   var LightBulbNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/LightBulbNode' );
@@ -35,13 +34,12 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  var PlayPauseStepButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PlayPauseStepButtonGroup' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SolarPanelNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SolarPanelNode' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SunNode' );
   var TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleNode' );
@@ -244,25 +242,10 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    // create the play pause button
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
-      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
-    } );
-
-    // create the step button, used to manually step the simulation
-    var stepButton = new StepForwardButton( {
-      isPlayingProperty: model.isPlayingProperty,
-      listener: function() { model.manualStep(); },
-      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
-    } );
-
-    // group the play and pause buttons into their own panel for correct layout in the HBox
-    var playPauseButtonGroup = new HBox( {
-      children: [ playPauseButton, stepButton ],
-      spacing: 10,
-      center: new Vector2( layoutBounds.centerX, resetAllButton.centerY )
-    } );
-    this.addChild( playPauseButtonGroup );
+    // add the play/pause and step buttons
+    var playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
+    playPauseStepButtonGroup.center = new Vector2( layoutBounds.centerX, resetAllButton.centerY );
+    this.addChild( playPauseStepButtonGroup );
 
     // add the energy system element selectors, which are sets of radio buttons
     var energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {
