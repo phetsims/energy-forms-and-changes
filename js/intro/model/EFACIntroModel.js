@@ -38,6 +38,7 @@ define( function( require ) {
   var BEAKER_WIDTH = 0.085; // in meters
   var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
   var MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
+  var FAST_FORWARD_MULTIPLIER = 4;
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
   var LEFT_EDGE = -0.30;
@@ -292,13 +293,14 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
+
+      // only step the model if not paused
       if ( this.isPlayingProperty.get() ) {
-        var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 :
-                         EFACConstants.FAST_FORWARD_MULTIPLIER;
+        var multiplier = this.normalSimSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
         this.stepModel( dt * multiplier );
       }
 
-      // step the sensors regardless of whether the sim is paused
+      // step the sensors regardless of whether the sim is paused, and fast forward makes no difference
       this.temperatureAndColorSensors.forEach( function( thermometer ) {
         thermometer.step( dt );
       } );
