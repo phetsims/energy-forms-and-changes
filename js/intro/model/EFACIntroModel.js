@@ -205,15 +205,6 @@ define( function( require ) {
     // pre-allocated and reused in an effort to reduce memory allocations.
     this.reusableBalanceArray = [];
 
-    // @private {Object} - this is used to track energy chunk exchanges with air, see usage for details
-    this.airECExchangeAccumulators = {};
-    this.blocks.forEach( function( block ) {
-      self.airECExchangeAccumulators[ block.id ] = 0;
-    } );
-    this.beakers.forEach( function( beaker ) {
-      self.airECExchangeAccumulators[ beaker.id ] = 0;
-    } );
-
     // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
     // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
     // preventing overlap.
@@ -395,7 +386,7 @@ define( function( require ) {
           }
         } );
 
-        // exchange energy and energy chunks with the air if not immersed in the beaker
+        // exchange energy with the air if not immersed in the beaker
         if ( !immersedInBeaker ) {
           var energyExchangedWithAir = self.air.exchangeEnergyWith( container1, dt );
           self.energyBalanceTracker.logEnergyExchange( self.air.id, container1.id, energyExchangedWithAir );
@@ -431,9 +422,6 @@ define( function( require ) {
           energyChunkSupplier = self.getThermalElementByID( toID );
           energyChunkConsumer = self.getThermalElementByID( fromID );
         }
-        console.log( '--------------------------' );
-        console.log( 'energyChunkSupplier.id = ' + energyChunkSupplier.id );
-        console.log( 'energyChunkConsumer.id = ' + energyChunkConsumer.id );
 
         // TODO: Try to simplify this to use a consistent set of APIs for all suppliers and consumers of energy chunks.
         // attempt to extract an energy chunk from the supplier
@@ -447,7 +435,7 @@ define( function( require ) {
           }
           else {
 
-            // when giving an energy chunk to the air, pull one from the top of the container
+            // when giving an energy chunk to the air, pull one from the top of the supplier
             energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
               energyChunkSupplier.getCenterTopPoint()
             );
@@ -462,7 +450,18 @@ define( function( require ) {
         // if we got an energy chunk, pass it to the consumer
         if ( energyChunk ) {
 
-          energyChunkConsumer.addEnergyChunk( energyChunk );
+          if ( energyChunkConsumer === self.air ) {
+
+            // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
+            // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
+            // the view.
+            var supplierBounds = energyChunkSupplier.getCompositeBounds();
+            var horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
+            energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
+          }
+          else {
+            energyChunkConsumer.addEnergyChunk( energyChunk );
+          }
 
           // adjust the energy balance since a chunk was transferred
           self.energyBalanceTracker.logEnergyExchange(

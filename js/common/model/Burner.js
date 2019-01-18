@@ -74,12 +74,6 @@ define( function( require ) {
     // @private {Property.<boolean>}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // Track energy transferred to anything sitting on the burner.
-    this.energyExchangedWithObjectSinceLastChunkTransfer = 0; // @private
-
-    // Track build up of energy for transferring chunks to/from the air.
-    this.energyExchangedWithAirSinceLastChunkTransfer = 0; // @private
-
     // add position test bounds (see definition in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
 
@@ -142,14 +136,10 @@ define( function( require ) {
           if ( this.heatCoolLevelProperty.value < 0 ) {
             if ( Math.abs( deltaEnergy ) > thermalEnergyContainer.getEnergyAboveMinimum() ) {
               deltaEnergy = -thermalEnergyContainer.getEnergyAboveMinimum();
-
-              // reset the energy exchange history so we don't lose chunks below the min temperature
-              this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
             }
           }
         }
         thermalEnergyContainer.changeEnergy( deltaEnergy );
-        this.energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;
       }
       return deltaEnergy;
     },
@@ -165,7 +155,6 @@ define( function( require ) {
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevelProperty.value * dt;
       air.changeEnergy( deltaEnergy );
-      this.energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
       return deltaEnergy;
     },
 
@@ -204,10 +193,6 @@ define( function( require ) {
       // add the chunk and its motion strategy to this model
       this.energyChunkList.add( energyChunk );
       this.energyChunkMotionStrategies.push( motionStrategy );
-
-      // reset energy transfer accumulators
-      this.energyExchangedWithAirSinceLastChunkTransfer = 0;
-      this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
     },
 
     /**
@@ -250,14 +235,11 @@ define( function( require ) {
         );
       }
 
-      if ( closestEnergyChunk !== null ) {
-        this.energyExchangedWithAirSinceLastChunkTransfer = 0;
-        this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
-      }
-      else {
+      if ( closestEnergyChunk === null ) {
 
-        // TODO: This was in the Java code, and will be left for a while, but should be removed or turned into an assert eventually.
-        console.warn( 'Request for energy chunk from burner when not in heat mode and no chunks contained, returning null.' );
+        // This probably shouldn't ever occur, but it doesn't really warrant an assert, so log a warning that will
+        // encourage investigation if it DOES happen.
+        console.warn( 'Burner was unable to supply energy chunks.' );
       }
       return closestEnergyChunk;
     },
@@ -293,8 +275,6 @@ define( function( require ) {
     reset: function() {
       ModelElement.prototype.reset.call( this );
       this.energyChunkList.clear();
-      this.energyExchangedWithAirSinceLastChunkTransfer = 0;
-      this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
       this.heatCoolLevelProperty.reset();
     },
 
@@ -312,31 +292,6 @@ define( function( require ) {
         }
       } );
       return onTop;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getEnergyChunkCountForAir: function() {
-      var self = this; // extend scope for nested loop function.
-      var count = 0;
-
-      // If there are approaching chunks, and the mode has switched to off or to heating, the chunks should go back to
-      // the air (if they're not almost to the burner).
-      if ( this.energyChunkList.length > 0 && this.heatCoolLevelProperty.value >= 0 ) {
-        this.energyChunkList.forEach( function( energyChunk ) {
-          if ( self.position.distance( energyChunk.positionProperty.value ) > ENERGY_CHUNK_CAPTURE_DISTANCE ) {
-            count++;
-          }
-        } );
-      }
-      if ( count === 0 ) {
-
-        // see whether the energy exchanged with the air since the last chunk transfer warrants another chunk
-        count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
-      }
-      return count;
     },
 
     /**
