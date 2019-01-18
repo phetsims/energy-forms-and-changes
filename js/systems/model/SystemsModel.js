@@ -177,14 +177,12 @@ define( function( require ) {
       var converter = this.energyConvertersCarousel.getSelectedElement();
       var user = this.energyUsersCarousel.getSelectedElement();
 
-      // step the currently selected energy system elements
+      // step the currently selected energy system elements and transfer energy chunks in between each step
       var energyFromSource = source.step( dt );
-      var energyFromConverter = converter.step( dt, energyFromSource );
-      user.step( dt, energyFromConverter );
-
-      // transfer energy chunks between the elements
       converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
+      var energyFromConverter = converter.step( dt, energyFromSource );
       user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
+      user.step( dt, energyFromConverter );
     },
 
     /**
