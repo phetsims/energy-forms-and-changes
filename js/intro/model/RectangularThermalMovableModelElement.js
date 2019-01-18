@@ -283,6 +283,11 @@ define( function( require ) {
      */
     extractEnergyChunkClosestToPoint: function( point ) {
 
+      // make sure this element doesn't give up all its energy chunks
+      if ( this.getNumEnergyChunks() <= 1 ) {
+        return null;
+      }
+
       var closestEnergyChunk = null;
       var closestCompensatedDistance = Number.POSITIVE_INFINITY;
 
@@ -314,6 +319,11 @@ define( function( require ) {
      * @public
      */
     extractEnergyChunkClosestToBounds: function( destinationBounds ) {
+
+      // make sure this element doesn't give up all its energy chunks
+      if ( this.getNumEnergyChunks() <= 1 ) {
+        return null;
+      }
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
