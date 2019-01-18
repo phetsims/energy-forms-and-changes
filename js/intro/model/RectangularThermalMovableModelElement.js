@@ -436,10 +436,12 @@ define( function( require ) {
     /**
      * @param {RectangularThermalMovableModelElement} otherEnergyContainer
      * @param {number} dt - time of contact, in seconds
+     * @returns {number} - amount of energy exchanged, in joules
      * @public
      */
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 
+      var amountOfEnergyExchanged = 0; // direction is from this to the other
       var thermalContactLength = this
         .thermalContactArea
         .getThermalContactLength( otherEnergyContainer.thermalContactArea );
@@ -464,9 +466,11 @@ define( function( require ) {
                                       thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
+            amountOfEnergyExchanged += -thermalEnergyGained;
           }
         }
       }
+      return amountOfEnergyExchanged;
     },
 
     /**
@@ -501,6 +505,15 @@ define( function( require ) {
     getCenterPoint: function() {
       var position = this.positionProperty.value;
       return new Vector2( position.x, position.y + this.height / 2 );
+    },
+
+    /**
+     * @returns {Vector2}
+     * @public
+     */
+    getCenterTopPoint: function() {
+      var position = this.positionProperty.value;
+      return new Vector2( position.x, position.y + this.height );
     },
 
     /**

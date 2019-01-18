@@ -20,9 +20,9 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
@@ -30,7 +30,6 @@ define( function( require ) {
   var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
-  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -56,12 +55,6 @@ define( function( require ) {
 
   // minimum distance allowed between two objects, used to prevent floating point issues
   var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
-
-  // A threshold value that is used to decide if an energy chunk should be exchanged between a thermal model element and
-  // the air.  It is empirically determined by heating and cooling objects on the burners, both individually and in
-  // stacks, and verifying that energy chunks are exchanged with the air, but not too easily.  See
-  // https://github.com/phetsims/energy-forms-and-changes/issues/146 for more information.
-  var AIR_EC_EXCHANGE_THRESHOLD = 80;
 
   /**
    * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
@@ -204,6 +197,14 @@ define( function( require ) {
       } );
     } );
 
+    // @private {EnergyBalanceTracker} - This is used to track energy exchanges between all of the various energy
+    // containing elements and using that information to transfer energy chunks commensurately.
+    this.energyBalanceTracker = new EnergyBalanceTracker();
+
+    // @private {EnergyBalanceRecord[]} - An array used for getting energy balances from the energy balance tracker,
+    // pre-allocated and reused in an effort to reduce memory allocations.
+    this.reusableBalanceArray = [];
+
     // @private {Object} - this is used to track energy chunk exchanges with air, see usage for details
     this.airECExchangeAccumulators = {};
     this.blocks.forEach( function( block ) {
@@ -277,6 +278,7 @@ define( function( require ) {
       this.temperatureAndColorSensors.forEach( function( sensor ) {
         sensor.reset();
       } );
+      this.energyBalanceTracker.clearAllBalances();
     },
 
     /**
@@ -341,74 +343,38 @@ define( function( require ) {
       // Energy and Energy Chunk Exchange
       //=====================================================================
 
-      // Note: The original intent was to design all the energy containers such that the order of the exchange didn't
-      // matter, nor who was exchanging with whom.  This turned out to be a lot of extra work to maintain, and was
-      // eventually abandoned.  So, the order and nature of the exchanges below should be maintained unless there is a
-      // good reason not to, and any changes should be well tested.
+      // Note: Ideally, the order in which the exchanges occur shouldn't make any difference, but since we are working
+      // with discrete non-infinitesimal time values, it probably does, so any changes to the order in which the energy
+      // exchanges occur below should be thoroughly tested.
+
+      // clear the flags that are used to track whether energy transfers occurred during this step
+      self.energyBalanceTracker.clearRecentlyUpdatedFlags();
 
       // loop through all the movable thermal energy containers and have them exchange energy with one another
       self.thermalContainers.forEach( function( container1, index ) {
         self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
-          container1.exchangeEnergyWith( container2, dt );
+
+          // transfer energy if there is a thermal differential, keeping track of what was exchanged
+          var energyTransferredFrom1to2 = container1.exchangeEnergyWith( container2, dt );
+          self.energyBalanceTracker.logEnergyExchange( container1.id, container2.id, energyTransferredFrom1to2 );
         } );
       } );
 
       // exchange thermal energy between the burners and the other thermal model elements, including air
       this.burners.forEach( function( burner ) {
+        var energyTransferredFromBurner = 0;
         if ( burner.areAnyOnTop( self.thermalContainers ) ) {
           self.thermalContainers.forEach( function( energyContainer ) {
-            burner.addOrRemoveEnergyToFromObject( energyContainer, dt );
+            energyTransferredFromBurner = burner.addOrRemoveEnergyToFromObject( energyContainer, dt );
+            self.energyBalanceTracker.logEnergyExchange( burner.id, energyContainer.id, energyTransferredFromBurner );
           } );
         }
         else {
 
           // nothing on a burner, so heat/cool the air
-          burner.addOrRemoveEnergyToFromAir( self.air, dt );
+          energyTransferredFromBurner = burner.addOrRemoveEnergyToFromAir( self.air, dt );
+          self.energyBalanceTracker.logEnergyExchange( burner.id, self.air.id, energyTransferredFromBurner );
         }
-      } );
-
-      // exchange energy chunks between burners and non-air energy containers
-      this.thermalContainers.forEach( function( element ) {
-        self.burners.forEach( function( burner ) {
-          if ( burner.inContactWith( element ) ) {
-            var burnerChunkBalance = burner.getEnergyChunkBalanceWithObjects();
-            var elementChunkBalance = element.getEnergyChunkBalance();
-            var energyChunk;
-
-            if ( ( burnerChunkBalance > 0 || elementChunkBalance < 0 ) && burner.canSupplyEnergyChunk() ) {
-
-              // add an energy chunk to the model element on the burner
-              element.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( element.getCenterPoint() ) );
-            }
-            else if ( ( burnerChunkBalance < 0 || elementChunkBalance > 0 ) && burner.canAcceptEnergyChunk() ) {
-
-              // extract an energy chunk from the model element
-              energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
-
-              if ( energyChunk !== null ) {
-                burner.addEnergyChunk( energyChunk );
-              }
-            }
-            else if ( burner.heatCoolLevelProperty.value < 0 && elementChunkBalance === 0 ) {
-
-              // This is a bit of a tricky case, so it requires some explanation.  If the burner is attempting to cool
-              // the element directly on top of it, and that element doesn't have any excess energy chunks, but
-              // something in the stack on TOP of the element does, the element on the burner should go ahead and
-              // surrender an energy chunk to the burner with the expectation that it will get one shortly from the
-              // element(s) on top.  Simple, right?
-              var numExcessChunksAbove = 0;
-              for ( var nextElement = element.getElementOnTop(); nextElement !== null; nextElement = nextElement.getElementOnTop() ) {
-                numExcessChunksAbove += nextElement.getEnergyChunkBalance();
-              }
-              if ( numExcessChunksAbove > 0 ) {
-                energyChunk = element.extractEnergyChunkClosestToPoint( burner.positionProperty.value );
-                if ( energyChunk !== null ) {
-                  burner.addEnergyChunk( energyChunk );
-                }
-              }
-            }
-          }
-        } );
       } );
 
       // clear the "in thermal contact" information
@@ -416,78 +382,12 @@ define( function( require ) {
         inContactList.length = 0;
       } );
 
-      // Exchange energy chunks between pairs of thermal energy containers that are in contact and have excess or
-      // deficits in their energy chunk balances that warrant an exchange.
-      this.thermalContainers.forEach( function( container1, index ) {
-
-        // loop through all other containers and, if in contact, see if an exchange of energy chunks should occur
-        self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
-
-          if ( container1.thermalContactArea.getThermalContactLength( container2.thermalContactArea ) > 0 ) {
-
-            // update list of elements that are in thermal contact
-            self.inThermalContactInfo[ container1.id ].push( container2.id );
-            self.inThermalContactInfo[ container2.id ].push( container1.id );
-
-            // exchange one or more chunks if appropriate
-            var ec = null;
-            if ( container1.getEnergyChunkBalance() > 0 ) {
-
-              // If the 2nd thermal energy container is low on energy chunks, it's a no brainer, do the transfer.  If
-              // the 1st is immersed in the 2nd, do the transfer regardless, otherwise the 1st has no way to get rid of
-              // its excess chunks and odd behavior can result, see
-              // https://github.com/phetsims/energy-forms-and-changes/issues/115#issuecomment-448810473.
-              if ( container2.getEnergyChunkBalance() < 0 || isImmersedIn( container1, container2 ) ) {
-                ec = container1.extractEnergyChunkClosestToBounds( container2.thermalContactArea );
-                ec && container2.addEnergyChunk( ec );
-              }
-            }
-            else if ( container1.getEnergyChunkBalance() < 0 && container2.getEnergyChunkBalance() > 0 ) {
-              ec = container2.extractEnergyChunkClosestToBounds( container1.thermalContactArea );
-              ec && container1.addEnergyChunk( ec );
-            }
-          }
-        } );
-      } );
-
-      // Check for cases where energy chunks should be exchanged between thermal model elements that are in stacks,
-      // since there can be cases where there are matching surpluses and deficits at the ends of a stack with none in
-      // the middle.  NOTE: This is not fully general, and only handles stacks of 3 elements, which is all that is
-      // needed at the time of this writing.  More generalization would be required to handle larger stacks.
-      this.thermalContainers.forEach( function( container ) {
-        if ( self.inThermalContactInfo[ container.id ].length === 2 ) {
-          var neighbor1ID = self.inThermalContactInfo[ container.id ][ 0 ];
-          var neighbor2ID = self.inThermalContactInfo[ container.id ][ 1 ];
-          if ( self.inThermalContactInfo[ neighbor1ID ].length === 1 && self.inThermalContactInfo[ neighbor2ID ].length ) {
-
-            // This is the situation we're looking for, where a thermal container is in the center of a stack of thermal
-            // containers.  Test whether an energy chunk exchange can be brokered.
-            var neighbor1 = self.getThermalElementByID( neighbor1ID );
-            var neighbor2 = self.getThermalElementByID( neighbor2ID );
-            var neighbor1ECBalance = neighbor1.getEnergyChunkBalance();
-            var neighbor2ECBalance = neighbor2.getEnergyChunkBalance();
-            var energyChunk;
-            if ( neighbor1ECBalance > 0 && neighbor2ECBalance < 0 ) {
-              energyChunk = neighbor1.extractEnergyChunkClosestToBounds( container.thermalContactArea );
-            }
-            else if ( neighbor2ECBalance > 0 && neighbor1ECBalance < 0 ) {
-              energyChunk = neighbor2.extractEnergyChunkClosestToBounds( container.thermalContactArea );
-            }
-            if ( energyChunk ) {
-              container.addEnergyChunk( energyChunk );
-            }
-          }
-        }
-      } );
-
-      // exchange energy and energy chunks between the movable thermal energy containers and the air
+      // exchange energy between the movable thermal energy containers and the air
       this.thermalContainers.forEach( function( container1 ) {
 
-        // set up some variables that are used to decide whether or not energy should be exchanged with air
+        // detect elements that are immersed in a beaker and don't allow them to exchange energy directly with the air
         var immersedInBeaker = false;
-
         self.beakers.forEach( function( beaker ) {
-
           if ( isImmersedIn( container1, beaker ) ) {
 
             // this model element is immersed in the beaker
@@ -497,84 +397,79 @@ define( function( require ) {
 
         // exchange energy and energy chunks with the air if not immersed in the beaker
         if ( !immersedInBeaker ) {
-
-          // exchange energy with the air
-          self.air.exchangeEnergyWith( container1, dt );
-
-          // Exchange energy chunks with the air.  There are some accumulators that are used to track if the container
-          // has a surplus or deficit of energy chunks for a while before chunks are exchanged with the air.  This is
-          // done so that the thermal energy containers are more inclined to exchange chunks with each other than the
-          // air if possible.
-          if ( container1.getEnergyChunkBalance() !== 0 ) {
-            var heatTransferFactor = HeatTransferConstants.getHeatTransferFactor(
-              EnergyContainerCategory.AIR,
-              container1.energyContainerCategory
-            );
-            self.airECExchangeAccumulators[ container1.id ] += container1.getEnergyChunkBalance() * dt * heatTransferFactor;
-            if ( self.airECExchangeAccumulators[ container1.id ] > AIR_EC_EXCHANGE_THRESHOLD ) {
-
-              // surrender an energy chunk to the air
-              var pointAbove = new Vector2(
-                phet.joist.random.nextDouble() * container1.getBounds().width + container1.getBounds().minX,
-                container1.getBounds().maxY
-              );
-              var energyChunk = container1.extractEnergyChunkClosestToPoint( pointAbove );
-
-              if ( energyChunk ) {
-                var energyChunkXMotionConstraint = null;
-                if ( container1 instanceof Beaker ) {
-
-                  // Constrain the energy chunk's motion so that it doesn't go through the edges of the beaker. There is
-                  // a bit of a fudge factor in here to make sure that the sides of the energy chunk, and not just the
-                  // center, stay in bounds.
-                  var energyChunkWidth = 0.01;
-                  var beakerBounds = container1.getBounds();
-                  energyChunkXMotionConstraint = new Range(
-                    beakerBounds.minX + energyChunkWidth / 2,
-                    beakerBounds.minX + beakerBounds.width - energyChunkWidth / 2
-                  );
-
-                  // make sure the energy chunk's position is within the motion constraint
-                  if ( !energyChunkXMotionConstraint.contains( energyChunk.positionProperty.value.x ) ) {
-                    var position = energyChunk.positionProperty.value.copy();
-                    position.setXY(
-                      Util.clamp( position.x, energyChunkXMotionConstraint.minX, energyChunkXMotionConstraint.maxX ),
-                      position.y
-                    );
-                    energyChunk.positionProperty.set( position );
-                  }
-                }
-                self.air.addEnergyChunk( energyChunk, energyChunkXMotionConstraint );
-
-                // reset the accumulator
-                self.airECExchangeAccumulators[ container1.id ] = 0;
-              }
-            }
-            else if ( self.airECExchangeAccumulators[ container1.id ] < -AIR_EC_EXCHANGE_THRESHOLD &&
-                      container1.getTemperature() < self.air.getTemperature() ) {
-
-              // get an energy chunk from the air
-              container1.addEnergyChunk( self.air.requestEnergyChunk( container1.getCenterPoint() ) );
-
-              // reset the accumulator
-              self.airECExchangeAccumulators[ container1.id ] = 0;
-            }
-          }
-          else {
-
-            // clear the accumulator
-            self.airECExchangeAccumulators[ container1.id ] = 0;
-          }
+          var energyExchangedWithAir = self.air.exchangeEnergyWith( container1, dt );
+          self.energyBalanceTracker.logEnergyExchange( self.air.id, container1.id, energyExchangedWithAir );
         }
       } );
 
-      // exchange energy chunks between the air and the burners
-      this.burners.forEach( function( burner ) {
-        if ( burner.getEnergyChunkCountForAir() > 0 ) {
-          self.air.addEnergyChunk( burner.extractEnergyChunkClosestToPoint( burner.getCenterPoint() ), null );
+      // --------- transfer energy chunks between elements --------------
+
+      // Get a list of all energy balances between pairs of objects whose magnitude exceeds the amount that corresponds
+      // to an energy chunk, and that also were recently updated.  The reason that it is important whether or not the
+      // balance was recently updated is that it indicates that the entities are in thermal contact, and thus can
+      // exchange energy chunks.
+      this.reusableBalanceArray.length = 0; // clear the list
+      self.energyBalanceTracker.getBalancesOverThreshold(
+        EFACConstants.ENERGY_PER_CHUNK,
+        true,
+        this.reusableBalanceArray
+      );
+
+      this.reusableBalanceArray.forEach( function( energyBalanceRecord ) {
+
+        var fromID = energyBalanceRecord.fromID;
+        var toID = energyBalanceRecord.toID;
+
+        // figure out who will supply the energy chunk and who will consume it
+        var energyChunkSupplier;
+        var energyChunkConsumer;
+        if ( energyBalanceRecord.energyBalance > 0 ) {
+          energyChunkSupplier = self.getThermalElementByID( fromID );
+          energyChunkConsumer = self.getThermalElementByID( toID );
         }
-        else if ( burner.getEnergyChunkCountForAir() < 0 ) {
-          burner.addEnergyChunk( self.air.requestEnergyChunk( burner.getCenterPoint() ) );
+        else {
+          energyChunkSupplier = self.getThermalElementByID( toID );
+          energyChunkConsumer = self.getThermalElementByID( fromID );
+        }
+        console.log( '--------------------------' );
+        console.log( 'energyChunkSupplier.id = ' + energyChunkSupplier.id );
+        console.log( 'energyChunkConsumer.id = ' + energyChunkConsumer.id );
+
+        // TODO: Try to simplify this to use a consistent set of APIs for all suppliers and consumers of energy chunks.
+        // attempt to extract an energy chunk from the supplier
+        var energyChunk;
+        if ( energyChunkSupplier !== self.air ) {
+
+          if ( energyChunkConsumer !== self.air ) {
+            energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
+              energyChunkConsumer.getCompositeBounds()
+            );
+          }
+          else {
+
+            // when giving an energy chunk to the air, pull one from the top of the container
+            energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
+              energyChunkSupplier.getCenterTopPoint()
+            );
+          }
+        }
+        else {
+
+          // getting an energy chunk from the air is a little different
+          energyChunk = energyChunkSupplier.requestEnergyChunk( energyChunkConsumer.positionProperty.get() );
+        }
+
+        // if we got an energy chunk, pass it to the consumer
+        if ( energyChunk ) {
+
+          energyChunkConsumer.addEnergyChunk( energyChunk );
+
+          // adjust the energy balance since a chunk was transferred
+          self.energyBalanceTracker.logEnergyExchange(
+            fromID,
+            toID,
+            energyBalanceRecord.energyBalance > 0 ? -EFACConstants.ENERGY_PER_CHUNK : EFACConstants.ENERGY_PER_CHUNK
+          );
         }
       } );
 
@@ -1140,13 +1035,26 @@ define( function( require ) {
     /**
      * get the thermal model element that has the provided ID
      * @param {string} id
-     * @returns {RectangularThermalMovableModelElement}
+     * @returns {Object} - one of the elements in the model that can provide and absorb energy
      * @private
      */
     getThermalElementByID: function( id ) {
-      return _.find( this.thermalContainers, function( container ) {
-        return container.id === id;
-      } );
+      var element = null;
+      if ( id === this.air.id ) {
+        element = this.air;
+      }
+      else if ( id.indexOf( 'burner' ) >= 0 ) {
+        element = _.find( this.burners, function( burner ) {
+          return burner.id === id;
+        } );
+      }
+      else {
+        element = _.find( this.thermalContainers, function( container ) {
+          return container.id === id;
+        } );
+      }
+      assert && assert( element, 'no element found for id ' + id );
+      return element;
     }
   } );
 } );

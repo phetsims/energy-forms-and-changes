@@ -38,6 +38,8 @@ define( function( require ) {
   // constants for temperature-energy mapping functions
   var LOW_ENERGY_FOR_MAP_FUNCTION = BRICK_ENERGY_AT_FREEZING_TEMPERATURE;
   var HIGH_ENERGY_FOR_MAP_FUNCTION = BRICK_ENERGY_AT_ROOM_TEMPERATURE;
+
+  // TODO: Why are these fixed numbers?  Seems like they should be calculated.  jbphet 1/18/2019
   var NUM_ENERGY_CHUNKS_IN_BRICK_AT_FREEZING = 1.25;
   var NUM_ENERGY_CHUNKS_IN_BRICK_AT_ROOM_TEMP = 2.4; // close to rounding to 3 so that little energy needed to transfer first chunk
 

@@ -26,7 +26,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'DOT/Rectangle' );
-  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -34,7 +33,6 @@ define( function( require ) {
   var MAX_ENERGY_GENERATION_RATE = 5000; // joules/sec, empirically chosen
   var CONTACT_DISTANCE = 0.001; // in meters
   var ENERGY_CHUNK_CAPTURE_DISTANCE = 0.2; // in meters, empirically chosen
-  var MAX_ENERGY_CHUNK_SUPPLY_RATE = MAX_ENERGY_GENERATION_RATE / EFACConstants.ENERGY_PER_CHUNK;
 
   // Because of the way that energy chunks are exchanged between thermal modeling elements within this simulation,
   // things can end up looking a bit odd if a burner is turned on with nothing on it.  To account for this, a separate
@@ -97,16 +95,6 @@ define( function( require ) {
       compositeBounds.maxX + perspectiveCompensation - ( compositeBounds.minX - perspectiveCompensation ),
       this
     );
-
-    // @private - used to prevent energy chunks from being supplied too quickly
-    this.energyChunkLockoutTimer = 0;
-
-    // reset the internal state variable that moderates energy flow when it changes when the element on top changes
-    this.topSurface.elementOnSurfaceProperty.link( function( element ) {
-      if ( element ) {
-        self.energyChunkLockoutTimer = 0;
-      }
-    } );
   }
 
   energyFormsAndChanges.register( 'Burner', Burner );
@@ -120,7 +108,10 @@ define( function( require ) {
      */
     getCompositeBounds: function() {
       // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.  Also should be bounds.
-      return new Rectangle( this.position.x - SIDE_LENGTH / 2, this.position.y, SIDE_LENGTH, SIDE_LENGTH );
+      var minX = this.position.x - SIDE_LENGTH / 2;
+      var minY = this.position.y;
+      return new Bounds2( minX, minY, minX + SIDE_LENGTH, minY + SIDE_LENGTH
+      );
     },
 
     /**
@@ -136,6 +127,7 @@ define( function( require ) {
      * NOTE: this shouldn't be used for air - there is a specific method for that
      * @param {ThermalEnergyContainer} thermalEnergyContainer - model object that will get or give energy
      * @param {number} dt - amount of time (delta time)
+     * @returns {number} - amount of energy transferred in joules, can be negative if energy was drawn from object
      * @public
      */
     addOrRemoveEnergyToFromObject: function( thermalEnergyContainer, dt ) {
@@ -159,6 +151,7 @@ define( function( require ) {
         thermalEnergyContainer.changeEnergy( deltaEnergy );
         this.energyExchangedWithObjectSinceLastChunkTransfer += deltaEnergy;
       }
+      return deltaEnergy;
     },
 
     /**
@@ -166,15 +159,14 @@ define( function( require ) {
      * defined elsewhere in this type.
      * @param {Air} air - air as a thermal energy container
      * @param dt - amount of time (delta time)
+     * @returns {number} - energy, in joules, transferred to the air, negative if energy was absorbed
      * @public
      */
     addOrRemoveEnergyToFromAir: function( air, dt ) {
       var deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevelProperty.value * dt;
-      if ( deltaEnergy > 0 ) {
-        // TODO: is this a special case?
-      }
       air.changeEnergy( deltaEnergy );
       this.energyExchangedWithAirSinceLastChunkTransfer += deltaEnergy;
+      return deltaEnergy;
     },
 
     /**
@@ -247,7 +239,7 @@ define( function( require ) {
         } );
       }
 
-      if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 && this.energyChunkLockoutTimer === 0 ) {
+      if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
 
         // create an energy chunk
         closestEnergyChunk = new EnergyChunk(
@@ -256,9 +248,6 @@ define( function( require ) {
           new Vector2( 0, 0 ),
           this.energyChunksVisibleProperty
         );
-
-        // prevent another energy chunk from being created for a while
-        this.energyChunkLockoutTimer = 1 / MAX_ENERGY_CHUNK_SUPPLY_RATE;
       }
 
       if ( closestEnergyChunk !== null ) {
@@ -268,9 +257,26 @@ define( function( require ) {
       else {
 
         // TODO: This was in the Java code, and will be left for a while, but should be removed or turned into an assert eventually.
-        console.log( 'Warning: Request for energy chunk from burner when not in heat mode and no chunks contained, returning null.' );
+        console.warn( 'Request for energy chunk from burner when not in heat mode and no chunks contained, returning null.' );
       }
       return closestEnergyChunk;
+    },
+
+    /**
+     * request an energy chunk from the burner based on provided bounds
+     * @param {Bounds2} bounds - bounds to which the energy chunks will be heading
+     * @returns {EnergyChunk} - closest energy chunk
+     * @public
+     */
+    extractEnergyChunkClosestToBounds: function( bounds ) {
+
+      // verify that the bounds where the energy chunk is going are above this burner
+      var burnerBounds = this.getCompositeBounds();
+      assert && assert(
+      bounds.minY >= burnerBounds.maxY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
+        'items should only be on top of burner when getting ECs'
+      );
+      return this.extractEnergyChunkClosestToPoint( new Vector2( bounds.centerX, bounds.minY ) );
     },
 
     /**
@@ -289,7 +295,6 @@ define( function( require ) {
       this.energyChunkList.clear();
       this.energyExchangedWithAirSinceLastChunkTransfer = 0;
       this.energyExchangedWithObjectSinceLastChunkTransfer = 0;
-      this.energyChunkLockoutTimer = 0;
       this.heatCoolLevelProperty.reset();
     },
 
@@ -352,12 +357,6 @@ define( function( require ) {
           _.pull( self.energyChunkMotionStrategies, controller );
         }
       } );
-
-      // update the lockout time for supplying energy chunks
-      this.energyChunkLockoutTimer = Math.max(
-        this.energyChunkLockoutTimer - dt * Math.abs( this.heatCoolLevelProperty.value ),
-        0
-      );
     },
 
     /**
@@ -382,37 +381,8 @@ define( function( require ) {
     getTemperature: function() {
       var temperature = EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevelProperty.value * 100;
       return Math.max( temperature, EFACConstants.WATER_FREEZING_POINT_TEMPERATURE );
-    },
-
-    /**
-     * get the (signed) number of energy chunks for interaction with thermal objects (as opposed to air)
-     * @returns {number} - The number of energy chunks that could be supplied or consumed. Negative value indicates that
-     * chunks should come in.
-     * @public
-     */
-    getEnergyChunkBalanceWithObjects: function() {
-      var deltaE = this.energyExchangedWithObjectSinceLastChunkTransfer;
-      var sign = Util.sign( deltaE );
-      return ( Math.floor( Math.abs( deltaE ) / EFACConstants.ENERGY_PER_CHUNK ) * sign );
-    },
-
-    /**
-     * whether burner can emit an energy chunk to another element
-     * @returns {boolean}
-     * @public
-     */
-    canSupplyEnergyChunk: function() {
-      return this.heatCoolLevelProperty.value > 0 && this.energyChunkLockoutTimer === 0;
-    },
-
-    /**
-     * whether burner can receive an energy chunk from another element
-     * @returns {boolean}
-     * @public
-     */
-    canAcceptEnergyChunk: function() {
-      return this.heatCoolLevelProperty.value < 0;
     }
+
   } );
 } );
 
