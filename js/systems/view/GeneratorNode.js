@@ -32,9 +32,16 @@ define( function( require ) {
   /**
    * @param {Generator} generator EnergyConverter
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
    * @constructor
    */
-  function GeneratorNode( generator, modelViewTransform ) {
+  function GeneratorNode( generator, modelViewTransform, options ) {
+
+    options = _.extend( {
+
+      // {boolean} - whether the mechanical energy chunk layer is added
+      addMechanicalEnergyChunkLayer: true
+    }, options );
 
     MoveFadeModelElementNode.call( this, generator, modelViewTransform );
 
@@ -75,10 +82,17 @@ define( function( require ) {
     } ) );
 
     // @public (read-only)
-    this.visibleEnergyChunkLayer = new EnergyChunkLayer( generator.energyChunkList, modelViewTransform, {
-      parentPositionProperty: generator.positionProperty
-    } );
-    this.addChild( this.visibleEnergyChunkLayer );
+    this.mechanicalEnergyChunkLayer = null;
+
+    if ( options.addMechanicalEnergyChunkLayer ) {
+      this.mechanicalEnergyChunkLayer = new EnergyChunkLayer( generator.energyChunkList, modelViewTransform, {
+        parentPositionProperty: generator.positionProperty
+      } );
+      this.addChild( this.mechanicalEnergyChunkLayer );
+    }
+    else {
+      this.mechanicalEnergyChunkLayer = new EnergyChunkLayer( generator.energyChunkList, modelViewTransform );
+    }
 
     // update the rotation of the wheel image based on model value
     var wheelRotationPoint = new Vector2( paddlesNode.center.x, paddlesNode.center.y );
@@ -99,15 +113,16 @@ define( function( require ) {
 
   return inherit( MoveFadeModelElementNode, GeneratorNode, {
     /**
-     * Remove and return the visible energy chunk layer. This supports adding the energy chunk layer back in from
-     * outside of this node to change the layering order.
+     * Return the mechanical energy chunk layer. This supports adding the energy chunk layer from
+     * outside of this node to alter the layering order.
      *
      * @public
      * @returns {EnergyChunkLayer}
      */
-    removeAndGetEnergyChunkLayer: function() {
-      this.removeChild( this.visibleEnergyChunkLayer );
-      return this.visibleEnergyChunkLayer;
+    getMechanicalEnergyChunkLayer: function() {
+      assert && assert( !this.hasChild( this.mechanicalEnergyChunkLayer ),
+        'this.mechanicalEnergyChunkLayer is already a child of GeneratorNode' );
+      return this.mechanicalEnergyChunkLayer;
     }
   } );
 } );
