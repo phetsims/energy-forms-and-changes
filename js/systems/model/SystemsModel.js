@@ -15,6 +15,7 @@ define( function( require ) {
   var Belt = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Belt' );
   var Biker = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Biker' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Emitter = require( 'AXON/Emitter' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElementCarousel' );
   var Fan = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Fan' );
@@ -97,6 +98,9 @@ define( function( require ) {
       this.energyUsersCarousel
     ];
 
+    // @public - used to notify the view that a manual step was called
+    this.manualStepEmitter = new Emitter();
+
     // set isActive = true for the first element in each carousel
     this.carousels.forEach( function( carousel ) {
       carousel.managedElements[ 0 ].activate();
@@ -148,6 +152,7 @@ define( function( require ) {
      */
     manualStep: function() {
       this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      this.manualStepEmitter.emit(); // notify the view
     },
 
     /**

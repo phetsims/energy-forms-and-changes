@@ -60,6 +60,8 @@ define( function( require ) {
    */
   function SystemsScreenView( model ) {
 
+    var self = this;
+
     // @private
     this.model = model;
 
@@ -261,6 +263,11 @@ define( function( require ) {
     this.addChild( energySourceSelector );
     this.addChild( energyConverterSelector );
     this.addChild( energyUserSelector );
+
+    // listen to the manualStepEmitter in the model
+    model.manualStepEmitter.addListener( function() {
+      self.manualStep();
+    } );
   }
 
   energyFormsAndChanges.register( 'SystemsScreenView', SystemsScreenView );
@@ -274,10 +281,27 @@ define( function( require ) {
      */
     step: function( dt ) {
       if ( this.model.isPlayingProperty.get() ) {
-        this.teaKettleNode.steamNode.step( dt );
-        this.beakerHeaterNode.step( dt );
-        this.faucetNode.step( dt );
+        this.stepView( dt );
       }
+    },
+
+    /**
+     * step forward by one fixed nominal frame time
+     * @public
+     */
+    manualStep: function() {
+      this.stepView( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+    },
+
+    /**
+     * update the state of the non-model associated view elements for a given time amount
+     * @param dt - time step, in seconds
+     * @public
+     */
+    stepView: function( dt ) {
+      this.teaKettleNode.steamNode.step( dt );
+      this.beakerHeaterNode.step( dt );
+      this.faucetNode.step( dt );
     }
   } );
 } );
