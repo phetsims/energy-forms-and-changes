@@ -13,7 +13,6 @@ define( function( require ) {
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var Property = require( 'AXON/Property' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
 
@@ -33,7 +32,7 @@ define( function( require ) {
     this.sensedTemperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
 
     // @public (read-only) {Property.<Color>}
-    this.sensedElementColorProperty = new Property( PhetColorScheme.RED_COLORBLIND );
+    this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR );
 
     // @public (read-only) {Property.<boolean>} - used to control visibility in the view
     this.activeProperty = new Property( initiallyActive );

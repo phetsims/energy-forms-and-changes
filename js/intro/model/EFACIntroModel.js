@@ -186,7 +186,7 @@ define( function( require ) {
             beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
 
-          if ( newColor !== sensor.sensedElementColorProperty.initialValue &&
+          if ( newColor !== EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR &&
                oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
                !beaker.userControlledProperty.get() &&

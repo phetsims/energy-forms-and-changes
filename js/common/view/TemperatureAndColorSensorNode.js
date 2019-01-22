@@ -26,7 +26,6 @@ define( function( require ) {
 
   // constants
   var TRIANGLE_SIDE_LENGTH = 18; // in screen coordinates
-  var INACTIVE_COLOR = new Color( 'white' );
 
   /**
    * @param {TemperatureAndColorSensor} temperatureAndColorSensor - model element that measures temperature and color
@@ -69,7 +68,7 @@ define( function( require ) {
         temperatureAndColorSensor.sensedElementColorProperty
       ],
       function( active, color ) {
-        self.colorIndicatorNode.fill = active ? color : INACTIVE_COLOR;
+        self.colorIndicatorNode.fill = active ? color : EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR;
       }
     );
 
