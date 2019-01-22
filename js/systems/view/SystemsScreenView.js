@@ -147,7 +147,7 @@ define( function( require ) {
     this.addChild( fanNode );
 
     // create the energy converter nodes
-    var generatorNode = new GeneratorNode( model.generator, modelViewTransform );
+    var generatorNode = new GeneratorNode( model.generator, modelViewTransform, { addMechanicalEnergyChunkLayer: false } );
     var beltNode = new BeltNode( model.belt, modelViewTransform );
     var solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
     this.addChild( generatorNode );
@@ -158,12 +158,10 @@ define( function( require ) {
     this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
     this.addChild( this.faucetNode );
 
-    // remove the visible energy chunk layer from the generator and add it back in after the faucet has been created.
-    // this is desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks
-    // that are traveling on top of the falling water now remain in front of the water once the generator owns them.
-    var generatorVisibleEnergyChunkLayer = generatorNode.removeAndGetEnergyChunkLayer();
-    generatorVisibleEnergyChunkLayer.removeParentPositionProperty();
-    this.addChild( generatorVisibleEnergyChunkLayer );
+    // get the mechanical energy chunk layer from the generator and add it after the faucet has been created. this is
+    // desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks that
+    // are traveling on top of the falling water now remain in front of the water once the generator owns them.
+    this.addChild( generatorNode.getMechanicalEnergyChunkLayer() );
 
     // create the rest of the energy source nodes
     var sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
