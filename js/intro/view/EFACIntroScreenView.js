@@ -612,6 +612,11 @@ define( function( require ) {
       centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
     } );
     this.addChild( resetAllButton );
+
+    // listen to the manualStepEmitter in the model
+    model.manualStepEmitter.addListener( function() {
+      self.manualStep();
+    } );
   }
 
   // helper function the constrains the provided model element's position to the play area
@@ -659,6 +664,15 @@ define( function( require ) {
         this.waterBeakerView.step( dt );
         this.oliveOilBeakerView.step( dt );
       }
+    },
+
+    /**
+     * step forward by one fixed nominal frame time
+     * @public
+     */
+    manualStep: function() {
+      this.waterBeakerView.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      this.oliveOilBeakerView.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
     }
   } );
 } );

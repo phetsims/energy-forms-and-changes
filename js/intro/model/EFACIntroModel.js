@@ -20,6 +20,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  var Emitter = require( 'AXON/Emitter' );
   var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
@@ -229,6 +230,9 @@ define( function( require ) {
       rightBurnerBounds.maxX,
       rightBurnerBounds.maxY
     );
+
+    // @public - used to notify the view that a manual step was called
+    this.manualStepEmitter = new Emitter();
   }
 
   // helper function
@@ -287,6 +291,7 @@ define( function( require ) {
      */
     manualStep: function() {
       this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      this.manualStepEmitter.emit();
     },
 
     /**
