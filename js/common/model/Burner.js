@@ -101,7 +101,7 @@ define( function( require ) {
      * @public
      */
     getCompositeBounds: function() {
-      // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.  Also should be bounds.
+      // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.
       var minX = this.position.x - SIDE_LENGTH / 2;
       var minY = this.position.y;
       return new Bounds2( minX, minY, minX + SIDE_LENGTH, minY + SIDE_LENGTH
