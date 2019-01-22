@@ -661,8 +661,7 @@ define( function( require ) {
      */
     step: function( dt ) {
       if ( this.model.isPlayingProperty.get() ) {
-        this.waterBeakerView.step( dt );
-        this.oliveOilBeakerView.step( dt );
+        this.stepView( dt );
       }
     },
 
@@ -671,8 +670,17 @@ define( function( require ) {
      * @public
      */
     manualStep: function() {
-      this.waterBeakerView.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
-      this.oliveOilBeakerView.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      this.stepView( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+    },
+
+    /**
+     * update the state of the non-model associated view elements for a given time amount
+     * @param dt - time step, in seconds
+     * @public
+     */
+    stepView: function( dt ) {
+      this.waterBeakerView.step( dt );
+      this.oliveOilBeakerView.step( dt );
     }
   } );
 } );

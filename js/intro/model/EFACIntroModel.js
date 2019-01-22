@@ -291,7 +291,7 @@ define( function( require ) {
      */
     manualStep: function() {
       this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
-      this.manualStepEmitter.emit();
+      this.manualStepEmitter.emit(); // notify the view
     },
 
     /**
