@@ -102,6 +102,7 @@ define( function( require ) {
       this.addInputListener( new MovableDragHandler( temperatureAndColorSensor.positionProperty, {
         modelViewTransform: options.modelViewTransform,
         dragBounds: options.dragBounds,
+        attach: true,
         startDrag: function() {
           temperatureAndColorSensor.userControlledProperty.set( true );
         },
