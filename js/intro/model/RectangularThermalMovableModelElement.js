@@ -284,7 +284,7 @@ define( function( require ) {
     extractEnergyChunkClosestToPoint: function( point ) {
 
       // make sure this element doesn't give up all its energy chunks
-      if ( this.getNumEnergyChunks() <= 1 ) {
+      if ( this.getNumEnergyChunksInElement() <= 1 ) {
         return null;
       }
 
@@ -321,7 +321,7 @@ define( function( require ) {
     extractEnergyChunkClosestToBounds: function( destinationBounds ) {
 
       // make sure this element doesn't give up all its energy chunks
-      if ( this.getNumEnergyChunks() <= 1 ) {
+      if ( this.getNumEnergyChunksInElement() <= 1 ) {
         return null;
       }
 
@@ -431,16 +431,24 @@ define( function( require ) {
     },
 
     /**
+     * get the number of energy chunks that are actually in the element, excluding any that are on the way
      * @returns {number}
-     * @public
+     * @private
      */
-    getNumEnergyChunks: function() {
-
+    getNumEnergyChunksInElement: function() {
       var numChunks = 0;
       this.slices.forEach( function( slice ) {
         numChunks += slice.getNumEnergyChunks();
       } );
-      return numChunks + this.approachingEnergyChunks.length;
+      return numChunks;
+    },
+
+    /**
+     * @returns {number}
+     * @public
+     */
+    getNumEnergyChunks: function() {
+      return this.getNumEnergyChunksInElement() + this.approachingEnergyChunks.length;
     },
 
     /**

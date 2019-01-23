@@ -338,6 +338,8 @@ define( function( require ) {
       // with discrete non-infinitesimal time values, it probably does, so any changes to the order in which the energy
       // exchanges occur below should be thoroughly tested.
 
+      // --------- transfer continuous energy (and not energy chunks yet) between elements --------------
+
       // clear the flags that are used to track whether energy transfers occurred during this step
       self.energyBalanceTracker.clearRecentlyUpdatedFlags();
 
@@ -423,52 +425,96 @@ define( function( require ) {
           energyChunkConsumer = self.getThermalElementByID( fromID );
         }
 
-        // TODO: Try to simplify this to use a consistent set of APIs for all suppliers and consumers of energy chunks.
-        // attempt to extract an energy chunk from the supplier
-        var energyChunk;
-        if ( energyChunkSupplier !== self.air ) {
+        // if the transfer is supposed to go to or from a burner, make sure the burner is in the correct state
+        if ( energyChunkSupplier.id.indexOf( 'burner' ) >= 0 && energyChunkSupplier.heatCoolLevelProperty.value < 0 ||
+             energyChunkConsumer.id.indexOf( 'burner' ) >= 0 && energyChunkConsumer.heatCoolLevelProperty.value > 0 ) {
 
-          if ( energyChunkConsumer !== self.air ) {
-            energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
-              energyChunkConsumer.getCompositeBounds()
-            );
-          }
-          else {
-
-            // when giving an energy chunk to the air, pull one from the top of the supplier
-            energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
-              energyChunkSupplier.getCenterTopPoint()
-            );
-          }
-        }
-        else {
-
-          // getting an energy chunk from the air is a little different
-          energyChunk = energyChunkSupplier.requestEnergyChunk( energyChunkConsumer.positionProperty.get() );
+          // burner isn't in correct state, bail on this transfer
+          return;
         }
 
-        // if we got an energy chunk, pass it to the consumer
-        if ( energyChunk ) {
+        // transfer the energy chunk from the supplier to the consumer
+        self.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord );
+      } );
 
-          if ( energyChunkConsumer === self.air ) {
+      // Now that continuous energy has been exchanged and then energy chunks have been exchanged based on the
+      // accumulated energy exchange balances, we now check to see if any thermal energy containers are left with an
+      // imbalance between their energy levels versus the number of energy chunks they contain.  If such an imbalance is
+      // detected, we search for a good candidate with which to make an exchange and, if one is found, transfer an
+      // energy chunk.  If no good candidate is found, no transfer is made.
+      this.thermalContainers.forEach( function( thermalContainer ) {
 
-            // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
-            // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
-            // the view.
-            var supplierBounds = energyChunkSupplier.getCompositeBounds();
-            var horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
-            energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
+        var energyChunkBalance = thermalContainer.getEnergyChunkBalance();
+        if ( energyChunkBalance !== 0 ) {
+
+          // This thermal energy container has an energy chunk imbalance.  Get a list of all thermal model elements with
+          // which a recent thermal energy exchange has occurred, because this lets us know who is in thermal contact
+          // ans could thus potentially supply or consume an energy chunk.
+          var recentlyUpdatedBalances = self.energyBalanceTracker.getBalancesForID( thermalContainer.id, true );
+
+          // set up some variables that will be used in the loops below
+          var bestExchangeCandidate = null;
+          var closestMatchExchangeRecord = null;
+          var currentRecord;
+          var otherElementInRecord;
+          var i;
+
+          // Search for other thermal containers that can consume this container's excess or supply this container's
+          // needs, as the case may be.
+          for ( i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
+            currentRecord = recentlyUpdatedBalances[ i ];
+            otherElementInRecord = self.getThermalElementByID( currentRecord.getOtherID( thermalContainer.id ) );
+            var thisElementTemperature = thermalContainer.getTemperature();
+            var otherElementTemperature = otherElementInRecord.getTemperature();
+
+            // See if there is another thermal container that is in the opposite situation from this one, i.e. one that
+            // has a deficit of ECs when this one has excess, or vice versa.
+            if ( self.thermalContainers.indexOf( otherElementInRecord ) >= 0 ) {
+              var otherECBalance = otherElementInRecord.getEnergyChunkBalance();
+              if ( energyChunkBalance > 0 && otherECBalance < 0 && thisElementTemperature > otherElementTemperature ||
+                   energyChunkBalance < 0 && otherECBalance > 0 && thisElementTemperature < otherElementTemperature ) {
+
+                // this is a great candidate for an exchange
+                bestExchangeCandidate = otherElementInRecord;
+                closestMatchExchangeRecord = currentRecord;
+              }
+            }
           }
-          else {
-            energyChunkConsumer.addEnergyChunk( energyChunk );
+
+          if ( !bestExchangeCandidate ) {
+
+            // nothing found yet, see if there is a burner that could take or provide and energy chunk
+            for ( i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
+              currentRecord = recentlyUpdatedBalances[ i ];
+              var otherID = currentRecord.getOtherID( thermalContainer.id );
+              if ( otherID.indexOf( 'burner' ) >= 0 ) {
+
+                // This is a burner, is it in a state where it is able to provide or receive an energy chunk?
+                var burner = self.getThermalElementByID( otherID );
+                var heatCoolLevel = burner.heatCoolLevelProperty.get();
+                if ( energyChunkBalance > 0 && heatCoolLevel < 0 || energyChunkBalance < 0 && heatCoolLevel > 0 ) {
+                  bestExchangeCandidate = burner;
+                  closestMatchExchangeRecord = currentRecord;
+                }
+              }
+            }
           }
 
-          // adjust the energy balance since a chunk was transferred
-          self.energyBalanceTracker.logEnergyExchange(
-            fromID,
-            toID,
-            energyBalanceRecord.energyBalance > 0 ? -EFACConstants.ENERGY_PER_CHUNK : EFACConstants.ENERGY_PER_CHUNK
-          );
+          if ( bestExchangeCandidate ) {
+
+            // a good candidate was found, make the transfer
+            var energyChunkSupplier;
+            var energyChunkConsumer;
+            if ( energyChunkBalance > 0 ) {
+              energyChunkSupplier = thermalContainer;
+              energyChunkConsumer = bestExchangeCandidate;
+            }
+            else {
+              energyChunkSupplier = bestExchangeCandidate;
+              energyChunkConsumer = thermalContainer;
+            }
+            self.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, closestMatchExchangeRecord );
+          }
         }
       } );
 
@@ -481,6 +527,70 @@ define( function( require ) {
       this.thermalContainers.forEach( function( thermalEnergyContainer ) {
         thermalEnergyContainer.step( dt );
       } );
+    },
+
+    /**
+     * exchange an energy chunk between the provided model elements
+     * @param {ModelElement} energyChunkSupplier
+     * @param {ModelElement} energyChunkConsumer
+     * @param {EnergyBalanceRecord} energyBalanceRecord
+     * @private
+     */
+    transferEnergyChunk: function( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord ) {
+
+      // attempt to extract an energy chunk from the supplier
+      var energyChunk;
+      if ( energyChunkSupplier !== this.air ) {
+
+        if ( energyChunkConsumer !== this.air ) {
+          energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
+            energyChunkConsumer.getCompositeBounds()
+          );
+        }
+        else {
+
+          // when giving an energy chunk to the air, pull one from the top of the supplier
+          energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
+            energyChunkSupplier.getCenterTopPoint()
+          );
+        }
+      }
+      else {
+
+        // when getting an energy chunk from the air, just let is know roughly where it's going
+        energyChunk = energyChunkSupplier.requestEnergyChunk( energyChunkConsumer.positionProperty.get() );
+      }
+
+      // if we got an energy chunk, pass it to the consumer
+      if ( energyChunk ) {
+
+        if ( energyChunkConsumer === this.air ) {
+
+          // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
+          // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
+          // the view.
+          var supplierBounds = energyChunkSupplier.getCompositeBounds();
+          var horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
+          energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
+        }
+        else {
+          energyChunkConsumer.addEnergyChunk( energyChunk );
+        }
+
+        // adjust the energy balance since a chunk was transferred, but don't cross zero for the energy balance
+        var energyExchangeToLog;
+        if ( energyBalanceRecord.energyBalance > 0 ) {
+          energyExchangeToLog = Math.max( -EFACConstants.ENERGY_PER_CHUNK, -energyBalanceRecord.energyBalance );
+        }
+        else {
+          energyExchangeToLog = Math.min( EFACConstants.ENERGY_PER_CHUNK, energyBalanceRecord.energyBalance );
+        }
+        this.energyBalanceTracker.logEnergyExchange(
+          energyChunkSupplier.id,
+          energyChunkConsumer.id,
+          energyExchangeToLog
+        );
+      }
     },
 
     /**

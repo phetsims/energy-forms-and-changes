@@ -270,6 +270,14 @@ define( function( require ) {
     },
 
     /**
+     * @returns {Vector2}
+     * @public
+     */
+    getCenterTopPoint: function() {
+      return new Vector2( this.position.x, this.position.y + SIDE_LENGTH );
+    },
+
+    /**
      * @public
      */
     reset: function() {

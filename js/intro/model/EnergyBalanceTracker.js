@@ -102,6 +102,27 @@ define( function( require ) {
     },
 
     /**
+     * get the balances between the provided ID and all other entities with whom balances are being tracked
+     * @param {string} id - ID of the entity whose balances are requested
+     * @param {boolean} recentlyUpdateOnly
+     * @returns {EnergyBalanceRecord[]}
+     */
+    getBalancesForID: function( id, recentlyUpdateOnly ) {
+
+      var resultsArray = [];
+
+      // c-style loop for best performance
+      for ( var i = 0; i < this.energyBalanceRecords.length; i++ ) {
+        var currentRecord = this.energyBalanceRecords[ i ];
+        if ( ( currentRecord.fromID === id || currentRecord.toID === id ) &&
+             ( !recentlyUpdateOnly || currentRecord.recentlyUpdated ) ) {
+          resultsArray.push( currentRecord );
+        }
+      }
+      return resultsArray;
+    },
+
+    /**
      * clear the energy balance for all records
      * @public
      */

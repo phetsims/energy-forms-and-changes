@@ -43,5 +43,17 @@ define( function( require ) {
 
   energyFormsAndChanges.register( 'EnergyBalanceRecord', EnergyBalanceRecord );
 
-  return inherit( Object, EnergyBalanceRecord );
+  return inherit( Object, EnergyBalanceRecord, {
+
+    /**
+     * get the other ID in this record
+     * @param {string} id
+     * @returns {string}
+     */
+    getOtherID: function( id ) {
+      assert && assert( id === this.fromID || id === this.toID, 'provided ID not in record' );
+      return id === this.fromID ? this.toID : this.fromID;
+    }
+
+  } );
 } );
