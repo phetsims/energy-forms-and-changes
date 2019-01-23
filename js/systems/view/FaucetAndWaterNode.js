@@ -19,6 +19,7 @@ define( function( require ) {
   var FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
 
   // constants
   var FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long enough that end is generally not seen
@@ -54,8 +55,10 @@ define( function( require ) {
     var faucetHeadOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD );
     var maxFlowProportion = 1.0;
 
+    var faucetSettingProperty = new NumberProperty( 0 );
+
     // create the faucet and set position to its model offset
-    var faucetNode = new FaucetNode( maxFlowProportion, faucet.flowProportionProperty, faucet.activeProperty, {
+    var faucetNode = new FaucetNode( maxFlowProportion, faucetSettingProperty, faucet.activeProperty, {
       horizontalPipeLength: FAUCET_NODE_HORIZONTAL_LENGTH,
       verticalPipeLength: 40,
       scale: 0.45,
@@ -63,6 +66,21 @@ define( function( require ) {
       y: faucetHeadOrigin.y,
       closeOnRelease: false
     } );
+
+    faucetSettingProperty.link( function( setting ) {
+
+      console.log( 'setting = ' + setting );
+      var mappedSetting;
+      if ( setting === 0 ) {
+        mappedSetting = 0;
+      }
+      else {
+        mappedSetting = 0.27 + ( setting * 0.75 );
+      }
+      console.log( 'mappedSetting = ' + mappedSetting );
+      faucet.flowProportionProperty.set( mappedSetting );
+    } );
+
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, modelViewTransform, {
