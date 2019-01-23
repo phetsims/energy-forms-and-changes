@@ -16,12 +16,13 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MIN_SPEED = 0.06; // In m/s.
-  var MAX_SPEED = 0.10; // In m/s.
+  var DEFAULT_MIN_SPEED = 0.06; // In m/s.
+  var DEFAULT_MAX_SPEED = 0.10; // In m/s.
   var MIN_TIME_IN_ONE_DIRECTION = 0.4;
   var MAX_TIME_IN_ONE_DIRECTION = 0.8;
   var DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chosen
   var DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
+  var GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if destination changes, speed increases
 
   /**
    * @param {EnergyChunk} energyChunk
@@ -30,6 +31,8 @@ define( function( require ) {
    * @constructor
    */
   function EnergyChunkWanderController( energyChunk, destinationProperty, options ) {
+
+    var self = this;
 
     options = _.extend( {
 
@@ -59,12 +62,31 @@ define( function( require ) {
     this.energyChunk = energyChunk;
 
     // @private
+    this.minSpeed = DEFAULT_MIN_SPEED;
+    this.maxSpeed = DEFAULT_MAX_SPEED;
     this.horizontalWanderConstraint = options.horizontalWanderConstraint;
     this.wanderAngleVariation = options.wanderAngleVariation;
     this.destinationProperty = destinationProperty;
-    this.velocity = new Vector2( 0, MAX_SPEED );
+    this.velocity = new Vector2( 0, DEFAULT_MAX_SPEED );
+    this.wandering = true;
     this.resetCountdownTimer();
     this.changeVelocityVector();
+
+    var speedIncreased = false;
+    this.destinationProperty.lazyLink( function( newDestination ) {
+
+      var distanceToDestination = newDestination.distance( self.energyChunk.positionProperty.value );
+
+      // if the destination changes, speed up and go directly to the destination
+      if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
+        var increaseFactor = 8;
+        self.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
+        self.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
+        speedIncreased = true;
+        self.wandering = false;
+      }
+      self.changeVelocityVector();
+    } );
   }
 
   energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
@@ -128,12 +150,12 @@ define( function( require ) {
     changeVelocityVector: function() {
       var vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
       var angle = vectorToDestination.angle();
-      if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING ) {
+      if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
 
         // add some randomness to the direction of travel
         angle = angle + ( ( phet.joist.random.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;
       }
-      var speed = MIN_SPEED + ( MAX_SPEED - MIN_SPEED ) * phet.joist.random.nextDouble();
+      var speed = this.minSpeed + ( this.maxSpeed - this.minSpeed ) * phet.joist.random.nextDouble();
       this.velocity.setXY( speed * Math.cos( angle ), speed * Math.sin( angle ) );
     },
 
