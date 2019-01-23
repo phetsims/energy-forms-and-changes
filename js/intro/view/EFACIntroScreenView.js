@@ -614,8 +614,8 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // listen to the manualStepEmitter in the model
-    model.manualStepEmitter.addListener( function() {
-      self.manualStep();
+    model.manualStepEmitter.addListener( function( dt ) {
+      self.manualStep( dt );
     } );
   }
 
@@ -667,10 +667,11 @@ define( function( require ) {
 
     /**
      * step forward by one fixed nominal frame time
+     * @param dt - time step, in seconds
      * @public
      */
-    manualStep: function() {
-      this.stepView( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+    manualStep: function( dt ) {
+      this.stepView( dt );
     },
 
     /**

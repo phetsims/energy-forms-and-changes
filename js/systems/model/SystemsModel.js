@@ -99,7 +99,7 @@ define( function( require ) {
     ];
 
     // @public - used to notify the view that a manual step was called
-    this.manualStepEmitter = new Emitter();
+    this.manualStepEmitter = new Emitter( { argumentTypes: [ { valueType: 'number' } ] } );
 
     // set isActive = true for the first element in each carousel
     this.carousels.forEach( function( carousel ) {
@@ -152,7 +152,7 @@ define( function( require ) {
      */
     manualStep: function() {
       this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
-      this.manualStepEmitter.emit(); // notify the view
+      this.manualStepEmitter.emit( EFACConstants.SIM_TIME_PER_TICK_NORMAL ); // notify the view
     },
 
     /**
