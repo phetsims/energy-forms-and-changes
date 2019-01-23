@@ -51,6 +51,7 @@ define( function( require ) {
     var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty, { scale: HEATER_COOLER_NODE_SCALE } );
     var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty, {
       snapToZero: false,
+      coolEnabled: false,
       scale: HEATER_COOLER_NODE_SCALE
     } );
 
