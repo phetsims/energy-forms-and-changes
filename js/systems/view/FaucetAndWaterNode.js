@@ -55,7 +55,13 @@ define( function( require ) {
     var faucetHeadOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD );
     var maxFlowProportion = 1.0;
 
+    // create a mapping between the slider position and the flow proportion that prevents very small values
     var faucetSettingProperty = new NumberProperty( 0 );
+    faucetSettingProperty.link( function( setting ) {
+      var mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
+      assert && assert( mappedSetting <= 0 && mappedSetting >= 1 );
+      faucet.flowProportionProperty.set( mappedSetting );
+    } );
 
     // create the faucet and set position to its model offset
     var faucetNode = new FaucetNode( maxFlowProportion, faucetSettingProperty, faucet.activeProperty, {
@@ -66,21 +72,6 @@ define( function( require ) {
       y: faucetHeadOrigin.y,
       closeOnRelease: false
     } );
-
-    faucetSettingProperty.link( function( setting ) {
-
-      console.log( 'setting = ' + setting );
-      var mappedSetting;
-      if ( setting === 0 ) {
-        mappedSetting = 0;
-      }
-      else {
-        mappedSetting = 0.27 + ( setting * 0.75 );
-      }
-      console.log( 'mappedSetting = ' + mappedSetting );
-      faucet.flowProportionProperty.set( mappedSetting );
-    } );
-
 
     // create the energy chunk layer
     var energyChunkLayer = new EnergyChunkLayer( faucet.energyChunkList, modelViewTransform, {
