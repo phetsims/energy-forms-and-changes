@@ -59,7 +59,7 @@ define( function( require ) {
     var faucetSettingProperty = new NumberProperty( 0 );
     faucetSettingProperty.link( function( setting ) {
       var mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
-      assert && assert( mappedSetting <= 0 && mappedSetting >= 1 );
+      assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
       faucet.flowProportionProperty.set( mappedSetting );
     } );
 
