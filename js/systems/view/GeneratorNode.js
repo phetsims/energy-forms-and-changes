@@ -91,6 +91,8 @@ define( function( require ) {
       this.addChild( this.mechanicalEnergyChunkLayer );
     }
     else {
+
+      // create this layer anyway so that it can be extracted and layered differently than it is be default
       this.mechanicalEnergyChunkLayer = new EnergyChunkLayer( generator.energyChunkList, modelViewTransform );
     }
 
@@ -112,16 +114,18 @@ define( function( require ) {
   energyFormsAndChanges.register( 'GeneratorNode', GeneratorNode );
 
   return inherit( MoveFadeModelElementNode, GeneratorNode, {
+
     /**
      * Return the mechanical energy chunk layer. This supports adding the energy chunk layer from
      * outside of this node to alter the layering order.
-     *
-     * @public
      * @returns {EnergyChunkLayer}
+     * @public
      */
     getMechanicalEnergyChunkLayer: function() {
-      assert && assert( !this.hasChild( this.mechanicalEnergyChunkLayer ),
-        'this.mechanicalEnergyChunkLayer is already a child of GeneratorNode' );
+      assert && assert(
+        !this.hasChild( this.mechanicalEnergyChunkLayer ),
+        'this.mechanicalEnergyChunkLayer is already a child of GeneratorNode'
+      );
       return this.mechanicalEnergyChunkLayer;
     }
   } );
