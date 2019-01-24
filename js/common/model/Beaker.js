@@ -223,12 +223,7 @@ define( function( require ) {
      * @public
      */
     getBounds: function() {
-      return this.beakerBounds.setMinMax(
-        this.positionProperty.value.x - this.width / 2,
-        this.positionProperty.value.y,
-        this.positionProperty.value.x + this.width / 2,
-        this.positionProperty.value.y + this.height
-      );
+      return this.compositeBounds;
     },
 
     /**

@@ -62,6 +62,7 @@ define( function( require ) {
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.compositeBounds = Bounds2.NOTHING.copy();
 
+    // update the composite bounds as the model element moves
     this.positionProperty.link( function( position ) {
       self.compositeBounds.setMinMax(
         position.x - width / 2,

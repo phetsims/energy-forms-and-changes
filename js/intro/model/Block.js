@@ -187,8 +187,7 @@ define( function( require ) {
      * @public
      */
     getBounds: function() {
-      var rect = this.rect;
-      return new Bounds2( rect.x, rect.y, rect.x + rect.width, rect.y + rect.height );
+      return this.compositeBounds;
     },
 
     /**
