@@ -44,12 +44,17 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {number} dt
      */
-    step: function( dt ) {
-      var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.positionProperty.value );
-      this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
-      this.sensedElementColorProperty.set( temperatureAndColor.color );
+    step: function() {
+      if ( this.activeProperty.value ) {
+        var temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.positionProperty.value );
+        this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
+        this.sensedElementColorProperty.set( temperatureAndColor.color );
+      }
+      else {
+        this.sensedTemperatureProperty.set( EFACConstants.ROOM_TEMPERATURE );
+        this.sensedElementColorProperty.set( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR );
+      }
     },
 
     /**
