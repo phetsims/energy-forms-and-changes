@@ -45,13 +45,18 @@ define( function( require ) {
   return inherit( Object, EnergyChunk, {
 
     /**
-     * set the position, uses pooled vectors so the user should be careful to use this consistently
+     * set the position
      * @param {number} x
      * @param {number} y
      * @public
      */
     setPosition: function( x, y ) {
-      this.positionProperty.set( new Vector2( x, y ) );
+
+      // only update if the position has changed to avoid unnecessary allocations and notifications
+      var currentPosition = this.positionProperty.get();
+      if ( x !== currentPosition.x || y !== currentPosition.y ) {
+        this.positionProperty.set( new Vector2( x, y ) );
+      }
     },
 
     /**
