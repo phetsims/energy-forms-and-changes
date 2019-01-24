@@ -71,6 +71,19 @@ define( function( require ) {
       .lineToPoint( new Vector2( -width / 2, height ).plus( forwardPerspectiveOffset ) )
       .close();
 
+    // @private {Shape} - The projected shape translated to the current position.  This is only updated when requested,
+    // so should never be accessed directly, since it could be out of date.  See the associated getter method.
+    this.latestProjectedShape = this.untranslatedProjectedShape;
+
+    // @private {Vector2} - the position when the projected shape was last updated, used to tell if update is needed
+    this.latestProjectedShapePosition = Vector2.ZERO;
+
+    // @private {Matrix3} - a reusable matrix, used to reduce allocations when updating the projected shape
+    this.translationMatrix = Matrix3.translation( initialPosition.x, initialPosition.y );
+
+    // perform the initial update of the projected shape
+    this.getProjectedShape();
+
     // when an approaching energy chunk is removed from the list, make sure its wander controller goes away too
     this.approachingEnergyChunks.addItemRemovedListener( function( removedEC ) {
       self.energyChunkWanderControllers = self.energyChunkWanderControllers.filter( function( wanderController ) {
@@ -511,8 +524,16 @@ define( function( require ) {
      * @public
      */
     getProjectedShape: function() {
-      var position = this.positionProperty.get();
-      return this.untranslatedProjectedShape.transformed( Matrix3.translation( position.x, position.y ) );
+
+      var currentPosition = this.positionProperty.get();
+
+      // update the projected shape only if the position has changed since the last request
+      if ( !this.latestProjectedShapePosition.equals( currentPosition ) ) {
+        this.translationMatrix.setToTranslation( currentPosition.x, currentPosition.y );
+        this.latestProjectedShape = this.untranslatedProjectedShape.transformed( this.translationMatrix );
+        this.latestProjectedShapePosition = this.positionProperty.get();
+      }
+      return this.latestProjectedShape;
     },
 
     /**
