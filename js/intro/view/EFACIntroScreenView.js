@@ -306,6 +306,9 @@ define( function( require ) {
     // add the air
     airLayer.addChild( new AirNode( model.air, modelViewTransform ) );
 
+    // create a reusable bounds in order to reduce memory allocations
+    var reusableConstraintBounds = Bounds2.NOTHING.copy();
+
     // define a closure that will limit the model element motion based on both view and model constraints
     function constrainMovableElementMotion( modelElement, proposedPosition ) {
 
@@ -314,7 +317,8 @@ define( function( require ) {
         modelElement,
         proposedPosition,
         self.layoutBounds,
-        modelViewTransform
+        modelViewTransform,
+        reusableConstraintBounds
       );
 
       // constrain the model element to move legally within the model, which generally means not moving through things
@@ -621,13 +625,12 @@ define( function( require ) {
   }
 
   // helper function the constrains the provided model element's position to the play area
-  function constrainToPlayArea( modelElement, proposedPosition, playAreaBounds, modelViewTransform ) {
+  function constrainToPlayArea( modelElement, proposedPosition, playAreaBounds, modelViewTransform, reusuableBounds ) {
 
     var viewConstrainedPosition = proposedPosition.copy();
 
-    // TODO: Consider using a pre-allocated bounds for this if retained
     var elementViewBounds = modelViewTransform.modelToViewBounds(
-      modelElement.getCompositeBoundsForPosition( proposedPosition )
+      modelElement.getCompositeBoundsForPosition( proposedPosition, reusuableBounds )
     );
 
     // constrain the model element to stay within the play area

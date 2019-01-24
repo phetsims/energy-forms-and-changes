@@ -209,6 +209,9 @@ define( function( require ) {
     // pre-allocated and reused in an effort to reduce memory allocations.
     this.reusableBalanceArray = [];
 
+    // @private {Bounds2} - pre-allocated reusable bounds, used to reduce memory allocations
+    this.reusableBounds = Bounds2.NOTHING.copy();
+
     // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
     // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
     // preventing overlap.
@@ -761,7 +764,10 @@ define( function( require ) {
       var allowedTranslation = proposedPosition.minus( modelElement.positionProperty.get() );
 
       // get the current composite bounds of the model element
-      var modelElementBounds = modelElement.getCompositeBoundsForPosition( modelElement.positionProperty.get() );
+      var modelElementBounds = modelElement.getCompositeBoundsForPosition(
+        modelElement.positionProperty.get(),
+        this.reusableBounds
+      );
 
       // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
       var modelElementBoundsWithSidePerspective = new Bounds2(
@@ -778,24 +784,6 @@ define( function( require ) {
         allowedTranslation,
         true
       );
-
-      // TODO: There is a request to add another beaker, see https://github.com/phetsims/energy-forms-and-changes/issues/39.
-      // The code below is not general enough to handle the interactions in that case, and will need to be improved.
-      // One thought that I (jbphet) had was to add a set of methods to an object that would test the various interactions
-      // and would be indexed by the model element type of the moving and stationary objects, so it would be structured
-      // like this:
-      // OVERLAP_TEST_FUNCTIONS = {
-      //   block: {
-      //     block: function...
-      //     beaker: function...
-      //     burners: function...
-      //   }
-      //   beaker: {
-      //     block: function...
-      //     beaker: function...
-      //     burners: function...
-      //   }
-      // }
 
       // now check the model element's motion against each of the beakers
       this.beakers.forEach( function( beaker ) {

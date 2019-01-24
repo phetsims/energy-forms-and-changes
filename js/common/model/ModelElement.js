@@ -11,7 +11,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -65,9 +64,6 @@ define( function( require ) {
         self.translatedPositionTestingBoundsList
       );
     } );
-
-    // @private {Bounds2} - composite relative bounds for this model element, cached after first calculation
-    this.relativeCompositeBounds = null;
 
     // @public {Vector2} - compensation for evaluating positions of elements that have perspective in the view
     this.perspectiveCompensation = new Vector2( 0, 0 );
@@ -157,45 +153,6 @@ define( function( require ) {
       }
 
       return boundsList;
-    },
-
-    /**
-     * get the composition bounds, meaning the total rectangular bounds occupied by this model element, for the provided
-     * position
-     * @param {Vector2} position
-     * @param {Bounds2} [bounds] - an option pre-allocated bounds instance, saves memory allocations
-     */
-    getCompositeBoundsForPosition: function( position, bounds ) {
-
-      // if the relative composite bounds have not yet been calculated do it now - should only be necessary once
-      if ( !this.relativeCompositeBounds ) {
-
-        var relativeCompositeBounds = Bounds2.NOTHING.copy();
-
-        this.relativePositionTestingBoundsList.forEach( function( relativePositionTestingBounds ) {
-          relativeCompositeBounds.includeBounds( relativePositionTestingBounds );
-        } );
-        this.relativeCompositeBounds = relativeCompositeBounds;
-      }
-
-      // allocate a Bounds2 instance if none was provided
-      if ( !bounds ) {
-        bounds = Bounds2.NOTHING.copy();
-      }
-
-      bounds.setMinMax(
-        this.relativeCompositeBounds.minX + position.x,
-        this.relativeCompositeBounds.minY + position.y,
-        this.relativeCompositeBounds.maxX + position.x,
-        this.relativeCompositeBounds.maxY + position.y
-      );
-
-      return bounds;
-    },
-
-    // TODO: Document if kept, but consider maintaining these bounds as the model element moves for efficiency
-    getCompositeBounds: function() {
-      return this.getCompositeBoundsForPosition( this.positionProperty.get() );
     },
 
     /**

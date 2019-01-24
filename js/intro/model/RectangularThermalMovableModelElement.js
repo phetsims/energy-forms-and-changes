@@ -59,6 +59,21 @@ define( function( require ) {
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = [];
 
+    // @private {Bounds2} - composite bounds for this model element, maintained as position changes
+    this.compositeBounds = Bounds2.NOTHING.copy();
+
+    this.positionProperty.link( function( position ) {
+      self.compositeBounds.setMinMax(
+        position.x - width / 2,
+        position.y,
+        position.x + width / 2,
+        position.y + height
+      );
+    } );
+
+    // @private {Bounds2} - composite relative bounds for this model element, cached after first calculation
+    this.relativeCompositeBounds = null;
+
     // @private {Shape} - untranslated shape that accounts for 3D projection
     var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
     var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
@@ -109,6 +124,49 @@ define( function( require ) {
   energyFormsAndChanges.register( 'RectangularThermalMovableModelElement', RectangularThermalMovableModelElement );
 
   return inherit( UserMovableModelElement, RectangularThermalMovableModelElement, {
+
+    /**
+     * Get the composite bounds, meaning the total rectangular bounds occupied by this model element, for the provided
+     * position, which may well not be the model element's current position.  This is essentially asking, "what would
+     * your 2D bounds be if you were at this position?"
+     * @param {Vector2} position
+     * @param {Bounds2} [bounds] - an optional pre-allocated bounds instance, saves memory allocations
+     */
+    getCompositeBoundsForPosition: function( position, bounds ) {
+
+      // if the relative composite bounds have not yet been calculated do it now - should only be necessary once
+      if ( !this.relativeCompositeBounds ) {
+
+        var relativeCompositeBounds = Bounds2.NOTHING.copy();
+
+        this.relativePositionTestingBoundsList.forEach( function( relativePositionTestingBounds ) {
+          relativeCompositeBounds.includeBounds( relativePositionTestingBounds );
+        } );
+        this.relativeCompositeBounds = relativeCompositeBounds;
+      }
+
+      // allocate a Bounds2 instance if none was provided
+      if ( !bounds ) {
+        bounds = Bounds2.NOTHING.copy();
+      }
+
+      bounds.setMinMax(
+        this.relativeCompositeBounds.minX + position.x,
+        this.relativeCompositeBounds.minY + position.y,
+        this.relativeCompositeBounds.maxX + position.x,
+        this.relativeCompositeBounds.maxY + position.y
+      );
+
+      return bounds;
+    },
+
+    /**
+     * get the composite bounds for this model element, meaning the full rectangular space that it occupies
+     * @returns {Bounds2}
+     */
+    getCompositeBounds: function() {
+      return this.compositeBounds;
+    },
 
     /**
      * get the rectangle that defines this elements position and shape in model space
