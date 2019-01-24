@@ -1109,6 +1109,7 @@ define( function( require ) {
       }
 
       this.beakers.forEach( function( beaker ) {
+
         // test if this point is in the water or steam associated with the beaker
         if ( !temperatureAndColor && beaker.thermalContactArea.containsPoint( position ) ) {
           temperatureAndColor = new TemperatureAndColor(

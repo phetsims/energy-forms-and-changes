@@ -98,6 +98,18 @@ define( function( require ) {
     // @private {number} - max height above water where steam still affects the measured temperature
     this.maxSteamHeight = 2 * height;
 
+    // @private {ThermalContactArea} - the 2D area in the model where this can be in thermal contact with other areas,
+    // only updated when requested so could be out of date and should not be directly read by clients
+    this.thermalContactArea = new ThermalContactArea(
+      new Bounds2(
+        initialPosition.x - this.width / 2,
+        initialPosition.y,
+        initialPosition.x + this.width / 2,
+        initialPosition.y + this.height * this.fluidLevelProperty.get()
+      ),
+      true
+    );
+
     // add position test bounds - left side, bottom, right side (see declaration in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2(
       -width / 2 - MATERIAL_THICKNESS / 2,
@@ -136,19 +148,43 @@ define( function( require ) {
     // @public - used to notify the view that reset was called
     this.resetEmitter = new Emitter();
 
-    // update the top and bottom surfaces whenever the position changes
+    // update internal state when the position changes
     this.positionProperty.link( function( position ) {
+
       var bounds = self.getCompositeBounds();
-      self.topSurface.positionProperty.value = new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS );
-      self.bottomSurface.positionProperty.value = new Vector2( position.x, bounds.minY );
+
+      // update the positions of the top and bottom surfaces
+      self.topSurface.positionProperty.set( new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS ) );
+      self.bottomSurface.positionProperty.set( new Vector2( position.x, bounds.minY ) );
+
+      // update the thermal contact area
+      self.thermalContactArea.setMinMax(
+        position.x - self.width / 2,
+        position.y,
+        position.x + self.width / 2,
+        position.y + self.height * self.fluidLevelProperty.get()
+      );
     } );
 
     // update the bounds of the energy chunk slices as the fluid level changes
-    this.fluidLevelProperty.lazyLink( function( newFluidLevel, oldFluidLevel ) {
-      var multiplier = newFluidLevel / oldFluidLevel;
-      self.slices.forEach( function( slice ) {
-        slice.updateHeight( multiplier );
-      } );
+    this.fluidLevelProperty.link( function( newFluidLevel, oldFluidLevel ) {
+
+      // update the thermal contact area
+      var position = self.positionProperty.get();
+      self.thermalContactArea.setMinMax(
+        position.x - self.width / 2,
+        position.y,
+        position.x + self.width / 2,
+        position.y + self.height * self.fluidLevelProperty.get()
+      );
+
+      // update the bounds of the energy chunk slices
+      if ( oldFluidLevel ) {
+        var multiplier = newFluidLevel / oldFluidLevel;
+        self.slices.forEach( function( slice ) {
+          slice.updateHeight( multiplier );
+        } );
+      }
     } );
   }
 
@@ -292,19 +328,21 @@ define( function( require ) {
      * @returns {ThermalContactArea}
      * @public
      */
-    get thermalContactArea() {
+    get thermalContactAreaX() {
 
       var currentPosition = this.positionProperty.get();
+      if ( this.thermalContactArea.centerX !== currentPosition.x || this.thermalContactArea.minY !== currentPosition.y ) {
 
-      return new ThermalContactArea(
-        new Bounds2(
+        // the thermal contact area needs to be updated
+        this.thermalContactArea.setMinMax(
           currentPosition.x - this.width / 2,
           currentPosition.y,
           currentPosition.x + this.width / 2,
           currentPosition.y + this.height * this.fluidLevelProperty.get()
-        ),
-        true
-      );
+        );
+      }
+
+      return this.thermalContactArea;
     },
 
     /**
