@@ -50,7 +50,6 @@ define( function( require ) {
    */
   function Burner( position, energyChunksVisibleProperty ) {
 
-    var self = this;
     ModelElement.call( this, position );
 
     // @public (read-only) {string} - unique ID, used for debug
