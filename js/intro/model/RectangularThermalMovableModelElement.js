@@ -296,6 +296,11 @@ define( function( require ) {
      */
     extractEnergyChunkClosestToPoint: function( point ) {
 
+      // make sure this element doesn't give up all its energy chunks
+      if ( this.getNumEnergyChunksInElement() <= 1 ) {
+        return null;
+      }
+
       var closestEnergyChunk = null;
       var closestCompensatedDistance = Number.POSITIVE_INFINITY;
 
@@ -327,6 +332,11 @@ define( function( require ) {
      * @public
      */
     extractEnergyChunkClosestToBounds: function( destinationBounds ) {
+
+      // make sure this element doesn't give up all its energy chunks
+      if ( this.getNumEnergyChunksInElement() <= 1 ) {
+        return null;
+      }
 
       var chunkToExtract = null;
       var myBounds = this.getSliceBounds();
@@ -434,25 +444,35 @@ define( function( require ) {
     },
 
     /**
+     * get the number of energy chunks that are actually in the element, excluding any that are on the way
      * @returns {number}
-     * @public
+     * @private
      */
-    getNumEnergyChunks: function() {
-
+    getNumEnergyChunksInElement: function() {
       var numChunks = 0;
       this.slices.forEach( function( slice ) {
         numChunks += slice.getNumEnergyChunks();
       } );
-      return numChunks + this.approachingEnergyChunks.length;
+      return numChunks;
+    },
+
+    /**
+     * @returns {number}
+     * @public
+     */
+    getNumEnergyChunks: function() {
+      return this.getNumEnergyChunksInElement() + this.approachingEnergyChunks.length;
     },
 
     /**
      * @param {RectangularThermalMovableModelElement} otherEnergyContainer
      * @param {number} dt - time of contact, in seconds
+     * @returns {number} - amount of energy exchanged, in joules
      * @public
      */
     exchangeEnergyWith: function( otherEnergyContainer, dt ) {
 
+      var amountOfEnergyExchanged = 0; // direction is from this to the other
       var thermalContactLength = this
         .thermalContactArea
         .getThermalContactLength( otherEnergyContainer.thermalContactArea );
@@ -477,9 +497,11 @@ define( function( require ) {
                                       thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
+            amountOfEnergyExchanged += -thermalEnergyGained;
           }
         }
       }
+      return amountOfEnergyExchanged;
     },
 
     /**
@@ -500,6 +522,15 @@ define( function( require ) {
     getCenterPoint: function() {
       var position = this.positionProperty.value;
       return new Vector2( position.x, position.y + this.height / 2 );
+    },
+
+    /**
+     * @returns {Vector2}
+     * @public
+     */
+    getCenterTopPoint: function() {
+      var position = this.positionProperty.value;
+      return new Vector2( position.x, position.y + this.height );
     },
 
     /**

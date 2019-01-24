@@ -1,6 +1,5 @@
 // Copyright 2014-2018, University of Colorado Boulder
 
-
 /**
  * A type that represents the air in the model.  Air can hold heat, and can exchange thermal energy with other model
  * objects.
@@ -47,6 +46,9 @@ define( function( require ) {
   var INITIAL_ENERGY = MASS * SPECIFIC_HEAT * EFACConstants.ROOM_TEMPERATURE;
   var THERMAL_CONTACT_AREA = new ThermalContactArea( new Bounds2( -SIZE.width / 2, 0, SIZE.width, SIZE.height ), true );
 
+  // instance counter used for creating unique IDs
+  var instanceCounter = 0;
+
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    * @constructor
@@ -58,6 +60,9 @@ define( function( require ) {
 
     // @public (read-only) - list of energy chunks owned by this model element
     this.energyChunkList = new ObservableArray();
+
+    // @public (read-only) {string} - unique ID
+    this.id = 'air-' + instanceCounter++;
 
     // @private {Array<EnergyChunkWanderController>} - wander controolers for energy chunks that are owned by this model
     // element but are wandering outside of it
@@ -144,15 +149,16 @@ define( function( require ) {
 
     /**
      * exchange thermal energy with the provided energy container
-     * @param energyContainer
-     * @param dt
+     * @param {RectangularThermalMovableModelElement} energyContainer
+     * @param {number} dt - time in seconds
+     * @returns {number} - energy, in joules, that is transferred from air to the object, negative if energy was absosrbed
      * @public
      */
     exchangeEnergyWith: function( energyContainer, dt ) {
+      var energyToExchange = 0;
       var thermalContactLength = this.thermalContactArea.getThermalContactLength( energyContainer.thermalContactArea );
       if ( thermalContactLength > 0 ) {
 
-        var energyToExchange = 0;
 
         // calculate the amount of energy to exchange based on the thermal differential
         var heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
@@ -178,6 +184,7 @@ define( function( require ) {
         energyContainer.changeEnergy( -energyToExchange );
         this.changeEnergy( energyToExchange );
       }
+      return -energyToExchange;
     },
 
     /**
