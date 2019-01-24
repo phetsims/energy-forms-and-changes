@@ -20,6 +20,7 @@ define( function( require ) {
   var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   var HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Shape = require( 'KITE/Shape' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
@@ -57,6 +58,18 @@ define( function( require ) {
 
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = [];
+
+    // @private {Shape} - untranslated shape that accounts for 3D projection
+    var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
+    var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
+    this.untranslatedProjectedShape = new Shape()
+      .moveToPoint( new Vector2( -width / 2, 0 ).plus( forwardPerspectiveOffset ) )
+      .lineToPoint( new Vector2( width / 2, 0 ).plus( forwardPerspectiveOffset ) )
+      .lineToPoint( new Vector2( width / 2, 0 ).plus( backwardPerspectiveOffset ) )
+      .lineToPoint( new Vector2( width / 2, height ).plus( backwardPerspectiveOffset ) )
+      .lineToPoint( new Vector2( -width / 2, height ).plus( backwardPerspectiveOffset ) )
+      .lineToPoint( new Vector2( -width / 2, height ).plus( forwardPerspectiveOffset ) )
+      .close();
 
     // when an approaching energy chunk is removed from the list, make sure its wander controller goes away too
     this.approachingEnergyChunks.addItemRemovedListener( function( removedEC ) {
@@ -476,22 +489,8 @@ define( function( require ) {
      * @public
      */
     getProjectedShape: function() {
-
-      // this projects a rectangle, override for other behavior
-      var forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
-      var backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
-
-      var shape = new Shape();
-
-      var b = this.getBounds();
-      shape.moveToPoint( new Vector2( b.minX, b.minY ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( b.maxX, b.minY ).plus( forwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( b.maxX, b.minY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( b.maxX, b.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( b.minX, b.maxY ).plus( backwardPerspectiveOffset ) )
-        .lineToPoint( new Vector2( b.minX, b.maxY ).plus( forwardPerspectiveOffset ) )
-        .close();
-      return shape;
+      var position = this.positionProperty.get();
+      return this.untranslatedProjectedShape.transformed( Matrix3.translation( position.x, position.y ) );
     },
 
     /**
