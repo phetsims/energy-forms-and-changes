@@ -97,7 +97,7 @@ define( function( require ) {
     // determine the locations of the snap-to spots, and round them to a few decimal places
     var leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
     for ( var i = 0; i < NUM_GROUND_SPOTS; i++ ) {
-      this.groundSpotXPositions.push( Math.round( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
+      this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
     }
 
     // @public (read-only) {Block}

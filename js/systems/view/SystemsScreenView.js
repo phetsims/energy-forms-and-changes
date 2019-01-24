@@ -44,6 +44,7 @@ define( function( require ) {
   var SunNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SunNode' );
   var TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
@@ -112,8 +113,8 @@ define( function( require ) {
     // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model, which is on the
     // middle of the screen above the counter as located in the view. Final arg is zoom factor from original Java sim -
     // smaller zooms out, larger zooms in.
-    var mvtOriginX = Math.round( layoutBounds.width * 0.5 );
-    var mvtOriginY = Math.round( layoutBounds.height * 0.475 );
+    var mvtOriginX = Util.roundSymmetric( layoutBounds.width * 0.5 );
+    var mvtOriginY = Util.roundSymmetric( layoutBounds.height * 0.475 );
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( mvtOriginX, mvtOriginY ),

@@ -329,7 +329,7 @@ define( function( require ) {
       if ( count === 0 ) {
 
         // see whether the energy exchanged with the air since the last chunk transfer warrants another chunk
-        count = Math.round( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
+        count = Util.roundSymmetric( this.energyExchangedWithAirSinceLastChunkTransfer / EFACConstants.ENERGY_PER_CHUNK );
       }
       return count;
     },

@@ -74,7 +74,7 @@ define( function( require ) {
     // @private - internal variables used in methods
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyChunkEmissionCountdownTimer = ENERGY_CHUNK_EMISSION_PERIOD;
-    this.sectorList = _.shuffle( _.range( NUM_EMISSION_SECTORS ) );
+    this.sectorList = phet.joist.random.shuffle( _.range( NUM_EMISSION_SECTORS ) );
     this.currentSectorIndex = 0;
     this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 

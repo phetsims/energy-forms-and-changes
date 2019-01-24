@@ -47,6 +47,7 @@ define( function( require ) {
   var SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
   var TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Util = require( 'DOT/Util' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -90,8 +91,8 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2(
-        Math.round( self.layoutBounds.width * 0.5 ),
-        Math.round( self.layoutBounds.height * 0.85 )
+        Util.roundSymmetric( self.layoutBounds.width * 0.5 ),
+        Util.roundSymmetric( self.layoutBounds.height * 0.85 )
       ),
       1700 // zoom factor - smaller zooms out, larger zooms in
     );
