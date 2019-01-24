@@ -74,19 +74,26 @@ define( function( require ) {
     // @private {Property.<boolean>}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
+    // @private {Bounds2} - bounds of the burner in model space
+    this.bounds = new Bounds2(
+      position.x - SIDE_LENGTH / 2,
+      position.y,
+      position.x + SIDE_LENGTH / 2,
+      position.y + SIDE_LENGTH
+    );
+
     // add position test bounds (see definition in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
 
     // Create and add the top surface.  Some compensation for perspective is necessary in order to avoid problems with
     // edge overlap when dropping objects on top of burner.
-    var compositeBounds = self.getCompositeBounds();
-    var perspectiveCompensation = compositeBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+    var perspectiveCompensation = this.bounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                   Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
     // @public - see base class for description
     this.topSurface = new HorizontalSurface(
-      new Vector2( this.position.x, compositeBounds.maxY ),
-      compositeBounds.maxX + perspectiveCompensation - ( compositeBounds.minX - perspectiveCompensation ),
+      new Vector2( this.position.x, this.bounds.maxY ),
+      this.bounds.maxX + perspectiveCompensation - ( this.bounds.minX - perspectiveCompensation ),
       this
     );
   }
@@ -101,11 +108,7 @@ define( function( require ) {
      * @public
      */
     getCompositeBounds: function() {
-      // TODO: This is wasteful to reconstruct this every time, since burners don't move, should be optimized.
-      var minX = this.position.x - SIDE_LENGTH / 2;
-      var minY = this.position.y;
-      return new Bounds2( minX, minY, minX + SIDE_LENGTH, minY + SIDE_LENGTH
-      );
+      return this.bounds;
     },
 
     /**
