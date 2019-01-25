@@ -23,22 +23,29 @@ define( function( require ) {
 
   // constants
   var ANGULAR_ACCELERATION = Math.PI * 4; // In radians/(sec^2).
-  var VELOCITY_DIVISOR = 2.7; // empirically determined, lower number = faster fan speed
-  var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
-  var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
-  var INCOMING_ENERGY_FAN_THRESHOLD = 6; // empirically determined, eliminates last few jumpy frames when fan slows to a stop
-  var MAX_INCOMING_ENERGY = 170;
-  var ROOM_TEMPERATURE = 22; // in Celsius
-  var TEMPERATURE_GAIN_PER_ENERGY_CHUNK = 2.5; // in Celsius
-  var THERMAL_RELEASE_TEMPERATURE = 38; // in Celsius
-  var COOLING_RATE = 0.25; // in degrees Celsius per second
+  var MINIMUM_TARGET_VELOCITY = 6; // In radians/sec. Any speed lower than this looks choppy, so this is the cutoff
+  var INCOMING_ENERGY_VELOCITY_COEFFICIENT = 0.0051; // empirically determined. used to map incoming energy to a target velocity
+  var MAX_INTERNAL_ENERGY = EFACConstants.ENERGY_PER_CHUNK * 4;
+  var ENERGY_LOST_PROPORTION = 0.30; // used to remove some energy from internal energy when a target velocity is set
 
-  // energy chunk path offsets
+  // empirically determined. used to map internal energy to a target velocity. the value is so specific because the speed
+  // of the fan when using internal energy should closely match its speed when using incoming energy
+  var INTERNAL_ENERGY_VELOCITY_COEFFICIENT = 0.00255;
+
+  // constants for temperature
+  var ROOM_TEMPERATURE = 22; // in Celsius
+  var TEMPERATURE_GAIN_PER_ENERGY_CHUNK = 1.5; // in Celsius
+  var THERMAL_RELEASE_TEMPERATURE = 38; // in Celsius
+  var COOLING_RATE = 0.5; // in degrees Celsius per second
+
+  // energy chunk path vars
   var OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.0435 );
   var OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
   var OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
   var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.019 );
+  var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
+  var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
@@ -54,15 +61,18 @@ define( function( require ) {
     // @public (read-only) {NumberProperty}
     this.bladePositionProperty = new Property( 0 );
 
-    // @private
-    this.bladeAngularVelocity = 0;
-    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-    this.energyChunkIncomingEnergy = 0;
-
     // @private - movers that control how the energy chunks move towards and through the fan
     this.electricalEnergyChunkMovers = [];
     this.radiatedEnergyChunkMovers = [];
     this.mechanicalEnergyChunkMovers = [];
+
+    // @private
+    this.bladeAngularVelocity = 0;
+    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+
+    // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
+    // incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
+    this.internalEnergyFromEnergyChunks = 0;
 
     // @private {number} - a temperature value used to decide when to release thermal energy chunks, very roughly in
     // degrees Celsius
@@ -115,18 +125,29 @@ define( function( require ) {
       // cooling is linear rather than differential, which isn't very realistic, but works for our purposes here.
       this.internalTemperature = Math.max( this.internalTemperature - dt * COOLING_RATE, ROOM_TEMPERATURE );
 
-      // set how fast the fan is turning
+      // set the target velocity of the fan
       if ( this.energyChunksVisibleProperty.get() ) {
 
-        // handle case where fan only turns when energy chunks are getting to the motor
-        this.energyChunkIncomingEnergy = this.motorRecentlyReceivedEnergy() ? this.energyChunkIncomingEnergy : 0;
-        targetVelocity = this.energyChunkIncomingEnergy / VELOCITY_DIVISOR;
+        // cap the internal energy
+        this.internalEnergyFromEnergyChunks = Math.min( this.internalEnergyFromEnergyChunks, MAX_INTERNAL_ENERGY );
+
+        // when chunks are on, use internal energy of the fan to determine the target velocity
+        targetVelocity = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
+
+        // lose a proportion of the energy
+        this.internalEnergyFromEnergyChunks = Math.max(
+          this.internalEnergyFromEnergyChunks - this.internalEnergyFromEnergyChunks * ENERGY_LOST_PROPORTION * dt,
+          0
+        );
       }
       else {
-        targetVelocity = incomingEnergy.amount > INCOMING_ENERGY_FAN_THRESHOLD ? incomingEnergy.amount / VELOCITY_DIVISOR : 0;
-      }
-      var dOmega = targetVelocity - this.bladeAngularVelocity;
 
+        // when chunks are off, get a smooth target velocity from incoming energy by using dt
+        targetVelocity = incomingEnergy.amount * INCOMING_ENERGY_VELOCITY_COEFFICIENT / dt;
+      }
+      targetVelocity = targetVelocity < MINIMUM_TARGET_VELOCITY ? 0 : targetVelocity;
+
+      var dOmega = targetVelocity - this.bladeAngularVelocity;
       if ( dOmega !== 0 ) {
         var change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
@@ -145,24 +166,6 @@ define( function( require ) {
       }
       var newAngle = ( this.bladePositionProperty.value + this.bladeAngularVelocity * dt ) % ( 2 * Math.PI );
       this.bladePositionProperty.set( newAngle );
-    },
-
-    /**
-     * check if a blown energy chunk is within a certain proximity to the fan. if true is returned, the most recent
-     * energy chunk to pass through the motor is still "powering" the motor.
-     * @returns {boolean}
-     * @private
-     */
-    motorRecentlyReceivedEnergy: function() {
-      var recentEnergy = false;
-      var fanPositionX = this.positionProperty.value.x;
-      for ( var i = 0; i < this.mechanicalEnergyChunkMovers.length; i++ ) {
-
-        // "recent energy" distance empirically determined to look correct, see function description above
-        recentEnergy = this.mechanicalEnergyChunkMovers[ i ].energyChunk.positionProperty.value.x - fanPositionX <
-                       INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE ? true : recentEnergy;
-      }
-      return recentEnergy;
     },
 
     /**
@@ -187,13 +190,15 @@ define( function( require ) {
             // increase the temperature a little, since this energy chunk is going to move the fan
             self.internalTemperature += TEMPERATURE_GAIN_PER_ENERGY_CHUNK;
 
+            // add the energy from this chunk to the fan's internal energy
+            self.internalEnergyFromEnergyChunks += EFACConstants.ENERGY_PER_CHUNK;
+
             mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
             // release the energy chunk as mechanical to blow away
             self.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               self.createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
-            self.energyChunkIncomingEnergy = MAX_INCOMING_ENERGY;
           }
           else {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
@@ -331,7 +336,7 @@ define( function( require ) {
       EnergyUser.prototype.deactivate.call( this );
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
-      this.energyChunkIncomingEnergy = 0;
+      this.internalEnergyFromEnergyChunks = 0;
       this.internalTemperature = ROOM_TEMPERATURE;
     },
 

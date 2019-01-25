@@ -176,7 +176,10 @@ define( function( require ) {
       // produce the appropriate amount of energy
       var energyProduced = 0;
       if ( this.activeProperty.value && incomingEnergy.type === EnergyType.LIGHT ) {
-        energyProduced = incomingEnergy.amount; // Perfectly efficient conversion. We should patent this.
+
+        // 68% efficient. Empirically determined to match the rate of energy chunks that flow from the sun to the solar
+        // panel (this way, the fan moves at the same speed when chunks are on or off).
+        energyProduced = incomingEnergy.amount * 0.68;
       }
       this.energyOutputRate = energyProduced / dt;
 
