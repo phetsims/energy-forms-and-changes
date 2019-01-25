@@ -32,6 +32,7 @@ define( function( require ) {
    */
   function FaucetAndWaterNode( faucet, energyChunksVisibleProperty, modelViewTransform ) {
 
+    var self = this;
     MoveFadeModelElementNode.call( this, faucet, modelViewTransform );
 
     var fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
@@ -56,15 +57,15 @@ define( function( require ) {
     var maxFlowProportion = 1.0;
 
     // create a mapping between the slider position and the flow proportion that prevents very small values
-    var faucetSettingProperty = new NumberProperty( 0 );
-    faucetSettingProperty.link( function( setting ) {
+    this.faucetSettingProperty = new NumberProperty( 0 );
+    this.faucetSettingProperty.link( function( setting ) {
       var mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
       assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
       faucet.flowProportionProperty.set( mappedSetting );
     } );
 
     // create the faucet and set position to its model offset
-    var faucetNode = new FaucetNode( maxFlowProportion, faucetSettingProperty, faucet.activeProperty, {
+    var faucetNode = new FaucetNode( maxFlowProportion, this.faucetSettingProperty, faucet.activeProperty, {
       horizontalPipeLength: FAUCET_NODE_HORIZONTAL_LENGTH,
       verticalPipeLength: 40,
       scale: 0.45,
@@ -81,6 +82,13 @@ define( function( require ) {
     this.addChild( this.fallingWaterCanvasNode );
     this.addChild( energyChunkLayer );
     this.addChild( faucetNode );
+
+    // reset the
+    faucet.activeProperty.link( function( active ) {
+      if ( !active ) {
+        self.faucetSettingProperty.reset();
+      }
+    } );
   }
 
   energyFormsAndChanges.register( 'FaucetAndWaterNode', FaucetAndWaterNode );
