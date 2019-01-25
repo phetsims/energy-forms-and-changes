@@ -165,6 +165,11 @@ define( function( require ) {
         }
         this.drawSteamBubble( context, this.steamBubbles[ i ] );
       }
+
+      //TODO: why is paintCanvas being called when the sim is paused and the beakers are being dragged?
+      // see https://github.com/phetsims/energy-forms-and-changes/issues/190#issuecomment-457755051
+      // clear the most recent dt value after it is used
+      this.dt = 0;
     },
 
     /*
