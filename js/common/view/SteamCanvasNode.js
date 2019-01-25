@@ -142,6 +142,11 @@ define( function( require ) {
         // // remove bubbles that have floated out of view
         if ( this.containerOutlineRect.minY - this.steamBubbles[ i ].y > MAX_STEAM_BUBBLE_HEIGHT ) {
           this.steamBubbles.splice( i, 1 );
+
+          // break out of this loop when the last steam bubble is removed
+          if ( this.steamBubbles.length < 1 ) {
+            break;
+          }
         }
 
         // update position of floating bubbles
