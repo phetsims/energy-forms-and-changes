@@ -22,6 +22,7 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -43,13 +44,22 @@ define( function( require ) {
    */
   function TeaKettleNode( teaKettle, energyChunksVisibleProperty, modelViewTransform ) {
 
+    var self = this;
     MoveFadeModelElementNode.call( this, teaKettle, modelViewTransform );
 
     var teaKettleImageNode = new Image( teapotImage, { right: 114, bottom: 53 } );
 
+    // create a mapping between the slider position and the steam proportion, which prevents very small values
+    this.heaterSettingProperty = new NumberProperty( 0 );
+    this.heaterSettingProperty.link( function( setting ) {
+      var mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
+      assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
+      teaKettle.heatCoolAmountProperty.set( mappedSetting );
+    } );
+
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
-    var heaterCoolerBack = new HeaterCoolerBack( teaKettle.heatCoolAmountProperty, { scale: HEATER_COOLER_NODE_SCALE } );
-    var heaterCoolerFront = new HeaterCoolerFront( teaKettle.heatCoolAmountProperty, {
+    var heaterCoolerBack = new HeaterCoolerBack( this.heaterSettingProperty, { scale: HEATER_COOLER_NODE_SCALE } );
+    var heaterCoolerFront = new HeaterCoolerFront( this.heaterSettingProperty, {
       snapToZero: false,
       coolEnabled: false,
       scale: HEATER_COOLER_NODE_SCALE
@@ -92,6 +102,13 @@ define( function( require ) {
     this.addChild( burnerStandNode );
     this.addChild( teaKettleImageNode );
     this.addChild( this.steamNode );
+
+    // reset the heater slider when the tea kettle is deactivated
+    teaKettle.activeProperty.link( function( active ) {
+      if ( !active ) {
+        self.heaterSettingProperty.reset();
+      }
+    } );
   }
 
   /**

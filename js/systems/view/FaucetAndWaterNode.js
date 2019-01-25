@@ -83,7 +83,7 @@ define( function( require ) {
     this.addChild( energyChunkLayer );
     this.addChild( faucetNode );
 
-    // reset the
+    // reset the valve when the faucet is deactivated
     faucet.activeProperty.link( function( active ) {
       if ( !active ) {
         self.faucetSettingProperty.reset();
