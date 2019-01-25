@@ -276,7 +276,7 @@ define( function( require ) {
     },
 
     /**
-     * step this view element, called by the framework
+     * step this view element
      * @param dt - time step, in seconds
      * @public
      */
