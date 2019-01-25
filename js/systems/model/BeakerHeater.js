@@ -374,12 +374,15 @@ define( function( require ) {
     createHeaterElementEnergyChunkPath: function( startingPoint ) {
       var path = [];
 
-      // The path for the thermal energy chunks is meant to look like it
-      // is moving on the burner element.  This must be manually
-      // coordinated with the burner element image.
-      var angle = this.random.nextBoolean() ? this.random.nextDouble() * Math.PI * 0.45 :
-                  -this.random.nextDouble() * Math.PI * 0.3;
-      path.push( startingPoint.plus( new Vector2( 0, HEATER_ELEMENT_2D_HEIGHT ).rotated( angle ) ) );
+      // The path for the thermal energy chunks is meant to look like it is moving on the burner element.  This must be
+      // updated if the burner element image changes.
+      var angleSpan = Math.PI * 0.75;
+      var angle = Math.PI / 2 + ( this.random.nextDouble() - 0.5 ) * angleSpan;
+
+      // Calculate a travel distance that will move farther to the left and right, less in the middle, to match the
+      // elliptical shape of the burner in the view, see https://github.com/phetsims/energy-forms-and-changes/issues/174.
+      var travelDistance = ( 0.6 + Math.abs( Math.cos( angle ) ) * 0.3 ) * HEATER_ELEMENT_2D_HEIGHT;
+      path.push( startingPoint.plus( new Vector2( travelDistance, 0 ).rotated( angle ) ) );
       return path;
     },
 
