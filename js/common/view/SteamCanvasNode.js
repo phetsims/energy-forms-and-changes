@@ -53,7 +53,7 @@ define( function( require ) {
     this.steamBubbles = [];
 
     // @private
-    // canvas where steam bubble images will reside
+    // canvas where the steam bubble image resides
     this.steamBubbleImageCanvas = document.createElement( 'canvas' );
     this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
     this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
@@ -90,13 +90,12 @@ define( function( require ) {
      * @private
      */
     renderSteam: function( context ) {
-      var self = this; // extend scope for nested callbacks.
-
+      var i = 0;
       var steamingProportion = 0;
-      if ( this.fluidBoilingPoint - self.temperatureProperty.value < STEAMING_RANGE ) {
+      if ( this.fluidBoilingPoint - this.temperatureProperty.value < STEAMING_RANGE ) {
 
         // the water is emitting some amount of steam - set the proportionate amount
-        steamingProportion = 1 - ( ( this.fluidBoilingPoint - self.temperatureProperty.value ) / STEAMING_RANGE );
+        steamingProportion = 1 - ( ( this.fluidBoilingPoint - this.temperatureProperty.value ) / STEAMING_RANGE );
         steamingProportion = Util.clamp( steamingProportion, 0, 1 );
       }
 
@@ -112,7 +111,8 @@ define( function( require ) {
           bubblesToProduce += Math.floor( this.bubbleProductionRemainder );
           this.bubbleProductionRemainder -= Math.floor( this.bubbleProductionRemainder );
         }
-        for ( var i = 0; i < bubblesToProduce; i++ ) {
+
+        for ( i = 0; i < bubblesToProduce; i++ ) {
           var steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min +
                                     phet.joist.random.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           var steamBubbleCenterXPos = this.containerOutlineRect.centerX +
@@ -134,41 +134,37 @@ define( function( require ) {
       var steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
       var unfilledBeakerHeight = this.containerOutlineRect.height + this.steamOrigin;
 
-      this.steamBubbles.forEach( function( steamBubble ) {
+      for ( i = 0; i < this.steamBubbles.length; i++ ) {
 
         // float the bubbles upward from the beaker
-        steamBubble.y += -self.dt * steamBubbleSpeed;
+        this.steamBubbles[ i ].y += -this.dt * steamBubbleSpeed;
 
         // // remove bubbles that have floated out of view
-        if ( self.containerOutlineRect.minY - steamBubble.y > MAX_STEAM_BUBBLE_HEIGHT ) {
-          var index = self.steamBubbles.indexOf( steamBubble );
-
-          if ( index !== -1 ) {
-            self.steamBubbles.splice( index, 1 );
-          }
+        if ( this.containerOutlineRect.minY - this.steamBubbles[ i ].y > MAX_STEAM_BUBBLE_HEIGHT ) {
+          this.steamBubbles.splice( i, 1 );
         }
 
         // update position of floating bubbles
-        else if ( steamBubble.y < self.containerOutlineRect.minY ) {
-          steamBubble.radius = steamBubble.radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * self.dt ) ) / 2;
-          var distanceFromCenterX = steamBubble.x;
+        else if ( this.steamBubbles[ i ].y < this.containerOutlineRect.minY ) {
+          this.steamBubbles[ i ].radius = this.steamBubbles[ i ].radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) ) / 2;
+          var distanceFromCenterX = this.steamBubbles[ i ].x;
 
           // give bubbles some lateral drift motion
-          steamBubble.x += distanceFromCenterX * 0.2 * self.dt;
+          this.steamBubbles[ i ].x += distanceFromCenterX * 0.2 * this.dt;
 
           // fade the bubble as it reaches the end of its range
-          var heightFraction = ( self.containerOutlineRect.minY - steamBubble.y ) / MAX_STEAM_BUBBLE_HEIGHT;
-          steamBubble.opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
+          var heightFraction = ( this.containerOutlineRect.minY - this.steamBubbles[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT;
+          this.steamBubbles[ i ].opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
         }
 
         // fade new bubbles in
         else {
-          var distanceFromWater = self.steamOrigin - steamBubble.y;
+          var distanceFromWater = this.steamOrigin - this.steamBubbles[ i ].y;
           var opacityFraction = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
-          steamBubble.opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
+          this.steamBubbles[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
-        self.drawSteamBubble( context, steamBubble );
-      } );
+        this.drawSteamBubble( context, this.steamBubbles[ i ] );
+      }
     },
 
     /*
