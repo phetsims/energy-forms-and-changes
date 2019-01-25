@@ -26,6 +26,9 @@ define( function( require ) {
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // const
+  var MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME = 2; // in seconds, empirically determined to allow good distributions
+
   /**
    * @param {Vector2} initialPosition
    * @param {number} width
@@ -96,6 +99,9 @@ define( function( require ) {
 
     // @private {Matrix3} - a reusable matrix, used to reduce allocations when updating the projected shape
     this.translationMatrix = Matrix3.translation( initialPosition.x, initialPosition.y );
+
+    // @private {number} - a value that is used to implement a countdown timer for energy chunk redistribution
+    this.energyChunkDistributionCountdownTimer = 0;
 
     // perform the initial update of the projected shape
     this.getProjectedShape();
@@ -230,6 +236,7 @@ define( function( require ) {
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
       this.addInitialEnergyChunks();
       this.approachingEnergyChunks.reset();
+      this.clearECDistributionCountdown();
     },
 
     /**
@@ -239,8 +246,22 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      // distribute the energy chunks contained within this model element
-      EnergyChunkDistributor.updatePositions( this.slices, dt );
+      if ( this.energyChunkDistributionCountdownTimer > 0 ) {
+
+        // distribute the energy chunks contained within this model element
+        var redistributed = EnergyChunkDistributor.updatePositions( this.slices, dt );
+
+        if ( !redistributed ) {
+
+          // the energy chunks are reasonably well distributed, no more needed, so clear the countodwn timer
+          this.clearECDistributionCountdown();
+        }
+        else {
+
+          // decrement the countdown timer
+          this.energyChunkDistributionCountdownTimer = Math.max( this.energyChunkDistributionCountdownTimer - dt, 0 );
+        }
+      }
 
       // animate the energy chunks that are outside this model element
       this.animateNonContainedEnergyChunks( dt );
@@ -300,6 +321,7 @@ define( function( require ) {
     addEnergyChunkToNextSlice: function( energyChunk ) {
       this.slices[ this.nextSliceIndex ].addEnergyChunk( energyChunk );
       this.nextSliceIndex = ( this.nextSliceIndex + 1 ) % this.slices.length;
+      this.resetECDistributionCountdown();
     },
 
     /**
@@ -350,9 +372,11 @@ define( function( require ) {
      * @public
      */
     removeEnergyChunk: function( energyChunk ) {
+      var self = this;
       this.slices.forEach( function( slice ) {
         if ( slice.energyChunkList.indexOf( energyChunk ) >= 0 ) {
           slice.energyChunkList.remove( energyChunk );
+          self.resetECDistributionCountdown();
           return true;
         }
       } );
@@ -506,7 +530,10 @@ define( function( require ) {
         this.addEnergyChunk( chunk );
       }
 
-      // distribute the energy chunks within the container
+      // clear the distribution timer and do a more thorough distribution below
+      this.clearECDistributionCountdown();
+
+      // distribute the initial energy chunks within the container
       for ( var i = 0; i < 500; i++ ) {
         var distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
@@ -622,6 +649,24 @@ define( function( require ) {
      */
     getEnergyChunkBalance: function() {
       return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+    },
+
+    /**
+     * Reset the energy chunk distribution countdown timer, which will cause EC distribution to start and continue
+     * until the countdown reaches zero or no more distribution is needed.
+     * @protected
+     */
+    resetECDistributionCountdown: function() {
+      this.energyChunkDistributionCountdownTimer = MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME;
+    },
+
+    /**
+     * clear the redistribution countdown timer, which will stop any further redistribution
+     * @protected
+     */
+    clearECDistributionCountdown: function() {
+      this.energyChunkDistributionCountdownTimer = 0;
     }
+
   } );
 } );

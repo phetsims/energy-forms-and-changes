@@ -166,7 +166,7 @@ define( function( require ) {
       );
     } );
 
-    // update the bounds of the energy chunk slices as the fluid level changes
+    // update internal state when the fluid level changes
     this.fluidLevelProperty.link( function( newFluidLevel, oldFluidLevel ) {
 
       // update the thermal contact area
@@ -185,6 +185,9 @@ define( function( require ) {
           slice.updateHeight( multiplier );
         } );
       }
+
+      // kick off redistribution of the energy chunks
+      self.resetECDistributionCountdown();
     } );
   }
 
@@ -272,6 +275,9 @@ define( function( require ) {
         );
       }
 
+      // clear the distribution timer and do a more thorough distribution below
+      this.clearECDistributionCountdown();
+
       // distribute the energy chunks within the beaker
       for ( var i = 0; i < 500; i++ ) {
         var distributed = EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
@@ -305,6 +311,9 @@ define( function( require ) {
         }
       }
       chosenSlice.addEnergyChunk( energyChunk );
+
+      // trigger redistribution of energy chunks
+      this.resetECDistributionCountdown();
     },
 
     /**

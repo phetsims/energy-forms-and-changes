@@ -45,6 +45,8 @@ define( function( require ) {
      * the chunks don't overlap with each other.
      * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
      * @param {number} dt - change in time
+     * @returns {boolean} - a value indicating whether redistribution was done, false can occur if the energy chunks are
+     * already well distributed
      * @public
      */
     updatePositions: function( slices, dt ) {
@@ -144,17 +146,6 @@ define( function( require ) {
       // free allocations
       _.values( chunkForces ).forEach( function( chunkForceVector ) { chunkForceVector.freeToPool(); } );
       return particlesRedistributed;
-    },
-
-
-    /**
-     * Redistribute a set of energy chunks that are contained in energy chunk "slices" until they have reached a state
-     * in which there is little or no movement of the chunks.
-     * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
-     * @public
-     */
-    updatePositionsUntilStill: function( slices ) {
-
     },
 
     /**
