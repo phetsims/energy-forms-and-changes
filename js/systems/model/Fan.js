@@ -397,15 +397,17 @@ define( function( require ) {
             EFACConstants.ENERGY_CHUNK_VELOCITY
           ) );
 
-          // update energy since last chunk
-          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+          // update energy since last chunk, and do so by taking "every other" chunk as the generator approximately does.
+          // this way, the spread of the preloaded energy chunks better matches what the actual spread would be, instead
+          // of being at a higher concentration than normal.
+          energySinceLastChunk = energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK * 2;
         }
 
         this.moveElectricalEnergyChunks( dt );
         this.moveRadiatedEnergyChunks( dt );
         this.moveBlownEnergyChunks( dt );
 
-        if ( this.mechanicalEnergyChunkMovers.length >= 4 ) {
+        if ( this.mechanicalEnergyChunkMovers.length >= 3 ) {
 
           // a few mechanical energy chunks are moving away from the fan, which completes the preload
           preloadComplete = true;
