@@ -147,6 +147,9 @@ define( function( require ) {
       }
       targetVelocity = targetVelocity < MINIMUM_TARGET_VELOCITY ? 0 : targetVelocity;
 
+      // dump any internal energy that was left around from when chunks were on
+      this.internalEnergyFromEnergyChunks = targetVelocity === 0 ? 0 : this.internalEnergyFromEnergyChunks;
+
       var dOmega = targetVelocity - this.bladeAngularVelocity;
       if ( dOmega !== 0 ) {
         var change = ANGULAR_ACCELERATION * dt;
