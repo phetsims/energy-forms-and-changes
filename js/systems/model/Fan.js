@@ -23,7 +23,7 @@ define( function( require ) {
 
   // constants
   var ANGULAR_ACCELERATION = Math.PI * 4; // In radians/(sec^2).
-  var MINIMUM_TARGET_VELOCITY = 6; // In radians/sec. Any speed lower than this looks choppy, so this is the cutoff
+  var MINIMUM_TARGET_VELOCITY = 4; // In radians/sec. Any speed lower than this looks choppy, so this is the cutoff
   var INCOMING_ENERGY_VELOCITY_COEFFICIENT = 0.0051; // empirically determined. used to map incoming energy to a target velocity
   var MAX_INTERNAL_ENERGY = EFACConstants.ENERGY_PER_CHUNK * 4;
   var ENERGY_LOST_PROPORTION = 0.30; // used to remove some energy from internal energy when a target velocity is set

@@ -124,8 +124,14 @@ define( function( require ) {
         // move the energy chunks
         this.updateEnergyChunkPositions( dt );
 
+        var energyProducedProportion = 1 - this.cloudinessProperty.value;
+
+        // map energy produced proportion to eliminate very low values
+        energyProducedProportion = energyProducedProportion === 0 ? 0 : 0.1 + ( energyProducedProportion * 0.9 );
+        assert && assert( energyProducedProportion >= 0 && energyProducedProportion <= 1 );
+
         // calculate the amount of energy produced
-        energyProduced = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProperty.value ) * dt;
+        energyProduced = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * energyProducedProportion * dt;
       }
 
       // produce the energy
