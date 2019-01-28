@@ -17,8 +17,15 @@ define( function( require ) {
    * @param {Node} screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
    * @param {ModelViewTransform2} modelViewTransform
    * @param {function} constrainPosition
+   * @param {BooleanProperty} simIsPlayingProperty
    */
-  function ThermalElementDragHandler( modelElement, screenViewChildNode, modelViewTransform, constrainPosition ) {
+  function ThermalElementDragHandler(
+    modelElement,
+    screenViewChildNode,
+    modelViewTransform,
+    constrainPosition,
+    simIsPlayingProperty
+  ) {
 
     var dragStartOffset = new Vector2();
     var currentTarget = null;
@@ -29,6 +36,9 @@ define( function( require ) {
       allowTouchSnag: true,
 
       start: function( event ) {
+
+        // make sure the sim is playing when an element is grabbed - this will resume the sim if it is paused
+        simIsPlayingProperty.value = true;
         modelElement.userControlledProperty.set( true );
         var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
         currentTarget = event.currentTarget;

@@ -93,7 +93,8 @@ define( function( require ) {
       beaker,
       this.grabNode,
       modelViewTransform,
-      constrainPosition
+      constrainPosition,
+      model.isPlayingProperty
     ) );
   }
 

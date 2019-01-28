@@ -333,6 +333,7 @@ define( function( require ) {
       model.brick,
       modelViewTransform,
       constrainMovableElementMotion,
+      model.isPlayingProperty,
       { setApproachingEnergyChunkParentNode: airLayer }
     );
     blockLayer.addChild( brickNode );
@@ -340,6 +341,7 @@ define( function( require ) {
       model.ironBlock,
       modelViewTransform,
       constrainMovableElementMotion,
+      model.isPlayingProperty,
       { setApproachingEnergyChunkParentNode: airLayer }
     );
     blockLayer.addChild( ironBlockNode );

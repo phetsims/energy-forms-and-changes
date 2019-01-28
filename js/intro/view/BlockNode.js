@@ -62,10 +62,11 @@ define( function( require ) {
    * @param {Block} block
    * @param {ModelViewTransform2} modelViewTransform
    * @param {function} constrainPosition
+   * @param {BooleanProperty} simIsPlayingProperty
    * @param {Object} [options]
    * @constructor
    */
-  function BlockNode( block, modelViewTransform, constrainPosition, options ) {
+  function BlockNode( block, modelViewTransform, constrainPosition, simIsPlayingProperty, options ) {
 
     var self = this;
     Node.call( this, { cursor: 'pointer' } );
@@ -246,7 +247,8 @@ define( function( require ) {
       block,
       this,
       modelViewTransform,
-      constrainPosition
+      constrainPosition,
+      simIsPlayingProperty
     ) );
   }
 
