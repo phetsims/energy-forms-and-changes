@@ -77,6 +77,8 @@ define( function( require ) {
     // @private {number} - a temperature value used to decide when to release thermal energy chunks, very roughly in
     // degrees Celsius
     this.internalTemperature = ROOM_TEMPERATURE;
+
+    this.targetVelocity = 0;
   }
 
   energyFormsAndChanges.register( 'Fan', Fan );
@@ -119,7 +121,6 @@ define( function( require ) {
       this.moveElectricalEnergyChunks( dt );
       this.moveRadiatedEnergyChunks( dt );
       this.moveBlownEnergyChunks( dt );
-      var targetVelocity = 0;
 
       // Cool down a bit on each step.  If the fan doesn't cool off fast enough, thermal energy will be released.  The
       // cooling is linear rather than differential, which isn't very realistic, but works for our purposes here.
@@ -132,7 +133,7 @@ define( function( require ) {
         this.internalEnergyFromEnergyChunks = Math.min( this.internalEnergyFromEnergyChunks, MAX_INTERNAL_ENERGY );
 
         // when chunks are on, use internal energy of the fan to determine the target velocity
-        targetVelocity = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
+        this.targetVelocity = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
 
         // lose a proportion of the energy
         this.internalEnergyFromEnergyChunks = Math.max(
@@ -143,14 +144,14 @@ define( function( require ) {
       else {
 
         // when chunks are off, get a smooth target velocity from incoming energy by using dt
-        targetVelocity = incomingEnergy.amount * INCOMING_ENERGY_VELOCITY_COEFFICIENT / dt;
+        this.targetVelocity = incomingEnergy.amount * INCOMING_ENERGY_VELOCITY_COEFFICIENT / dt;
       }
-      targetVelocity = targetVelocity < MINIMUM_TARGET_VELOCITY ? 0 : targetVelocity;
+      this.targetVelocity = this.targetVelocity < MINIMUM_TARGET_VELOCITY ? 0 : this.targetVelocity;
 
       // dump any internal energy that was left around from when chunks were on
-      this.internalEnergyFromEnergyChunks = targetVelocity === 0 ? 0 : this.internalEnergyFromEnergyChunks;
+      this.internalEnergyFromEnergyChunks = this.targetVelocity === 0 ? 0 : this.internalEnergyFromEnergyChunks;
 
-      var dOmega = targetVelocity - this.bladeAngularVelocity;
+      var dOmega = this.targetVelocity - this.bladeAngularVelocity;
       if ( dOmega !== 0 ) {
         var change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
@@ -158,7 +159,7 @@ define( function( require ) {
           // accelerate
           this.bladeAngularVelocity = Math.min(
             this.bladeAngularVelocity + change,
-            targetVelocity
+            this.targetVelocity
           );
         }
         else {
@@ -339,6 +340,7 @@ define( function( require ) {
       EnergyUser.prototype.deactivate.call( this );
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
+      this.targetVelocity = 0;
       this.internalEnergyFromEnergyChunks = 0;
       this.internalTemperature = ROOM_TEMPERATURE;
     },
@@ -364,7 +366,7 @@ define( function( require ) {
 
       this.clearEnergyChunks();
 
-      if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
+      if ( this.targetVelocity < MINIMUM_TARGET_VELOCITY ||
            incomingEnergy.type !== EnergyType.ELECTRICAL ) {
 
         // no energy chunk pre-loading needed
