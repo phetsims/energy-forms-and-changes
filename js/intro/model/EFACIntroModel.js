@@ -758,10 +758,6 @@ define( function( require ) {
      */
     constrainPosition: function( modelElement, proposedPosition ) {
 
-      if ( !this.isPlayingProperty.get() ) {
-        this.isPlayingProperty.value = true;
-      }
-
       var self = this;
 
       // TODO: Optimize this method for allocations
