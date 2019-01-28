@@ -183,7 +183,9 @@ define( function( require ) {
             beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
 
-          if ( newColor !== EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR &&
+          // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
+          // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
+          if ( _.some( self.blocks, function( block ) { return block.color === newColor; } ) &&
                oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
                !beaker.userControlledProperty.get() &&
@@ -755,6 +757,10 @@ define( function( require ) {
      * TODO: Consider adding the optimization where a vector is provided so that a new one doesn't have to be allocated
      */
     constrainPosition: function( modelElement, proposedPosition ) {
+
+      if ( !this.isPlayingProperty.get() ) {
+        this.isPlayingProperty.value = true;
+      }
 
       var self = this;
 
