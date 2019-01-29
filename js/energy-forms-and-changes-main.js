@@ -29,7 +29,7 @@ define( function( require ) {
       softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
       team: 'Trish Loeblein, Emily Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
       qualityAssurance: 'Steele Dalton, Jacob Romero, Kathryn Woessner, Bryan Yoelin',
-      graphicArts: 'Mariah Hermsmeyer, Megan Lai',
+      graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
       thanks: ''
     }
   };
