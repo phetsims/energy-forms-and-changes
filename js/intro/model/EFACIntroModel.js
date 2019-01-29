@@ -186,7 +186,7 @@ define( function( require ) {
           var checkBlocks = function( block ) {
 
             // see if one of the blocks is being sensed in the beaker
-            return block.color === newColor || block.positionProperty.value.y > beaker.positionProperty.value.y;
+            return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
           };
 
           // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
