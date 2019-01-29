@@ -183,9 +183,15 @@ define( function( require ) {
             beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
 
+          var checkBlocks = function( block ) {
+
+            // see if one of the blocks is being sensed in the beaker
+            return block.color === newColor || block.positionProperty.value.y > beaker.positionProperty.value.y;
+          };
+
           // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
           // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-          if ( _.some( self.blocks, function( block ) { return block.color === newColor; } ) &&
+          if ( _.some( self.blocks, checkBlocks ) &&
                oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
                !beaker.userControlledProperty.get() &&
