@@ -1,13 +1,13 @@
-Energy Forms And Changes
+Energy Forms and Changes
 =============
-"Energy Forms And Changes" is an educational simulation in HTML5, by <a href="https://phet.colorado.edu/" target="_blank">PhET Interactive Simulations</a>
+"Energy Forms and Changes" is an educational simulation in HTML5, by <a href="https://phet.colorado.edu/" target="_blank">PhET Interactive Simulations</a>
 at the University of Colorado Boulder.
 For a description of this simulation, associated resources, and a link to the published version,
 <a href="https://phet.colorado.edu/en/simulation/energy-forms-and-changes" target="_blank">visit the simulation's web page</a>.
 
 ### Try it!
 
-<a href="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html" target="_blank">Click here to run "Energy Forms And Changes".</a>
+<a href="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html" target="_blank">Click here to run "Energy Forms and Changes".</a>
 
 <a href="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html" target="_blank">
 <img src="https://raw.githubusercontent.com/phetsims/energy-forms-and-changes/master/assets/energy-forms-and-changes-screenshot.png" alt="Screenshot" style="width: 400px;"/>
