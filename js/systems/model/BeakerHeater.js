@@ -46,6 +46,14 @@ define( function( require ) {
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0003, -0.0175 );
   var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( -0.0003, -0.01 );
   var OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.003 );
+  var ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
+    OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND,
+    OFFSET_TO_FIRST_WIRE_CURVE_POINT,
+    OFFSET_TO_SECOND_WIRE_CURVE_POINT,
+    OFFSET_TO_THIRD_WIRE_CURVE_POINT,
+    OFFSET_TO_BOTTOM_OF_CONNECTOR,
+    OFFSET_TO_CONVERSION_POINT
+  ];
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
@@ -130,7 +138,7 @@ define( function( require ) {
 
           // add a "mover" that will move this energy chunk through the wire to the heating element
           self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
-            self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
+            EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         } );
 
@@ -189,7 +197,7 @@ define( function( require ) {
           this.radiatedEnergyChunkMovers.push(
             new EnergyChunkPathMover(
               ec,
-              this.createRadiatedEnergyChunkPath( ec.positionProperty.value ),
+              EnergyChunkPathMover.createRadiatedPath( ec.positionProperty.value, 0 ),
               EFACConstants.ENERGY_CHUNK_VELOCITY
             )
           );
@@ -323,7 +331,7 @@ define( function( require ) {
 
           // add a "mover" that will move this energy chunk through the wire to the heating element
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            this.createElectricalEnergyChunkPath( this.positionProperty.get() ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
 
@@ -384,55 +392,7 @@ define( function( require ) {
       var travelDistance = ( 0.6 + Math.abs( Math.cos( angle ) ) * 0.3 ) * HEATER_ELEMENT_2D_HEIGHT;
       path.push( startingPoint.plus( new Vector2( travelDistance, 0 ).rotated( angle ) ) );
       return path;
-    },
-
-    /**
-     * @param  {Vector2} center
-     * @returns {Vector2[]}
-     * @private
-     */
-    createElectricalEnergyChunkPath: function( center ) {
-      var path = [];
-
-      path.push( center.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND ) );
-      path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_BOTTOM_OF_CONNECTOR ) );
-      path.push( center.plus( OFFSET_TO_CONVERSION_POINT ) );
-
-      return path;
-    },
-
-    /**
-     * create a path for chunks to follow when radiated from the beaker
-     * @param  {Vector2} startingPoint
-     * @returns {Vector2[]}
-     * @private
-     */
-    createRadiatedEnergyChunkPath: function( startingPoint ) {
-      var energyChunkTravelPath = [];
-      var numberOfDirectionChanges = 4; // empirically chosen
-      var segmentVector = new Vector2(
-        0,
-        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfDirectionChanges
-      );
-
-      // The first segment is is straight above the starting point.  This is done because it looks good, making the
-      // chunk move straight up out of the beaker.
-      var nextPoint = startingPoint.plus( segmentVector );
-      energyChunkTravelPath.push( nextPoint );
-
-      // add the remaining points in the path
-      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
-        var movement = segmentVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
-        nextPoint = nextPoint.plus( movement );
-        energyChunkTravelPath.push( nextPoint );
-      }
-
-      return energyChunkTravelPath;
     }
-
   }, {
 
     // statics
