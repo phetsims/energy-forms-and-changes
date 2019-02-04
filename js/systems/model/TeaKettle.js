@@ -174,15 +174,16 @@ define( function( require ) {
             // Set this chunk on a path to the base of the spout.
             var travelDistance = chunk.positionProperty.get().distance( self.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
+            // create path mover to spout bottom
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createPathToSpoutBottom( self.positionProperty.value ),
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
               travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
           }
 
           // This chunk is moving out of the spout.
           else if ( chunk.positionProperty.get().equals( self.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createSpoutExitPath( self.positionProperty.value ),
+              EnergyChunkPathMover.createStraightPath( self.positionProperty.value, SPOUT_EXIT_ANGLE ),
               EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
           }
 
@@ -251,39 +252,6 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Vector2} parentElementPosition
-     *
-     * @returns {Vector2[]}
-     * @private
-     */
-    createPathToSpoutBottom: function( parentElementPosition ) {
-      var path = [];
-
-      path.push( parentElementPosition.plus( SPOUT_BOTTOM_OFFSET ) );
-
-      return path;
-    },
-
-    /**
-     * @param  {Vector2} parentElementPosition
-     *
-     * @returns {Vector2[]}
-     * @private
-     */
-    createSpoutExitPath: function( parentElementPosition ) {
-      var path = [];
-
-      // calculate the travel vector based on how high the chunks should gp
-      var yDistance = EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - parentElementPosition.y;
-      var xDistance = yDistance / Math.tan( SPOUT_EXIT_ANGLE ) + parentElementPosition.x;
-      var distantTargetLocation = new Vector2( xDistance, yDistance );
-      path.push( distantTargetLocation );
-
-      return path;
-    },
-
-
-    /**
      * @public
      * @override
      */
@@ -322,8 +290,9 @@ define( function( require ) {
           var travelDistance = newEnergyChunk.positionProperty.get().distance(
             this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
+          // create path mover to spout bottom
           this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            this.createPathToSpoutBottom( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
 
           energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
