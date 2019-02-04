@@ -36,6 +36,14 @@ define( function( require ) {
   var OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0003, -0.0175 );
   var OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( 0.0002, -0.01 );
   var OFFSET_TO_RADIATE_POINT = new Vector2( 0.0002, 0.066 );
+  var ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
+    OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND,
+    OFFSET_TO_FIRST_WIRE_CURVE_POINT,
+    OFFSET_TO_SECOND_WIRE_CURVE_POINT,
+    OFFSET_TO_THIRD_WIRE_CURVE_POINT,
+    OFFSET_TO_BOTTOM_OF_CONNECTOR,
+    OFFSET_TO_RADIATE_POINT
+  ];
 
   /**
    * @param {Image} iconImage
@@ -94,7 +102,7 @@ define( function( require ) {
               self.electricalEnergyChunkMovers.push(
                 new EnergyChunkPathMover(
                   incomingChunk,
-                  self.createElectricalEnergyChunkPath( self.positionProperty.value ),
+                  EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
                   EFACConstants.ENERGY_CHUNK_VELOCITY )
               );
             }
@@ -217,7 +225,7 @@ define( function( require ) {
           // turn this energy chunk into thermal energy on the filament
           if ( self.hasFilament ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
-            var path = self.createThermalEnergyChunkPath( mover.energyChunk.positionProperty.value );
+            var path = self.createPathOnFilament( mover.energyChunk.positionProperty.value );
             var speed = self.getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
                         self.generateThermalChunkTimeOnFilament();
             self.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
@@ -269,7 +277,7 @@ define( function( require ) {
           // add a "mover" that will move this energy chunk through the wire to the heating element
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
             newEnergyChunk,
-            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
           ) );
 
@@ -300,20 +308,11 @@ define( function( require ) {
         energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
       }
 
-      // path of radiated light chunks
-      var path = [];
-
-      path.push( this.positionProperty.value
-        .plus( OFFSET_TO_RADIATE_POINT )
-        .plus( new Vector2(
-          ( phet.joist.random.nextDouble() - 0.5 ) * 0.3,
-          EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - OFFSET_TO_RADIATE_POINT.y - this.positionProperty.value.y
-        ) )
-      );
-
       this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
         energyChunk,
-        path,
+        EnergyChunkPathMover.createRandomStraightPath(
+          this.positionProperty.value,
+          new Range( Math.PI / 3, Math.PI / 3 * 2 ) ),
         EFACConstants.ENERGY_CHUNK_VELOCITY )
       );
     },
@@ -323,31 +322,13 @@ define( function( require ) {
      * @returns {Vector2[]}
      * @private
      */
-    createThermalEnergyChunkPath: function( startingPoint ) {
+    createPathOnFilament: function( startingPoint ) {
       var path = [];
       var filamentWidth = 0.03;
       var x = ( 0.5 + phet.joist.random.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
 
       path.push( startingPoint.plus( new Vector2( x, 0 ) ) );
       this.goRightNextTime = !this.goRightNextTime;
-
-      return path;
-    },
-
-    /**
-     * @param  {Vector2} center
-     * @returns {Vector2[]}
-     * @private
-     */
-    createElectricalEnergyChunkPath: function( center ) {
-      var path = [];
-
-      path.push( center.plus( OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND ) );
-      path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_BOTTOM_OF_CONNECTOR ) );
-      path.push( center.plus( OFFSET_TO_RADIATE_POINT ) );
 
       return path;
     },
