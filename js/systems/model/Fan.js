@@ -46,6 +46,13 @@ define( function( require ) {
   var OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.019 );
   var INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
   var BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
+  var ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
+    OFFSET_TO_WIRE_START,
+    OFFSET_TO_FIRST_WIRE_CURVE_POINT,
+    OFFSET_TO_SECOND_WIRE_CURVE_POINT,
+    OFFSET_TO_THIRD_WIRE_CURVE_POINT,
+    OFFSET_TO_FAN_MOTOR_INTERIOR
+  ];
 
   // images
   var FAN_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_icon.png' );
@@ -111,7 +118,7 @@ define( function( require ) {
 
           // add a "mover" that will move this energy chunk through the wire to the heating element
           self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
-            self.createElectricalEnergyChunkPath( self.positionProperty.get() ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         } );
 
@@ -210,7 +217,7 @@ define( function( require ) {
             // release the energy chunk as thermal to radiate away
             self.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
               mover.energyChunk,
-              self.createRadiatedEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
+              EnergyChunkPathMover.createRadiatedPath( mover.energyChunk.positionProperty.get(), 0 ),
               EFACConstants.ENERGY_CHUNK_VELOCITY
             ) );
 
@@ -257,52 +264,6 @@ define( function( require ) {
           _.pull( self.mechanicalEnergyChunkMovers, mover );
         }
       } );
-    },
-
-    /**
-     * create a path for chunks to follow when traveling along the wire to the motor
-     * @param  {Vector2} center
-     * @returns {Vector2[]}
-     * @private
-     */
-    createElectricalEnergyChunkPath: function( center ) {
-      var path = [];
-
-      path.push( center.plus( OFFSET_TO_WIRE_START ) );
-      path.push( center.plus( OFFSET_TO_FIRST_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_SECOND_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_THIRD_WIRE_CURVE_POINT ) );
-      path.push( center.plus( OFFSET_TO_FAN_MOTOR_INTERIOR ) );
-      return path;
-    },
-
-    /**
-     * create a path for chunks to follow when radiated from the motor. originally from BeakerHeater.js
-     * @param  {Vector2} startingPoint
-     * @returns {Vector2[]}
-     * @private
-     */
-    createRadiatedEnergyChunkPath: function( startingPoint ) {
-      var path = [];
-      var numberOfDirectionChanges = 4; // Empirically chosen.
-      var nominalTravelVector = new Vector2(
-        0,
-        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfDirectionChanges
-      );
-
-      // The first point is straight above the starting point.  This is done because it looks good, making the chunk
-      // move straight up out of the motor.
-      var currentPosition = startingPoint.plus( nominalTravelVector );
-      path.push( currentPosition );
-
-      // add the remaining points in the path
-      for ( var i = 0; i < numberOfDirectionChanges - 1; i++ ) {
-        var movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
-        currentPosition = currentPosition.plus( movement );
-        path.push( currentPosition );
-      }
-
-      return path;
     },
 
     /**
@@ -398,7 +359,7 @@ define( function( require ) {
           // add a "mover" that will move this energy chunk through the wire to the heating element
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
             newEnergyChunk,
-            this.createElectricalEnergyChunkPath( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
           ) );
 
