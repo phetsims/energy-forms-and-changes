@@ -171,9 +171,10 @@ define( function( require ) {
             _.pull( self.incomingEnergyChunks, chunk );
 
             // add a "mover" that will move this energy chunk to the center of the wheel
-            var path = self.createMechanicalEnergyChunkPath( self.positionProperty.get() );
-            var mover = new EnergyChunkPathMover( chunk, path, EFACConstants.ENERGY_CHUNK_VELOCITY );
-            self.energyChunkMovers.push( mover );
+            self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
+              EFACConstants.ENERGY_CHUNK_VELOCITY )
+            );
           } );
 
           assert && assert(
@@ -214,6 +215,14 @@ define( function( require ) {
         switch( chunk.energyTypeProperty.get() ) {
           case EnergyType.MECHANICAL:
 
+            var electricalEnergyChunkOffsets = [
+              START_OF_WIRE_CURVE_OFFSET,
+              WIRE_CURVE_POINT_1_OFFSET,
+              WIRE_CURVE_POINT_2_OFFSET,
+              WIRE_CURVE_POINT_3_OFFSET,
+              CENTER_OF_CONNECTOR_OFFSET
+            ];
+
             // This mechanical energy chunk has traveled to the end of its path, so change it to electrical and send it
             // on its way.  Also add a "hidden" chunk so that the movement through the generator can be seen by the
             // user.
@@ -222,7 +231,7 @@ define( function( require ) {
             chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
             self.electricalEnergyChunks.push( chunk );
             self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              self.createElectricalEnergyChunkPath( self.positionProperty.value ),
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, electricalEnergyChunkOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
             var hiddenChunk = new EnergyChunk(
@@ -233,8 +242,9 @@ define( function( require ) {
             );
             hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
             self.hiddenEnergyChunks.push( hiddenChunk );
+            var hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
             self.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
-              self.createHiddenEnergyChunkPath( self.positionProperty.value ),
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, hiddenEnergyChunkOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
 
@@ -308,7 +318,7 @@ define( function( require ) {
 
           // add a 'mover' for this energy chunk
           this.energyChunkMovers.push( new EnergyChunkPathMover( newChunk,
-            this.createMechanicalEnergyChunkPath( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
 
@@ -329,44 +339,6 @@ define( function( require ) {
           preloadComplete = true;
         }
       }
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createMechanicalEnergyChunkPath: function( panelPosition ) {
-      var path = [];
-      path.push( panelPosition.plus( WHEEL_CENTER_OFFSET ) );
-      return path;
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createElectricalEnergyChunkPath: function( panelPosition ) {
-      var path = [];
-      path.push( panelPosition.plus( START_OF_WIRE_CURVE_OFFSET ) );
-      path.push( panelPosition.plus( WIRE_CURVE_POINT_1_OFFSET ) );
-      path.push( panelPosition.plus( WIRE_CURVE_POINT_2_OFFSET ) );
-      path.push( panelPosition.plus( WIRE_CURVE_POINT_3_OFFSET ) );
-      path.push( panelPosition.plus( CENTER_OF_CONNECTOR_OFFSET ) );
-      return path;
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createHiddenEnergyChunkPath: function( panelPosition ) {
-      var path = [];
-
-      // overlaps with the electrical chunks until it reaches the window, then is done
-      path.push( panelPosition.plus( START_OF_WIRE_CURVE_OFFSET ) );
-      path.push( panelPosition.plus( WIRE_CURVE_POINT_1_OFFSET ) );
-
-      return path;
     },
 
     /**
