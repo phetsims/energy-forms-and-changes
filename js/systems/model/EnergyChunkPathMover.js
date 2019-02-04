@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -68,7 +69,8 @@ define( function( require ) {
           var velocity = new Vector2( distanceToTravel, 0 ).rotated( phi );
           this.energyChunk.positionProperty.set( this.energyChunk.positionProperty.get().plus( velocity ) );
           distanceToTravel = 0; // no remaining distance
-        } else {
+        }
+        else {
 
           // arrived at next destination point
           distanceToTravel -= this.energyChunk.positionProperty.get().distance( this.nextPoint );
@@ -78,7 +80,8 @@ define( function( require ) {
 
             // the end of the path has been reached
             this.pathFullyTraversed = true;
-          } else {
+          }
+          else {
 
             // set the next destination point
             this.nextPoint = this.path[ this.path.indexOf( this.nextPoint ) + 1 ];
@@ -94,6 +97,83 @@ define( function( require ) {
      */
     getFinalDestination: function() {
       return this.path[ this.path.length - 1 ];
+    }
+  }, {
+    /**
+     * Create an energy chunk path entirely from offsets
+     * @param parentPosition {Vector2} the position of the parent element that is creating the path
+     * @param offsets {Vector2[]} offsets from the element position
+     * @returns {Vector[]}
+     * @public
+     */
+    createPathFromOffsets: function( parentPosition, offsets ) {
+      var path = [];
+
+      for ( var i = 0; i < offsets.length; i++ ) {
+        path.push( parentPosition.plus( offsets[ i ] ) );
+      }
+
+      return path;
+    },
+
+    /**
+     * Create an energy chunk path for radiated energy chunks
+     * @param startingPosition {Vector2} the starting position of the energy chunk
+     * @param startingAngle {number} the angle (away from vertical) of the first segment in the path
+     * @returns {Vector[]}
+     * @public
+     */
+    createRadiatedPath: function( startingPosition, startingAngle ) {
+      var path = [];
+      var segmentLength = 0.06; // in meters. empirically determined to look nice and make it past the top of the beaker
+      var verticalSegment = new Vector2( 0, segmentLength );
+
+      // calculate the first segment based on the desired starting angle
+      var startingSegment = new Vector2( 0, segmentLength ).rotated( startingAngle );
+      var currentPosition = startingPosition.plus( startingSegment );
+      path.push( currentPosition );
+
+      // add segments at random angles until the path gets close to the max height
+      while ( currentPosition.plus( verticalSegment ).y < EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) {
+        currentPosition = currentPosition.plus( verticalSegment.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 ) );
+        path.push( currentPosition );
+      }
+
+      // go straight up to the max height cutoff point
+      var finalSegment = new Vector2( 0, EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - currentPosition.y );
+      currentPosition = currentPosition.plus( finalSegment );
+      path.push( currentPosition );
+
+      return path;
+    },
+
+    /**
+     * Create a straight-line energy chunk path at a valid random angle
+     * @param position {Vector2}
+     * @param validAngles {Range} the range of possible angles to be randomly chosen
+     * @returns {Vector[]}
+     * @public
+     */
+    createRandomStraightPath: function( position, validAngles ) {
+      var validRandomAngle = phet.joist.random.nextDouble() * ( validAngles.max - validAngles.min ) + validAngles.min;
+      return this.createStraightPath( position, validRandomAngle );
+    },
+
+    /** Create a straight-line energy chunk path
+     * @param position {Vector2} the position that the path is created from
+     * @param angle {number} the angle of the path
+     * @returns {Vector[]}
+     * @public
+     */
+    createStraightPath: function( position, angle ) {
+      var path = [];
+
+      // calculate the travel segment based on how high the chunk should go
+      var yDistance = EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - position.y;
+      var xDistance = yDistance / Math.tan( angle ) + position.x;
+      path.push( new Vector2( xDistance, yDistance ) );
+
+      return path;
     }
   } );
 } );
