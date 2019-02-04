@@ -43,6 +43,7 @@ define( function( require ) {
   var UPPER_CENTER_OF_BACK_WHEEL_OFFSET = new Vector2( 0.035, -0.006 ); // where the top chain meets the back wheel cassette
   var TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.024, 0.007 );
   var NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.107, 0.066 );
+  var CHEMICAL_ENERGY_CHUNK_OFFSETS = [ BIKER_BUTTOCKS_OFFSET, TOP_TUBE_ABOVE_CRANK_OFFSET ];
 
   // images
   var BICYCLE_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_icon.png' );
@@ -209,7 +210,7 @@ define( function( require ) {
           var energyChunk = this.findNonMovingEnergyChunk();
           this.energyChunkMovers.push( new EnergyChunkPathMover(
             energyChunk,
-            this.createChemicalEnergyChunkPath( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
           this.energyProducedSinceLastChunkEmitted = 0;
@@ -264,10 +265,16 @@ define( function( require ) {
             self.mechanicalChunksSinceLastThermal = 0;
           }
           else {
+            var mechanicalEnergyChunkOffsets = [
+              BIKE_CRANK_OFFSET,
+              UPPER_CENTER_OF_BACK_WHEEL_OFFSET,
+              TOP_TANGENT_OF_BACK_WHEEL_OFFSET,
+              NEXT_ENERGY_SYSTEM_OFFSET
+            ];
 
             // send this chunk to the next energy system
             self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              self.createMechanicalEnergyChunkPath( self.positionProperty.get() ),
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.get(), mechanicalEnergyChunkOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
             self.mechanicalChunksSinceLastThermal++;
@@ -282,7 +289,7 @@ define( function( require ) {
           _.pull( self.energyChunkMovers, mover );
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
           self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-            self.createThermalEnergyChunkPath( self.positionProperty.value ),
+            EnergyChunkPathMover.createRadiatedPath( self.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
         }
@@ -344,7 +351,7 @@ define( function( require ) {
           var energyChunk = this.findNonMovingEnergyChunk();
           this.energyChunkMovers.push( new EnergyChunkPathMover(
             energyChunk,
-            this.createChemicalEnergyChunkPath( this.positionProperty.value ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
           energySinceLastChunk = 0;
@@ -456,32 +463,6 @@ define( function( require ) {
     },
 
     /**
-     * @param  {Vector2} centerPosition
-     * @returns {Vector2[]}
-     * @private
-     */
-    createChemicalEnergyChunkPath: function( centerPosition ) {
-      var path = [];
-      path.push( centerPosition.plus( BIKER_BUTTOCKS_OFFSET ) );
-      path.push( centerPosition.plus( TOP_TUBE_ABOVE_CRANK_OFFSET ) );
-      return path;
-    },
-
-    /**
-     * @param  {Vector2} centerPosition
-     * @returns {Vector2[]}
-     * @private
-     */
-    createMechanicalEnergyChunkPath: function( centerPosition ) {
-      var path = [];
-      path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
-      path.push( centerPosition.plus( UPPER_CENTER_OF_BACK_WHEEL_OFFSET ) );
-      path.push( centerPosition.plus( TOP_TANGENT_OF_BACK_WHEEL_OFFSET ) );
-      path.push( centerPosition.plus( NEXT_ENERGY_SYSTEM_OFFSET ) );
-      return path;
-    },
-
-    /**
      * create a path for an energy chunk that will travel to the hub and then become thermal
      * @param  {Vector2} centerPosition
      * @param  {Vector2} currentPosition
@@ -497,37 +478,6 @@ define( function( require ) {
         path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
       }
       path.push( centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET ) );
-      return path;
-    },
-
-    /**
-     * @param  {Vector2} centerPosition
-     * @returns {Vector2[]}
-     * @private
-     */
-    createThermalEnergyChunkPath: function( centerPosition ) {
-      var startingPoint = centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET );
-      var path = [];
-      path.push( startingPoint );
-
-      var numberOfSegments = 4;
-      var segmentVector = new Vector2(
-        0,
-        ( EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - startingPoint.y ) / numberOfSegments
-      );
-
-      // the chuck needs to move up and to the right to avoid overlapping with the biker
-      var nextPoint = startingPoint.plus( segmentVector.rotated( Math.PI * -0.1 ) );
-
-      // add a set of path segments that make the chunk move up in a somewhat random path
-      path.push( nextPoint );
-
-      for ( var i = 0; i < numberOfSegments - 1; i++ ) {
-        var movement = segmentVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
-        nextPoint = nextPoint.plus( movement );
-        path.push( nextPoint );
-      }
-
       return path;
     },
 
