@@ -134,7 +134,7 @@ define( function( require ) {
                 // add a "mover" that will move this energy chunk to the bottom of the solar panel
                 self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
                   incomingChunk,
-                  self.createPathToPanelBottom( self.positionProperty.get() ),
+                  EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.get(), [ OFFSET_TO_CONVERGENCE_POINT ] ),
                   self.chooseChunkSpeedOnPanel( incomingChunk ) )
                 );
 
@@ -148,7 +148,7 @@ define( function( require ) {
                 // add a "mover" that will reflect this energy chunk up and away from the panel
                 self.lightEnergyChunkMovers.push( new EnergyChunkPathMover(
                   incomingChunk,
-                  self.createReflectedLightPath( incomingChunk.positionProperty.get() ),
+                  EnergyChunkPathMover.createStraightPath( incomingChunk.positionProperty.get(), REFLECTION_ANGLE ),
                   EFACConstants.ENERGY_CHUNK_VELOCITY )
                 );
 
@@ -207,11 +207,17 @@ define( function( require ) {
         if ( mover.pathFullyTraversed ) {
 
           _.pull( self.electricalEnergyChunkMovers, mover );
+          var pathThroughConverterOffsets = [
+            OFFSET_TO_FIRST_CURVE_POINT,
+            OFFSET_TO_SECOND_CURVE_POINT,
+            OFFSET_TO_THIRD_CURVE_POINT,
+            OFFSET_TO_OUTGOING_CONNECTOR
+          ];
 
           // energy chunk has reached the bottom of the panel and now needs to move through the converter
           if ( mover.energyChunk.positionProperty.value.equals( self.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
             self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              self.createPathThroughConverter( self.positionProperty.value ),
+              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, pathThroughConverterOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
 
@@ -308,7 +314,7 @@ define( function( require ) {
           // add a "mover" that will move this energy chunk to the bottom of the solar panel
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
             newEnergyChunk,
-            this.createPathToPanelBottom( this.positionProperty.get() ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ OFFSET_TO_CONVERGENCE_POINT ] ),
             this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
           );
 
@@ -403,45 +409,6 @@ define( function( require ) {
       EnergyConverter.prototype.clearEnergyChunks.call( this );
       this.electricalEnergyChunkMovers.length = 0;
       this.latestChunkArrivalTime = 0;
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createPathToPanelBottom: function( panelPosition ) {
-      var path = [];
-      path.push( panelPosition.plus( OFFSET_TO_CONVERGENCE_POINT ) );
-      return path;
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createPathThroughConverter: function( panelPosition ) {
-      var path = [];
-      path.push( panelPosition.plus( OFFSET_TO_FIRST_CURVE_POINT ) );
-      path.push( panelPosition.plus( OFFSET_TO_SECOND_CURVE_POINT ) );
-      path.push( panelPosition.plus( OFFSET_TO_THIRD_CURVE_POINT ) );
-      path.push( panelPosition.plus( OFFSET_TO_OUTGOING_CONNECTOR ) );
-      return path;
-    },
-
-    /**
-     * @param {Vector2} panelPosition
-     * @private
-     */
-    createReflectedLightPath: function( chunkPosition ) {
-      var path = [];
-
-      // calculate the travel vector based on how high the reflected chunk should go
-      var yDistance = EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - chunkPosition.y;
-      var xDistance = yDistance / Math.tan( REFLECTION_ANGLE ) + chunkPosition.x;
-      var reflectionTargetLocation = new Vector2( xDistance, yDistance );
-      path.push( reflectionTargetLocation );
-
-      return path;
     },
 
     /**
