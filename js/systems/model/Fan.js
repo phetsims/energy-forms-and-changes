@@ -118,7 +118,7 @@ define( function( require ) {
 
           // add a "mover" that will move this energy chunk through the wire to the heating element
           self.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
-            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
+            EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         } );
 
