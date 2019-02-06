@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * model of a cloud that can block energy coming from the sun
@@ -6,70 +6,66 @@
  * @author  John Blanco
  * @author  Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var Shape = require( 'KITE/Shape' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Shape = require( 'KITE/Shape' );
 
   // constants
-  var WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
-  var HEIGHT = WIDTH * 0.55; // determined from the approximate aspect ratio of the image
+  const WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
+  const HEIGHT = WIDTH * 0.55; // determined from the approximate aspect ratio of the image
 
-  /**
-   * @param {Vector2} offsetFromParent
-   * @param {Property.<Vector2>} parentPositionProperty
-   * @constructor
-   */
-  function Cloud( offsetFromParent, parentPositionProperty ) {
-    var self = this;
+  class Cloud {
 
-    // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
-    this.existenceStrengthProperty = new NumberProperty( 1.0 );
+    /**
+     * @param {Vector2} offsetFromParent
+     * @param {Property.<Vector2>} parentPositionProperty
+     */
+    constructor( offsetFromParent, parentPositionProperty ) {
 
-    // @public (read-only) {number} - offset position for this cloud
-    this.offsetFromParent = offsetFromParent;
+      // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
+      this.existenceStrengthProperty = new NumberProperty( 1.0 );
 
-    // @private {number} - used to calculate this cloud's position
-    this.parentPositionProperty = parentPositionProperty;
+      // @public (read-only) {number} - offset position for this cloud
+      this.offsetFromParent = offsetFromParent;
 
-    this.cloudEllipse = null;
+      // @private {number} - used to calculate this cloud's position
+      this.parentPositionProperty = parentPositionProperty;
 
-    this.parentPositionProperty.link( function( parentPosition ) {
-      var center = parentPosition.plus( self.offsetFromParent );
-      self.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0, 0, 0, false );
-    } );
-  }
+      this.cloudEllipse = null;
 
-  energyFormsAndChanges.register( 'Cloud', Cloud );
-
-  return inherit( Object, Cloud, {
+      this.parentPositionProperty.link( parentPosition => {
+        const center = parentPosition.plus( this.offsetFromParent );
+        this.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0, 0, 0, false );
+      } );
+    }
 
     /**
      * return ellipse with size of this cloud
      * @returns {Shape.ellipse} - ellipse with axes sized to width and height of cloud
      * @public
      */
-    getCloudAbsorptionReflectionShape: function() {
+    getCloudAbsorptionReflectionShape() {
       return this.cloudEllipse;
-    },
+    }
 
     /**
      * @returns {Vector2} Center position of cloud
      * @public
      */
-    getCenterPosition: function() {
+    getCenterPosition() {
       return this.parentPositionProperty.get().plus( this.offsetFromParent );
     }
 
-  }, {
+  }
 
-    // statics
-    WIDTH: WIDTH,
-    HEIGHT: HEIGHT
-  } );
+  // statics
+  Cloud.WIDTH = WIDTH;
+  Cloud.HEIGHT = HEIGHT;
+
+  return energyFormsAndChanges.register( 'Cloud', Cloud );
 } );
 
