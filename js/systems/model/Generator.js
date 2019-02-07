@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * a type that models an electrical generator in an energy system
@@ -6,84 +6,80 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var Energy = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Energy' );
-  var EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
-  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyChunkPathMover' );
-  var EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyConverter' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const Energy = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Energy' );
+  const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
+  const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  const EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyChunkPathMover' );
+  const EnergyConverter = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyConverter' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // images
-  var GENERATOR_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_icon.png' );
+  const GENERATOR_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_icon.png' );
 
   // constants
 
   // attributes of the wheel and generator
-  var WHEEL_MOMENT_OF_INERTIA = 5; // In kg.
-  var RESISTANCE_CONSTANT = 3; // Controls max speed and rate of slow down, empirically determined.
-  var MAX_ROTATIONAL_VELOCITY = Math.PI / 2; // In radians/sec, empirically determined.
-  var WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
-  var WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
-  var LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.03, 0.03 );
+  const WHEEL_MOMENT_OF_INERTIA = 5; // In kg.
+  const RESISTANCE_CONSTANT = 3; // Controls max speed and rate of slow down, empirically determined.
+  const MAX_ROTATIONAL_VELOCITY = Math.PI / 2; // In radians/sec, empirically determined.
+  const WHEEL_RADIUS = 0.039; // half the width of the wheel image, need this precision for proper visual
+  const WHEEL_CENTER_OFFSET = new Vector2( 0, 0.03 );
+  const LEFT_SIDE_OF_WHEEL_OFFSET = new Vector2( -0.03, 0.03 );
 
   // offsets used to create the paths followed by the energy chunks
-  var START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.011, -0.050 );
-  var WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.012, -0.055 );
-  var WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.016, -0.063 );
-  var WIRE_CURVE_POINT_3_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
-  var CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
+  const START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.011, -0.050 );
+  const WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.012, -0.055 );
+  const WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.016, -0.063 );
+  const WIRE_CURVE_POINT_3_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
+  const CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
-  /**
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @constructor
-   */
-  function Generator( energyChunksVisibleProperty ) {
+  class Generator extends EnergyConverter {
 
-    EnergyConverter.call( this, new Image( GENERATOR_ICON ) );
+    /**
+     * @param {Property.<boolean>} energyChunksVisibleProperty
+     */
+    constructor( energyChunksVisibleProperty ) {
 
-    // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.electricalGenerator.value;
+      super( new Image( GENERATOR_ICON ) );
 
-    // @private {BooleanProperty}
-    this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+      // @public {string} - a11y name
+      this.a11yName = EFACA11yStrings.electricalGenerator.value;
 
-    // @public (read-only) {NumberProperty} - rotational position of the wheel
-    this.wheelRotationalAngleProperty = new NumberProperty( 0 );
+      // @private {BooleanProperty}
+      this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @public {BooleanProperty} - a flag that controls "direct coupling mode", which means that the generator wheel
-    // turns at a rate that is directly proportional to the incoming energy, with no rotational inertia
-    this.directCouplingModeProperty = new BooleanProperty( false );
+      // @public (read-only) {NumberProperty} - rotational position of the wheel
+      this.wheelRotationalAngleProperty = new NumberProperty( 0 );
 
-    // @private
-    this.wheelRotationalVelocity = 0;
-    this.energyChunkMovers = [];
+      // @public {BooleanProperty} - a flag that controls "direct coupling mode", which means that the generator wheel
+      // turns at a rate that is directly proportional to the incoming energy, with no rotational inertia
+      this.directCouplingModeProperty = new BooleanProperty( false );
 
-    // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
-    // support placing them on a different layer in the view.
-    this.electricalEnergyChunks = new ObservableArray();
+      // @private
+      this.wheelRotationalVelocity = 0;
+      this.energyChunkMovers = [];
 
-    // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
-    // mainly for code clarity
-    this.hiddenEnergyChunks = new ObservableArray();
-  }
+      // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
+      // support placing them on a different layer in the view.
+      this.electricalEnergyChunks = new ObservableArray();
 
-  energyFormsAndChanges.register( 'Generator', Generator );
-
-  return inherit( EnergyConverter, Generator, {
+      // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
+      // mainly for code clarity
+      this.hiddenEnergyChunks = new ObservableArray();
+    }
 
     /**
      * Factored from this.step
@@ -91,20 +87,20 @@ define( function( require ) {
      * @param {Energy} incomingEnergy
      * @private
      */
-    spinGeneratorWheel: function( dt, incomingEnergy ) {
+    spinGeneratorWheel( dt, incomingEnergy ) {
       if ( !this.activeProperty.value ) {
         return;
       }
 
       // positive is counter clockwise
-      var sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
+      const sign = Math.sin( incomingEnergy.direction ) > 0 ? -1 : 1;
 
       // handle different wheel rotation modes
       if ( this.directCouplingModeProperty.value ) {
 
         // treat the wheel as though it is directly coupled to the energy source, e.g. through a belt or drive shaft
         if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
-          var energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
+          const energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
           this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
           this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
         }
@@ -113,18 +109,18 @@ define( function( require ) {
       else {
 
         // treat the wheel like it is being moved from an external energy, such as water, and has inertia
-        var torqueFromIncomingEnergy = 0;
+        let torqueFromIncomingEnergy = 0;
 
         // empirically determined to reach max energy after a second or two
-        var energyToTorqueConstant = 0.5;
+        const energyToTorqueConstant = 0.5;
 
         if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
           torqueFromIncomingEnergy = incomingEnergy.amount * WHEEL_RADIUS * energyToTorqueConstant * sign;
         }
 
-        var torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
-        var angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
-        var newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
+        const torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
+        const angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
+        const newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
         this.wheelRotationalVelocity = Util.clamp(
           newAngularVelocity,
           -MAX_ROTATIONAL_VELOCITY,
@@ -138,7 +134,7 @@ define( function( require ) {
         }
         this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
       }
-    },
+    }
 
     /**
      * step this model element in time
@@ -148,18 +144,16 @@ define( function( require ) {
      * @public
      * @override
      */
-    step: function( dt, incomingEnergy ) {
+    step( dt, incomingEnergy ) {
       if ( this.activeProperty.value ) {
-
-        var self = this;
 
         this.spinGeneratorWheel( dt, incomingEnergy );
 
         // handle any incoming energy chunks
         if ( this.incomingEnergyChunks.length > 0 ) {
 
-          var incomingChunks = _.clone( this.incomingEnergyChunks );
-          incomingChunks.forEach( function( chunk ) {
+          const incomingChunks = _.clone( this.incomingEnergyChunks );
+          incomingChunks.forEach( chunk => {
 
             // validate energy type
             assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
@@ -167,12 +161,12 @@ define( function( require ) {
               chunk.energyTypeProperty.get() );
 
             // transfer chunk from incoming list to current list
-            self.energyChunkList.push( chunk );
-            _.pull( self.incomingEnergyChunks, chunk );
+            this.energyChunkList.push( chunk );
+            _.pull( this.incomingEnergyChunks, chunk );
 
             // add a "mover" that will move this energy chunk to the center of the wheel
-            self.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
+            this.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+              EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
           } );
@@ -189,21 +183,20 @@ define( function( require ) {
       } // this.active
 
       // produce the appropriate amount of energy
-      var speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
-      var energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE ) * dt;
+      const speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE ) * dt;
       return new Energy( EnergyType.ELECTRICAL, energy, 0 );
-    },
+    }
 
     /**
      * @param {number} dt - time step, in seconds
      * @returns {Energy}
      * @private
      */
-    updateEnergyChunkPositions: function( dt ) {
-      var chunkMovers = _.clone( this.energyChunkMovers );
+    updateEnergyChunkPositions( dt ) {
+      const chunkMovers = _.clone( this.energyChunkMovers );
 
-      var self = this;
-      chunkMovers.forEach( function( mover ) {
+      chunkMovers.forEach( mover => {
 
         mover.moveAlongPath( dt );
 
@@ -211,11 +204,11 @@ define( function( require ) {
           return;
         }
 
-        var chunk = mover.energyChunk;
+        const chunk = mover.energyChunk;
         switch( chunk.energyTypeProperty.get() ) {
-          case EnergyType.MECHANICAL:
+          case EnergyType.MECHANICAL: {
 
-            var electricalEnergyChunkOffsets = [
+            const electricalEnergyChunkOffsets = [
               START_OF_WIRE_CURVE_OFFSET,
               WIRE_CURVE_POINT_1_OFFSET,
               WIRE_CURVE_POINT_2_OFFSET,
@@ -226,60 +219,58 @@ define( function( require ) {
             // This mechanical energy chunk has traveled to the end of its path, so change it to electrical and send it
             // on its way.  Also add a "hidden" chunk so that the movement through the generator can be seen by the
             // user.
-            self.energyChunkList.remove( chunk );
-            _.pull( self.energyChunkMovers, mover );
+            this.energyChunkList.remove( chunk );
+            _.pull( this.energyChunkMovers, mover );
             chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
-            self.electricalEnergyChunks.push( chunk );
-            self.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, electricalEnergyChunkOffsets ),
+            this.electricalEnergyChunks.push( chunk );
+            this.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+              EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, electricalEnergyChunkOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
-            var hiddenChunk = new EnergyChunk(
+            const hiddenChunk = new EnergyChunk(
               EnergyType.HIDDEN,
               chunk.positionProperty.get(),
               Vector2.ZERO,
-              self.energyChunksVisibleProperty
+              this.energyChunksVisibleProperty
             );
             hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
-            self.hiddenEnergyChunks.push( hiddenChunk );
-            var hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
-            self.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
-              EnergyChunkPathMover.createPathFromOffsets( self.positionProperty.value, hiddenEnergyChunkOffsets ),
+            this.hiddenEnergyChunks.push( hiddenChunk );
+            const hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
+            this.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
+              EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, hiddenEnergyChunkOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
 
             break;
-
+          }
           case EnergyType.ELECTRICAL:
 
             // This electrical energy chunk has traveled to the end of its path, so transfer it to the next energy
             // system.
-            _.pull( self.energyChunkMovers, mover );
-            self.outgoingEnergyChunks.push( chunk );
+            _.pull( this.energyChunkMovers, mover );
+            this.outgoingEnergyChunks.push( chunk );
 
             break;
-
           case EnergyType.HIDDEN:
 
             // This hidden energy chunk has traveled to the end of its path, so just remove it, because the electrical
             // energy chunk to which is corresponds should now be visible to the user.
-            self.hiddenEnergyChunks.remove( chunk );
-            _.pull( self.energyChunkMovers, mover );
+            this.hiddenEnergyChunks.remove( chunk );
+            _.pull( this.energyChunkMovers, mover );
 
             break;
-
           default:
             assert && assert( false, 'Unrecognized EnergyType: ', chunk.energyTypeProperty.get() );
         }
       } );
-    },
+    }
 
     /**
      * @param {Energy} incomingEnergy
      * @public
      * @override
      */
-    preloadEnergyChunks: function( incomingEnergy ) {
+    preloadEnergyChunks( incomingEnergy ) {
 
       // in most system elements, we clear energy chunks before checking if incomingEnergy.amount === 0, but since the
       // generator wheel has rotational inertia, we leave the remaining chunks on their way, which looks more accurate.
@@ -290,16 +281,16 @@ define( function( require ) {
       }
       this.clearEnergyChunks();
 
-      var dt = 1 / EFACConstants.FRAMES_PER_SECOND;
-      var energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
-      var preloadComplete = false;
+      const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+      let energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
+      let preloadComplete = false;
 
       // skip every other visual chunk to match the usual rate of chunks flowing through the generator. this is needed
       // because there is visual energy chunk loss (e.g. every other chunks from the faucet comes into the generator,
       // but the actual incoming energy is constant so that the generator wheel spins at a constant speed). so, since
       // more energy is being converted than visually shown, we need to stay consistent with that practice here and only
       // preload chunks for half as much energy that is incoming
-      var skipThisChunk = true;
+      let skipThisChunk = true;
 
       // simulate energy chunks moving through the system
       while ( !preloadComplete ) {
@@ -307,7 +298,7 @@ define( function( require ) {
 
         // determine if time to add a new chunk
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK && !skipThisChunk ) {
-          var newChunk = new EnergyChunk(
+          const newChunk = new EnergyChunk(
             EnergyType.MECHANICAL,
             this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
             Vector2.ZERO,
@@ -339,46 +330,46 @@ define( function( require ) {
           preloadComplete = true;
         }
       }
-    },
+    }
 
     /**
      * @returns {Energy}
      * @public
      * @override
      */
-    getEnergyOutputRate: function() {
-      var speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
-      var energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
+    getEnergyOutputRate() {
+      const speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
       return new Energy( EnergyType.ELECTRICAL, energy, 0 );
-    },
+    }
 
     /**
      * deactivate the generator
      * @public
      * @override
      */
-    deactivate: function() {
+    deactivate() {
       EnergyConverter.prototype.deactivate.call( this );
       this.wheelRotationalVelocity = 0;
-    },
+    }
 
     /**
      * @public
      * @override
      */
-    clearEnergyChunks: function() {
+    clearEnergyChunks() {
       EnergyConverter.prototype.clearEnergyChunks.call( this );
       this.electricalEnergyChunks.clear();
       this.hiddenEnergyChunks.clear();
       this.energyChunkMovers.length = 0;
-    },
+    }
 
     /**
      * @public
      * @override
      */
-    extractOutgoingEnergyChunks: function() {
-      var chunks = _.clone( this.outgoingEnergyChunks );
+    extractOutgoingEnergyChunks() {
+      const chunks = _.clone( this.outgoingEnergyChunks );
 
       // Remove outgoing chunks from electrical energy chunks list
       this.electricalEnergyChunks.removeAll( chunks );
@@ -386,11 +377,11 @@ define( function( require ) {
 
       return chunks;
     }
+  }
 
-  }, {
+  // statics
+  Generator.WHEEL_CENTER_OFFSET = WHEEL_CENTER_OFFSET;
+  Generator.WHEEL_RADIUS = WHEEL_RADIUS;
 
-    // statics
-    WHEEL_CENTER_OFFSET: WHEEL_CENTER_OFFSET,
-    WHEEL_RADIUS: WHEEL_RADIUS
-  } );
+  return energyFormsAndChanges.register( 'Generator', Generator );
 } );
