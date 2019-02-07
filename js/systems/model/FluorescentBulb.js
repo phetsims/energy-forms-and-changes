@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * a type that models a fluorescent light bulb in an energy system
@@ -6,32 +6,31 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LightBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/LightBulb' );
+  const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const LightBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/LightBulb' );
 
   // images
-  var FLUORESCENT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_icon.png' );
+  const FLUORESCENT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_icon.png' );
 
-  /**
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @constructor
-   */
-  function FluorescentBulb( energyChunksVisibleProperty ) {
+  class FluorescentBulb extends LightBulb {
 
-    LightBulb.call( this, new Image( FLUORESCENT_ICON ), false, energyChunksVisibleProperty );
+    /**
+     * @param {BooleanProperty} energyChunksVisibleProperty
+     */
+    constructor( energyChunksVisibleProperty ) {
 
-    // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.fluorescentLightBulb.value;
+      super( new Image( FLUORESCENT_ICON ), false, energyChunksVisibleProperty );
+
+      // @public {string} - a11y name
+      this.a11yName = EFACA11yStrings.fluorescentLightBulb.value;
+    }
   }
 
-  energyFormsAndChanges.register( 'FluorescentBulb', FluorescentBulb );
-
-  return inherit( LightBulb, FluorescentBulb );
+  return energyFormsAndChanges.register( 'FluorescentBulb', FluorescentBulb );
 } );
