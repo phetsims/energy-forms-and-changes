@@ -22,7 +22,6 @@ define( require => {
      * @param {WaterDrop[]} waterDrops - the falling water drops to be rendered
      * @param {ModelViewTransform2} modelViewTransform
      * @param {Object} [options] that can be passed on to the underlying node
-     * @constructor
      */
     constructor( waterDrops, modelViewTransform, options ) {
       super( options );
