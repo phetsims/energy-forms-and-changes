@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * base type for energy users, i.e. model elements that take energy from an energy converter and do something with it,
@@ -7,29 +7,24 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElement' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElement' );
 
-  /**
-   * @param {Image} iconImage
-   * @constructor
-   */
-  function EnergyUser( iconImage ) {
+  class EnergyUser extends EnergySystemElement {
 
-    EnergySystemElement.call( this, iconImage );
+    /**
+     * @param {Image} iconImage
+     */
+    constructor( iconImage ) {
+      super( iconImage );
 
-    // @private {EnergyChunk[]}
-    this.incomingEnergyChunks = [];
-  }
-
-  energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
-
-  return inherit( EnergySystemElement, EnergyUser, {
+      // @private {EnergyChunk[]}
+      this.incomingEnergyChunks = [];
+    }
 
     /**
      * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
@@ -37,19 +32,20 @@ define( function( require ) {
      * @param {Array{EnergyChunk}} energyChunks - list of energy chunks to inject
      * @public
      */
-    injectEnergyChunks: function( energyChunks ) {
+    injectEnergyChunks( energyChunks ) {
       this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
-    },
+    }
 
     /**
      * @public
      * @override
      */
-    clearEnergyChunks: function() {
+    clearEnergyChunks() {
       EnergySystemElement.prototype.clearEnergyChunks.call( this );
       this.incomingEnergyChunks.length = 0;
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
 } );
 
