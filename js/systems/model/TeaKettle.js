@@ -47,7 +47,6 @@ define( function( require ) {
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
-   * @constructor
    */
   function TeaKettle( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty ) {
 

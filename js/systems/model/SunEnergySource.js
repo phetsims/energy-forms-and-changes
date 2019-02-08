@@ -44,7 +44,6 @@ define( require => {
     /**
      * @param {SolarPanel} solarPanel
      * @param {BooleanProperty} energyChunksVisibleProperty
-     * @constructor
      */
     constructor( solarPanel, energyChunksVisibleProperty ) {
       super( new Image( SUN_ICON ) );
