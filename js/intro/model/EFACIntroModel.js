@@ -1,70 +1,68 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
- *  model for the 'Intro' screen of the Energy Forms And Changes simulation
+ * model for the 'Intro' screen of the Energy Forms And Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
-  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-  var BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
-  var Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
-  var BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var Emitter = require( 'AXON/Emitter' );
-  var EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
-  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
-  var Shape = require( 'KITE/Shape' );
-  var SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
-  var StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
-  var TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
+  const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  const BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const Emitter = require( 'AXON/Emitter' );
+  const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
+  const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
+  const Shape = require( 'KITE/Shape' );
+  const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
+  const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
+  const TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var NUM_THERMOMETERS = 4;
-  var BEAKER_WIDTH = 0.085; // in meters
-  var BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
-  var MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
-  var FAST_FORWARD_MULTIPLIER = 4;
+  const NUM_THERMOMETERS = 4;
+  const BEAKER_WIDTH = 0.085; // in meters
+  const BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
+  const MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
+  const FAST_FORWARD_MULTIPLIER = 4;
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
-  var LEFT_EDGE = -0.30;
-  var RIGHT_EDGE = 0.30;
+  const LEFT_EDGE = -0.30;
+  const RIGHT_EDGE = 0.30;
 
   // this is the desired space between the edges of the sim ( left edge or right edge) and the edge
   // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
-  var EDGE_PAD = 0.016;
+  const EDGE_PAD = 0.016;
 
   // number of snap-to spots on the ground, should match number of thermal containers
-  var NUM_GROUND_SPOTS = 6;
+  const NUM_GROUND_SPOTS = 6;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
-  var INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
+  const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
 
   // minimum distance allowed between two objects, used to prevent floating point issues
-  var MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
+  const MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
+
+  class EFACIntroModel {
 
   /**
    * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
-   * @constructor
    */
-  function EFACIntroModel() {
-
-    var self = this;
+  constructor() {
 
     // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
     this.energyChunksVisibleProperty = new BooleanProperty( false );
@@ -89,8 +87,8 @@ define( function( require ) {
     this.groundSpotXPositions = [];
 
     // determine the locations of the snap-to spots, and round them to a few decimal places
-    var leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
-    for ( var i = 0; i < NUM_GROUND_SPOTS; i++ ) {
+    const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
+    for ( let i = 0; i < NUM_GROUND_SPOTS; i++ ) {
       this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
     }
 
@@ -115,7 +113,7 @@ define( function( require ) {
     this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 2 ], 0 ), this.energyChunksVisibleProperty );
     this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 3 ], 0 ), this.energyChunksVisibleProperty );
 
-    var listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
+    const listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
     // @public (read-only) {BeakerContainer)
     this.waterBeaker = new BeakerContainer(
@@ -154,8 +152,8 @@ define( function( require ) {
     // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
     // each model step.
     this.inThermalContactInfo = {};
-    this.thermalContainers.forEach( function( thermalContainer ) {
-      self.inThermalContactInfo[ thermalContainer.id ] = [];
+    this.thermalContainers.forEach( thermalContainer => {
+      this.inThermalContactInfo[ thermalContainer.id ] = [];
     } );
 
     // @private - put burners into a list for easy iteration
@@ -166,24 +164,24 @@ define( function( require ) {
 
     // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.temperatureAndColorSensors = [];
-    _.times( NUM_THERMOMETERS, function() {
-      var sensor = new StickyTemperatureAndColorSensor( self, INITIAL_THERMOMETER_LOCATION, false );
-      self.temperatureAndColorSensors.push( sensor );
+    _.times( NUM_THERMOMETERS, () => {
+      const sensor = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
+      this.temperatureAndColorSensors.push( sensor );
 
       // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
       // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
       // beaker temperature. This was requested after interviews.
-      sensor.sensedElementColorProperty.link( function( newColor, oldColor ) {
+      sensor.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
-        self.beakers.forEach( function( beaker ) {
-          var blockWidthIncludingPerspective = self.ironBlock.getProjectedShape().bounds.width;
+        this.beakers.forEach( beaker => {
+          const blockWidthIncludingPerspective = this.ironBlock.getProjectedShape().bounds.width;
 
-          var xRange = new Range(
+          const xRange = new Range(
             beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
             beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
           );
 
-          var checkBlocks = function( block ) {
+          const checkBlocks = block => {
 
             // see if one of the blocks is being sensed in the beaker
             return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
@@ -191,7 +189,7 @@ define( function( require ) {
 
           // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
           // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-          if ( _.some( self.blocks, checkBlocks ) &&
+          if ( _.some( this.blocks, checkBlocks ) &&
                oldColor === beaker.fluidColor &&
                !sensor.userControlledProperty.get() &&
                !beaker.userControlledProperty.get() &&
@@ -223,9 +221,9 @@ define( function( require ) {
     // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
     // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
     // preventing overlap.
-    var leftBurnerBounds = this.leftBurner.getCompositeBounds();
-    var rightBurnerBounds = this.rightBurner.getCompositeBounds();
-    var burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+    const leftBurnerBounds = this.leftBurner.getCompositeBounds();
+    const rightBurnerBounds = this.rightBurner.getCompositeBounds();
+    const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                      Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
     this.burnerBlockingRect = new Bounds2(
@@ -240,8 +238,8 @@ define( function( require ) {
   }
 
   // helper function
-  function mapHeatCoolLevelToColor( heatCoolLevel ) {
-    var color;
+    mapHeatCoolLevelToColor( heatCoolLevel ) {
+      let color;
     if ( heatCoolLevel > 0 ) {
       color = 'orange';
     }
@@ -258,21 +256,17 @@ define( function( require ) {
    * helper function to determine if one thermal model element is immersed in another - tests if the first element is
    * immersed in the second
    */
-  function isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
+  isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
     return thermalModelElement1 !== thermalModelElement2 &&
            thermalModelElement1.blockType !== undefined &&
            thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
   }
 
-  energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
-
-  return inherit( Object, EFACIntroModel, {
-
     /**
      * restore the initial conditions of the model
      * @public
      */
-    reset: function() {
+    reset() {
       this.energyChunksVisibleProperty.reset();
       this.linkedHeatersProperty.reset();
       this.isPlayingProperty.reset();
@@ -284,69 +278,67 @@ define( function( require ) {
       this.brick.reset();
       this.waterBeaker.reset();
       this.oliveOilBeaker.reset();
-      this.temperatureAndColorSensors.forEach( function( sensor ) {
+      this.temperatureAndColorSensors.forEach( sensor => {
         sensor.reset();
       } );
       this.energyBalanceTracker.clearAllBalances();
-    },
+    }
 
     /**
      * step the sim forward by one fixed nominal frame time
      * @public
      */
-    manualStep: function() {
+    manualStep() {
       this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       this.manualStepEmitter.emit( EFACConstants.SIM_TIME_PER_TICK_NORMAL ); // notify the view
-    },
+    }
 
     /**
      * step function for this model, automatically called by joist
      * @param {number} dt - delta time, in seconds
      * @public
      */
-    step: function( dt ) {
+    step( dt ) {
 
       // only step the model if not paused
       if ( this.isPlayingProperty.get() ) {
-        var multiplier = this.simSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
+        const multiplier = this.simSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
         this.stepModel( dt * multiplier );
       }
 
       // step the sensors regardless of whether the sim is paused, and fast forward makes no difference
-      this.temperatureAndColorSensors.forEach( function( thermometer ) {
+      this.temperatureAndColorSensors.forEach( thermometer => {
         thermometer.step( dt );
       } );
-    },
+    }
 
     /**
      * update the state of the model for a given time amount
      * @param {number} dt - time step, in seconds
      * @private
      */
-    stepModel: function( dt ) {
-
-      var self = this;
+    stepModel( dt ) {
 
       // Cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
       // towards the nearest supporting surface.
-      var unsupported;
-      var raised;
-      this.thermalContainers.forEach( function( movableModelElement ) {
+      let unsupported;
+      let raised;
+      this.thermalContainers.forEach( movableModelElement => {
         unsupported = movableModelElement.supportingSurface === null;
         raised = ( movableModelElement.positionProperty.value.y !== 0 );
         if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
-          self.fallToSurface( movableModelElement, dt );
+          this.fallToSurface( movableModelElement, dt );
         }
         else if ( !movableModelElement.userControlledProperty.value &&
                   unsupported &&
-                  !_.includes( self.groundSpotXPositions, movableModelElement.positionProperty.value.x ) ) {
-          self.fallToSurface( movableModelElement, dt );
+                  !_.includes( this.groundSpotXPositions, movableModelElement.positionProperty.value.x ) ) {
+          this.fallToSurface( movableModelElement, dt );
         }
       } );
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
-      this.beakers.forEach( function( beaker ) {
-        beaker.updateFluidDisplacement( [ self.brick.getBounds(), self.ironBlock.getBounds() ] );
+      this.beakers.forEach( beaker => {
+        beaker.updateFluidDisplacement( [ this.brick.getBounds(), this.ironBlock.getBounds() ] );
       } );
 
       //=====================================================================
@@ -360,47 +352,47 @@ define( function( require ) {
       // --------- transfer continuous energy (and not energy chunks yet) between elements --------------
 
       // clear the flags that are used to track whether energy transfers occurred during this step
-      self.energyBalanceTracker.clearRecentlyUpdatedFlags();
+      this.energyBalanceTracker.clearRecentlyUpdatedFlags();
 
       // loop through all the movable thermal energy containers and have them exchange energy with one another
-      self.thermalContainers.forEach( function( container1, index ) {
-        self.thermalContainers.slice( index + 1, self.thermalContainers.length ).forEach( function( container2 ) {
+      this.thermalContainers.forEach( ( container1, index ) => {
+        this.thermalContainers.slice( index + 1, this.thermalContainers.length ).forEach( container2 => {
 
           // transfer energy if there is a thermal differential, keeping track of what was exchanged
-          var energyTransferredFrom1to2 = container1.exchangeEnergyWith( container2, dt );
-          self.energyBalanceTracker.logEnergyExchange( container1.id, container2.id, energyTransferredFrom1to2 );
+          const energyTransferredFrom1to2 = container1.exchangeEnergyWith( container2, dt );
+          this.energyBalanceTracker.logEnergyExchange( container1.id, container2.id, energyTransferredFrom1to2 );
         } );
       } );
 
       // exchange thermal energy between the burners and the other thermal model elements, including air
-      this.burners.forEach( function( burner ) {
-        var energyTransferredFromBurner = 0;
-        if ( burner.areAnyOnTop( self.thermalContainers ) ) {
-          self.thermalContainers.forEach( function( energyContainer ) {
+      this.burners.forEach( burner => {
+        let energyTransferredFromBurner = 0;
+        if ( burner.areAnyOnTop( this.thermalContainers ) ) {
+          this.thermalContainers.forEach( energyContainer => {
             energyTransferredFromBurner = burner.addOrRemoveEnergyToFromObject( energyContainer, dt );
-            self.energyBalanceTracker.logEnergyExchange( burner.id, energyContainer.id, energyTransferredFromBurner );
+            this.energyBalanceTracker.logEnergyExchange( burner.id, energyContainer.id, energyTransferredFromBurner );
           } );
         }
         else {
 
           // nothing on a burner, so heat/cool the air
-          energyTransferredFromBurner = burner.addOrRemoveEnergyToFromAir( self.air, dt );
-          self.energyBalanceTracker.logEnergyExchange( burner.id, self.air.id, energyTransferredFromBurner );
+          energyTransferredFromBurner = burner.addOrRemoveEnergyToFromAir( this.air, dt );
+          this.energyBalanceTracker.logEnergyExchange( burner.id, this.air.id, energyTransferredFromBurner );
         }
       } );
 
       // clear the "in thermal contact" information
-      _.values( self.inThermalContactInfo ).forEach( function( inContactList ) {
+      _.values( this.inThermalContactInfo ).forEach( inContactList => {
         inContactList.length = 0;
       } );
 
       // exchange energy between the movable thermal energy containers and the air
-      this.thermalContainers.forEach( function( container1 ) {
+      this.thermalContainers.forEach( container1 => {
 
         // detect elements that are immersed in a beaker and don't allow them to exchange energy directly with the air
-        var immersedInBeaker = false;
-        self.beakers.forEach( function( beaker ) {
-          if ( isImmersedIn( container1, beaker ) ) {
+        let immersedInBeaker = false;
+        this.beakers.forEach( beaker => {
+          if ( this.isImmersedIn( container1, beaker ) ) {
 
             // this model element is immersed in the beaker
             immersedInBeaker = true;
@@ -409,8 +401,8 @@ define( function( require ) {
 
         // exchange energy with the air if not immersed in the beaker
         if ( !immersedInBeaker ) {
-          var energyExchangedWithAir = self.air.exchangeEnergyWith( container1, dt );
-          self.energyBalanceTracker.logEnergyExchange( self.air.id, container1.id, energyExchangedWithAir );
+          const energyExchangedWithAir = this.air.exchangeEnergyWith( container1, dt );
+          this.energyBalanceTracker.logEnergyExchange( this.air.id, container1.id, energyExchangedWithAir );
         }
       } );
 
@@ -421,27 +413,27 @@ define( function( require ) {
       // balance was recently updated is that it indicates that the entities are in thermal contact, and thus can
       // exchange energy chunks.
       this.reusableBalanceArray.length = 0; // clear the list
-      self.energyBalanceTracker.getBalancesOverThreshold(
+      this.energyBalanceTracker.getBalancesOverThreshold(
         EFACConstants.ENERGY_PER_CHUNK,
         true,
         this.reusableBalanceArray
       );
 
-      this.reusableBalanceArray.forEach( function( energyBalanceRecord ) {
+      this.reusableBalanceArray.forEach( energyBalanceRecord => {
 
-        var fromID = energyBalanceRecord.fromID;
-        var toID = energyBalanceRecord.toID;
+        const fromID = energyBalanceRecord.fromID;
+        const toID = energyBalanceRecord.toID;
 
         // figure out who will supply the energy chunk and who will consume it
-        var energyChunkSupplier;
-        var energyChunkConsumer;
+        let energyChunkSupplier;
+        let energyChunkConsumer;
         if ( energyBalanceRecord.energyBalance > 0 ) {
-          energyChunkSupplier = self.getThermalElementByID( fromID );
-          energyChunkConsumer = self.getThermalElementByID( toID );
+          energyChunkSupplier = this.getThermalElementByID( fromID );
+          energyChunkConsumer = this.getThermalElementByID( toID );
         }
         else {
-          energyChunkSupplier = self.getThermalElementByID( toID );
-          energyChunkConsumer = self.getThermalElementByID( fromID );
+          energyChunkSupplier = this.getThermalElementByID( toID );
+          energyChunkConsumer = this.getThermalElementByID( fromID );
         }
 
         // if the transfer is supposed to go to or from a burner, make sure the burner is in the correct state
@@ -453,7 +445,7 @@ define( function( require ) {
         }
 
         // transfer the energy chunk from the supplier to the consumer
-        self.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord );
+        this.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord );
       } );
 
       // Now that continuous energy has been exchanged and then energy chunks have been exchanged based on the
@@ -461,35 +453,34 @@ define( function( require ) {
       // imbalance between their energy levels versus the number of energy chunks they contain.  If such an imbalance is
       // detected, we search for a good candidate with which to make an exchange and, if one is found, transfer an
       // energy chunk.  If no good candidate is found, no transfer is made.
-      this.thermalContainers.forEach( function( thermalContainer ) {
+      this.thermalContainers.forEach( thermalContainer => {
 
-        var energyChunkBalance = thermalContainer.getEnergyChunkBalance();
+        const energyChunkBalance = thermalContainer.getEnergyChunkBalance();
         if ( energyChunkBalance !== 0 ) {
 
           // This thermal energy container has an energy chunk imbalance.  Get a list of all thermal model elements with
           // which a recent thermal energy exchange has occurred, because this lets us know who is in thermal contact
           // ans could thus potentially supply or consume an energy chunk.
-          var recentlyUpdatedBalances = self.energyBalanceTracker.getBalancesForID( thermalContainer.id, true );
+          const recentlyUpdatedBalances = this.energyBalanceTracker.getBalancesForID( thermalContainer.id, true );
 
           // set up some variables that will be used in the loops below
-          var bestExchangeCandidate = null;
-          var closestMatchExchangeRecord = null;
-          var currentRecord;
-          var otherElementInRecord;
-          var i;
+          let bestExchangeCandidate = null;
+          let closestMatchExchangeRecord = null;
+          let currentRecord;
+          let otherElementInRecord;
 
           // Search for other thermal containers that can consume this container's excess or supply this container's
           // needs, as the case may be.
-          for ( i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
+          for ( let i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
             currentRecord = recentlyUpdatedBalances[ i ];
-            otherElementInRecord = self.getThermalElementByID( currentRecord.getOtherID( thermalContainer.id ) );
-            var thisElementTemperature = thermalContainer.getTemperature();
-            var otherElementTemperature = otherElementInRecord.getTemperature();
+            otherElementInRecord = this.getThermalElementByID( currentRecord.getOtherID( thermalContainer.id ) );
+            const thisElementTemperature = thermalContainer.getTemperature();
+            const otherElementTemperature = otherElementInRecord.getTemperature();
 
             // See if there is another thermal container that is in the opposite situation from this one, i.e. one that
             // has a deficit of ECs when this one has excess, or vice versa.
-            if ( self.thermalContainers.indexOf( otherElementInRecord ) >= 0 ) {
-              var otherECBalance = otherElementInRecord.getEnergyChunkBalance();
+            if ( this.thermalContainers.indexOf( otherElementInRecord ) >= 0 ) {
+              const otherECBalance = otherElementInRecord.getEnergyChunkBalance();
               if ( energyChunkBalance > 0 && otherECBalance < 0 && thisElementTemperature > otherElementTemperature ||
                    energyChunkBalance < 0 && otherECBalance > 0 && thisElementTemperature < otherElementTemperature ) {
 
@@ -503,14 +494,14 @@ define( function( require ) {
           if ( !bestExchangeCandidate ) {
 
             // nothing found yet, see if there is a burner that could take or provide and energy chunk
-            for ( i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
+            for ( let i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
               currentRecord = recentlyUpdatedBalances[ i ];
-              var otherID = currentRecord.getOtherID( thermalContainer.id );
+              const otherID = currentRecord.getOtherID( thermalContainer.id );
               if ( otherID.indexOf( 'burner' ) >= 0 ) {
 
                 // This is a burner, is it in a state where it is able to provide or receive an energy chunk?
-                var burner = self.getThermalElementByID( otherID );
-                var heatCoolLevel = burner.heatCoolLevelProperty.get();
+                const burner = this.getThermalElementByID( otherID );
+                const heatCoolLevel = burner.heatCoolLevelProperty.get();
                 if ( energyChunkBalance > 0 && heatCoolLevel < 0 || energyChunkBalance < 0 && heatCoolLevel > 0 ) {
                   bestExchangeCandidate = burner;
                   closestMatchExchangeRecord = currentRecord;
@@ -522,8 +513,8 @@ define( function( require ) {
           if ( bestExchangeCandidate ) {
 
             // a good candidate was found, make the transfer
-            var energyChunkSupplier;
-            var energyChunkConsumer;
+            let energyChunkSupplier;
+            let energyChunkConsumer;
             if ( energyChunkBalance > 0 ) {
               energyChunkSupplier = thermalContainer;
               energyChunkConsumer = bestExchangeCandidate;
@@ -532,21 +523,21 @@ define( function( require ) {
               energyChunkSupplier = bestExchangeCandidate;
               energyChunkConsumer = thermalContainer;
             }
-            self.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, closestMatchExchangeRecord );
+            this.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, closestMatchExchangeRecord );
           }
         }
       } );
 
       // step model elements to animate energy chunks movement
       this.air.step( dt );
-      this.burners.forEach( function( burner ) {
+      this.burners.forEach( burner => {
         burner.step( dt );
       } );
 
-      this.thermalContainers.forEach( function( thermalEnergyContainer ) {
+      this.thermalContainers.forEach( thermalEnergyContainer => {
         thermalEnergyContainer.step( dt );
       } );
-    },
+    }
 
     /**
      * exchange an energy chunk between the provided model elements
@@ -555,10 +546,10 @@ define( function( require ) {
      * @param {EnergyBalanceRecord} energyBalanceRecord
      * @private
      */
-    transferEnergyChunk: function( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord ) {
+    transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord ) {
 
       // attempt to extract an energy chunk from the supplier
-      var energyChunk;
+      let energyChunk;
       if ( energyChunkSupplier !== this.air ) {
 
         if ( energyChunkConsumer !== this.air ) {
@@ -588,8 +579,8 @@ define( function( require ) {
           // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
           // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
           // the view.
-          var supplierBounds = energyChunkSupplier.getCompositeBounds();
-          var horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
+          const supplierBounds = energyChunkSupplier.getCompositeBounds();
+          const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
           energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
         }
         else {
@@ -597,7 +588,7 @@ define( function( require ) {
         }
 
         // adjust the energy balance since a chunk was transferred, but don't cross zero for the energy balance
-        var energyExchangeToLog;
+        let energyExchangeToLog;
         if ( energyBalanceRecord.energyBalance > 0 ) {
           energyExchangeToLog = Math.max( -EFACConstants.ENERGY_PER_CHUNK, -energyBalanceRecord.energyBalance );
         }
@@ -610,7 +601,7 @@ define( function( require ) {
           energyExchangeToLog
         );
       }
-    },
+    }
 
     /**
      * make a user-movable model element fall to the nearest supporting surface
@@ -618,29 +609,28 @@ define( function( require ) {
      * @param {number} dt - time step in seconds
      * @private
      */
-    fallToSurface: function( modelElement, dt ) {
-      var self = this;
-      var minYPos = 0;
-      var acceleration = -9.8; // meters/s/s
+    fallToSurface( modelElement, dt ) {
+      let minYPos = 0;
+      const acceleration = -9.8; // meters/s/s
 
       // sort list of ground spots in order, with the closest spot to modelElement first
-      this.groundSpotXPositions.sort( function( a, b ) {
-        var distanceA = Math.abs( a - modelElement.positionProperty.value.x );
-        var distanceB = Math.abs( b - modelElement.positionProperty.value.x );
+      this.groundSpotXPositions.sort( ( a, b ) => {
+        const distanceA = Math.abs( a - modelElement.positionProperty.value.x );
+        const distanceB = Math.abs( b - modelElement.positionProperty.value.x );
         return distanceA - distanceB;
       } );
-      var destinationXSpot = null;
-      var destinationSurface = null;
+      let destinationXSpot = null;
+      let destinationSurface = null;
 
       // check out each spot
-      for ( var i = 0; i < this.groundSpotXPositions.length &&
+      for ( let i = 0; i < this.groundSpotXPositions.length &&
                        destinationXSpot === null &&
                        destinationSurface === null; i++
       ) {
-        var modelElementsInSpot = [];
+        const modelElementsInSpot = [];
 
         // get a list of what's currently in the spot being checked
-        this.modelElementList.forEach( function( potentialRestingModelElement ) {
+        this.modelElementList.forEach( potentialRestingModelElement => {
           if (
             potentialRestingModelElement !== modelElement &&
 
@@ -665,7 +655,7 @@ define( function( require ) {
             // makes sure that the approaching block is far enough away in the x direction that it couldn't be a block
             // inside a beaker, since a block and its containing beaker share the same x coordinate. for that reason,
             // the minimum distance away was arbitrarily chosen.
-            Math.abs( potentialRestingModelElement.positionProperty.value.x - self.groundSpotXPositions[ i ] ) <= self.spaceBetweenSpotCenters / 2 &&
+            Math.abs( potentialRestingModelElement.positionProperty.value.x - this.groundSpotXPositions[ i ] ) <= this.spaceBetweenSpotCenters / 2 &&
             ( potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ||
               Math.abs( potentialRestingModelElement.positionProperty.value.x - modelElement.positionProperty.value.x ) > modelElement.width / 2
             )
@@ -675,18 +665,18 @@ define( function( require ) {
         } );
 
         if ( modelElementsInSpot.length > 0 ) {
-          var highestElement = modelElementsInSpot[ 0 ];
-          var beakerFoundInSpot = highestElement instanceof Beaker;
+          let highestElement = modelElementsInSpot[ 0 ];
+          let beakerFoundInSpot = highestElement instanceof Beaker;
 
           // if more than one model element is in the spot, find the highest surface and flag any beakers that are present
-          for ( var j = 1; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
+          for ( let j = 1; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
             beakerFoundInSpot = beakerFoundInSpot || modelElementsInSpot[ j ] instanceof Beaker;
             if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y > highestElement.topSurface.positionProperty.value.y ) {
               highestElement = modelElementsInSpot[ j ];
             }
           }
-          var currentModelElementInStack = modelElement;
-          var beakerFoundInStack = currentModelElementInStack instanceof Beaker;
+          let currentModelElementInStack = modelElement;
+          let beakerFoundInStack = currentModelElementInStack instanceof Beaker;
 
           // iterate through the stack of model elements being held and flag if any beakers are in it
           while ( currentModelElementInStack.topSurface.elementOnSurfaceProperty.value && !beakerFoundInStack ) {
@@ -716,8 +706,8 @@ define( function( require ) {
       }
 
       // calculate a proposed Y position based on gravitational falling
-      var velocity = modelElement.verticalVelocityProperty.value + acceleration * dt;
-      var proposedYPos = modelElement.positionProperty.value.y + velocity * dt;
+      const velocity = modelElement.verticalVelocityProperty.value + acceleration * dt;
+      let proposedYPos = modelElement.positionProperty.value.y + velocity * dt;
       if ( proposedYPos < minYPos ) {
 
         // the element has landed on the ground or some other surface
@@ -732,7 +722,7 @@ define( function( require ) {
         modelElement.verticalVelocityProperty.set( velocity );
       }
       modelElement.positionProperty.set( new Vector2( modelElement.positionProperty.value.x, proposedYPos ) );
-    },
+    }
 
     /**
      * Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by
@@ -742,15 +732,15 @@ define( function( require ) {
      * @returns {Shape}
      * @private
      */
-    projectShapeFromLine: function( edge, projection ) {
-      var shape = new Shape();
+    projectShapeFromLine( edge, projection ) {
+      const shape = new Shape();
       shape.moveToPoint( edge.start );
       shape.lineTo( edge.start.x + projection.x, edge.start.y + projection.y );
       shape.lineTo( edge.end.x + projection.x, edge.end.y + projection.y );
       shape.lineToPoint( edge.end );
       shape.close();
       return shape;
-    },
+    }
 
     /**
      * Evaluate whether the provided model element can be moved to the provided position without overlapping with other
@@ -762,23 +752,21 @@ define( function( require ) {
      * @returns {Vector2} the original proposed position if valid, or alternative position if not
      * TODO: Consider adding the optimization where a vector is provided so that a new one doesn't have to be allocated
      */
-    constrainPosition: function( modelElement, proposedPosition ) {
-
-      var self = this;
+    constrainPosition( modelElement, proposedPosition ) {
 
       // TODO: Optimize this method for allocations
 
       // calculate the proposed motion TODO consider optimizing to avoid allocation
-      var allowedTranslation = proposedPosition.minus( modelElement.positionProperty.get() );
+      let allowedTranslation = proposedPosition.minus( modelElement.positionProperty.get() );
 
       // get the current composite bounds of the model element
-      var modelElementBounds = modelElement.getCompositeBoundsForPosition(
+      const modelElementBounds = modelElement.getCompositeBoundsForPosition(
         modelElement.positionProperty.get(),
         this.reusableBounds
       );
 
       // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
-      var modelElementBoundsWithSidePerspective = new Bounds2(
+      const modelElementBoundsWithSidePerspective = new Bounds2(
         modelElementBounds.minX - modelElement.perspectiveCompensation.x,
         modelElementBounds.minY,
         modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -794,18 +782,18 @@ define( function( require ) {
       );
 
       // now check the model element's motion against each of the beakers
-      this.beakers.forEach( function( beaker ) {
+      this.beakers.forEach( beaker => {
 
         if ( beaker === modelElement ) {
-          // don't test against self
+          // don't test against this
           return;
         }
 
         // get the bounds set that describes the shape of the beaker
-        var beakerBoundsList = beaker.translatedPositionTestingBoundsList;
+        const beakerBoundsList = beaker.translatedPositionTestingBoundsList;
 
         // if the modelElement is a block, it has x and y perspective comp that need to be used
-        var modelElementBoundsWithTopAndSidePerspective = new Bounds2(
+        const modelElementBoundsWithTopAndSidePerspective = new Bounds2(
           modelElementBounds.minX - modelElement.perspectiveCompensation.x,
           modelElementBounds.minY - modelElement.perspectiveCompensation.y,
           modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -816,19 +804,19 @@ define( function( require ) {
         if ( !beaker.isStackedUpon( modelElement ) ) {
 
           // TODO: This is less than ideal because it assumes the bottom of the beaker is the 2nd bounds entry
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithTopAndSidePerspective,
             beakerBoundsList[ 0 ],
             allowedTranslation,
             true
           );
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithSidePerspective,
             beakerBoundsList[ 1 ],
             allowedTranslation,
             true
           );
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithTopAndSidePerspective,
             beakerBoundsList[ 2 ],
             allowedTranslation,
@@ -839,25 +827,25 @@ define( function( require ) {
           // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there are
           // currently only two beakers. this will need to be generalized to check for each other beaker that is not
           // stacked on this modelElement if the time comes when more than two beakers exist.
-          var otherBeaker = self.beakers[ 1 - self.beakers.indexOf( beaker ) ];
+          const otherBeaker = this.beakers[ 1 - this.beakers.indexOf( beaker ) ];
 
           // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
-          var otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
-          var currentBeakerBounds = beaker.getBounds();
+          const otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
+          const currentBeakerBounds = beaker.getBounds();
 
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 0 ],
             allowedTranslation,
             true
           );
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 1 ],
             allowedTranslation,
             true
           );
-          allowedTranslation = self.determineAllowedTranslation(
+          allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 2 ],
             allowedTranslation,
@@ -867,30 +855,30 @@ define( function( require ) {
       } );
 
       // now check the model element's motion against each of the blocks
-      this.blocks.forEach( function( block ) {
+      this.blocks.forEach( block => {
 
         if ( block === modelElement ) {
-          // don't test against self
+          // don't test against this
           return;
         }
 
-        var blockBounds = block.getCompositeBounds();
+        let blockBounds = block.getCompositeBounds();
 
         // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
         // the model element - the block will simply be lifted up.
-        var restrictPositiveY = !block.isStackedUpon( modelElement );
+        const restrictPositiveY = !block.isStackedUpon( modelElement );
 
-        var modelElementBounds = modelElement.getCompositeBounds();
+        const modelElementBounds = modelElement.getCompositeBounds();
 
-        self.beakers.forEach( function( beaker ) {
+        this.beakers.forEach( beaker => {
           if ( modelElement === beaker ) {
 
             // Special handling for the beaker: Use the perspective-compensated edge of the block instead of the model
             // edge in order to simplify z-order handling.
             blockBounds = new Bounds2(
-              blockBounds.minX - self.brick.perspectiveCompensation.x,
+              blockBounds.minX - this.brick.perspectiveCompensation.x,
               blockBounds.minY,
-              blockBounds.maxX + self.brick.perspectiveCompensation.x,
+              blockBounds.maxX + this.brick.perspectiveCompensation.x,
               blockBounds.maxY
             );
           }
@@ -900,7 +888,7 @@ define( function( require ) {
           if ( !( modelElement === beaker &&
                   beaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
 
-            allowedTranslation = self.determineAllowedTranslation(
+            allowedTranslation = this.determineAllowedTranslation(
               modelElementBounds,
               blockBounds,
               allowedTranslation,
@@ -911,7 +899,7 @@ define( function( require ) {
       } );
 
       return modelElement.positionProperty.get().plus( allowedTranslation );
-    },
+    }
 
     /**
      * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
@@ -919,13 +907,13 @@ define( function( require ) {
      * @param {Bounds2} bounds2
      * @returns {boolean}
      */
-    exclusiveIntersectsBounds: function( bounds1, bounds2 ) {
-      var minX = Math.max( bounds1.minX, bounds2.minX );
-      var minY = Math.max( bounds1.minY, bounds2.minY );
-      var maxX = Math.min( bounds1.maxX, bounds2.maxX );
-      var maxY = Math.min( bounds1.maxY, bounds2.maxY );
+    exclusiveIntersectsBounds( bounds1, bounds2 ) {
+      const minX = Math.max( bounds1.minX, bounds2.minX );
+      const minY = Math.max( bounds1.minY, bounds2.minY );
+      const maxX = Math.min( bounds1.maxX, bounds2.maxX );
+      const maxY = Math.min( bounds1.maxY, bounds2.maxY );
       return ( maxX - minX ) > 0 && ( maxY - minY > 0 );
-    },
+    }
 
     /**
      * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
@@ -939,10 +927,7 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    determineAllowedTranslation: function( movingElementBounds,
-                                           stationaryElementBounds,
-                                           proposedTranslation,
-                                           restrictPosY ) {
+    determineAllowedTranslation( movingElementBounds, stationaryElementBounds, proposedTranslation, restrictPosY ) {
 
       // TODO: Use vector pooling and possibly Shape or Bounds2 pooling to improve performance
 
@@ -956,7 +941,7 @@ define( function( require ) {
         // }
 
         // determine the motion in the X & Y directions that will "cure" the overlap
-        var xOverlapCure = 0;
+        let xOverlapCure = 0;
         if ( movingElementBounds.maxX >= stationaryElementBounds.minX &&
              movingElementBounds.minX <= stationaryElementBounds.minX ) {
 
@@ -967,7 +952,7 @@ define( function( require ) {
 
           xOverlapCure = stationaryElementBounds.maxX - movingElementBounds.minX;
         }
-        var yOverlapCure = 0;
+        let yOverlapCure = 0;
         if ( movingElementBounds.maxY >= stationaryElementBounds.minY &&
              movingElementBounds.minY <= stationaryElementBounds.minY ) {
 
@@ -995,9 +980,9 @@ define( function( require ) {
         }
       }
 
-      var xTranslation = proposedTranslation.x;
-      var yTranslation = proposedTranslation.y;
-      var motionTestBounds = Bounds2.NOTHING.copy();
+      let xTranslation = proposedTranslation.x;
+      let yTranslation = proposedTranslation.y;
+      const motionTestBounds = Bounds2.NOTHING.copy();
 
       // X direction
       if ( proposedTranslation.x > 0 ) {
@@ -1069,7 +1054,7 @@ define( function( require ) {
       }
 
       return new Vector2( xTranslation, yTranslation );
-    },
+    }
 
     /**
      * Get the temperature and color that would be sensed by a thermometer at the provided location.  This is done as
@@ -1079,14 +1064,14 @@ define( function( require ) {
      * @returns {TemperatureAndColor} - object with temperature and color
      * @public
      */
-    getTemperatureAndColorAtLocation: function( position ) {
+    getTemperatureAndColorAtLocation( position ) {
 
-      var temperatureAndColor = null;
+      let temperatureAndColor = null;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-      var copyOfBlockList = this.blocks.slice( 0 );
+      const copyOfBlockList = this.blocks.slice( 0 );
 
-      copyOfBlockList.sort( function( block1, block2 ) {
+      copyOfBlockList.sort( ( block1, block2 ) => {
         if ( block1.position === block2.position ) {
           return 0;
         }
@@ -1097,14 +1082,14 @@ define( function( require ) {
         return -1;
       } );
 
-      for ( var i = 0; i < copyOfBlockList.length && !temperatureAndColor; i++ ) {
-        var block = copyOfBlockList[ i ];
+      for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColor; i++ ) {
+        const block = copyOfBlockList[ i ];
         if ( block.getProjectedShape().containsPoint( position ) ) {
           temperatureAndColor = new TemperatureAndColor( block.temperature, block.color );
         }
       }
 
-      this.beakers.forEach( function( beaker ) {
+      this.beakers.forEach( beaker => {
 
         // test if this point is in the water or steam associated with the beaker
         if ( !temperatureAndColor && beaker.thermalContactArea.containsPoint( position ) ) {
@@ -1124,12 +1109,12 @@ define( function( require ) {
       } );
 
       // test if the point is a burner
-      for ( i = 0; i < this.burners.length && !temperatureAndColor; i++ ) {
-        var burner = this.burners[ i ];
+      for ( let i = 0; i < this.burners.length && !temperatureAndColor; i++ ) {
+        const burner = this.burners[ i ];
         if ( burner.getFlameIceRect().containsPoint( position ) ) {
           temperatureAndColor = new TemperatureAndColor(
             burner.getTemperature(),
-            mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() )
+            this.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() )
           );
         }
       }
@@ -1144,7 +1129,7 @@ define( function( require ) {
       }
 
       return temperatureAndColor;
-    },
+    }
 
     /**
      * get the thermal model element that has the provided ID
@@ -1152,23 +1137,21 @@ define( function( require ) {
      * @returns {Object} - one of the elements in the model that can provide and absorb energy
      * @private
      */
-    getThermalElementByID: function( id ) {
-      var element = null;
+    getThermalElementByID( id ) {
+      let element = null;
       if ( id === this.air.id ) {
         element = this.air;
       }
       else if ( id.indexOf( 'burner' ) >= 0 ) {
-        element = _.find( this.burners, function( burner ) {
-          return burner.id === id;
-        } );
+        element = _.find( this.burners, burner => burner.id === id );
       }
       else {
-        element = _.find( this.thermalContainers, function( container ) {
-          return container.id === id;
-        } );
+        element = _.find( this.thermalContainers, container => container.id === id );
       }
       assert && assert( element, 'no element found for id ' + id );
       return element;
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
 } );
