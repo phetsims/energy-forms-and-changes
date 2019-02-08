@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * This node monitors the comings and goings of energy chunks on a observable list and adds/removes nodes that
@@ -10,73 +10,70 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
+  const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Node = require( 'SCENERY/nodes/Node' );
 
-  /**
-   * @param {ObservableArray} energyChunkList
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} options
-   * @param {Property.<Vector2>} parentPositionProperty
-   * @constructor
-   */
-  function EnergyChunkLayer( energyChunkList, modelViewTransform, options ) {
-    Node.call( this );
+  class EnergyChunkLayer extends Node {
 
-    var self = this;
+    /**
+     * @param {ObservableArray} energyChunkList
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {Object} options
+     * @param {Property.<Vector2>} parentPositionProperty
+     */
+    constructor( energyChunkList, modelViewTransform, options ) {
+      super();
 
-    options = _.extend( {
+      options = _.extend( {
 
-      // Property.<Vector2> - a position property that will be used to compensate the energy chunk layer's position
-      // such that it stays in untranslated screen-view coordinates.  This is often used for an energy chunk layer that
-      // is the child of a node that is itself being placed in the view according to its position value.
-      parentPositionProperty: null
-    }, options );
+        // Property.<Vector2> - a position property that will be used to compensate the energy chunk layer's position
+        // such that it stays in untranslated screen-view coordinates. This is often used for an energy chunk layer that
+        // is the child of a node that is being placed in the view according to its position value.
+        parentPositionProperty: null
+      }, options );
 
-    // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
-    // when chunks are removed from the model.
-    function chunkAddedListener( energyChunk ) {
+      // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
+      // when chunks are removed from the model.
+      const chunkAddedListener = energyChunk => {
 
-      // create and add a node to represent the energy chunk
-      var energyChunkNode = new EnergyChunkNode( energyChunk, modelViewTransform );
-      self.addChild( energyChunkNode );
+        // create and add a node to represent the energy chunk
+        const energyChunkNode = new EnergyChunkNode( energyChunk, modelViewTransform );
+        this.addChild( energyChunkNode );
 
-      // when chunk is removed from the model, remove its node from the view
-      var itemRemovedListener = function( removedChunk ) {
-        if ( removedChunk === energyChunk ) {
-          self.removeChild( energyChunkNode );
-          energyChunkNode.dispose();
+        // when chunk is removed from the model, remove its node from the view
+        const itemRemovedListener = removedChunk => {
+          if ( removedChunk === energyChunk ) {
+            this.removeChild( energyChunkNode );
+            energyChunkNode.dispose();
 
-          // remove this listener to avoid leaking memory
-          energyChunkList.removeItemRemovedListener( itemRemovedListener );
-        }
+            // remove this listener to avoid leaking memory
+            energyChunkList.removeItemRemovedListener( itemRemovedListener );
+          }
+        };
+
+        // link itemRemovedListener to the provided ObservableArray
+        energyChunkList.addItemRemovedListener( itemRemovedListener );
       };
 
-      // link itemRemovedListener to the provided ObservableArray
-      energyChunkList.addItemRemovedListener( itemRemovedListener );
-    }
+      // add the named observer function
+      energyChunkList.addItemAddedListener( chunkAddedListener );
 
-    // add the named observer function
-    energyChunkList.addItemAddedListener( chunkAddedListener );
+      if ( options.parentPositionProperty ) {
 
-    if ( options.parentPositionProperty ) {
-
-      // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
-      // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
-      options.parentPositionProperty.link( function( position ) {
-        self.x = -modelViewTransform.modelToViewX( position.x );
-        self.y = -modelViewTransform.modelToViewY( position.y );
-      } );
+        // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
+        // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
+        options.parentPositionProperty.link( position => {
+          this.x = -modelViewTransform.modelToViewX( position.x );
+          this.y = -modelViewTransform.modelToViewY( position.y );
+        } );
+      }
     }
   }
 
-  energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );
-
-  return inherit( Node, EnergyChunkLayer );
+  return energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );
 } );
