@@ -1,23 +1,22 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * a scenery node that represents a fan in the view
  *
  * @author Chris Klusendorf
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
-  var Node = require( 'SCENERY/nodes/Node' );
+  const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  const Node = require( 'SCENERY/nodes/Node' );
 
   // images
-  var fanImages = [
+  const fanImages = [
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_01.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_02.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_03.png' ),
@@ -29,65 +28,61 @@ define( function( require ) {
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_09.png' ),
     require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' )
   ];
-  var connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
-  var wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
+  const connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
+  const wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
 
   // constants
-  var NUM_FAN_IMAGES = fanImages.length;
+  const NUM_FAN_IMAGES = fanImages.length;
 
-  /**
-   * @param {Fan} fan
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @constructor
-   */
-  function FanNode( fan, energyChunksVisibleProperty, modelViewTransform ) {
-    var self = this;
-    MoveFadeModelElementNode.call( this, fan, modelViewTransform );
+  class FanNode extends MoveFadeModelElementNode {
 
-    // add the images and the layer that will contain the energy chunks
-    var wireBottomRightNode = new Image( wireBottomRightShortImage, { left: -110, bottom: 105 } );
-    var connectorNode = new Image( connectorImage, {
-      right: wireBottomRightNode.right + 9,
-      bottom: wireBottomRightNode.top + 3
-    } );
+    /**
+     * @param {Fan} fan
+     * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {ModelViewTransform2} modelViewTransform
+     */
+    constructor( fan, energyChunksVisibleProperty, modelViewTransform ) {
+      super( fan, modelViewTransform );
 
-    this.addChild( wireBottomRightNode );
+      // add the images and the layer that will contain the energy chunks
+      const wireBottomRightNode = new Image( wireBottomRightShortImage, { left: -110, bottom: 105 } );
+      const connectorNode = new Image( connectorImage, {
+        right: wireBottomRightNode.right + 9,
+        bottom: wireBottomRightNode.top + 3
+      } );
 
-    var fanBladeRootNode = new Node();
-    var fanBladeImageNodes = [];
+      this.addChild( wireBottomRightNode );
 
-    // fan blade image nodes
-    for ( var i = 0; i < NUM_FAN_IMAGES; i++ ) {
-      fanBladeImageNodes.push( new Image( fanImages[ i ], {
-        left: connectorNode.right - 2,
-        centerY: connectorNode.centerY,
-        scale: 0.74
+      const fanBladeRootNode = new Node();
+      const fanBladeImageNodes = [];
+
+      // fan blade image nodes
+      for ( let i = 0; i < NUM_FAN_IMAGES; i++ ) {
+        fanBladeImageNodes.push( new Image( fanImages[ i ], {
+          left: connectorNode.right - 2,
+          centerY: connectorNode.centerY,
+          scale: 0.74
+        } ) );
+        fanBladeImageNodes[ i ].setVisible( false );
+        fanBladeRootNode.addChild( fanBladeImageNodes[ i ] );
+      }
+
+      // animate blades by setting image visibility based on fan rotation angle
+      let visibleFanNode = fanBladeImageNodes[ 0 ];
+      fan.bladePositionProperty.link( angle => {
+        assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
+        const i = this.mapAngleToImageIndex( angle );
+        visibleFanNode.setVisible( false );
+        visibleFanNode = fanBladeImageNodes[ i ];
+        visibleFanNode.setVisible( true );
+      } );
+      this.addChild( fanBladeRootNode );
+
+      this.addChild( new EnergyChunkLayer( fan.energyChunkList, modelViewTransform, {
+        parentPositionProperty: fan.positionProperty
       } ) );
-      fanBladeImageNodes[ i ].setVisible( false );
-      fanBladeRootNode.addChild( fanBladeImageNodes[ i ] );
+      this.addChild( connectorNode );
     }
-
-    // animate blades by setting image visibility based on fan rotation angle
-    var visibleFanNode = fanBladeImageNodes[ 0 ];
-    fan.bladePositionProperty.link( function( angle ) {
-      assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
-      var i = self.mapAngleToImageIndex( angle );
-      visibleFanNode.setVisible( false );
-      visibleFanNode = fanBladeImageNodes[ i ];
-      visibleFanNode.setVisible( true );
-    } );
-    this.addChild( fanBladeRootNode );
-
-    this.addChild( new EnergyChunkLayer( fan.energyChunkList, modelViewTransform, {
-      parentPositionProperty: fan.positionProperty
-    } ) );
-    this.addChild( connectorNode );
-  }
-
-  energyFormsAndChanges.register( 'FanNode', FanNode );
-
-  return inherit( MoveFadeModelElementNode, FanNode, {
 
     /**
      * find the image index corresponding to this angle in radians
@@ -95,10 +90,12 @@ define( function( require ) {
      * @returns {number} - image index
      * @private
      */
-    mapAngleToImageIndex: function( angle ) {
-      var i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_FAN_IMAGES ) );
+    mapAngleToImageIndex( angle ) {
+      const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_FAN_IMAGES ) );
       assert && assert( i >= 0 && i < NUM_FAN_IMAGES );
       return i;
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'FanNode', FanNode );
 } );
