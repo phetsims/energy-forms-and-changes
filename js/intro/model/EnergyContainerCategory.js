@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * enum that defines the types of thermal energy containers, primarily used for determining the rate at which heat is
@@ -6,12 +6,12 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  var EnergyContainerCategory = {
+  const EnergyContainerCategory = {
     IRON: 'iron',
     BRICK: 'brick',
     WATER: 'water',
@@ -22,7 +22,5 @@ define( function( require ) {
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( EnergyContainerCategory ); }
 
-  energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
-
-  return EnergyContainerCategory;
+  return energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
 } );
