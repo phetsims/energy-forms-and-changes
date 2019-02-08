@@ -1,82 +1,78 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * base class for energy sources, converters, and users, that can be connected together to create what is referred to
  * as an "energy system" in this simulation
  *
- * @author  John Blanco
- * @author  Andrew Adare
- * @author  Jesse Greenberg
+ * @author John Blanco
+ * @author Andrew Adare
+ * @author Jesse Greenberg
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableFadableModelElement' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableFadableModelElement' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @param {Image} iconImage
-   * @constructor
-   */
-  function EnergySystemElement( iconImage ) {
+  class EnergySystemElement extends PositionableFadableModelElement {
 
-    PositionableFadableModelElement.call( this, new Vector2( 0, 0 ), 1.0 );
+    /**
+     * @param {Image} iconImage
+     */
+    constructor( iconImage ) {
 
-    // @public (read-only) {image}
-    this.iconImage = iconImage;
+      super( new Vector2( 0, 0 ), 1.0 );
 
-    // @public (read-only) {ObservableArray.<EnergyChunk>}
-    this.energyChunkList = new ObservableArray();
+      // @public (read-only) {image}
+      this.iconImage = iconImage;
 
-    // @public {BooleanProperty}
-    this.activeProperty = new BooleanProperty( false );
+      // @public (read-only) {ObservableArray.<EnergyChunk>}
+      this.energyChunkList = new ObservableArray();
 
-    // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
-    this.a11yName = 'name not set';
+      // @public {BooleanProperty}
+      this.activeProperty = new BooleanProperty( false );
 
-    var self = this;
+      // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
+      this.a11yName = 'name not set';
 
-    // at initialization, oldPosition is null, so skip that case with lazyLink
-    this.positionProperty.lazyLink( function( newPosition, oldPosition ) {
-      var deltaPosition = newPosition.minus( oldPosition );
-      self.energyChunkList.forEach( function( chunk ) {
-        chunk.translate( deltaPosition.x, deltaPosition.y );
+      // at initialization, oldPosition is null, so skip that case with lazyLink
+      this.positionProperty.lazyLink( ( newPosition, oldPosition ) => {
+        const deltaPosition = newPosition.minus( oldPosition );
+        this.energyChunkList.forEach( chunk => {
+          chunk.translate( deltaPosition.x, deltaPosition.y );
+        } );
       } );
-    } );
-  }
-
-  energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
-
-  return inherit( PositionableFadableModelElement, EnergySystemElement, {
+    }
 
     /**
      * activate this element
      * @public
      */
-    activate: function() {
+    activate() {
       this.activeProperty.set( true );
-    },
+    }
 
     /**
      * deactivate this element - this causes all energy chunks to be removed
      * @public
      */
-    deactivate: function() {
+    deactivate() {
       this.activeProperty.set( false );
       this.clearEnergyChunks();
-    },
+    }
 
     /**
      * clear daughter energy chunks
      * @protected
      */
-    clearEnergyChunks: function() {
+    clearEnergyChunks() {
       this.energyChunkList.clear();
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
 } );
 
