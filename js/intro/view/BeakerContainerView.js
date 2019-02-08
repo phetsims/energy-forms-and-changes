@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
@@ -11,25 +11,26 @@
  * @author Jesse Greenberg
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Property = require( 'AXON/Property' );
-  var Shape = require( 'KITE/Shape' );
-  var ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Matrix3 = require( 'DOT/Matrix3' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Property = require( 'AXON/Property' );
+  const Shape = require( 'KITE/Shape' );
+  const ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var BLOCK_PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
-  var BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+  const BLOCK_PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
+  const BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+
+  class BeakerContainerView extends BeakerView {
 
   /**
    * @param {Beaker} beaker
@@ -38,17 +39,15 @@ define( function( require ) {
    * @param {function} constrainPosition
    * @param {Object} [options]
    */
-  function BeakerContainerView( beaker, model, modelViewTransform, constrainPosition, options ) {
-
-    var self = this;
-    BeakerView.call( this, beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
+  constructor( beaker, model, modelViewTransform, constrainPosition, options ) {
+    super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
     // @private
     this.beaker = beaker;
 
     // variables for creating reusable shapes for doing the updates to the clipping areas
-    var beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
-    var beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
+    const beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
+    const beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
 
     // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
     // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
@@ -65,7 +64,7 @@ define( function( require ) {
     // This assumes the blocks are all the same size and do not change size.
     this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.brick.width );
     this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
-    var perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+    const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
     this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
     if ( EFACQueryParameters.showHelperShapes ) {
@@ -78,14 +77,14 @@ define( function( require ) {
     // Update the clipping area based on the motion of this beaker, the blocks, and whether the energy chunks are
     // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
     // distracting, as though the energy chunks in the beaker are behind the blocks.
-    var propertiesThatInfluenceClipArea = [];
-    model.blocks.forEach( function( block ) {
+    const propertiesThatInfluenceClipArea = [];
+    model.blocks.forEach( block => {
       propertiesThatInfluenceClipArea.push( block.positionProperty );
     } );
     propertiesThatInfluenceClipArea.push( beaker.positionProperty );
     propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
-    Property.multilink( propertiesThatInfluenceClipArea, function() {
-      self.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
+    Property.multilink( propertiesThatInfluenceClipArea, () => {
+      this.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
 
     // add an input listener to make this draggable
@@ -98,10 +97,6 @@ define( function( require ) {
     ) );
   }
 
-  energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
-
-  return inherit( BeakerView, BeakerContainerView, {
-
     /**
      * Update the clipping area that is used to hide energy chunks that are in the beaker but occluded by blocks that
      * are ALSO in the beaker.
@@ -111,7 +106,7 @@ define( function( require ) {
      * @param {ModelViewTransform2} modelViewTransform
      * @private
      */
-    updateEnergyChunkClipArea: function( beaker, blocks, energyChunksVisible, modelViewTransform ) {
+    updateEnergyChunkClipArea( beaker, blocks, energyChunksVisible, modelViewTransform ) {
 
       if ( energyChunksVisible ) {
 
@@ -120,7 +115,7 @@ define( function( require ) {
         // winding order from the outer ones in order to create the "hole" effect.  The outer shape extends above and
         // below the basic beaker model rectangle in order to prevent clipping of energy chunks that are positioned at
         // the upper and lower rim of the beaker and energy chunks moving between the beaker and the heater/cooler.
-        var clipArea = this.untransformedBeakerClipShape.transformed(
+        const clipArea = this.untransformedBeakerClipShape.transformed(
           Matrix3.translationFromVector( modelViewTransform.modelToViewPosition( beaker.positionProperty.get() ) )
         );
 
@@ -141,7 +136,7 @@ define( function( require ) {
         // see https://github.com/phetsims/energy-forms-and-changes/issues/173.
         this.energyChunkRootNode.clipArea = null;
       }
-    },
+    }
 
     /**
      * Add shapes corresponded to the provided blocks to the provide clip area shape, accounting for any 3D projection
@@ -152,21 +147,18 @@ define( function( require ) {
      * @param {ModelViewTransform2} modelViewTransform
      * @private
      */
-    addProjectedBlocksToClipArea: function( blocks, clipAreaShape, modelViewTransform ) {
+    addProjectedBlocksToClipArea( blocks, clipAreaShape, modelViewTransform ) {
 
       // Make sure there aren't more blocks than this method can deal with.  There are some assumptions built in that
       // would not work for more than two blocks, see the code and comments below for details.
       assert && assert( blocks.length <= 2, 'number of blocks exceeds what this method is designed to handle' );
 
-      // index for C-style loops, which are used to maximize performance
-      var i;
-
       // hoisted block variable
-      var block;
+      let block;
 
       // if neither of the blocks is in the beaker then there are no "holes" to add
-      var blocksInBeaker = [];
-      for ( i = 0; i < blocks.length; i++ ) {
+      const blocksInBeaker = [];
+      for ( let i = 0; i < blocks.length; i++ ) {
         block = blocks[ i ];
         if ( this.beaker.beakerBounds.containsPoint( block.positionProperty.value ) ||
              this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
@@ -180,10 +172,10 @@ define( function( require ) {
       }
 
       // use the bounds of the shape for faster tests, assumes that it is rectangular
-      var chipAreaShapeBounds = clipAreaShape.bounds;
+      const chipAreaShapeBounds = clipAreaShape.bounds;
 
       // determine whether the blocks are stacked upon each other
-      var blocksAreStacked = false;
+      let blocksAreStacked = false;
       if ( blocksInBeaker.length === 2 ) {
         blocksAreStacked = blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ||
                            blocksInBeaker[ 1 ].isStackedUpon( blocksInBeaker[ 0 ] );
@@ -194,7 +186,7 @@ define( function( require ) {
         // When the blocks are stacked, draw a single shape the encompasses both.  This is necessary because if the
         // shapes are drawn separately and the overlap in the clipping area, a space is created where the energy chunks
         // aren't occluded.
-        var bottomBlock;
+        let bottomBlock;
         if ( blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ) {
           bottomBlock = blocksInBeaker[ 1 ];
         }
@@ -202,7 +194,7 @@ define( function( require ) {
           bottomBlock = blocksInBeaker[ 0 ];
         }
 
-        var bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
+        const bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
 
         if ( chipAreaShapeBounds.containsPoint( bottomBlockPositionInView ) ) {
           clipAreaShape.moveTo(
@@ -220,9 +212,9 @@ define( function( require ) {
       else {
 
         // C-style loop for best performance
-        for ( i = 0; i < blocksInBeaker.length; i++ ) {
+        for ( let i = 0; i < blocksInBeaker.length; i++ ) {
           block = blocksInBeaker[ i ];
-          var blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
+          const blockPositionInView = modelViewTransform.modelToViewPosition( block.positionProperty.value );
 
           // The following code makes some assumptions that are known to be true for the EFAC simulation but which
           // wouldn't necessarily true for a generalized version of this.  Those assumptions are that the provided shape
@@ -242,6 +234,8 @@ define( function( require ) {
         }
       }
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
 } );
 
