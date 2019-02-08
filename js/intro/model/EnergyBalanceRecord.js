@@ -5,55 +5,52 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  /**
-   * inner type which defines the structure where energy exchanges are tracked
-   * @param {string} fromID
-   * @param {string} toID
-   * @param {number} energyAmount - in joules
-   * @constructor
-   */
-  function EnergyBalanceRecord( fromID, toID, energyAmount ) {
+  class EnergyBalanceRecord {
 
-    // objects can't exchange energy with themselves
-    assert && assert( fromID !== toID );
+    /**
+     * inner type which defines the structure where energy exchanges are tracked
+     * @param {string} fromID
+     * @param {string} toID
+     * @param {number} energyAmount - in joules
+     */
+    constructor( fromID, toID, energyAmount ) {
 
-    // For ease of locating the exchange records, they are set up so that the 'from' ID precedes the 'to' ID in lexical
-    // order.  That is checked here.
-    assert && assert( fromID < toID, 'fromID must precede toID in lexical order' );
+      // objects can't exchange energy with themselves
+      assert && assert( fromID !== toID );
 
-    // @public (read-only) {string} - id of the entity from which the energy was transferred
-    this.fromID = fromID;
+      // For ease of locating the exchange records, they are set up so that the 'from' ID precedes the 'to' ID in lexical
+      // order.  That is checked here.
+      assert && assert( fromID < toID, 'fromID must precede toID in lexical order' );
 
-    // @public (read-only) {string} - id of the entity to which the energy was transferred
-    this.toID = toID;
+      // @public (read-only) {string} - id of the entity from which the energy was transferred
+      this.fromID = fromID;
 
-    // @public {number} - amount of energy transferred, negative values indicate reverse direction
-    this.energyBalance = energyAmount;
+      // @public (read-only) {string} - id of the entity to which the energy was transferred
+      this.toID = toID;
 
-    // @public {boolean} - flag that is used to mark whether energy was recently transferred
-    this.recentlyUpdated = true;
-  }
+      // @public {number} - amount of energy transferred, negative values indicate reverse direction
+      this.energyBalance = energyAmount;
 
-  energyFormsAndChanges.register( 'EnergyBalanceRecord', EnergyBalanceRecord );
-
-  return inherit( Object, EnergyBalanceRecord, {
+      // @public {boolean} - flag that is used to mark whether energy was recently transferred
+      this.recentlyUpdated = true;
+    }
 
     /**
      * get the other ID in this record
      * @param {string} id
      * @returns {string}
      */
-    getOtherID: function( id ) {
+    getOtherID( id ) {
       assert && assert( id === this.fromID || id === this.toID, 'provided ID not in record' );
       return id === this.fromID ? this.toID : this.fromID;
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'EnergyBalanceRecord', EnergyBalanceRecord );
 } );
