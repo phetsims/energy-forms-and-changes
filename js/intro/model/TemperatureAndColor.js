@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * convenience type that combines values for temperature and color, used primarily by the thermometer to obtain
@@ -8,22 +8,22 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  /**
-   * @param {number} temperature
-   * @param {Color} color
-   * @constructor
-   */
-  function TemperatureAndColor( temperature, color ) {
-    this.temperature = temperature;
-    this.color = color;
+  class TemperatureAndColor {
+
+    /**
+     * @param {number} temperature
+     * @param {Color} color
+     */
+    constructor( temperature, color ) {
+      this.temperature = temperature;
+      this.color = color;
+    }
   }
 
-  energyFormsAndChanges.register( 'TemperatureAndColor', TemperatureAndColor );
-
-  return TemperatureAndColor;
+  return energyFormsAndChanges.register( 'TemperatureAndColor', TemperatureAndColor );
 } );
