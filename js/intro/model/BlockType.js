@@ -9,10 +9,10 @@ define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   // @public
-  var BlockType = {
+  const BlockType = {
     IRON: 'IRON',
     BRICK: 'BRICK'
   };
