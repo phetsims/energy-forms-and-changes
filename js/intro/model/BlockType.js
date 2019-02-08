@@ -1,11 +1,11 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * Block types for EFAC intro
  *
  * @author Chris Klusendorf
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -20,8 +20,5 @@ define( function( require ) {
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( BlockType ); }
 
-  energyFormsAndChanges.register( 'BlockType', BlockType );
-
-  return BlockType;
-
+  return energyFormsAndChanges.register( 'BlockType', BlockType );
 } );
