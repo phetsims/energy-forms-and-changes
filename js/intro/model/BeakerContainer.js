@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * Model element that represents a beaker that can contain other thermal model elements.
@@ -6,20 +6,21 @@
  * @author John Blanco
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Range = require( 'DOT/Range' );
-  var Rectangle = require( 'DOT/Rectangle' );
+  const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Range = require( 'DOT/Range' );
+  const Rectangle = require( 'DOT/Rectangle' );
 
   // counter used by constructor to create unique IDs
-  var idCounter = 0;
+  let idCounter = 0;
+
+  class BeakerContainer extends Beaker {
 
   /**
    * @param {Vector2} initialPosition
@@ -28,9 +29,8 @@ define( function( require ) {
    * @param {Array.<Block>} potentiallyContainedElements
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {Object} [options]
-   * @constructor
    */
-  function BeakerContainer(
+  constructor(
     initialPosition,
     width,
     height,
@@ -38,7 +38,7 @@ define( function( require ) {
     energyChunksVisibleProperty,
     options
   ) {
-    Beaker.call( this, initialPosition, width, height, energyChunksVisibleProperty, options );
+    super( initialPosition, width, height, energyChunksVisibleProperty, options );
 
     // @public (read-only) {string} - id of this beaker
     this.id = 'beaker-container-' + idCounter++;
@@ -47,73 +47,66 @@ define( function( require ) {
     this.potentiallyContainedElements = potentiallyContainedElements;
   }
 
-  energyFormsAndChanges.register( 'BeakerContainer', BeakerContainer );
-
-  return inherit( Beaker, BeakerContainer, {
-
     /**
      * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
      * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
      * @param {Rectangle[]} potentiallyDisplacingRectangles
      * @public
      */
-    updateFluidDisplacement: function( potentiallyDisplacingRectangles ) {
+    updateFluidDisplacement( potentiallyDisplacingRectangles ) {
 
       // calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles
-      var fluidRectangle = new Rectangle(
+      const fluidRectangle = new Rectangle(
         this.getBounds().minX,
         this.getBounds().minY,
         this.width,
         this.height * this.fluidLevelProperty.value
       );
 
-      var overlappingArea = 0;
-      potentiallyDisplacingRectangles.forEach( function( rectangle ) {
+      let overlappingArea = 0;
+      potentiallyDisplacingRectangles.forEach( rectangle => {
         if ( rectangle.intersectsBounds( fluidRectangle ) ) {
-          var intersection = rectangle.intersection( fluidRectangle );
+          const intersection = rectangle.intersection( fluidRectangle );
           overlappingArea += intersection.width * intersection.height;
         }
       } );
 
       // Map the overlap to a new fluid level.  The scaling factor was empirically determined to look good.
-      var newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
+      const newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
       this.fluidLevelProperty.set( newFluidLevel );
-    },
+    }
 
     /**
      * @param {EnergyChunk} energyChunk
      * @returns {boolean}
      * @private
      */
-    isEnergyChunkObscured: function( energyChunk ) {
-      var self = this;
-      var isObscured = false;
+    isEnergyChunkObscured( energyChunk ) {
+      let isObscured = false;
 
-      this.potentiallyContainedElements.forEach( function( element ) {
-        if ( self.thermalContactArea.containsBounds( element.getBounds() ) &&
+      this.potentiallyContainedElements.forEach( element => {
+        if ( this.thermalContactArea.containsBounds( element.getBounds() ) &&
              element.getProjectedShape().containsPoint( energyChunk.positionProperty.value ) ) {
           isObscured = true;
         }
       } );
 
       return isObscured;
-    },
+    }
 
     /**
      * @param {number} dt
      * @override
      */
-    animateNonContainedEnergyChunks: function( dt ) {
+    animateNonContainedEnergyChunks( dt ) {
+      const controllers = this.energyChunkWanderControllers.slice( 0 );
 
-      var self = this;
-      var controllers = this.energyChunkWanderControllers.slice( 0 );
-
-      controllers.forEach( function( controller ) {
-        var ec = controller.energyChunk;
+      controllers.forEach( controller => {
+        const ec = controller.energyChunk;
 
         // this chunk is being transferred from a container in the beaker to the fluid, so move it sideways
-        if ( self.isEnergyChunkObscured( ec ) ) {
-          var xVel = 0.05 * dt * ( self.getCenterPoint().x > ec.positionProperty.value.x ? -1 : 1 );
+        if ( this.isEnergyChunkObscured( ec ) ) {
+          const xVel = 0.05 * dt * ( this.getCenterPoint().x > ec.positionProperty.value.x ? -1 : 1 );
           ec.translate( xVel, 0 );
         }
 
@@ -123,17 +116,17 @@ define( function( require ) {
         }
 
         // chunk is in a place where it can migrate to the slices and stop moving
-        if ( !self.isEnergyChunkObscured( ec ) && self.getSliceBounds().containsPoint( ec.positionProperty.value ) ) {
-          self.moveEnergyChunkToSlices( controller.energyChunk );
+        if ( !this.isEnergyChunkObscured( ec ) && this.getSliceBounds().containsPoint( ec.positionProperty.value ) ) {
+          this.moveEnergyChunkToSlices( controller.energyChunk );
         }
       } );
-    },
+    }
 
     /**
      * @param {EnergyChunk} energyChunk
      * @override
      */
-    addEnergyChunk: function( energyChunk ) {
+    addEnergyChunk( energyChunk ) {
       if ( this.isEnergyChunkObscured( energyChunk ) ) {
 
         // the chunk is obscured by a model element in the beaker, so move it to the front of the z-order
@@ -148,12 +141,12 @@ define( function( require ) {
 
         // If the energy chunk is above the beaker, it's coming from the air, and must be constrained to the width of
         // the beaker to avoid being clipped.
-        var ecPosition = energyChunk.positionProperty.get();
+        const ecPosition = energyChunk.positionProperty.get();
         if ( ecPosition.y > this.beakerBounds.maxY &&
              ecPosition.x > this.beakerBounds.minX &&
              ecPosition.x < this.beakerBounds.maxX ) {
 
-          var wanderController = _.find( this.energyChunkWanderControllers, function( controller ) {
+          const wanderController = _.find( this.energyChunkWanderControllers, controller => {
             return controller.energyChunk === energyChunk;
           } );
 
@@ -168,6 +161,8 @@ define( function( require ) {
         }
       }
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'BeakerContainer', BeakerContainer );
 } );
 
