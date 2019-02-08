@@ -1,54 +1,52 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * view representation of the air, which is basically just a parent node through which energy chunks can move
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  var EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
+  const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-  /**
-   * @param {Air} air - model of the air
-   * @param {ModelViewTransform2} modelViewTransform
-   * @constructor
-   */
-  function AirNode( air, modelViewTransform ) {
+  class AirNode extends Node {
 
-    var self = this;
-    Node.call( this );
+    /**
+     * @param {Air} air - model of the air
+     * @param {ModelViewTransform2} modelViewTransform
+     */
+    constructor( air, modelViewTransform ) {
+      super();
 
-    if ( EFACQueryParameters.showAirBounds ) {
-      this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.thermalContactArea ), {
-        fill: 'rgba( 255, 0, 0, 0.5 )',
-        lineWidth: 1
-      } ) );
-    }
+      if ( EFACQueryParameters.showAirBounds ) {
+        this.addChild( new Rectangle( modelViewTransform.modelToViewBounds( air.thermalContactArea ), {
+          fill: 'rgba( 255, 0, 0, 0.5 )',
+          lineWidth: 1
+        } ) );
+      }
 
-    // watch for energy chunks coming and going and add/remove nodes accordingly
-    air.energyChunkList.addItemAddedListener( function( addedEnergyChunk ) {
-      var energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-      self.addChild( energyChunkNode );
-      air.energyChunkList.addItemRemovedListener( function removalListener( removedEnergyChunk ) {
-        if ( removedEnergyChunk === addedEnergyChunk ) {
-          self.removeChild( energyChunkNode );
-          energyChunkNode.dispose();
-          air.energyChunkList.removeItemRemovedListener( removalListener );
-        }
+      // watch for energy chunks coming and going and add/remove nodes accordingly
+      air.energyChunkList.addItemAddedListener( addedEnergyChunk => {
+        const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+        this.addChild( energyChunkNode );
+        const removalListener = removedEnergyChunk => {
+          if ( removedEnergyChunk === addedEnergyChunk ) {
+            this.removeChild( energyChunkNode );
+            energyChunkNode.dispose();
+            air.energyChunkList.removeItemRemovedListener( removalListener );
+          }
+        };
+        air.energyChunkList.addItemRemovedListener( removalListener );
       } );
-    } );
+    }
   }
 
-  energyFormsAndChanges.register( 'AirNode', AirNode );
-
-  return inherit( Node, AirNode );
+  return energyFormsAndChanges.register( 'AirNode', AirNode );
 } );
 
