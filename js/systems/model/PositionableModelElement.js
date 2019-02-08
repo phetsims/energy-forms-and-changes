@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * a model element that has a position (a.k.a. a location) which can be changed
@@ -7,25 +7,24 @@
  * @author Jesse Greenberg
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Property = require( 'AXON/Property' );
 
-  /**
-   * @param {Vector2} initialPosition
-   * @constructor
-   */
-  function PositionableModelElement( initialPosition ) {
+  class PositionableModelElement {
 
-    // @public {Property.<Vector>}
-    this.positionProperty = new Property( initialPosition );
+    /**
+     * @param {Vector2} initialPosition
+     */
+    constructor( initialPosition ) {
+
+      // @public {Property.<Vector>}
+      this.positionProperty = new Property( initialPosition );
+    }
   }
 
-  energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
-
-  return inherit( Object, PositionableModelElement );
+  return energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
 } );
 

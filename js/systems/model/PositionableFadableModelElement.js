@@ -1,34 +1,33 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * base type for model elements that can be positioned and faded
  *
- * @author  John Blanco
- * @author  Andrew Adare
- * @author  Jesse Greenberg
+ * @author John Blanco
+ * @author Andrew Adare
+ * @author Jesse Greenberg
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableModelElement' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableModelElement' );
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {number} initialOpacity
-   * @constructor
-   */
-  function PositionableFadableModelElement( initialPosition, initialOpacity ) {
-    PositionableModelElement.call( this, initialPosition );
+  class PositionableFadableModelElement extends PositionableModelElement {
 
-    // @public {NumberProperty}
-    this.opacityProperty = new NumberProperty( initialOpacity );
+    /**
+     * @param {Vector2} initialPosition
+     * @param {number} initialOpacity
+     */
+    constructor( initialPosition, initialOpacity ) {
+      super( initialPosition );
+
+      // @public {NumberProperty}
+      this.opacityProperty = new NumberProperty( initialOpacity );
+    }
   }
 
-  energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
-
-  return inherit( Object, PositionableFadableModelElement );
+  return energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
 } );
 
