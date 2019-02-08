@@ -1,35 +1,31 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * A type that represents a 2D space that can come into contact with other thermal areas, leading to the exchange of
- * thermal energy.  This is basically just a shape and a flag that indicates whether or not immersion can occur.
+ * thermal energy. This is basically just a shape and a flag that indicates whether or not immersion can occur.
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
   // threshold of distance for determining whether two areas are in contact
-  var TOUCH_DISTANCE_THRESHOLD = 0.001; // in meters
+  const TOUCH_DISTANCE_THRESHOLD = 0.001; // in meters
+
+  class ThermalContactArea extends Bounds2 {
 
   /**
    * @param {Bounds2} bounds
    * @param {boolean} supportsImmersion
-   * @constructor
    */
-  function ThermalContactArea( bounds, supportsImmersion ) {
-    Bounds2.call( this, bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
+  constructor( bounds, supportsImmersion ) {
+    super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
     this.supportsImmersion = supportsImmersion;
   }
-
-  energyFormsAndChanges.register( 'ThermalContactArea', ThermalContactArea );
-
-  return inherit( Bounds2, ThermalContactArea, {
 
     /**
      * Get the amount of thermal contact that exists between this and another thermal area.  Since thermal contact
@@ -39,18 +35,18 @@ define( function( require ) {
      * @returns {number} - length of contact
      * @public
      */
-    getThermalContactLength: function( that ) {
+    getThermalContactLength( that ) {
 
-      var xOverlap = this.getHorizontalOverlap( this, that );
-      var yOverlap = this.getVerticalOverlap( this, that );
+      const xOverlap = this.getHorizontalOverlap( this, that );
+      const yOverlap = this.getVerticalOverlap( this, that );
 
-      var contactLength = 0;
+      let contactLength = 0;
       if ( xOverlap > 0 && yOverlap > 0 ) {
 
         // One of the areas is overlapping another.  This should be an 'immersion' situation, i.e. one is all or
         // partially immersed in the other.
         if ( this.supportsImmersion || that.supportsImmersion ) {
-          var immersionRect = this.intersection( that );
+          const immersionRect = this.intersection( that );
           contactLength = immersionRect.width * 2 + immersionRect.height * 2;
           if ( immersionRect.width !== this.width && immersionRect.width !== that.width ) {
 
@@ -87,7 +83,7 @@ define( function( require ) {
       }
 
       return contactLength;
-    },
+    }
 
     /**
      * convenience method for determining overlap of rectangles in X dimension
@@ -96,11 +92,11 @@ define( function( require ) {
      * @returns {number}
      * @private
      */
-    getHorizontalOverlap: function( rectangle1, rectangle2 ) {
-      var lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
-      var highestMin = Math.max( rectangle1.minX, rectangle2.minX );
+    getHorizontalOverlap( rectangle1, rectangle2 ) {
+      const lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
+      const highestMin = Math.max( rectangle1.minX, rectangle2.minX );
       return Math.max( lowestMax - highestMin, 0 );
-    },
+    }
 
     /**
      * convenience method for determining overlap of rectangles in Y dimension
@@ -109,10 +105,12 @@ define( function( require ) {
      * @returns {number}
      * @private
      */
-    getVerticalOverlap: function( rectangle1, rectangle2 ) {
-      var lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
-      var highestMin = Math.max( rectangle1.minY, rectangle2.minY );
+    getVerticalOverlap( rectangle1, rectangle2 ) {
+      const lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
+      const highestMin = Math.max( rectangle1.minY, rectangle2.minY );
       return Math.max( lowestMax - highestMin, 0 );
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'ThermalContactArea', ThermalContactArea );
 } );
