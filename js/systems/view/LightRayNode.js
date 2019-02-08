@@ -1,5 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
-
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * A Scenery Node that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the
@@ -8,142 +7,123 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var KiteLine = require( 'KITE/segments/Line' ); // eslint-disable-line require-statement-match
-  var Line = require( 'SCENERY/nodes/Line' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const KiteLine = require( 'KITE/segments/Line' ); // eslint-disable-line require-statement-match
+  const Line = require( 'SCENERY/nodes/Line' );
+  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Shape = require( 'KITE/Shape' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var STROKE_THICKNESS = 2;
-  var SEARCH_ITERATIONS = 10;
+  const STROKE_THICKNESS = 2;
+  const SEARCH_ITERATIONS = 10;
 
-  /**
-   * @param {Vector2} origin
-   * @param {Vector2} endpoint
-   * @param {Color} color
-   * @constructor
-   */
-  function LightRayNode( origin, endpoint, color ) {
+  class LightRayNode extends Node {
 
-    // @private - data that defines this ray
-    this.lightAbsorbingShapes = [];
-    this.pointAndFadeValues = [];
-    this.origin = origin;
-    this.endpoint = endpoint;
-    this.color = color;
+    /**
+     * @param {Vector2} origin
+     * @param {Vector2} endpoint
+     * @param {Color} color
+     */
+    constructor( origin, endpoint, color ) {
+      super();
 
-    Node.call( this );
+      // @private - data that defines this ray
+      this.lightAbsorbingShapes = [];
+      this.pointAndFadeValues = [];
+      this.origin = origin;
+      this.endpoint = endpoint;
+      this.color = color;
 
-    this.updateRay();
-  }
-
-  /**
-   * helper type that consolidates a point and a fade value
-   * @param {Vector2} point - position
-   * @param {number} fadeValue - Fade coefficient
-   * @constructor
-   * @private
-   */
-  function PointAndFadeValue( point, fadeValue ) {
-    this.point = point;
-    this.fadeValue = fadeValue;
-  }
-
-  energyFormsAndChanges.register( 'LightRayNode', LightRayNode );
-
-  return inherit( Node, LightRayNode, {
+      this.updateRay();
+    }
 
     /**
      * add a shape that will potentially interact with this light ray
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
-    addLightAbsorbingShape: function( lightAbsorbingShape ) {
-      var self = this;
+    addLightAbsorbingShape( lightAbsorbingShape ) {
       this.lightAbsorbingShapes.push( lightAbsorbingShape );
-      lightAbsorbingShape.absorptionCoefficientProperty.link( function() {
-        self.updateRay();
+      lightAbsorbingShape.absorptionCoefficientProperty.link( () => {
+        this.updateRay();
       } );
-    },
+    }
 
     /**
      * @param  {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
-    removeLightAbsorbingShape: function( lightAbsorbingShape ) {
+    removeLightAbsorbingShape( lightAbsorbingShape ) {
       // TODO: This probably works, but is not quite correct, since it should really be unlinking the added listener, not everything.
       lightAbsorbingShape.absorptionCoefficientProperty.unlinkAll();
       _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
       this.updateRay();
-    },
+    }
 
     /**
      * @private
      */
-    updateRay: function() {
+    updateRay() {
       this.removeAllChildren();
       this.pointAndFadeValues.length = 0;
 
       this.pointAndFadeValues.push( new PointAndFadeValue( this.origin, EFACConstants.FADE_COEFFICIENT_IN_AIR ) );
       this.pointAndFadeValues.push( new PointAndFadeValue( this.endpoint, 0 ) );
 
-      var self = this;
-      this.lightAbsorbingShapes.forEach( function( absorbingShape ) {
+      this.lightAbsorbingShapes.forEach( absorbingShape => {
 
-        var entryPoint = self.getShapeEntryPoint( self.origin, self.endpoint, absorbingShape.shape );
+        const entryPoint = this.getShapeEntryPoint( this.origin, this.endpoint, absorbingShape.shape );
 
         if ( entryPoint !== null ) {
-          var fade = absorbingShape.absorptionCoefficientProperty.get();
-          self.pointAndFadeValues.push( new PointAndFadeValue( entryPoint, fade ) );
-          var exitPoint = self.getShapeExitPoint( self.origin, self.endpoint, absorbingShape.shape );
+          const fade = absorbingShape.absorptionCoefficientProperty.get();
+          this.pointAndFadeValues.push( new PointAndFadeValue( entryPoint, fade ) );
+          const exitPoint = this.getShapeExitPoint( this.origin, this.endpoint, absorbingShape.shape );
           if ( exitPoint !== null ) {
-            self.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, EFACConstants.FADE_COEFFICIENT_IN_AIR ) );
+            this.pointAndFadeValues.push( new PointAndFadeValue( exitPoint, EFACConstants.FADE_COEFFICIENT_IN_AIR ) );
           }
         }
       } );
 
       // sort the list of PointAndFadeValues by their distance from the origin, closest first
-      var sortedPointAndFadeValues = _.sortBy( this.pointAndFadeValues, function( p ) {
-        return p.point.distance( self.origin );
+      const sortedPointAndFadeValues = _.sortBy( this.pointAndFadeValues, p => {
+        return p.point.distance( this.origin );
       } );
 
-      var rayLength = this.origin.distance( this.endpoint );
+      const rayLength = this.origin.distance( this.endpoint );
 
-      var rayGradient = new LinearGradient( this.origin.x, this.origin.y, this.endpoint.x, this.endpoint.y )
+      const rayGradient = new LinearGradient( this.origin.x, this.origin.y, this.endpoint.x, this.endpoint.y )
         .addColorStop( 0, this.color );
 
-      var prevIntensity = this.color.alpha;
-      for ( var i = 0; i < sortedPointAndFadeValues.length - 1; i++ ) {
-        var distanceFromOrigin = this.origin.distance( sortedPointAndFadeValues[ i + 1 ].point );
-        var distanceFromPreviousPoint = sortedPointAndFadeValues[ i ].point.distance( sortedPointAndFadeValues[ i + 1 ].point );
+      let prevIntensity = this.color.alpha;
+      for ( let i = 0; i < sortedPointAndFadeValues.length - 1; i++ ) {
+        const distanceFromOrigin = this.origin.distance( sortedPointAndFadeValues[ i + 1 ].point );
+        const distanceFromPreviousPoint = sortedPointAndFadeValues[ i ].point.distance( sortedPointAndFadeValues[ i + 1 ].point );
 
-        var intensityAtEndPoint = prevIntensity * Math.pow( Math.E, -sortedPointAndFadeValues[ i ].fadeValue * distanceFromPreviousPoint );
+        let intensityAtEndPoint = prevIntensity * Math.pow( Math.E, -sortedPointAndFadeValues[ i ].fadeValue * distanceFromPreviousPoint );
         intensityAtEndPoint = Util.roundSymmetric( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
 
-        var endPointColor = this.color.copy().setAlpha( intensityAtEndPoint );
+        const endPointColor = this.color.copy().setAlpha( intensityAtEndPoint );
         rayGradient.addColorStop( distanceFromOrigin / rayLength, endPointColor );
 
         prevIntensity = intensityAtEndPoint;
       }
       rayGradient.addColorStop( 1, this.color.copy().setAlpha( 0 ) );
 
-      var fadingRay = new Line( this.origin, this.endpoint, {
+      const fadingRay = new Line( this.origin, this.endpoint, {
         stroke: rayGradient,
         lineWidth: STROKE_THICKNESS
       } );
       this.addChild( fadingRay );
-    },
+    }
 
     /**
      * @param {KiteLine} line1
@@ -151,14 +131,14 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    getLineIntersection: function( line1, line2 ) {
+    getLineIntersection( line1, line2 ) {
 
-      var start1 = line1.start;
-      var start2 = line2.start;
-      var end1 = line1.end;
-      var end2 = line2.end;
+      const start1 = line1.start;
+      const start2 = line2.start;
+      const end1 = line1.end;
+      const end2 = line2.end;
 
-      var denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
+      const denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
                         ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
 
       // Check if the lines are parallel, and thus don't intersect.
@@ -166,13 +146,13 @@ define( function( require ) {
         return null;
       }
 
-      var numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
-                      ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
-      var r = numerator / denominator;
+      const numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
+                        ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
+      const r = numerator / denominator;
 
-      var numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
+      const numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
                        ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
-      var s = numerator2 / denominator;
+      const s = numerator2 / denominator;
 
       if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
         return null;
@@ -183,7 +163,7 @@ define( function( require ) {
         start1.x + ( r * ( end1.x - start1.x ) ),
         start1.y + ( r * ( end1.y - start1.y ) )
       );
-    },
+    }
 
     /**
      * @param  {Vector2} origin
@@ -192,39 +172,39 @@ define( function( require ) {
      * @returns {Vector2|null}
      * @private
      */
-    getShapeEntryPoint: function( origin, endpoint, shape ) {
-      var b = shape.bounds;
-      var shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
-      var entryPoint = null;
+    getShapeEntryPoint( origin, endpoint, shape ) {
+      const b = shape.bounds;
+      const shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
+      let entryPoint = null;
 
       if ( shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
-        var boundsEntryPoint = this.getRectangleEntryPoint( origin, endpoint, shapeRect );
+        const boundsEntryPoint = this.getRectangleEntryPoint( origin, endpoint, shapeRect );
         if ( boundsEntryPoint === null ) {
 
           // DEBUG
-          var l = new Line( origin, endpoint, {
+          const l = new Line( origin, endpoint, {
             stroke: 'lime',
             lineWidth: 3
           } );
           this.addChild( l );
 
-          var p = new Path( shape, {
+          const p = new Path( shape, {
             stroke: 'red',
             lineWidth: 3
           } );
           this.addChild( p );
           return null;
         }
-        var boundsExitPoint = this.getRectangleExitPoint( origin, endpoint, shapeRect );
-        var searchEndPoint = boundsExitPoint === null ? endpoint : boundsExitPoint;
+        const boundsExitPoint = this.getRectangleExitPoint( origin, endpoint, shapeRect );
+        const searchEndPoint = boundsExitPoint === null ? endpoint : boundsExitPoint;
 
         // Search linearly for edge of the shape.  BIG HAIRY NOTE - This will not work in all cases.  It worked for the
         // coarse shapes and rough bounds needed for this simulation.  Don't reuse if you need good general edge
         // finding.
-        var angle = endpoint.minus( origin ).angle();
-        var incrementalDistance = boundsEntryPoint.distance( searchEndPoint ) / SEARCH_ITERATIONS;
-        for ( var i = 0; i < SEARCH_ITERATIONS; i++ ) {
-          var testPoint = boundsEntryPoint.plus( new Vector2( incrementalDistance * i, 0 ).rotated( angle ) );
+        const angle = endpoint.minus( origin ).angle();
+        const incrementalDistance = boundsEntryPoint.distance( searchEndPoint ) / SEARCH_ITERATIONS;
+        for ( let i = 0; i < SEARCH_ITERATIONS; i++ ) {
+          const testPoint = boundsEntryPoint.plus( new Vector2( incrementalDistance * i, 0 ).rotated( angle ) );
           if ( shape.bounds.containsPoint( testPoint ) ) {
             entryPoint = testPoint;
             break;
@@ -232,7 +212,7 @@ define( function( require ) {
         }
       }
       return entryPoint;
-    },
+    }
 
     /**
      * @param  {Vector2} origin
@@ -241,9 +221,8 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    getShapeExitPoint: function( origin, endpoint, shape ) {
-
-      var exitPoint = null;
+    getShapeExitPoint( origin, endpoint, shape ) {
+      let exitPoint = null;
 
       if ( shape.bounds.containsPoint( endpoint ) ) {
 
@@ -254,18 +233,18 @@ define( function( require ) {
       if ( !shape.bounds.containsPoint( endpoint ) && shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
 
         // phase I - Do a binary search to locate the edge of the rectangle that encloses the shape
-        var angle = endpoint.minus( origin ).angle();
-        var length = origin.distance( endpoint );
-        var lengthChange = length / 2;
-        for ( var i = 0; i < SEARCH_ITERATIONS; i++ ) {
-          var start = origin.plus( new Vector2( length, 0 ).rotated( angle ) );
+        const angle = endpoint.minus( origin ).angle();
+        let length = origin.distance( endpoint );
+        let lengthChange = length / 2;
+        for ( let i = 0; i < SEARCH_ITERATIONS; i++ ) {
+          const start = origin.plus( new Vector2( length, 0 ).rotated( angle ) );
           length += lengthChange * ( shape.interiorIntersectsLineSegment( start, endpoint ) ? 1 : -1 );
           lengthChange = lengthChange / 2;
         }
         exitPoint = origin.plus( new Vector2( length, 0 ).rotated( angle ) );
       }
       return exitPoint;
-    },
+    }
 
     /**
      * @param  {Vector2} origin
@@ -274,10 +253,10 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    getRectangleEntryPoint: function( origin, endpoint, rect ) {
-      var intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
-      var closestIntersectionPoint = null;
-      intersectingPoints.forEach( function( point ) {
+    getRectangleEntryPoint( origin, endpoint, rect ) {
+      const intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
+      let closestIntersectionPoint = null;
+      intersectingPoints.forEach( point => {
         if ( closestIntersectionPoint === null ||
              closestIntersectionPoint.distance( origin ) > point.distance( origin ) ) {
           closestIntersectionPoint = point;
@@ -285,7 +264,7 @@ define( function( require ) {
       } );
 
       return closestIntersectionPoint;
-    },
+    }
 
     /**
      * @param  {Vector2} origin
@@ -294,8 +273,8 @@ define( function( require ) {
      * @returns {Vector2}
      * @private
      */
-    getRectangleExitPoint: function( origin, endpoint, rect ) {
-      var intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
+    getRectangleExitPoint( origin, endpoint, rect ) {
+      const intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
 
       if ( intersectingPoints.length < 2 ) {
 
@@ -303,8 +282,8 @@ define( function( require ) {
         return null;
       }
 
-      var furthestIntersectionPoint = null;
-      intersectingPoints.forEach( function( point ) {
+      let furthestIntersectionPoint = null;
+      intersectingPoints.forEach( point => {
         if ( furthestIntersectionPoint === null ||
              furthestIntersectionPoint.distance( origin ) < point.distance( origin ) ) {
           furthestIntersectionPoint = point;
@@ -312,17 +291,17 @@ define( function( require ) {
       } );
 
       return furthestIntersectionPoint;
-    },
+    }
 
     /**
      * @param  {Rectangle} rect
      * @param  {Line} line
      * @returns {Vector2[]}
      */
-    getRectangleLineIntersectionPoints: function( rect, line ) {
+    getRectangleLineIntersectionPoints( rect, line ) {
 
       // corners of rect
-      var p = [
+      const p = [
         new Vector2( rect.bounds.minX, rect.bounds.minY ),
         new Vector2( rect.bounds.minX, rect.bounds.maxY ),
         new Vector2( rect.bounds.maxX, rect.bounds.maxY ),
@@ -330,16 +309,15 @@ define( function( require ) {
       ];
 
       // perimeter lines of rect
-      var lines = [];
+      const lines = [];
       lines.push( new KiteLine( p[ 0 ], p[ 1 ] ) );
       lines.push( new KiteLine( p[ 1 ], p[ 2 ] ) );
       lines.push( new KiteLine( p[ 2 ], p[ 3 ] ) );
       lines.push( new KiteLine( p[ 3 ], p[ 0 ] ) );
 
-      var intersectingPoints = [];
-      var self = this;
-      lines.forEach( function( rectLine ) {
-        var intersectingPoint = self.getLineIntersection( rectLine, line );
+      const intersectingPoints = [];
+      lines.forEach( rectLine => {
+        const intersectingPoint = this.getLineIntersection( rectLine, line );
         if ( intersectingPoint !== null ) {
           intersectingPoints.push( intersectingPoint );
         }
@@ -347,7 +325,22 @@ define( function( require ) {
 
       return intersectingPoints;
     }
+  }
 
-  } );
+  class PointAndFadeValue {
+
+    /**
+     * helper type that consolidates a point and a fade value
+     * @param {Vector2} point - position
+     * @param {number} fadeValue - Fade coefficient
+     * @private
+     */
+    constructor( point, fadeValue ) {
+      this.point = point;
+      this.fadeValue = fadeValue;
+    }
+  }
+
+  return energyFormsAndChanges.register( 'LightRayNode', LightRayNode );
 } );
 
