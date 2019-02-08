@@ -5,26 +5,20 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EnergyBalanceRecord = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceRecord' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const EnergyBalanceRecord = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceRecord' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  /**
-   * @constructor
-   */
-  function EnergyBalanceTracker() {
+  class EnergyBalanceTracker {
 
-    // @private - array where the energy exchange records are kept
-    this.energyBalanceRecords = [];
-  }
+    constructor() {
 
-  energyFormsAndChanges.register( 'EnergyBalanceTracker', EnergyBalanceTracker );
-
-  return inherit( Object, EnergyBalanceTracker, {
+      // @private - array where the energy exchange records are kept
+      this.energyBalanceRecords = [];
+    }
 
     /**
      * log an amount of energy that was exchanged between to entities with the provided IDs
@@ -33,16 +27,16 @@ define( function( require ) {
      * @param {number} energyAmount
      * @public
      */
-    logEnergyExchange: function( fromID, toID, energyAmount ) {
+    logEnergyExchange( fromID, toID, energyAmount ) {
 
       // for efficiency, bail out right away if the energy amount is zero, since it won't have any effect
       if ( energyAmount === 0 ) {
         return;
       }
 
-      var fromIDForEntry;
-      var toIDForEntry;
-      var energyAmountToLog;
+      let fromIDForEntry;
+      let toIDForEntry;
+      let energyAmountToLog;
 
       // So that we don't end up with multiple records for exchanges between a single pair of entities, reorder the
       // provided IDs and reverse the order of energy if necessary.
@@ -58,9 +52,9 @@ define( function( require ) {
       }
 
       // look through the records for one that matches, use C-style loops for best performance
-      var energyBalanceRecord = null;
-      for ( var i = 0; i < this.energyBalanceRecords.length; i++ ) {
-        var tempRecord = this.energyBalanceRecords[ i ];
+      let energyBalanceRecord = null;
+      for ( let i = 0; i < this.energyBalanceRecords.length; i++ ) {
+        const tempRecord = this.energyBalanceRecords[ i ];
         if ( tempRecord.fromID === fromIDForEntry && tempRecord.toID === toIDForEntry ) {
           energyBalanceRecord = tempRecord;
           break;
@@ -78,7 +72,7 @@ define( function( require ) {
         energyBalanceRecord.energyBalance += energyAmountToLog;
         energyBalanceRecord.recentlyUpdated = true;
       }
-    },
+    }
 
     /**
      * get all records whose energy balance magnitude exceeds the provided threshold
@@ -87,19 +81,19 @@ define( function( require ) {
      * @param {Array} resultsArray - array where results are returned, this is done to reduce memory allocations
      * @returns {EnergyBalanceRecord[]}
      */
-    getBalancesOverThreshold: function( threshold, recentlyUpdatedOnly, resultsArray ) {
+    getBalancesOverThreshold( threshold, recentlyUpdatedOnly, resultsArray ) {
 
-      var currentRecord;
+      let currentRecord;
 
       // c-style loop for best performance
-      for ( var i = 0; i < this.energyBalanceRecords.length; i++ ) {
+      for ( let i = 0; i < this.energyBalanceRecords.length; i++ ) {
         currentRecord = this.energyBalanceRecords[ i ];
         if ( Math.abs( currentRecord.energyBalance ) > threshold && ( currentRecord.recentlyUpdated || !recentlyUpdatedOnly ) ) {
           resultsArray.push( currentRecord );
         }
       }
       return resultsArray;
-    },
+    }
 
     /**
      * get the balances between the provided ID and all other entities with whom balances are being tracked
@@ -107,40 +101,41 @@ define( function( require ) {
      * @param {boolean} recentlyUpdateOnly
      * @returns {EnergyBalanceRecord[]}
      */
-    getBalancesForID: function( id, recentlyUpdateOnly ) {
+    getBalancesForID( id, recentlyUpdateOnly ) {
 
-      var resultsArray = [];
+      const resultsArray = [];
 
       // c-style loop for best performance
-      for ( var i = 0; i < this.energyBalanceRecords.length; i++ ) {
-        var currentRecord = this.energyBalanceRecords[ i ];
+      for ( let i = 0; i < this.energyBalanceRecords.length; i++ ) {
+        const currentRecord = this.energyBalanceRecords[ i ];
         if ( ( currentRecord.fromID === id || currentRecord.toID === id ) &&
              ( !recentlyUpdateOnly || currentRecord.recentlyUpdated ) ) {
           resultsArray.push( currentRecord );
         }
       }
       return resultsArray;
-    },
+    }
 
     /**
      * clear the energy balance for all records
      * @public
      */
-    clearAllBalances: function() {
-      this.energyBalanceRecords.forEach( function( energyBalanceRecord ) {
+    clearAllBalances() {
+      this.energyBalanceRecords.forEach( energyBalanceRecord => {
         energyBalanceRecord.energyBalance = 0;
       } );
-    },
+    }
 
     /**
      * clear the flags that are used to determine whether energy was recently transferred
      * @public
      */
-    clearRecentlyUpdatedFlags: function() {
-      this.energyBalanceRecords.forEach( function( energyBalanceRecord ) {
+    clearRecentlyUpdatedFlags() {
+      this.energyBalanceRecords.forEach( energyBalanceRecord => {
         energyBalanceRecord.recentlyUpdated = false;
       } );
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'EnergyBalanceTracker', EnergyBalanceTracker );
 } );
