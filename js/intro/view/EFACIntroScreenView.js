@@ -469,7 +469,6 @@ define( require => {
        * @param {StickyTemperatureAndColorSensor} sensor
        * @param {Boolean} doAnimation - whether the sensor animates back to the storage area
        * @param {TemperatureAndColorSensorNode} [sensorNode]
-       * @constructor
        */
       const returnSensorToStorageArea = ( sensor, doAnimation, sensorNode ) => {
         const currentPosition = sensor.positionProperty.get();
