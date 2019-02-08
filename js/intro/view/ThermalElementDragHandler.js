@@ -1,70 +1,69 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
  * them from being dragged through one another
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var DragListener = require( 'SCENERY/listeners/DragListener' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @param {UserMovableModelElement} modelElement
-   * @param {Node} screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {function} constrainPosition
-   * @param {BooleanProperty} simIsPlayingProperty
-   */
-  function ThermalElementDragHandler(
-    modelElement,
-    screenViewChildNode,
-    modelViewTransform,
-    constrainPosition,
-    simIsPlayingProperty
-  ) {
+  class ThermalElementDragHandler extends DragListener {
 
-    var dragStartOffset = new Vector2();
-    var currentTarget = null;
+    /**
+     * @param {UserMovableModelElement} modelElement
+     * @param {Node} screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {function} constrainPosition
+     * @param {BooleanProperty} simIsPlayingProperty
+     */
+    constructor(
+      modelElement,
+      screenViewChildNode,
+      modelViewTransform,
+      constrainPosition,
+      simIsPlayingProperty
+    ) {
 
-    DragListener.call( this, {
+      const dragStartOffset = new Vector2();
+      let currentTarget = null;
 
-      // allow moving a finger (touch) across a screenViewChildNode to pick it up
-      allowTouchSnag: true,
+      super( {
 
-      start: function( event ) {
+        // allow moving a finger (touch) across a screenViewChildNode to pick it up
+        allowTouchSnag: true,
 
-        // make sure the sim is playing when an element is grabbed - this will resume the sim if it is paused
-        simIsPlayingProperty.value = true;
-        modelElement.userControlledProperty.set( true );
-        var modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
-        currentTarget = event.currentTarget;
-        var dragStartPosition = currentTarget.globalToParentPoint( event.pointer.point );
-        dragStartOffset.setXY(
-          dragStartPosition.x - modelElementViewPosition.x,
-          dragStartPosition.y - modelElementViewPosition.y
-        );
-      },
+        start: event => {
 
-      drag: function( event ) {
-        var dragPosition = currentTarget.globalToParentPoint( event.pointer.point );
-        var modelElementViewPosition = dragPosition.minus( dragStartOffset );
-        var modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
-        modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
-      },
+          // make sure the sim is playing when an element is grabbed - this will resume the sim if it is paused
+          simIsPlayingProperty.value = true;
+          modelElement.userControlledProperty.set( true );
+          const modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
+          currentTarget = event.currentTarget;
+          const dragStartPosition = currentTarget.globalToParentPoint( event.pointer.point );
+          dragStartOffset.setXY(
+            dragStartPosition.x - modelElementViewPosition.x,
+            dragStartPosition.y - modelElementViewPosition.y
+          );
+        },
 
-      end: function( event ) {
-        modelElement.userControlledProperty.set( false );
-        currentTarget = null;
-      }
+        drag: event => {
+          const dragPosition = currentTarget.globalToParentPoint( event.pointer.point );
+          const modelElementViewPosition = dragPosition.minus( dragStartOffset );
+          const modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
+          modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
+        },
 
-    } );
+        end: () => {
+          modelElement.userControlledProperty.set( false );
+          currentTarget = null;
+        }
+      } );
+    }
   }
 
-  energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
-
-  return inherit( DragListener, ThermalElementDragHandler );
+  return energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
 } );
