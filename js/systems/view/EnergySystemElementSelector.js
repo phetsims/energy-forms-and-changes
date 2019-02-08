@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * a Scenery Node that allows the user to select the various elements contained within a carousel by presenting a set of
@@ -9,64 +9,63 @@
  * @author Jesse Greenberg
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Panel = require( 'SUN/Panel' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  const Color = require( 'SCENERY/util/Color' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Panel = require( 'SUN/Panel' );
+  const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
 
   // constants
-  var BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
+  const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
-  /**
-   * @param {EnergySystemElementCarousel} carousel
-   * @constructor
-   */
-  function EnergySystemElementSelector( carousel, options ) {
+  class EnergySystemElementSelector extends Panel {
 
-    options = _.extend( {
-      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-      xMargin: 10,
-      yMargin: 10
-    }, options );
+    /**
+     * @param {EnergySystemElementCarousel} carousel
+     */
+    constructor( carousel, options ) {
 
-    var buttonElementList = [];
+      options = _.extend( {
+        fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+        stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+        lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+        cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+        xMargin: 10,
+        yMargin: 10
+      }, options );
 
-    for ( var i = 0; i < carousel.managedElements.length; i++ ) {
-      var element = carousel.managedElements[ i ];
-      var iconImage = element.iconImage;
-      var width = iconImage.getBounds().getWidth();
-      var height = iconImage.getBounds().getHeight();
-      var denominator = ( width > height ) ? width : height;
+      const buttonElementList = [];
 
-      assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
+      for ( let i = 0; i < carousel.managedElements.length; i++ ) {
+        const element = carousel.managedElements[ i ];
+        const iconImage = element.iconImage;
+        const width = iconImage.getBounds().getWidth();
+        const height = iconImage.getBounds().getHeight();
+        const denominator = ( width > height ) ? width : height;
 
-      iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
-      buttonElementList.push( {
-        value: i,
-        node: iconImage
+        assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
+
+        iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
+        buttonElementList.push( {
+          value: i,
+          node: iconImage
+        } );
+      }
+
+      const buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
+        baseColor: Color.WHITE,
+        orientation: 'horizontal',
+        spacing: 15
       } );
+
+      super( buttonGroup, options );
     }
-
-    var buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
-      baseColor: Color.WHITE,
-      orientation: 'horizontal',
-      spacing: 15
-    } );
-
-    Panel.call( this, buttonGroup, options );
   }
 
-  energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
-
-  return inherit( Panel, EnergySystemElementSelector );
+  return energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
 } );
 
