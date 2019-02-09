@@ -1,123 +1,118 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * a scenery node that looks like water in a cylindrical container as seen from slightly above the horizon
  * @author John Blanco
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
-  var SteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SteamCanvasNode' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Shape = require( 'KITE/Shape' );
+  const SteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SteamCanvasNode' );
 
   // constants
-  var PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
+  const PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
 
   // constants for the PerspectiveWaterNode
-  var FLUID_LINE_WIDTH = 2;
+  const FLUID_LINE_WIDTH = 2;
 
-  /**
-   * @param {Rectangle} beakerOutlineRect
-   * @param {Property.<number>} fluidLevelProperty
-   * @param {Property.<number>} temperatureProperty
-   * @param {number} fluidBoilingPoint
-   * @param {Color} fluidColor
-   * @param {Color} steamColor
-   */
-  function PerspectiveWaterNode( beakerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
+  class PerspectiveWaterNode extends Node {
 
-    Node.call( this );
-    var self = this;
+    /**
+     * @param {Rectangle} beakerOutlineRect
+     * @param {Property.<number>} fluidLevelProperty
+     * @param {Property.<number>} temperatureProperty
+     * @param {number} fluidBoilingPoint
+     * @param {Color} fluidColor
+     * @param {Color} steamColor
+     */
+    constructor( beakerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
+      super();
 
-    // @private
-    this.beakerOutlineRect = beakerOutlineRect;
-    this.fluidLevelProperty = fluidLevelProperty;
-    this.temperatureProperty = temperatureProperty;
-    this.fluidBoilingPoint = fluidBoilingPoint;
-    this.fluidColor = fluidColor;
-    this.steamColor = steamColor;
+      // @private
+      this.beakerOutlineRect = beakerOutlineRect;
+      this.fluidLevelProperty = fluidLevelProperty;
+      this.temperatureProperty = temperatureProperty;
+      this.fluidBoilingPoint = fluidBoilingPoint;
+      this.fluidColor = fluidColor;
+      this.steamColor = steamColor;
 
-    // @private - a rectangle that defines the size of the fluid within the beaker
-    this.fluidBounds = Bounds2.NOTHING.copy();
+      // @private - a rectangle that defines the size of the fluid within the beaker
+      this.fluidBounds = Bounds2.NOTHING.copy();
 
-    // @private - nodes that represent the top and body of the water
-    this.liquidWaterTopNode = new Path( null, {
-      fill: this.fluidColor.colorUtilsBrighter( 0.25 ),
-      lineWidth: FLUID_LINE_WIDTH,
-      stroke: this.fluidColor.colorUtilsDarker( 0.2 )
-    } );
-    this.liquidWaterBodyNode = new Path( null, {
-      fill: this.fluidColor,
-      lineWidth: FLUID_LINE_WIDTH,
-      stroke: this.fluidColor.colorUtilsDarker( 0.2 )
-    } );
+      // @private - nodes that represent the top and body of the water
+      this.liquidWaterTopNode = new Path( null, {
+        fill: this.fluidColor.colorUtilsBrighter( 0.25 ),
+        lineWidth: FLUID_LINE_WIDTH,
+        stroke: this.fluidColor.colorUtilsDarker( 0.2 )
+      } );
+      this.liquidWaterBodyNode = new Path( null, {
+        fill: this.fluidColor,
+        lineWidth: FLUID_LINE_WIDTH,
+        stroke: this.fluidColor.colorUtilsDarker( 0.2 )
+      } );
 
-    this.steamCanvasNode = new SteamCanvasNode(
-      this.beakerOutlineRect,
-      this.fluidLevelProperty,
-      this.temperatureProperty,
-      this.fluidBoilingPoint,
-      this.steamColor, {
-        canvasBounds: new Bounds2(
-          -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxX / 2,
-          -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY,
-          EFACConstants.SCREEN_LAYOUT_BOUNDS.maxX / 2,
-          EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY
-        )
-    } );
-    this.addChild( this.liquidWaterBodyNode );
-    this.addChild( this.liquidWaterTopNode );
-    this.addChild( this.steamCanvasNode );
+      this.steamCanvasNode = new SteamCanvasNode(
+        this.beakerOutlineRect,
+        this.fluidLevelProperty,
+        this.temperatureProperty,
+        this.fluidBoilingPoint,
+        this.steamColor, {
+          canvasBounds: new Bounds2(
+            -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxX / 2,
+            -EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY,
+            EFACConstants.SCREEN_LAYOUT_BOUNDS.maxX / 2,
+            EFACConstants.SCREEN_LAYOUT_BOUNDS.maxY
+          )
+        } );
+      this.addChild( this.liquidWaterBodyNode );
+      this.addChild( this.liquidWaterTopNode );
+      this.addChild( this.steamCanvasNode );
 
-    // update the appearance of the water as the level changes
-    this.fluidLevelProperty.link( function( fluidLevel ) {
-      var fluidHeight = beakerOutlineRect.height * fluidLevel;
-      self.fluidBounds.setMinMax(
-        beakerOutlineRect.minX,
-        beakerOutlineRect.maxY - fluidHeight,
-        beakerOutlineRect.maxX,
-        0
-      );
-      self.updateWaterAppearance();
-    } );
-  }
-
-  energyFormsAndChanges.register( 'PerspectiveWaterNode', PerspectiveWaterNode );
-
-  return inherit( Node, PerspectiveWaterNode, {
+      // update the appearance of the water as the level changes
+      this.fluidLevelProperty.link( fluidLevel => {
+        const fluidHeight = beakerOutlineRect.height * fluidLevel;
+        this.fluidBounds.setMinMax(
+          beakerOutlineRect.minX,
+          beakerOutlineRect.maxY - fluidHeight,
+          beakerOutlineRect.maxX,
+          0
+        );
+        this.updateWaterAppearance();
+      } );
+    }
 
     /**
      * @public
      */
-    reset: function() {
+    reset() {
       this.steamCanvasNode.reset();
-    },
+    }
 
     /**
      * time step function for the water
      * @param {number} dt - the change in time
      * @public
      */
-    step: function( dt ) {
+    step( dt ) {
       this.steamCanvasNode.step( dt );
-    },
+    }
 
     /**
      * update the appearance of the water
      * @private
      */
-    updateWaterAppearance: function() {
-      var ellipseWidth = this.fluidBounds.width;
-      var ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
-      var liquidWaterTopEllipse = Shape.ellipse(
+    updateWaterAppearance() {
+      const ellipseWidth = this.fluidBounds.width;
+      const ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
+      const liquidWaterTopEllipse = Shape.ellipse(
         this.fluidBounds.centerX,
         this.fluidBounds.minY,
         ellipseWidth / 2,
@@ -128,9 +123,9 @@ define( function( require ) {
         false
       );
 
-      var halfWidth = this.fluidBounds.width / 2;
-      var halfHeight = ellipseHeight / 2;
-      var liquidWaterBodyShape = new Shape()
+      const halfWidth = this.fluidBounds.width / 2;
+      const halfHeight = ellipseHeight / 2;
+      const liquidWaterBodyShape = new Shape()
         .moveTo( this.fluidBounds.minX, this.fluidBounds.minY ) // Top left of the beaker body.
         .ellipticalArc( this.fluidBounds.centerX, this.fluidBounds.minY, halfWidth, halfHeight, 0, Math.PI, 0, false )
         .lineTo( this.fluidBounds.maxX, this.fluidBounds.maxY ) // Bottom right of the beaker body.
@@ -140,5 +135,7 @@ define( function( require ) {
       this.liquidWaterBodyNode.setShape( liquidWaterBodyShape );
       this.liquidWaterTopNode.setShape( liquidWaterTopEllipse );
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'PerspectiveWaterNode', PerspectiveWaterNode );
 } );
