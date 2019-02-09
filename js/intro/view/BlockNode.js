@@ -98,31 +98,49 @@ define( require => {
       const lowerRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMaxY() ).plus( blockFaceOffset );
       const upperRightFrontCorner = new Vector2( blockRect.maxX, blockRect.getMinY() ).plus( blockFaceOffset );
       const upperLeftFrontCorner = new Vector2( blockRect.minX, blockRect.getMinY() ).plus( blockFaceOffset );
-      const blockFaceShape = Shape.rectangle(
-        lowerLeftFrontCorner.x,
-        upperLeftFrontCorner.y,
-        blockRect.width,
-        blockRect.height
-      );
-
-      // create the shape of the top of the block
       const upperLeftBackCorner = upperLeftFrontCorner.plus( backCornersOffset );
       const upperRightBackCorner = upperRightFrontCorner.plus( backCornersOffset );
+      const lowerRightBackCorner = lowerRightFrontCorner.plus( backCornersOffset );
+
+
+      // create the outline of the block
+      const blockOutline = new Shape()
+        .moveToPoint( upperLeftBackCorner )
+        .lineToPoint( upperRightBackCorner )
+        .lineToPoint( upperRightFrontCorner )
+        .lineToPoint( upperLeftFrontCorner )
+        .lineToPoint( upperLeftBackCorner )
+        .moveToPoint( upperLeftFrontCorner )
+        .lineToPoint( lowerLeftFrontCorner )
+        .lineToPoint( lowerRightFrontCorner )
+        .lineToPoint( upperRightFrontCorner )
+        .moveToPoint( lowerRightFrontCorner )
+        .lineToPoint( lowerRightBackCorner )
+        .lineToPoint( upperRightBackCorner );
+
+      // create the shape of the front of the block
+      const blockFaceShape = new Shape();
+      blockFaceShape.moveToPoint( upperRightFrontCorner )
+        .lineToPoint( upperLeftFrontCorner )
+        .lineToPoint( lowerLeftFrontCorner )
+        .lineToPoint( lowerRightFrontCorner )
+        .close();
+
+      // create the shape of the top of the block
       const blockTopShape = new Shape();
       blockTopShape.moveToPoint( upperLeftFrontCorner )
-        .lineToPoint( upperRightFrontCorner )
-        .lineToPoint( upperRightBackCorner )
         .lineToPoint( upperLeftBackCorner )
-        .lineToPoint( upperLeftFrontCorner );
+        .lineToPoint( upperRightBackCorner )
+        .lineToPoint( upperRightFrontCorner )
+        .close();
 
       // create the shape of the side of the block
-      const lowerRightBackCorner = lowerRightFrontCorner.plus( backCornersOffset );
       const blockSideShape = new Shape();
-      blockSideShape.moveToPoint( upperRightFrontCorner )
-        .lineToPoint( lowerRightFrontCorner )
+      blockSideShape.moveToPoint( upperRightBackCorner )
         .lineToPoint( lowerRightBackCorner )
-        .lineToPoint( upperRightBackCorner )
-        .lineToPoint( upperRightFrontCorner );
+        .lineToPoint( lowerRightFrontCorner )
+        .lineToPoint( upperRightFrontCorner )
+        .close();
 
       // Create the shape for the back of the block, which can only be seen when the block is transparent.  The lines are
       // shortened a little so that they don't stick out from behind the block.
@@ -159,23 +177,30 @@ define( require => {
       const blockFace = this.createSurface(
         blockFaceShape,
         block.color,
-        edgeColor,
         BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].front : null
       );
       const blockTop = this.createSurface(
         blockTopShape,
-        block.color, edgeColor,
+        block.color,
         BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].top : null
       );
       const blockSide = this.createSurface(
         blockSideShape,
         block.color,
-        edgeColor,
         BLOCK_IMAGES[ block.blockType ] ? BLOCK_IMAGES[ block.blockType ].side : null
       );
-      this.addChild( blockFace );
       this.addChild( blockTop );
       this.addChild( blockSide );
+      this.addChild( blockFace );
+
+      // add the outline
+      const frontOutline = new Path( blockOutline, {
+        stroke: edgeColor,
+        lineWidth: OUTLINE_LINE_WIDTH,
+        lineCap: 'round',
+        lineJoin: 'round'
+      } );
+      this.addChild( frontOutline );
 
       if ( EFACQueryParameters.show2DBlockBounds ) {
         const blockBounds = scaleTransform.transformBounds2( block.getRawShape() );
@@ -225,6 +250,7 @@ define( require => {
         blockSide.opacity = opacity;
         blockBack.opacity = opacity / 2; // make back less opaque to create a look of distance
         label.opacity = opacity;
+        frontOutline.opacity = opacity;
 
         // don't bother displaying the back if the block is not in see-through mode
         blockBack.visible = energyChunksVisible;
@@ -254,12 +280,11 @@ define( require => {
      * convenience method to avoid code duplication - adds a node of the given shape, color, and texture (if specified)
      * @param {Shape} shape
      * @param {Color} fillColor
-     * @param {Color} edgeColor
      * @param {Image} textureImage
      * @returns {Node}
      * @private
      */
-    createSurface( shape, fillColor, edgeColor, textureImage ) {
+    createSurface( shape, fillColor, textureImage ) {
 
       let surfaceNode = null;
 
@@ -288,23 +313,12 @@ define( require => {
         surfaceNode.addChild( textureClipNode );
 
         // add the outline
-        surfaceNode.addChild( new Path( shape, {
-          lineWidth: OUTLINE_LINE_WIDTH,
-          stroke: edgeColor,
-          lineEnd: 'butt',
-          lineJoin: 'round'
-        } ) );
+        surfaceNode.addChild( new Path( shape ) );
       }
       else {
 
         // add filled shape using only color
-        surfaceNode = new Path( shape, {
-          fill: fillColor,
-          stroke: edgeColor,
-          lineWidth: OUTLINE_LINE_WIDTH,
-          lineEnd: 'butt',
-          lineJoin: 'round'
-        } );
+        surfaceNode = new Path( shape, { fill: fillColor } );
       }
 
       return surfaceNode;
