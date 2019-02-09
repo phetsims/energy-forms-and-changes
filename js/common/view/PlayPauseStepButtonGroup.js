@@ -5,43 +5,42 @@
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  const StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
-  /**
-   * @param {EFACIntroModel|SystemsModel} model
-   * @constructor
-   */
-  function PlayPauseStepButtonGroup( model ) {
+  class PlayPauseStepButtonGroup extends HBox {
 
-    // create the play/pause button
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
-      radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
-    } );
+    /**
+     * @param {EFACIntroModel|SystemsModel} model
+     */
+    constructor( model ) {
 
-    // create the step button, which is used to manually step the simulation
-    var stepButton = new StepForwardButton( {
-      isPlayingProperty: model.isPlayingProperty,
-      listener: function() { model.manualStep(); },
-      radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
-    } );
+      // create the play/pause button
+      const playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
+        radius: EFACConstants.PLAY_PAUSE_BUTTON_RADIUS
+      } );
 
-    HBox.call( this, {
-      children: [ playPauseButton, stepButton ],
-      spacing: 10
-    } );
+      // create the step button, which is used to manually step the simulation
+      const stepButton = new StepForwardButton( {
+        isPlayingProperty: model.isPlayingProperty,
+        listener: () => model.manualStep(),
+        radius: EFACConstants.STEP_FORWARD_BUTTON_RADIUS
+      } );
+
+      super( {
+        children: [ playPauseButton, stepButton ],
+        spacing: 10
+      } );
+    }
   }
 
-  energyFormsAndChanges.register( 'PlayPauseStepButtonGroup', PlayPauseStepButtonGroup );
-
-  return inherit( HBox, PlayPauseStepButtonGroup );
+  return energyFormsAndChanges.register( 'PlayPauseStepButtonGroup', PlayPauseStepButtonGroup );
 } );
 
