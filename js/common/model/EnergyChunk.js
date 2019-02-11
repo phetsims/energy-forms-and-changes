@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * type that represents a chunk of energy in the view
@@ -6,43 +6,39 @@
  * @author John Blanco
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // static data
-  var instanceCount = 0; // counter for creating unique IDs
+  let instanceCount = 0; // counter for creating unique IDs
 
-  /**
-   * @param {EnergyType} initialEnergyType
-   * @param {Vector2} initialPosition
-   * @param {Vector2} initialVelocity
-   * @param {Property.<boolean>} visibleProperty
-   * @constructor
-   */
-  function EnergyChunk( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
+  class EnergyChunk {
 
-    // @public - properties of this energy chunk
-    this.positionProperty = new Property( initialPosition );
-    this.zPositionProperty = new Property( 0 );   // for simple 3D layering effects
-    this.energyTypeProperty = new Property( initialEnergyType );
-    this.visibleProperty = visibleProperty;
+    /**
+     * @param {EnergyType} initialEnergyType
+     * @param {Vector2} initialPosition
+     * @param {Vector2} initialVelocity
+     * @param {Property.<boolean>} visibleProperty
+     */
+    constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
 
-    // @public (read-only) {number} - an ID that will be used to track this energy chunk
-    this.id = instanceCount++;
+      // @public - properties of this energy chunk
+      this.positionProperty = new Property( initialPosition );
+      this.zPositionProperty = new Property( 0 );   // for simple 3D layering effects
+      this.energyTypeProperty = new Property( initialEnergyType );
+      this.visibleProperty = visibleProperty;
 
-    // @public {Vector2}
-    this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
-  }
+      // @public (read-only) {number} - an ID that will be used to track this energy chunk
+      this.id = instanceCount++;
 
-  energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
-
-  return inherit( Object, EnergyChunk, {
+      // @public {Vector2}
+      this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
+    }
 
     /**
      * set the position
@@ -50,14 +46,14 @@ define( function( require ) {
      * @param {number} y
      * @public
      */
-    setPosition: function( x, y ) {
+    setPosition( x, y ) {
 
       // only update if the position has changed to avoid unnecessary allocations and notifications
-      var currentPosition = this.positionProperty.get();
+      const currentPosition = this.positionProperty.get();
       if ( x !== currentPosition.x || y !== currentPosition.y ) {
         this.positionProperty.set( new Vector2( x, y ) );
       }
-    },
+    }
 
     /**
      * translate the energy chunk by amount specified
@@ -65,27 +61,27 @@ define( function( require ) {
      * @param {number} y
      * @public
      */
-    translate: function( x, y ) {
-      var oldPosition = this.positionProperty.get();
+    translate( x, y ) {
+      const oldPosition = this.positionProperty.get();
       this.positionProperty.set( new Vector2( oldPosition.x + x, oldPosition.y + y ) );
-    },
+    }
 
     /**
      * translate the energy chunk based on its velocity
      * @param {number} dt - delta time
      */
-    translateBasedOnVelocity: function( dt ) {
+    translateBasedOnVelocity( dt ) {
       this.translate( this.velocity.x * dt, this.velocity.y * dt );
-    },
+    }
 
     /**
      * Function that returns the velocity of the energy chunk
      * @returns {Vector2}
      * @public
      */
-    getVelocity: function() {
+    getVelocity() {
       return this.velocity.copy();
-    },
+    }
 
     /**
      * set the X and Y velocity of the energy chunk
@@ -93,29 +89,30 @@ define( function( require ) {
      * @param {number} y
      * @public
      */
-    setVelocityXY: function( x, y ) {
+    setVelocityXY( x, y ) {
       this.velocity.setXY( x, y );
-    },
+    }
 
     /**
      * set the velocity of the energy chunk (using a vector)
      * @param {Vector2} newVelocity
      * @public
      */
-    setVelocity: function( newVelocity ) {
+    setVelocity( newVelocity ) {
       this.velocity.set( newVelocity );
-    },
+    }
 
     /**
      * @public
      */
-    reset: function() {
+    reset() {
       this.positionProperty.reset();
       this.zPositionProperty.reset();
       this.energyTypeProperty.reset();
       this.visibleProperty.reset();
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 } );
 

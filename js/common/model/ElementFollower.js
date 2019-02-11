@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
  * An object that makes it easy for one model element to follow another one around.  This was originally created to
@@ -9,21 +9,19 @@
  * @author Andrew Adare
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Vector2 = require( 'DOT/Vector2' );
+
+  class ElementFollower {
 
   /**
    * @param {Property<Vector2>} trackedPositionProperty
-   * @constructor
    */
-  function ElementFollower( trackedPositionProperty ) {
-
-    var self = this;
+  constructor( trackedPositionProperty ) {
 
     // @private {Property<Vector2>} - position property of element that will follow another
     this.followerProperty = trackedPositionProperty;
@@ -35,21 +33,17 @@ define( function( require ) {
     this.offset = Vector2.ZERO;
 
     // @private {function} - function that gets linked/unlinked when the thermometer is following/unfollowing.
-    this.followerFunction = function( location ) {
-      self.followerProperty.set( location.plus( self.offset ) );
+    this.followerFunction = location => {
+      this.followerProperty.set( location.plus( this.offset ) );
     };
   }
-
-  energyFormsAndChanges.register( 'ElementFollower', ElementFollower );
-
-  return inherit( Object, ElementFollower, {
 
     /**
      * start following the provided property
      * @param {Property<Vector2>} locationToFollowProperty - location Property to follow
      * @public
      */
-    startFollowing: function( locationToFollowProperty ) {
+    startFollowing( locationToFollowProperty ) {
 
       // if this was previously following something else, un-follow it
       if ( this.locationBeingFollowedProperty ) {
@@ -62,34 +56,35 @@ define( function( require ) {
       // hook up the listener
       locationToFollowProperty.link( this.followerFunction );
       this.locationBeingFollowedProperty = locationToFollowProperty;
-    },
+    }
 
     /**
      * @public
      */
-    stopFollowing: function() {
+    stopFollowing() {
       if ( this.locationBeingFollowedProperty ) {
         this.locationBeingFollowedProperty.unlink( this.followerFunction );
         this.locationBeingFollowedProperty = null;
       }
-    },
+    }
 
     /**
      * @public
      * @returns {boolean}
      */
-    isFollowing: function() {
+    isFollowing() {
       return this.locationBeingFollowedProperty !== null;
-    },
+    }
 
     /**
      * @public
      */
-    reset: function() {
+    reset() {
       this.followerProperty.reset();
       this.locationBeingFollowedProperty.reset();
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'ElementFollower', ElementFollower );
 } );
 
