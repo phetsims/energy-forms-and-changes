@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * This class represents a "slice" within a 2D container that can contain a set of energy chunks, and can be used to add
@@ -14,23 +14,21 @@
  * @author Jesse Greenberg
  * @author Martin Veillette
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+
+  class EnergyChunkContainerSlice {
 
   /**
    * @param {Bounds2} bounds
    * @param {number} zPosition - used to give appearance of depth
    * @param {Property.<Vector2>} anchorPointProperty
-   * @constructor
    */
-  function EnergyChunkContainerSlice( bounds, zPosition, anchorPointProperty ) {
-
-    var self = this;
+  constructor( bounds, zPosition, anchorPointProperty ) {
 
     // @public {Property.<Vector2>} - position of this slice in model space
     this.anchorPointProperty = anchorPointProperty;
@@ -45,50 +43,47 @@ define( function( require ) {
     this.energyChunkList = new ObservableArray();
 
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
-    this.anchorPointProperty.lazyLink( function( newPosition, oldPosition ) {
+    this.anchorPointProperty.lazyLink( ( newPosition, oldPosition ) => {
 
-      var xTranslation = newPosition.x - oldPosition.x;
-      var yTranslation = newPosition.y - oldPosition.y;
+      const xTranslation = newPosition.x - oldPosition.x;
+      const yTranslation = newPosition.y - oldPosition.y;
 
-      self.bounds.shift( xTranslation, yTranslation );
+      this.bounds.shift( xTranslation, yTranslation );
 
       // c-style loop for best performance
-      for ( var i = 0; i < self.energyChunkList.length; i++ ) {
-        self.energyChunkList.get( i ).translate( xTranslation, yTranslation );
+      for ( let i = 0; i < this.energyChunkList.length; i++ ) {
+        this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
       }
     } );
   }
-
-  energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
-
-  return inherit( Object, EnergyChunkContainerSlice, {
 
     /**
      * @param {EnergyChunk} energyChunk
      * @public
      */
-    addEnergyChunk: function( energyChunk ) {
+    addEnergyChunk( energyChunk ) {
       energyChunk.zPositionProperty.set( this.zPosition );
       this.energyChunkList.push( energyChunk );
-    },
+    }
 
     /**
      * expand or contract the bounds of this slice in the y-direction based on the provided multiplier value
      * @param {number} multiplier
      * @public
      */
-    updateHeight: function( multiplier ) {
+    updateHeight( multiplier ) {
       this.bounds.maxY = this.bounds.minY + this.bounds.height * multiplier;
-    },
+    }
 
     /**
      * @returns {number}
      * @public
      */
-    getNumEnergyChunks: function() {
+    getNumEnergyChunks() {
       return this.energyChunkList.length;
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 } );
 
