@@ -1,4 +1,4 @@
-// Copyright 2015-2018, University of Colorado Boulder
+// Copyright 2015-2019, University of Colorado Boulder
 
 /**
  * Static object containing the constants that control the rate of heat transfer between the various model elements that
@@ -9,26 +9,27 @@
  * @author Jesse Greenberg
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
-  // constants
-  var BRICK_IRON_HEAT_TRANSFER_FACTOR = 1000.0;
-  var BRICK_WATER_HEAT_TRANSFER_FACTOR = 1000.0;
-  var BRICK_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
-  var BRICK_AIR_HEAT_TRANSFER_FACTOR = 30.0;
-  var IRON_WATER_HEAT_TRANSFER_FACTOR = 1000.0;
-  var IRON_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
-  var IRON_AIR_HEAT_TRANSFER_FACTOR = 30.0;
-  var WATER_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
-  var WATER_AIR_HEAT_TRANSFER_FACTOR = 30.0;
-  var OLIVE_OIL_AIR_HEAT_TRANSFER_FACTOR = 30.0;
-  var AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
+  // modules
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  // constants
+  const BRICK_IRON_HEAT_TRANSFER_FACTOR = 1000.0;
+  const BRICK_WATER_HEAT_TRANSFER_FACTOR = 1000.0;
+  const BRICK_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
+  const BRICK_AIR_HEAT_TRANSFER_FACTOR = 30.0;
+  const IRON_WATER_HEAT_TRANSFER_FACTOR = 1000.0;
+  const IRON_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
+  const IRON_AIR_HEAT_TRANSFER_FACTOR = 30.0;
+  const WATER_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
+  const WATER_AIR_HEAT_TRANSFER_FACTOR = 30.0;
+  const OLIVE_OIL_AIR_HEAT_TRANSFER_FACTOR = 30.0;
+  const AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
   // map of inter-object heat transfer constants
-  var heatTransferConstantsMap = {
+  const heatTransferConstantsMap = {
     'iron': {
       'brick': BRICK_IRON_HEAT_TRANSFER_FACTOR,
       'water': IRON_WATER_HEAT_TRANSFER_FACTOR,
@@ -61,7 +62,7 @@ define( function( require ) {
     }
   };
 
-  var HeatTransferConstants = {
+  const HeatTransferConstants = {
 
     /**
      * get the heat transfer constants for two model elements that can contain heat
@@ -69,18 +70,18 @@ define( function( require ) {
      * @param {string} element2
      * @returns {number}
      */
-    getHeatTransferFactor: function( element1, element2 ) {
+    getHeatTransferFactor( element1, element2 ) {
       return heatTransferConstantsMap[ element1 ][ element2 ];
     },
 
     /**
      * @returns {number}
      */
-    getAirToSurroundingAirHeatTransferFactor: function() {
+    getAirToSurroundingAirHeatTransferFactor() {
       return AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
     }
   };
-  energyFormsAndChanges.register( 'HeatTransferConstants', HeatTransferConstants );
-  return HeatTransferConstants;
+
+  return energyFormsAndChanges.register( 'HeatTransferConstants', HeatTransferConstants );
 } );
 
