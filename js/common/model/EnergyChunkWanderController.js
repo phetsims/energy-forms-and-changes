@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * This type is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
@@ -7,32 +7,30 @@
  * @author John Blanco
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var DEFAULT_MIN_SPEED = 0.06; // In m/s.
-  var DEFAULT_MAX_SPEED = 0.10; // In m/s.
-  var MIN_TIME_IN_ONE_DIRECTION = 0.4;
-  var MAX_TIME_IN_ONE_DIRECTION = 0.8;
-  var DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chosen
-  var DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
-  var GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if destination changes, speed increases
+  const DEFAULT_MIN_SPEED = 0.06; // In m/s.
+  const DEFAULT_MAX_SPEED = 0.10; // In m/s.
+  const MIN_TIME_IN_ONE_DIRECTION = 0.4;
+  const MAX_TIME_IN_ONE_DIRECTION = 0.8;
+  const DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chosen
+  const DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
+  const GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if destination changes, speed increases
+
+  class EnergyChunkWanderController {
 
   /**
    * @param {EnergyChunk} energyChunk
    * @param {Property.<Vector2>} destinationProperty
    * @param {Object} [options]
-   * @constructor
    */
-  function EnergyChunkWanderController( energyChunk, destinationProperty, options ) {
-
-    var self = this;
+  constructor( energyChunk, destinationProperty, options ) {
 
     options = _.extend( {
 
@@ -72,38 +70,34 @@ define( function( require ) {
     this.resetCountdownTimer();
     this.changeVelocityVector();
 
-    var speedIncreased = false;
-    this.destinationProperty.lazyLink( function( newDestination ) {
+    let speedIncreased = false;
+    this.destinationProperty.lazyLink( newDestination => {
 
-      var distanceToDestination = newDestination.distance( self.energyChunk.positionProperty.value );
+      const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
 
       // if the destination changes, speed up and go directly to the destination
       if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
-        var increaseFactor = 8;
-        self.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
-        self.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
+        const increaseFactor = 8;
+        this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
+        this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
         speedIncreased = true;
-        self.wandering = false;
+        this.wandering = false;
       }
-      self.changeVelocityVector();
+      this.changeVelocityVector();
     } );
   }
-
-  energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
-
-  return inherit( Object, EnergyChunkWanderController, {
 
     /**
      * Update the position of this energy chunk for a given change in time.
      * @param {number} dt
      * @public
      */
-    updatePosition: function( dt ) {
+    updatePosition( dt ) {
 
-      var currentPosition = this.energyChunk.positionProperty.get();
-      var destination = this.destinationProperty.get();
-      var distanceToDestination = currentPosition.distance( destination );
-      var speed = this.velocity.magnitude();
+      const currentPosition = this.energyChunk.positionProperty.get();
+      const destination = this.destinationProperty.get();
+      const distanceToDestination = currentPosition.distance( destination );
+      const speed = this.velocity.magnitude();
 
       // only do something if the energy chunk has not yet reached its destination
       if ( speed > 0 || !currentPosition.equals( destination ) ) {
@@ -118,7 +112,7 @@ define( function( require ) {
           if ( this.horizontalWanderConstraint ) {
 
             // stay within the confines of the horizontal wander constraint
-            var proposedX = this.energyChunk.positionProperty.value.x + dt * this.velocity.x;
+            const proposedX = this.energyChunk.positionProperty.value.x + dt * this.velocity.x;
             if ( proposedX < this.horizontalWanderConstraint.min && this.velocity.x < 0 ||
                  proposedX > this.horizontalWanderConstraint.max && this.velocity.x > 0 ) {
 
@@ -141,49 +135,50 @@ define( function( require ) {
           }
         }
       }
-    },
+    }
 
     /**
      * randomly change the velocity vector of the energy chunk
      * @private
      */
-    changeVelocityVector: function() {
-      var vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
-      var angle = vectorToDestination.angle();
+    changeVelocityVector() {
+      const vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
+      let angle = vectorToDestination.angle();
       if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
 
         // add some randomness to the direction of travel
         angle = angle + ( ( phet.joist.random.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;
       }
-      var speed = this.minSpeed + ( this.maxSpeed - this.minSpeed ) * phet.joist.random.nextDouble();
+      const speed = this.minSpeed + ( this.maxSpeed - this.minSpeed ) * phet.joist.random.nextDouble();
       this.velocity.setXY( speed * Math.cos( angle ), speed * Math.sin( angle ) );
-    },
+    }
 
     /**
      * reset the countdown timer that is used to decide when to change direction
      * @private
      */
-    resetCountdownTimer: function() {
+    resetCountdownTimer() {
       this.countdownTimer = MIN_TIME_IN_ONE_DIRECTION + ( MAX_TIME_IN_ONE_DIRECTION - MIN_TIME_IN_ONE_DIRECTION ) *
                             phet.joist.random.nextDouble();
-    },
+    }
 
     /**
      * returns true if the energy chunk has reached its destination, false if not
      * @returns {boolean}
      * @public
      */
-    isDestinationReached: function() {
+    isDestinationReached() {
       return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
-    },
+    }
 
     /**
      * set a new constraint on the wandering
      * @param {Range|null} horizontalWanderConstraint
      */
-    setHorizontalWanderConstraint: function( horizontalWanderConstraint ) {
+    setHorizontalWanderConstraint( horizontalWanderConstraint ) {
       this.horizontalWanderConstraint = horizontalWanderConstraint;
     }
-  } );
-} )
-;
+  }
+
+  return energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
+} );
