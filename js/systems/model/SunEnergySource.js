@@ -275,7 +275,7 @@ define( require => {
      * @override
      */
     activate() {
-      EnergySource.prototype.activate.call( this );
+      super.activate();
 
       // step a few times to get some energy chunks out
       for ( let i = 0; i < 100; i++ ) {
@@ -289,7 +289,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergySource.prototype.deactivate.call( this );
+      super.deactivate();
       this.cloudinessProperty.reset();
       this.energyChunksPassingThroughClouds = [];
     }

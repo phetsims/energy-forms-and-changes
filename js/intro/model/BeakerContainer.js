@@ -137,7 +137,7 @@ define( require => {
         );
       }
       else {
-        Beaker.prototype.addEnergyChunk.call( this, energyChunk );
+        super.addEnergyChunk( energyChunk );
 
         // If the energy chunk is above the beaker, it's coming from the air, and must be constrained to the width of
         // the beaker to avoid being clipped.

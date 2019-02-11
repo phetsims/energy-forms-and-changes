@@ -1,29 +1,29 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * Main entry point for the 'Energy Forms And Changes' sim.
+ * Main entry point for the 'Energy Forms and Changes' sim.
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
  * @author Andrew Adare
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var EFACIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EFACIntroScreen' );
-  var SystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/systems/SystemsScreen' );
-  var Sim = require( 'JOIST/Sim' );
-  var SimLauncher = require( 'JOIST/SimLauncher' );
-  var Tandem = require( 'TANDEM/Tandem' );
+  const EFACIntroScreen = require( 'ENERGY_FORMS_AND_CHANGES/intro/EFACIntroScreen' );
+  const SystemsScreen = require( 'ENERGY_FORMS_AND_CHANGES/systems/SystemsScreen' );
+  const Sim = require( 'JOIST/Sim' );
+  const SimLauncher = require( 'JOIST/SimLauncher' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   // strings
-  var energyFormsAndChangesTitleString = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.title' );
+  const energyFormsAndChangesTitleString = require( 'string!ENERGY_FORMS_AND_CHANGES/energy-forms-and-changes.title' );
 
   // constants
-  var tandem = Tandem.rootTandem;
+  const tandem = Tandem.rootTandem;
 
-  var simOptions = {
+  const simOptions = {
     credits: {
       leadDesign: 'Noah Podolefsky, Amy Rouinfar',
       softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
@@ -34,9 +34,9 @@ define( function( require ) {
     }
   };
 
-  SimLauncher.launch( function() {
+  SimLauncher.launch( () => {
 
-    var sim = new Sim( energyFormsAndChangesTitleString, [
+    const sim = new Sim( energyFormsAndChangesTitleString, [
       new EFACIntroScreen( tandem.createTandem( 'introScreen' ) ),
       new SystemsScreen( tandem.createTandem( 'systemsScreen' ) )
     ], simOptions );

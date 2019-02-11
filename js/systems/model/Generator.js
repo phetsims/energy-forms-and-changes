@@ -349,7 +349,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergyConverter.prototype.deactivate.call( this );
+      super.deactivate();
       this.wheelRotationalVelocity = 0;
     }
 
@@ -358,7 +358,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergyConverter.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.electricalEnergyChunks.clear();
       this.hiddenEnergyChunks.clear();
       this.energyChunkMovers.length = 0;

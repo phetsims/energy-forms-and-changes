@@ -276,7 +276,7 @@ define( require => {
      * @public
      */
     reset() {
-      ModelElement.prototype.reset.call( this );
+      super.reset();
       this.energyChunkList.clear();
       this.heatCoolLevelProperty.reset();
     }

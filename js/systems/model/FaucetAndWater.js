@@ -275,7 +275,7 @@ define( require => {
       this.flowProportionProperty.reset();
       this.waterDrops.length = 0;
       this.flowEnergyDelay.length = 0;
-      EnergySource.prototype.deactivate.call( this );
+      super.deactivate();
     }
 
     /**
@@ -283,7 +283,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergySource.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.exemptFromTransferEnergyChunks.length = 0;
     }
 

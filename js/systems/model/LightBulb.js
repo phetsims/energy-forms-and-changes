@@ -355,7 +355,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergyUser.prototype.deactivate.call( this );
+      super.deactivate();
       this.litProportionProperty.set( 0 );
     }
 
@@ -364,7 +364,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergyUser.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.electricalEnergyChunkMovers.length = 0;
       this.filamentEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;

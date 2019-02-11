@@ -290,7 +290,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergyUser.prototype.deactivate.call( this );
+      super.deactivate();
       this.bladePositionProperty.reset();
       this.bladeAngularVelocity = 0;
       this.targetVelocity = 0;
@@ -303,7 +303,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergyUser.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.electricalEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;
       this.mechanicalEnergyChunkMovers.length = 0;

@@ -148,7 +148,7 @@ define( require => {
     // @public
     dispose() {
       this.disposeEnergyChunkNode();
-      Node.prototype.dispose.call( this );
+      super.dispose();
     }
   }
 

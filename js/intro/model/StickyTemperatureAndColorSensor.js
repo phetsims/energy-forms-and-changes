@@ -66,7 +66,7 @@ define( require => {
      */
     reset() {
       this.elementFollower.stopFollowing();
-      TemperatureAndColorSensor.prototype.reset.call( this );
+      super.reset();
     }
   }
 

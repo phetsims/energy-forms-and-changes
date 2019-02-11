@@ -41,7 +41,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergySystemElement.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.incomingEnergyChunks.length = 0;
     }
   }

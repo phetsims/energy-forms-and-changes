@@ -384,7 +384,7 @@ define( require => {
           energyChunks = _.pull( energyChunks, chunk );
         }
       } );
-      EnergyConverter.prototype.injectEnergyChunks.call( this, energyChunks );
+      super.injectEnergyChunks( energyChunks );
     }
 
     /**
@@ -392,7 +392,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergyConverter.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.electricalEnergyChunkMovers.length = 0;
       this.latestChunkArrivalTime = 0;
     }

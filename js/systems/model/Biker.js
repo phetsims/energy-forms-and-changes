@@ -389,7 +389,7 @@ define( require => {
      * @override
      */
     activate() {
-      EnergySource.prototype.activate.call( this );
+      super.activate();
       this.replenishBikerEnergyChunks();
     }
 
@@ -398,7 +398,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergySource.prototype.deactivate.call( this );
+      super.deactivate();
       this.targetCrankAngularVelocityProperty.reset();
       this.rearWheelAngleProperty.reset();
       this.crankAngularVelocity = this.targetCrankAngularVelocityProperty.value;
@@ -409,7 +409,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergySource.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.energyChunkMovers.length = 0;
     }
 

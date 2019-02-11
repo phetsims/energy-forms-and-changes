@@ -344,7 +344,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergyUser.prototype.deactivate.call( this );
+      super.deactivate();
       this.beaker.reset();
       this.beaker.positionProperty.value = this.positionProperty.value.plus( BEAKER_OFFSET );
       this.heatProportionProperty.set( 0 );
@@ -356,7 +356,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergyUser.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.electricalEnergyChunkMovers.length = 0;
       this.heatingElementEnergyChunkMovers.length = 0;
       this.radiatedEnergyChunkMovers.length = 0;

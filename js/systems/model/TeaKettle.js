@@ -319,7 +319,7 @@ define( require => {
      * @override
      */
     deactivate() {
-      EnergySource.prototype.deactivate.call( this );
+      super.deactivate();
       this.heatCoolAmountProperty.reset();
       this.energyProductionRateProperty.reset();
     }
@@ -329,7 +329,7 @@ define( require => {
      * @override
      */
     clearEnergyChunks() {
-      EnergySource.prototype.clearEnergyChunks.call( this );
+      super.clearEnergyChunks();
       this.exemptFromTransferEnergyChunks.length = 0;
       this.energyChunkMovers.length = 0;
     }
