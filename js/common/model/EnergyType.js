@@ -1,16 +1,16 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * enum that represents the various types of energy used in this simulation
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  var EnergyType = {
+  const EnergyType = {
     THERMAL: 'THERMAL',
     ELECTRICAL: 'ELECTRICAL',
     MECHANICAL: 'MECHANICAL',
@@ -19,11 +19,9 @@ define( function( require ) {
     HIDDEN: 'HIDDEN'
   };
 
-  energyFormsAndChanges.register( 'EnergyType', EnergyType );
-
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( EnergyType ); }
 
-  return EnergyType;
+  return energyFormsAndChanges.register( 'EnergyType', EnergyType );
 } );
 
