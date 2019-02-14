@@ -141,7 +141,11 @@ define( require => {
     // constants for energy chunks
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
     ENERGY_CHUNK_WIDTH: 19, // in screen coords, which are close to pixels. Empirically determined to look nice.
-    ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.25, // in meters
+
+    // max travel height of energy chunks, in meters. the y-center location and zoom factors are different on each
+    // screen, so these were empirically determined to visually match on both screens
+    INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.6,
+    SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.36,
 
     // constants that define physical parameters of various objects
     WATER_SPECIFIC_HEAT: 3000, // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there

@@ -131,13 +131,13 @@ define( require => {
       path.push( currentPosition );
 
       // add segments at random angles until the path gets close to the max height
-      while ( currentPosition.plus( verticalSegment ).y < EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) {
+      while ( currentPosition.plus( verticalSegment ).y < EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) {
         currentPosition = currentPosition.plus( verticalSegment.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 ) );
         path.push( currentPosition );
       }
 
       // go straight up to the max height cutoff point
-      const finalSegment = new Vector2( 0, EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - currentPosition.y );
+      const finalSegment = new Vector2( 0, EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - currentPosition.y );
       currentPosition = currentPosition.plus( finalSegment );
       path.push( currentPosition );
 
@@ -166,7 +166,7 @@ define( require => {
       const path = [];
 
       // calculate the travel segment based on how high the chunk should go
-      const yDistance = EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - position.y;
+      const yDistance = EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT - position.y;
       const xDistance = yDistance / Math.tan( angle ) + position.x;
       path.push( new Vector2( xDistance, yDistance ) );
 

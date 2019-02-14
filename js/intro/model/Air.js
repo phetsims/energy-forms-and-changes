@@ -26,9 +26,9 @@ define( require => {
 
   // constants
 
-  // 2D size of the air.  It is sized such that it will extend off the left, right, and top edges of screen for the
+  // 2D size of the air. It is sized such that it will extend off the left, right, and top edges of screen for the
   // most common aspect ratios of the view.
-  const SIZE = new Dimension2( 0.7, 0.5 );
+  const SIZE = new Dimension2( 0.7, EFACConstants.INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT );
 
   // The thickness of the slice of air being modeled.  This is basically the z dimension, and is used solely for
   // volume calculations.

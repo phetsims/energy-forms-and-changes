@@ -150,7 +150,7 @@ define( require => {
         // this energy chunk is out of visible range, so remove it
         else if ( distanceFromSun > MAX_DISTANCE_OF_E_CHUNKS_FROM_SUN ||
                   chunk.positionProperty.value.x < -0.35 || // empirically determined
-                  chunk.positionProperty.value.y > EFACConstants.ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
+                  chunk.positionProperty.value.y > EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
         ) {
           this.energyChunkList.remove( chunk );
           _.pull( this.energyChunksPassingThroughClouds, chunk );
