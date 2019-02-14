@@ -143,7 +143,6 @@ define( require => {
         // the beaker to avoid being clipped.
         const ecPosition = energyChunk.positionProperty.get();
         const beakerBounds = this.getBounds();
-        console.log( 'valid test' );
         if ( ecPosition.y > beakerBounds.maxY &&
              ecPosition.x > beakerBounds.minX &&
              ecPosition.x < beakerBounds.maxX ) {

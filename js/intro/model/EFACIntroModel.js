@@ -934,12 +934,6 @@ define( require => {
       // test for case where rectangles already overlap
       if ( this.exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
 
-        // the bounds already overlap - are they right on top of one another in both dimensions?
-        // if ( movingElementBounds.centerX === stationaryElementBounds.centerX && movingElementBounds.centerY === stationaryElementBounds.centerY ) {
-        //   console.log( 'Warning: Rectangle centers in same location, returning zero vector.' );
-        //   return new Vector2( 0, 0 );
-        // }
-
         // determine the motion in the X & Y directions that will "cure" the overlap
         let xOverlapCure = 0;
         if ( movingElementBounds.maxX >= stationaryElementBounds.minX &&
