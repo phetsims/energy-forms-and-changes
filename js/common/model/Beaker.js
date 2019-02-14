@@ -54,9 +54,6 @@ define( function( require ) {
       majorTickMarkDistance: height * 0.95 / 2 // empirically determined
     }, options );
 
-    // @private - allocate a mutable bounds so we don't need to reallocate
-    this.beakerBounds = new Bounds2( 0, 0, 0, 0 );
-
     RectangularThermalMovableModelElement.call( this,
       initialPosition,
       width,

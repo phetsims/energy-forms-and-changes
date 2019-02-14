@@ -156,16 +156,16 @@ define( require => {
       // hoisted block variable
       let block;
 
-      // if neither of the blocks is in the beaker then there are no "holes" to add
+      // if neither of the blocks is in the beaker then there are no "holes" to add, use C-style loop for performance
       const blocksInBeaker = [];
       for ( let i = 0; i < blocks.length; i++ ) {
         block = blocks[ i ];
-        if ( this.beaker.beakerBounds.containsPoint( block.positionProperty.value ) ||
+        if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
              this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
           blocksInBeaker.push( block );
         }
       }
-      if ( !blocksInBeaker.length === 0 ) {
+      if ( blocksInBeaker.length === 0 ) {
 
         // nothing to do, bail
         return;

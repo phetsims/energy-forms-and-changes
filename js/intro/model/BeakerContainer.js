@@ -142,9 +142,11 @@ define( require => {
         // If the energy chunk is above the beaker, it's coming from the air, and must be constrained to the width of
         // the beaker to avoid being clipped.
         const ecPosition = energyChunk.positionProperty.get();
-        if ( ecPosition.y > this.beakerBounds.maxY &&
-             ecPosition.x > this.beakerBounds.minX &&
-             ecPosition.x < this.beakerBounds.maxX ) {
+        const beakerBounds = this.getBounds();
+        console.log( 'valid test' );
+        if ( ecPosition.y > beakerBounds.maxY &&
+             ecPosition.x > beakerBounds.minX &&
+             ecPosition.x < beakerBounds.maxX ) {
 
           const wanderController = _.find( this.energyChunkWanderControllers, controller => {
             return controller.energyChunk === energyChunk;
@@ -155,8 +157,8 @@ define( require => {
           // Set the horizontal motion constraint to be slightly narrower than the beaker to account for the width of
           // the energy chunk nodes.
           wanderController.setHorizontalWanderConstraint( new Range(
-            this.beakerBounds.minX + this.beakerBounds.width * 0.1,
-            this.beakerBounds.maxX - this.beakerBounds.width * 0.1
+            beakerBounds.minX + beakerBounds.width * 0.1,
+            beakerBounds.maxX - beakerBounds.width * 0.1
           ) );
         }
       }
