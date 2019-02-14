@@ -25,67 +25,70 @@ define( require => {
 
   class EnergyChunkWanderController {
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @param {Property.<Vector2>} destinationProperty
-   * @param {Object} [options]
-   */
-  constructor( energyChunk, destinationProperty, options ) {
+    /**
+     * @param {EnergyChunk} energyChunk
+     * @param {Property.<Vector2>} destinationProperty
+     * @param {Object} [options]
+     */
+    constructor( energyChunk, destinationProperty, options ) {
 
-    options = _.extend( {
+      options = _.extend( {
 
-      // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
-      horizontalWanderConstraint: null,
+        // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
+        horizontalWanderConstraint: null,
 
-      // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
-      wanderAngleVariation: DEFAULT_ANGLE_VARIATION
+        // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
+        wanderAngleVariation: DEFAULT_ANGLE_VARIATION,
 
-    }, options );
+        // {boolean} - follow the destination if it changes by moving the EC and wander constraints too
+        followDestination: true
 
-    // parameter checking
-    assert && options.wanderConstraint && assert(
-      options.wanderConstraint.containsPoint( energyChunk.positionProperty.value ),
-      'energy chunk starting position is not within the wander constraint'
-    );
-    assert && options.wanderConstraint && assert(
-      options.wanderConstraint.containsPoint( destinationProperty.value ),
-      'energy chunk destination is not within the wander constraint'
-    );
-    assert && assert(
-    options.wanderAngleVariation <= Math.PI && options.wanderAngleVariation >= 0,
-      'wander angle must be from zero to PI (inclusive)'
-    );
+      }, options );
 
-    // @public (read-only) {EnergyChunk)
-    this.energyChunk = energyChunk;
+      // parameter checking
+      assert && options.wanderConstraint && assert(
+        options.wanderConstraint.containsPoint( energyChunk.positionProperty.value ),
+        'energy chunk starting position is not within the wander constraint'
+      );
+      assert && options.wanderConstraint && assert(
+        options.wanderConstraint.containsPoint( destinationProperty.value ),
+        'energy chunk destination is not within the wander constraint'
+      );
+      assert && assert(
+      options.wanderAngleVariation <= Math.PI && options.wanderAngleVariation >= 0,
+        'wander angle must be from zero to PI (inclusive)'
+      );
 
-    // @private
-    this.minSpeed = DEFAULT_MIN_SPEED;
-    this.maxSpeed = DEFAULT_MAX_SPEED;
-    this.horizontalWanderConstraint = options.horizontalWanderConstraint;
-    this.wanderAngleVariation = options.wanderAngleVariation;
-    this.destinationProperty = destinationProperty;
-    this.velocity = new Vector2( 0, DEFAULT_MAX_SPEED );
-    this.wandering = true;
-    this.resetCountdownTimer();
-    this.changeVelocityVector();
+      // @public (read-only) {EnergyChunk)
+      this.energyChunk = energyChunk;
 
-    let speedIncreased = false;
-    this.destinationProperty.lazyLink( newDestination => {
-
-      const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
-
-      // if the destination changes, speed up and go directly to the destination
-      if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
-        const increaseFactor = 8;
-        this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
-        this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
-        speedIncreased = true;
-        this.wandering = false;
-      }
+      // @private
+      this.minSpeed = DEFAULT_MIN_SPEED;
+      this.maxSpeed = DEFAULT_MAX_SPEED;
+      this.horizontalWanderConstraint = options.horizontalWanderConstraint;
+      this.wanderAngleVariation = options.wanderAngleVariation;
+      this.destinationProperty = destinationProperty;
+      this.velocity = new Vector2( 0, DEFAULT_MAX_SPEED );
+      this.wandering = true;
+      this.resetCountdownTimer();
       this.changeVelocityVector();
-    } );
-  }
+
+      let speedIncreased = false;
+      this.destinationProperty.lazyLink( newDestination => {
+
+        const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
+
+        // if the destination changes, speed up and go directly to the destination
+        if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
+          const increaseFactor = 8;
+          this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
+          this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
+          speedIncreased = true;
+          this.wandering = false;
+        }
+        this.changeVelocityVector();
+      } );
+    }
 
     /**
      * Update the position of this energy chunk for a given change in time.
