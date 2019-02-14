@@ -134,8 +134,8 @@ define( require => {
     // used to scale down the element base image, which is used in multiple system elements
     ELEMENT_BASE_WIDTH: 72,
 
-    //TODO: This is not being used anywhere. Should it be?
-    // model-view transform scale factor for the Systems screen
+    // model-view transform scale factors for each screen - smaller zooms out, larger zooms in
+    INTRO_MVT_SCALE_FACTOR: 1700,
     SYSTEMS_MVT_SCALE_FACTOR: 2200,
 
     // constants for energy chunks

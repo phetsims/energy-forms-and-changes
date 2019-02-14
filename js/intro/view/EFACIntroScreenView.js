@@ -89,7 +89,7 @@ define( require => {
           Util.roundSymmetric( this.layoutBounds.width * 0.5 ),
           Util.roundSymmetric( this.layoutBounds.height * 0.85 )
         ),
-        1700 // zoom factor - smaller zooms out, larger zooms in
+        EFACConstants.INTRO_MVT_SCALE_FACTOR
       );
 
       // create nodes that will act as layers in order to create the needed Z-order behavior

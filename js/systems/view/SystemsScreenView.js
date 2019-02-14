@@ -118,7 +118,7 @@ define( require => {
       const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
         Vector2.ZERO,
         new Vector2( mvtOriginX, mvtOriginY ),
-        2200
+        EFACConstants.SYSTEMS_MVT_SCALE_FACTOR
       );
 
       // create the energy user nodes
