@@ -678,6 +678,36 @@ define( require => {
       this.waterBeakerView.step( dt );
       this.oliveOilBeakerView.step( dt );
     }
+
+    /**
+     * Custom layout function for this view so that it floats to the bottom of the window.
+     *
+     * @param {number} width
+     * @param {number} height
+     */
+    layout( width, height ) {
+      this.resetTransform();
+
+      const scale = this.getLayoutScale( width, height );
+      this.setScaleMagnitude( scale );
+
+      let dx = 0;
+      let offsetY = 0;
+
+      // Move to bottom vertically (custom for this sim)
+      if ( scale === width / this.layoutBounds.width ) {
+        offsetY = ( height / scale - this.layoutBounds.height );
+      }
+
+      // center horizontally (default behavior for ScreenView)
+      else if ( scale === height / this.layoutBounds.height ) {
+        dx = ( width - this.layoutBounds.width * scale ) / 2 / scale;
+      }
+      this.translate( dx, offsetY );
+
+      // update the visible bounds of the screen view
+      this.visibleBoundsProperty.set( new Bounds2( -dx, -offsetY, width / scale - dx, height / scale - offsetY ) );
+    }
   }
 
   return energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
