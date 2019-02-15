@@ -108,9 +108,18 @@ define( function( require ) {
 
     // when an approaching energy chunk is removed from the list, make sure its wander controller goes away too
     this.approachingEnergyChunks.addItemRemovedListener( function( removedEC ) {
-      self.energyChunkWanderControllers = self.energyChunkWanderControllers.filter( function( wanderController ) {
-        return wanderController.energyChunk !== removedEC;
+
+      // find the wander controller that is controlling the motion of this energy chunk
+      const wanderController = _.find( self.energyChunkWanderControllers, wanderController => {
+        return wanderController.energyChunk === removedEC;
       } );
+
+      assert && assert( wanderController, 'there should always be a wander controller for each approaching EC' );
+
+      self.energyChunkWanderControllers = _.without( self.energyChunkWanderControllers, wanderController );
+
+      // dispose the wander controller
+      wanderController.dispose();
     } );
 
     // @private {number} - minimum amount of energy that this is allowed to have

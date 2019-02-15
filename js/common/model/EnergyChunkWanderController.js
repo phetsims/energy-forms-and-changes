@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -32,6 +33,8 @@ define( require => {
      */
     constructor( energyChunk, destinationProperty, options ) {
 
+      const self = this;
+
       options = _.extend( {
 
         // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
@@ -40,8 +43,10 @@ define( require => {
         // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
         wanderAngleVariation: DEFAULT_ANGLE_VARIATION,
 
-        // {boolean} - follow the destination if it changes by moving the EC and wander constraints too
-        followDestination: true
+        // {boolean} - Translate the EC position and wander constraints horizonally if the destination changes.  This
+        // was found to be useful to help prevent "chase scenes" when an energy was heading towards an object and the
+        // user started dragging that object.
+        translateXWithDestination: true
 
       }, options );
 
@@ -74,20 +79,53 @@ define( require => {
       this.changeVelocityVector();
 
       let speedIncreased = false;
-      this.destinationProperty.lazyLink( newDestination => {
 
-        const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
+      function handleDestinationChanged( newDestination, oldDestination ) {
+
+        const distanceToDestination = newDestination.distance( self.energyChunk.positionProperty.value );
 
         // if the destination changes, speed up and go directly to the destination
         if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
           const increaseFactor = 8;
-          this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
-          this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
+          self.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
+          self.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
           speedIncreased = true;
-          this.wandering = false;
+          self.wandering = false;
         }
-        this.changeVelocityVector();
-      } );
+        self.changeVelocityVector();
+
+        if ( options.translateXWithDestination ) {
+
+          const translation = newDestination.minus( oldDestination );
+
+          // adjust the current EC position
+          self.energyChunk.positionProperty.set(
+            self.energyChunk.positionProperty.value.plusXY( translation.x, 0 )
+          );
+
+          // adjust the wander constraints if present
+          if ( self.horizontalWanderConstraint ) {
+            self.setHorizontalWanderConstraint( new Range(
+              self.horizontalWanderConstraint.min + translation.x,
+              self.horizontalWanderConstraint.max + translation.x
+            ) );
+          }
+        }
+      }
+
+      this.destinationProperty.lazyLink( handleDestinationChanged );
+
+      this.disposeEnergyChunkWanderController = () => {
+        this.destinationProperty.unlink( handleDestinationChanged );
+      };
+    }
+
+    /**
+     * dispose function
+     * @public
+     */
+    dispose() {
+      this.disposeEnergyChunkWanderController();
     }
 
     /**
