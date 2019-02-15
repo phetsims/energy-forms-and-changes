@@ -146,7 +146,7 @@ define( require => {
      */
     changeVelocityVector() {
       const vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
-      let angle = vectorToDestination.angle();
+      let angle = vectorToDestination.angle;
       if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
 
         // add some randomness to the direction of travel

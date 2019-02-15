@@ -162,7 +162,7 @@ define( require => {
 
             const inClouds = cloud.getCloudAbsorptionReflectionShape().containsPoint( chunk.positionProperty.value );
             const inList = _.includes( this.energyChunksPassingThroughClouds, chunk );
-            const deltaPhi = chunk.velocity.angle() - chunk.positionProperty.value.minus( this.sunPosition ).angle();
+            const deltaPhi = chunk.velocity.angle - chunk.positionProperty.value.minus( this.sunPosition ).angle;
 
             if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {
 
@@ -171,8 +171,8 @@ define( require => {
 
                 // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the code below
                 // tries to avoid that.
-                const angleTowardsSun = chunk.velocity.angle() + Math.PI;
-                const reflectionAngle = chunk.positionProperty.value.minus( cloud.getCenterPosition() ).angle();
+                const angleTowardsSun = chunk.velocity.angle + Math.PI;
+                const reflectionAngle = chunk.positionProperty.value.minus( cloud.getCenterPosition() ).angle;
 
                 if ( reflectionAngle < angleTowardsSun ) {
                   chunk.setVelocity( chunk.velocity.rotated(

@@ -62,7 +62,7 @@ define( require => {
         if ( distanceToTravel < distanceToNextPoint ) {
 
           // the energy chunk will not reach the next destination point during this step, so just move that direction
-          const phi = this.nextPoint.minus( this.energyChunk.positionProperty.get() ).angle();
+          const phi = this.nextPoint.minus( this.energyChunk.positionProperty.get() ).angle;
           const velocity = new Vector2( distanceToTravel, 0 ).rotated( phi );
           this.energyChunk.positionProperty.set( this.energyChunk.positionProperty.get().plus( velocity ) );
           distanceToTravel = 0; // no remaining distance

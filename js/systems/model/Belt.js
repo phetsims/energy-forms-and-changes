@@ -48,16 +48,16 @@ define( require => {
       beltShape.arcPoint(
         wheel1Center,
         wheel1Radius,
-        wheel1CenterToArcStart.angle(),
-        wheel1CenterToArcEnd.angle(),
+        wheel1CenterToArcStart.angle,
+        wheel1CenterToArcEnd.angle,
         false
       );
       beltShape.lineToPoint( wheel2Center.plus( wheel2CenterToArcStart ) );
       beltShape.arcPoint(
         wheel2Center,
         wheel2Radius,
-        wheel2CenterToArcStart.angle(),
-        wheel2CenterToArcEnd.angle()
+        wheel2CenterToArcStart.angle,
+        wheel2CenterToArcEnd.angle
       );
       beltShape.lineToPoint( wheel1Center.plus( wheel1CenterToArcStart ) );
       beltShape.close();

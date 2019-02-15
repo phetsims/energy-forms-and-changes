@@ -201,7 +201,7 @@ define( require => {
         // Search linearly for edge of the shape.  BIG HAIRY NOTE - This will not work in all cases.  It worked for the
         // coarse shapes and rough bounds needed for this simulation.  Don't reuse if you need good general edge
         // finding.
-        const angle = endpoint.minus( origin ).angle();
+        const angle = endpoint.minus( origin ).angle;
         const incrementalDistance = boundsEntryPoint.distance( searchEndPoint ) / SEARCH_ITERATIONS;
         for ( let i = 0; i < SEARCH_ITERATIONS; i++ ) {
           const testPoint = boundsEntryPoint.plus( new Vector2( incrementalDistance * i, 0 ).rotated( angle ) );
@@ -233,7 +233,7 @@ define( require => {
       if ( !shape.bounds.containsPoint( endpoint ) && shape.interiorIntersectsLineSegment( origin, endpoint ) ) {
 
         // phase I - Do a binary search to locate the edge of the rectangle that encloses the shape
-        const angle = endpoint.minus( origin ).angle();
+        const angle = endpoint.minus( origin ).angle;
         let length = origin.distance( endpoint );
         let lengthChange = length / 2;
         for ( let i = 0; i < SEARCH_ITERATIONS; i++ ) {
