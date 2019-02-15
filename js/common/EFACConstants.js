@@ -144,8 +144,8 @@ define( require => {
 
     // max travel height of energy chunks, in meters. the y-center location and zoom factors are different on each
     // screen, so these were empirically determined to visually match on both screens
-    INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.6,
-    SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.36,
+    INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.85,
+    SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.55,
 
     // constants that define physical parameters of various objects
     WATER_SPECIFIC_HEAT: 3000, // In J/kg-K.  The real value for water is 4186, but this was adjusted so that there

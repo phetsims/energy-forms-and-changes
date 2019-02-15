@@ -43,6 +43,7 @@ define( require => {
   const SolarPanelNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SolarPanelNode' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const SunNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SunNode' );
+  const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
   const TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Util = require( 'DOT/Util' );
@@ -264,6 +265,13 @@ define( require => {
       this.addChild( energySourceSelector );
       this.addChild( energyConverterSelector );
       this.addChild( energyUserSelector );
+
+      // add a floating sky high above the sim
+      const skyNode = new SkyNode(
+        this.layoutBounds,
+        modelViewTransform.modelToViewY( EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) + EFACConstants.ENERGY_CHUNK_WIDTH
+      );
+      this.addChild( skyNode );
 
       // listen to the manualStepEmitter in the model
       model.manualStepEmitter.addListener( dt => {

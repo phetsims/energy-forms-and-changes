@@ -44,6 +44,7 @@ define( require => {
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
+  const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
   const TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Util = require( 'DOT/Util' );
@@ -613,6 +614,13 @@ define( require => {
         centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
       } );
       this.addChild( resetAllButton );
+
+      // add a floating sky high above the sim
+      const skyNode = new SkyNode(
+        this.layoutBounds,
+        modelViewTransform.modelToViewY( EFACConstants.INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) + EFACConstants.ENERGY_CHUNK_WIDTH
+      );
+      this.addChild( skyNode );
 
       // listen to the manualStepEmitter in the model
       model.manualStepEmitter.addListener( dt => {
