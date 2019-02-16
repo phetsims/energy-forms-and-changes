@@ -28,7 +28,7 @@ define( require => {
       simIsPlayingProperty
     ) {
 
-      const dragStartOffset = new Vector2();
+      const dragStartOffset = new Vector2( 0, 0 );
       let currentTarget = null;
 
       super( {
