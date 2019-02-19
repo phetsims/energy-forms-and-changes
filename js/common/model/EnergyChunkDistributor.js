@@ -206,8 +206,8 @@ define( function( require ) {
             chunk.positionProperty.value.x - chunkMap[ otherEnergyChunkID ].positionProperty.value.x,
             chunk.positionProperty.value.y - chunkMap[ otherEnergyChunkID ].positionProperty.value.y
           );
-          if ( vectorFromOther.magnitude() < minDistance ) {
-            if ( vectorFromOther.magnitude() === 0 ) {
+          if ( vectorFromOther.magnitude < minDistance ) {
+            if ( vectorFromOther.magnitude === 0 ) {
 
               // create a random vector of min distance
               var randomAngle = phet.joist.random.nextDouble() * Math.PI * 2;
@@ -296,7 +296,7 @@ define( function( require ) {
           }
 
           // update max energy
-          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocityMagnitudeSquared + force.magnitude() * Math.PI / 2;
+          var totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocityMagnitudeSquared + force.magnitude * Math.PI / 2;
           if ( totalParticleEnergy > maxEnergy ) {
             maxEnergy = totalParticleEnergy;
           }

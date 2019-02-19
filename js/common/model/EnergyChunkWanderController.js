@@ -138,13 +138,13 @@ define( require => {
       const currentPosition = this.energyChunk.positionProperty.get();
       const destination = this.destinationProperty.get();
       const distanceToDestination = currentPosition.distance( destination );
-      const speed = this.velocity.magnitude();
+      const speed = this.velocity.magnitude;
 
       // only do something if the energy chunk has not yet reached its destination
       if ( speed > 0 || !currentPosition.equals( destination ) ) {
 
         // check if destination reached
-        if ( distanceToDestination <= this.velocity.magnitude() * dt ) {
+        if ( distanceToDestination <= this.velocity.magnitude * dt ) {
           this.energyChunk.positionProperty.set( destination );
           this.velocity.setMagnitude( 0 );
         }
@@ -185,7 +185,7 @@ define( require => {
     changeVelocityVector() {
       const vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
       let angle = vectorToDestination.angle;
-      if ( vectorToDestination.magnitude() > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
+      if ( vectorToDestination.magnitude > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
 
         // add some randomness to the direction of travel
         angle = angle + ( ( phet.joist.random.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;

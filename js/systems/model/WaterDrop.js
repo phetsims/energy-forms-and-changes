@@ -38,7 +38,7 @@ define( require => {
 
       // adjust the size as the velocity changes, mimicking how water drops thin out as they fall through air
       this.velocityProperty.link( velocity => {
-        const newWidth = ( 1 / ( 1 + velocity.magnitude() * WIDTH_CHANGE_TWEAK_FACTOR ) ) * this.size.width;
+        const newWidth = ( 1 / ( 1 + velocity.magnitude * WIDTH_CHANGE_TWEAK_FACTOR ) ) * this.size.width;
         const newHeight = ( this.size.height * this.size.width ) / newWidth;
         this.size.set( new Dimension2( newWidth, newHeight ) );
       } );

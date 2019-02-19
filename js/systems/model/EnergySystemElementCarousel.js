@@ -171,7 +171,7 @@ define( require => {
     updateManagedElementOpacities() {
       this.managedElements.forEach( managedElement => {
         const distanceToSelection = managedElement.positionProperty.value.distance( this.selectedElementPosition );
-        const opacity = Util.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude() ), 0, 1 );
+        const opacity = Util.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
         managedElement.opacityProperty.set( opacity );
       } );
     }
