@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * Model element that represents a beaker that contains water.  The water contains energy, which includes energy chunks,
