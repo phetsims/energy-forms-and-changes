@@ -51,12 +51,12 @@ define( require => {
       }, options );
 
       // parameter checking
-      assert && options.wanderConstraint && assert(
-        options.wanderConstraint.containsPoint( energyChunk.positionProperty.value ),
+      assert && options.horizontalWanderConstraint && assert(
+        options.horizontalWanderConstraint.contains( energyChunk.positionProperty.value.x ),
         'energy chunk starting position is not within the wander constraint'
       );
-      assert && options.wanderConstraint && assert(
-        options.wanderConstraint.containsPoint( destinationProperty.value ),
+      assert && options.horizontalWanderConstraint && assert(
+        options.horizontalWanderConstraint.contains( destinationProperty.value.x ),
         'energy chunk destination is not within the wander constraint'
       );
       assert && assert(

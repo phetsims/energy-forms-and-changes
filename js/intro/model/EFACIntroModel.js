@@ -581,6 +581,12 @@ define( require => {
           // the view.
           const supplierBounds = energyChunkSupplier.getCompositeBounds();
           const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
+          if ( energyChunk.positionProperty.value.x < horizontalWanderConstraint.min ) {
+            energyChunk.setPosition( horizontalWanderConstraint.min, energyChunk.positionProperty.value.y );
+          }
+          else if ( energyChunk.positionProperty.value.x > horizontalWanderConstraint.max ) {
+            energyChunk.setPosition( horizontalWanderConstraint.max, energyChunk.positionProperty.value.y );
+          }
           energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
         }
         else {
