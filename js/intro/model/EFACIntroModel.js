@@ -1089,21 +1089,26 @@ define( require => {
         }
       }
 
+      // test if this point is in any beaker's fluid
       this.beakers.forEach( beaker => {
-
-        // test if this point is in the water or steam associated with the beaker
         if ( !temperatureAndColor && beaker.thermalContactArea.containsPoint( position ) ) {
           temperatureAndColor = new TemperatureAndColor(
             beaker.temperatureProperty.get(),
             beaker.fluidColor
           );
         }
-        else if ( !temperatureAndColor &&
+      } );
+
+      // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
+      // checked because in the case of a beaker body and another beaker's steam overlapping, the sensor should detect
+      // the beaker body first
+      this.beakers.forEach( beaker => {
+        if ( !temperatureAndColor &&
                   beaker.getSteamArea().containsPoint( position ) &&
                   beaker.steamingProportion > 0 ) {
           temperatureAndColor = new TemperatureAndColor(
             beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ),
-            'white'
+            beaker.steamColor
           );
         }
       } );
