@@ -98,6 +98,9 @@ define( function( require ) {
       this
     );
 
+    // @private
+    this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
+
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function( position ) {
       var rectangle = self.getBounds();
@@ -166,18 +169,13 @@ define( function( require ) {
     },
 
     /**
-     * @returns {Rectangle}
+     * get the untranslated rectangle that defines the shape of the block
+     * @returns {Dot.Rectangle}
      * @public
      */
-    getRawShape: function() {
-      return new Rectangle(
-        -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
-        0,
-        EFACConstants.BLOCK_SURFACE_WIDTH,
-        EFACConstants.BLOCK_SURFACE_WIDTH
-      );
-    }
-    ,
+    getUntransformedBounds: function() {
+      return this.untransformedBounds;
+    },
 
     /**
      * This function originally existed primarily in support of boiling liquids, whose temperatures should not go up

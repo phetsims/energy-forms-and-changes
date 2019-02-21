@@ -85,7 +85,7 @@ define( require => {
 
       // Note that blockRect is in view coordinates.
       // The shift by the block height is not in the original Java, but without it, the blocks sit too low.
-      const blockShape = block.getRawShape();
+      const blockShape = block.getUntransformedBounds();
       const blockRect = scaleTransform.transformShape( blockShape.shiftedY( -blockShape.height ) );
 
       // create the shape for the front of the block
@@ -203,7 +203,7 @@ define( require => {
       this.addChild( frontOutline );
 
       if ( EFACQueryParameters.show2DBlockBounds ) {
-        const blockBounds = scaleTransform.transformBounds2( block.getRawShape() );
+        const blockBounds = scaleTransform.transformBounds2( block.getUntransformedBounds() );
 
         // compensate for inverted Y axis when creating view representation
         this.addChild( new Rectangle(
