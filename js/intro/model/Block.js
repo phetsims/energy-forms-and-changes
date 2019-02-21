@@ -147,11 +147,11 @@ define( function( require ) {
       // the slices for the block are intended to match the projection used in the view
       var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
       var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 );
-      var rect = this.rect;
+      var rectangle = this.getBounds();
 
       for ( var i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
         var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( -i * sliceWidth );
-        var sliceBounds = new Bounds2.rect( rect.x, rect.y, rect.width, rect.height );
+        var sliceBounds = new Bounds2.rect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
         sliceBounds.shift(
           projectionToFront.x + projectionOffsetVector.x,
           projectionToFront.y + projectionOffsetVector.y
@@ -163,21 +163,6 @@ define( function( require ) {
           this.positionProperty
         ) );
       }
-    },
-
-    /**
-     * Get a rectangle the defines the current shape in model space.  By convention for this simulation, the position
-     * is the middle of the bottom of the block's defining rectangle.
-     * @returns {Dot.Rectangle} rectangle that defines this item's 2D shape
-     * @public
-     */
-    get rect() {
-      return new Rectangle(
-        this.positionProperty.value.x - EFACConstants.BLOCK_SURFACE_WIDTH / 2,
-        this.positionProperty.value.y,
-        EFACConstants.BLOCK_SURFACE_WIDTH,
-        EFACConstants.BLOCK_SURFACE_WIDTH  // height = width
-      );
     },
 
     /**

@@ -205,21 +205,6 @@ define( function( require ) {
     },
 
     /**
-     * Get a rectangle defining the current outline in model space.  By convention for this simulation, the position
-     * is the middle of the bottom of the beakers's defining rectangle.
-     * @returns {Dot.Rectangle} - rectangle that defines this item's 2D shape
-     * @public
-     */
-    get rect() {
-      return new Rectangle(
-        this.positionProperty.value.x - this.width / 2,
-        this.positionProperty.value.y,
-        this.width,
-        this.height
-      );
-    },
-
-    /**
      * step the beaker in time
      * @param {number} dt - delta time (in seconds)
      * @public
