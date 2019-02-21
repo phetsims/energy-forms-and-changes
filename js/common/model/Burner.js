@@ -250,7 +250,7 @@ define( require => {
       // verify that the bounds where the energy chunk is going are above this burner
       const burnerBounds = this.getCompositeBounds();
       assert && assert(
-      bounds.minY >= burnerBounds.maxY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
+      bounds.minY + 1E-6 >= burnerBounds.maxY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
         'items should only be on top of burner when getting ECs'
       );
       return this.extractEnergyChunkClosestToPoint( new Vector2( bounds.centerX, bounds.minY ) );
