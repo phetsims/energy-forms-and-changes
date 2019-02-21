@@ -255,7 +255,7 @@ define( require => {
       energyChunksVisibleProperty.link( energyChunksVisible => {
         label.opacity = energyChunksVisible ? 0.5 : 1;
         const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
-        this.fluid.opacity = energyChunksVisible ? opacity / 2 : opacity;
+        this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
       } );
 
       // listen to the resetEmitter in the beaker model
