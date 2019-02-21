@@ -161,7 +161,7 @@ define( require => {
       // remove energy from the beaker based on loss of heat to the surrounding air
       const temperatureGradient = this.beaker.getTemperature() - EFACConstants.ROOM_TEMPERATURE;
       if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
-        const beakerRect = this.beaker.getRawOutlineRect();
+        const beakerRect = this.beaker.getUntransformedBounds();
         const thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidLevelProperty.value;
         const transferFactor = HeatTransferConstants.getHeatTransferFactor( 'water', 'air' );
         const thermalEnergyLost = temperatureGradient * transferFactor * thermalContactArea * dt;

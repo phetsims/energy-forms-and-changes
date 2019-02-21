@@ -142,6 +142,9 @@ define( function( require ) {
       this
     );
 
+    // @private
+    this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
+
     // @public - used to notify the view that reset was called
     this.resetEmitter = new Emitter();
 
@@ -197,8 +200,8 @@ define( function( require ) {
      * @returns {Dot.Rectangle}
      * @public
      */
-    getRawOutlineRect: function() {
-      return new Rectangle( -this.width / 2, 0, this.width, this.height );
+    getUntransformedBounds: function() {
+      return this.untransformedBounds;
     },
 
     /**

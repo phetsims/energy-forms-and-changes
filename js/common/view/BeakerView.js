@@ -82,7 +82,7 @@ define( require => {
       );
 
       // get a Bounds2 object defining the beaker size and location in the view
-      const beakerBounds = scaleTransform.transformShape( beaker.getRawOutlineRect() );
+      const beakerBounds = scaleTransform.transformShape( beaker.getUntransformedBounds() );
 
       // Create the shapes for the top and bottom of the beaker.  These are ellipses in order to create a 3D-ish look.
       const ellipseHeight = beakerBounds.getWidth() * PERSPECTIVE_PROPORTION;
