@@ -182,12 +182,12 @@ define( require => {
 
       // add the burners
       const burnerProjectionAmount = modelViewTransform.modelToViewDeltaX(
-        model.leftBurner.getCompositeBounds().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO
+        model.leftBurner.getBounds().height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO
       );
 
       // create left burner node
       const leftBurnerStand = new BurnerStandNode(
-        modelViewTransform.modelToViewShape( model.leftBurner.getCompositeBounds() ),
+        modelViewTransform.modelToViewShape( model.leftBurner.getBounds() ),
         burnerProjectionAmount
       );
 
@@ -196,8 +196,8 @@ define( require => {
 
       // set up left heater-cooler node, front and back are added separately to support layering of energy chunks
       const leftHeaterCoolerBack = new HeaterCoolerBack( model.leftBurner.heatCoolLevelProperty, {
-        centerX: modelViewTransform.modelToViewX( model.leftBurner.getCompositeBounds().centerX ),
-        bottom: modelViewTransform.modelToViewY( model.leftBurner.getCompositeBounds().minY ),
+        centerX: modelViewTransform.modelToViewX( model.leftBurner.getBounds().centerX ),
+        bottom: modelViewTransform.modelToViewY( model.leftBurner.getBounds().minY ),
         minWidth: leftBurnerStand.width / 1.5,
         maxWidth: leftBurnerStand.width / 1.5
       } );
@@ -214,13 +214,13 @@ define( require => {
 
       // create right burner node
       const rightBurnerStand = new BurnerStandNode(
-        modelViewTransform.modelToViewShape( model.rightBurner.getCompositeBounds() ),
+        modelViewTransform.modelToViewShape( model.rightBurner.getBounds() ),
         burnerProjectionAmount );
 
       // set up right heater-cooler node
       const rightHeaterCoolerBack = new HeaterCoolerBack( model.rightBurner.heatCoolLevelProperty, {
-        centerX: modelViewTransform.modelToViewX( model.rightBurner.getCompositeBounds().centerX ),
-        bottom: modelViewTransform.modelToViewY( model.rightBurner.getCompositeBounds().minY ),
+        centerX: modelViewTransform.modelToViewX( model.rightBurner.getBounds().centerX ),
+        bottom: modelViewTransform.modelToViewY( model.rightBurner.getBounds().minY ),
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5
       } );

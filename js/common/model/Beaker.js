@@ -126,7 +126,7 @@ define( function( require ) {
       width / 2 + MATERIAL_THICKNESS / 2,
       height
     ) );
-    var bounds = self.getCompositeBounds();
+    var bounds = self.getBounds();
 
     // @public - see base class for description
     this.topSurface = new HorizontalSurface(
@@ -151,7 +151,7 @@ define( function( require ) {
     // update internal state when the position changes
     this.positionProperty.link( function( position ) {
 
-      var bounds = self.getCompositeBounds();
+      var bounds = self.getBounds();
 
       // update the positions of the top and bottom surfaces
       self.topSurface.positionProperty.set( new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS ) );
@@ -217,16 +217,6 @@ define( function( require ) {
         this.width,
         this.height
       );
-    },
-
-    /**
-     * Get a Bounds2 object defining the current boundaries in model space.  By convention for this simulation, the
-     * position is the middle of the bottom of the block's defining rectangle.
-     * @returns {Bounds2} - boundaries this item's 2D shape
-     * @public
-     */
-    getBounds: function() {
-      return this.compositeBounds;
     },
 
     /**

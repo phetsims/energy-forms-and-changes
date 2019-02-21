@@ -221,8 +221,8 @@ define( require => {
     // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
     // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
     // preventing overlap.
-    const leftBurnerBounds = this.leftBurner.getCompositeBounds();
-    const rightBurnerBounds = this.rightBurner.getCompositeBounds();
+    const leftBurnerBounds = this.leftBurner.getBounds();
+    const rightBurnerBounds = this.rightBurner.getBounds();
     const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                      Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
@@ -554,7 +554,7 @@ define( require => {
 
         if ( energyChunkConsumer !== this.air ) {
           energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
-            energyChunkConsumer.getCompositeBounds()
+            energyChunkConsumer.getBounds()
           );
         }
         else {
@@ -579,7 +579,7 @@ define( require => {
           // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
           // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
           // the view.
-          const supplierBounds = energyChunkSupplier.getCompositeBounds();
+          const supplierBounds = energyChunkSupplier.getBounds();
           const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
           if ( energyChunk.positionProperty.value.x < horizontalWanderConstraint.min ) {
             energyChunk.setPosition( horizontalWanderConstraint.min, energyChunk.positionProperty.value.y );
@@ -868,13 +868,13 @@ define( require => {
           return;
         }
 
-        let blockBounds = block.getCompositeBounds();
+        let blockBounds = block.getBounds();
 
         // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
         // the model element - the block will simply be lifted up.
         const restrictPositiveY = !block.isStackedUpon( modelElement );
 
-        const modelElementBounds = modelElement.getCompositeBounds();
+        const modelElementBounds = modelElement.getBounds();
 
         this.beakers.forEach( beaker => {
           if ( modelElement === beaker ) {
@@ -892,7 +892,7 @@ define( require => {
           // Clamp the translation based on the test block's position, but handle the case where the block is immersed
           // in the beaker.
           if ( !( modelElement === beaker &&
-                  beaker.getCompositeBounds().containsBounds( blockBounds ) ) ) {
+                  beaker.getBounds().containsBounds( blockBounds ) ) ) {
 
             allowedTranslation = this.determineAllowedTranslation(
               modelElementBounds,

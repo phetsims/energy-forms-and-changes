@@ -101,7 +101,7 @@ define( require => {
      * @public
      * @override
      */
-    getCompositeBounds() {
+    getBounds() {
       return this.bounds;
     }
 
@@ -161,7 +161,7 @@ define( require => {
      * @public
      */
     inContactWith( thermalEnergyContainer ) {
-      const burnerRect = this.getCompositeBounds();
+      const burnerRect = this.getBounds();
       const area = thermalEnergyContainer.thermalContactArea;
       const xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
       const yContact = ( Math.abs( area.minY - burnerRect.maxY ) < CONTACT_DISTANCE );
@@ -248,7 +248,7 @@ define( require => {
     extractEnergyChunkClosestToBounds( bounds ) {
 
       // verify that the bounds where the energy chunk is going are above this burner
-      const burnerBounds = this.getCompositeBounds();
+      const burnerBounds = this.getBounds();
       assert && assert(
       bounds.minY + 1E-6 >= burnerBounds.maxY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
         'items should only be on top of burner when getting ECs'
@@ -322,7 +322,7 @@ define( require => {
     getFlameIceRect() {
 
       // word of warning: this needs to stay consistent with the view
-      const outlineRect = this.getCompositeBounds();
+      const outlineRect = this.getBounds();
       const width = outlineRect.width;
       const height = outlineRect.height;
       return new Rectangle( outlineRect.centerX - width / 4, outlineRect.centerY, width / 2, height / 2 );

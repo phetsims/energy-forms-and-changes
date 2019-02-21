@@ -181,16 +181,6 @@ define( function( require ) {
     },
 
     /**
-     * Convenience function to get the rectangle bounds.  Outlining bounds are needed in multiple places throughout the
-     * sim.
-     * @returns {Bounds2}
-     * @public
-     */
-    getBounds: function() {
-      return this.compositeBounds;
-    },
-
-    /**
      * @returns {Rectangle}
      * @public
      */

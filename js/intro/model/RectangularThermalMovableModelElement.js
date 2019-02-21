@@ -63,11 +63,11 @@ define( function( require ) {
     this.energyChunkWanderControllers = [];
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
-    this.compositeBounds = Bounds2.NOTHING.copy();
+    this.bounds = Bounds2.NOTHING.copy();
 
     // update the composite bounds as the model element moves
     this.positionProperty.link( function( position ) {
-      self.compositeBounds.setMinMax(
+      self.bounds.setMinMax(
         position.x - width / 2,
         position.y,
         position.x + width / 2,
@@ -177,20 +177,11 @@ define( function( require ) {
     },
 
     /**
-     * get the composite bounds for this model element, meaning the full rectangular space that it occupies
+     * get the bounds for this model element, meaning the full rectangular space that it occupies
      * @returns {Bounds2}
-     */
-    getCompositeBounds: function() {
-      return this.compositeBounds;
-    },
-
-    /**
-     * get the rectangle that defines this elements position and shape in model space
-     * @returns {Bounds2}
-     * @public
      */
     getBounds: function() {
-      assert && assert( false, 'this function should not be called in base class' );
+      return this.bounds;
     },
 
     /**
