@@ -142,9 +142,6 @@ define( function( require ) {
       this
     );
 
-    // @private
-    this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
-
     // @public - used to notify the view that reset was called
     this.resetEmitter = new Emitter();
 
@@ -194,15 +191,6 @@ define( function( require ) {
   energyFormsAndChanges.register( 'Beaker', Beaker );
 
   return inherit( RectangularThermalMovableModelElement, Beaker, {
-
-    /**
-     * get the untranslated rectangle that defines the shape of the beaker
-     * @returns {Dot.Rectangle}
-     * @public
-     */
-    getUntransformedBounds: function() {
-      return this.untransformedBounds;
-    },
 
     /**
      * step the beaker in time

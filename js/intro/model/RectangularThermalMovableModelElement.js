@@ -22,6 +22,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -74,6 +75,9 @@ define( function( require ) {
         position.y + height
       );
     } );
+
+    // @private {Dot.Rectangle} - untranslated bounds for this model element
+    this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
 
     // @private {Bounds2} - composite relative bounds for this model element, cached after first calculation
     this.relativeCompositeBounds = null;
@@ -174,6 +178,15 @@ define( function( require ) {
       );
 
       return bounds;
+    },
+
+    /**
+     * get the untranslated rectangle
+     * @returns {Dot.Rectangle}
+     * @public
+     */
+    getUntransformedBounds: function() {
+      return this.untransformedBounds;
     },
 
     /**

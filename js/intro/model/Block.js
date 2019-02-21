@@ -20,7 +20,6 @@ define( function( require ) {
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Rectangle = require( 'DOT/Rectangle' );
   var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/RectangularThermalMovableModelElement' );
   var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -98,9 +97,6 @@ define( function( require ) {
       this
     );
 
-    // @private
-    this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
-
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( function( position ) {
       var rectangle = self.getBounds();
@@ -166,15 +162,6 @@ define( function( require ) {
           this.positionProperty
         ) );
       }
-    },
-
-    /**
-     * get the untranslated rectangle that defines the shape of the block
-     * @returns {Dot.Rectangle}
-     * @public
-     */
-    getUntransformedBounds: function() {
-      return this.untransformedBounds;
     },
 
     /**
