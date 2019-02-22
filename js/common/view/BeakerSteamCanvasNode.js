@@ -24,7 +24,7 @@ define( require => {
   const STEAM_BUBBLE_GROWTH_RATE = 0.2; // proportion per second
   const MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
 
-  class SteamCanvasNode extends CanvasNode {
+  class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * @param {Rectangle} containerOutlineRect - the outline of the container
@@ -211,5 +211,5 @@ define( require => {
     }
   }
 
-  return energyFormsAndChanges.register( 'SteamCanvasNode', SteamCanvasNode );
+  return energyFormsAndChanges.register( 'BeakerSteamCanvasNode', BeakerSteamCanvasNode );
 } );

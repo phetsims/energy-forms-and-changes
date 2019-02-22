@@ -15,7 +15,7 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
-  const SteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SteamCanvasNode' );
+  const BeakerSteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerSteamCanvasNode' );
 
   // constants
   const PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
@@ -59,7 +59,7 @@ define( require => {
         stroke: this.fluidColor.colorUtilsDarker( 0.2 )
       } );
 
-      this.steamCanvasNode = new SteamCanvasNode(
+      this.steamCanvasNode = new BeakerSteamCanvasNode(
         this.beakerOutlineRect,
         this.fluidLevelProperty,
         this.temperatureProperty,
