@@ -335,6 +335,9 @@ define( require => {
     }
   }
 
+  // statics
+  TeaKettle.SPOUT_EXIT_ANGLE = SPOUT_EXIT_ANGLE;
+
   return energyFormsAndChanges.register( 'TeaKettle', TeaKettle );
 } );
 

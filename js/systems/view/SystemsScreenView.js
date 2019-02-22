@@ -305,7 +305,7 @@ define( require => {
      * @public
      */
     stepView( dt ) {
-      this.teaKettleNode.steamNode.step( dt );
+      this.teaKettleNode.step( dt );
       this.beakerHeaterNode.step( dt );
       this.faucetNode.step( dt );
     }
