@@ -18,6 +18,7 @@ define( require => {
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
   const Image = require( 'SCENERY/nodes/Image' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const TeaKettleSteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleSteamCanvasNode' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -91,18 +92,19 @@ define( require => {
       this.addChild( heaterCoolerBack );
       this.addChild( energyChunkLayer );
       this.addChild( heaterCoolerFront );
-      this.addChild( burnerStandNode );
-      this.addChild( this.steamCanvasNode );
-      this.addChild( teaKettleImageNode );
 
-      // make the tea kettle & stand transparent when the energy chunks are visible
+      // create a separate layer for the tea kettle, stand, and steam, which all become transparent when energy chunks
+      // are turned on. the steam canvas node does not like its opacity to be set when it's not rendering anything, but
+      // setting the opacity of its parent node is allowed.
+      const kettleAndStand = new Node();
+      kettleAndStand.addChild( burnerStandNode );
+      kettleAndStand.addChild( this.steamCanvasNode );
+      kettleAndStand.addChild( teaKettleImageNode );
+      this.addChild( kettleAndStand );
+
+      // make the tea kettle, stand, and steam transparent when energy chunks are visible
       energyChunksVisibleProperty.link( chunksVisible => {
-        if ( teaKettle.activeProperty.get() ) {
-          const opacity = chunksVisible ? 0.7 : 1;
-          teaKettleImageNode.setOpacity( opacity );
-          burnerStandNode.setOpacity( opacity );
-          this.steamCanvasNode.setOpacity( opacity );
-        }
+        kettleAndStand.setOpacity( chunksVisible ? 0.7 : 1 );
       } );
 
       // reset the heater slider when the tea kettle is deactivated
