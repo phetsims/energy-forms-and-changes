@@ -268,27 +268,25 @@ define( require => {
 
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
-          // Create a chunk inside the tea kettle (at the water surface).
-          const initialPosition = new Vector2( this.positionProperty.value.x,
-            this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET );
+          // Create a thermal chunk inside the burner.
+          const xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
+          const initialPosition = new Vector2(
+            this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength(),
+            this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN
+          );
 
-          const energyType = phet.joist.random.nextDouble() > 0.2 ? EnergyType.MECHANICAL : EnergyType.THERMAL;
-
-          const newEnergyChunk = new EnergyChunk(
-            energyType,
+          const energyChunk = new EnergyChunk(
+            EnergyType.THERMAL,
             initialPosition,
             Vector2.ZERO,
             this.energyChunksVisibleProperty
           );
-          this.energyChunkList.push( newEnergyChunk );
+          this.energyChunkList.push( energyChunk );
 
-          const travelDistance = newEnergyChunk.positionProperty.get().distance(
-            this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
-
-          // create path mover to spout bottom
-          this.energyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
-            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
-            travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
+          this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
+            this.createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
+            EFACConstants.ENERGY_CHUNK_VELOCITY
+          ) );
 
           energySinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
         }
@@ -300,6 +298,9 @@ define( require => {
 
           // An energy chunk has traversed to the output of this system, or passed the point of moving to the next system.
           preloadComplete = true;
+
+          // a chunk was recently released from the burner because of preloading, so reset the heat energy level
+          this.heatEnergyProducedSinceLastChunk = 0;
         }
       }
     }
