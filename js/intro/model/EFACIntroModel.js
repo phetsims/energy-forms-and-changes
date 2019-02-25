@@ -59,208 +59,208 @@ define( require => {
 
   class EFACIntroModel {
 
-  /**
-   * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
-   */
-  constructor() {
+    /**
+     * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
+     */
+    constructor() {
 
-    // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
-    this.energyChunksVisibleProperty = new BooleanProperty( false );
+      // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
+      this.energyChunksVisibleProperty = new BooleanProperty( false );
 
-    // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
-    this.linkedHeatersProperty = new BooleanProperty( false );
+      // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
+      this.linkedHeatersProperty = new BooleanProperty( false );
 
-    // @public {BooleanProperty} - is the sim running or paused?
-    this.isPlayingProperty = new Property( true );
+      // @public {BooleanProperty} - is the sim running or paused?
+      this.isPlayingProperty = new Property( true );
 
-    // @public {Property.<SimSpeed>} - controls the speed of the sim
-    this.simSpeedProperty = new Property( SimSpeed.NORMAL, {
-      validValues: [ SimSpeed.NORMAL, SimSpeed.FAST_FORWARD ]
-    } );
+      // @public {Property.<SimSpeed>} - controls the speed of the sim
+      this.simSpeedProperty = new Property( SimSpeed.NORMAL, {
+        validValues: [ SimSpeed.NORMAL, SimSpeed.FAST_FORWARD ]
+      } );
 
-    // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
-    // energy
-    this.air = new Air( this.energyChunksVisibleProperty );
+      // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
+      // energy
+      this.air = new Air( this.energyChunksVisibleProperty );
 
-    // @private - calculate space in between the center points of the snap-to spots on the ground
-    this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) / ( NUM_GROUND_SPOTS - 1 );
-    this.groundSpotXPositions = [];
+      // @private - calculate space in between the center points of the snap-to spots on the ground
+      this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) / ( NUM_GROUND_SPOTS - 1 );
+      this.groundSpotXPositions = [];
 
-    // determine the locations of the snap-to spots, and round them to a few decimal places
-    const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
-    for ( let i = 0; i < NUM_GROUND_SPOTS; i++ ) {
-      this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
-    }
-
-    // @public (read-only) {Block}
-    this.ironBlock = new Block(
-      new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
-      this.energyChunksVisibleProperty,
-      BlockType.IRON
-    );
-
-    // @public (read-only) {Block}
-    this.brick = new Block(
-      new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
-      this.energyChunksVisibleProperty,
-      BlockType.BRICK
-    );
-
-    // @public (read-only) {Block[]} - list of all blocks in sim
-    this.blocks = [ this.brick, this.ironBlock ];
-
-    // @public (read-only) {Burner} - right and left burners
-    this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 2 ], 0 ), this.energyChunksVisibleProperty );
-    this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 3 ], 0 ), this.energyChunksVisibleProperty );
-
-    const listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
-
-    // @public (read-only) {BeakerContainer)
-    this.waterBeaker = new BeakerContainer(
-      new Vector2( this.groundSpotXPositions[ 4 ], 0 ),
-      BEAKER_WIDTH,
-      BEAKER_HEIGHT,
-      listOfThingsThatCanGoInBeaker,
-      this.energyChunksVisibleProperty, {
-        majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+      // determine the locations of the snap-to spots, and round them to a few decimal places
+      const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
+      for ( let i = 0; i < NUM_GROUND_SPOTS; i++ ) {
+        this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
       }
-    );
 
-    // @public (read-only) {BeakerContainer)
-    this.oliveOilBeaker = new BeakerContainer(
-      new Vector2( this.groundSpotXPositions[ 5 ], 0 ),
-      BEAKER_WIDTH,
-      BEAKER_HEIGHT,
-      listOfThingsThatCanGoInBeaker,
-      this.energyChunksVisibleProperty, {
-        fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
-        steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
-        fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
-        fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
-        fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-        energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
-        majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
-      }
-    );
+      // @public (read-only) {Block}
+      this.ironBlock = new Block(
+        new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
+        this.energyChunksVisibleProperty,
+        BlockType.IRON
+      );
 
-    // @public (read-only) {BeakerContainer[]}
-    this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
+      // @public (read-only) {Block}
+      this.brick = new Block(
+        new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
+        this.energyChunksVisibleProperty,
+        BlockType.BRICK
+      );
 
-    // @private - put all the thermal containers on a list for easy iteration
-    this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
+      // @public (read-only) {Block[]} - list of all blocks in sim
+      this.blocks = [ this.brick, this.ironBlock ];
 
-    // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
-    // each model step.
-    this.inThermalContactInfo = {};
-    this.thermalContainers.forEach( thermalContainer => {
-      this.inThermalContactInfo[ thermalContainer.id ] = [];
-    } );
+      // @public (read-only) {Burner} - right and left burners
+      this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 2 ], 0 ), this.energyChunksVisibleProperty );
+      this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 3 ], 0 ), this.energyChunksVisibleProperty );
 
-    // @private - put burners into a list for easy iteration
-    this.burners = [ this.rightBurner, this.leftBurner ];
+      const listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
-    // @private - put all of the model elements on a list for easy iteration
-    this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
+      // @public (read-only) {BeakerContainer)
+      this.waterBeaker = new BeakerContainer(
+        new Vector2( this.groundSpotXPositions[ 4 ], 0 ),
+        BEAKER_WIDTH,
+        BEAKER_HEIGHT,
+        listOfThingsThatCanGoInBeaker,
+        this.energyChunksVisibleProperty, {
+          majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+        }
+      );
 
-    // @public (read-only) {StickyTemperatureAndColorSensor[]}
-    this.temperatureAndColorSensors = [];
-    _.times( NUM_THERMOMETERS, () => {
-      const sensor = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
-      this.temperatureAndColorSensors.push( sensor );
+      // @public (read-only) {BeakerContainer)
+      this.oliveOilBeaker = new BeakerContainer(
+        new Vector2( this.groundSpotXPositions[ 5 ], 0 ),
+        BEAKER_WIDTH,
+        BEAKER_HEIGHT,
+        listOfThingsThatCanGoInBeaker,
+        this.energyChunksVisibleProperty, {
+          fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+          steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
+          fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
+          fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
+          fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
+          energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
+          majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+        }
+      );
 
-      // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
-      // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
-      // beaker temperature. This was requested after interviews.
-      sensor.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+      // @public (read-only) {BeakerContainer[]}
+      this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
 
-        this.beakers.forEach( beaker => {
-          const blockWidthIncludingPerspective = this.ironBlock.getProjectedShape().bounds.width;
+      // @private - put all the thermal containers on a list for easy iteration
+      this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
-          const xRange = new Range(
-            beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
-            beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
-          );
+      // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
+      // each model step.
+      this.inThermalContactInfo = {};
+      this.thermalContainers.forEach( thermalContainer => {
+        this.inThermalContactInfo[ thermalContainer.id ] = [];
+      } );
 
-          const checkBlocks = block => {
+      // @private - put burners into a list for easy iteration
+      this.burners = [ this.rightBurner, this.leftBurner ];
 
-            // see if one of the blocks is being sensed in the beaker
-            return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
-          };
+      // @private - put all of the model elements on a list for easy iteration
+      this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
-          // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
-          // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-          if ( _.some( this.blocks, checkBlocks ) &&
-               oldColor === beaker.fluidColor &&
-               !sensor.userControlledProperty.get() &&
-               !beaker.userControlledProperty.get() &&
-               xRange.contains( sensor.positionProperty.value.x ) ) {
+      // @public (read-only) {StickyTemperatureAndColorSensor[]}
+      this.temperatureAndColorSensors = [];
+      _.times( NUM_THERMOMETERS, () => {
+        const sensor = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
+        this.temperatureAndColorSensors.push( sensor );
 
-            // fake a movement by the user to a point in the beaker where the sensor is not over a brick
-            sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
-            sensor.position = new Vector2(
-              beaker.getBounds().maxX - 0.01,
-              beaker.getBounds().minY + beaker.getBounds().height * 0.33
+        // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
+        // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
+        // beaker temperature. This was requested after interviews.
+        sensor.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+
+          this.beakers.forEach( beaker => {
+            const blockWidthIncludingPerspective = this.ironBlock.getProjectedShape().bounds.width;
+
+            const xRange = new Range(
+              beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
+              beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
             );
-            sensor.userControlledProperty.set( false );
-          }
+
+            const checkBlocks = block => {
+
+              // see if one of the blocks is being sensed in the beaker
+              return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
+            };
+
+            // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
+            // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
+            if ( _.some( this.blocks, checkBlocks ) &&
+                 oldColor === beaker.fluidColor &&
+                 !sensor.userControlledProperty.get() &&
+                 !beaker.userControlledProperty.get() &&
+                 xRange.contains( sensor.positionProperty.value.x ) ) {
+
+              // fake a movement by the user to a point in the beaker where the sensor is not over a brick
+              sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+              sensor.position = new Vector2(
+                beaker.getBounds().maxX - 0.01,
+                beaker.getBounds().minY + beaker.getBounds().height * 0.33
+              );
+              sensor.userControlledProperty.set( false );
+            }
+          } );
         } );
       } );
-    } );
 
-    // @private {EnergyBalanceTracker} - This is used to track energy exchanges between all of the various energy
-    // containing elements and using that information to transfer energy chunks commensurately.
-    this.energyBalanceTracker = new EnergyBalanceTracker();
+      // @private {EnergyBalanceTracker} - This is used to track energy exchanges between all of the various energy
+      // containing elements and using that information to transfer energy chunks commensurately.
+      this.energyBalanceTracker = new EnergyBalanceTracker();
 
-    // @private {EnergyBalanceRecord[]} - An array used for getting energy balances from the energy balance tracker,
-    // pre-allocated and reused in an effort to reduce memory allocations.
-    this.reusableBalanceArray = [];
+      // @private {EnergyBalanceRecord[]} - An array used for getting energy balances from the energy balance tracker,
+      // pre-allocated and reused in an effort to reduce memory allocations.
+      this.reusableBalanceArray = [];
 
-    // @private {Bounds2} - pre-allocated reusable bounds, used to reduce memory allocations
-    this.reusableBounds = Bounds2.NOTHING.copy();
+      // @private {Bounds2} - pre-allocated reusable bounds, used to reduce memory allocations
+      this.reusableBounds = Bounds2.NOTHING.copy();
 
-    // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
-    // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
-    // preventing overlap.
-    const leftBurnerBounds = this.leftBurner.getBounds();
-    const rightBurnerBounds = this.rightBurner.getBounds();
-    const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
-                                     Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+      // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
+      // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
+      // preventing overlap.
+      const leftBurnerBounds = this.leftBurner.getBounds();
+      const rightBurnerBounds = this.rightBurner.getBounds();
+      const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+                                         Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
-    this.burnerBlockingRect = new Bounds2(
-      leftBurnerBounds.minX - burnerPerspectiveExtension,
-      leftBurnerBounds.minY,
-      rightBurnerBounds.maxX,
-      rightBurnerBounds.maxY
-    );
+      this.burnerBlockingRect = new Bounds2(
+        leftBurnerBounds.minX - burnerPerspectiveExtension,
+        leftBurnerBounds.minY,
+        rightBurnerBounds.maxX,
+        rightBurnerBounds.maxY
+      );
 
-    // @public - used to notify the view that a manual step was called
-    this.manualStepEmitter = new Emitter( { validators: [ { valueType: 'number' } ] } );
-  }
+      // @public - used to notify the view that a manual step was called
+      this.manualStepEmitter = new Emitter( { validators: [ { valueType: 'number' } ] } );
+    }
 
-  // helper function
+    // helper function
     mapHeatCoolLevelToColor( heatCoolLevel ) {
       let color;
-    if ( heatCoolLevel > 0 ) {
-      color = 'orange';
+      if ( heatCoolLevel > 0 ) {
+        color = 'orange';
+      }
+      else if ( heatCoolLevel < 0 ) {
+        color = '#87CEFA';
+      }
+      else {
+        color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
+      }
+      return color;
     }
-    else if ( heatCoolLevel < 0 ) {
-      color = '#87CEFA';
-    }
-    else {
-      color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
-    }
-    return color;
-  }
 
-  /**
-   * helper function to determine if one thermal model element is immersed in another - tests if the first element is
-   * immersed in the second
-   */
-  isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
-    return thermalModelElement1 !== thermalModelElement2 &&
-           thermalModelElement1.blockType !== undefined &&
-           thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
-  }
+    /**
+     * helper function to determine if one thermal model element is immersed in another - tests if the first element is
+     * immersed in the second
+     */
+    isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
+      return thermalModelElement1 !== thermalModelElement2 &&
+             thermalModelElement1.blockType !== undefined &&
+             thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
+    }
 
     /**
      * restore the initial conditions of the model
@@ -1104,8 +1104,8 @@ define( require => {
       // the beaker body first
       this.beakers.forEach( beaker => {
         if ( !temperatureAndColor &&
-                  beaker.getSteamArea().containsPoint( position ) &&
-                  beaker.steamingProportion > 0 ) {
+             beaker.getSteamArea().containsPoint( position ) &&
+             beaker.steamingProportion > 0 ) {
           temperatureAndColor = new TemperatureAndColor(
             beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ),
             beaker.steamColor
