@@ -97,10 +97,12 @@ define( require => {
 
       // make the tea kettle & stand transparent when the energy chunks are visible
       energyChunksVisibleProperty.link( chunksVisible => {
-        const opacity = chunksVisible ? 0.7 : 1;
-        teaKettleImageNode.setOpacity( opacity );
-        burnerStandNode.setOpacity( opacity );
-        this.steamCanvasNode.setOpacity( opacity );
+        if ( this.teaKettle.activeProperty.get() ) {
+          const opacity = chunksVisible ? 0.7 : 1;
+          teaKettleImageNode.setOpacity( opacity );
+          burnerStandNode.setOpacity( opacity );
+          this.steamCanvasNode.setOpacity( opacity );
+        }
       } );
 
       // reset the heater slider when the tea kettle is deactivated
