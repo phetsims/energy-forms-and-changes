@@ -97,7 +97,7 @@ define( require => {
 
       // make the tea kettle & stand transparent when the energy chunks are visible
       energyChunksVisibleProperty.link( chunksVisible => {
-        if ( this.teaKettle.activeProperty.get() ) {
+        if ( teaKettle.activeProperty.get() ) {
           const opacity = chunksVisible ? 0.7 : 1;
           teaKettleImageNode.setOpacity( opacity );
           burnerStandNode.setOpacity( opacity );
