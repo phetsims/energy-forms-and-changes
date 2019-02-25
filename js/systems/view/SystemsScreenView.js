@@ -315,6 +315,7 @@ define( require => {
      *
      * @param {number} width
      * @param {number} height
+     * @override
      */
     layout( width, height ) {
       this.resetTransform();
