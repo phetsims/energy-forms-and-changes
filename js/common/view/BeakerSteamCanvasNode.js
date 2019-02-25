@@ -163,9 +163,6 @@ define( require => {
         }
         this.drawSteamBubble( context, this.steamBubbles[ i ] );
       }
-
-      // clear the most recent dt value after it is used, see https://github.com/phetsims/energy-forms-and-changes/issues/190
-      this.dt = 0;
     }
 
     /*
