@@ -652,19 +652,14 @@ define( require => {
             // (and therefore falling through it and overlapping), it does detect it, and then falls to the model elements
             // surface instead of all the way down to the ground spot.
             //
-            // the first condition of the or clause checks that potentialRestingModelElement is below modelElement
+            // the second condition checks that potentialRestingModelElement is below modelElement
             // because in the case where a beaker with a block inside is being dropped, we don't want the beaker to
             // think that its block is in the spot below it. however, because of floating point errors, sometimes when
             // a block is dragged onto a burner surface next to another block, it is actually slightly lower than the
-            // resting block, so it still needs to detect that the resting block is in that spot. otherwise, it will
-            // jump inside of it instead of on top of it. that is solved by the second condition of the or clause, which
-            // makes sure that the approaching block is far enough away in the x direction that it couldn't be a block
-            // inside a beaker, since a block and its containing beaker share the same x coordinate. for that reason,
-            // the minimum distance away was arbitrarily chosen.
+            // resting block, but it still needs to detect that the resting block is in that spot. otherwise, it will
+            // jump inside of it instead of on top of it. this is solved with a tolerance added to the comparison
             Math.abs( potentialRestingModelElement.positionProperty.value.x - this.groundSpotXPositions[ i ] ) <= this.spaceBetweenSpotCenters / 2 &&
-            ( potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ||
-              Math.abs( potentialRestingModelElement.positionProperty.value.x - modelElement.positionProperty.value.x ) > modelElement.width / 2
-            )
+            potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y + 1E-6
           ) {
             modelElementsInSpot.push( potentialRestingModelElement );
           }
