@@ -26,57 +26,57 @@ define( require => {
 
   class BeakerSteamCanvasNode extends CanvasNode {
 
-  /**
-   * @param {Rectangle} containerOutlineRect - the outline of the container
-   * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
-   * @param {Property<number>} temperatureProperty - the temperature of the liquid
-   * @param {number} fluidBoilingPoint
-   * @param {Color} steamColor
-   * @param {Object} [options]
-   */
-  constructor( containerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
-    super( options );
+    /**
+     * @param {Rectangle} containerOutlineRect - the outline of the container
+     * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
+     * @param {Property<number>} temperatureProperty - the temperature of the liquid
+     * @param {number} fluidBoilingPoint
+     * @param {Color} steamColor
+     * @param {Object} [options]
+     */
+    constructor( containerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
+      super( options );
 
-    // @private
-    this.containerOutlineRect = containerOutlineRect;
-    this.fluidLevelProperty = fluidLevelProperty;
-    this.temperatureProperty = temperatureProperty;
-    this.fluidBoilingPoint = fluidBoilingPoint;
-    this.steamColor = steamColor;
+      // @private
+      this.containerOutlineRect = containerOutlineRect;
+      this.fluidLevelProperty = fluidLevelProperty;
+      this.temperatureProperty = temperatureProperty;
+      this.fluidBoilingPoint = fluidBoilingPoint;
+      this.steamColor = steamColor;
 
-    // @private
-    this.bubbleProductionRemainder = 0;
-    this.dt = 0;
-    this.steamOrigin = 0;
-    this.steamBubbles = [];
+      // @private
+      this.bubbleProductionRemainder = 0;
+      this.dt = 0;
+      this.steamOrigin = 0;
+      this.steamBubbles = [];
 
-    // @private
-    // canvas where the steam bubble image resides
-    this.steamBubbleImageCanvas = document.createElement( 'canvas' );
-    this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
-    this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
-    const context = this.steamBubbleImageCanvas.getContext( '2d' );
+      // @private
+      // canvas where the steam bubble image resides
+      this.steamBubbleImageCanvas = document.createElement( 'canvas' );
+      this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
+      this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
+      const context = this.steamBubbleImageCanvas.getContext( '2d' );
 
-    // draw a steam bubble centered in the steam bubble image canvas
-    context.fillStyle = this.steamColor.toCSS();
-    context.beginPath();
-    context.arc(
-      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
-      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
-      STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
-      0,
-      Math.PI * 2,
-      true
-    );
-    context.fill();
+      // draw a steam bubble centered in the steam bubble image canvas
+      context.fillStyle = this.steamColor.toCSS();
+      context.beginPath();
+      context.arc(
+        STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+        STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+        STEAM_BUBBLE_DIAMETER_RANGE.max / 2,
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.fill();
 
-    // update the appearance of the water as the level changes
-    this.fluidLevelProperty.link( fluidLevel => {
-      this.steamOrigin = this.containerOutlineRect.minY * fluidLevel;
-    } );
+      // update the appearance of the water as the level changes
+      this.fluidLevelProperty.link( fluidLevel => {
+        this.steamOrigin = this.containerOutlineRect.minY * fluidLevel;
+      } );
 
-    this.mutate( options );
-  }
+      this.mutate( options );
+    }
 
     /**
      * Renders the steam bubbles on the canvas node.
@@ -107,7 +107,7 @@ define( require => {
 
         for ( let i = 0; i < bubblesToProduce; i++ ) {
           const steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min +
-                                    phet.joist.random.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+                                      phet.joist.random.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
           const steamBubbleCenterXPos = this.containerOutlineRect.centerX +
                                         ( phet.joist.random.nextDouble() - 0.5 ) *
                                         ( this.containerOutlineRect.width - steamBubbleDiameter );
