@@ -127,43 +127,40 @@ define( require => {
       const steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
       const unfilledBeakerHeight = this.containerOutlineRect.height + this.steamOrigin;
 
-      for ( let i = 0; i < this.steamBubbles.length; i++ ) {
+      // create a clone to iterate over so we can splice the original when removing bubbles
+      const steamBubblesCopy = [ ...this.steamBubbles ];
+
+      for ( let i = 0; i < steamBubblesCopy.length; i++ ) {
 
         // float the bubbles upward from the beaker
-        this.steamBubbles[ i ].y += -this.dt * steamBubbleSpeed;
+        steamBubblesCopy[ i ].y += -this.dt * steamBubbleSpeed;
 
-        // // remove bubbles that have floated out of view
-        if ( this.containerOutlineRect.minY - this.steamBubbles[ i ].y > MAX_STEAM_BUBBLE_HEIGHT ) {
-          this.steamBubbles.splice( i, 1 );
+        if ( steamBubblesCopy[ i ].y < this.containerOutlineRect.minY ) {
 
-          // break out of this loop when the last steam bubble is removed
-          if ( this.steamBubbles.length < 1 ) {
-            break;
-          }
-        }
+          // increase radius
+          steamBubblesCopy[ i ].radius = steamBubblesCopy[ i ].radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) ) / 2;
 
-        // update position of floating bubbles
-        else if ( this.steamBubbles[ i ].y < this.containerOutlineRect.minY ) {
-          this.steamBubbles[ i ].radius = this.steamBubbles[ i ].radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) ) / 2;
-          const distanceFromCenterX = this.steamBubbles[ i ].x;
-
-          // give bubbles some lateral drift motion
-          this.steamBubbles[ i ].x += distanceFromCenterX * 0.2 * this.dt;
+          // give bubble some lateral drift motion
+          const distanceFromCenterX = steamBubblesCopy[ i ].x;
+          steamBubblesCopy[ i ].x += distanceFromCenterX * 0.2 * this.dt;
 
           // fade the bubble as it reaches the end of its range
-          const heightFraction = ( this.containerOutlineRect.minY - this.steamBubbles[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT;
-          this.steamBubbles[ i ].opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
+          const heightFraction = Util.clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
+          steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
         }
 
-        // fade new bubbles in
+        // fade new bubble in
         else {
-          const distanceFromWater = this.steamOrigin - this.steamBubbles[ i ].y;
+          const distanceFromWater = this.steamOrigin - steamBubblesCopy[ i ].y;
           const opacityFraction = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
-          this.steamBubbles[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
+          steamBubblesCopy[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
 
-        if ( this.steamBubbles[ i ] ) {
-          this.drawSteamBubble( context, this.steamBubbles[ i ] );
+        this.drawSteamBubble( context, steamBubblesCopy[ i ] );
+
+        // remove bubble that has floated out of view
+        if ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y > MAX_STEAM_BUBBLE_HEIGHT ) {
+          this.steamBubbles.splice( i, 1 );
         }
       }
     }

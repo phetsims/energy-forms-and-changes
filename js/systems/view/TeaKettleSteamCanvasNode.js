@@ -119,37 +119,30 @@ define( require => {
       // update the position and appearance of the existing steam bubbles
       const steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
 
-      for ( let i = 0; i < this.steamBubbles.length; i++ ) {
+      // create a copy to iterate over so we can splice the original when removing bubbles
+      const steamBubblesCopy = [ ...this.steamBubbles ];
+
+      for ( let i = 0; i < steamBubblesCopy.length; i++ ) {
 
         // update position
         const dy = -this.dt * steamBubbleSpeed;
-        const dx = -dy / Math.tan( this.steamBubbles[ i ].angle );
-        this.steamBubbles[ i ].y += dy;
-        this.steamBubbles[ i ].x += dx;
+        const dx = -dy / Math.tan( steamBubblesCopy[ i ].angle );
+        steamBubblesCopy[ i ].y += dy;
+        steamBubblesCopy[ i ].x += dx;
 
+        // increase radius
+        steamBubblesCopy[ i ].radius = steamBubblesCopy[ i ].radius * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) );
+
+        // fade out the bubble as it reaches the end of its range
         const steamBubbleMaxHeight = STEAM_BUBBLE_HEIGHT_RANGE.min + steamingProportion * STEAM_BUBBLE_HEIGHT_RANGE.getLength();
+        const heightFraction = Util.clamp( ( this.steamOrigin.y - steamBubblesCopy[ i ].y ) / steamBubbleMaxHeight, 0, 1 );
+        steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * STEAM_BUBBLE_MAX_OPACITY;
+
+        this.drawSteamBubble( context, steamBubblesCopy[ i ] );
 
         // remove bubbles that are out of the current height range
-        if ( this.steamOrigin.y - this.steamBubbles[ i ].y > steamBubbleMaxHeight ) {
+        if ( this.steamOrigin.y - steamBubblesCopy[ i ].y > steamBubbleMaxHeight ) {
           this.steamBubbles.splice( i, 1 );
-
-          // break out of this loop when the last steam bubble is removed
-          if ( this.steamBubbles.length < 1 ) {
-            break;
-          }
-        }
-
-        // update radius and opacity
-        else {
-          this.steamBubbles[ i ].radius = this.steamBubbles[ i ].radius * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) );
-
-          // fade out the bubble as it reaches the end of its range
-          const heightFraction = ( this.steamOrigin.y - this.steamBubbles[ i ].y ) / steamBubbleMaxHeight;
-          this.steamBubbles[ i ].opacity = ( 1 - heightFraction ) * STEAM_BUBBLE_MAX_OPACITY;
-        }
-
-        if ( this.steamBubbles[ i ] ) {
-          this.drawSteamBubble( context, this.steamBubbles[ i ] );
         }
       }
     }
