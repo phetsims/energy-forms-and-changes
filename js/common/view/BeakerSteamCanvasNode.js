@@ -161,7 +161,10 @@ define( require => {
           const opacityFraction = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
           this.steamBubbles[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
-        this.drawSteamBubble( context, this.steamBubbles[ i ] );
+
+        if ( this.steamBubbles[ i ] ) {
+          this.drawSteamBubble( context, this.steamBubbles[ i ] );
+        }
       }
     }
 

@@ -148,7 +148,9 @@ define( require => {
           this.steamBubbles[ i ].opacity = ( 1 - heightFraction ) * STEAM_BUBBLE_MAX_OPACITY;
         }
 
-        this.drawSteamBubble( context, this.steamBubbles[ i ] );
+        if ( this.steamBubbles[ i ] ) {
+          this.drawSteamBubble( context, this.steamBubbles[ i ] );
+        }
       }
     }
 
