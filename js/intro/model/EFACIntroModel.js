@@ -321,17 +321,12 @@ define( require => {
 
       // Cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
       // towards the nearest supporting surface.
-      let unsupported;
-      let raised;
       this.thermalContainers.forEach( movableModelElement => {
-        unsupported = movableModelElement.supportingSurface === null;
-        raised = ( movableModelElement.positionProperty.value.y !== 0 );
-        if ( !movableModelElement.userControlledProperty.value && unsupported && raised ) {
-          this.fallToSurface( movableModelElement, dt );
-        }
-        else if ( !movableModelElement.userControlledProperty.value &&
-                  unsupported &&
-                  !_.includes( this.groundSpotXPositions, movableModelElement.positionProperty.value.x ) ) {
+        const userControlled = movableModelElement.userControlledProperty.value;
+        const unsupported = movableModelElement.supportingSurface === null;
+        const raised = movableModelElement.positionProperty.value.y !== 0;
+        const atXSpot = _.includes( this.groundSpotXPositions, movableModelElement.positionProperty.value.x );
+        if ( !userControlled && unsupported && ( raised || !atXSpot ) ) {
           this.fallToSurface( movableModelElement, dt );
         }
       } );
@@ -620,7 +615,8 @@ define( require => {
       const acceleration = -9.8; // meters/s/s
 
       // sort list of ground spots in order, with the closest spot to modelElement first
-      this.groundSpotXPositions.sort( ( a, b ) => {
+      const groundSpotXPositionsCopy = [ ...this.groundSpotXPositions ];
+      groundSpotXPositionsCopy.sort( ( a, b ) => {
         const distanceA = Math.abs( a - modelElement.positionProperty.value.x );
         const distanceB = Math.abs( b - modelElement.positionProperty.value.x );
         return distanceA - distanceB;
@@ -629,7 +625,7 @@ define( require => {
       let destinationSurface = null;
 
       // check out each spot
-      for ( let i = 0; i < this.groundSpotXPositions.length &&
+      for ( let i = 0; i < groundSpotXPositionsCopy.length &&
                        destinationXSpot === null &&
                        destinationSurface === null; i++
       ) {
@@ -637,26 +633,27 @@ define( require => {
 
         // get a list of what's currently in the spot being checked
         this.modelElementList.forEach( potentialRestingModelElement => {
-          if (
-            potentialRestingModelElement !== modelElement &&
+          if ( potentialRestingModelElement === modelElement ) {
+            return;
+          }
 
-            // this if statement is checking each potentialRestingModelElement to see which ones are already in the spot
-            // that modelElement is falling to.
-            //
-            // the following first condition usually just needs to check if potentialRestingModelElement's center x
-            // coordinate matches the current ground spot x coordinate, but instead it considers any
-            // potentialRestingModelElement's to be in this spot if its center x coordinate is within half a spot's
-            // width of the ground spot x coordinate. this handles the multitouch case where modelElement is falling and
-            // a user drags a different model element somewhere underneath it (which is likely not located at a ground
-            // x coordinate), because instead of not detecting that user-held model element as occupying this spot
-            // (and therefore falling through it and overlapping), it does detect it, and then falls to the model
-            // elements surface instead of all the way down to the ground spot.
-            //
-            // the second condition checks that potentialRestingModelElement is below modelElement
-            // because, for example, in the case where a beaker with a block inside is being dropped, we don't want the
-            // beaker to think that its block is in the spot below it.
-            Math.abs( potentialRestingModelElement.positionProperty.value.x - this.groundSpotXPositions[ i ] ) <= this.spaceBetweenSpotCenters / 2 &&
-            potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
+          // this if statement is checking each potentialRestingModelElement to see which ones are already in the spot
+          // that modelElement is falling to.
+          //
+          // the following first condition usually just needs to check if potentialRestingModelElement's center x
+          // coordinate matches the current ground spot x coordinate, but instead it considers any
+          // potentialRestingModelElement's to be in this spot if its center x coordinate is within half a spot's
+          // width of the ground spot x coordinate. this handles the multitouch case where modelElement is falling and
+          // a user drags a different model element somewhere underneath it (which is likely not located at a ground
+          // x coordinate), because instead of not detecting that user-held model element as occupying this spot
+          // (and therefore falling through it and overlapping), it does detect it, and then falls to the model
+          // elements surface instead of all the way down to the ground spot.
+          //
+          // the second condition checks that potentialRestingModelElement is below modelElement
+          // because, for example, in the case where a beaker with a block inside is being dropped, we don't want the
+          // beaker to think that its block is in the spot below it.
+          if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <= this.spaceBetweenSpotCenters / 2 &&
+               potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
           ) {
             modelElementsInSpot.push( potentialRestingModelElement );
 
@@ -675,15 +672,11 @@ define( require => {
         } );
 
         if ( modelElementsInSpot.length > 0 ) {
-          let highestElement = modelElementsInSpot[ 0 ];
-          let beakerFoundInSpot = highestElement instanceof Beaker;
 
-          // if more than one model element is in the spot, find the highest surface and flag any beakers that are present
-          for ( let j = 1; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
+          // flag any beakers that are in the spot because beakers aren't allowed to stack on top of one another
+          let beakerFoundInSpot = false;
+          for ( let j = 0; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
             beakerFoundInSpot = beakerFoundInSpot || modelElementsInSpot[ j ] instanceof Beaker;
-            if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y > highestElement.topSurface.positionProperty.value.y ) {
-              highestElement = modelElementsInSpot[ j ];
-            }
           }
           let currentModelElementInStack = modelElement;
           let beakerFoundInStack = currentModelElementInStack instanceof Beaker;
@@ -696,16 +689,25 @@ define( require => {
           }
 
           if ( !( beakerFoundInSpot && beakerFoundInStack ) ) {
+
+            // find the highest element in the stack
+            let highestElement = modelElementsInSpot[ 0 ];
+            for ( let j = 1; j < modelElementsInSpot.length; j++ ) {
+              if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y > highestElement.topSurface.positionProperty.value.y ) {
+                highestElement = modelElementsInSpot[ j ];
+              }
+            }
             destinationSurface = highestElement.topSurface;
           }
         }
         else {
-          destinationXSpot = this.groundSpotXPositions[ i ];
+          destinationXSpot = groundSpotXPositionsCopy[ i ];
         }
       }
 
-      // if so, center the model element above its new supporting element
       if ( destinationSurface !== null ) {
+
+        // center the model element above its new supporting element
         minYPos = destinationSurface.positionProperty.value.y;
         modelElement.positionProperty.set(
           new Vector2( destinationSurface.positionProperty.value.x, modelElement.positionProperty.value.y )
