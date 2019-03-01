@@ -160,7 +160,7 @@ define( require => {
       let visibleFrontLeg = cyclistFrontLegNodes[ 0 ];
       const gearRotationPoint = bicycleGearNode.bounds.center;
       biker.crankAngleProperty.link( angle => {
-        assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
+        assert && assert( angle >= 0 && angle <= 2 * Math.PI, `Angle out of range: ${angle}` );
         const i = biker.mapAngleToImageIndex( angle );
         visibleFrontLeg.setVisible( false );
         visibleBackLeg.setVisible( false );

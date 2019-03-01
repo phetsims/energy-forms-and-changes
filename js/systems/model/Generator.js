@@ -157,8 +157,8 @@ define( require => {
 
             // validate energy type
             assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
-              'EnergyType of incoming chunk expected to be of type MECHANICAL, but has type ' +
-              chunk.energyTypeProperty.get() );
+              `EnergyType of incoming chunk expected to be of type MECHANICAL, but has type ${chunk.energyTypeProperty.get()}`
+            );
 
             // transfer chunk from incoming list to current list
             this.energyChunkList.push( chunk );
@@ -173,7 +173,7 @@ define( require => {
 
           assert && assert(
             this.incomingEnergyChunks.length === 0,
-            'this.incomingEnergyChunks should be empty: ' + this.incomingEnergyChunks
+            `this.incomingEnergyChunks should be empty: ${this.incomingEnergyChunks}`
           );
         }
 

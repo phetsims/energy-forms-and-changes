@@ -122,7 +122,7 @@ define( require => {
 
           assert && assert(
             chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
-            'Energy chunk type should be ELECTRICAL but is ' + chunk.energyTypeProperty.value
+            `Energy chunk type should be ELECTRICAL but is ${chunk.energyTypeProperty.value}`
           );
 
           // add the energy chunk to the list of those under management

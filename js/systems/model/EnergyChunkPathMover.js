@@ -26,9 +26,9 @@ define( require => {
     constructor( energyChunk, path, speed ) {
 
       // validate args
-      assert && assert( energyChunk instanceof EnergyChunk, 'energyChunk is not of correct type: ' + energyChunk );
+      assert && assert( energyChunk instanceof EnergyChunk, `energyChunk is not of correct type: ${energyChunk}` );
       assert && assert( path.length > 0, 'Path must have at least one point' );
-      assert && assert( speed >= 0, 'speed must be a non-negative scalar. Received: ' + speed );
+      assert && assert( speed >= 0, `speed must be a non-negative scalar. Received: ${speed}` );
 
       // @public (read-only) {EnergyChunk}
       this.energyChunk = energyChunk;
@@ -52,10 +52,7 @@ define( require => {
 
         const chunkPosition = this.energyChunk.positionProperty.get();
 
-        assert && assert(
-          chunkPosition instanceof Vector2,
-          'Expected a Vector2, got this: ' + chunkPosition
-        );
+        assert && assert( chunkPosition instanceof Vector2, `Expected a Vector2, got this: ${chunkPosition}` );
 
         const distanceToNextPoint = chunkPosition.distance( this.nextPoint );
 

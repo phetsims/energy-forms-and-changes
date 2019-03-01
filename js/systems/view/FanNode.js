@@ -70,7 +70,7 @@ define( require => {
       // animate blades by setting image visibility based on fan rotation angle
       let visibleFanNode = fanBladeImageNodes[ 0 ];
       fan.bladePositionProperty.link( angle => {
-        assert && assert( angle >= 0 && angle <= 2 * Math.PI, 'Angle out of range: ' + angle );
+        assert && assert( angle >= 0 && angle <= 2 * Math.PI, `Angle out of range: ${angle}` );
         const i = this.mapAngleToImageIndex( angle );
         visibleFanNode.setVisible( false );
         visibleFanNode = fanBladeImageNodes[ i ];

@@ -51,7 +51,7 @@ define( require => {
       super( position );
 
       // @public (read-only) {string} - unique ID, used for debug
-      this.id = 'burner-' + idCounter++;
+      this.id = `burner-${idCounter++}`;
 
       // @public {Property<number>}
       this.heatCoolLevelProperty = new Property( 0 );

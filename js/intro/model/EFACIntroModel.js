@@ -1159,7 +1159,7 @@ define( require => {
       else {
         element = _.find( this.thermalContainers, container => container.id === id );
       }
-      assert && assert( element, 'no element found for id ' + id );
+      assert && assert( element, `no element found for id: ${id}` );
       return element;
     }
   }

@@ -41,7 +41,7 @@ define( require => {
     super( initialPosition, width, height, energyChunksVisibleProperty, options );
 
     // @public (read-only) {string} - id of this beaker
-    this.id = 'beaker-container-' + idCounter++;
+    this.id = `beaker-container-${idCounter++}`;
 
     // @private
     this.potentiallyContainedElements = potentiallyContainedElements;

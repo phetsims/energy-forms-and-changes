@@ -386,7 +386,7 @@ define( require => {
      */
     getTemperature() {
       const temperature = super.getTemperature();
-      assert && assert( temperature >= 0, 'Invalid temperature: ' + temperature );
+      assert && assert( temperature >= 0, `Invalid temperature: ${temperature}` );
       return Math.min( temperature, this.fluidBoilingPoint );
     }
 

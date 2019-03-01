@@ -63,7 +63,7 @@ define( require => {
     background.center = Vector2.ZERO;
     const backgroundBounds = background.bounds;
     assert && background.on( 'bounds', bounds => {
-      assert( backgroundBounds === bounds, 'Energy chunk node bounds should not change: ' + bounds );
+      assert( backgroundBounds === bounds, `Energy chunk node bounds should not change: ${bounds}` );
     } );
     return background;
   };

@@ -191,7 +191,7 @@ define( require => {
      * @public
      */
     changeEnergy( deltaEnergy ) {
-      assert && assert( !_.isNaN( deltaEnergy ), 'invalided deltaEnergy, value = ' + deltaEnergy );
+      assert && assert( !_.isNaN( deltaEnergy ), `invalided deltaEnergy, value = ${deltaEnergy}` );
       this.energy += deltaEnergy;
     }
 
@@ -219,9 +219,9 @@ define( require => {
      * @public
      */
     getTemperature() {
-      assert && assert( this.energy >= 0, 'Invalid energy: ' + this.energy );
-      assert && assert( this.mass > 0, 'Invalid mass: ' + this.mass );
-      assert && assert( this.specificHeat > 0, 'Invalid specific heat: ' + this.specificHeat );
+      assert && assert( this.energy >= 0, `Invalid energy: ${this.energy}` );
+      assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
+      assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
       return this.energy / ( this.mass * this.specificHeat );
     }
 

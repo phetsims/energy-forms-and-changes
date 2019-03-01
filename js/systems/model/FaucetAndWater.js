@@ -263,7 +263,7 @@ define( require => {
      */
     getEnergyOutputRate() {
       const energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
-      assert && assert( energyAmount >= 0, 'EnergyAmount is ' + energyAmount );
+      assert && assert( energyAmount >= 0, `EnergyAmount is ${energyAmount}` );
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     }
 

@@ -83,7 +83,7 @@ define( require => {
       if ( assert ) {
         this.targetCrankAngularVelocityProperty.link( omega => {
           assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
-            'Angular velocity out of range: ' + omega );
+            `Angular velocity out of range: ${omega}` );
         } );
       }
 

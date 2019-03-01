@@ -61,7 +61,7 @@ define( require => {
 
         // check bounds
         const target = this.targetIndexProperty.value;
-        assert && assert( target === 0 || target < this.managedElements.length, 'targetIndex out of range:' + target );
+        assert && assert( target === 0 || target < this.managedElements.length, `targetIndex out of range: ${target}` );
 
         // set vars for the transition
         this.elapsedTransitionTime = 0;
@@ -112,7 +112,7 @@ define( require => {
      * @public
      */
     getElement( index ) {
-      assert && assert( index < this.managedElements.length, 'carousel index out of range: ' + index );
+      assert && assert( index < this.managedElements.length, `carousel index out of range: ${index}` );
       return this.managedElements[ index ];
     }
 

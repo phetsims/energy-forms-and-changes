@@ -105,7 +105,7 @@ define( require => {
             else {
               assert && assert(
                 false,
-                'Encountered energy chunk with unexpected type: ' + this.incomingEnergyChunk.energyTypeProperty.get()
+                `Encountered energy chunk with unexpected type: ${this.incomingEnergyChunk.energyTypeProperty.get()}`
               );
             }
           } );
