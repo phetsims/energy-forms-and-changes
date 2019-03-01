@@ -2,57 +2,59 @@
 
 /**
  * simple moving average calculator
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
 
-  /**
-   * @constructor
-   */
-  function MovingAverageCalculator( size, options ) {
+  class MovingAverageCalculator {
 
-    options = _.extend( {
-      initialValue: 0
-    }, options );
+    /**
+     * @param {number} size
+     * @param {Object} [options]
+     */
+    constructor( size, options ) {
 
-    // @public (read-only) {number} - window size
-    this.size = size;
+      options = _.extend( {
+        initialValue: 0
+      }, options );
 
-    // @public (read-only) {number} - the calculated average
-    this.average = options.initialValue;
+      // @public (read-only) {number} - window size
+      this.size = size;
 
-    // @private
-    this.initialValue = options.initialValue;
-    this.array = new Array( size );
-    this.total = 0;
+      // @public (read-only) {number} - the calculated average
+      this.average = options.initialValue;
 
-    // set up initial values
-    this.reset();
-  }
+      // @private
+      this.initialValue = options.initialValue;
+      this.array = new Array( size );
+      this.total = 0;
 
-  energyFormsAndChanges.register( 'MovingAverageCalculator', MovingAverageCalculator );
+      // set up initial values
+      this.reset();
+    }
 
-  return inherit( Object, MovingAverageCalculator, {
-
-    addValue: function( newValue ) {
-      var replacedValue = this.array[ this.currentIndex ];
+    addValue( newValue ) {
+      const replacedValue = this.array[ this.currentIndex ];
       this.array[ this.currentIndex ] = newValue;
       this.currentIndex = ( this.currentIndex + 1 ) % this.size;
       this.total = ( this.total - replacedValue ) + newValue;
       this.average = this.total / this.size;
-    },
+    }
 
-    reset: function() {
-      for ( var i = 0; i < this.size; i++ ) {
+    reset() {
+      for ( let i = 0; i < this.size; i++ ) {
         this.array[ i ] = this.initialValue;
       }
       this.total = this.initialValue * this.size;
       this.average = this.total / this.size;
       this.currentIndex = 0;
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'MovingAverageCalculator', MovingAverageCalculator );
 } );
