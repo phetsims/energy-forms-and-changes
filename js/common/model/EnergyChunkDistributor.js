@@ -16,6 +16,7 @@ define( function( require ) {
 
   // modules
   var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
+  var MovingAverageCalculator = require( 'ENERGY_FORMS_AND_CHANGES/common/model/MovingAverageCalculator' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -44,6 +45,16 @@ define( function( require ) {
   // spread out, then stop all movement.
   var REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // in joules (I think)
 
+  // The following constants and moving average calculator are used to automatically transition the energy chunk
+  // distributor to a faster algorithm if slow average performance is detected.  This is because the distribution
+  // algorithm was causing problems on slower devices, see https://github.com/phetsims/energy-forms-and-changes/issues/191.
+  // The thresholds were determined through experimentation with various devices, mostly iPads, and can certainly be
+  // adjusted, but such adjustments should be made carefully and tested well.
+  var PERFORMANCE_MOVING_AVERAGE_SIZE = 50;
+  var SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 0.010; // in seconds
+  var averagePerformanceCalculator = new MovingAverageCalculator( PERFORMANCE_MOVING_AVERAGE_SIZE );
+
+  // the main singleton object definition
   var EnergyChunkDistributor = {
 
     /**
@@ -57,6 +68,8 @@ define( function( require ) {
      * @private
      */
     updatePositionsRepulsive: function( slices, dt ) {
+
+      var startTime = window.performance.now();
 
       var self = this;
 
@@ -152,6 +165,15 @@ define( function( require ) {
 
       // free allocations
       _.values( chunkForces ).forEach( function( chunkForceVector ) { chunkForceVector.freeToPool(); } );
+
+      // check performance and switch to faster (but visually inferior) algorithm if necessary
+      var timeOfExecution = window.performance.now() - startTime;
+      averagePerformanceCalculator.addValue( timeOfExecution );
+      if ( averagePerformanceCalculator.average / 1000 > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
+        console.warn( 'poor performance detected for energy chunk distribution, switching to faster algorithm' );
+        this.updatePositions = this.updatePositionsSpiral;
+      }
+
       return particlesRedistributed;
     },
 
