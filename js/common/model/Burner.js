@@ -66,7 +66,7 @@ define( require => {
       this.energyChunkMotionStrategies = [];
 
       // @private {Range} - used to keep incoming energy chunks from wandering very far to the left or right
-      this.incomingEnergyChunkWanderBounds = new Range( position.x - SIDE_LENGTH / 4, position.x + SIDE_LENGTH / 4 );
+      this.incomingEnergyChunkWanderBounds = new Range( position.x - SIDE_LENGTH / 3, position.x + SIDE_LENGTH / 3 );
 
       // @private {Property.<boolean>}
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -181,7 +181,7 @@ define( require => {
       const motionStrategy = new EnergyChunkWanderController(
         energyChunk,
         new Property( this.getCenterPoint() ),
-        { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleconstiation: Math.PI * 0.15 }
+        { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
       );
 
       energyChunk.zPosition = 0;
