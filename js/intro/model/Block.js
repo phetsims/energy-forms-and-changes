@@ -7,31 +7,30 @@
  * @author John Blanco
  * @author Chris Klusendorf
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Color = require( 'SCENERY/util/Color' );
-  var EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  var EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
-  var EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
-  var ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Color = require( 'SCENERY/util/Color' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
+  const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyContainerCategory' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
+  const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
+  const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
-  var MAX_TEMPERATURE = 620; // in degrees Kelvin, see usage below for where the value comes from
-  var BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
+  const NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
+  const MAX_TEMPERATURE = 620; // in degrees Kelvin, see usage below for where the value comes from
+  const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
-  var BLOCK_COMPOSITION = {};
+  const BLOCK_COMPOSITION = {};
   BLOCK_COMPOSITION[ BlockType.IRON ] = {
     color: new Color( 150, 150, 150 ),
     density: 7800,
@@ -46,71 +45,65 @@ define( function( require ) {
   };
 
   // static data
-  var instanceCount = 0; // counter for creating unique IDs
+  let instanceCount = 0; // counter for creating unique IDs
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {Property} energyChunksVisibleProperty
-   * @param {BlockType} blockType
-   * @constructor
-   */
-  function Block( initialPosition, energyChunksVisibleProperty, blockType ) {
+  class Block extends RectangularThermalMovableModelElement {
 
-    RectangularThermalMovableModelElement.call(
-      this,
-      initialPosition,
-      EFACConstants.BLOCK_SURFACE_WIDTH,
-      EFACConstants.BLOCK_SURFACE_WIDTH,
-      Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
-      BLOCK_COMPOSITION[ blockType ].specificHeat,
-      energyChunksVisibleProperty
-    );
+    /**
+     * @param {Vector2} initialPosition
+     * @param {Property} energyChunksVisibleProperty
+     * @param {BlockType} blockType
+     */
+    constructor( initialPosition, energyChunksVisibleProperty, blockType ) {
 
-    var self = this;
+      super(
+        initialPosition,
+        EFACConstants.BLOCK_SURFACE_WIDTH,
+        EFACConstants.BLOCK_SURFACE_WIDTH,
+        Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
+        BLOCK_COMPOSITION[ blockType ].specificHeat,
+        energyChunksVisibleProperty
+      );
 
-    // @public (read-only) {String} - unique ID for this block
-    this.id = 'block-' + instanceCount++;
+      // @public (read-only) {String} - unique ID for this block
+      this.id = `block-${instanceCount++}`;
 
-    // @public
-    this.blockType = blockType;
+      // @public
+      this.blockType = blockType;
 
-    // add position test bounds (see definition in base class for more info)
-    this.relativePositionTestingBoundsList.push( new Bounds2(
-      -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
-      0,
-      EFACConstants.BLOCK_SURFACE_WIDTH / 2,
-      EFACConstants.BLOCK_SURFACE_WIDTH
-    ) );
-    var rectangle = this.getBounds();
+      // add position test bounds (see definition in base class for more info)
+      this.relativePositionTestingBoundsList.push( new Bounds2(
+        -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
+        0,
+        EFACConstants.BLOCK_SURFACE_WIDTH / 2,
+        EFACConstants.BLOCK_SURFACE_WIDTH
+      ) );
+      const rectangle = this.getBounds();
 
-    // @public - see base class for description
-    this.topSurface = new HorizontalSurface(
-      new Vector2( initialPosition.x, rectangle.maxY ),
-      EFACConstants.BLOCK_SURFACE_WIDTH,
-      this
-    );
+      // @public - see base class for description
+      this.topSurface = new HorizontalSurface(
+        new Vector2( initialPosition.x, rectangle.maxY ),
+        EFACConstants.BLOCK_SURFACE_WIDTH,
+        this
+      );
 
-    // @public - see base class for description
-    this.bottomSurface = new HorizontalSurface(
-      new Vector2( initialPosition.x, rectangle.minY ),
-      EFACConstants.BLOCK_SURFACE_WIDTH,
-      this
-    );
+      // @public - see base class for description
+      this.bottomSurface = new HorizontalSurface(
+        new Vector2( initialPosition.x, rectangle.minY ),
+        EFACConstants.BLOCK_SURFACE_WIDTH,
+        this
+      );
 
-    // update the top and bottom surfaces whenever the position changes
-    this.positionProperty.link( function( position ) {
-      var rectangle = self.getBounds();
-      self.topSurface.positionProperty.value = new Vector2( position.x, rectangle.maxY );
-      self.bottomSurface.positionProperty.value = new Vector2( position.x, rectangle.minY );
-    } );
+      // update the top and bottom surfaces whenever the position changes
+      this.positionProperty.link( position => {
+        const rectangle = this.getBounds();
+        this.topSurface.positionProperty.value = new Vector2( position.x, rectangle.maxY );
+        this.bottomSurface.positionProperty.value = new Vector2( position.x, rectangle.minY );
+      } );
 
-    // add perspective information, used for validating positions
-    this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
-  }
-
-  energyFormsAndChanges.register( 'Block', Block );
-
-  return inherit( RectangularThermalMovableModelElement, Block, {
+      // add perspective information, used for validating positions
+      this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
+    }
 
     /**
      * @public
@@ -118,7 +111,7 @@ define( function( require ) {
      */
     get color() {
       return BLOCK_COMPOSITION[ this.blockType ].color;
-    },
+    }
 
     /**
      * @public
@@ -126,7 +119,7 @@ define( function( require ) {
      */
     get energyContainerCategory() {
       return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
-    },
+    }
 
     // TODO: I (jbphet) noticed a number of unused methods below during code cleanup, and should delete any that are still not used when code is fully cleaned up.
 
@@ -136,21 +129,21 @@ define( function( require ) {
      */
     get thermalContactArea() {
       return new ThermalContactArea( this.getBounds(), false );
-    },
+    }
 
     /**
      * @override
      */
-    addEnergyChunkSlices: function() {
+    addEnergyChunkSlices() {
 
       // the slices for the block are intended to match the projection used in the view
-      var projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
-      var sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 );
-      var rectangle = this.getBounds();
+      const projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
+      const sliceWidth = EFACConstants.BLOCK_SURFACE_WIDTH / ( NUM_ENERGY_CHUNK_SLICES - 1 );
+      const rectangle = this.getBounds();
 
-      for ( var i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
-        var projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( -i * sliceWidth );
-        var sliceBounds = new Bounds2.rect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
+      for ( let i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
+        const projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( -i * sliceWidth );
+        const sliceBounds = new Bounds2.rect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
         sliceBounds.shift(
           projectionToFront.x + projectionOffsetVector.x,
           projectionToFront.y + projectionOffsetVector.y
@@ -162,7 +155,7 @@ define( function( require ) {
           this.positionProperty
         ) );
       }
-    },
+    }
 
     /**
      * This function originally existed primarily in support of boiling liquids, whose temperatures should not go up
@@ -177,8 +170,10 @@ define( function( require ) {
      * @returns {number}
      * @override
      */
-    getEnergyBeyondMaxTemperature: function() {
+    getEnergyBeyondMaxTemperature() {
       return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     }
-  } );
+  }
+
+  return energyFormsAndChanges.register( 'Block', Block );
 } );
