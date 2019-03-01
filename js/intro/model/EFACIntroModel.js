@@ -65,7 +65,10 @@ define( require => {
     constructor() {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
-      this.energyChunksVisibleProperty = new BooleanProperty( false );
+
+      // TODO: DON'T COMMIT THIS!!!!!!!!!!!!!!!!!!
+      // this.energyChunksVisibleProperty = new BooleanProperty( false );
+      this.energyChunksVisibleProperty = new BooleanProperty( true );
 
       // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
       this.linkedHeatersProperty = new BooleanProperty( false );
@@ -577,10 +580,10 @@ define( require => {
           const supplierBounds = energyChunkSupplier.getBounds();
           const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
           if ( energyChunk.positionProperty.value.x < horizontalWanderConstraint.min ) {
-            energyChunk.setPosition( horizontalWanderConstraint.min, energyChunk.positionProperty.value.y );
+            energyChunk.setPositionXY( horizontalWanderConstraint.min, energyChunk.positionProperty.value.y );
           }
           else if ( energyChunk.positionProperty.value.x > horizontalWanderConstraint.max ) {
-            energyChunk.setPosition( horizontalWanderConstraint.max, energyChunk.positionProperty.value.y );
+            energyChunk.setPositionXY( horizontalWanderConstraint.max, energyChunk.positionProperty.value.y );
           }
           energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
         }

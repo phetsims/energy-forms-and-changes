@@ -46,12 +46,26 @@ define( require => {
      * @param {number} y
      * @public
      */
-    setPosition( x, y ) {
+    setPositionXY( x, y ) {
 
       // only update if the position has changed to avoid unnecessary allocations and notifications
       const currentPosition = this.positionProperty.get();
       if ( x !== currentPosition.x || y !== currentPosition.y ) {
         this.positionProperty.set( new Vector2( x, y ) );
+      }
+    }
+
+    /**
+     * set the position
+     * @param {Vector2} position
+     * @public
+     */
+    setPosition( position ) {
+
+      // only update if the position has changed to avoid unnecessary allocations and notifications
+      const currentPosition = this.positionProperty.get();
+      if ( !currentPosition.equals( position ) ) {
+        this.positionProperty.set( position );
       }
     }
 

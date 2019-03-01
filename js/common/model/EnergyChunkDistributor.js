@@ -23,7 +23,13 @@ define( function( require ) {
   var OUTSIDE_SLICE_FORCE = 0.01; // In Newtons, empirically determined.
   var ZERO_VECTOR = Vector2.ZERO;
 
-  // parameters that can be adjusted to change the nature of the redistribution
+  // width of an energy chunk in the view, used to keep them in bounds
+  var ENERGY_CHUNK_VIEW_TO_MODEL_WIDTH = 0.012;
+
+  // speed used when positioning ECs using deterministic algorithms, in meters per second
+  var EC_SPEED_DETERMINISTIC = 0.1;
+
+  // parameters that can be adjusted to change the nature of the repulsive redistribution algorithm
   var MAX_TIME_STEP = ( 1 / 60 ) / 3; // in seconds, for algorithm that moves the points, best if a multiple of nominal frame rate
   var ENERGY_CHUNK_MASS = 1E-3; // in kilograms, chosen arbitrarily
   var FLUID_DENSITY = 1000; // in kg / m ^ 3, same as water, used for drag
@@ -326,6 +332,111 @@ define( function( require ) {
     },
 
     /**
+     * An order-N algorithm for distributing the energy chunks based on an Archimedean spiral.  This was created from
+     * first thinking about using concentric circles, then figuring that a spiral is perhaps and easier way to get a
+     * similar effect.  Many of the values used were arrived at through trial and error.
+     * @param {EnergyChunkContainerSlice[]} slices
+     * @param {number} dt - time step
+     * @returns {boolean} - true if any energy chunks needed to be moved, false if not
+     * @public
+     */
+    updatePositionsSpiral: function( slices, dt ) {
+
+      var ecMoved = false;
+
+      // loop through each slice, updating the energy chunk positions for each
+      for ( var sliceIndex = 0; sliceIndex < slices.length; sliceIndex++ ) {
+
+        var sliceBounds = slices[ sliceIndex ].bounds;
+        var sliceCenter = sliceBounds.getCenter();
+        var numEnergyChunksInSlice = slices[ sliceIndex ].energyChunkList.length;
+        if ( numEnergyChunksInSlice === 0 ) {
+
+          // bail out now if there are no energy chunks to distribute in this slice
+          continue;
+        }
+
+        // number of turns of the spiral
+        var numTurns = 3;
+
+        var maxAngle = numTurns * Math.PI * 2;
+        var a = 1 / maxAngle; // the equation for the spiral is generally written as r = a * theta, this is the 'a'
+
+        // Define the angular span over which energy chunks will be placed.  This will grow as the number of energy
+        // chunks grows.
+        var angularSpan;
+        if ( numEnergyChunksInSlice <= 6 ) {
+          angularSpan = 2 * Math.PI * ( 1 - 1 / numEnergyChunksInSlice );
+        }
+        else {
+          angularSpan = Math.min( Math.max( numEnergyChunksInSlice / 19 * maxAngle, 2 * Math.PI ), maxAngle );
+        }
+
+        // The offset faction defined below controls how weighted the algorithm is towards placing chunks towards the
+        // end of the spiral versus the beginning.  We always want to be somewhat weighted towards the end since there
+        // is more space at the end, but this gets more important as the number of slices increases because we need to
+        // avoid overlap of energy chunks in the middle of the model element.
+        var offsetFactor = ( -1 / Math.pow( slices.length, 1.75 ) ) + 1;
+        var startAngle = offsetFactor * ( maxAngle - angularSpan );
+
+        // Define a value that will be used to offset the spiral rotation in the different slices so that energy chunks
+        // are less likely to line up across slices.
+        var spiralAngleOffset = ( 2 * Math.PI ) / slices.length + Math.PI;
+
+        // loop through each energy chunk in this slice and set its position
+        for ( var ecIndex = 0; ecIndex < numEnergyChunksInSlice; ecIndex++ ) {
+
+          var ec = slices[ sliceIndex ].energyChunkList.get( ecIndex );
+
+          // calculate the angle to feed into the spiral formula
+          var angle;
+          if ( numEnergyChunksInSlice <= 1 ) {
+            angle = startAngle;
+          }
+          else {
+            angle = startAngle + Math.pow( ecIndex / ( numEnergyChunksInSlice - 1 ), 0.75 ) * angularSpan;
+          }
+
+          // calculate a radius value within the "normalized spiral", where the radius is 1 at the max angle
+          var normalizedRadius = a * Math.abs( angle );
+          assert && assert( normalizedRadius <= 1, 'normalized length must be 1 or smaller' );
+
+          // Rotate the spiral in each set of two slices to minimize overlap between slices.  This works in conjunction
+          // with the code that reverses the winding direction below so that the same spiral is never used for any two
+          // slices.
+          var adjustedAngle = angle + spiralAngleOffset * sliceIndex;
+
+          // Determine the max possible radius for the current angle, which is basically the distance from the center to
+          // the closest edge.  This must be reduced a bit to account for the fact that energy chunks have some width in
+          // the view.
+          var maxRadius = getCenterToEdgeDistance( sliceBounds, adjustedAngle ) - ENERGY_CHUNK_VIEW_TO_MODEL_WIDTH / 2;
+
+          // determine the radius to use as a function of the value from the normalized spiral and the max value
+          var radius = maxRadius * normalizedRadius;
+
+          // Reverse the angle on every other slice to get more spread between slices and a more random appearance when
+          // chunks are added (because they don't all wind in the same direction).
+          if ( sliceIndex % 2 === 0 ) {
+            adjustedAngle = -adjustedAngle;
+          }
+
+          // calculate the desired position using polar coordinates
+          var ecDestination = new Vector2( 0, 0 );
+          ecDestination.setPolar( radius, adjustedAngle );
+          ecDestination.add( sliceCenter );
+
+          // animate the energy chunk towards its destination if it isn't there already
+          if ( !ec.positionProperty.value.equals( ecDestination ) ) {
+            moveECTowardsDestination( ec, ecDestination, dt );
+            ecMoved = true;
+          }
+        }
+      }
+
+      return ecMoved;
+    },
+
+    /**
      * Super simple alternative energy chunk distribution algorithm - just puts all energy chunks in center of slice.
      * This is useful for debugging. Rename it to substitute if for the 'real' algorithm.
      * @param {EnergyChunkContainerSlice[]} slices
@@ -352,6 +463,53 @@ define( function( require ) {
       );
     }
   };
+
+  /**
+   * helper function for moving an energy chunk towards a destination, sets the EC's velocity value
+   * @param {EnergyChunk} ec
+   * @param {Vector2} destination
+   * @param {number} dt - delta time, in seconds
+   */
+  function moveECTowardsDestination( ec, destination, dt ) {
+    var ecPosition = ec.positionProperty.value;
+    if ( !ecPosition.equals( destination ) ) {
+      if ( ecPosition.distance( destination ) <= EC_SPEED_DETERMINISTIC * dt ) {
+
+        // EC is close enough that it should just go to the destination
+        ec.setPosition( destination );
+      }
+      else {
+        var vectorTowardsDestination = destination.minus( ec.positionProperty.value );
+        vectorTowardsDestination.setMagnitude( EC_SPEED_DETERMINISTIC * dt );
+        ec.velocity.set( vectorTowardsDestination );
+        ec.setPositionXY( ecPosition.x + vectorTowardsDestination.x, ecPosition.y + vectorTowardsDestination.y );
+      }
+    }
+  }
+
+  /**
+   * helper function for getting the distance from the center of the provided bounds to the edge at the given angle
+   * @param {Bounds2} bounds
+   * @param {number} angle in radians
+   * @returns {number}
+   */
+  function getCenterToEdgeDistance( bounds, angle ) {
+    var halfWidth = bounds.width / 2;
+    var halfHeight = bounds.height / 2;
+    var tangentOfAngle = Math.tan( angle );
+    var opposite;
+    var adjacent;
+    if ( Math.abs( halfHeight / tangentOfAngle ) < halfWidth ) {
+      opposite = halfHeight;
+      adjacent = opposite / tangentOfAngle;
+    }
+    else {
+      adjacent = halfWidth;
+      opposite = halfWidth * tangentOfAngle;
+    }
+
+    return Math.sqrt( opposite * opposite + adjacent * adjacent );
+  }
 
   energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
 

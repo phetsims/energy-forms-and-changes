@@ -217,66 +217,72 @@ define( function( require ) {
      */
     addInitialEnergyChunks: function() {
 
-      // extend scope for nested functions
       var self = this;
+      var totalSliceArea = 0;
+
+      // remove the current set of energy chunks, calculate total area of the slices
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
+        totalSliceArea += slice.bounds.width * slice.bounds.height;
       } );
-      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( self.energy );
 
-      // var initialChunkBounds = self.getSliceBounds();
-      var initialChunkBounds = self.getSliceBounds().shiftedX( self.getBounds().width / 8 );
+      // calculate the number of energy chunks to add based on the amount of energy in the beaker
+      var targetNumECs = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
 
-      while ( self.getNumEnergyChunks() < targetNumChunks ) {
+      // make a copy of the slice array sorted such that the smallest is first
+      var sortedSliceArray = _.sortBy( this.slices, function( slice ) {
+        return slice.bounds.width * slice.bounds.height;
+      } );
 
-        // add a chunk at a random location in the beaker
-        self.addEnergyChunkToNextSlice( new EnergyChunk(
-          EnergyType.THERMAL,
-          EnergyChunkDistributor.generateRandomLocation( initialChunkBounds ),
-          new Vector2( 0, 0 ),
-          self.energyChunksVisibleProperty )
-        );
+      var smallOffset = 0.00001; // used so that the ECs don't start on top of each other
+      var numECsAdded = 0;
+
+      // go through each slice, adding a number of energy chunks based on proprotion
+      sortedSliceArray.forEach( function( slice ) {
+        var sliceArea = slice.bounds.width * slice.bounds.height;
+        var sliceCenter = slice.bounds.center;
+        _.times( Util.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumECs ), function( index ) {
+          if ( numECsAdded < targetNumECs ) {
+            slice.addEnergyChunk( new EnergyChunk(
+              EnergyType.THERMAL,
+              sliceCenter.plusXY( smallOffset * index, smallOffset * index ),
+              Vector2.ZERO,
+              self.energyChunksVisibleProperty )
+            );
+            numECsAdded++;
+          }
+        } );
+      } );
+
+      // If the total number of added chunks was not quite enough, work through the list of slices from the biggest to
+      // the smallest until they have all been added.
+      if ( numECsAdded < targetNumECs ) {
+        sortedSliceArray = sortedSliceArray.reverse();
+        var sliceIndex = 0;
+        while ( numECsAdded < targetNumECs ) {
+          var slice = sortedSliceArray[ sliceIndex ];
+          var sliceCenter = slice.bounds.center;
+          slice.addEnergyChunk( new EnergyChunk(
+            EnergyType.THERMAL,
+            sliceCenter,
+            Vector2.ZERO,
+            self.energyChunksVisibleProperty )
+          );
+          numECsAdded++;
+          sliceIndex = ( sliceIndex + 1 ) % sortedSliceArray.length;
+        }
       }
 
       // clear the distribution timer and do a more thorough distribution below
       this.clearECDistributionCountdown();
 
-      // distribute the energy chunks within the beaker
+      // distribute the initial energy chunks within the container
       for ( var i = 0; i < 500; i++ ) {
-        var distributed = EnergyChunkDistributor.updatePositions( self.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        var distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
           break;
         }
       }
-    },
-
-    /**
-     * Add an energy chunk to one of the "energy chunk slices" managed by the beaker.  This attempts to keep the
-     * energy chunks evenly distributed between the different slices.
-     * @param {EnergyChunk} energyChunk
-     * @protected
-     * @override
-     */
-    addEnergyChunkToNextSlice: function( energyChunk ) {
-      var totalSliceArea = 0;
-      this.slices.forEach( function( slice ) {
-        totalSliceArea += slice.bounds.width * slice.bounds.height;
-      } );
-
-      var sliceSelectionValue = phet.joist.random.nextDouble();
-      var chosenSlice = this.slices[ 0 ];
-      var accumulatedArea = 0;
-      for ( var i = 0; i < this.slices.length; i++ ) {
-        accumulatedArea += this.slices[ i ].bounds.width * this.slices[ i ].bounds.height;
-        if ( accumulatedArea / totalSliceArea >= sliceSelectionValue ) {
-          chosenSlice = this.slices[ i ];
-          break;
-        }
-      }
-      chosenSlice.addEnergyChunk( energyChunk );
-
-      // trigger redistribution of energy chunks
-      this.resetECDistributionCountdown();
     },
 
     /**

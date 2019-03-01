@@ -135,7 +135,6 @@ define( function( require ) {
 
     // add the slices
     this.addEnergyChunkSlices();
-    this.nextSliceIndex = this.slices.length / 2; // @private
 
     // add the initial energy chunks
     this.addInitialEnergyChunks();
@@ -313,7 +312,7 @@ define( function( require ) {
 
       // energy chunk is positioned within container bounds, so add it directly to a slice
       if ( bounds.containsPoint( energyChunk.positionProperty.value ) ) {
-        this.addEnergyChunkToNextSlice( energyChunk );
+        this.addEnergyChunkToSlice( energyChunk );
       }
 
       // chunk is out of the bounds of this element, so make it wander towards it
@@ -327,13 +326,34 @@ define( function( require ) {
     },
 
     /**
-     * add an energy chunk to the next available slice, override for more elaborate behavior
+     * add an energy chunk to one of the energy chunk container slices owned by this model element
      * @param {EnergyChunk} energyChunk
-     * @public
+     * @protected
      */
-    addEnergyChunkToNextSlice: function( energyChunk ) {
-      this.slices[ this.nextSliceIndex ].addEnergyChunk( energyChunk );
-      this.nextSliceIndex = ( this.nextSliceIndex + 1 ) % this.slices.length;
+    addEnergyChunkToSlice: function( energyChunk ) {
+
+      // start with a slice at or near the middle of the order
+      var sliceIndex = Math.floor( ( this.slices.length - 1 ) / 2 );
+
+      var sliceIndexWithLowestEnergyDensity = null;
+
+      var lowestEnergyDensityFound = Number.NEGATIVE_INFINITY;
+
+      for ( var ecSliceCount = 0; ecSliceCount < this.slices.length; ecSliceCount++ ) {
+        var slice = this.slices[ sliceIndex ];
+        var sliceArea = slice.bounds.width * slice.bounds.height;
+        var energyChunkDensity = slice.getNumEnergyChunks() / sliceArea;
+        if ( sliceIndexWithLowestEnergyDensity === null || energyChunkDensity < lowestEnergyDensityFound ) {
+          sliceIndexWithLowestEnergyDensity = sliceIndex;
+          lowestEnergyDensityFound = energyChunkDensity;
+        }
+        sliceIndex = ( sliceIndex + 1 ) % this.slices.length;
+      }
+
+      // add the energy chunk to the slice with the lowest density of energy chunks
+      this.slices[ sliceIndexWithLowestEnergyDensity ].addEnergyChunk( energyChunk );
+
+      // trigger redistribution of the energy chunks
       this.resetECDistributionCountdown();
     },
 
@@ -374,7 +394,7 @@ define( function( require ) {
      */
     moveEnergyChunkToSlices: function( energyChunk ) {
       this.approachingEnergyChunks.remove( energyChunk );
-      this.addEnergyChunkToNextSlice( energyChunk );
+      this.addEnergyChunkToSlice( energyChunk );
     },
 
     /**
@@ -528,25 +548,35 @@ define( function( require ) {
      *  @private
      */
     addInitialEnergyChunks: function() {
+
+      // clear out the current energy chunks
       this.slices.forEach( function( slice ) {
         slice.energyChunkList.clear();
       } );
 
-      var targetNumChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      // calculate how many energy chunks should be present based on the amount of energy in this container
+      var targetNumECs = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
 
-      var energyChunkBounds = this.thermalContactArea;
-      while ( this.getNumEnergyChunks() < targetNumChunks ) {
+      var smallOffset = 0.00001; // used so that the ECs don't start on top of each other
 
-        // add a chunk at a random location in the block
-        var location = EnergyChunkDistributor.generateRandomLocation( energyChunkBounds );
-        var chunk = new EnergyChunk( EnergyType.THERMAL, location, Vector2.ZERO, this.energyChunksVisibleProperty );
-        this.addEnergyChunk( chunk );
+      // start with the middle slice and cycle through in order, added chunks evenly to each
+      var slideIndex = Math.floor( this.slices.length / 2 ) - 1;
+      var numECsAdded = 0;
+      while ( numECsAdded < targetNumECs ) {
+        var slice = this.slices[ slideIndex ];
+        var numECsInSlice = slice.getNumEnergyChunks();
+        var center = slice.bounds.center.plusXY( smallOffset * numECsAdded, smallOffset * numECsInSlice );
+        slice.addEnergyChunk(
+          new EnergyChunk( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
+        );
+        numECsAdded++;
+        slideIndex = ( slideIndex + 1 ) % this.slices.length;
       }
 
       // clear the distribution timer and do a more thorough distribution below
       this.clearECDistributionCountdown();
 
-      // distribute the initial energy chunks within the container
+      // distribute the initial energy chunks within the container using the repulsive algorithm
       for ( var i = 0; i < 500; i++ ) {
         var distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
