@@ -215,7 +215,7 @@ define( require => {
 
       const energyAmount = Math.abs( fractionalVelocity * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * dt );
 
-      assert && assert( energyAmount >= 0, 'energyAmount is ' + energyAmount );
+      assert && assert( energyAmount >= 0, `energyAmount is ${energyAmount}` );
 
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     }
