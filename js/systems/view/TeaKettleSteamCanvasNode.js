@@ -30,7 +30,6 @@ define( require => {
      * @param {NumberProperty} energyOutputProperty
      * @param {number} maxEnergyOutput
      * @param {Object} [options]
-     * @constructor
      */
     constructor( steamOrigin, energyOutputProperty, maxEnergyOutput, options ) {
 

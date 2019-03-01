@@ -88,7 +88,6 @@ define( require => {
     /**
      * @param {EnergyChunk} energyChunk - model of an energy chunk
      * @param {ModelViewTransform2} modelViewTransform
-     * @constructor
      */
     constructor( energyChunk, modelViewTransform ) {
       super();
