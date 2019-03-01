@@ -36,10 +36,10 @@ define( require => {
       // vectors needed to create the belt shape
       const wheel1CenterToWheelTwoCenter = wheel2Center.minus( wheel1Center );
       const wheel1CenterToArcEnd =
-        wheel1CenterToWheelTwoCenter.perpendicular().withMagnitude( wheel1Radius ).rotated( -contactAngle );
+        wheel1CenterToWheelTwoCenter.perpendicular.withMagnitude( wheel1Radius ).rotated( -contactAngle );
       const wheel1CenterToArcStart = wheel1CenterToArcEnd.rotated( Math.PI + 2 * contactAngle );
       const wheel2CenterToArcStart =
-        wheel1CenterToWheelTwoCenter.perpendicular().withMagnitude( wheel2Radius ).rotated( -contactAngle );
+        wheel1CenterToWheelTwoCenter.perpendicular.withMagnitude( wheel2Radius ).rotated( -contactAngle );
       const wheel2CenterToArcEnd = wheel2CenterToArcStart.rotated( Math.PI + 2 * contactAngle );
 
       // create the shape of the belt

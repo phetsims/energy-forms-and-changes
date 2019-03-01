@@ -24,7 +24,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
-  const teapotImage = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle_large.png' );
+  const teaKettleImage = require( 'image!ENERGY_FORMS_AND_CHANGES/tea_kettle.png' );
 
   // constants
   const BURNER_MODEL_BOUNDS = new Bounds2( -0.037, -0.0075, 0.037, 0.0525 ); // in meters
@@ -41,7 +41,7 @@ define( require => {
     constructor( teaKettle, energyChunksVisibleProperty, modelViewTransform ) {
       super( teaKettle, modelViewTransform );
 
-      const teaKettleImageNode = new Image( teapotImage, { right: 114, bottom: 53 } );
+      const teaKettleNode = new Image( teaKettleImage, { right: 114, bottom: 53 } );
 
       // create a mapping between the slider position and the steam proportion, which prevents very small values
       this.heaterSettingProperty = new NumberProperty( 0 );
@@ -64,7 +64,7 @@ define( require => {
       const burnerProjection = burnerSize.width * BURNER_EDGE_TO_HEIGHT_RATIO;
       const burnerStandNode = new BurnerStandNode( burnerSize, burnerProjection );
 
-      burnerStandNode.centerTop = teaKettleImageNode.centerBottom.plus( new Vector2( 0, -teaKettleImageNode.height / 4 ) );
+      burnerStandNode.centerTop = teaKettleNode.centerBottom.plus( new Vector2( 0, -teaKettleNode.height / 4 ) );
       heaterCoolerBack.centerX = burnerStandNode.centerX;
       heaterCoolerBack.bottom = burnerStandNode.bottom - burnerProjection / 2;
       heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
@@ -76,7 +76,7 @@ define( require => {
       );
 
       // create steam node
-      const spoutExitPosition = new Vector2( teaKettleImageNode.bounds.maxX - 4.5, teaKettleImageNode.bounds.minY + 16 );
+      const spoutExitPosition = new Vector2( teaKettleNode.bounds.maxX - 4.5, teaKettleNode.bounds.minY + 16 );
       this.steamCanvasNode = new TeaKettleSteamCanvasNode(
         spoutExitPosition,
         teaKettle.energyProductionRateProperty,
@@ -99,7 +99,7 @@ define( require => {
       const kettleAndStand = new Node();
       kettleAndStand.addChild( burnerStandNode );
       kettleAndStand.addChild( this.steamCanvasNode );
-      kettleAndStand.addChild( teaKettleImageNode );
+      kettleAndStand.addChild( teaKettleNode );
       this.addChild( kettleAndStand );
 
       // make the tea kettle, stand, and steam transparent when energy chunks are visible
