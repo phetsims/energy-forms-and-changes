@@ -5,65 +5,58 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
-  var Property = require( 'AXON/Property' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
+  const Property = require( 'AXON/Property' );
 
-  /**
-   * {Vector2} initialPosition
-   * @constructor
-   */
-  function UserMovableModelElement( initialPosition ) {
+  class UserMovableModelElement extends ModelElement {
 
-    var self = this;
+    /**
+     * {Vector2} initialPosition
+     */
+    constructor( initialPosition ) {
+      super( initialPosition );
 
-    ModelElement.call( this, initialPosition );
+      // @public {BooleanProperty}
+      this.userControlledProperty = new BooleanProperty( false );
 
-    // @public {BooleanProperty}
-    this.userControlledProperty = new BooleanProperty( false );
+      // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
+      // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
+      this.supportingSurface = null;
 
-    // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
-    // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
-    this.supportingSurface = null;
+      // @public {Property.<number>}
+      this.verticalVelocityProperty = new Property( 0 );
 
-    // @public {Property.<number>}
-    this.verticalVelocityProperty = new Property( 0 );
+      // update internal state when the user picks up this model element
+      this.userControlledProperty.link( userControlled => {
+        if ( userControlled ) {
 
-    // update internal state when the user picks up this model element
-    this.userControlledProperty.link( function( userControlled ) {
-      if ( userControlled ) {
+          // the user has picked up this model element, so it is no longer sitting on any surface
+          this.clearSupportingSurface();
+        }
+      } );
 
-        // the user has picked up this model element, so it is no longer sitting on any surface
-        self.clearSupportingSurface();
-      }
-    } );
-
-    // @private - observer that moves this model element if and when the surface that is supporting it moves
-    this.surfaceMotionObserver = function( position ) {
-      self.positionProperty.value = position;
-    };
-  }
-
-  energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
-
-  return inherit( ModelElement, UserMovableModelElement, {
+      // @private - observer that moves this model element if and when the surface that is supporting it moves
+      this.surfaceMotionObserver = position => {
+        this.positionProperty.value = position;
+      };
+    }
 
     /**
      * restore initial state
      * @public
      */
-    reset: function() {
+    reset() {
       this.clearSupportingSurface();
       this.userControlledProperty.reset();
       this.verticalVelocityProperty.reset();
-      ModelElement.prototype.reset.call( this );
-    },
+      super.reset();
+    }
 
     /**
      * Set the supporting surface of this model element
@@ -71,7 +64,7 @@ define( function( require ) {
      * @override
      * @public
      */
-    setSupportingSurface: function( supportingSurface ) {
+    setSupportingSurface( supportingSurface ) {
 
       // state and parameter checking
       assert && assert(
@@ -85,13 +78,13 @@ define( function( require ) {
 
       supportingSurface.positionProperty.link( this.surfaceMotionObserver );
       this.supportingSurface = supportingSurface;
-    },
+    }
 
     /**
      * clear the supporting surface so that this model element is no longer sitting on a surface
-     * @public TODO: Check this visibility when sim dev is closer to completion
+     * @private
      */
-    clearSupportingSurface: function() {
+    clearSupportingSurface() {
 
       // only do something if the supporting surface was set
       if ( this.supportingSurface !== null ) {
@@ -99,7 +92,7 @@ define( function( require ) {
         this.supportingSurface.elementOnSurfaceProperty.set( null );
         this.supportingSurface = null;
       }
-    },
+    }
 
     /**
      * get a value that indicates whether this element is stacked upon the given model element
@@ -109,11 +102,12 @@ define( function( require ) {
      * @public
      * @override
      */
-    isStackedUpon: function( element ) {
-      var surface = this.supportingSurface ? this.supportingSurface : null;
+    isStackedUpon( element ) {
+      const surface = this.supportingSurface ? this.supportingSurface : null;
       return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
     }
+  }
 
-  } );
+  return energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
 } );
 
