@@ -30,7 +30,20 @@ define( require => {
     showSpeedControls: { type: 'flag' },
 
     // make the first screen burners sticky
-    stickyBurners: { type: 'flag' }
+    stickyBurners: { type: 'flag' },
+
+    // force the energy chunk distributor to use a particular algorithm
+    ecDistribution: {
+      type: 'string',
+      defaultValue: null,
+      validValues: [
+        null, // use the default
+        'repulsive', // always use the repulsive algorithm
+        'spiral', // use the spiral algorithm, which is after than repulsive but doesn't generally look as good
+        'simple' // use the simple algorithm, which just puts all chunks in the center of the slice
+      ]
+    }
+
   } );
 
   return energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );

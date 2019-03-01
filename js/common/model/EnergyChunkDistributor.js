@@ -15,6 +15,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   var energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -46,16 +47,16 @@ define( function( require ) {
   var EnergyChunkDistributor = {
 
     /**
-     * Redistribute a set of energy chunks that are contained in energy chunk "slices".  The distribution is done taking
-     * all nearby slices into account so that the chunks can be distributed in a way that looks good in the view, i.e.
-     * the chunks don't overlap with each other.
+     * Redistribute a set of energy chunks that are contained in energy chunk slices using an algorithm where the
+     * chunks are repelled by each other and by the edges of the slice.  The distribution is done taking all nearby
+     * slices into account so that the chunks can be distributed in a way that minimizes overlap.
      * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
      * @param {number} dt - change in time
      * @returns {boolean} - a value indicating whether redistribution was done, false can occur if the energy chunks are
      * already well distributed
-     * @public
+     * @private
      */
-    updatePositions: function( slices, dt ) {
+    updatePositionsRepulsive: function( slices, dt ) {
 
       var self = this;
 
@@ -338,7 +339,7 @@ define( function( require ) {
      * @param {EnergyChunkContainerSlice[]} slices
      * @param {number} dt - time step
      * @returns {boolean} - true if any energy chunks needed to be moved, false if not
-     * @public
+     * @private
      */
     updatePositionsSpiral: function( slices, dt ) {
 
@@ -438,31 +439,49 @@ define( function( require ) {
 
     /**
      * Super simple alternative energy chunk distribution algorithm - just puts all energy chunks in center of slice.
-     * This is useful for debugging. Rename it to substitute if for the 'real' algorithm.
+     * This is useful for debugging since it positions the chunks as quickly as possible.
      * @param {EnergyChunkContainerSlice[]} slices
-     * @param {number} dt
+     * @param {number} dt - time step
+     * @returns {boolean} - true if any energy chunks needed to be moved, false if not
+     * @private
      */
-    updatePositionsDbg: function( slices, dt ) {
+    updatePositionsSimple: function( slices, dt ) {
+
+      var ecMoved = false;
+      var ecDestination = new Vector2( 0, 0 ); // reusable vector for optimal performance
 
       // update the positions of the energy chunks
       slices.forEach( function( slice ) {
         slice.energyChunkList.forEach( function( energyChunk ) {
-          energyChunk.setPosition( slice.bounds.centerX, slice.bounds.centerY );
+          ecDestination = new Vector2( slice.bounds.centerX, slice.bounds.centerY );
+
+          // animate the energy chunk towards its destination if it isn't there already
+          if ( !energyChunk.positionProperty.value.equals( ecDestination ) ) {
+            moveECTowardsDestination( energyChunk, ecDestination, dt );
+            ecMoved = true;
+          }
+
         } );
       } );
-    },
 
-    /**
-     * Generate a random location inside a rectangle.
-     * @param {Rectangle} rect
-     */
-    generateRandomLocation: function( rect ) {
-      return new Vector2(
-        rect.x + ( phet.joist.random.nextDouble() * rect.width ),
-        rect.y + ( phet.joist.random.nextDouble() * rect.height )
-      );
+      return ecMoved;
     }
   };
+
+  // Set up the distribution algorithm to use based on query parameters.  If no query parameter is specified, we start
+  // with the repulsive algorithm because it looks best, but may move to spiral if poor performance is detected.
+  if ( EFACQueryParameters.ecDistribution === null || EFACQueryParameters.ecDistribution === 'repulsive' ) {
+    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsRepulsive;
+  }
+  else if ( EFACQueryParameters.ecDistribution === 'spiral' ) {
+    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsSpiral;
+  }
+  else if ( EFACQueryParameters.ecDistribution === 'simple' ) {
+    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsSimple;
+  }
+  else {
+    assert && assert( false, 'unknown energy distribution algorithm specified' );
+  }
 
   /**
    * helper function for moving an energy chunk towards a destination, sets the EC's velocity value
@@ -480,9 +499,9 @@ define( function( require ) {
       }
       else {
         var vectorTowardsDestination = destination.minus( ec.positionProperty.value );
-        vectorTowardsDestination.setMagnitude( EC_SPEED_DETERMINISTIC * dt );
+        vectorTowardsDestination.setMagnitude( EC_SPEED_DETERMINISTIC );
         ec.velocity.set( vectorTowardsDestination );
-        ec.setPositionXY( ecPosition.x + vectorTowardsDestination.x, ecPosition.y + vectorTowardsDestination.y );
+        ec.setPositionXY( ecPosition.x + ec.velocity.x * dt, ecPosition.y + ec.velocity.y * dt );
       }
     }
   }
