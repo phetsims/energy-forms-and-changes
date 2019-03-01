@@ -61,7 +61,6 @@ define( require => {
 
     /**
      * @param {SystemsModel} model
-     * @constructor
      */
     constructor( model ) {
       super();

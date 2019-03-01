@@ -35,7 +35,7 @@ define( require => {
   class SystemsModel {
 
     /**
-     * @constructor
+     * main constructor for SystemsModel, which contains all of the model logic for the systems sim screen
      */
     constructor() {
       this.energyChunksVisibleProperty = new Property( false );

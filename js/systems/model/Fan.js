@@ -60,7 +60,6 @@ define( require => {
 
     /**
      * @param {Property.<boolean>} energyChunksVisibleProperty
-     * @constructor
      */
     constructor( energyChunksVisibleProperty ) {
       super( new Image( FAN_ICON ) );
