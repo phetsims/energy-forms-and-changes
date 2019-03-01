@@ -33,8 +33,6 @@ define( require => {
      */
     constructor( energyChunk, destinationProperty, options ) {
 
-      const self = this;
-
       options = _.extend( {
 
         // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
@@ -80,38 +78,38 @@ define( require => {
 
       let speedIncreased = false;
 
-      function handleDestinationChanged( newDestination, oldDestination ) {
+      const handleDestinationChanged = ( newDestination, oldDestination ) => {
 
-        const distanceToDestination = newDestination.distance( self.energyChunk.positionProperty.value );
+        const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
 
         // if the destination changes, speed up and go directly to the destination
         if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
           const increaseFactor = 8;
-          self.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
-          self.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
+          this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
+          this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
           speedIncreased = true;
-          self.wandering = false;
+          this.wandering = false;
         }
-        self.changeVelocityVector();
+        this.changeVelocityVector();
 
         if ( options.translateXWithDestination ) {
 
           const translation = newDestination.minus( oldDestination );
 
           // adjust the current EC position
-          self.energyChunk.positionProperty.set(
-            self.energyChunk.positionProperty.value.plusXY( translation.x, 0 )
+          this.energyChunk.positionProperty.set(
+            this.energyChunk.positionProperty.value.plusXY( translation.x, 0 )
           );
 
           // adjust the wander constraints if present
-          if ( self.horizontalWanderConstraint ) {
-            self.setHorizontalWanderConstraint( new Range(
-              self.horizontalWanderConstraint.min + translation.x,
-              self.horizontalWanderConstraint.max + translation.x
+          if ( this.horizontalWanderConstraint ) {
+            this.setHorizontalWanderConstraint( new Range(
+              this.horizontalWanderConstraint.min + translation.x,
+              this.horizontalWanderConstraint.max + translation.x
             ) );
           }
         }
-      }
+      };
 
       this.destinationProperty.lazyLink( handleDestinationChanged );
 
