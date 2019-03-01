@@ -65,10 +65,7 @@ define( require => {
     constructor() {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
-
-      // TODO: DON'T COMMIT THIS!!!!!!!!!!!!!!!!!!
-      // this.energyChunksVisibleProperty = new BooleanProperty( false );
-      this.energyChunksVisibleProperty = new BooleanProperty( true );
+      this.energyChunksVisibleProperty = new BooleanProperty( false );
 
       // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
       this.linkedHeatersProperty = new BooleanProperty( false );

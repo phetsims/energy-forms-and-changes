@@ -1,4 +1,4 @@
-// Copyright 2014-2019, University of Colorado Boulder
+// Copyright 2019, University of Colorado Boulder
 
 /**
  * base type for a movable model element that contains thermal energy and that, at least in the model, has an overall
@@ -24,7 +24,7 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Rectangle = require( 'DOT/Rectangle' );
   var Shape = require( 'KITE/Shape' );
-  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/UserMovableModelElement' );
+  var UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // const
