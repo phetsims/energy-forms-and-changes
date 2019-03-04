@@ -12,6 +12,7 @@ define( require => {
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const Emitter = require( 'AXON/Emitter' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
@@ -32,6 +33,10 @@ define( require => {
   const MATERIAL_THICKNESS = 0.001; // In meters.
   const NUM_SLICES = 6;
   const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
+  const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
+
+  // class var used for measuring performance during startup
+  let performanceMeasurementTaken = false;
 
   class Beaker extends RectangularThermalMovableModelElement {
 
@@ -267,6 +272,28 @@ define( require => {
 
       // clear the distribution timer and do a more thorough distribution below
       this.clearECDistributionCountdown();
+
+      // If this is the water beaker, and it's the first time energy chunks have been added, measure the performance
+      // and, if it is found to be low, switch to a higher performace (but visually inferior) algorithm for distributing
+      // the energy chunks.  This was found to be necessary on some platforms, see
+      // https://github.com/phetsims/energy-forms-and-changes/issues/191.
+      if ( this.specificHeat === EFACConstants.WATER_SPECIFIC_HEAT && !performanceMeasurementTaken ) {
+        const startTime = window.performance.now();
+        const numIterations = 10; // empirically determined to give a reasonably consistent value
+        for ( let i = 0; i < numIterations; i++ ) {
+          EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        }
+        const averageIterationTime = ( window.performance.now() - startTime ) / numIterations;
+        if ( averageIterationTime > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
+
+          // Performance on this device is poor, switch to the less computationally intenstive distribution algorithm,
+          // but only if something else wasn't explicitly specified.
+          if ( EFACQueryParameters.ecDistribution === null ) {
+            EnergyChunkDistributor.setDistributionAlgorithm( 'spiral' );
+          }
+        }
+        performanceMeasurementTaken = true;
+      }
 
       // distribute the initial energy chunks within the container
       for ( let i = 0; i < 500; i++ ) {

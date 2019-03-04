@@ -16,7 +16,6 @@ define( require => {
 
   // modules
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  const MovingAverageCalculator = require( 'ENERGY_FORMS_AND_CHANGES/common/model/MovingAverageCalculator' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Rectangle = require( 'DOT/Rectangle' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -45,15 +44,6 @@ define( require => {
   // spread out, then stop all movement.
   const REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // in joules (I think)
 
-  // The following constants and moving average calculator are used to automatically transition the energy chunk
-  // distributor to a faster algorithm if slow average performance is detected.  This is because the distribution
-  // algorithm was causing problems on slower devices, see https://github.com/phetsims/energy-forms-and-changes/issues/191.
-  // The thresholds were determined through experimentation with various devices, mostly iPads, and can certainly be
-  // adjusted, but such adjustments should be made carefully and tested well.
-  const PERFORMANCE_MOVING_AVERAGE_SIZE = 50;
-  const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 0.010; // in seconds
-  const averagePerformanceCalculator = new MovingAverageCalculator( PERFORMANCE_MOVING_AVERAGE_SIZE );
-
   // the main singleton object definition
   const EnergyChunkDistributor = {
 
@@ -68,8 +58,6 @@ define( require => {
      * @private
      */
     updatePositionsRepulsive( slices, dt ) {
-
-      const startTime = window.performance.now();
 
       // determine a rectangle that bounds all of the slices
       let minX = Number.POSITIVE_INFINITY;
@@ -163,14 +151,6 @@ define( require => {
 
       // free allocations
       _.values( chunkForces ).forEach( chunkForceVector => { chunkForceVector.freeToPool(); } );
-
-      // check performance and switch to faster (but visually inferior) algorithm if necessary
-      const timeOfExecution = window.performance.now() - startTime;
-      averagePerformanceCalculator.addValue( timeOfExecution );
-      if ( averagePerformanceCalculator.average / 1000 > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
-        console.warn( 'poor performance detected for energy chunk distribution, switching to faster algorithm' );
-        this.updatePositions = this.updatePositionsSpiral;
-      }
 
       return particlesRedistributed;
     },
@@ -484,22 +464,33 @@ define( require => {
       } );
 
       return ecMoved;
+    },
+
+    setDistributionAlgorithm( algorithmName ) {
+      if ( algorithmName === 'repulsive' ) {
+        this.updatePositions = this.updatePositionsRepulsive;
+      }
+      else if ( algorithmName === 'spiral' ) {
+        this.updatePositions = this.updatePositionsSpiral;
+      }
+      else if ( algorithmName === 'simple' ) {
+        this.updatePositions = this.updatePositionsSimple;
+      }
+      else {
+        assert && assert( false, 'unknown distribution algorithm specified: ' + algorithmName );
+      }
     }
   };
 
   // Set up the distribution algorithm to use based on query parameters.  If no query parameter is specified, we start
   // with the repulsive algorithm because it looks best, but may move to spiral if poor performance is detected.
-  if ( EFACQueryParameters.ecDistribution === null || EFACQueryParameters.ecDistribution === 'repulsive' ) {
+  if ( EFACQueryParameters.ecDistribution === null ) {
+
+    // use the repulsive algorithm by default, which looks the best but is also the most computationally expensive
     EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsRepulsive;
   }
-  else if ( EFACQueryParameters.ecDistribution === 'spiral' ) {
-    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsSpiral;
-  }
-  else if ( EFACQueryParameters.ecDistribution === 'simple' ) {
-    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsSimple;
-  }
   else {
-    assert && assert( false, 'unknown energy distribution algorithm specified' );
+    EnergyChunkDistributor.setDistributionAlgorithm( EFACQueryParameters.ecDistribution );
   }
 
   /**
