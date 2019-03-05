@@ -57,6 +57,19 @@ define( require => {
           }
         }
       } );
+
+      this.sensedElementColorProperty.link( () => {
+        if ( this.elementFollower.isFollowing() ) {
+          model.beakers.forEach( beaker => {
+            if ( beaker.bounds.containsPoint( this.positionProperty.value ) &&
+                 !beaker.thermalContactArea.containsPoint( this.positionProperty.value ) ) {
+
+              // stop following this beaker
+              this.elementFollower.stopFollowing();
+            }
+          } );
+        }
+      } );
     }
 
     /**
