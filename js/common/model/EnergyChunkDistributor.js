@@ -229,7 +229,7 @@ define( require => {
           }
 
           const forceToOther = Vector2.createFromPool( vectorFromOther.x, vectorFromOther.y )
-            .setMagnitude( forceConstant / vectorFromOther.magnitudeSquared() );
+            .setMagnitude( forceConstant / vectorFromOther.magnitudeSquared );
 
           // add the force to the accumulated forces on this energy chunk
           chunkForces[ chunk.id ] = chunkForces[ chunk.id ].add( forceToOther );
@@ -277,7 +277,7 @@ define( require => {
           const forceMultiplier = dt / ENERGY_CHUNK_MASS;
 
           // calculate drag force using standard drag equation
-          const velocityMagnitudeSquared = velocity.magnitudeSquared();
+          const velocityMagnitudeSquared = velocity.magnitudeSquared;
           assert && assert(
           velocityMagnitudeSquared !== Infinity && !_.isNaN( velocityMagnitudeSquared ) && typeof velocityMagnitudeSquared === 'number',
             `velocity^2 is ${velocityMagnitudeSquared}`
