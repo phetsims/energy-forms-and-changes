@@ -20,9 +20,9 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
   const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/ThermalContactArea' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // constants
 
@@ -187,7 +187,7 @@ define( require => {
       this.energyChunkList.push( energyChunk );
       this.energyChunkWanderControllers.push( new EnergyChunkWanderController(
         energyChunk,
-        new Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
+        new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
         { horizontalWanderConstraint: horizontalWanderConstraint }
       ) );
     }
