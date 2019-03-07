@@ -16,6 +16,7 @@ define( require => {
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class HorizontalSurface {
 
@@ -27,8 +28,8 @@ define( require => {
      */
     constructor( initialPosition, width, owner, initialElementOnSurface ) {
 
-      // @public (read-write) {Property.<Vector2>}
-      this.positionProperty = new Property( initialPosition );
+      // @public (read-write)
+      this.positionProperty = new Vector2Property( initialPosition );
 
       // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
       // one, null if nothing there, use the API below to update
