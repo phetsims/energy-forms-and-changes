@@ -13,7 +13,7 @@ define( require => {
   // modules
   const Dimension2 = require( 'DOT/Dimension2' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Property = require( 'AXON/Property' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // the following constant is used to adjust the way in which the drop elongates as its velocity increases
   const WIDTH_CHANGE_TWEAK_FACTOR = 0.05;
@@ -30,8 +30,8 @@ define( require => {
       // @public {Vector2} - after being transformed to view coordinates, this position is the distance from the faucet head
       this.position = initialPosition;
 
-      // @public {Property.<Vector2>}
-      this.velocityProperty = new Property( initialVelocity );
+      // @public
+      this.velocityProperty = new Vector2Property( initialVelocity );
 
       // @public (read-only) {Dimension2}
       this.size = size;

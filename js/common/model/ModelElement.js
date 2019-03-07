@@ -13,8 +13,8 @@ define( require => {
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class ModelElement {
 
@@ -23,8 +23,8 @@ define( require => {
      */
     constructor( initialPosition ) {
 
-      // @public {Property.<Vector2>} - position of the center bottom of this model element
-      this.positionProperty = new Property( initialPosition );
+      // @public - position of the center bottom of this model element
+      this.positionProperty = new Vector2Property( initialPosition );
 
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
       // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.
