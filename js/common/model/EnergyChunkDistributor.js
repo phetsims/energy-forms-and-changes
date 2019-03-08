@@ -344,6 +344,7 @@ define( require => {
     updatePositionsSpiral( slices, dt ) {
 
       let ecMoved = false;
+      const ecDestination = new Vector2( 0, 0 ); // reusable vector to minimize garbage collection
 
       // loop through each slice, updating the energy chunk positions for each
       for ( let sliceIndex = 0; sliceIndex < slices.length; sliceIndex++ ) {
@@ -421,7 +422,6 @@ define( require => {
           }
 
           // calculate the desired position using polar coordinates
-          const ecDestination = new Vector2( 0, 0 );
           ecDestination.setPolar( radius, adjustedAngle );
           ecDestination.add( sliceCenter );
 
@@ -447,25 +447,31 @@ define( require => {
     updatePositionsSimple( slices, dt ) {
 
       let ecMoved = false;
-      let ecDestination = new Vector2( 0, 0 ); // reusable vector for optimal performance
+      const ecDestination = new Vector2( 0, 0 ); // reusable vector to minimze garbage collection
 
       // update the positions of the energy chunks
       slices.forEach( slice => {
         slice.energyChunkList.forEach( energyChunk => {
-          ecDestination = new Vector2( slice.bounds.centerX, slice.bounds.centerY );
+          ecDestination.setXY( slice.bounds.centerX, slice.bounds.centerY );
 
           // animate the energy chunk towards its destination if it isn't there already
           if ( !energyChunk.positionProperty.value.equals( ecDestination ) ) {
             moveECTowardsDestination( energyChunk, ecDestination, dt );
             ecMoved = true;
           }
-
         } );
       } );
 
       return ecMoved;
     },
 
+    /**
+     * Set the algorithm to use in the "updatePositions" method.  This is generally done only during initialization so
+     * that users don't see noticeable changes in the energy chunk motion.  The tradeoffs between the different
+     * algorithms are generally based on how good it looks and how much computational power it requires.
+     * @param {string} algorithmName
+     * @public
+     */
     setDistributionAlgorithm( algorithmName ) {
       if ( algorithmName === 'repulsive' ) {
         this.updatePositions = this.updatePositionsRepulsive;
@@ -505,7 +511,7 @@ define( require => {
       if ( ecPosition.distance( destination ) <= EC_SPEED_DETERMINISTIC * dt ) {
 
         // EC is close enough that it should just go to the destination
-        ec.setPosition( destination );
+        ec.setPosition( destination.copy() );
       }
       else {
         const vectorTowardsDestination = destination.minus( ec.positionProperty.value );
