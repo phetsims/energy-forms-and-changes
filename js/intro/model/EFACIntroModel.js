@@ -870,44 +870,51 @@ define( require => {
       this.blocks.forEach( block => {
 
         if ( block === modelElement ) {
-          // don't test against this
+
+          // don't test against self
           return;
         }
 
-        let blockBounds = block.getBounds();
+        const blockBounds = block.getBounds();
 
         // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
         // the model element - the block will simply be lifted up.
         const restrictPositiveY = !block.isStackedUpon( modelElement );
 
-        const modelElementBounds = modelElement.getBounds();
+        if ( modelElement instanceof Block ) {
 
-        this.beakers.forEach( beaker => {
-          if ( modelElement === beaker ) {
+          allowedTranslation = this.determineAllowedTranslation(
+            modelElement.getBounds(),
+            blockBounds,
+            allowedTranslation,
+            restrictPositiveY
+          );
+        }
+        else {
 
-            // Special handling for the beaker: Use the perspective-compensated edge of the block instead of the model
-            // edge in order to simplify z-order handling.
-            blockBounds = new Bounds2(
-              blockBounds.minX - this.brick.perspectiveCompensation.x,
-              blockBounds.minY,
-              blockBounds.maxX + this.brick.perspectiveCompensation.x,
-              blockBounds.maxY
-            );
-          }
+          // make sure this is a beaker before going any further
+          assert && assert( modelElement instanceof BeakerContainer, 'unrecognized model element type' );
 
-          // Clamp the translation based on the test block's position, but handle the case where the block is immersed
-          // in the beaker.
-          if ( !( modelElement === beaker &&
-                  beaker.getBounds().containsBounds( blockBounds ) ) ) {
+          // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
+          // handling.
+          const perspectiveBlockBounds = new Bounds2(
+            blockBounds.minX - this.brick.perspectiveCompensation.x,
+            blockBounds.minY,
+            blockBounds.maxX + this.brick.perspectiveCompensation.x,
+            blockBounds.maxY
+          );
 
+          // Clamp the translation of the beaker based on the test block's position.  This uses the sides of the beaker
+          // and not it's outline so that the block can go inside.
+          modelElement.translatedPositionTestingBoundsList.forEach( beakerEdgeBounds => {
             allowedTranslation = this.determineAllowedTranslation(
-              modelElementBounds,
-              blockBounds,
+              beakerEdgeBounds,
+              perspectiveBlockBounds,
               allowedTranslation,
               restrictPositiveY
             );
-          }
-        } );
+          } );
+        }
       } );
 
       return modelElement.positionProperty.get().plus( allowedTranslation );
@@ -930,8 +937,8 @@ define( require => {
     /**
      * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
      * rectangle that can block the moving one.
-     * @param {Boundd2} movingElementBounds
-     * @param {Boundd2} stationaryElementBounds
+     * @param {Bounds2} movingElementBounds
+     * @param {Bounds2} stationaryElementBounds
      * @param {Vector2} proposedTranslation
      * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
      *                                      is often set false if there is another model element on top of the one
@@ -1008,7 +1015,6 @@ define( require => {
         }
       }
       else if ( proposedTranslation.x < 0 ) {
-
 
         // check for collisions moving left
         motionTestBounds.setMinMax(
