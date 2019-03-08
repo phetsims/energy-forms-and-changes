@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.2 Wed Feb 20 2019 16:15:05 GMT-0700 (Mountain Standard Time)",
+  "comment": "# energy-forms-and-changes 1.0.2 Fri Mar 08 2019 13:05:05 GMT-0500 (EST)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -9,8 +9,8 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "a1025798f01b7c54c9c7670954b8a293ce34c2b1",
-    "branch": "HEAD"
+    "sha": "460a60db9ebcc23d50667bd2e39fe30998232012",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "chipper": {
     "sha": "9419a94d7cb3bdd64d2a5c2be6331d7ab25a6533",
@@ -21,12 +21,12 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "9e02d5ac9ae988d95c661f76e2ec9eab5451ad05",
+    "sha": "27201c9dcc05195c28f7a8522ba2da1190f4d2be",
     "branch": "1.0"
   },
   "joist": {
-    "sha": "71b72c0ffc87df8cea478a25d241de3129a091dc",
-    "branch": "HEAD"
+    "sha": "ee378529e52aa377b74c03a621443ea20487d9b3",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "kite": {
     "sha": "20a875b740cbb9c441c72911e60617cd05a5d4e1",
