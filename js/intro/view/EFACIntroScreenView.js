@@ -66,10 +66,6 @@ define( require => {
   const SENSOR_ANIMATION_SPEED = 0.2; // in meters per second
   const MAX_SENSOR_ANIMATION_TIME = 1; // max time for sensor return animation to complete
 
-  // TODO: I (jbphet) came across the code immediately below during code cleanup in early May 2018, not sure what it is or whether it is still needed.
-  // Boolean property for showing/hiding developer control for dumping energy levels.
-  // const showDumpEnergiesButton = new Property( false );
-
   class EFACIntroScreenView extends ScreenView {
 
     /**
