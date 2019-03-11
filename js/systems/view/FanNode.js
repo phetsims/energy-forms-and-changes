@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Image = require( 'SCENERY/nodes/Image' );
@@ -45,7 +46,11 @@ define( require => {
       super( fan, modelViewTransform );
 
       // add the images and the layer that will contain the energy chunks
-      const wireBottomRightNode = new Image( wireBottomRightShortImage, { left: -110, bottom: 105 } );
+      const wireBottomRightNode = new Image( wireBottomRightShortImage, {
+        left: -109.5,
+        bottom: 105,
+        scale: EFACConstants.WIRE_IMAGE_SCALE
+      } );
       const connectorNode = new Image( connectorImage, {
         right: wireBottomRightNode.right + 9,
         bottom: wireBottomRightNode.top + 3

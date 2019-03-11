@@ -11,6 +11,7 @@ define( require => {
   'use strict';
 
   // modules
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -65,7 +66,8 @@ define( require => {
       } );
       const wireBottomLeftNode = new Image( wireBottomLeftImage, {
         right: windowNode.right - 20,
-        bottom: windowNode.centerY + 13
+        bottom: windowNode.centerY + 13,
+        scale: EFACConstants.WIRE_IMAGE_SCALE
       } );
       const connectorNode = new Image( connectorImage, { left: windowNode.right - 2, centerY: windowNode.centerY } );
 

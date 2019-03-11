@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Generator = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Generator' );
@@ -61,7 +62,8 @@ define( require => {
       } );
       const wireBottomLeftNode = new Image( wireBottomLeftImage, {
         right: generatorNode.right - 29,
-        top: generatorNode.centerY - 30
+        top: generatorNode.centerY - 30,
+        scale: EFACConstants.WIRE_IMAGE_SCALE
       } );
       const connectorNode = new Image( connectorImage, {
         left: generatorNode.right - 3,

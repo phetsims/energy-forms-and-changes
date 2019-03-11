@@ -69,10 +69,15 @@ define( require => {
       } );
 
       // add the images and the layer that will contain the energy chunks
-      const wireStraightNode = new Image( wireStraightImage, { left: -112, top: 78 } );
+      const wireStraightNode = new Image( wireStraightImage, {
+        left: -110,
+        top: 78,
+        scale: EFACConstants.WIRE_IMAGE_SCALE
+      } );
       const wireBottomRightNode = new Image( wireBottomRightImage, {
         left: wireStraightNode.right - 4,
-        bottom: wireStraightNode.bottom + 2.5
+        bottom: wireStraightNode.bottom + 2.3,
+        scale: EFACConstants.WIRE_IMAGE_SCALE
       } );
       const elementBaseBackNode = new Image( elementBaseBackImage, {
         maxWidth: EFACConstants.ELEMENT_BASE_WIDTH,

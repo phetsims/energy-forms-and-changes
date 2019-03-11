@@ -134,6 +134,9 @@ define( require => {
     // used to scale down the element base image, which is used in multiple system elements
     ELEMENT_BASE_WIDTH: 72,
 
+    // used to scale down the wire images, which are used in multiple system elements
+    WIRE_IMAGE_SCALE: 0.48,
+
     // model-view transform scale factors for each screen - smaller zooms out, larger zooms in
     INTRO_MVT_SCALE_FACTOR: 1700,
     SYSTEMS_MVT_SCALE_FACTOR: 2200,
