@@ -601,7 +601,7 @@ define( require => {
         rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
         minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
       } );
-      this.addChild( controlPanel );
+      backLayer.addChild( controlPanel );
 
       // create and add the "Reset All" button in the bottom right
       const resetAllButton = new ResetAllButton( {
