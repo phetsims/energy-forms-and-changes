@@ -106,14 +106,6 @@ define( require => {
     }
 
     /**
-     * @returns {HorizontalSurface}
-     * @public
-     */
-    getTopSurface() {
-      return this.topSurface;
-    }
-
-    /**
      * Interact with a thermal energy container, adding or removing energy based on the current heat/cool setting.
      * NOTE: this shouldn't be used for air - there is a specific method for that
      * @param {ThermalEnergyContainer} thermalEnergyContainer - model object that will get or give energy

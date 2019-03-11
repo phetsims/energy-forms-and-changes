@@ -75,27 +75,6 @@ define( require => {
       this.positionProperty.set( newPosition );
     }
 
-    // TODO: Consider making these properties set directly instead of through methods when the port is nearly complete.
-
-    /**
-     * Get the bottom surface of this model element.  Only model elements that can rest on top of other model elements
-     * have bottom surfaces.
-     * @public read-only
-     * @returns {HorizontalSurface|null} The bottom surface of this model element, null if this element never
-     * rests upon other model elements.
-     */
-    getBottomSurface() {
-      return this.bottomSurface;
-    }
-
-    /**
-     * @returns {HorizontalSurface|null} Surface upon which this element is resting, null if there is none.
-     * @public
-     */
-    getTopSurface() {
-      return this.topSurface;
-    }
-
     /**
      * method to test whether this element is stacked upon another, always false for non-movable model elements,
      * override as needed in descendant types

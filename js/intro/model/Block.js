@@ -121,8 +121,6 @@ define( require => {
       return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
     }
 
-    // TODO: I (jbphet) noticed a number of unused methods below during code cleanup, and should delete any that are still not used when code is fully cleaned up.
-
     /**
      * @returns {ThermalContactArea}
      * @public
