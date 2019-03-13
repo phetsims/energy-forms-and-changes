@@ -1048,7 +1048,7 @@ define( require => {
 
       let xTranslation = proposedTranslationX;
       let yTranslation = proposedTranslationY;
-      const motionTestBounds = Bounds2.createFromPool( 0, 0, 0, 0 );
+      const motionTestBounds = Bounds2.dirtyFromPool();
 
       // X direction
       if ( proposedTranslationX > 0 ) {
