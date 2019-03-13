@@ -29,7 +29,6 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
-  const TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -1122,16 +1121,17 @@ define( require => {
     }
 
     /**
-     * Get the temperature and color that would be sensed by a thermometer at the provided location.  This is done as
+     * Update the temperature and color that would be sensed by a thermometer at the provided location.  This is done as
      * a single operation instead of having separate methods for getting temperature and color because it is more
      * efficient to do it like this.
      * @param {Vector2} position - location to be sensed
-     * @returns {TemperatureAndColor} - object with temperature and color
+     * @param {Property.<number>} sensedTemperatureProperty
+     * @param {Property.<Color>} sensedElementColorProperty
      * @public
      */
-    getTemperatureAndColorAtLocation( position ) {
+    updateTemperatureAndColorAtLocation( position, sensedTemperatureProperty, sensedElementColorProperty ) {
 
-      let temperatureAndColor = null;
+      let temperatureAndColorUpdated = false;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
       const copyOfBlockList = this.blocks.slice( 0 );
@@ -1147,58 +1147,54 @@ define( require => {
         return -1;
       } );
 
-      for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColor; i++ ) {
+      for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColorUpdated; i++ ) {
         const block = copyOfBlockList[ i ];
         if ( block.getProjectedShape().containsPoint( position ) ) {
-          temperatureAndColor = new TemperatureAndColor( block.temperature, block.color );
+          sensedTemperatureProperty.set( block.temperature );
+          sensedElementColorProperty.set( block.color );
+          temperatureAndColorUpdated = true;
+          break;
         }
       }
 
       // test if this point is in any beaker's fluid
-      this.beakers.forEach( beaker => {
-        if ( !temperatureAndColor && beaker.thermalContactArea.containsPoint( position ) ) {
-          temperatureAndColor = new TemperatureAndColor(
-            beaker.temperatureProperty.get(),
-            beaker.fluidColor
-          );
+      for ( let i = 0; i < this.beakers.length && !temperatureAndColorUpdated; i++ ) {
+        const beaker = this.beakers[ i ];
+        if ( beaker.thermalContactArea.containsPoint( position ) ) {
+          sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
+          sensedElementColorProperty.set( beaker.fluidColor );
+          temperatureAndColorUpdated = true;
         }
-      } );
+      }
 
       // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
       // checked because in the case of a beaker body and another beaker's steam overlapping, the sensor should detect
       // the beaker body first
-      this.beakers.forEach( beaker => {
-        if ( !temperatureAndColor &&
-             beaker.getSteamArea().containsPoint( position ) &&
-             beaker.steamingProportion > 0 ) {
-          temperatureAndColor = new TemperatureAndColor(
-            beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ),
-            beaker.steamColor
-          );
+      for ( let i = 0; i < this.beakers.length && !temperatureAndColorUpdated; i++ ) {
+        const beaker = this.beakers[ i ];
+        if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
+          sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
+          sensedElementColorProperty.set( beaker.steamColor );
+          temperatureAndColorUpdated = true;
         }
-      } );
+      }
 
       // test if the point is a burner
-      for ( let i = 0; i < this.burners.length && !temperatureAndColor; i++ ) {
+      for ( let i = 0; i < this.burners.length && !temperatureAndColorUpdated; i++ ) {
         const burner = this.burners[ i ];
         if ( burner.getFlameIceRect().containsPoint( position ) ) {
-          temperatureAndColor = new TemperatureAndColor(
-            burner.getTemperature(),
-            this.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() )
-          );
+          sensedTemperatureProperty.set( burner.getTemperature() );
+          sensedElementColorProperty.set( this.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() ) );
+          temperatureAndColorUpdated = true;
         }
       }
 
-      if ( !temperatureAndColor ) {
+      if ( !temperatureAndColorUpdated ) {
 
-        // the position is in nothing else, so return the air temperature and color
-        temperatureAndColor = new TemperatureAndColor(
-          this.air.getTemperature(),
-          EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR
-        );
+        // the position is in nothing else, so set the air temperature and color
+        sensedTemperatureProperty.set( this.air.getTemperature() );
+        sensedElementColorProperty.set( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
       }
-
-      return temperatureAndColor;
     }
 
     /**

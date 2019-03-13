@@ -43,9 +43,11 @@ define( require => {
      */
     step() {
       if ( this.activeProperty.value ) {
-        const temperatureAndColor = this.model.getTemperatureAndColorAtLocation( this.positionProperty.value );
-        this.sensedTemperatureProperty.set( temperatureAndColor.temperature );
-        this.sensedElementColorProperty.set( temperatureAndColor.color );
+        this.model.updateTemperatureAndColorAtLocation(
+          this.positionProperty.value,
+          this.sensedTemperatureProperty,
+          this.sensedElementColorProperty
+        );
       }
       else {
         this.sensedTemperatureProperty.set( EFACConstants.ROOM_TEMPERATURE );

@@ -21,7 +21,6 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
-  const TemperatureAndColor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/TemperatureAndColor' );
   const TemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/TemperatureAndColorSensor' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -203,22 +202,27 @@ define( require => {
     }
 
     /**
-     * get the temperature and color at the specified location within the beaker
-     * @param {Vector2} location
+     * update the temperature and color at the specified location within the beaker
+     *
+     * @param {Vector2} position - location to be sensed
+     * @param {Property.<number>} sensedTemperatureProperty
+     * @param {Property.<Color>} sensedElementColorProperty
+     * @public
      */
-    getTemperatureAndColorAtLocation( location ) {
+    updateTemperatureAndColorAtLocation( position, sensedTemperatureProperty, sensedElementColorProperty ) {
 
       // validate that the specified location is inside the beaker, since that's the only supported location
       assert && assert(
-      location.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && location.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
+      position.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && position.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
         'location is not inside of beaker'
       );
       assert && assert(
-      location.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && location.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
+      position.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && position.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
         'location is not inside of beaker'
       );
 
-      return new TemperatureAndColor( this.beaker.getTemperature(), EFACConstants.WATER_COLOR_OPAQUE );
+      sensedTemperatureProperty.set( this.beaker.getTemperature() );
+      sensedElementColorProperty.set( EFACConstants.WATER_COLOR_OPAQUE );
     }
 
     /**
