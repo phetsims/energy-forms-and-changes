@@ -78,15 +78,10 @@ define( require => {
 
       // extract the scale transform from the MVT so that we can separate the shape from the position of the block
       const scaleVector = modelViewTransform.matrix.getScaleVector();
-      const scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, scaleVector.y ) );
+      const scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, -scaleVector.y ) );
 
-      // TODO: I (jbphet) noticed the code below during an initial pass through this file.  This looks like there is
-      // something wrong with the transforms, and I should straighten it out.
-
-      // Note that blockRect is in view coordinates.
-      // The shift by the block height is not in the original Java, but without it, the blocks sit too low.
-      const blockShape = block.getUntransformedBounds();
-      const blockRect = scaleTransform.transformShape( blockShape.shiftedY( -blockShape.height ) );
+      // get a view representation of the block without perspective
+      const blockRect = scaleTransform.transformShape( block.getUntransformedBounds() );
 
       // create the shape for the front of the block
       const perspectiveEdgeSize = modelViewTransform.modelToViewDeltaX(
