@@ -27,7 +27,6 @@ define( require => {
         this.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
       } );
 
-      // TODO: The model shouldn't have opacity, it should have something like a selection proportion.
       // update our opacity as the model element fades in and out
       modelElement.opacityProperty.link( opacity => {
         this.setOpacity( opacity );
