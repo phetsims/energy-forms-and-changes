@@ -762,23 +762,26 @@ define( require => {
      * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
      * @param {Vector2} proposedPosition - the position where the model element would like to go
      * @returns {Vector2} the original proposed position if valid, or alternative position if not
-     * TODO: Consider adding the optimization where a vector is provided so that a new one doesn't have to be allocated
+     * @public
      */
     constrainPosition( modelElement, proposedPosition ) {
 
-      // TODO: Optimize this method for allocations
+      const modelElementPosition = modelElement.positionProperty.get();
 
-      // calculate the proposed motion TODO consider optimizing to avoid allocation
-      let allowedTranslation = proposedPosition.minus( modelElement.positionProperty.get() );
+      // calculate the proposed motion
+      let allowedTranslation = Vector2.createFromPool(
+        proposedPosition.x - modelElementPosition.x,
+        proposedPosition.y - modelElementPosition.y
+      );
 
       // get the current composite bounds of the model element
       const modelElementBounds = modelElement.getCompositeBoundsForPosition(
-        modelElement.positionProperty.get(),
+        modelElementPosition,
         this.reusableBounds
       );
 
       // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
-      const modelElementBoundsWithSidePerspective = new Bounds2(
+      const modelElementBoundsWithSidePerspective = Bounds2.createFromPool(
         modelElementBounds.minX - modelElement.perspectiveCompensation.x,
         modelElementBounds.minY,
         modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -789,8 +792,10 @@ define( require => {
       allowedTranslation = this.determineAllowedTranslation(
         modelElementBoundsWithSidePerspective,
         this.burnerBlockingRect,
-        allowedTranslation,
-        true
+        allowedTranslation.x,
+        allowedTranslation.y,
+        true,
+        allowedTranslation
       );
 
       // now check the model element's motion against each of the beakers
@@ -806,7 +811,7 @@ define( require => {
         const beakerBoundsList = beaker.translatedPositionTestingBoundsList;
 
         // if the modelElement is a block, it has x and y perspective comp that need to be used
-        const modelElementBoundsWithTopAndSidePerspective = new Bounds2(
+        const modelElementBoundsWithTopAndSidePerspective = Bounds2.createFromPool(
           modelElementBounds.minX - modelElement.perspectiveCompensation.x,
           modelElementBounds.minY - modelElement.perspectiveCompensation.y,
           modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -820,20 +825,26 @@ define( require => {
           allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithTopAndSidePerspective,
             beakerBoundsList[ 0 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
           allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithSidePerspective,
             beakerBoundsList[ 1 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
           allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithTopAndSidePerspective,
             beakerBoundsList[ 2 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
         }
         else {
@@ -849,22 +860,30 @@ define( require => {
           allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 0 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
           allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 1 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
           allowedTranslation = this.determineAllowedTranslation(
             currentBeakerBounds,
             otherBeakerBoundsList[ 2 ],
-            allowedTranslation,
-            true
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
           );
         }
+
+        modelElementBoundsWithTopAndSidePerspective.freeToPool();
       } );
 
       // now check the model element's motion against each of the blocks
@@ -887,8 +906,10 @@ define( require => {
           allowedTranslation = this.determineAllowedTranslation(
             modelElement.getBounds(),
             blockBounds,
-            allowedTranslation,
-            !isBlockStackedInBeaker // don't restrict in Y direction if this block is sitting in the beaker
+            allowedTranslation.x,
+            allowedTranslation.y,
+            !isBlockStackedInBeaker, // don't restrict in Y direction if this block is sitting in the beaker
+            allowedTranslation
           );
         }
         else {
@@ -902,7 +923,7 @@ define( require => {
 
             // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
             // handling.
-            const perspectiveBlockBounds = new Bounds2(
+            const perspectiveBlockBounds = Bounds2.createFromPool(
               blockBounds.minX - this.brick.perspectiveCompensation.x,
               blockBounds.minY,
               blockBounds.maxX + this.brick.perspectiveCompensation.x,
@@ -915,15 +936,25 @@ define( require => {
               allowedTranslation = this.determineAllowedTranslation(
                 beakerEdgeBounds,
                 perspectiveBlockBounds,
-                allowedTranslation,
-                !isBlockStackedInBeaker
+                allowedTranslation.x,
+                allowedTranslation.y,
+                !isBlockStackedInBeaker,
+                allowedTranslation
               );
             } );
+
+            perspectiveBlockBounds.freeToPool();
           }
         }
       } );
 
-      return modelElement.positionProperty.get().plus( allowedTranslation );
+      const newPosition = modelElementPosition.plus( allowedTranslation );
+
+      // free reusable vectors and bounds
+      allowedTranslation.freeToPool();
+      modelElementBoundsWithSidePerspective.freeToPool();
+
+      return newPosition;
     }
 
     /**
@@ -945,16 +976,25 @@ define( require => {
      * rectangle that can block the moving one.
      * @param {Bounds2} movingElementBounds
      * @param {Bounds2} stationaryElementBounds
-     * @param {Vector2} proposedTranslation
+     * @param {number} proposedTranslationX
+     * @param {number} proposedTranslationY
      * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
      *                                      is often set false if there is another model element on top of the one
      *                                      being tested.
+     * @param {Vector2} [result] - optional vector to be reused
      * @returns {Vector2}
      * @private
      */
-    determineAllowedTranslation( movingElementBounds, stationaryElementBounds, proposedTranslation, restrictPosY ) {
+    determineAllowedTranslation(
+      movingElementBounds,
+      stationaryElementBounds,
+      proposedTranslationX,
+      proposedTranslationY,
+      restrictPosY,
+      result
+    ) {
 
-      // TODO: Use vector pooling and possibly Shape or Bounds2 pooling to improve performance
+      result = result || new Vector2();
 
       // test for case where rectangles already overlap
       if ( this.exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
@@ -992,19 +1032,19 @@ define( require => {
 
         // return a vector with the smallest valid "cure" value, leaving the other translation value unchanged
         if ( xOverlapCure !== 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
-          return new Vector2( xOverlapCure, proposedTranslation.y );
+          return result.setXY( xOverlapCure, proposedTranslationY );
         }
         else {
-          return new Vector2( proposedTranslation.x, yOverlapCure );
+          return result.setXY( proposedTranslationX, yOverlapCure );
         }
       }
 
-      let xTranslation = proposedTranslation.x;
-      let yTranslation = proposedTranslation.y;
-      const motionTestBounds = Bounds2.NOTHING.copy();
+      let xTranslation = proposedTranslationX;
+      let yTranslation = proposedTranslationY;
+      const motionTestBounds = Bounds2.createFromPool( 0, 0, 0, 0 );
 
       // X direction
-      if ( proposedTranslation.x > 0 ) {
+      if ( proposedTranslationX > 0 ) {
 
         // check for collisions moving right
         motionTestBounds.setMinMax(
@@ -1020,7 +1060,7 @@ define( require => {
           xTranslation = stationaryElementBounds.minX - movingElementBounds.maxX - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
-      else if ( proposedTranslation.x < 0 ) {
+      else if ( proposedTranslationX < 0 ) {
 
         // check for collisions moving left
         motionTestBounds.setMinMax(
@@ -1038,7 +1078,7 @@ define( require => {
       }
 
       // Y direction.
-      if ( proposedTranslation.y > 0 && restrictPosY ) {
+      if ( proposedTranslationY > 0 && restrictPosY ) {
 
         // check for collisions moving up
         motionTestBounds.setMinMax(
@@ -1054,7 +1094,7 @@ define( require => {
           yTranslation = stationaryElementBounds.minY - movingElementBounds.maxY - MIN_INTER_ELEMENT_DISTANCE;
         }
       }
-      else if ( proposedTranslation.y < 0 ) {
+      else if ( proposedTranslationY < 0 ) {
 
         // check for collisions moving down
         motionTestBounds.setMinMax(
@@ -1071,7 +1111,7 @@ define( require => {
         }
       }
 
-      return new Vector2( xTranslation, yTranslation );
+      return result.setXY( xTranslation, yTranslation );
     }
 
     /**
