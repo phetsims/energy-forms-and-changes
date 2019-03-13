@@ -821,7 +821,14 @@ define( require => {
         // don't restrict the motion based on the beaker if the beaker is on top of this model element
         if ( !beaker.isStackedUpon( modelElement ) ) {
 
-          // TODO: This is less than ideal because it assumes the bottom of the beaker is the 2nd bounds entry
+          // the code below assumes that the bounds list is in the order: left side, bottom, right side. this assertion
+          // verifies that.
+          assert && assert(
+          beakerBoundsList[ 0 ].centerX < beakerBoundsList[ 1 ].centerX &&
+          beakerBoundsList[ 1 ].centerX < beakerBoundsList[ 2 ].centerX,
+            'beaker bounds list is out of order'
+          );
+
           allowedTranslation = this.determineAllowedTranslation(
             modelElementBoundsWithTopAndSidePerspective,
             beakerBoundsList[ 0 ],
