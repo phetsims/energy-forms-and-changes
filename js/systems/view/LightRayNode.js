@@ -44,6 +44,10 @@ define( require => {
       this.color = color;
 
       this.updateRay();
+
+      // @private - A version of the updateRay function that is bound to this instance, used for adding to and removing
+      // from light absorbing shapes.
+      this.rayUpdater = this.updateRay.bind( this );
     }
 
     /**
@@ -53,9 +57,7 @@ define( require => {
      */
     addLightAbsorbingShape( lightAbsorbingShape ) {
       this.lightAbsorbingShapes.push( lightAbsorbingShape );
-      lightAbsorbingShape.absorptionCoefficientProperty.link( () => {
-        this.updateRay();
-      } );
+      lightAbsorbingShape.absorptionCoefficientProperty.link( this.rayUpdater );
     }
 
     /**
@@ -63,8 +65,7 @@ define( require => {
      * @public
      */
     removeLightAbsorbingShape( lightAbsorbingShape ) {
-      // TODO: This probably works, but is not quite correct, since it should really be unlinking the added listener, not everything.
-      lightAbsorbingShape.absorptionCoefficientProperty.unlinkAll();
+      lightAbsorbingShape.absorptionCoefficientProperty.unlink( this.rayUpdater );
       _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
       this.updateRay();
     }
