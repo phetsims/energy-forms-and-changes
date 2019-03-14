@@ -21,7 +21,7 @@ define( require => {
   // images
   const connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
   const generatorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator.png' );
-  const generatorWheelHubImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_hub_2.png' );
+  const generatorWheelHubImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_hub.png' );
   const generatorWheelPaddlesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_paddles_short.png' );
   const generatorWheelSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/generator_wheel_spokes.png' );
   const wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
