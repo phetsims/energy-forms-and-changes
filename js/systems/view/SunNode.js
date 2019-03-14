@@ -37,7 +37,7 @@ define( require => {
   const VSlider = require( 'SUN/VSlider' );
 
   // images
-  const cloudImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud_1.png' );
+  const cloudImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud.png' );
 
   // strings
   const cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
