@@ -27,7 +27,7 @@ define( require => {
   const connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
   const solarPanelGenImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_gen.png' );
   const solarPanelImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel.png' );
-  const solarPanelPostImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post_2.png' );
+  const solarPanelPostImage = require( 'image!ENERGY_FORMS_AND_CHANGES/solar_panel_post.png' );
   const wireBottomLeftImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_left.png' );
 
   class SolarPanelNode extends MoveFadeModelElementNode {
