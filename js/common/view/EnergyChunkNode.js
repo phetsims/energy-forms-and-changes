@@ -23,12 +23,12 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
-  const chemicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_chem_blank_light.png' );
-  const electricalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_electric_blank.png' );
-  const hiddenEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_dashed_blank.png' );
-  const lightEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_light_blank.png' );
-  const mechanicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_mech_blank.png' );
-  const thermalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/E_therm_blank_orange.png' );
+  const chemicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_chemical.png' );
+  const electricalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_electrical.png' );
+  const hiddenEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_hidden.png' );
+  const lightEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_light.png' );
+  const mechanicalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_mechanical.png' );
+  const thermalEnergyImage = require( 'image!ENERGY_FORMS_AND_CHANGES/energy_thermal.png' );
 
   // strings
   const energyChunkLabelString = require( 'string!ENERGY_FORMS_AND_CHANGES/energyChunkLabel' );
