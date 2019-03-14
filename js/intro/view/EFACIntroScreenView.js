@@ -57,7 +57,7 @@ define( require => {
   const oliveOilString = require( 'string!ENERGY_FORMS_AND_CHANGES/oliveOil' );
 
   // images
-  const shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf_long.png' );
+  const shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf.png' );
   const flameImage = require( 'image!SCENERY_PHET/flame.png' );
 
   // constants
