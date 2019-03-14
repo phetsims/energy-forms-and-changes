@@ -24,12 +24,12 @@ define( require => {
   // images
   const elementBaseBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_back.png' );
   const elementBaseFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/element_base_front.png' );
-  const fluorescentOffBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_back_2.png' );
-  const fluorescentOffFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_front_2.png' );
-  const fluorescentOnBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_on_back_2.png' );
-  const fluorescentOnFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_on_front_2.png' );
-  const incandescentOffImage = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_2.png' );
-  const incandescentOnImage = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_on_3.png' );
+  const fluorescentOffBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_back.png' );
+  const fluorescentOffFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_front.png' );
+  const fluorescentOnBackImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_on_back.png' );
+  const fluorescentOnFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/fluorescent_on_front.png' );
+  const incandescentOffImage = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent.png' );
+  const incandescentOnImage = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_on.png' );
   const wireBottomRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right.png' );
   const wireStraightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_straight.png' );
 

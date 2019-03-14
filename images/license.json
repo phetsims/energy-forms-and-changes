@@ -279,7 +279,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "cloud_1.png": {
+  "cloud.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -407,7 +407,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "fluorescent_back_2.png": {
+  "fluorescent_back.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -415,7 +415,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "fluorescent_front_2.png": {
+  "fluorescent_front.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -431,7 +431,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "fluorescent_on_back_2.png": {
+  "fluorescent_on_back.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -439,7 +439,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "fluorescent_on_front_2.png": {
+  "fluorescent_on_front.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -647,7 +647,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "incandescent_2.png": {
+  "incandescent.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -663,7 +663,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "incandescent_on_3.png": {
+  "incandescent_on.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
