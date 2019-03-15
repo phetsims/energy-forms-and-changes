@@ -48,7 +48,7 @@ define( require => {
       this.heaterSettingProperty.link( setting => {
         const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
         assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
-        teaKettle.heatCoolAmountProperty.set( mappedSetting );
+        teaKettle.heatAmountProperty.set( mappedSetting );
       } );
 
       // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks

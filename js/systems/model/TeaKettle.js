@@ -56,10 +56,14 @@ define( require => {
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.teaKettle.value;
 
-      this.heatCoolAmountProperty = new Property( 0 );
+      // @public
+      this.heatAmountProperty = new Property( 0 );
       this.energyProductionRateProperty = new Property( 0 );
 
+      // @public
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+
+      // @private
       this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
       this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
       this.energyChunkMovers = [];
@@ -86,12 +90,12 @@ define( require => {
 
       if ( this.activeProperty.value ) {
 
-        if ( this.heatCoolAmountProperty.value > 0 || this.energyProductionRateProperty.value > COOL_DOWN_COMPLETE_THRESHOLD ) {
+        if ( this.heatAmountProperty.value > 0 || this.energyProductionRateProperty.value > COOL_DOWN_COMPLETE_THRESHOLD ) {
 
           // Calculate the energy production rate.
 
           // Analogous to acceleration.
-          const increase = this.heatCoolAmountProperty.value * MAX_ENERGY_CHANGE_RATE;
+          const increase = this.heatAmountProperty.value * MAX_ENERGY_CHANGE_RATE;
 
           // Analogous to friction.
           const decrease = this.energyProductionRateProperty.value * COOLING_CONSTANT;
@@ -110,7 +114,7 @@ define( require => {
 
         // See if it's time to emit a new energy chunk from the heater.
         this.heatEnergyProducedSinceLastChunk +=
-          Math.max( this.heatCoolAmountProperty.value, 0 ) * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
+          Math.max( this.heatAmountProperty.value, 0 ) * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
 
         if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
@@ -321,7 +325,7 @@ define( require => {
      */
     deactivate() {
       super.deactivate();
-      this.heatCoolAmountProperty.reset();
+      this.heatAmountProperty.reset();
       this.energyProductionRateProperty.reset();
     }
 
