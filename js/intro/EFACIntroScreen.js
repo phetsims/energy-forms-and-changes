@@ -35,6 +35,7 @@ define( require => {
         name: introString,
         backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
         homeScreenIcon: new Image( introScreenIcon ),
+        maxDT: EFACConstants.maxDT,
         tandem: tandem
       };
 

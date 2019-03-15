@@ -37,6 +37,7 @@ define( require => {
         name: systemsString,
         backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
         homeScreenIcon: new Image( systemsScreenIcon ),
+        maxDT: EFACConstants.maxDT,
         tandem: tandem
       };
 
