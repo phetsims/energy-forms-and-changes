@@ -271,13 +271,22 @@ define( require => {
         energySinceLastChunk += this.energyProductionRateProperty.get() * dt;
 
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-
-          // Create a thermal chunk inside the burner.
+          let initialPosition;
           const xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
-          const initialPosition = new Vector2(
-            this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength(),
-            this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN
-          );
+
+          if ( this.heatAmountProperty.value > 0 ) {
+
+            // Create a thermal chunk inside the burner.
+            initialPosition = new Vector2(
+              this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength(),
+              this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN
+            );
+          }
+          else {
+
+            // Create a thermal chunk inside the tea kettle.
+            initialPosition = new Vector2( this.positionProperty.value.x, this.positionProperty.value.y );
+          }
 
           const energyChunk = new EnergyChunk(
             EnergyType.THERMAL,
