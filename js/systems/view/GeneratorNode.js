@@ -66,7 +66,7 @@ define( require => {
         scale: EFACConstants.WIRE_IMAGE_SCALE
       } );
       const connectorNode = new Image( connectorImage, {
-        left: generatorNode.right - 3,
+        left: generatorNode.right - 2,
         centerY: generatorNode.centerY + 90
       } );
 
