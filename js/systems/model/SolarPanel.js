@@ -38,11 +38,13 @@ define( require => {
   // images in the view.  Many of these numbers were empirically determined based on the images, and will need to be
   // updated if the images change.  All values are in meters.
   const PANEL_CONNECTOR_OFFSET = new Vector2( 0.015, 0 ); // where the bottom of the panel connects to the wires & such
-  const OFFSET_TO_CONVERGENCE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, 0.0065 );
-  const OFFSET_TO_FIRST_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0, -0.025 );
-  const OFFSET_TO_SECOND_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.005, -0.033 );
-  const OFFSET_TO_THIRD_CURVE_POINT = PANEL_CONNECTOR_OFFSET.plusXY( 0.015, -0.040 );
-  const OFFSET_TO_OUTGOING_CONNECTOR = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
+  const CONVERGENCE_POINT_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0, 0.0065 );
+  const WIRE_CURVE_POINT_1_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0, -0.025 );
+  const WIRE_CURVE_POINT_2_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.005, -0.0325 );
+  const WIRE_CURVE_POINT_3_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.008, -0.0355 );
+  const WIRE_CURVE_POINT_4_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.012, -0.038 );
+  const WIRE_CURVE_POINT_5_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.0165, -0.040 );
+  const OUTGOING_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
   const REFLECTION_ANGLE = 1.012; // when a chunk gets reflected, send it away from the panel at this angle, in radians.
 
   // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
@@ -126,7 +128,7 @@ define( require => {
                 // add a "mover" that will move this energy chunk to the bottom of the solar panel
                 this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
                   incomingChunk,
-                  EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ OFFSET_TO_CONVERGENCE_POINT ] ),
+                  EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
                   this.chooseChunkSpeedOnPanel( incomingChunk ) )
                 );
 
@@ -198,14 +200,16 @@ define( require => {
 
           _.pull( this.electricalEnergyChunkMovers, mover );
           const pathThroughConverterOffsets = [
-            OFFSET_TO_FIRST_CURVE_POINT,
-            OFFSET_TO_SECOND_CURVE_POINT,
-            OFFSET_TO_THIRD_CURVE_POINT,
-            OFFSET_TO_OUTGOING_CONNECTOR
+            WIRE_CURVE_POINT_1_OFFSET,
+            WIRE_CURVE_POINT_2_OFFSET,
+            WIRE_CURVE_POINT_3_OFFSET,
+            WIRE_CURVE_POINT_4_OFFSET,
+            WIRE_CURVE_POINT_5_OFFSET,
+            OUTGOING_CONNECTOR_OFFSET
           ];
 
           // energy chunk has reached the bottom of the panel and now needs to move through the converter
-          if ( mover.energyChunk.positionProperty.value.equals( this.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+          if ( mover.energyChunk.positionProperty.value.equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
             this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
               EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, pathThroughConverterOffsets ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -302,7 +306,7 @@ define( require => {
           // add a "mover" that will move this energy chunk to the bottom of the solar panel
           this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
             newEnergyChunk,
-            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ OFFSET_TO_CONVERGENCE_POINT ] ),
+            EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
             this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
           );
 
@@ -342,14 +346,14 @@ define( require => {
       let numChunksOnPanel = 0;
 
       this.electricalEnergyChunkMovers.forEach( mover => {
-        if ( mover.getFinalDestination().equals( this.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) ) ) {
+        if ( mover.getFinalDestination().equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
           numChunksOnPanel++;
         }
       } );
 
       // compute the projected time of arrival at the convergence point
       const distanceToConvergencePoint =
-        incomingEnergyChunk.positionProperty.get().distance( this.positionProperty.value.plus( OFFSET_TO_CONVERGENCE_POINT ) );
+        incomingEnergyChunk.positionProperty.get().distance( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) );
       const travelTime = distanceToConvergencePoint / chunkSpeed;
       let projectedArrivalTime = this.simulationTime + travelTime;
 

@@ -42,8 +42,10 @@ define( require => {
   // offsets used to create the paths followed by the energy chunks
   const START_OF_WIRE_CURVE_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.011, -0.050 );
   const WIRE_CURVE_POINT_1_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.012, -0.055 );
-  const WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.016, -0.063 );
-  const WIRE_CURVE_POINT_3_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0708 );
+  const WIRE_CURVE_POINT_2_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.015, -0.061 );
+  const WIRE_CURVE_POINT_3_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.021, -0.066 );
+  const WIRE_CURVE_POINT_4_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.024, -0.068 );
+  const WIRE_CURVE_POINT_5_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0705 );
   const CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
   class Generator extends EnergyConverter {
@@ -213,6 +215,8 @@ define( require => {
               WIRE_CURVE_POINT_1_OFFSET,
               WIRE_CURVE_POINT_2_OFFSET,
               WIRE_CURVE_POINT_3_OFFSET,
+              WIRE_CURVE_POINT_4_OFFSET,
+              WIRE_CURVE_POINT_5_OFFSET,
               CENTER_OF_CONNECTOR_OFFSET
             ];
 
