@@ -70,7 +70,7 @@ define( require => {
 
       // add the images and the layer that will contain the energy chunks
       const wireStraightNode = new Image( wireStraightImage, {
-        left: -110,
+        left: -111,
         top: 78,
         scale: EFACConstants.WIRE_IMAGE_SCALE
       } );

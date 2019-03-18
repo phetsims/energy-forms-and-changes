@@ -45,7 +45,7 @@ define( require => {
       super( beakerHeater, modelViewTransform );
 
       const wireStraightNode = new Image( wireStraightImage, {
-        left: -111.5,
+        left: -111,
         top: 78,
         scale: EFACConstants.WIRE_IMAGE_SCALE
       } );

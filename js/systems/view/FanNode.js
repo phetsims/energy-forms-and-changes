@@ -52,7 +52,7 @@ define( require => {
         scale: EFACConstants.WIRE_IMAGE_SCALE
       } );
       const connectorNode = new Image( connectorImage, {
-        right: wireBottomRightNode.right + 9,
+        right: wireBottomRightNode.right + 10,
         bottom: wireBottomRightNode.top + 3
       } );
 
