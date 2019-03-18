@@ -38,19 +38,23 @@ define( require => {
   const COOLING_RATE = 0.5; // in degrees Celsius per second
 
   // energy chunk path vars
-  const OFFSET_TO_WIRE_START = new Vector2( -0.055, -0.0435 );
-  const OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.0365, -0.0385 );
-  const OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.0275, -0.025 );
-  const OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0265, -0.0175 );
-  const OFFSET_TO_FAN_MOTOR_INTERIOR = new Vector2( -0.0265, 0.019 );
+  const WIRE_START_OFFSET = new Vector2( -0.055, -0.0435 );
+  const WIRE_CURVE_POINT_1_OFFSET = new Vector2( -0.0425, -0.0405 );
+  const WIRE_CURVE_POINT_2_OFFSET = new Vector2( -0.0385, -0.039 );
+  const WIRE_CURVE_POINT_3_OFFSET = new Vector2( -0.0345, -0.0365 );
+  const WIRE_CURVE_POINT_4_OFFSET = new Vector2( -0.0305, -0.033 );
+  const WIRE_CURVE_POINT_5_OFFSET = new Vector2( -0.0265, -0.024 );
+  const FAN_MOTOR_INTERIOR_OFFSET = new Vector2( -0.0265, 0.019 );
   const INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.05; // in meters
   const BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE = 0.3; // in meters
   const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
-    OFFSET_TO_WIRE_START,
-    OFFSET_TO_FIRST_WIRE_CURVE_POINT,
-    OFFSET_TO_SECOND_WIRE_CURVE_POINT,
-    OFFSET_TO_THIRD_WIRE_CURVE_POINT,
-    OFFSET_TO_FAN_MOTOR_INTERIOR
+    WIRE_START_OFFSET,
+    WIRE_CURVE_POINT_1_OFFSET,
+    WIRE_CURVE_POINT_2_OFFSET,
+    WIRE_CURVE_POINT_3_OFFSET,
+    WIRE_CURVE_POINT_4_OFFSET,
+    WIRE_CURVE_POINT_5_OFFSET,
+    FAN_MOTOR_INTERIOR_OFFSET
   ];
 
   // images
@@ -340,7 +344,7 @@ define( require => {
         if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           const newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
-            this.positionProperty.value.plus( OFFSET_TO_WIRE_START ),
+            this.positionProperty.value.plus( WIRE_START_OFFSET ),
             Vector2.ZERO,
             this.energyChunksVisibleProperty
           );

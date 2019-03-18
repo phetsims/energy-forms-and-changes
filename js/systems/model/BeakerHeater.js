@@ -37,20 +37,22 @@ define( require => {
   const HEAT_ENERGY_CHANGE_RATE = 0.5; // in proportion per second
 
   // energy chunk path offsets, empirically determined such that they move through the view in a way that looks good
-  const OFFSET_TO_LEFT_SIDE_OF_WIRE = new Vector2( -0.04, -0.041 );
-  const OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND = new Vector2( -0.02, -0.041 );
-  const OFFSET_TO_FIRST_WIRE_CURVE_POINT = new Vector2( -0.01, -0.0375 );
-  const OFFSET_TO_SECOND_WIRE_CURVE_POINT = new Vector2( -0.001, -0.025 );
-  const OFFSET_TO_THIRD_WIRE_CURVE_POINT = new Vector2( -0.0003, -0.0175 );
-  const OFFSET_TO_BOTTOM_OF_CONNECTOR = new Vector2( -0.0003, -0.01 );
-  const OFFSET_TO_CONVERSION_POINT = new Vector2( 0, 0.003 );
+  const LEFT_SIDE_OF_WIRE_OFFSET = new Vector2( -0.04, -0.041 );
+  const WIRE_CURVE_POINT_1_OFFSET = new Vector2( -0.02, -0.041 );
+  const WIRE_CURVE_POINT_2_OFFSET = new Vector2( -0.015, -0.04 );
+  const WIRE_CURVE_POINT_3_OFFSET = new Vector2( -0.005, -0.034 );
+  const WIRE_CURVE_POINT_4_OFFSET = new Vector2( -0.001, -0.027 );
+  const WIRE_CURVE_POINT_5_OFFSET = new Vector2( -0.0003, -0.02 );
+  const BOTTOM_OF_CONNECTOR_OFFSET = new Vector2( -0.0003, -0.01 );
+  const CONVERSION_POINT_OFFSET = new Vector2( 0, 0.003 );
   const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
-    OFFSET_TO_LEFT_SIDE_OF_WIRE_BEND,
-    OFFSET_TO_FIRST_WIRE_CURVE_POINT,
-    OFFSET_TO_SECOND_WIRE_CURVE_POINT,
-    OFFSET_TO_THIRD_WIRE_CURVE_POINT,
-    OFFSET_TO_BOTTOM_OF_CONNECTOR,
-    OFFSET_TO_CONVERSION_POINT
+    WIRE_CURVE_POINT_1_OFFSET,
+    WIRE_CURVE_POINT_2_OFFSET,
+    WIRE_CURVE_POINT_3_OFFSET,
+    WIRE_CURVE_POINT_4_OFFSET,
+    WIRE_CURVE_POINT_5_OFFSET,
+    BOTTOM_OF_CONNECTOR_OFFSET,
+    CONVERSION_POINT_OFFSET
   ];
 
   class BeakerHeater extends EnergyUser {
@@ -316,7 +318,7 @@ define( require => {
           // create and add a new chunk
           const newEnergyChunk = new EnergyChunk(
             EnergyType.ELECTRICAL,
-            this.positionProperty.get().plus( OFFSET_TO_LEFT_SIDE_OF_WIRE ),
+            this.positionProperty.get().plus( LEFT_SIDE_OF_WIRE_OFFSET ),
             Vector2.ZERO,
             this.energyChunksVisibleProperty
           );
