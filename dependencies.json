@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.2 Fri Mar 08 2019 13:05:05 GMT-0500 (EST)",
+  "comment": "# energy-forms-and-changes 1.0.2 Tue Mar 19 2019 16:10:28 GMT-0400 (EDT)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -10,23 +10,23 @@
   },
   "brand": {
     "sha": "460a60db9ebcc23d50667bd2e39fe30998232012",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "chipper": {
-    "sha": "9419a94d7cb3bdd64d2a5c2be6331d7ab25a6533",
-    "branch": "HEAD"
+    "sha": "45d6242c21a3841fc27bbaf052743d1506f90eaf",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "dot": {
     "sha": "d3cd38ecf7c1f8bae42649291d993bf9f8033f46",
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "27201c9dcc05195c28f7a8522ba2da1190f4d2be",
+    "sha": "d46e5895be162e56747f04bcf92b62ec0f566bf2",
     "branch": "1.0"
   },
   "joist": {
     "sha": "ee378529e52aa377b74c03a621443ea20487d9b3",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "kite": {
     "sha": "20a875b740cbb9c441c72911e60617cd05a5d4e1",
@@ -60,6 +60,10 @@
     "sha": "fa4055ab385803b7e9d46877c9a5efbe2b88da6a",
     "branch": "HEAD"
   },
+  "phetmarks": {
+    "sha": "8decc0216e90f38a005b0d6726ccc2672286628b",
+    "branch": "HEAD"
+  },
   "query-string-machine": {
     "sha": "e47329ccba50671352daf74eb8de1b7b7d80da48",
     "branch": "HEAD"
@@ -91,9 +95,5 @@
   "twixt": {
     "sha": "4beb2804c56dbbb3765b7fce3e95794245ccd5d5",
     "branch": "HEAD"
-  },
-  "phetmarks": {
-    "branch": "master",
-    "sha": "8decc0216e90f38a005b0d6726ccc2672286628b"
   }
 }
