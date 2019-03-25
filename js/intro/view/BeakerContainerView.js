@@ -54,9 +54,9 @@ define( require => {
     // go between the beaker and the heater/cooler.
     this.untransformedBeakerClipShape = new Shape.rect(
       -beakerRectangleWidthInView / 2,
-      -beakerRectangleHeightInView * 5,
+      -beakerRectangleHeightInView * 9,
       beakerRectangleWidthInView,
-      beakerRectangleHeightInView * 5.5
+      beakerRectangleHeightInView * 9.5
     );
 
     // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
