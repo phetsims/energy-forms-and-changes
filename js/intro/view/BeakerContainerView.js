@@ -183,9 +183,8 @@ define( require => {
 
       if ( blocksAreStacked ) {
 
-        // When the blocks are stacked, draw a single shape the encompasses both.  This is necessary because if the
-        // shapes are drawn separately and the overlap in the clipping area, a space is created where the energy chunks
-        // aren't occluded.
+        // When the blocks are stacked, draw a single shape that encompasses both.  This is necessary because if the
+        // shapes are drawn separately and they overlap, a space is created where the energy chunks are not occluded.
         let bottomBlock;
         if ( blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ) {
           bottomBlock = blocksInBeaker[ 1 ];
