@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.3-rc.1 Thu Mar 28 2019 22:53:21 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.3-rc.2 Fri Mar 29 2019 13:33:27 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -10,7 +10,7 @@
   },
   "brand": {
     "sha": "7291d9b050b96a04d24bd4c4fbaba4f6e85e7906",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "chipper": {
     "sha": "3fbbff8e80710f8a23ab7c4f498089a9da35edae",
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "80495edd219ace0f3dacaa51e05225aa05423517",
+    "sha": "b0350dc5b5e79134d7201ab2c16cefe540fd269e",
     "branch": "1.0"
   },
   "joist": {
