@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.4-rc.1 Thu Apr 18 2019 09:05:43 GMT-0800 (Alaskan Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.4 Wed Apr 24 2019 15:17:13 GMT-0800 (Alaskan Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "93db51f9688c0f32d13aaba38da5791e6de0b92d",
+    "sha": "92dc4d2231d74f8698e0447aea80ecf3efb4532c",
     "branch": "1.0"
   },
   "joist": {
