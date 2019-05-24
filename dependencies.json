@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Fri Apr 26 2019 13:41:13 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Fri May 24 2019 14:37:47 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -13,7 +13,7 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "2674eb4a267218876b5dbf75a64109f2a8ce8c8c",
+    "sha": "db2be5cc958c9ea0455f630871e9459e36ad3089",
     "branch": "energy-forms-and-changes-1.1"
   },
   "dot": {
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "63a89f52c6f267294b4bdba78185c5dca268db16",
+    "sha": "be7d39da60b5a3711a245a9d73eeb7d09a2a7005",
     "branch": "1.1"
   },
   "joist": {
@@ -38,18 +38,6 @@
   },
   "phet-io": {
     "sha": "e5c95dd0482a81bc09d35fd4992fca70994ef6e6",
-    "branch": "HEAD"
-  },
-  "phet-io-wrapper-classroom-activity": {
-    "sha": "248958109c8d3b73b5f9d6c31015b2c8b5016571",
-    "branch": "HEAD"
-  },
-  "phet-io-wrapper-hookes-law-energy": {
-    "sha": "3ea0d43712de26832a841086365544fa930fe458",
-    "branch": "HEAD"
-  },
-  "phet-io-wrapper-lab-book": {
-    "sha": "cdb2698695aba22b25571a4330386346378ff7d2",
     "branch": "HEAD"
   },
   "phet-io-wrappers": {
