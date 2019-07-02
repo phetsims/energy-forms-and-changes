@@ -27,7 +27,7 @@ define( require => {
     credits: {
       leadDesign: 'Noah Podolefsky, Amy Rouinfar',
       softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
-      team: 'Trish Loeblein, Emily Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
+      team: 'Trish Loeblein, Emily B. Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
       qualityAssurance: 'Steele Dalton, Megan Lai, Liam Mulhall, Laura Rea, Jacob Romero, Katie Woessner, Kelly Wurtz, Bryan Yoelin',
       graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
       thanks: ''
