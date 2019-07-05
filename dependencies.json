@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Fri May 24 2019 14:37:47 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Fri Jul 05 2019 14:52:32 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -14,14 +14,14 @@
   },
   "chipper": {
     "sha": "db2be5cc958c9ea0455f630871e9459e36ad3089",
-    "branch": "energy-forms-and-changes-1.1"
+    "branch": "HEAD"
   },
   "dot": {
     "sha": "dba21987a05470f2da00ea0314020ff0581bea60",
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "be7d39da60b5a3711a245a9d73eeb7d09a2a7005",
+    "sha": "b297b4ef32633b6ccc352342a68fb993b9059acc",
     "branch": "1.1"
   },
   "joist": {
@@ -45,8 +45,8 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "e495149bda019d002b373304235b8bc90edee617",
-    "branch": "HEAD"
+    "sha": "f55ce24ec10ebb6c9ae505af6dfbef21a0f64d90",
+    "branch": "energy-forms-and-changes-1.1"
   },
   "phetmarks": {
     "sha": "7a10df2547c10e82261cb03b96db77c11c032eef",
