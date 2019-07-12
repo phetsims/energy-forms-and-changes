@@ -1,7 +1,7 @@
 // Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * a model element senses the temperature and color of the model at its current position, and can be moved around
+ * a model element that senses the temperature and color of the model at its current position, and can be moved around
  *
  * @author John Blanco
  */
