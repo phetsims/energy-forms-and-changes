@@ -77,7 +77,7 @@ define( require => {
     ROOM_TEMPERATURE: 296, // in degrees Kelvin
     WATER_FREEZING_POINT_TEMPERATURE: WATER_FREEZING_POINT_TEMPERATURE, // in degrees Kelvin
     WATER_BOILING_POINT_TEMPERATURE: 373.15, // in degrees Kelvin
-    OLIVE_OIL_BOILING_POINT_TEMPERATURE: 572.04, // in degrees Kelvin, need to confirm
+    OLIVE_OIL_BOILING_POINT_TEMPERATURE: 573.15, // in degrees Kelvin
 
     // mapping function that maps the energy to the number of energy chunks
     MAP_ENERGY_TO_NUM_CHUNKS: MAP_ENERGY_TO_NUM_CHUNKS,
