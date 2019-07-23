@@ -80,7 +80,7 @@ define( require => {
           bulbDiameter: 30,
           tubeWidth: 18,
           lineWidth: 2,
-          tickSpacing: 10,
+          tickSpacingTemperature: 25,
           majorTickLength: 10,
           minorTickLength: 5,
           backgroundFill: new Color( 256, 256, 256, 0.67 ),
