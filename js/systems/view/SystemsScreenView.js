@@ -16,6 +16,7 @@ define( require => {
   const BeakerHeaterNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/BeakerHeaterNode' );
   const BeltNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/BeltNode' );
   const BikerNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/BikerNode' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const Checkbox = require( 'SUN/Checkbox' );
   const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
@@ -185,7 +186,7 @@ define( require => {
               maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
             } ),
             new EnergyChunkNode(
-              new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+              new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ) ),
               modelViewTransform
             )
           ],

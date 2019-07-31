@@ -15,6 +15,7 @@ define( require => {
   const BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/BeakerHeater' );
   const Belt = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Belt' );
   const Biker = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Biker' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const Emitter = require( 'AXON/Emitter' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -24,7 +25,6 @@ define( require => {
   const FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/FluorescentBulb' );
   const Generator = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Generator' );
   const IncandescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/IncandescentBulb' );
-  const Property = require( 'AXON/Property' );
   const SolarPanel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SolarPanel' );
   const SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SunEnergySource' );
   const TeaKettle = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/TeaKettle' );
@@ -39,12 +39,12 @@ define( require => {
      * main constructor for SystemsModel, which contains all of the model logic for the systems sim screen
      */
     constructor() {
-      this.energyChunksVisibleProperty = new Property( false );
-      this.steamPowerableElementInPlaceProperty = new Property( false );
-      this.waterPowerableElementInPlaceProperty = new Property( false );
+      this.energyChunksVisibleProperty = new BooleanProperty( false );
+      this.steamPowerableElementInPlaceProperty = new BooleanProperty( false );
+      this.waterPowerableElementInPlaceProperty = new BooleanProperty( false );
 
       // @public (read-only) {BooleanProperty} - is the sim running or paused?
-      this.isPlayingProperty = new Property( true );
+      this.isPlayingProperty = new BooleanProperty( true );
 
       // carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
