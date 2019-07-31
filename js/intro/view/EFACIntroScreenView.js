@@ -551,8 +551,8 @@ define( require => {
       model.waterBeaker.positionProperty.link( beakerChangeListener );
       model.oliveOilBeaker.positionProperty.link( beakerChangeListener );
 
-      // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to allow
-      // each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
+      // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to
+      // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
       // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
       const energyChunkNode = new EnergyChunkNode(
         new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),

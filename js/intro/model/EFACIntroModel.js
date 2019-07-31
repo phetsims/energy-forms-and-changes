@@ -88,7 +88,9 @@ define( require => {
       // determine the locations of the snap-to spots, and round them to a few decimal places
       const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
       for ( let i = 0; i < NUMBER_OF_GROUND_SPOTS; i++ ) {
-        this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
+        this.groundSpotXPositions.push(
+          Util.roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000
+        );
       }
 
       // @public (read-only) {Block}
@@ -657,9 +659,9 @@ define( require => {
           // the second condition checks that potentialRestingModelElement is below modelElement
           // because, for example, in the case where a beaker with a block inside is being dropped, we don't want the
           // beaker to think that its block is in the spot below it.
-          if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <= this.spaceBetweenGroundSpotCenters / 2 &&
-               potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
-          ) {
+          if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <=
+               this.spaceBetweenGroundSpotCenters / 2 &&
+               potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ) {
             modelElementsInSpot.push( potentialRestingModelElement );
 
             // this is an additional search to see if there are any elements stacked on a found element that are
@@ -698,7 +700,8 @@ define( require => {
             // find the highest element in the stack
             let highestElement = modelElementsInSpot[ 0 ];
             for ( let j = 1; j < modelElementsInSpot.length; j++ ) {
-              if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y > highestElement.topSurface.positionProperty.value.y ) {
+              if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y >
+                   highestElement.topSurface.positionProperty.value.y ) {
                 highestElement = modelElementsInSpot[ j ];
               }
             }
@@ -842,8 +845,8 @@ define( require => {
           );
         }
         else {
-          // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there are
-          // currently only two beakers. this will need to be generalized to check for each other beaker that is not
+          // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there
+          // are currently only two beakers. this will need to be generalized to check for each other beaker that is not
           // stacked on this modelElement if the time comes when more than two beakers exist.
           const otherBeaker = this.beakers[ 1 - this.beakers.indexOf( beaker ) ];
 
