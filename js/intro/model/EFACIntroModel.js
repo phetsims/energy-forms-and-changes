@@ -33,7 +33,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  const NUM_THERMOMETERS = 4;
+  const NUMBER_OF_THERMOMETERS = 4;
   const BEAKER_WIDTH = 0.085; // in meters
   const BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
   const MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
@@ -48,7 +48,7 @@ define( require => {
   const EDGE_PAD = 0.016;
 
   // number of snap-to spots on the ground, should match number of thermal containers
-  const NUM_GROUND_SPOTS = 6;
+  const NUMBER_OF_GROUND_SPOTS = 6;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
@@ -82,12 +82,13 @@ define( require => {
       this.air = new Air( this.energyChunksVisibleProperty );
 
       // @private - calculate space in between the center points of the snap-to spots on the ground
-      this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) / ( NUM_GROUND_SPOTS - 1 );
+      this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
+                                     ( NUMBER_OF_GROUND_SPOTS - 1 );
       this.groundSpotXPositions = [];
 
       // determine the locations of the snap-to spots, and round them to a few decimal places
       const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
-      for ( let i = 0; i < NUM_GROUND_SPOTS; i++ ) {
+      for ( let i = 0; i < NUMBER_OF_GROUND_SPOTS; i++ ) {
         this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
       }
 
@@ -163,7 +164,7 @@ define( require => {
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.temperatureAndColorSensors = [];
-      _.times( NUM_THERMOMETERS, () => {
+      _.times( NUMBER_OF_THERMOMETERS, () => {
         const sensor = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
         this.temperatureAndColorSensors.push( sensor );
 
