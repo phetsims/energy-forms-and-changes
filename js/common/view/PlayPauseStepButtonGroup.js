@@ -18,6 +18,7 @@ define( require => {
 
   class PlayPauseStepButtonGroup extends HBox {
 
+    //REVIEW #247 passing in the entire model is undesirable
     /**
      * @param {EFACIntroModel|SystemsModel} model
      */

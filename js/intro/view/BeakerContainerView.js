@@ -32,6 +32,7 @@ define( require => {
 
   class BeakerContainerView extends BeakerView {
 
+    //REVIEW #247 passing in the entire model is undesirable
   /**
    * @param {Beaker} beaker
    * @param {EFACIntroModel} model
