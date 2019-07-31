@@ -80,9 +80,10 @@ define( require => {
       // energy
       this.air = new Air( this.energyChunksVisibleProperty );
 
-      // @private - calculate space in between the center points of the snap-to spots on the ground
+      // @private {number} - calculate space in between the center points of the snap-to spots on the ground
       this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
                                      ( NUMBER_OF_GROUND_SPOTS - 1 );
+      // @private {number[]} - list of valid x-positions for model elements to rest
       this.groundSpotXPositions = [];
 
       // determine the locations of the snap-to spots, and round them to a few decimal places
@@ -147,7 +148,7 @@ define( require => {
       // @public (read-only) {BeakerContainer[]}
       this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
 
-      // @private - put all the thermal containers on a list for easy iteration
+      // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers on a list for easy iteration
       this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
@@ -157,10 +158,10 @@ define( require => {
         this.inThermalContactInfo[ thermalContainer.id ] = [];
       } );
 
-      // @private - put burners into a list for easy iteration
+      // @private {Burner[]} - put burners into a list for easy iteration
       this.burners = [ this.rightBurner, this.leftBurner ];
 
-      // @private - put all of the model elements on a list for easy iteration
+      // @private {ModelElement} - put all of the model elements on a list for easy iteration
       this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
@@ -227,6 +228,7 @@ define( require => {
       const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                          Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
+      // @private {Bounds2}
       this.burnerBlockingRect = new Bounds2(
         leftBurnerBounds.minX - burnerPerspectiveExtension,
         leftBurnerBounds.minY,

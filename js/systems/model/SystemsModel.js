@@ -39,14 +39,14 @@ define( require => {
      * main constructor for SystemsModel, which contains all of the model logic for the systems sim screen
      */
     constructor() {
+
+      // @public {BooleanProperty} - see in EFACIntroModel for doc
       this.energyChunksVisibleProperty = new BooleanProperty( false );
-      this.steamPowerableElementInPlaceProperty = new BooleanProperty( false );
-      this.waterPowerableElementInPlaceProperty = new BooleanProperty( false );
 
       // @public (read-only) {BooleanProperty} - is the sim running or paused?
       this.isPlayingProperty = new BooleanProperty( true );
 
-      // carousels that control the positions of the energy sources, converters, and users
+      // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
         new Vector2( -0.15, 0 ),
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL
@@ -60,37 +60,42 @@ define( require => {
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL
       );
 
-      // energy converters
+      // @public (read-only) energy converters
       this.generator = new Generator( this.energyChunksVisibleProperty );
       this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty );
+
       this.energyConvertersCarousel.add( this.generator );
       this.energyConvertersCarousel.add( this.solarPanel );
 
-      // energy sources
+      // @public (read-only) energy sources
       this.faucet = new FaucetAndWater( this.energyChunksVisibleProperty, this.generator.activeProperty );
       this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisibleProperty );
       this.teaKettle = new TeaKettle( this.energyChunksVisibleProperty, this.generator.activeProperty );
       this.biker = new Biker( this.energyChunksVisibleProperty, this.generator.activeProperty );
+
       this.energySourcesCarousel.add( this.faucet );
       this.energySourcesCarousel.add( this.sun );
       this.energySourcesCarousel.add( this.teaKettle );
       this.energySourcesCarousel.add( this.biker );
 
-      // belt that connects biker to generator, which is not on a carousel
       const wheel1Center = this.energySourcesCarousel.selectedElementPosition.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
       const wheel2Center = this.energyConvertersCarousel.selectedElementPosition.plus( Generator.WHEEL_CENTER_OFFSET );
+
+      // @public (read-only) belt that connects biker to generator, which is not on a carousel
       this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
-      // energy users
+      // @public (read-only) energy users
       this.fan = new Fan( this.energyChunksVisibleProperty );
       this.incandescentBulb = new IncandescentBulb( this.energyChunksVisibleProperty );
       this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisibleProperty );
       this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty );
+
       this.energyUsersCarousel.add( this.beakerHeater );
       this.energyUsersCarousel.add( this.incandescentBulb );
       this.energyUsersCarousel.add( this.fluorescentBulb );
       this.energyUsersCarousel.add( this.fan );
 
+      // @private {EnergySystemElementCarousel[]}
       this.carousels = [
         this.energySourcesCarousel,
         this.energyConvertersCarousel,
@@ -130,8 +135,6 @@ define( require => {
      */
     reset() {
       this.energyChunksVisibleProperty.reset();
-      this.steamPowerableElementInPlaceProperty.reset();
-      this.waterPowerableElementInPlaceProperty.reset();
       this.isPlayingProperty.reset();
 
       this.carousels.forEach( carousel => {

@@ -66,7 +66,7 @@ define( require => {
     constructor( model ) {
       super();
 
-      // @private
+      // @private {SystemsModel}
       this.model = model;
 
       // a11y - the screen summary to be read by assistive technology
@@ -123,6 +123,8 @@ define( require => {
       );
 
       // create the energy user nodes
+
+      // @private
       this.beakerHeaterNode = new BeakerHeaterNode(
         model.beakerHeater,
         model.energyChunksVisibleProperty,
@@ -158,7 +160,7 @@ define( require => {
       this.addChild( beltNode );
       this.addChild( solarPanelNode );
 
-      // create the faucet nodes
+      // @private
       this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
       this.addChild( this.faucetNode );
 
@@ -169,6 +171,8 @@ define( require => {
 
       // create the rest of the energy source nodes
       const sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
+
+      // @private
       this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
       const bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
       this.addChild( sunNode );

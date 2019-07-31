@@ -75,7 +75,7 @@ define( require => {
     constructor( model ) {
       super();
 
-      // @private
+      // @private {EFACIntroModel}
       this.model = model;
 
       // Create the model-view transform. The primary units used in the model are meters, so significant zoom is used.
@@ -338,19 +338,23 @@ define( require => {
         { setApproachingEnergyChunkParentNode: airLayer }
       );
       blockLayer.addChild( ironBlockNode );
+
+      // @private
       this.waterBeakerView = new BeakerContainerView(
         model.waterBeaker,
         model,
         modelViewTransform,
-        constrainMovableElementMotion,
-        { composited: false }
+        constrainMovableElementMotion, {
+          composited: false
+        }
       );
+
+      // @private
       this.oliveOilBeakerView = new BeakerContainerView(
         model.oliveOilBeaker,
         model,
         modelViewTransform,
-        constrainMovableElementMotion,
-        {
+        constrainMovableElementMotion, {
           label: oliveOilString,
           composited: false
         }
