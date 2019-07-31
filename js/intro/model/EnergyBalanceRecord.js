@@ -41,6 +41,7 @@ define( require => {
       this.recentlyUpdated = true;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * get the other ID in this record
      * @param {string} id

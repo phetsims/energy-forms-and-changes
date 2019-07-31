@@ -64,6 +64,7 @@ define( require => {
 
   const HeatTransferConstants = {
 
+    //REVIEW #247 missing visibility annotation
     /**
      * get the heat transfer constants for two model elements that can contain heat
      * @param {string} element1
@@ -74,6 +75,8 @@ define( require => {
       return heatTransferConstantsMap[ element1 ][ element2 ];
     },
 
+    //REVIEW #247 missing visibility annotation
+    //REVIEW #247 document
     /**
      * @returns {number}
      */

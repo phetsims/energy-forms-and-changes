@@ -39,6 +39,7 @@ define( require => {
       return this.outgoingEnergyChunks.splice( 0 );
     }
 
+    //REVIEW #247 this was @protected in the superclass, is @public accurate?
     /**
      * clear internal list of energy chunks and outgoing energy chunks
      * @public

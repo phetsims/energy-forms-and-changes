@@ -103,6 +103,7 @@ define( require => {
       return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
     }
 
+    //REVIEW #247 document
     /**
      * @private
      */
@@ -114,6 +115,7 @@ define( require => {
       }
     }
 
+    //REVIEW #247 why is this an override? no step in class hierarchy
     /**
      * step in time
      * @param  {number} dt time step, in seconds
@@ -286,8 +288,6 @@ define( require => {
       super.clearEnergyChunks();
       this.exemptFromTransferEnergyChunks.length = 0;
     }
-
-
   }
 
   // statics

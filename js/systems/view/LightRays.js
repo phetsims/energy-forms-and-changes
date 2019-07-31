@@ -39,6 +39,8 @@ define( require => {
       }
     }
 
+    //REVIEW #247 document
+    //REVIEW #247 LightAbsorbingShape does not exist
     /**
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
@@ -49,6 +51,8 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 document
+    //REVIEW #247 LightAbsorbingShape does not exist
     /**
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public

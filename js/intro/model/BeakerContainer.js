@@ -94,6 +94,7 @@ define( require => {
       return isObscured;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * @param {number} dt
      * @override
@@ -122,6 +123,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * @param {EnergyChunk} energyChunk
      * @override

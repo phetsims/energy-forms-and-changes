@@ -25,7 +25,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  const TRANSITION_DURATION = 0.75;
+  const TRANSITION_DURATION = 0.75; //REVIEW #247 units?
 
   class EnergySystemElementCarousel {
 
@@ -52,7 +52,7 @@ define( require => {
       this.managedElements = [];
 
       // @private - variables needed to manage carousel transitions
-      this.elapsedTransitionTime = 0;
+      this.elapsedTransitionTime = 0; //REVIEW #247 units?
       this.currentCarouselOffset = new Vector2( 0, 0 );
       this.initialCarouselOffset = new Vector2( 0, 0 );
 
@@ -129,6 +129,7 @@ define( require => {
       return null;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * step this model element
      * @param {number} dt - time step, in seconds
@@ -154,6 +155,7 @@ define( require => {
       }
     }
 
+    //REVIEW #247 document
     /**
      * @private
      */
@@ -165,6 +167,7 @@ define( require => {
       }
     }
 
+    //REVIEW #247 document
     /**
      * @private
      */
@@ -176,6 +179,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 document
     /**
      * @private
      */

@@ -163,6 +163,7 @@ define( require => {
       );
     }
 
+    //REVIEW #247 missing @override
     /**
      * Paints the steam on the canvas node.
      * @param {CanvasRenderingContext2D} context

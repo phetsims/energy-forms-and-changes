@@ -48,6 +48,7 @@ define( require => {
   // array that holds the created energy chunk image nodes
   const energyChunkImageNodes = {};
 
+  //REVIEW #247 define private functions after constructor
   /**
    * Helper function that creates the image for an EnergyChunkNode.
    * @param {EnergyType} energyType
@@ -68,6 +69,7 @@ define( require => {
     return background;
   };
 
+  //REVIEW #247 define private functions after constructor
   /**
    * Helper function that returns the correct image for an EnergyChunkNode.
    * @param {EnergyType} energyType

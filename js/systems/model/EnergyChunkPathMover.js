@@ -40,6 +40,7 @@ define( require => {
       this.nextPoint = path[ 0 ];
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * advance chunk position along the path
      * @param  {number} dt - time step in seconds

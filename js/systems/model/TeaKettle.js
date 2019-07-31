@@ -77,6 +77,7 @@ define( require => {
       this.transferNextAvailableChunk = true;
     }
 
+    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * Animation for tea kettle and energy chunks
      *
@@ -235,6 +236,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 can be a private function, no dependencies on TeaKettle
     /**
      * @param  {Vector2}  startPosition
      * @param  {Vector2}  teaKettlePosition

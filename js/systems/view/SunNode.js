@@ -54,7 +54,7 @@ define( require => {
     /**
      * @param {SunEnergySource} sun Sun model element
      * @param {Property} energyChunksVisibleProperty
-     * @param {ModelViewTransform} modelViewTransform
+     * @param {ModelViewTransform2} modelViewTransform
      */
     constructor( sun, energyChunksVisibleProperty, modelViewTransform ) {
       super( sun, modelViewTransform );

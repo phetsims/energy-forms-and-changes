@@ -259,6 +259,7 @@ define( require => {
       return color;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * determines if the first thermal model element is immersed in the second
      * @param {RectangularThermalMovableModelElement} thermalModelElement1
@@ -956,6 +957,7 @@ define( require => {
       return newPosition;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
      * @param {Bounds2} bounds1

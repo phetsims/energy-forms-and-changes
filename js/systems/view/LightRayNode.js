@@ -126,6 +126,7 @@ define( require => {
       this.addChild( fadingRay );
     }
 
+    //REVIEW #247 can be a private function, no dependencies on LightRayNode
     /**
      * @param {KiteLine} line1
      * @param {KiteLine} line2
@@ -166,6 +167,7 @@ define( require => {
       );
     }
 
+    //REVIEW #247 document
     /**
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
@@ -215,6 +217,7 @@ define( require => {
       return entryPoint;
     }
 
+    //REVIEW #247 document
     /**
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
@@ -247,6 +250,7 @@ define( require => {
       return exitPoint;
     }
 
+    //REVIEW document
     /**
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint

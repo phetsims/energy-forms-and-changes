@@ -16,6 +16,7 @@ define( require => {
 
   class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
+    //REVIEW #247 passing in model.blocks and model.beakers, not the entire model
     /**
      * @param {EFACIntroModel} model
      * @param {Vector2} initialPosition

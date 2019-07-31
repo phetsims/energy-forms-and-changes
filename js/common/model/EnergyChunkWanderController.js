@@ -35,13 +35,14 @@ define( require => {
 
       options = _.extend( {
 
+        //REVIEW looking at setHorizontalWanderConstraint type expression should be {Range|null}, describe semantics of null
         // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
         horizontalWanderConstraint: null,
 
         // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
         wanderAngleVariation: DEFAULT_ANGLE_VARIATION,
 
-        // {boolean} - Translate the EC position and wander constraints horizonally if the destination changes.  This
+        // {boolean} - Translate the EC position and wander constraints horizontally if the destination changes.  This
         // was found to be useful to help prevent "chase scenes" when an energy was heading towards an object and the
         // user started dragging that object.
         translateXWithDestination: true
@@ -76,6 +77,7 @@ define( require => {
       this.resetCountdownTimer();
       this.changeVelocityVector();
 
+      //REVIEW #247 document, why is this needed?
       let speedIncreased = false;
 
       const handleDestinationChanged = ( newDestination, oldDestination ) => {
@@ -84,7 +86,7 @@ define( require => {
 
         // if the destination changes, speed up and go directly to the destination
         if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
-          const increaseFactor = 8;
+          const increaseFactor = 8; //REVIEW #247 magic number, describe
           this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
           this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
           speedIncreased = true;
@@ -210,6 +212,7 @@ define( require => {
       return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
     }
 
+    //REVIEW missing visibility annotation
     /**
      * set a new constraint on the wandering
      * @param {Range|null} horizontalWanderConstraint

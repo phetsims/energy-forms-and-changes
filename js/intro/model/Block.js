@@ -105,6 +105,7 @@ define( require => {
       this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * @public
      * @returns {Color}
@@ -129,6 +130,7 @@ define( require => {
       return new ThermalContactArea( this.getBounds(), false );
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * @override
      */
@@ -155,6 +157,7 @@ define( require => {
       }
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * This function originally existed primarily in support of boiling liquids, whose temperatures should not go up
      * after reaching a certain temperature.  In the context of a block, it is less meaningful in a true physical sense

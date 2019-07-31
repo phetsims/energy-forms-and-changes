@@ -89,6 +89,7 @@ define( require => {
       this.addChild( connectorNode );
     }
 
+    //REVIEW #247 function can be private, no dependencies on FanNode
     /**
      * find the image index corresponding to this angle in radians
      * @param  {number} angle

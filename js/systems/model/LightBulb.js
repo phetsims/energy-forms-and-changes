@@ -73,6 +73,7 @@ define( require => {
       this.goRightNextTime = true;
     }
 
+    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * @param  {number} dt - time step, in seconds
      * @param  {Energy} incomingEnergy
@@ -323,6 +324,7 @@ define( require => {
       return path;
     }
 
+    //REVIEW #247 can be a private function, has no dependencies on LightBulb
     /**
      * @returns {number} time
      * @private
@@ -332,6 +334,7 @@ define( require => {
              phet.joist.random.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
     }
 
+    //REVIEW #247 can be a private function, has no dependencies on LightBulb
     /**
      * @param {Vector2} startingLocation
      * @param {Vector2[]} pathPoints

@@ -161,6 +161,7 @@ define( require => {
       } );
       this.addChild( blockBack );
 
+      //REVIEW #247 missing visibility annotation
       // create the layers where the energy chunks will be placed
       this.energyChunkRootNode = new Node();
       this.addChild( this.energyChunkRootNode );

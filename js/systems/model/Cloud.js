@@ -35,6 +35,7 @@ define( require => {
       // @private {number} - used to calculate this cloud's position
       this.parentPositionProperty = parentPositionProperty;
 
+      //REVIEW #247 missing visibility annotation, type expression, description of null
       this.cloudEllipse = null;
 
       this.parentPositionProperty.link( parentPosition => {

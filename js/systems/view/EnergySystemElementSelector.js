@@ -24,6 +24,7 @@ define( require => {
 
   class EnergySystemElementSelector extends Panel {
 
+    //REVIEW #247 missing @param options
     /**
      * @param {EnergySystemElementCarousel} carousel
      */

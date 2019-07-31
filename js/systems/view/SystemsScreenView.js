@@ -314,6 +314,7 @@ define( require => {
       this.faucetNode.step( dt );
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * Custom layout function for this view so that it floats to the bottom of the window.
      *

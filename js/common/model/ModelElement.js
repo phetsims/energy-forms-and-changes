@@ -67,10 +67,14 @@ define( require => {
       this.perspectiveCompensation = new Vector2( 0, 0 );
     }
 
+    //REVIEW missing visibility annotation
+    //REVIEW why is this needed when this.positionProperty is not read-only?
     get position() {
       return this.positionProperty.get();
     }
-    
+
+    //REVIEW missing visibility annotation
+    //REVIEW why is this needed when this.positionProperty is not read-only?
     set position( newPosition ) {
       this.positionProperty.set( newPosition );
     }
@@ -86,6 +90,7 @@ define( require => {
       return false;
     }
 
+    //REVIEW missing visibility annotation
     /**
      * get any element that is on top of this one, null if nothing there
      * @returns {ModelElement|null}
@@ -94,6 +99,7 @@ define( require => {
       return this.topSurface.elementOnSurfaceProperty.get();
     }
 
+    //REVIEW missing visibility annotation
     /**
      * get the bounds list, which represents the model space occupied by this model element, translated to the supplied
      * position

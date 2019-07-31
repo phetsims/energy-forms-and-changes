@@ -17,7 +17,7 @@ define( require => {
 
     /**
      * @param {PositionableFadableModelElement} modelElement
-     * @param {ModelViewTransform} modelViewTransform
+     * @param {ModelViewTransform2} modelViewTransform
      */
     constructor( modelElement, modelViewTransform ) {
       super();

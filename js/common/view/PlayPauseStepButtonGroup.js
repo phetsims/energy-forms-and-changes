@@ -1,5 +1,6 @@
 // Copyright 2019, University of Colorado Boulder
 
+//REVIEW #247 this duplicates SCENERY_PHET/TimeControlNode
 /**
  * Button group that contains a play/pause and step button.
  *

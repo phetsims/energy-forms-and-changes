@@ -18,6 +18,7 @@ define( require => {
 
   class ThermalContactArea extends Bounds2 {
 
+    //REVIEW #247 missing visibility annotation
   /**
    * @param {Bounds2} bounds
    * @param {boolean} supportsImmersion
@@ -85,6 +86,7 @@ define( require => {
       return contactLength;
     }
 
+    //REVIEW #247 this can be a private function, is uses no ThermalContactArea fields
     /**
      * convenience method for determining overlap of rectangles in X dimension
      * @param {Rectangle} rectangle1
@@ -98,6 +100,7 @@ define( require => {
       return Math.max( lowestMax - highestMin, 0 );
     }
 
+    //REVIEW #247 this can be a private function, is uses no ThermalContactArea fields
     /**
      * convenience method for determining overlap of rectangles in Y dimension
      * @param {Rectangle} rectangle1

@@ -127,6 +127,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * step this energy producer forward in time
      * @param  {number} dt - time step in seconds
@@ -220,6 +221,7 @@ define( require => {
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     }
 
+    //REVIEW #247 this is a big enough method that it should be documented
     /**
      * @param {number} dt
      * @private
@@ -442,6 +444,7 @@ define( require => {
       this.energyChunkList.add( newEnergyChunk );
     }
 
+    //REVIEW #247 this can be a private function, it has no dependencies on Biker
     /**
      * find the image index corresponding to this angle in radians
      * @param  {number} angle
@@ -454,6 +457,7 @@ define( require => {
       return i;
     }
 
+    //REVIEW #247 this can be a private function, it has no dependencies on Biker
     /**
      * create a path for an energy chunk that will travel to the hub and then become thermal
      * @param  {Vector2} centerPosition

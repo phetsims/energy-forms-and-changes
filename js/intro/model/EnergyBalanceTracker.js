@@ -74,6 +74,7 @@ define( require => {
       }
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * get all records whose energy balance magnitude exceeds the provided threshold
      * @param {number} threshold - amount of energy
@@ -95,6 +96,7 @@ define( require => {
       return resultsArray;
     }
 
+    //REVIEW #247 missing visibility annotation
     /**
      * get the balances between the provided ID and all other entities with whom balances are being tracked
      * @param {string} id - ID of the entity whose balances are requested

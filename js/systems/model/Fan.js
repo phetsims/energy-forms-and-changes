@@ -91,6 +91,7 @@ define( require => {
       this.targetVelocity = 0;
     }
 
+    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * @param {number} dt - time step, in seconds
      * @param {Energy} incomingEnergy
@@ -177,6 +178,7 @@ define( require => {
       this.bladePositionProperty.set( newAngle );
     }
 
+    //REVIEW #247 document
     /**
      * @param  {number} dt - time step, in seconds
      * @private
@@ -225,6 +227,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 document
     /**
      * @param  {number} dt - time step, in seconds
      * @private
@@ -261,6 +264,7 @@ define( require => {
       } );
     }
 
+    //REVIEW #247 function can be private, it has no dependencies on Fan
     /**
      * create a path for chunks to follow when blown out of the fan.
      * @param  {Vector2} startingPoint
