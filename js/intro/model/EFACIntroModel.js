@@ -26,7 +26,6 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
-  const Shape = require( 'KITE/Shape' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -237,7 +236,11 @@ define( require => {
       this.manualStepEmitter = new Emitter( { validators: [ { valueType: 'number' } ] } );
     }
 
-    // helper function
+    /**
+     * @param {number} heatCoolLevel
+     * @returns {string}
+     * @private
+     */
     mapHeatCoolLevelToColor( heatCoolLevel ) {
       let color;
       if ( heatCoolLevel > 0 ) {
@@ -253,8 +256,10 @@ define( require => {
     }
 
     /**
-     * helper function to determine if one thermal model element is immersed in another - tests if the first element is
-     * immersed in the second
+     * determines if the first thermal model element is immersed in the second
+     * @param {RectangularThermalMovableModelElement} thermalModelElement1
+     * @param {RectangularThermalMovableModelElement} thermalModelElement2
+     * @returns {boolean}
      */
     isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
       return thermalModelElement1 !== thermalModelElement2 &&
@@ -535,7 +540,7 @@ define( require => {
     }
 
     /**
-     * exchange an energy chunk between the provided model elements
+     * exchanges an energy chunk between the provided model elements
      * @param {ModelElement} energyChunkSupplier
      * @param {ModelElement} energyChunkConsumer
      * @param {EnergyBalanceRecord} energyBalanceRecord
@@ -606,7 +611,7 @@ define( require => {
 
     /**
      * make a user-movable model element fall to the nearest supporting surface
-     * @param {MovableModelElement} modelElement - the falling object
+     * @param {UserMovableModelElement} modelElement - the falling object
      * @param {number} dt - time step in seconds
      * @private
      */
@@ -737,26 +742,8 @@ define( require => {
     }
 
     /**
-     * Project a line into a 2D shape based on the provided projection vector. This is a convenience function used by
-     * the code that detects potential collisions between the 2D objects in model space.
-     * @param {Line} edge
-     * @param {Vector2} projection
-     * @returns {Shape}
-     * @private
-     */
-    projectShapeFromLine( edge, projection ) {
-      const shape = new Shape();
-      shape.moveToPoint( edge.start );
-      shape.lineTo( edge.start.x + projection.x, edge.start.y + projection.y );
-      shape.lineTo( edge.end.x + projection.x, edge.end.y + projection.y );
-      shape.lineToPoint( edge.end );
-      shape.close();
-      return shape;
-    }
-
-    /**
      * Evaluate whether the provided model element can be moved to the provided position without overlapping with other
-     * solid model elements.  If overlap would occur, adjust the position to one that works.  Note that this is not
+     * solid model elements. If overlap would occur, adjust the position to one that works. Note that this is not
      * very general due to a number of special requirements for the Energy Forms and Changes sim, so it would likely not
      * be easy to reuse.
      * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
@@ -979,7 +966,7 @@ define( require => {
     }
 
     /**
-     * Determine the portion of a proposed translation that may occur given a moving rectangle and a stationary
+     * Determines the portion of a proposed translation that may occur given a moving rectangle and a stationary
      * rectangle that can block the moving one.
      * @param {Bounds2} movingElementBounds
      * @param {Bounds2} stationaryElementBounds
@@ -1122,8 +1109,8 @@ define( require => {
     }
 
     /**
-     * Update the temperature and color that would be sensed by a thermometer at the provided location.  This is done as
-     * a single operation instead of having separate methods for getting temperature and color because it is more
+     * Updates the temperature and color that would be sensed by a thermometer at the provided location.  This is done
+     * as a single operation instead of having separate methods for getting temperature and color because it is more
      * efficient to do it like this.
      * @param {Vector2} position - location to be sensed
      * @param {Property.<number>} sensedTemperatureProperty

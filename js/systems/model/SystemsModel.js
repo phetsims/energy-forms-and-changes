@@ -6,6 +6,7 @@
  * @author John Blanco
  * @author Jesse Greenberg
  * @author Andrew Adare
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 define( require => {
   'use strict';
