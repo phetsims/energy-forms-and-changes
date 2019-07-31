@@ -105,7 +105,7 @@ define( require => {
         carousel.managedElements[ 0 ].activate();
       } );
 
-      // add the functionality to show/hide the belt that interconnects the biker and the generator.
+      // adds the functionality to show/hide the belt that interconnects the biker and the generator
       const beltVisibilityUpdated = isAnimating => {
         const bikerAndGeneratorSelected = ( !isAnimating && this.biker.activeProperty.value &&
                                             this.generator.activeProperty.value );

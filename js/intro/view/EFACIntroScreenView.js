@@ -1,7 +1,7 @@
 // Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * main view for the 'Intro' screen of the Energy Forms And Changes simulation
+ * main view for the 'Intro' screen of the Energy Forms and Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
@@ -302,7 +302,7 @@ define( require => {
       // create a reusable bounds in order to reduce memory allocations
       const reusableConstraintBounds = Bounds2.NOTHING.copy();
 
-      // define a closure that will limit the model element motion based on both view and model constraints
+      // limits the model element motion based on both view and model constraints
       const constrainMovableElementMotion = ( modelElement, proposedPosition ) => {
 
         // constrain the model element to stay within the play area
@@ -501,7 +501,7 @@ define( require => {
         sensor.activeProperty.set( false );
       };
 
-      // function to return all sensors to the storage area
+      // returns all sensors to the storage area
       const returnAllSensorsToStorageArea = () => {
         model.temperatureAndColorSensors.forEach( sensor => {
           returnSensorToStorageArea( sensor, false );
@@ -511,7 +511,7 @@ define( require => {
       // put all of the temperature and color sensors into the storage area as part of initialization process
       returnAllSensorsToStorageArea();
 
-      // create a function that updates the Z-order of the blocks when the user-controlled state changes
+      // updates the Z-order of the blocks when the user-controlled state changes
       const blockChangeListener = () => {
         if ( model.ironBlock.isStackedUpon( model.brick ) ) {
           brickNode.moveToBack();
@@ -533,7 +533,7 @@ define( require => {
       model.brick.positionProperty.link( blockChangeListener );
       model.ironBlock.positionProperty.link( blockChangeListener );
 
-      // function that updates the Z-order of the beakers when the user-controlled state changes
+      // updates the Z-order of the beakers when the user-controlled state changes
       const beakerChangeListener = () => {
         if ( model.waterBeaker.getBounds().minY >= model.oliveOilBeaker.getBounds().maxY ) {
           this.waterBeakerView.frontNode.moveToFront();
@@ -624,7 +624,7 @@ define( require => {
         this.manualStep( dt );
       } );
 
-      // helper function the constrains the provided model element's position to the play area
+      // constrains the provided model element's position to the play area
       const constrainToPlayArea = ( modelElement, proposedPosition, playAreaBounds, modelViewTransform, reusuableBounds ) => {
         const viewConstrainedPosition = proposedPosition.copy();
 

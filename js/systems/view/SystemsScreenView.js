@@ -1,7 +1,7 @@
 // Copyright 2016-2019, University of Colorado Boulder
 
 /**
- * main view for the 'Systems' screen of the Energy Forms And Changes simulation
+ * main view for the 'Systems' screen of the Energy Forms and Changes simulation
  *
  * @author John Blanco
  * @author Martin Veillette (Berea College)
