@@ -61,10 +61,10 @@ define( require => {
   const flameImage = require( 'image!SCENERY_PHET/flame.png' );
 
   // constants
-  const EDGE_INSET = 10;
+  const EDGE_INSET = 10; // screen edge padding, in screen coordinates
   const SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
   const SENSOR_ANIMATION_SPEED = 0.2; // in meters per second
-  const MAX_SENSOR_ANIMATION_TIME = 1; // max time for sensor return animation to complete
+  const MAX_SENSOR_ANIMATION_TIME = 1; // max time for sensor return animation to complete, in seconds
 
   class EFACIntroScreenView extends ScreenView {
 
@@ -77,7 +77,7 @@ define( require => {
       // @private
       this.model = model;
 
-      // Create the model-view transform.  The primary units used in the model are meters, so significant zoom is used.
+      // Create the model-view transform. The primary units used in the model are meters, so significant zoom is used.
       // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model appears in the
       // view.
       const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(

@@ -36,15 +36,15 @@ define( require => {
   const NUMBER_OF_THERMOMETERS = 4;
   const BEAKER_WIDTH = 0.085; // in meters
   const BEAKER_HEIGHT = BEAKER_WIDTH * 1.1;
-  const MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
-  const FAST_FORWARD_MULTIPLIER = 4;
+  const BEAKER_MAJOR_TICK_MARK_DISTANCE = BEAKER_HEIGHT * 0.95 / 3;
+  const FAST_FORWARD_MULTIPLIER = 4; // how many times faster the intro screen runs when in fast forward mode
 
   // the sim model x range is laid out in meters with 0 in the middle, so this value is the left edge of the sim, in meters
   const LEFT_EDGE = -0.30;
   const RIGHT_EDGE = 0.30;
 
-  // this is the desired space between the edges of the sim ( left edge or right edge) and the edge
-  // of the widest element (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
+  // the desired space between the edges of the sim (left edge or right edge) and the edge of the widest element
+  // (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
   const EDGE_PAD = 0.016;
 
   // number of snap-to spots on the ground, should match number of thermal containers
@@ -82,14 +82,14 @@ define( require => {
       this.air = new Air( this.energyChunksVisibleProperty );
 
       // @private - calculate space in between the center points of the snap-to spots on the ground
-      this.spaceBetweenSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
+      this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
                                      ( NUMBER_OF_GROUND_SPOTS - 1 );
       this.groundSpotXPositions = [];
 
       // determine the locations of the snap-to spots, and round them to a few decimal places
       const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
       for ( let i = 0; i < NUMBER_OF_GROUND_SPOTS; i++ ) {
-        this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
+        this.groundSpotXPositions.push( Util.roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000 );
       }
 
       // @public (read-only) {Block}
@@ -122,7 +122,7 @@ define( require => {
         BEAKER_HEIGHT,
         listOfThingsThatCanGoInBeaker,
         this.energyChunksVisibleProperty, {
-          majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE
         }
       );
 
@@ -139,7 +139,7 @@ define( require => {
           fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
           fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
           energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
-          majorTickMarkDistance: MAJOR_TICK_MARK_DISTANCE
+          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE
         }
       );
 
@@ -652,7 +652,7 @@ define( require => {
           // the second condition checks that potentialRestingModelElement is below modelElement
           // because, for example, in the case where a beaker with a block inside is being dropped, we don't want the
           // beaker to think that its block is in the spot below it.
-          if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <= this.spaceBetweenSpotCenters / 2 &&
+          if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <= this.spaceBetweenGroundSpotCenters / 2 &&
                potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y
           ) {
             modelElementsInSpot.push( potentialRestingModelElement );

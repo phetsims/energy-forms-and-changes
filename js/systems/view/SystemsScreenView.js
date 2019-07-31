@@ -53,8 +53,8 @@ define( require => {
   const energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
 
   // constants
-  const EDGE_INSET = 10;
-  const SELECTOR_SPACING = 82;
+  const EDGE_INSET = 10; // screen edge padding, in screen coordinates
+  const SELECTOR_SPACING = 82; // space between energy system selector panel, in screen coordinates
   const BOTTOM_CONTROL_PANEL_HEIGHT = 49; // manually coordinated to match similar panel on 1st screen
 
   class SystemsScreenView extends ScreenView {
