@@ -302,7 +302,12 @@ define( require => {
       // create a reusable bounds in order to reduce memory allocations
       const reusableConstraintBounds = Bounds2.NOTHING.copy();
 
-      // limits the model element motion based on both view and model constraints
+      /**
+       * limits the model element motion based on both view and model constraints
+       * @param {ModelElement} modelElement
+       * @param {Vector2} proposedPosition
+       * @returns {Vector2}
+       */
       const constrainMovableElementMotion = ( modelElement, proposedPosition ) => {
 
         // constrain the model element to stay within the play area
@@ -628,7 +633,15 @@ define( require => {
         this.manualStep( dt );
       } );
 
-      // constrains the provided model element's position to the play area
+      /**
+       * constrains the provided model element's position to the play area
+       * @param {ModelElement} modelElement
+       * @param {Vector2} proposedPosition
+       * @param {Bounds2} playAreaBounds
+       * @param {ModelViewTransform2} modelViewTransform
+       * @param {Bounds2} reusuableBounds
+       * @returns {Vector2}
+       */
       const constrainToPlayArea = ( modelElement, proposedPosition, playAreaBounds, modelViewTransform, reusuableBounds ) => {
         const viewConstrainedPosition = proposedPosition.copy();
 
