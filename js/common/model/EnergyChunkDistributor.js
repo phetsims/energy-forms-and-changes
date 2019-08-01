@@ -346,11 +346,11 @@ define( require => {
       return energyInMostEnergeticEC;
     },
 
-    //REVIEW #247 missing visibility annotation
     /**
      * update the energy chunk positions based on their velocity and a time step
      * @param  {EnergyChunkContainerSlice[]} slices
      * @param  {number} dt - time step in seconds
+     * @public
      */
     updateEnergyChunkPositions: function( slices, dt ) {
       slices.forEach( function( slice ) {
