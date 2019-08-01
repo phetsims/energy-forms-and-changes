@@ -237,7 +237,7 @@ define( require => {
       );
 
       // @public - used to notify the view that a manual step was called
-      this.manualStepEmitter = new Emitter( { validators: [ { valueType: 'number' } ] } );
+      this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
     }
 
     /**
