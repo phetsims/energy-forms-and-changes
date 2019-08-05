@@ -461,8 +461,12 @@ define( require => {
 
             // the user has released this sensor - test if it should go back in the storage area
             const sensorNode = temperatureAndColorSensorNodes[ index ];
-            const colorIndicatorBounds = sensorNode.localToParentBounds( sensorNode.colorIndicatorNode.bounds );
-            const thermometerBounds = sensorNode.localToParentBounds( sensorNode.thermometerNode.bounds );
+            const colorIndicatorBounds = sensorNode.localToParentBounds(
+              sensorNode.temperatureAndColorSensorNode.colorIndicatorBounds
+            );
+            const thermometerBounds = sensorNode.localToParentBounds(
+              sensorNode.temperatureAndColorSensorNode.thermometerBounds
+            );
             if ( colorIndicatorBounds.intersectsBounds( sensorStorageArea.bounds ) ||
                  thermometerBounds.intersectsBounds( sensorStorageArea.bounds ) ) {
               returnSensorToStorageArea( sensor, true, sensorNode );
