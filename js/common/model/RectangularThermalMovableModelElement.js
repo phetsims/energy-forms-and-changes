@@ -255,7 +255,7 @@ define( require => {
 
         if ( !redistributed ) {
 
-          // the energy chunks are reasonably well distributed, no more needed, so clear the countodwn timer
+          // the energy chunks are reasonably well distributed, no more needed, so clear the countdown timer
           this.clearECDistributionCountdown();
         }
         else {
