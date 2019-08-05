@@ -2,8 +2,9 @@
 
 /**
  * A static object that contains methods for redistributing a set of energy chunks within a shape in order to make them
- * spread out fairly evenly in a way that looks dynamic and real.  The basic approach is to simulate a set of particles
- * embedded in a fluid, and each particle repels all others as well as the edges of the containers.
+ * spread out fairly evenly in a way that looks dynamic and realistic.  The basic approach is to simulate a set of
+ * small spheres embedded in a fluid, and each one is changes such that it repels all others as well as the edges of the
+ * container(s).  The repulsion algorithm is based on Coulomb's law.
  *
  * Reuse Notes: This could probably be generalized fairly easily to distribute any number items within a container of
  * arbitrary size.
@@ -28,17 +29,24 @@ define( require => {
 
   // parameters that can be adjusted to change the nature of the repulsive redistribution algorithm
   const MAX_TIME_STEP = ( 1 / 60 ) / 3; // in seconds, for algorithm that moves the points, best if a multiple of nominal frame rate
-  const ENERGY_CHUNK_MASS = 1E-3; // in kilograms, chosen arbitrarily
-  const FLUID_DENSITY = 1000; // in kg / m ^ 3, same as water, used for drag
-  const ENERGY_CHUNK_DIAMETER = 1E-3; // in meters, chosen empirically
+  const ENERGY_CHUNK_MASS = 0.00035; // in kilograms, mass of a bb, which seems about right
+  const FLUID_DENSITY = 8000; // in kg / m ^ 3, for reference, this value is 1000 for water
+  const ENERGY_CHUNK_DIAMETER = 0.0044; // in meters, this is the diameter of a bb, which seems about right
 
-  // treat energy chunk as if it is shaped like a sphere
+  // charge of an energy chunk in Coulombs, about 1/100th of what a charged balloon would be
+  const ENERGY_CHUNK_CHARGE = 1E-9;
+
+  // charge of the wall, used to calculate repulsion of energy chunks
+  const WALL_CHARGE = ENERGY_CHUNK_CHARGE;
+
+  // for drag, treat energy chunk as if it is shaped like a sphere
   const ENERGY_CHUNK_CROSS_SECTIONAL_AREA = Math.PI * Math.pow( ENERGY_CHUNK_DIAMETER, 2 );
-  const DRAG_COEFFICIENT = 500; // unitless, empirically chosen
+  const DRAG_COEFFICIENT = 0.48; // unitless, this is what Wikipedia says is the value for a rough sphere
 
-  // Thresholds for deciding whether or not to perform redistribution. These value should be chosen such that particles
-  // spread out, then stop all movement.
-  const REDISTRIBUTION_THRESHOLD_ENERGY = 1E-4; // in joules (I think)
+  // Threshold for deciding whether or not to perform redistribution. Lower values finish the redistribution more
+  // quickly but not as thoroughly, higher values are thorough but more computationally intensive.  The value here was
+  // empirically determined to work well for the EFAC sim.
+  const REDISTRIBUTION_THRESHOLD_ENERGY = 3E-6; // in joules (I think)
 
   // max number of energy chunk slices that can be handled per call to update positions, adjust as needed
   const MAX_SLICES = 6;
@@ -48,6 +56,18 @@ define( require => {
 
   // speed used when positioning ECs using deterministic algorithms, in meters per second
   const EC_SPEED_DETERMINISTIC = 0.1;
+
+  // Coulomb's constant, used to calculate repulsive forces, from Wikipedia
+  const COULOMBS_CONSTANT = 9E9;
+
+  // pre-calculated factors based on the above values, used to save time in the computations below
+  const DRAG_MULTIPLIER = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA;
+  const WALL_REPULSION_FACTOR = -COULOMBS_CONSTANT * ENERGY_CHUNK_CHARGE * WALL_CHARGE; // based on Coulomb's law
+  const EC_REPULSION_FACTOR = -COULOMBS_CONSTANT * ENERGY_CHUNK_CHARGE * ENERGY_CHUNK_CHARGE; // based on Coulomb's law
+
+  //-------------------------------------------------------------------------------------------------------------------
+  // reusable variables and array intended to reduce garbage collection and thus improve performance
+  //-------------------------------------------------------------------------------------------------------------------
 
   // a reusable 2D array of the energy chunks being redistributed, indexed by [sliceNum][ecNum]
   const energyChunks = new Array( MAX_SLICES );
@@ -64,7 +84,9 @@ define( require => {
     } );
   } );
 
-  // reusable elements intended to reduce garbage collection and thus improve performance
+  // a reusable vector for calculating drag force
+  const reusableDragForceVector = new Vector2( 0, 0 );
+
   const compositeSliceBounds = Bounds2.NOTHING.copy();
 
   // the main singleton object definition
@@ -114,9 +136,8 @@ define( require => {
           'pre-allocated array too small, please adjust'
         );
 
-        // put each energy chunk on the list of those to be processed and zero out its force vector
+        // put each energy chunk on the list of those to be processed
         for ( ecIndex = 0; ecIndex < slices[ sliceIndex ].energyChunkList.length; ecIndex++ ) {
-          energyChunkForces[ sliceIndex ][ ecIndex ].setXY( 0, 0 );
           energyChunks[ sliceIndex ][ ecIndex ] = slices[ sliceIndex ].energyChunkList.get( ecIndex );
           totalNumEnergyChunks++;
         }
@@ -127,24 +148,15 @@ define( require => {
         return false; // nothing to do - bail out
       }
 
-      // Determine the minimum distance that is allowed to be used in the force calculations.  This prevents hitting
-      // infinities that can cause run time issues or unreasonably large forces. Denominator empirically determined.
-      const minDistance = Math.min( compositeSliceBounds.width, compositeSliceBounds.height ) / 20;
-
-      // The particle repulsion force varies inversely with the density of particles so that we don't end up with hugely
-      // repulsive forces that tend to push the particles out of the container.  This formula was made up, and can be
-      // adjusted or even replaced if needed.
-      const forceConstant = ENERGY_CHUNK_MASS * compositeSliceBounds.width *
-                            compositeSliceBounds.height * 0.1 / totalNumEnergyChunks;
-
       // divide the time step up into the largest value known to work consistently for the algorithm
       let particlesRedistributed = false;
-      const numForceCalcSteps = Math.floor( dt / MAX_TIME_STEP );
-      const extraTime = dt - numForceCalcSteps * MAX_TIME_STEP;
-      for ( let forceCalcStep = 0; forceCalcStep <= numForceCalcSteps; forceCalcStep++ ) {
-        const timeStep = forceCalcStep < numForceCalcSteps ? MAX_TIME_STEP : extraTime;
+      const numUpdateSteps = Math.floor( dt / MAX_TIME_STEP );
+      const extraTime = dt - numUpdateSteps * MAX_TIME_STEP;
+      for ( let forceCalcStep = 0; forceCalcStep <= numUpdateSteps; forceCalcStep++ ) {
+        const timeStep = forceCalcStep < numUpdateSteps ? MAX_TIME_STEP : extraTime;
+        assert && assert( timeStep <= MAX_TIME_STEP );
 
-        // update the forces acting on the particle due to its bounding container, other particles, and drag
+        // update the forces acting on the energy chunk due to its bounding container, other energy chunks, and drag
         for ( sliceIndex = 0; sliceIndex < slices.length; sliceIndex++ ) {
           slice = slices[ sliceIndex ];
           const containerShapeBounds = slice.bounds;
@@ -152,14 +164,13 @@ define( require => {
           // determine forces on each energy chunk
           for ( ecIndex = 0; ecIndex < slice.energyChunkList.length; ecIndex++ ) {
             const ec = energyChunks[ sliceIndex ][ ecIndex ];
+            energyChunkForces[ sliceIndex ][ ecIndex ].setXY( 0, 0 );
             if ( containerShapeBounds.containsPoint( ec.positionProperty.value ) ) {
 
               // compute forces from the edges of the slice boundary
               this.updateEdgeForces(
                 ec.positionProperty.value,
                 energyChunkForces[ sliceIndex ][ ecIndex ],
-                forceConstant,
-                minDistance,
                 containerShapeBounds
               );
 
@@ -168,10 +179,11 @@ define( require => {
                 ec,
                 energyChunkForces[ sliceIndex ][ ecIndex ],
                 energyChunks,
-                slices,
-                minDistance,
-                forceConstant
+                slices
               );
+
+              // update drag force
+              this.updateDragForce( ec.velocity, energyChunkForces[ sliceIndex ][ ecIndex ], timeStep );
             }
             else {
 
@@ -200,15 +212,16 @@ define( require => {
      * compute the force on an energy chunk based on the edges of the container in which it resides
      * @param {Vector2} position
      * @param {Vector2} ecForce
-     * @param {number} forceConstant
-     * @param {number} minDistance
      * @param {Bounds2} containerBounds
      * @private
      */
-    updateEdgeForces: function( position, ecForce, forceConstant, minDistance, containerBounds ) {
+    updateEdgeForces: function( position, ecForce, containerBounds ) {
 
       // this should only be called for chunks that are inside a container
       assert && assert( containerBounds.containsPoint( position ) );
+
+      // the minimum distance from the wall is one EC radius
+      const minDistance = ENERGY_CHUNK_DIAMETER / 2;
 
       // get the distance to the four different edges
       const distanceFromRightSide = Math.max( containerBounds.maxX - position.x, minDistance );
@@ -217,10 +230,45 @@ define( require => {
       const distanceFromTop = Math.max( containerBounds.maxY - position.y, minDistance );
 
       // apply the forces
-      ecForce.addXY( -forceConstant / Math.pow( distanceFromRightSide, 2 ), 0 ); // force from right edge
-      ecForce.addXY( 0, forceConstant / Math.pow( distanceFromBottom, 2 ) ); // force from bottom edge
-      ecForce.addXY( forceConstant / Math.pow( distanceFromLeftSide, 2 ), 0 ); // force from left edge
-      ecForce.addXY( 0, -forceConstant / Math.pow( distanceFromTop, 2 ) ); // force from top edge
+      ecForce.addXY( WALL_REPULSION_FACTOR / Math.pow( distanceFromRightSide, 2 ), 0 ); // force from right edge
+      ecForce.addXY( 0, -WALL_REPULSION_FACTOR / Math.pow( distanceFromBottom, 2 ) ); // force from bottom edge
+      ecForce.addXY( -WALL_REPULSION_FACTOR / Math.pow( distanceFromLeftSide, 2 ), 0 ); // force from left edge
+      ecForce.addXY( 0, WALL_REPULSION_FACTOR / Math.pow( distanceFromTop, 2 ) ); // force from top edge
+    },
+
+    /**
+     * compute the force on an energy chunk based on the drag that it is experiencing
+     * @param {Vector2} velocity
+     * @param {Vector2} ecForce
+     * @param {number} timeStep - length of time step, in seconds
+     * @private
+     */
+    updateDragForce: function( velocity, ecForce, timeStep ) {
+
+      const velocityMagnitude = velocity.magnitude;
+      const velocityMagnitudeSquared = Math.pow( velocityMagnitude, 2 );
+      assert && assert(
+      velocityMagnitudeSquared !== Infinity && !_.isNaN( velocityMagnitudeSquared ) && typeof velocityMagnitudeSquared === 'number',
+        `velocity^2 is ${velocityMagnitudeSquared}`
+      );
+
+      // calculate the drag based on the velocity and the nature of the fluid that it's in, see
+      // https://en.wikipedia.org/wiki/Drag_equation
+      let dragForceMagnitude = DRAG_MULTIPLIER * velocityMagnitudeSquared;
+      if ( dragForceMagnitude > 0 ) {
+
+        // limit the drag force vector such that it can't reverse the current velocity, since that is unphysical
+        if ( dragForceMagnitude / ENERGY_CHUNK_MASS * timeStep > velocityMagnitude ) {
+          dragForceMagnitude = velocityMagnitude * ENERGY_CHUNK_MASS / timeStep;
+        }
+
+        // calculate the drag force vector
+        reusableDragForceVector.setXY( -velocity.x, -velocity.y );
+        reusableDragForceVector.setMagnitude( dragForceMagnitude );
+
+        // add the drag force to the total force acting on this energy chunk
+        ecForce.addXY( reusableDragForceVector.x, reusableDragForceVector.y );
+      }
     },
 
     /**
@@ -229,15 +277,16 @@ define( require => {
      * @param {Vector2} ecForce - the force vector acting on the energy chunk being evaluated
      * @param {EnergyChunk[]} energyChunks
      * @param {EnergyChunkContainerSlice[]} slices
-     * @param {number} minDistance
-     * @param {number} forceConstant
      * @private
      */
-    updateEnergyChunkForces: function( ec, ecForce, energyChunks, slices, minDistance, forceConstant ) {
+    updateEnergyChunkForces: function( ec, ecForce, energyChunks, slices ) {
 
       // allocate reusable vectors to improve performance
       let vectorFromOther = Vector2.dirtyFromPool();
       const forceFromOther = Vector2.dirtyFromPool();
+
+      // the minimum distance between two chunks is 2 times the radius of each, or 1x the diameter
+      const minDistance = ENERGY_CHUNK_DIAMETER / 2;
 
       // apply the force from each of the other energy chunks, but set some limits on the max force that can be applied
       for ( let sliceIndex = 0; sliceIndex < slices.length; sliceIndex++ ) {
@@ -271,7 +320,7 @@ define( require => {
           }
 
           forceFromOther.setXY( vectorFromOther.x, vectorFromOther.y );
-          forceFromOther.setMagnitude( forceConstant / vectorFromOther.magnitudeSquared );
+          forceFromOther.setMagnitude( -EC_REPULSION_FACTOR / vectorFromOther.magnitudeSquared );
 
           // add the force to the accumulated forces on this energy chunk
           ecForce.setXY( ecForce.x + forceFromOther.x, ecForce.y + forceFromOther.y );
@@ -284,7 +333,7 @@ define( require => {
     },
 
     /**
-     * update energy chunk velocities and drag force, returning max total energy of chunks
+     * update energy chunk velocities, returning max energy found
      * @param  {EnergyChunkContainerSlice[]} slices
      * @param  {EnergyChunk[][]} energyChunks
      * @param  {Vector2[][]} energyChunkForces
@@ -294,7 +343,6 @@ define( require => {
      */
     updateVelocities: function( slices, energyChunks, energyChunkForces, dt ) {
 
-      const dragForce = Vector2.dirtyFromPool();
       let energyInMostEnergeticEC = 0;
 
       // loop through the slices, and then the energy chunks therein, and update their velocities
@@ -309,39 +357,21 @@ define( require => {
           assert && assert( !_.isNaN( force.x ) && !_.isNaN( force.y ), 'force contains NaN value' );
 
           // current velocity
-          const energyChunk = energyChunks[ sliceIndex ][ ecIndex ];
-          const velocity = energyChunk.velocity;
+          const velocity = energyChunks[ sliceIndex ][ ecIndex ].velocity;
           assert && assert( !_.isNaN( velocity.x ) && !_.isNaN( velocity.y ), 'velocity contains NaN value' );
 
           // velocity change is based on the formula v = (F/m)* t, so pre-compute the t/m part for later use
           const forceMultiplier = dt / ENERGY_CHUNK_MASS;
 
-          // calculate drag force using standard drag equation
-          const velocityMagnitudeSquared = velocity.magnitudeSquared;
-          assert && assert(
-          velocityMagnitudeSquared !== Infinity && !_.isNaN( velocityMagnitudeSquared ) && typeof velocityMagnitudeSquared === 'number',
-            `velocity^2 is ${velocityMagnitudeSquared}`
-          );
-          const dragMagnitude = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CROSS_SECTIONAL_AREA * velocityMagnitudeSquared;
-          dragForce.setXY( 0, 0 );
-          if ( dragMagnitude > 0 ) {
-            dragForce.setXY( -velocity.x, -velocity.y );
-            dragForce.setMagnitude( dragMagnitude );
-          }
-          assert && assert( !_.isNaN( dragForce.x ) && !_.isNaN( dragForce.y ), 'dragForce contains NaN value' );
-
-          // update velocity based on the sum of forces acting on the particle
-          velocity.addXY( ( force.x + dragForce.x ) * forceMultiplier, ( force.y + dragForce.y ) * forceMultiplier );
+          // update velocity based on the sum of forces acting on the energy chunk
+          velocity.addXY( force.x * forceMultiplier, force.y * forceMultiplier );
           assert && assert( !_.isNaN( velocity.x ) && !_.isNaN( velocity.y ), 'New velocity contains NaN value' );
 
           // update max energy
-          const totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocityMagnitudeSquared + force.magnitude * Math.PI / 2;
+          const totalParticleEnergy = 0.5 * ENERGY_CHUNK_MASS * velocity.magnitudeSquared + force.magnitude * Math.PI / 2;
           energyInMostEnergeticEC = Math.max( totalParticleEnergy, energyInMostEnergeticEC );
         }
       }
-
-      // free allocations
-      dragForce.freeToPool();
 
       return energyInMostEnergeticEC;
     },
