@@ -46,7 +46,7 @@ define( require => {
   const ScreenView = require( 'JOIST/ScreenView' );
   const SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
   const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
-  const TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
+  const EFACTemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EFACTemperatureAndColorSensorNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Util = require( 'DOT/Util' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -382,7 +382,7 @@ define( require => {
       let sensorNodeWidth = 0;
       let sensorNodeHeight = 0;
       model.temperatureAndColorSensors.forEach( sensor => {
-        const temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( sensor, {
+        const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode( sensor, {
           modelViewTransform: modelViewTransform,
           dragBounds: modelViewTransform.viewToModelBounds( this.layoutBounds ),
           draggable: true
@@ -475,7 +475,7 @@ define( require => {
        * return a sensor to its initial position in the storage area
        * @param {StickyTemperatureAndColorSensor} sensor
        * @param {Boolean} doAnimation - whether the sensor animates back to the storage area
-       * @param {TemperatureAndColorSensorNode} [sensorNode]
+       * @param {EFACTemperatureAndColorSensorNode} [sensorNode]
        */
       const returnSensorToStorageArea = ( sensor, doAnimation, sensorNode ) => {
         const currentPosition = sensor.positionProperty.get();

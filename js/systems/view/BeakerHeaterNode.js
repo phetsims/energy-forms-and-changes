@@ -19,7 +19,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
-  const TemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/TemperatureAndColorSensorNode' );
+  const EFACTemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EFACTemperatureAndColorSensorNode' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -123,9 +123,10 @@ define( require => {
 
       // Add the thermometer that will indicate the beaker water temperature.  Since the position of the thermometer is
       // relative to the beaker heater, the model view transform must be compensated
-      const temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( beakerHeater.temperatureAndColorSensor, {
-        modelViewTransform: scaleOnlyMVT
-      } );
+      const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode(
+        beakerHeater.temperatureAndColorSensor,
+        { modelViewTransform: scaleOnlyMVT }
+      );
       this.addChild( temperatureAndColorSensorNode );
 
       // update the transparency of the hot element to make the dark element appear to heat up

@@ -26,7 +26,7 @@ define( require => {
   // constants
   const TRIANGLE_SIDE_LENGTH = 18; // in screen coordinates
 
-  class TemperatureAndColorSensorNode extends Node {
+  class EFACTemperatureAndColorSensorNode extends Node {
 
     /**
      * @param {TemperatureAndColorSensor} temperatureAndColorSensor - model element that measures temperature and color
@@ -114,5 +114,5 @@ define( require => {
     }
   }
 
-  return energyFormsAndChanges.register( 'TemperatureAndColorSensorNode', TemperatureAndColorSensorNode );
+  return energyFormsAndChanges.register( 'EFACTemperatureAndColorSensorNode', EFACTemperatureAndColorSensorNode );
 } );
