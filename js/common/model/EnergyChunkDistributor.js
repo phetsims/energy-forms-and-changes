@@ -30,7 +30,7 @@ define( require => {
   // parameters that can be adjusted to change the nature of the repulsive redistribution algorithm
   const MAX_TIME_STEP = ( 1 / 60 ) / 3; // in seconds, for algorithm that moves the points, best if a multiple of nominal frame rate
   const ENERGY_CHUNK_MASS = 0.00035; // in kilograms, mass of a bb, which seems about right
-  const FLUID_DENSITY = 8000; // in kg / m ^ 3, for reference, this value is 1000 for water
+  const FLUID_DENSITY = 8000; // in kg / m ^ 3 - for reference, water is 1000, molten lead is around 10000
   const ENERGY_CHUNK_DIAMETER = 0.0044; // in meters, this is the diameter of a bb, which seems about right
 
   // charge of an energy chunk in Coulombs, about 1/100th of what a charged balloon would be
