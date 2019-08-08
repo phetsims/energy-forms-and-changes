@@ -17,7 +17,6 @@ define( require => {
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   const Node = require( 'SCENERY/nodes/Node' );
-  const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const TemperatureAndColorSensorNode = require( 'SCENERY_PHET/TemperatureAndColorSensorNode' );
 
@@ -38,24 +37,15 @@ define( require => {
       }, options );
 
       // @public (read-only) {TemperatureAndColorSensorNode} - public so getBounds functions can be called
-      this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( new Range(
-        EFACConstants.WATER_FREEZING_POINT_TEMPERATURE,
-        EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
-        ), temperatureAndColorSensor.sensedTemperatureProperty
+      this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode(
+        new Range(
+          EFACConstants.WATER_FREEZING_POINT_TEMPERATURE,
+          EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
+        ),
+        temperatureAndColorSensor.sensedTemperatureProperty,
+        temperatureAndColorSensor.sensedElementColorProperty
       );
       this.addChild( this.temperatureAndColorSensorNode );
-
-      // set the fill color of the triangle as the 'sensed color' changes
-      Property.multilink(
-        [
-          temperatureAndColorSensor.activeProperty,
-          temperatureAndColorSensor.sensedElementColorProperty
-        ],
-        ( active, color ) => {
-          const fillColor = active ? color : EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR;
-          this.temperatureAndColorSensorNode.changeColor( fillColor );
-        }
-      );
 
       // move this node when the model element moves
       temperatureAndColorSensor.positionProperty.link( position => {
