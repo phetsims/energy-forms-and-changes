@@ -18,6 +18,7 @@ define( require => {
   const MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
   const TemperatureAndColorSensorNode = require( 'SCENERY_PHET/TemperatureAndColorSensorNode' );
 
   class EFACTemperatureAndColorSensorNode extends Node {
@@ -37,10 +38,10 @@ define( require => {
       }, options );
 
       // @public (read-only) {TemperatureAndColorSensorNode} - public so getBounds functions can be called
-      this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode(
+      this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode( new Range(
         EFACConstants.WATER_FREEZING_POINT_TEMPERATURE,
-        EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-        temperatureAndColorSensor.sensedTemperatureProperty
+        EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
+        ), temperatureAndColorSensor.sensedTemperatureProperty
       );
       this.addChild( this.temperatureAndColorSensorNode );
 
