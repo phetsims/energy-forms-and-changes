@@ -57,7 +57,7 @@ define( require => {
   const createEnergyChunkImageNode = energyType => {
     const background = new Image( mapEnergyTypeToImage[ energyType ] );
     const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
-    energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.95 );
+    energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
     energyText.center = background.center;
     background.addChild( energyText );
     background.scale( EFACConstants.ENERGY_CHUNK_WIDTH / background.width );
