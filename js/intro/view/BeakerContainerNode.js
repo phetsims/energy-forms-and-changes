@@ -15,7 +15,7 @@ define( require => {
   'use strict';
 
   // modules
-  const BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
+  const BeakerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerNode' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -30,7 +30,7 @@ define( require => {
   const BLOCK_PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
   const BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
 
-  class BeakerContainerView extends BeakerView {
+  class BeakerContainerNode extends BeakerNode {
 
     //REVIEW #247 passing in the entire model is undesirable
   /**
@@ -236,6 +236,6 @@ define( require => {
     }
   }
 
-  return energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
+  return energyFormsAndChanges.register( 'BeakerContainerNode', BeakerContainerNode );
 } );
 

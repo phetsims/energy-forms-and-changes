@@ -15,7 +15,7 @@ define( require => {
   // modules
   const AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
   const Animation = require( 'TWIXT/Animation' );
-  const BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
+  const BeakerContainerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerNode' );
   const BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
@@ -345,7 +345,7 @@ define( require => {
       blockLayer.addChild( ironBlockNode );
 
       // @private
-      this.waterBeakerView = new BeakerContainerView(
+      this.waterBeakerNode = new BeakerContainerNode(
         model.waterBeaker,
         model,
         modelViewTransform,
@@ -355,7 +355,7 @@ define( require => {
       );
 
       // @private
-      this.oliveOilBeakerView = new BeakerContainerView(
+      this.oliveOilBeakerNode = new BeakerContainerNode(
         model.oliveOilBeaker,
         model,
         modelViewTransform,
@@ -366,12 +366,12 @@ define( require => {
       );
 
       // add the beakers, which are composed of several pieces
-      beakerFrontLayer.addChild( this.waterBeakerView.frontNode );
-      beakerFrontLayer.addChild( this.oliveOilBeakerView.frontNode );
-      beakerBackLayer.addChild( this.waterBeakerView.backNode );
-      beakerBackLayer.addChild( this.oliveOilBeakerView.backNode );
-      beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
-      beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
+      beakerFrontLayer.addChild( this.waterBeakerNode.frontNode );
+      beakerFrontLayer.addChild( this.oliveOilBeakerNode.frontNode );
+      beakerBackLayer.addChild( this.waterBeakerNode.backNode );
+      beakerBackLayer.addChild( this.oliveOilBeakerNode.backNode );
+      beakerGrabLayer.addChild( this.waterBeakerNode.grabNode );
+      beakerGrabLayer.addChild( this.oliveOilBeakerNode.grabNode );
 
       // the sensor layer needs to be above the movable objects
       const sensorLayer = new Node();
@@ -549,14 +549,14 @@ define( require => {
       // updates the Z-order of the beakers when the user-controlled state changes
       const beakerChangeListener = () => {
         if ( model.waterBeaker.getBounds().minY >= model.oliveOilBeaker.getBounds().maxY ) {
-          this.waterBeakerView.frontNode.moveToFront();
-          this.waterBeakerView.backNode.moveToFront();
-          this.waterBeakerView.grabNode.moveToFront();
+          this.waterBeakerNode.frontNode.moveToFront();
+          this.waterBeakerNode.backNode.moveToFront();
+          this.waterBeakerNode.grabNode.moveToFront();
         }
         else if ( model.oliveOilBeaker.getBounds().minY >= model.waterBeaker.getBounds().maxY ) {
-          this.oliveOilBeakerView.frontNode.moveToFront();
-          this.oliveOilBeakerView.backNode.moveToFront();
-          this.oliveOilBeakerView.grabNode.moveToFront();
+          this.oliveOilBeakerNode.frontNode.moveToFront();
+          this.oliveOilBeakerNode.backNode.moveToFront();
+          this.oliveOilBeakerNode.grabNode.moveToFront();
         }
       };
 
@@ -701,8 +701,8 @@ define( require => {
      * @public
      */
     stepView( dt ) {
-      this.waterBeakerView.step( dt );
-      this.oliveOilBeakerView.step( dt );
+      this.waterBeakerNode.step( dt );
+      this.oliveOilBeakerNode.step( dt );
     }
 
     //REVIEW #247 missing visibility annotation

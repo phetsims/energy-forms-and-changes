@@ -39,7 +39,7 @@ define( require => {
   const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
   const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
-  class BeakerView extends Node {
+  class BeakerNode extends Node {
 
     /**
      * @param {Beaker} beaker - model of a beaker
@@ -292,5 +292,5 @@ define( require => {
     }
   }
 
-  return energyFormsAndChanges.register( 'BeakerView', BeakerView );
+  return energyFormsAndChanges.register( 'BeakerNode', BeakerNode );
 } );
