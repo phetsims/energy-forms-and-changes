@@ -178,6 +178,10 @@ define( require => {
 
     // use the default layout bounds
     SCREEN_LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS
+
+    // A note for energy-forms-and-changes-strings_en.json (which cannot have comments): the keys for the screen names
+    // are incorrect, as they do not follow the form 'screen.{{screenName}}', but the sim was published and translated
+    // before that was noticed. See https://github.com/phetsims/energy-forms-and-changes/issues/249 for discussion.
   };
 
   return energyFormsAndChanges.register( 'EFACConstants', EFACConstants );
