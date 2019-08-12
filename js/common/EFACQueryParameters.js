@@ -15,24 +15,31 @@ define( require => {
   const EFACQueryParameters = QueryStringMachine.getAll( {
 
     // show the 2D bounds of the block, which is what is actually modeled
+    // For internal use only, not public facing.
     show2DBlockBounds: { type: 'flag' },
 
     // show the bounds of the air
+    // For internal use only, not public facing.
     showAirBounds: { type: 'flag' },
 
     // show some shapes that are helpful for debugging, such as the container slices
+    // For internal use only, not public facing.
     showHelperShapes: { type: 'flag' },
 
     // show the 2D bounds of the beaker
+    // For internal use only, not public facing.
     show2DBeakerBounds: { type: 'flag' },
 
     // show the normal/fast forward buttons on the first screen
+    // For internal use only, not public facing.
     showSpeedControls: { type: 'flag' },
 
     // make the first screen burners sticky
+    // For internal use only, not public facing.
     stickyBurners: { type: 'flag' },
 
     // force the energy chunk distributor to use a particular algorithm
+    // For internal use only, not public facing.
     ecDistribution: {
       type: 'string',
       defaultValue: null,
