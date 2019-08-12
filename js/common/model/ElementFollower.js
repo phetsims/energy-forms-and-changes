@@ -18,25 +18,25 @@ define( require => {
 
   class ElementFollower {
 
-  /**
-   * @param {Property<Vector2>} trackedPositionProperty
-   */
-  constructor( trackedPositionProperty ) {
+    /**
+     * @param {Property<Vector2>} trackedPositionProperty
+     */
+    constructor( trackedPositionProperty ) {
 
-    // @private {Property<Vector2>} - position property of element that will follow another
-    this.followerProperty = trackedPositionProperty;
+      // @private {Property<Vector2>} - position property of element that will follow another
+      this.followerProperty = trackedPositionProperty;
 
-    // @private {Property<Vector2>|null} - location of the thing being followed, null if not following anything
-    this.locationBeingFollowedProperty = null;
+      // @private {Property<Vector2>|null} - location of the thing being followed, null if not following anything
+      this.locationBeingFollowedProperty = null;
 
-    // @private {Vector2} - offset from following position
-    this.offset = Vector2.ZERO;
+      // @private {Vector2} - offset from following position
+      this.offset = Vector2.ZERO;
 
-    // @private {function} - function that gets linked/unlinked when the thermometer is following/unfollowing.
-    this.followerFunction = location => {
-      this.followerProperty.set( location.plus( this.offset ) );
-    };
-  }
+      // @private {function} - function that gets linked/unlinked when the thermometer is following/unfollowing.
+      this.followerFunction = location => {
+        this.followerProperty.set( location.plus( this.offset ) );
+      };
+    }
 
     /**
      * start following the provided property

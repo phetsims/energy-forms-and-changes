@@ -33,70 +33,70 @@ define( require => {
   class BeakerContainerNode extends BeakerNode {
 
     //REVIEW #247 passing in the entire model is undesirable
-  /**
-   * @param {Beaker} beaker
-   * @param {EFACIntroModel} model
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {function} constrainPosition
-   * @param {Object} [options]
-   */
-  constructor( beaker, model, modelViewTransform, constrainPosition, options ) {
-    super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
+    /**
+     * @param {Beaker} beaker
+     * @param {EFACIntroModel} model
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {function} constrainPosition
+     * @param {Object} [options]
+     */
+    constructor( beaker, model, modelViewTransform, constrainPosition, options ) {
+      super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
-    // @private
-    this.beaker = beaker;
+      // @private
+      this.beaker = beaker;
 
-    // variables for creating reusable shapes for doing the updates to the clipping areas
-    const beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
-    const beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
+      // variables for creating reusable shapes for doing the updates to the clipping areas
+      const beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
+      const beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
 
-    // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
-    // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
-    // go between the beaker and the heater/cooler.
-    this.untransformedBeakerClipShape = new Shape.rect(
-      -beakerRectangleWidthInView / 2,
-      -beakerRectangleHeightInView * 9,
-      beakerRectangleWidthInView,
-      beakerRectangleHeightInView * 9.5
-    );
+      // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
+      // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
+      // go between the beaker and the heater/cooler.
+      this.untransformedBeakerClipShape = new Shape.rect(
+        -beakerRectangleWidthInView / 2,
+        -beakerRectangleHeightInView * 9,
+        beakerRectangleWidthInView,
+        beakerRectangleHeightInView * 9.5
+      );
 
-    // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
-    // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
-    // This assumes the blocks are all the same size and do not change size.
-    this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.brick.width );
-    this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
-    const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
-    this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+      // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
+      // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
+      // This assumes the blocks are all the same size and do not change size.
+      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.brick.width );
+      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
+      const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+      this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
-    if ( EFACQueryParameters.showHelperShapes ) {
-      this.clipAreaHelperNode = new Path( this.untransformedBeakerClipShape, {
-        fill: 'rgba(255, 0, 0, 0.2)'
+      if ( EFACQueryParameters.showHelperShapes ) {
+        this.clipAreaHelperNode = new Path( this.untransformedBeakerClipShape, {
+          fill: 'rgba(255, 0, 0, 0.2)'
+        } );
+        this.energyChunkRootNode.addChild( this.clipAreaHelperNode );
+      }
+
+      // Update the clipping area based on the motion of this beaker, the blocks, and whether the energy chunks are
+      // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
+      // distracting, as though the energy chunks in the beaker are behind the blocks.
+      const propertiesThatInfluenceClipArea = [];
+      model.blocks.forEach( block => {
+        propertiesThatInfluenceClipArea.push( block.positionProperty );
       } );
-      this.energyChunkRootNode.addChild( this.clipAreaHelperNode );
+      propertiesThatInfluenceClipArea.push( beaker.positionProperty );
+      propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
+      Property.multilink( propertiesThatInfluenceClipArea, () => {
+        this.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
+      } );
+
+      // add an input listener to make this draggable
+      this.grabNode.addInputListener( new ThermalElementDragHandler(
+        beaker,
+        this.grabNode,
+        modelViewTransform,
+        constrainPosition,
+        model.isPlayingProperty
+      ) );
     }
-
-    // Update the clipping area based on the motion of this beaker, the blocks, and whether the energy chunks are
-    // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
-    // distracting, as though the energy chunks in the beaker are behind the blocks.
-    const propertiesThatInfluenceClipArea = [];
-    model.blocks.forEach( block => {
-      propertiesThatInfluenceClipArea.push( block.positionProperty );
-    } );
-    propertiesThatInfluenceClipArea.push( beaker.positionProperty );
-    propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
-    Property.multilink( propertiesThatInfluenceClipArea, () => {
-      this.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
-    } );
-
-    // add an input listener to make this draggable
-    this.grabNode.addInputListener( new ThermalElementDragHandler(
-      beaker,
-      this.grabNode,
-      modelViewTransform,
-      constrainPosition,
-      model.isPlayingProperty
-    ) );
-  }
 
     /**
      * Update the clipping area that is used to hide energy chunks that are in the beaker but occluded by blocks that

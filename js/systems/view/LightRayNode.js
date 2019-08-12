@@ -141,7 +141,7 @@ define( require => {
       const end2 = line2.end;
 
       const denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
-                        ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
+                          ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
 
       // Check if the lines are parallel, and thus don't intersect.
       if ( denominator === 0 ) {
@@ -153,7 +153,7 @@ define( require => {
       const r = numerator / denominator;
 
       const numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
-                       ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
+                         ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
       const s = numerator2 / denominator;
 
       if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {

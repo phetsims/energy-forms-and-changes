@@ -133,7 +133,7 @@ define( require => {
       if ( this.flowProportionProperty.value > 0 ) {
         const initialPosition = new Vector2( 0, 0 );
         const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
-                           ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
+                             ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
         const initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
       }

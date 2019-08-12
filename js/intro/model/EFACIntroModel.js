@@ -82,7 +82,7 @@ define( require => {
 
       // @private {number} - calculate space in between the center points of the snap-to spots on the ground
       this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
-                                     ( NUMBER_OF_GROUND_SPOTS - 1 );
+                                           ( NUMBER_OF_GROUND_SPOTS - 1 );
       // @private {number[]} - list of valid x-positions for model elements to rest
       this.groundSpotXPositions = [];
 

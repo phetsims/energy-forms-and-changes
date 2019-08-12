@@ -361,7 +361,7 @@ define( require => {
       // calculate the minimum spacing based on the number of chunks on the panel
       const minArrivalTimeSpacing = numChunksOnPanel <= 3 ?
                                     MIN_INTER_CHUNK_TIME :
-                                  MIN_INTER_CHUNK_TIME / ( numChunksOnPanel - 2 );
+                                    MIN_INTER_CHUNK_TIME / ( numChunksOnPanel - 2 );
 
       // if the projected arrival time is too close to the current last chunk, slow down so that the minimum spacing is
       // maintained

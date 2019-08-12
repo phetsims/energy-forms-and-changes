@@ -23,39 +23,39 @@ define( require => {
 
   class EnergyChunkContainerSlice {
 
-  /**
-   * @param {Bounds2} bounds
-   * @param {number} zPosition - used to give appearance of depth
-   * @param {Property.<Vector2>} anchorPointProperty
-   */
-  constructor( bounds, zPosition, anchorPointProperty ) {
+    /**
+     * @param {Bounds2} bounds
+     * @param {number} zPosition - used to give appearance of depth
+     * @param {Property.<Vector2>} anchorPointProperty
+     */
+    constructor( bounds, zPosition, anchorPointProperty ) {
 
-    // @public {Property.<Vector2>} - position of this slice in model space
-    this.anchorPointProperty = anchorPointProperty;
+      // @public {Property.<Vector2>} - position of this slice in model space
+      this.anchorPointProperty = anchorPointProperty;
 
-    // @public (read-only) {Bounds2} - 2D bounds of this slice in model space, translates with the anchor point
-    this.bounds = bounds;
+      // @public (read-only) {Bounds2} - 2D bounds of this slice in model space, translates with the anchor point
+      this.bounds = bounds;
 
-    // @private {number}
-    this.zPosition = zPosition;
+      // @private {number}
+      this.zPosition = zPosition;
 
-    // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
-    this.energyChunkList = new ObservableArray();
+      // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
+      this.energyChunkList = new ObservableArray();
 
-    // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
-    this.anchorPointProperty.lazyLink( ( newPosition, oldPosition ) => {
+      // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
+      this.anchorPointProperty.lazyLink( ( newPosition, oldPosition ) => {
 
-      const xTranslation = newPosition.x - oldPosition.x;
-      const yTranslation = newPosition.y - oldPosition.y;
+        const xTranslation = newPosition.x - oldPosition.x;
+        const yTranslation = newPosition.y - oldPosition.y;
 
-      this.bounds.shift( xTranslation, yTranslation );
+        this.bounds.shift( xTranslation, yTranslation );
 
-      // c-style loop for best performance
-      for ( let i = 0; i < this.energyChunkList.length; i++ ) {
-        this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
-      }
-    } );
-  }
+        // c-style loop for best performance
+        for ( let i = 0; i < this.energyChunkList.length; i++ ) {
+          this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
+        }
+      } );
+    }
 
     /**
      * @param {EnergyChunk} energyChunk

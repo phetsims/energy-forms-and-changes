@@ -619,7 +619,7 @@ define( require => {
             const timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
 
             const thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) *
-                                      thermalContactLength * heatTransferConstant * timeStep;
+                                        thermalContactLength * heatTransferConstant * timeStep;
             otherEnergyContainer.changeEnergy( -thermalEnergyGained );
             this.changeEnergy( thermalEnergyGained );
             amountOfEnergyExchanged += -thermalEnergyGained;

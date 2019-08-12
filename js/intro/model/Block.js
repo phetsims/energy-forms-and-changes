@@ -27,8 +27,8 @@ define( require => {
   const NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
   const MAX_TEMPERATURE = 620; // in degrees Kelvin, see usage below for where the value comes from
   const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
-                                    EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
-                                    Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
+                                      EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
+                                      Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
   const BLOCK_COMPOSITION = {};
   BLOCK_COMPOSITION[ BlockType.IRON ] = {

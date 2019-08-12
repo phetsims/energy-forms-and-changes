@@ -22,30 +22,30 @@ define( require => {
 
   class BeakerContainer extends Beaker {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {number} width
-   * @param {number} height
-   * @param {Array.<Block>} potentiallyContainedElements
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {Object} [options]
-   */
-  constructor(
-    initialPosition,
-    width,
-    height,
-    potentiallyContainedElements,
-    energyChunksVisibleProperty,
-    options
-  ) {
-    super( initialPosition, width, height, energyChunksVisibleProperty, options );
+    /**
+     * @param {Vector2} initialPosition
+     * @param {number} width
+     * @param {number} height
+     * @param {Array.<Block>} potentiallyContainedElements
+     * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Object} [options]
+     */
+    constructor(
+      initialPosition,
+      width,
+      height,
+      potentiallyContainedElements,
+      energyChunksVisibleProperty,
+      options
+    ) {
+      super( initialPosition, width, height, energyChunksVisibleProperty, options );
 
-    // @public (read-only) {string} - id of this beaker
-    this.id = `beaker-container-${idCounter++}`;
+      // @public (read-only) {string} - id of this beaker
+      this.id = `beaker-container-${idCounter++}`;
 
-    // @private
-    this.potentiallyContainedElements = potentiallyContainedElements;
-  }
+      // @private
+      this.potentiallyContainedElements = potentiallyContainedElements;
+    }
 
     /**
      * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.

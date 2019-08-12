@@ -19,14 +19,14 @@ define( require => {
   class ThermalContactArea extends Bounds2 {
 
     //REVIEW #247 missing visibility annotation
-  /**
-   * @param {Bounds2} bounds
-   * @param {boolean} supportsImmersion
-   */
-  constructor( bounds, supportsImmersion ) {
-    super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
-    this.supportsImmersion = supportsImmersion;
-  }
+    /**
+     * @param {Bounds2} bounds
+     * @param {boolean} supportsImmersion
+     */
+    constructor( bounds, supportsImmersion ) {
+      super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
+      this.supportsImmersion = supportsImmersion;
+    }
 
     /**
      * Get the amount of thermal contact that exists between this and another thermal area.  Since thermal contact
@@ -58,7 +58,8 @@ define( require => {
             // not fully overlapping in Y direction, so adjust contact length accordingly
             contactLength -= immersionRect.width;
           }
-        } else {
+        }
+        else {
 
           // This shouldn't occur, but in practice it sometimes does due to floating point tolerances.  Print out an
           // error if a threshold is exceeded so that we can know that the value needs adjusting.  The threshold value
@@ -69,16 +70,18 @@ define( require => {
           //   console.warn( 'xOverlap = ' + xOverlap );
           // }
         }
-      } else if ( xOverlap > 0 || yOverlap > 0 ) {
+      }
+      else if ( xOverlap > 0 || yOverlap > 0 ) {
 
         // there is overlap in one dimension but not the other, so test to see if the two containers are touching
         if ( xOverlap > 0 &&
-          Math.abs( this.maxY - that.minY ) < TOUCH_DISTANCE_THRESHOLD ||
-          Math.abs( this.minY - that.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
+             Math.abs( this.maxY - that.minY ) < TOUCH_DISTANCE_THRESHOLD ||
+             Math.abs( this.minY - that.maxY ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
-        } else if ( yOverlap > 0 &&
-          Math.abs( this.maxX - that.minX ) < TOUCH_DISTANCE_THRESHOLD ||
-          Math.abs( this.minX - that.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
+        }
+        else if ( yOverlap > 0 &&
+                  Math.abs( this.maxX - that.minX ) < TOUCH_DISTANCE_THRESHOLD ||
+                  Math.abs( this.minX - that.maxX ) < TOUCH_DISTANCE_THRESHOLD ) {
           contactLength = xOverlap;
         }
       }

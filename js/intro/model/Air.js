@@ -108,7 +108,7 @@ define( require => {
         _.times( numFullTimeStepExchanges + 1, index => {
           const timeStep = index < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
           const thermalEnergyLost = ( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) *
-                                  HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
+                                    HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
           this.changeEnergy( -thermalEnergyLost );
 
         } );
@@ -161,7 +161,7 @@ define( require => {
         for ( let i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
           const timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
           const thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) *
-                                    thermalContactLength * heatTransferConstant * timeStep;
+                                      thermalContactLength * heatTransferConstant * timeStep;
           energyToExchange += thermalEnergyGained;
         }
 
