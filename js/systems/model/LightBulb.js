@@ -16,7 +16,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyUser' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -57,7 +57,9 @@ define( require => {
       super( iconImage );
 
       // @public (read-only) {NumberProperty}
-      this.litProportionProperty = new Property( 0 );
+      this.litProportionProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
 
       // @private
       this.hasFilament = hasFilament;

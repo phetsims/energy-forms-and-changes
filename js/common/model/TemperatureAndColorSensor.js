@@ -13,6 +13,8 @@ define( require => {
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
 
   class TemperatureAndColorSensor extends UserMovableModelElement {
@@ -29,8 +31,10 @@ define( require => {
       // @private
       this.model = model;
 
-      // @public (read-only) {Property.<number>}
-      this.sensedTemperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
+      // @public (read-only) {NumberProperty}
+      this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
+        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE )
+      } );
 
       // @public (read-only) {Property.<Color>}
       this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR );

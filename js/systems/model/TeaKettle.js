@@ -60,7 +60,11 @@ define( require => {
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 )
       } );
-      this.energyProductionRateProperty = new NumberProperty( 0 );
+
+      // @public (read-only) {NumberProperty}
+      this.energyProductionRateProperty = new NumberProperty( 0, {
+        range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE )
+      } );
 
       // @public
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;

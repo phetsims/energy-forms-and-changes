@@ -12,7 +12,8 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
 
   class UserMovableModelElement extends ModelElement {
 
@@ -29,8 +30,10 @@ define( require => {
       // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
       this.supportingSurface = null;
 
-      // @public {Property.<number>}
-      this.verticalVelocityProperty = new Property( 0 );
+      // @public {NumberProperty} - in meters/second
+      this.verticalVelocityProperty = new NumberProperty( 0, {
+        range: new Range( -3, 0 ) // empirically determined
+      } );
 
       // update internal state when the user picks up this model element
       this.userControlledProperty.link( userControlled => {

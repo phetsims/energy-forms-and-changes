@@ -20,7 +20,8 @@ define( require => {
   const HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const TemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/TemperatureAndColorSensor' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -69,9 +70,10 @@ define( require => {
       // @private
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-      // @public (read-only) {NumberProperty} - proportion, from 0 to 1, of the max amount of heat that can be applied to
-      // the beaker
-      this.heatProportionProperty = new Property( 0 );
+      // @public (read-only) {NumberProperty}
+      this.heatProportionProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
       // beaker

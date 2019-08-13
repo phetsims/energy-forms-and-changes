@@ -20,6 +20,7 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
@@ -53,8 +54,10 @@ define( require => {
       // @public (read-only) {string} - unique ID, used for debug
       this.id = `burner-${idCounter++}`;
 
-      // @public {Property<number>}
-      this.heatCoolLevelProperty = new Property( 0 );
+      // @public {NumberProperty}
+      this.heatCoolLevelProperty = new NumberProperty( 0, {
+        range: new Range( -1, 1 )
+      } );
 
       // @public (read-only) {ObservableArray.<EnergyChunk>}
       this.energyChunkList = new ObservableArray();

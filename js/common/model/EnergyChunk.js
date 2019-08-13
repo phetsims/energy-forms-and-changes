@@ -11,8 +11,10 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // static data
   let instanceCount = 0; // counter for creating unique IDs
@@ -23,14 +25,20 @@ define( require => {
      * @param {EnergyType} initialEnergyType
      * @param {Vector2} initialPosition
      * @param {Vector2} initialVelocity
-     * @param {Property.<boolean>} visibleProperty
+     * @param {BooleanProperty} visibleProperty
      */
     constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
 
-      // @public - properties of this energy chunk
-      this.positionProperty = new Property( initialPosition );
-      this.zPositionProperty = new Property( 0 );   // for simple 3D layering effects
+      // @public
+      this.positionProperty = new Vector2Property( initialPosition );
+
+      // @public - for simple 3D layering effects
+      this.zPositionProperty = new NumberProperty( 0 );
+
+      // @public - TODO: convert to enumeration and enumerationProperty
       this.energyTypeProperty = new Property( initialEnergyType );
+
+      // @public
       this.visibleProperty = visibleProperty;
 
       // @public (read-only) {number} - an ID that will be used to track this energy chunk

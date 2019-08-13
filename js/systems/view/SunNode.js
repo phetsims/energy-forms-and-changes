@@ -26,6 +26,7 @@ define( require => {
   const Panel = require( 'SUN/Panel' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const RadialGradient = require( 'SCENERY/util/RadialGradient' );
   const Range = require( 'DOT/Range' );
@@ -223,7 +224,13 @@ define( require => {
      * @param {number} initialAbsorptionCoefficient
      */
     constructor( shape, initialAbsorptionCoefficient ) {
-      this.absorptionCoefficientProperty = new Property( initialAbsorptionCoefficient );
+
+      // @public {NumberProperty}
+      this.absorptionCoefficientProperty = new NumberProperty( initialAbsorptionCoefficient, {
+        range: new Range( 0, 1 )
+      } );
+
+      // @public (read-only) {Shape}
       this.shape = shape;
     }
 

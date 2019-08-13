@@ -17,7 +17,8 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyUser' );
   const Image = require( 'SCENERY/nodes/Image' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -68,8 +69,10 @@ define( require => {
     constructor( energyChunksVisibleProperty ) {
       super( new Image( FAN_ICON ) );
 
-      // @public (read-only) {NumberProperty}
-      this.bladePositionProperty = new Property( 0 );
+      // @public (read-only) {NumberProperty} - the angle of the blade as it's spinning in a circular motion, in radians
+      this.bladePositionProperty = new NumberProperty( 0, {
+        range: new Range( 0, 2 * Math.PI )
+      } );
 
       // @private - movers that control how the energy chunks move towards and through the fan
       this.electricalEnergyChunkMovers = [];

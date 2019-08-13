@@ -23,7 +23,6 @@ define( require => {
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const LinearFunction = require( 'DOT/LinearFunction' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
@@ -92,8 +91,10 @@ define( require => {
         range: new Range( EFACConstants.INITIAL_FLUID_LEVEL, 1 )
       } );
 
-      // @public (read-only) {Property.<number>} - temperature of fluid in beaker
-      this.temperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
+      // @public (read-only) {NumberProperty} - temperature of fluid in beaker
+      this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
+        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE )
+      } );
 
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
       // steam, 1 is the max amount (full boil)

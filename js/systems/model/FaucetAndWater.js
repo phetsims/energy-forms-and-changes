@@ -20,7 +20,7 @@ define( require => {
   const EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySource' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
   const WaterDrop = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/WaterDrop' );
@@ -64,8 +64,10 @@ define( require => {
       // system element
       this.waterPowerableElementInPlaceProperty = waterPowerableElementInPlaceProperty;
 
-      // @public {BooleanProperty} proportion of full available flow that is occurring
-      this.flowProportionProperty = new Property( 0 );
+      // @public {NumberProperty}
+      this.flowProportionProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
 
       // @public {read-only) {WaterDrop[]} - water drops that comprise the stream of water
       this.waterDrops = [];
