@@ -16,7 +16,7 @@ define( require => {
   const Emitter = require( 'AXON/Emitter' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
-  const EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkDistributor' );
+  const energyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/energyChunkDistributor' );
   const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -281,7 +281,7 @@ define( require => {
         const startTime = window.performance.now();
         const numIterations = 10; // empirically determined to give a reasonably consistent value
         for ( let i = 0; i < numIterations; i++ ) {
-          EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+          energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         }
         const averageIterationTime = ( window.performance.now() - startTime ) / numIterations;
         if ( averageIterationTime > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
@@ -289,7 +289,7 @@ define( require => {
           // Performance on this device is poor, switch to the less computationally intenstive distribution algorithm,
           // but only if something else wasn't explicitly specified.
           if ( EFACQueryParameters.ecDistribution === null ) {
-            EnergyChunkDistributor.setDistributionAlgorithm( 'spiral' );
+            energyChunkDistributor.setDistributionAlgorithm( 'spiral' );
           }
         }
         performanceMeasurementTaken = true;
@@ -297,7 +297,7 @@ define( require => {
 
       // distribute the initial energy chunks within the container
       for ( let i = 0; i < 500; i++ ) {
-        const distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        const distributed = energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
           break;
         }

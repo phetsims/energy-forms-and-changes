@@ -14,7 +14,7 @@ define( require => {
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
-  const EnergyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkDistributor' );
+  const energyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/energyChunkDistributor' );
   const EnergyChunkWanderController = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkWanderController' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
@@ -251,7 +251,7 @@ define( require => {
       if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 
         // distribute the energy chunks contained within this model element
-        const redistributed = EnergyChunkDistributor.updatePositions( this.slices, dt );
+        const redistributed = energyChunkDistributor.updatePositions( this.slices, dt );
 
         if ( !redistributed ) {
 
@@ -562,7 +562,7 @@ define( require => {
 
       // distribute the initial energy chunks within the container using the repulsive algorithm
       for ( let i = 0; i < 500; i++ ) {
-        const distributed = EnergyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        const distributed = energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
           break;
         }

@@ -90,7 +90,7 @@ define( require => {
   const compositeSliceBounds = Bounds2.NOTHING.copy();
 
   // the main singleton object definition
-  const EnergyChunkDistributor = {
+  const energyChunkDistributor = {
 
     /**
      * Redistribute a set of energy chunks that are contained in energy chunk slices using an algorithm where the
@@ -553,10 +553,10 @@ define( require => {
   if ( EFACQueryParameters.ecDistribution === null ) {
 
     // use the repulsive algorithm by default, which looks the best but is also the most computationally expensive
-    EnergyChunkDistributor.updatePositions = EnergyChunkDistributor.updatePositionsRepulsive;
+    energyChunkDistributor.updatePositions = energyChunkDistributor.updatePositionsRepulsive;
   }
   else {
-    EnergyChunkDistributor.setDistributionAlgorithm( EFACQueryParameters.ecDistribution );
+    energyChunkDistributor.setDistributionAlgorithm( EFACQueryParameters.ecDistribution );
   }
 
   /**
@@ -606,5 +606,5 @@ define( require => {
     return Math.sqrt( opposite * opposite + adjacent * adjacent );
   };
 
-  return energyFormsAndChanges.register( 'EnergyChunkDistributor', EnergyChunkDistributor );
+  return energyFormsAndChanges.register( 'energyChunkDistributor', energyChunkDistributor );
 } );
