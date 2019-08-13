@@ -20,7 +20,7 @@ define( require => {
   const EnergySource = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySource' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -56,9 +56,11 @@ define( require => {
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.teaKettle.value;
 
-      // @public
-      this.heatAmountProperty = new Property( 0 );
-      this.energyProductionRateProperty = new Property( 0 );
+      // @public {NumberProperty}
+      this.heatProportionProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
+      this.energyProductionRateProperty = new NumberProperty( 0 );
 
       // @public
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -91,12 +93,12 @@ define( require => {
 
       if ( this.activeProperty.value ) {
 
-        if ( this.heatAmountProperty.value > 0 || this.energyProductionRateProperty.value > COOL_DOWN_COMPLETE_THRESHOLD ) {
+        if ( this.heatProportionProperty.value > 0 || this.energyProductionRateProperty.value > COOL_DOWN_COMPLETE_THRESHOLD ) {
 
           // Calculate the energy production rate.
 
           // Analogous to acceleration.
-          const increase = this.heatAmountProperty.value * MAX_ENERGY_CHANGE_RATE;
+          const increase = this.heatProportionProperty.value * MAX_ENERGY_CHANGE_RATE;
 
           // Analogous to friction.
           const decrease = this.energyProductionRateProperty.value * COOLING_CONSTANT;
@@ -115,7 +117,7 @@ define( require => {
 
         // See if it's time to emit a new energy chunk from the heater.
         this.heatEnergyProducedSinceLastChunk +=
-          Math.max( this.heatAmountProperty.value, 0 ) * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
+          Math.max( this.heatProportionProperty.value, 0 ) * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
 
         if ( this.heatEnergyProducedSinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
@@ -276,7 +278,7 @@ define( require => {
           let initialPosition;
           const xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
 
-          if ( this.heatAmountProperty.value > 0 ) {
+          if ( this.heatProportionProperty.value > 0 ) {
 
             // Create a thermal chunk inside the burner.
             initialPosition = new Vector2(
@@ -336,7 +338,7 @@ define( require => {
      */
     deactivate() {
       super.deactivate();
-      this.heatAmountProperty.reset();
+      this.heatProportionProperty.reset();
       this.energyProductionRateProperty.reset();
     }
 
