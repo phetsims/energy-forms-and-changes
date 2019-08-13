@@ -11,7 +11,7 @@ define( require => {
   'use strict';
 
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Property = require( 'AXON/Property' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class PositionableModelElement {
 
@@ -20,8 +20,8 @@ define( require => {
      */
     constructor( initialPosition ) {
 
-      // @public {Property.<Vector>}
-      this.positionProperty = new Property( initialPosition );
+      // @public {Vector2Property}
+      this.positionProperty = new Vector2Property( initialPosition );
     }
   }
 

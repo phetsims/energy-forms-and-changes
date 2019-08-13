@@ -22,10 +22,10 @@ define( require => {
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // constants
   const SIDE_LENGTH = 0.075; // in meters
@@ -175,7 +175,7 @@ define( require => {
       // create a motion strategy that will move this energy chunk
       const motionStrategy = new EnergyChunkWanderController(
         energyChunk,
-        new Property( this.getCenterPoint() ),
+        new Vector2Property( this.getCenterPoint() ),
         { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
       );
 

@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -42,8 +43,8 @@ define( require => {
         isValidValue: ColorDef.isColorDef
       } );
 
-      // @public (read-only) {Property.<boolean>} - used to control visibility in the view
-      this.activeProperty = new Property( initiallyActive );
+      // @public (read-only) {BooleanProperty} - used to control visibility in the view
+      this.activeProperty = new BooleanProperty( initiallyActive );
     }
 
     /**

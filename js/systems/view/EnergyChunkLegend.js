@@ -19,7 +19,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Property = require( 'AXON/Property' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -92,7 +92,7 @@ define( require => {
       // The EnergyChunks that are created here are not going to be used in the simulation, they are only needed for the
       // EnergyChunkNodes that are displayed in the legend.
       const iconNode = new EnergyChunkNode(
-        new EnergyChunk( energyType, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+        new EnergyChunk( energyType, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ) ),
         modelViewTransform
       );
 

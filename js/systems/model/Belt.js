@@ -16,7 +16,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Property = require( 'AXON/Property' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Shape = require( 'KITE/Shape' );
 
   class Belt {
@@ -66,7 +66,7 @@ define( require => {
       this.beltShape = beltShape;
 
       // @public {BooleanProperty}
-      this.isVisibleProperty = new Property( false );
+      this.isVisibleProperty = new BooleanProperty( false );
     }
   }
 
