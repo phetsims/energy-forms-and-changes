@@ -17,6 +17,7 @@ define( require => {
   const Animation = require( 'TWIXT/Animation' );
   const BeakerContainerNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerNode' );
   const BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
   const Checkbox = require( 'SUN/Checkbox' );
@@ -40,7 +41,6 @@ define( require => {
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PlayPauseStepButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PlayPauseStepButtonGroup' );
-  const Property = require( 'AXON/Property' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
@@ -568,7 +568,7 @@ define( require => {
       // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
       // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
       const energyChunkNode = new EnergyChunkNode(
-        new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new Property( true ) ),
+        new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ) ),
         modelViewTransform
       );
       energyChunkNode.pickable = false;

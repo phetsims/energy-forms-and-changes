@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const ColorDef = require( 'SCENERY/util/ColorDef' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Property = require( 'AXON/Property' );
@@ -37,7 +38,9 @@ define( require => {
       } );
 
       // @public (read-only) {Property.<Color>}
-      this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR );
+      this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
+        isValidValue: ColorDef.isColorDef
+      } );
 
       // @public (read-only) {Property.<boolean>} - used to control visibility in the view
       this.activeProperty = new Property( initiallyActive );

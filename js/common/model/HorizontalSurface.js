@@ -33,7 +33,9 @@ define( require => {
 
       // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
       // one, null if nothing there, use the API below to update
-      this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null );
+      this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null, {
+        valueType: [ ModelElement, null ]
+      } );
 
       // monitor the element on the surface for legitimate settings
       assert && this.elementOnSurfaceProperty.link( ( elementOnSurface, previousElementOnSurface ) => {
