@@ -132,7 +132,7 @@ define( require => {
       if ( this.isEnergyChunkObscured( energyChunk ) ) {
 
         // the chunk is obscured by a model element in the beaker, so move it to the front of the z-order
-        energyChunk.zPositionProperty.set( 0.0 );
+        energyChunk.zPositionProperty.set( 0 );
         this.approachingEnergyChunks.push( energyChunk );
         this.energyChunkWanderControllers.push(
           new EnergyChunkWanderController( energyChunk, this.positionProperty )

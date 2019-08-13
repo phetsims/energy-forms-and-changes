@@ -187,7 +187,7 @@ define( require => {
         const ec = this.beaker.extractEnergyChunkClosestToPoint( extractionPoint );
 
         if ( ec ) {
-          ec.zPositionProperty.set( 0.0 ); // move to front of z order
+          ec.zPositionProperty.set( 0 ); // move to front of z order
           this.radiatedEnergyChunkList.push( ec );
           this.radiatedEnergyChunkMovers.push(
             new EnergyChunkPathMover(
