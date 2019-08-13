@@ -74,7 +74,7 @@ define( require => {
     maxDT: 0.1,
 
     // physical temperature constants
-    ROOM_TEMPERATURE: 296, // in degrees Kelvin
+    ROOM_TEMPERATURE: ROOM_TEMPERATURE,
     WATER_FREEZING_POINT_TEMPERATURE: WATER_FREEZING_POINT_TEMPERATURE, // in degrees Kelvin
     WATER_BOILING_POINT_TEMPERATURE: 373.15, // in degrees Kelvin
     OLIVE_OIL_BOILING_POINT_TEMPERATURE: 573.15, // in degrees Kelvin
