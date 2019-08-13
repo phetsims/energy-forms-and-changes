@@ -60,7 +60,7 @@ define( require => {
         this.getBounds().minX,
         this.getBounds().minY,
         this.width,
-        this.height * this.fluidLevelProperty.value
+        this.height * this.fluidProportionProperty.value
       );
 
       let overlappingArea = 0;
@@ -73,7 +73,7 @@ define( require => {
 
       // Map the overlap to a new fluid level.  The scaling factor was empirically determined to look good.
       const newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
-      this.fluidLevelProperty.set( newFluidLevel );
+      this.fluidProportionProperty.set( newFluidLevel );
     }
 
     /**

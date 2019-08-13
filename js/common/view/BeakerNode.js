@@ -95,7 +95,7 @@ define( require => {
       // Add the fluid.  It will adjust its size based on the fluid level.
       this.fluid = new PerspectiveWaterNode(
         beakerBounds,
-        beaker.fluidLevelProperty,
+        beaker.fluidProportionProperty,
         beaker.temperatureProperty,
         beaker.fluidBoilingPoint,
         beaker.fluidColor,
@@ -189,7 +189,7 @@ define( require => {
       } );
       label.translation = new Vector2(
         beakerBounds.centerX - label.bounds.width / 2,
-        beakerBounds.maxY - beakerBounds.height * beaker.fluidLevelProperty.value + topEllipse.bounds.height * 1.1
+        beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
       );
       label.pickable = false;
       this.frontNode.addChild( label );

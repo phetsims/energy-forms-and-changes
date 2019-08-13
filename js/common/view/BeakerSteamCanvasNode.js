@@ -28,18 +28,18 @@ define( require => {
 
     /**
      * @param {Rectangle} containerOutlineRect - the outline of the container
-     * @param {Property<number>} fluidLevelProperty - the proportion of fluid in its container
+     * @param {Property<number>} fluidProportionProperty - the proportion of fluid in its container
      * @param {Property<number>} temperatureProperty - the temperature of the liquid
      * @param {number} fluidBoilingPoint
      * @param {Color} steamColor
      * @param {Object} [options]
      */
-    constructor( containerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
+    constructor( containerOutlineRect, fluidProportionProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
       super( options );
 
       // @private
       this.containerOutlineRect = containerOutlineRect;
-      this.fluidLevelProperty = fluidLevelProperty;
+      this.fluidProportionProperty = fluidProportionProperty;
       this.temperatureProperty = temperatureProperty;
       this.fluidBoilingPoint = fluidBoilingPoint;
       this.steamColor = steamColor;
@@ -71,7 +71,7 @@ define( require => {
       context.fill();
 
       // update the appearance of the water as the level changes
-      this.fluidLevelProperty.link( fluidLevel => {
+      this.fluidProportionProperty.link( fluidLevel => {
         this.steamOrigin = this.containerOutlineRect.minY * fluidLevel;
       } );
 

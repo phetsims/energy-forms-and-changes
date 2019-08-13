@@ -27,18 +27,18 @@ define( require => {
 
     /**
      * @param {Rectangle} beakerOutlineRect
-     * @param {Property.<number>} fluidLevelProperty
+     * @param {Property.<number>} fluidProportionProperty
      * @param {Property.<number>} temperatureProperty
      * @param {number} fluidBoilingPoint
      * @param {Color} fluidColor
      * @param {Color} steamColor
      */
-    constructor( beakerOutlineRect, fluidLevelProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
+    constructor( beakerOutlineRect, fluidProportionProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
       super();
 
       // @private
       this.beakerOutlineRect = beakerOutlineRect;
-      this.fluidLevelProperty = fluidLevelProperty;
+      this.fluidProportionProperty = fluidProportionProperty;
       this.temperatureProperty = temperatureProperty;
       this.fluidBoilingPoint = fluidBoilingPoint;
       this.fluidColor = fluidColor;
@@ -61,7 +61,7 @@ define( require => {
 
       this.steamCanvasNode = new BeakerSteamCanvasNode(
         this.beakerOutlineRect,
-        this.fluidLevelProperty,
+        this.fluidProportionProperty,
         this.temperatureProperty,
         this.fluidBoilingPoint,
         this.steamColor, {
@@ -77,7 +77,7 @@ define( require => {
       this.addChild( this.steamCanvasNode );
 
       // update the appearance of the water as the level changes
-      this.fluidLevelProperty.link( fluidLevel => {
+      this.fluidProportionProperty.link( fluidLevel => {
         const fluidHeight = beakerOutlineRect.height * fluidLevel;
         this.fluidBounds.setMinMax(
           beakerOutlineRect.minX,

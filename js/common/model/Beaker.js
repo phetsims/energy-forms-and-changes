@@ -22,7 +22,9 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const LinearFunction = require( 'DOT/LinearFunction' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
   const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
@@ -85,8 +87,10 @@ define( require => {
       // @public {number} - the distance between major tick marks on the side of the beaker
       this.majorTickMarkDistance = options.majorTickMarkDistance;
 
-      // @public {Property.<number>} - fluid level in beaker, should only be set in sub-types
-      this.fluidLevelProperty = new Property( EFACConstants.INITIAL_FLUID_LEVEL );
+      // @public {Property.<number>} - proportion of fluid in the beaker, should only be set in sub-types
+      this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_LEVEL, {
+        range: new Range( EFACConstants.INITIAL_FLUID_LEVEL, 1 )
+      } );
 
       // @public (read-only) {Property.<number>} - temperature of fluid in beaker
       this.temperatureProperty = new Property( EFACConstants.ROOM_TEMPERATURE );
@@ -105,7 +109,7 @@ define( require => {
           initialPosition.x - this.width / 2,
           initialPosition.y,
           initialPosition.x + this.width / 2,
-          initialPosition.y + this.height * this.fluidLevelProperty.get()
+          initialPosition.y + this.height * this.fluidProportionProperty.get()
         ),
         true
       );
@@ -162,12 +166,12 @@ define( require => {
           position.x - this.width / 2,
           position.y,
           position.x + this.width / 2,
-          position.y + this.height * this.fluidLevelProperty.get()
+          position.y + this.height * this.fluidProportionProperty.get()
         );
       } );
 
       // update internal state when the fluid level changes
-      this.fluidLevelProperty.link( ( newFluidLevel, oldFluidLevel ) => {
+      this.fluidProportionProperty.link( ( newFluidLevel, oldFluidLevel ) => {
 
         // update the thermal contact area
         const position = this.positionProperty.get();
@@ -175,7 +179,7 @@ define( require => {
           position.x - this.width / 2,
           position.y,
           position.x + this.width / 2,
-          position.y + this.height * this.fluidLevelProperty.get()
+          position.y + this.height * this.fluidProportionProperty.get()
         );
 
         // update the bounds of the energy chunk slices
@@ -319,7 +323,7 @@ define( require => {
           currentPosition.x - this.width / 2,
           currentPosition.y,
           currentPosition.x + this.width / 2,
-          currentPosition.y + this.height * this.fluidLevelProperty.get()
+          currentPosition.y + this.height * this.fluidProportionProperty.get()
         );
       }
 
@@ -334,7 +338,7 @@ define( require => {
     getSteamArea() {
 
       // height of steam rectangle is based on beaker height and steamingProportion
-      const liquidWaterHeight = this.height * this.fluidLevelProperty.value;
+      const liquidWaterHeight = this.height * this.fluidProportionProperty.value;
       const position = this.positionProperty.value;
       return new Rectangle( position.x - this.width / 2,
         position.y + liquidWaterHeight,
@@ -473,7 +477,7 @@ define( require => {
      * @public
      */
     reset() {
-      this.fluidLevelProperty.reset();
+      this.fluidProportionProperty.reset();
       this.temperatureProperty.reset();
       this.resetEmitter.emit();
       super.reset();
