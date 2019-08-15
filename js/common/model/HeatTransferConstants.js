@@ -15,6 +15,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
 
   // constants
   const BRICK_IRON_HEAT_TRANSFER_FACTOR = 1000.0;
@@ -65,15 +66,18 @@ define( require => {
 
   const HeatTransferConstants = {
 
-    //REVIEW #247 missing visibility annotation
     /**
      * get the heat transfer constants for two model elements that can contain heat
-     * @param {string} element1
-     * @param {string} element2
+     * @param {Object} element1 - a value from EnergyContainerCategory
+     * @param {Object} element2 - a value from EnergyContainerCategory
      * @returns {number}
+     * @public
      */
-    getHeatTransferFactor( element1, element2 ) {
-      return heatTransferConstantsMap[ element1 ][ element2 ];
+    getHeatTransferFactor( category1, category2 ) {
+      assert && assert( EnergyContainerCategory.includes( category1 ), `invalid category1: ${category1}` );
+      assert && assert( EnergyContainerCategory.includes( category2 ), `invalid category2: ${category2}` );
+
+      return heatTransferConstantsMap[ category1.name ][ category2.name ];
     },
 
     //REVIEW #247 missing visibility annotation
