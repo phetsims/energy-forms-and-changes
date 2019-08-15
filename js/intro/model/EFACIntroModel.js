@@ -71,7 +71,7 @@ define( require => {
       // @public {BooleanProperty} - is the sim running or paused?
       this.isPlayingProperty = new BooleanProperty( true );
 
-      // @public {Property.<SimSpeed>} - controls the speed of the sim
+      // @public
       this.simSpeedProperty = new EnumerationProperty( SimSpeed, SimSpeed.NORMAL );
 
       // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
