@@ -77,8 +77,8 @@ define( require => {
       this.addChild( this.steamCanvasNode );
 
       // update the appearance of the water as the level changes
-      this.fluidProportionProperty.link( fluidLevel => {
-        const fluidHeight = beakerOutlineRect.height * fluidLevel;
+      this.fluidProportionProperty.link( fluidProportion => {
+        const fluidHeight = beakerOutlineRect.height * fluidProportion;
         this.fluidBounds.setMinMax(
           beakerOutlineRect.minX,
           beakerOutlineRect.maxY - fluidHeight,

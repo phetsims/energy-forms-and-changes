@@ -64,7 +64,7 @@ define( require => {
         initialPosition,
         width,
         height,
-        Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_LEVEL * options.fluidDensity,
+        Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_PROPORTION * options.fluidDensity,
         options.fluidSpecificHeat,
         energyChunksVisibleProperty
       );
@@ -87,8 +87,8 @@ define( require => {
       this.majorTickMarkDistance = options.majorTickMarkDistance;
 
       // @public {Property.<number>} - proportion of fluid in the beaker, should only be set in sub-types
-      this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_LEVEL, {
-        range: new Range( EFACConstants.INITIAL_FLUID_LEVEL, 1 )
+      this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_PROPORTION, {
+        range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 )
       } );
 
       // @public (read-only) {NumberProperty} - temperature of fluid in beaker
@@ -172,7 +172,7 @@ define( require => {
       } );
 
       // update internal state when the fluid level changes
-      this.fluidProportionProperty.link( ( newFluidLevel, oldFluidLevel ) => {
+      this.fluidProportionProperty.link( ( newFluidProportion, oldFluidProportion ) => {
 
         // update the thermal contact area
         const position = this.positionProperty.get();
@@ -184,8 +184,8 @@ define( require => {
         );
 
         // update the bounds of the energy chunk slices
-        if ( oldFluidLevel ) {
-          const multiplier = newFluidLevel / oldFluidLevel;
+        if ( oldFluidProportion ) {
+          const multiplier = newFluidProportion / oldFluidProportion;
           this.slices.forEach( slice => {
             slice.updateHeight( multiplier );
           } );
@@ -375,7 +375,7 @@ define( require => {
         this.positionProperty.value.x - this.width / 2,
         this.positionProperty.value.y,
         this.width,
-        this.height * EFACConstants.INITIAL_FLUID_LEVEL
+        this.height * EFACConstants.INITIAL_FLUID_PROPORTION
       );
 
       const widthYProjection = Math.abs( this.width * EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER );

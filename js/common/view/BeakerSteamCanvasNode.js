@@ -71,8 +71,8 @@ define( require => {
       context.fill();
 
       // update the appearance of the water as the level changes
-      this.fluidProportionProperty.link( fluidLevel => {
-        this.steamOrigin = this.containerOutlineRect.minY * fluidLevel;
+      this.fluidProportionProperty.link( fluidProportion => {
+        this.steamOrigin = this.containerOutlineRect.minY * fluidProportion;
       } );
 
       this.mutate( options );

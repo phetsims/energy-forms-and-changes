@@ -72,8 +72,8 @@ define( require => {
       } );
 
       // Map the overlap to a new fluid level.  The scaling factor was empirically determined to look good.
-      const newFluidLevel = Math.min( EFACConstants.INITIAL_FLUID_LEVEL + overlappingArea * 120, 1 );
-      this.fluidProportionProperty.set( newFluidLevel );
+      const newFluidProportion = Math.min( EFACConstants.INITIAL_FLUID_PROPORTION + overlappingArea * 120, 1 );
+      this.fluidProportionProperty.set( newFluidProportion );
     }
 
     /**

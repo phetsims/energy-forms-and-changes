@@ -168,7 +168,7 @@ define( require => {
     FADE_COEFFICIENT_IN_AIR: 0.005,
 
     // constants for the burners.
-    INITIAL_FLUID_LEVEL: 0.5,
+    INITIAL_FLUID_PROPORTION: 0.5,
     BURNER_EDGE_TO_HEIGHT_RATIO: 0.2, // multiplier empirically determined for best look
     BURNER_PERSPECTIVE_ANGLE: Math.PI / 4, // positive is counterclockwise, a value of 0 produces a non-skewed rectangle
 
