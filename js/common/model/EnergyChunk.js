@@ -11,8 +11,9 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
@@ -35,8 +36,8 @@ define( require => {
       // @public - for simple 3D layering effects
       this.zPositionProperty = new NumberProperty( 0 );
 
-      // @public - TODO: convert to enumeration and enumerationProperty
-      this.energyTypeProperty = new Property( initialEnergyType );
+      // @public
+      this.energyTypeProperty = new EnumerationProperty( EnergyType, initialEnergyType );
 
       // @public
       this.visibleProperty = visibleProperty;

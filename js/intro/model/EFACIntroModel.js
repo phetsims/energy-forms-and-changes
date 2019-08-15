@@ -24,7 +24,7 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Property = require( 'AXON/Property' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const Range = require( 'DOT/Range' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
@@ -72,9 +72,7 @@ define( require => {
       this.isPlayingProperty = new BooleanProperty( true );
 
       // @public {Property.<SimSpeed>} - controls the speed of the sim
-      this.simSpeedProperty = new Property( SimSpeed.NORMAL, {
-        validValues: [ SimSpeed.NORMAL, SimSpeed.FAST_FORWARD ]
-      } );
+      this.simSpeedProperty = new EnumerationProperty( SimSpeed, SimSpeed.NORMAL );
 
       // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
       // energy
