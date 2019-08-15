@@ -10,15 +10,10 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
 
   // @public
-  const BlockType = {
-    IRON: 'IRON',
-    BRICK: 'BRICK'
-  };
-
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( BlockType ); }
+  const BlockType = new Enumeration( [ 'IRON', 'BRICK' ] );
 
   return energyFormsAndChanges.register( 'BlockType', BlockType );
 } );
