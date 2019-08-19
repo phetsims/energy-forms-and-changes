@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.7 Mon Aug 05 2019 15:18:14 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.7 Mon Aug 19 2019 13:19:05 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -21,12 +21,12 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "427e7d4787a3b287eacd2d6fbfbb13ebdea45d03",
+    "sha": "f9d23f7c6ed852c93b321e1a313ebd9b448a307c",
     "branch": "1.0"
   },
   "joist": {
-    "sha": "ee378529e52aa377b74c03a621443ea20487d9b3",
-    "branch": "HEAD"
+    "sha": "d92cdc598d41334ec7246e6be5cf115cc7dd364f",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "kite": {
     "sha": "20a875b740cbb9c441c72911e60617cd05a5d4e1",
@@ -57,12 +57,12 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "2cc43f734aa0b40f425c8a84ab2b87adb604634f",
-    "branch": "HEAD"
+    "sha": "392ff716c1969302481321be2371310996c3e244",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "scenery-phet": {
-    "sha": "69e8cad78b83ff4b3ab2dae4445efc211125c290",
-    "branch": "HEAD"
+    "sha": "32b5c6cad3061c8085588e44e95cdc4a20c6060b",
+    "branch": "energy-forms-and-changes-1.0"
   },
   "sherpa": {
     "sha": "1a34a865759342c8fc440cb3936df8ecd8a460d8",
