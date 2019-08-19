@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.7 Mon Aug 19 2019 13:19:05 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.8-rc.1 Mon Aug 19 2019 16:15:43 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -21,12 +21,12 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "f9d23f7c6ed852c93b321e1a313ebd9b448a307c",
+    "sha": "5e7195c5dc54386fc0fbf65b0d54c722a9d0b601",
     "branch": "1.0"
   },
   "joist": {
     "sha": "d92cdc598d41334ec7246e6be5cf115cc7dd364f",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "kite": {
     "sha": "20a875b740cbb9c441c72911e60617cd05a5d4e1",
@@ -58,11 +58,11 @@
   },
   "scenery": {
     "sha": "392ff716c1969302481321be2371310996c3e244",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "scenery-phet": {
     "sha": "32b5c6cad3061c8085588e44e95cdc4a20c6060b",
-    "branch": "energy-forms-and-changes-1.0"
+    "branch": "HEAD"
   },
   "sherpa": {
     "sha": "1a34a865759342c8fc440cb3936df8ecd8a460d8",
