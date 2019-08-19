@@ -69,7 +69,11 @@ define( require => {
         scale: 0.45,
         x: faucetHeadOrigin.x,
         y: faucetHeadOrigin.y,
-        closeOnRelease: false
+        closeOnRelease: false,
+        shooterOptions: {
+          touchAreaXDilation: 40,
+          touchAreaYDilation: 40
+        }
       } );
 
       // create the energy chunk layer
