@@ -12,6 +12,7 @@ define( require => {
   const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkPathMover = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyChunkPathMover' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -166,7 +167,8 @@ define( require => {
       if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
         const beakerRect = this.beaker.getUntransformedBounds();
         const thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidProportionProperty.value;
-        const transferFactor = HeatTransferConstants.getHeatTransferFactor( EnergyType.WATER, EnergyType.AIR );
+        const transferFactor = HeatTransferConstants.getHeatTransferFactor(
+          EnergyContainerCategory.WATER, EnergyContainerCategory.AIR );
         const thermalEnergyLost = temperatureGradient * transferFactor * thermalContactArea * dt;
 
         this.beaker.changeEnergy( -thermalEnergyLost );
