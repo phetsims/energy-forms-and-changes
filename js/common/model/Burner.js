@@ -109,28 +109,28 @@ define( require => {
     }
 
     /**
-     * Interact with a thermal energy container, adding or removing energy based on the current heat/cool setting.
+     * Interact with a thermal container, adding or removing energy based on the current heat/cool setting.
      * NOTE: this shouldn't be used for air - there is a specific method for that
-     * @param {ThermalEnergyContainer} thermalEnergyContainer - model object that will get or give energy
+     * @param {RectangularThermalMovableModelElement} thermalContainer - model object that will get or give energy
      * @param {number} dt - amount of time (delta time)
      * @returns {number} - amount of energy transferred in joules, can be negative if energy was drawn from object
      * @public
      */
-    addOrRemoveEnergyToFromObject( thermalEnergyContainer, dt ) {
+    addOrRemoveEnergyToFromObject( thermalContainer, dt ) {
       let deltaEnergy = 0;
 
-      if ( this.inContactWith( thermalEnergyContainer ) ) {
-        if ( thermalEnergyContainer.getTemperature() > EFACConstants.WATER_FREEZING_POINT_TEMPERATURE ) {
+      if ( this.inContactWith( thermalContainer ) ) {
+        if ( thermalContainer.getTemperature() > EFACConstants.WATER_FREEZING_POINT_TEMPERATURE ) {
           deltaEnergy = MAX_ENERGY_GENERATION_RATE * this.heatCoolLevelProperty.value * dt;
 
           // make sure we don't cool the object below its minimum allowed energy level
           if ( this.heatCoolLevelProperty.value < 0 ) {
-            if ( Math.abs( deltaEnergy ) > thermalEnergyContainer.getEnergyAboveMinimum() ) {
-              deltaEnergy = -thermalEnergyContainer.getEnergyAboveMinimum();
+            if ( Math.abs( deltaEnergy ) > thermalContainer.getEnergyAboveMinimum() ) {
+              deltaEnergy = -thermalContainer.getEnergyAboveMinimum();
             }
           }
         }
-        thermalEnergyContainer.changeEnergy( deltaEnergy );
+        thermalContainer.changeEnergy( deltaEnergy );
       }
       return deltaEnergy;
     }
@@ -151,13 +151,13 @@ define( require => {
 
     /**
      * determine if the burner is in contact with a thermal energy container
-     * @param {ThermalEnergyContainer} thermalEnergyContainer
+     * @param {RectangularThermalMovableModelElement} thermalContainer
      * @returns {boolean}
      * @public
      */
-    inContactWith( thermalEnergyContainer ) {
+    inContactWith( thermalContainer ) {
       const burnerRect = this.getBounds();
-      const area = thermalEnergyContainer.thermalContactArea;
+      const area = thermalContainer.thermalContactArea;
       const xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
       const yContact = ( Math.abs( area.minY - burnerRect.maxY ) < CONTACT_DISTANCE );
       return ( xContact && yContact );
@@ -277,14 +277,14 @@ define( require => {
     }
 
     /**
-     * @param {ThermalEnergyContainer[]} thermalEnergyContainers
+     * @param {RectangularThermalMovableModelElement[]} thermalContainers
      * @returns {boolean}
      * @public
      */
-    areAnyOnTop( thermalEnergyContainers ) {
+    areAnyOnTop( thermalContainers ) {
       let onTop = false;
-      thermalEnergyContainers.forEach( thermalEnergyContainer => {
-        if ( this.inContactWith( thermalEnergyContainer ) ) {
+      thermalContainers.forEach( thermalContainer => {
+        if ( this.inContactWith( thermalContainer ) ) {
           onTop = true;
         }
       } );

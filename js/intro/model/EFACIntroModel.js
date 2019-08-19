@@ -537,8 +537,8 @@ define( require => {
         burner.step( dt );
       } );
 
-      this.thermalContainers.forEach( thermalEnergyContainer => {
-        thermalEnergyContainer.step( dt );
+      this.thermalContainers.forEach( thermalContainer => {
+        thermalContainer.step( dt );
       } );
     }
 
