@@ -157,7 +157,6 @@ define( require => {
       }
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * This function originally existed primarily in support of boiling liquids, whose temperatures should not go up
      * after reaching a certain temperature.  In the context of a block, it is less meaningful in a true physical sense
@@ -169,7 +168,7 @@ define( require => {
      * empirically determined to be higher than the value that maxes out the thermometers, and enough above that value
      * that two stacked blocks can both reach the max value shown on the thermometer if heated long enough.
      * @returns {number}
-     * @override
+     * @public
      */
     getEnergyBeyondMaxTemperature() {
       return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
