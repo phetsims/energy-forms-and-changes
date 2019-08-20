@@ -103,8 +103,7 @@ define( require => {
       // @private {number} - max height above water where steam still affects the measured temperature
       this.maxSteamHeight = 2 * height;
 
-      // @private {ThermalContactArea} - the 2D area in the model where this can be in thermal contact with other areas,
-      // only updated when requested so could be out of date and should not be directly read by clients
+      // @protected {ThermalContactArea} - see base class for info
       this.thermalContactArea = new ThermalContactArea(
         new Bounds2(
           initialPosition.x - this.width / 2,
@@ -307,28 +306,6 @@ define( require => {
           break;
         }
       }
-    }
-
-    /**
-     * get the area of this beaker where exchange of thermal energy could occur
-     * @returns {ThermalContactArea}
-     * @public
-     */
-    get thermalContactAreaX() {
-
-      const currentPosition = this.positionProperty.get();
-      if ( this.thermalContactArea.centerX !== currentPosition.x || this.thermalContactArea.minY !== currentPosition.y ) {
-
-        // the thermal contact area needs to be updated
-        this.thermalContactArea.setMinMax(
-          currentPosition.x - this.width / 2,
-          currentPosition.y,
-          currentPosition.x + this.width / 2,
-          currentPosition.y + this.height * this.fluidProportionProperty.get()
-        );
-      }
-
-      return this.thermalContactArea;
     }
 
     /**

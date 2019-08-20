@@ -20,7 +20,6 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
-  const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -96,19 +95,19 @@ define( require => {
 
       // update the top and bottom surfaces whenever the position changes
       this.positionProperty.link( position => {
-        const rectangle = this.getBounds();
-        this.topSurface.positionProperty.value = new Vector2( position.x, rectangle.maxY );
-        this.bottomSurface.positionProperty.value = new Vector2( position.x, rectangle.minY );
+        const currentBounds = this.getBounds();
+        this.topSurface.positionProperty.value = new Vector2( position.x, currentBounds.maxY );
+        this.bottomSurface.positionProperty.value = new Vector2( position.x, currentBounds.minY );
+        this.thermalContactArea.set( currentBounds );
       } );
 
       // add perspective information, used for validating positions
       this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
-     * @public
      * @returns {Color}
+     * @public
      */
     get color() {
       return BLOCK_COMPOSITION[ this.blockType ].color;
@@ -123,16 +122,8 @@ define( require => {
     }
 
     /**
-     * @returns {ThermalContactArea}
-     * @public
-     */
-    get thermalContactArea() {
-      return new ThermalContactArea( this.getBounds(), false );
-    }
-
-    //REVIEW #247 missing visibility annotation
-    /**
      * @override
+     * @public
      */
     addEnergyChunkSlices() {
 

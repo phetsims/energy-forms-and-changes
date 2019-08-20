@@ -23,6 +23,7 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Rectangle = require( 'DOT/Rectangle' );
   const Shape = require( 'KITE/Shape' );
+  const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
   const UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -58,6 +59,10 @@ define( require => {
 
       // @private {Bounds2} - composite bounds for this model element, maintained as position changes
       this.bounds = Bounds2.NOTHING.copy();
+
+      // @protected {ThermalContactArea} - the 2D area for this element where it can be in contact with another thermal
+      // elements and thus exchange heat, generally set by descendant classes
+      this.thermalContactArea = new ThermalContactArea( Bounds2.NOTHING.copy(), false );
 
       // update the composite bounds as the model element moves
       this.positionProperty.link( position => {

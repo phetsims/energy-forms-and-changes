@@ -18,10 +18,10 @@ define( require => {
 
   class ThermalContactArea extends Bounds2 {
 
-    //REVIEW #247 missing visibility annotation
     /**
      * @param {Bounds2} bounds
      * @param {boolean} supportsImmersion
+     * @public
      */
     constructor( bounds, supportsImmersion ) {
       super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
