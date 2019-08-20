@@ -571,7 +571,7 @@ define( require => {
       if ( ecPosition.distance( destination ) <= EC_SPEED_DETERMINISTIC * dt ) {
 
         // EC is close enough that it should just go to the destination
-        ec.setPosition( destination.copy() );
+        ec.positionProperty.set( destination.copy() );
       }
       else {
         const vectorTowardsDestination = destination.minus( ec.positionProperty.value );

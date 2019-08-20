@@ -45,7 +45,7 @@ define( require => {
       // @public (read-only) {number} - an ID that will be used to track this energy chunk
       this.id = instanceCount++;
 
-      // @public {Vector2}
+      // @public (read-only) {Vector2} - for performance reasons, this is allocated once and should never be overwritten
       this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
     }
 
@@ -57,15 +57,6 @@ define( require => {
      */
     setPositionXY( x, y ) {
       this.positionProperty.set( new Vector2( x, y ) );
-    }
-
-    /**
-     * set the position
-     * @param {Vector2} position
-     * @public
-     */
-    setPosition( position ) {
-      this.positionProperty.set( position );
     }
 
     /**
@@ -84,15 +75,6 @@ define( require => {
      */
     translateBasedOnVelocity( dt ) {
       this.translate( this.velocity.x * dt, this.velocity.y * dt );
-    }
-
-    /**
-     * Function that returns the velocity of the energy chunk
-     * @returns {Vector2}
-     * @public
-     */
-    getVelocity() {
-      return this.velocity.copy();
     }
 
     /**
