@@ -56,10 +56,6 @@ define( require => {
   const MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
 
   class EFACIntroModel {
-
-    /**
-     * main constructor for EFACIntroModel, which contains all of the model logic for the Intro sim screen
-     */
     constructor() {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view

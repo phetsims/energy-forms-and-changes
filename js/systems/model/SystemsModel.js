@@ -34,10 +34,6 @@ define( require => {
   const OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 ); // in meters
 
   class SystemsModel {
-
-    /**
-     * main constructor for SystemsModel, which contains all of the model logic for the systems sim screen
-     */
     constructor() {
 
       // @public {BooleanProperty} - see in EFACIntroModel for doc
