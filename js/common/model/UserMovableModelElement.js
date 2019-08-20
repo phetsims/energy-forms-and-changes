@@ -32,7 +32,7 @@ define( require => {
 
       // @public {NumberProperty} - in meters/second
       this.verticalVelocityProperty = new NumberProperty( 0, {
-        range: new Range( -3, 0 ) // empirically determined
+        range: new Range( -4, 0 ) // empirically determined
       } );
 
       // update internal state when the user picks up this model element
