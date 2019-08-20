@@ -17,7 +17,6 @@ define( require => {
   const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const Bounds2 = require( 'DOT/Bounds2' );
   const Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const Emitter = require( 'AXON/Emitter' );
@@ -51,9 +50,6 @@ define( require => {
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
-
-  // minimum distance allowed between two objects, used to prevent floating point issues
-  const MIN_INTER_ELEMENT_DISTANCE = 1E-9; // in meters
 
   class EFACIntroModel {
     constructor() {
@@ -211,25 +207,6 @@ define( require => {
       // pre-allocated and reused in an effort to reduce memory allocations.
       this.reusableBalanceArray = [];
 
-      // @private {Bounds2} - pre-allocated reusable bounds, used to reduce memory allocations
-      this.reusableBounds = Bounds2.NOTHING.copy();
-
-      // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating positions
-      // of movable model elements.  The space is extended a bit to the left to avoid awkward z-ording issues when
-      // preventing overlap.
-      const leftBurnerBounds = this.leftBurner.getBounds();
-      const rightBurnerBounds = this.rightBurner.getBounds();
-      const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
-                                         Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
-
-      // @private {Bounds2}
-      this.burnerBlockingRect = new Bounds2(
-        leftBurnerBounds.minX - burnerPerspectiveExtension,
-        leftBurnerBounds.minY,
-        rightBurnerBounds.maxX,
-        rightBurnerBounds.maxY
-      );
-
       // @public - used to notify the view that a manual step was called
       this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
     }
@@ -239,7 +216,7 @@ define( require => {
      * @returns {string}
      * @private
      */
-    mapHeatCoolLevelToColor( heatCoolLevel ) {
+    static mapHeatCoolLevelToColor( heatCoolLevel ) {
       let color;
       if ( heatCoolLevel > 0 ) {
         color = 'orange';
@@ -253,12 +230,12 @@ define( require => {
       return color;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * determines if the first thermal model element is immersed in the second
      * @param {RectangularThermalMovableModelElement} thermalModelElement1
      * @param {RectangularThermalMovableModelElement} thermalModelElement2
      * @returns {boolean}
+     * @private
      */
     isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
       return thermalModelElement1 !== thermalModelElement2 &&
@@ -742,374 +719,6 @@ define( require => {
     }
 
     /**
-     * Evaluate whether the provided model element can be moved to the provided position without overlapping with other
-     * solid model elements. If overlap would occur, adjust the position to one that works. Note that this is not
-     * very general due to a number of special requirements for the Energy Forms and Changes sim, so it would likely not
-     * be easy to reuse.
-     * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
-     * @param {Vector2} proposedPosition - the position where the model element would like to go
-     * @returns {Vector2} the original proposed position if valid, or alternative position if not
-     * @public
-     */
-    constrainPosition( modelElement, proposedPosition ) {
-
-      const modelElementPosition = modelElement.positionProperty.get();
-
-      // calculate the proposed motion
-      let allowedTranslation = Vector2.createFromPool(
-        proposedPosition.x - modelElementPosition.x,
-        proposedPosition.y - modelElementPosition.y
-      );
-
-      // get the current composite bounds of the model element
-      const modelElementBounds = modelElement.getCompositeBoundsForPosition(
-        modelElementPosition,
-        this.reusableBounds
-      );
-
-      // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
-      const modelElementBoundsWithSidePerspective = Bounds2.createFromPool(
-        modelElementBounds.minX - modelElement.perspectiveCompensation.x,
-        modelElementBounds.minY,
-        modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
-        modelElementBounds.maxY
-      );
-
-      // validate against burner boundaries
-      allowedTranslation = this.determineAllowedTranslation(
-        modelElementBoundsWithSidePerspective,
-        this.burnerBlockingRect,
-        allowedTranslation.x,
-        allowedTranslation.y,
-        true,
-        allowedTranslation
-      );
-
-      // now check the model element's motion against each of the beakers
-      this.beakers.forEach( beaker => {
-
-        if ( beaker === modelElement ) {
-
-          // don't test against self
-          return;
-        }
-
-        // get the bounds set that describes the shape of the beaker
-        const beakerBoundsList = beaker.translatedPositionTestingBoundsList;
-
-        // if the modelElement is a block, it has x and y perspective comp that need to be used
-        const modelElementBoundsWithTopAndSidePerspective = Bounds2.createFromPool(
-          modelElementBounds.minX - modelElement.perspectiveCompensation.x,
-          modelElementBounds.minY - modelElement.perspectiveCompensation.y,
-          modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
-          modelElementBounds.maxY + modelElement.perspectiveCompensation.y
-        );
-
-        // don't restrict the motion based on the beaker if the beaker is on top of this model element
-        if ( !beaker.isStackedUpon( modelElement ) ) {
-
-          // the code below assumes that the bounds list is in the order: left side, bottom, right side. this assertion
-          // verifies that.
-          assert && assert(
-          beakerBoundsList[ 0 ].centerX < beakerBoundsList[ 1 ].centerX &&
-          beakerBoundsList[ 1 ].centerX < beakerBoundsList[ 2 ].centerX,
-            'beaker bounds list is out of order'
-          );
-
-          allowedTranslation = this.determineAllowedTranslation(
-            modelElementBoundsWithTopAndSidePerspective,
-            beakerBoundsList[ 0 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-          allowedTranslation = this.determineAllowedTranslation(
-            modelElementBoundsWithSidePerspective,
-            beakerBoundsList[ 1 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-          allowedTranslation = this.determineAllowedTranslation(
-            modelElementBoundsWithTopAndSidePerspective,
-            beakerBoundsList[ 2 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-        }
-        else {
-          // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there
-          // are currently only two beakers. this will need to be generalized to check for each other beaker that is not
-          // stacked on this modelElement if the time comes when more than two beakers exist.
-          const otherBeaker = this.beakers[ 1 - this.beakers.indexOf( beaker ) ];
-
-          // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
-          const otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
-          const currentBeakerBounds = beaker.getBounds();
-
-          allowedTranslation = this.determineAllowedTranslation(
-            currentBeakerBounds,
-            otherBeakerBoundsList[ 0 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-          allowedTranslation = this.determineAllowedTranslation(
-            currentBeakerBounds,
-            otherBeakerBoundsList[ 1 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-          allowedTranslation = this.determineAllowedTranslation(
-            currentBeakerBounds,
-            otherBeakerBoundsList[ 2 ],
-            allowedTranslation.x,
-            allowedTranslation.y,
-            true,
-            allowedTranslation
-          );
-        }
-
-        modelElementBoundsWithTopAndSidePerspective.freeToPool();
-      } );
-
-      // now check the model element's motion against each of the blocks
-      this.blocks.forEach( block => {
-
-        if ( block === modelElement ) {
-
-          // don't test against self
-          return;
-        }
-
-        const blockBounds = block.getBounds();
-
-        // Do not restrict the model element's motion in positive Y direction if the tested block is sitting on top of
-        // the model element - the block will simply be lifted up.
-        const isBlockStackedInBeaker = block.isStackedUpon( modelElement );
-
-        if ( modelElement instanceof Block ) {
-
-          allowedTranslation = this.determineAllowedTranslation(
-            modelElement.getBounds(),
-            blockBounds,
-            allowedTranslation.x,
-            allowedTranslation.y,
-            !isBlockStackedInBeaker, // don't restrict in Y direction if this block is sitting in the beaker
-            allowedTranslation
-          );
-        }
-        else {
-
-          // make sure this is a beaker before going any further
-          assert && assert( modelElement instanceof BeakerContainer, 'unrecognized model element type' );
-
-          // Test to see if the beaker's motion needs to be constrained due to the block's position, but *don't* do this
-          // if the block is sitting inside the beaker, since it will be dragged along with the beaker's motion.
-          if ( !isBlockStackedInBeaker ) {
-
-            // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
-            // handling.
-            const perspectiveBlockBounds = Bounds2.createFromPool(
-              blockBounds.minX - this.brick.perspectiveCompensation.x,
-              blockBounds.minY,
-              blockBounds.maxX + this.brick.perspectiveCompensation.x,
-              blockBounds.maxY
-            );
-
-            // Clamp the translation of the beaker based on the test block's position.  This uses the sides of the beaker
-            // and not it's outline so that the block can go inside.
-            modelElement.translatedPositionTestingBoundsList.forEach( beakerEdgeBounds => {
-              allowedTranslation = this.determineAllowedTranslation(
-                beakerEdgeBounds,
-                perspectiveBlockBounds,
-                allowedTranslation.x,
-                allowedTranslation.y,
-                !isBlockStackedInBeaker,
-                allowedTranslation
-              );
-            } );
-
-            perspectiveBlockBounds.freeToPool();
-          }
-        }
-      } );
-
-      const newPosition = modelElementPosition.plus( allowedTranslation );
-
-      // free reusable vectors and bounds
-      allowedTranslation.freeToPool();
-      modelElementBoundsWithSidePerspective.freeToPool();
-
-      return newPosition;
-    }
-
-    //REVIEW #247 missing visibility annotation
-    /**
-     * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
-     * @param {Bounds2} bounds1
-     * @param {Bounds2} bounds2
-     * @returns {boolean}
-     */
-    exclusiveIntersectsBounds( bounds1, bounds2 ) {
-      const minX = Math.max( bounds1.minX, bounds2.minX );
-      const minY = Math.max( bounds1.minY, bounds2.minY );
-      const maxX = Math.min( bounds1.maxX, bounds2.maxX );
-      const maxY = Math.min( bounds1.maxY, bounds2.maxY );
-      return ( maxX - minX ) > 0 && ( maxY - minY > 0 );
-    }
-
-    /**
-     * Determines the portion of a proposed translation that may occur given a moving rectangle and a stationary
-     * rectangle that can block the moving one.
-     * @param {Bounds2} movingElementBounds
-     * @param {Bounds2} stationaryElementBounds
-     * @param {number} proposedTranslationX
-     * @param {number} proposedTranslationY
-     * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
-     *                                      is often set false if there is another model element on top of the one
-     *                                      being tested.
-     * @param {Vector2} [result] - optional vector to be reused
-     * @returns {Vector2}
-     * @private
-     */
-    determineAllowedTranslation(
-      movingElementBounds,
-      stationaryElementBounds,
-      proposedTranslationX,
-      proposedTranslationY,
-      restrictPosY,
-      result
-    ) {
-
-      result = result || new Vector2();
-
-      // test for case where rectangles already overlap
-      if ( this.exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
-
-        // determine the motion in the X & Y directions that will "cure" the overlap
-        let xOverlapCure = 0;
-        if ( movingElementBounds.maxX >= stationaryElementBounds.minX &&
-             movingElementBounds.minX <= stationaryElementBounds.minX ) {
-
-          xOverlapCure = stationaryElementBounds.minX - movingElementBounds.maxX;
-        }
-        else if ( stationaryElementBounds.maxX >= movingElementBounds.minX &&
-                  stationaryElementBounds.minX <= movingElementBounds.minX ) {
-
-          xOverlapCure = stationaryElementBounds.maxX - movingElementBounds.minX;
-        }
-        let yOverlapCure = 0;
-        if ( movingElementBounds.maxY >= stationaryElementBounds.minY &&
-             movingElementBounds.minY <= stationaryElementBounds.minY ) {
-
-          yOverlapCure = stationaryElementBounds.minY - movingElementBounds.maxY;
-        }
-        else if ( stationaryElementBounds.maxY >= movingElementBounds.minY &&
-                  stationaryElementBounds.minY <= movingElementBounds.minY ) {
-
-          yOverlapCure = stationaryElementBounds.maxY - movingElementBounds.minY;
-        }
-
-        // Something is wrong with algorithm if both values are zero, since overlap was detected by the "intersects"
-        // method.
-        assert && assert(
-          !( xOverlapCure === 0 && yOverlapCure === 0 ),
-          'xOverlap and yOverlap should not both be zero'
-        );
-
-        // return a vector with the smallest valid "cure" value, leaving the other translation value unchanged
-        if ( xOverlapCure !== 0 && Math.abs( xOverlapCure ) < Math.abs( yOverlapCure ) ) {
-          return result.setXY( xOverlapCure, proposedTranslationY );
-        }
-        else {
-          return result.setXY( proposedTranslationX, yOverlapCure );
-        }
-      }
-
-      let xTranslation = proposedTranslationX;
-      let yTranslation = proposedTranslationY;
-      const motionTestBounds = Bounds2.dirtyFromPool();
-
-      // X direction
-      if ( proposedTranslationX > 0 ) {
-
-        // check for collisions moving right
-        motionTestBounds.setMinMax(
-          movingElementBounds.maxX,
-          movingElementBounds.minY,
-          movingElementBounds.maxX + xTranslation,
-          movingElementBounds.maxY
-        );
-
-        if ( this.exclusiveIntersectsBounds( motionTestBounds, stationaryElementBounds ) ) {
-
-          // collision detected, limit motion in this direction
-          xTranslation = stationaryElementBounds.minX - movingElementBounds.maxX - MIN_INTER_ELEMENT_DISTANCE;
-        }
-      }
-      else if ( proposedTranslationX < 0 ) {
-
-        // check for collisions moving left
-        motionTestBounds.setMinMax(
-          movingElementBounds.minX + xTranslation,
-          movingElementBounds.minY,
-          movingElementBounds.minX,
-          movingElementBounds.maxY
-        );
-
-        if ( this.exclusiveIntersectsBounds( motionTestBounds, stationaryElementBounds ) ) {
-
-          // collision detected, limit motion in this direction
-          xTranslation = stationaryElementBounds.maxX - movingElementBounds.minX + MIN_INTER_ELEMENT_DISTANCE;
-        }
-      }
-
-      // Y direction.
-      if ( proposedTranslationY > 0 && restrictPosY ) {
-
-        // check for collisions moving up
-        motionTestBounds.setMinMax(
-          movingElementBounds.minX,
-          movingElementBounds.maxY,
-          movingElementBounds.maxX,
-          movingElementBounds.maxY + yTranslation
-        );
-
-        if ( this.exclusiveIntersectsBounds( motionTestBounds, stationaryElementBounds ) ) {
-
-          // collision detected, limit motion
-          yTranslation = stationaryElementBounds.minY - movingElementBounds.maxY - MIN_INTER_ELEMENT_DISTANCE;
-        }
-      }
-      else if ( proposedTranslationY < 0 ) {
-
-        // check for collisions moving down
-        motionTestBounds.setMinMax(
-          movingElementBounds.minX,
-          movingElementBounds.minY + yTranslation,
-          movingElementBounds.maxX,
-          movingElementBounds.minY
-        );
-
-        if ( this.exclusiveIntersectsBounds( motionTestBounds, stationaryElementBounds ) ) {
-
-          // collision detected, limit motion
-          yTranslation = stationaryElementBounds.maxY - movingElementBounds.minY - MIN_INTER_ELEMENT_DISTANCE;
-        }
-      }
-
-      return result.setXY( xTranslation, yTranslation );
-    }
-
-    /**
      * Updates the temperature and color that would be sensed by a thermometer at the provided location.  This is done
      * as a single operation instead of having separate methods for getting temperature and color because it is more
      * efficient to do it like this.
@@ -1173,7 +782,7 @@ define( require => {
         const burner = this.burners[ i ];
         if ( burner.getFlameIceRect().containsPoint( position ) ) {
           sensedTemperatureProperty.set( burner.getTemperature() );
-          sensedElementColorProperty.set( this.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() ) );
+          sensedElementColorProperty.set( EFACIntroModel.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() ) );
           temperatureAndColorUpdated = true;
         }
       }

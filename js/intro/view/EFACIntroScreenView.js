@@ -25,6 +25,7 @@ define( require => {
   const DownUpListener = require( 'SCENERY/input/DownUpListener' );
   const Easing = require( 'TWIXT/Easing' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
+  const efacPositionConstrainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/efacPositionConstrainer' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
@@ -188,6 +189,21 @@ define( require => {
         burnerProjectionAmount
       );
 
+      // Pre-calculate the space occupied by the burners, since they don't move.  This is used when validating
+      // positions of movable model elements.  The space is extended a bit to the left to avoid awkward z-ordering
+      // issues when preventing overlap.
+      const leftBurnerBounds = model.leftBurner.getBounds();
+      const rightBurnerBounds = model.rightBurner.getBounds();
+      const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
+                                         Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
+      // @private {Bounds2}
+      this.burnerBlockingRect = new Bounds2(
+        leftBurnerBounds.minX - burnerPerspectiveExtension,
+        leftBurnerBounds.minY,
+        rightBurnerBounds.maxX,
+        rightBurnerBounds.maxY
+      );
+
       // for testing - option to keep the heater coolers sticky
       const snapToZero = !EFACQueryParameters.stickyBurners;
 
@@ -320,7 +336,13 @@ define( require => {
         );
 
         // constrain the model element to move legally within the model, which generally means not moving through things
-        const viewAndModelConstrainedPosition = model.constrainPosition( modelElement, viewConstrainedPosition );
+        const viewAndModelConstrainedPosition = efacPositionConstrainer.constrainPosition(
+          modelElement,
+          viewConstrainedPosition,
+          model.beakers,
+          model.blocks,
+          this.burnerBlockingRect
+        );
 
         // return the position as constrained by both the model and the view
         return viewAndModelConstrainedPosition;
