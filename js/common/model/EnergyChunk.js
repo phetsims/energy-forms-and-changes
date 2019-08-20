@@ -85,8 +85,7 @@ define( require => {
      * @public
      */
     translate( x, y ) {
-      const oldPosition = this.positionProperty.get();
-      this.positionProperty.set( new Vector2( oldPosition.x + x, oldPosition.y + y ) );
+      this.positionProperty.set( this.positionProperty.get().plusXY( x, y ) );
     }
 
     /**
