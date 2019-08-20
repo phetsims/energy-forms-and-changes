@@ -31,7 +31,7 @@ define( require => {
     constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty ) {
 
       // @public
-      this.positionProperty = new Vector2Property( initialPosition );
+      this.positionProperty = new Vector2Property( initialPosition, { useDeepEquality: true } );
 
       // @public - for simple 3D layering effects
       this.zPositionProperty = new NumberProperty( 0 );
@@ -56,12 +56,7 @@ define( require => {
      * @public
      */
     setPositionXY( x, y ) {
-
-      // only update if the position has changed to avoid unnecessary allocations and notifications
-      const currentPosition = this.positionProperty.get();
-      if ( x !== currentPosition.x || y !== currentPosition.y ) {
-        this.positionProperty.set( new Vector2( x, y ) );
-      }
+      this.positionProperty.set( new Vector2( x, y ) );
     }
 
     /**
@@ -70,12 +65,7 @@ define( require => {
      * @public
      */
     setPosition( position ) {
-
-      // only update if the position has changed to avoid unnecessary allocations and notifications
-      const currentPosition = this.positionProperty.get();
-      if ( !currentPosition.equals( position ) ) {
-        this.positionProperty.set( position );
-      }
+      this.positionProperty.set( position );
     }
 
     /**
