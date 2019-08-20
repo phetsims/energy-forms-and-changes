@@ -301,7 +301,7 @@ define( require => {
       }
 
       // distribute the initial energy chunks within the container
-      for ( let i = 0; i < 500; i++ ) {
+      for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
         const distributed = energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         if ( !distributed ) {
           break;

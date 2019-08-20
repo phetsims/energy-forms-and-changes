@@ -148,6 +148,11 @@ define( require => {
     ENERGY_CHUNK_VELOCITY: 0.04, // in meters/sec
     ENERGY_CHUNK_WIDTH: 19, // in screen coords, which are close to pixels. Empirically determined to look nice.
 
+    // the maximum number of times that the energy chunk distribution algorithm should run when initializing energy
+    // chunks in their containers. containers like the water beaker take more cycles than this threshold, but cause
+    // the sim reset time to be too long if not limited.
+    MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES: 500,
+
     // max travel height of energy chunks, in meters. the y-center location and zoom factors are different on each
     // screen, so these were empirically determined to visually match on both screens
     INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.85,
