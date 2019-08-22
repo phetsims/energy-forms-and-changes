@@ -19,6 +19,7 @@ define( require => {
   const FaucetNode = require( 'SCENERY_PHET/FaucetNode' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
 
   // constants
   const FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long enough that end is generally not seen
@@ -55,10 +56,11 @@ define( require => {
       const maxFlowProportion = 1.0;
 
       // create a mapping between the slider position and the flow proportion that prevents very small values
-      this.faucetSettingProperty = new NumberProperty( 0 );
+      this.faucetSettingProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
       this.faucetSettingProperty.link( setting => {
         const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
-        assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
         faucet.flowProportionProperty.set( mappedSetting );
       } );
 
