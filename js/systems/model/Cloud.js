@@ -12,6 +12,7 @@ define( require => {
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const Shape = require( 'KITE/Shape' );
 
   // constants
@@ -27,7 +28,9 @@ define( require => {
     constructor( offsetFromParent, parentPositionProperty ) {
 
       // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
-      this.existenceStrengthProperty = new NumberProperty( 1.0 );
+      this.existenceStrengthProperty = new NumberProperty( 1, {
+        range: new Range( 0, 1 )
+      } );
 
       // @public (read-only) {number} - offset position for this cloud
       this.offsetFromParent = offsetFromParent;

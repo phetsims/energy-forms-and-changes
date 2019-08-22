@@ -20,6 +20,7 @@ define( require => {
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const TeaKettleSteamCanvasNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleSteamCanvasNode' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -44,10 +45,11 @@ define( require => {
       const teaKettleNode = new Image( teaKettleImage, { right: 114, bottom: 53 } );
 
       // create a mapping between the slider position and the steam proportion, which prevents very small values
-      this.heaterSettingProperty = new NumberProperty( 0 );
+      this.heaterSettingProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
       this.heaterSettingProperty.link( setting => {
         const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
-        assert && assert( mappedSetting >= 0 && mappedSetting <= 1 );
         teaKettle.heatProportionProperty.set( mappedSetting );
       } );
 

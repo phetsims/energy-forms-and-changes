@@ -20,6 +20,7 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -66,7 +67,9 @@ define( require => {
       ];
 
       // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
-      this.cloudinessProperty = new NumberProperty( 0 );
+      this.cloudinessProperty = new NumberProperty( 0, {
+        range: new Range( 0, 1 )
+      } );
 
       // @private - internal variables used in methods
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;

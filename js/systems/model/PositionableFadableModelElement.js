@@ -13,6 +13,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableModelElement' );
+  const Range = require( 'DOT/Range' );
 
   class PositionableFadableModelElement extends PositionableModelElement {
 
@@ -24,7 +25,9 @@ define( require => {
       super( initialPosition );
 
       // @public {NumberProperty}
-      this.opacityProperty = new NumberProperty( initialOpacity );
+      this.opacityProperty = new NumberProperty( initialOpacity, {
+        range: new Range( 0, 1 )
+      } );
     }
   }
 
