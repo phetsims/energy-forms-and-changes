@@ -20,6 +20,7 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -60,16 +61,24 @@ define( require => {
       this.a11yName = EFACA11yStrings.cyclist.value;
 
       // @public (read-only) {NumberProperty} - angle of the crank arm on the bike, in radians
-      this.crankAngleProperty = new NumberProperty( 0 );
+      this.crankAngleProperty = new NumberProperty( 0, {
+        range: new Range( 0, 2 * Math.PI )
+      } );
 
       // @public (read-only) {NumberProperty} - angle of the rear wheel on the bike, in radians
-      this.rearWheelAngleProperty = new NumberProperty( 0 );
+      this.rearWheelAngleProperty = new NumberProperty( 0, {
+        range: new Range( 0, 2 * Math.PI )
+      } );
 
       // @public (read-only) {NumberProperty} - number of energy chunks remaining in the biker's body
-      this.energyChunksRemainingProperty = new NumberProperty( 0 );
+      this.energyChunksRemainingProperty = new NumberProperty( 0, {
+        range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS )
+      } );
 
       // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians
-      this.targetCrankAngularVelocityProperty = new NumberProperty( 0 );
+      this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
+        range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK )
+      } );
 
       // @private - internal variables
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
