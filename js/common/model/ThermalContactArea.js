@@ -38,8 +38,8 @@ define( require => {
      */
     getThermalContactLength( that ) {
 
-      const xOverlap = this.getHorizontalOverlap( this, that );
-      const yOverlap = this.getVerticalOverlap( this, that );
+      const xOverlap = getHorizontalOverlap( this, that );
+      const yOverlap = getVerticalOverlap( this, that );
 
       let contactLength = 0;
       if ( xOverlap > 0 && yOverlap > 0 ) {
@@ -88,34 +88,30 @@ define( require => {
 
       return contactLength;
     }
+  }
 
-    //REVIEW #247 this can be a private function, is uses no ThermalContactArea fields
-    /**
-     * convenience method for determining overlap of rectangles in X dimension
-     * @param {Rectangle} rectangle1
-     * @param {Rectangle} rectangle2
-     * @returns {number}
-     * @private
-     */
-    getHorizontalOverlap( rectangle1, rectangle2 ) {
-      const lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
-      const highestMin = Math.max( rectangle1.minX, rectangle2.minX );
-      return Math.max( lowestMax - highestMin, 0 );
-    }
+  /**
+   * convenience method for determining overlap of rectangles in X dimension
+   * @param {Rectangle} rectangle1
+   * @param {Rectangle} rectangle2
+   * @returns {number}
+   */
+  function getHorizontalOverlap( rectangle1, rectangle2 ) {
+    const lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
+    const highestMin = Math.max( rectangle1.minX, rectangle2.minX );
+    return Math.max( lowestMax - highestMin, 0 );
+  }
 
-    //REVIEW #247 this can be a private function, is uses no ThermalContactArea fields
-    /**
-     * convenience method for determining overlap of rectangles in Y dimension
-     * @param {Rectangle} rectangle1
-     * @param {Rectangle} rectangle2
-     * @returns {number}
-     * @private
-     */
-    getVerticalOverlap( rectangle1, rectangle2 ) {
-      const lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
-      const highestMin = Math.max( rectangle1.minY, rectangle2.minY );
-      return Math.max( lowestMax - highestMin, 0 );
-    }
+  /**
+   * convenience method for determining overlap of rectangles in Y dimension
+   * @param {Rectangle} rectangle1
+   * @param {Rectangle} rectangle2
+   * @returns {number}
+   */
+  function getVerticalOverlap( rectangle1, rectangle2 ) {
+    const lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
+    const highestMin = Math.max( rectangle1.minY, rectangle2.minY );
+    return Math.max( lowestMax - highestMin, 0 );
   }
 
   return energyFormsAndChanges.register( 'ThermalContactArea', ThermalContactArea );
