@@ -48,43 +48,6 @@ define( require => {
   // array that holds the created energy chunk image nodes
   const energyChunkImageNodes = {};
 
-  //REVIEW #247 define private functions after constructor
-  /**
-   * Helper function that creates the image for an EnergyChunkNode.
-   * @param {EnergyType} energyType
-   * @returns {Image}
-   */
-  const createEnergyChunkImageNode = energyType => {
-    const background = new Image( mapEnergyTypeToImage[ energyType ] );
-    const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
-    energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
-    energyText.center = background.center;
-    background.addChild( energyText );
-    background.scale( EFACConstants.ENERGY_CHUNK_WIDTH / background.width );
-    background.center = Vector2.ZERO;
-    const backgroundBounds = background.bounds;
-    assert && background.on( 'bounds', bounds => {
-      assert( backgroundBounds === bounds, `Energy chunk node bounds should not change: ${bounds}` );
-    } );
-    return background;
-  };
-
-  //REVIEW #247 define private functions after constructor
-  /**
-   * Helper function that returns the correct image for an EnergyChunkNode.
-   * @param {EnergyType} energyType
-   * @returns {Image}
-   */
-  const getEnergyChunkNode = energyType => {
-
-    // these need to be lazily created because the images are not decoded fast enough in the built version to be
-    // available right away
-    if ( !energyChunkImageNodes[ energyType ] ) {
-      energyChunkImageNodes[ energyType ] = createEnergyChunkImageNode( energyType );
-    }
-    return energyChunkImageNodes[ energyType ];
-  };
-
   class EnergyChunkNode extends Node {
 
     /**
@@ -152,6 +115,41 @@ define( require => {
       super.dispose();
     }
   }
+
+  /**
+   * Helper function that creates the image for an EnergyChunkNode.
+   * @param {EnergyType} energyType
+   * @returns {Image}
+   */
+  const createEnergyChunkImageNode = energyType => {
+    const background = new Image( mapEnergyTypeToImage[ energyType ] );
+    const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
+    energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
+    energyText.center = background.center;
+    background.addChild( energyText );
+    background.scale( EFACConstants.ENERGY_CHUNK_WIDTH / background.width );
+    background.center = Vector2.ZERO;
+    const backgroundBounds = background.bounds;
+    assert && background.on( 'bounds', bounds => {
+      assert( backgroundBounds === bounds, `Energy chunk node bounds should not change: ${bounds}` );
+    } );
+    return background;
+  };
+
+  /**
+   * Helper function that returns the correct image for an EnergyChunkNode.
+   * @param {EnergyType} energyType
+   * @returns {Image}
+   */
+  const getEnergyChunkNode = energyType => {
+
+    // these need to be lazily created because the images are not decoded fast enough in the built version to be
+    // available right away
+    if ( !energyChunkImageNodes[ energyType ] ) {
+      energyChunkImageNodes[ energyType ] = createEnergyChunkImageNode( energyType );
+    }
+    return energyChunkImageNodes[ energyType ];
+  };
 
   // statics
   EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED = Z_DISTANCE_WHERE_FULLY_FADED;

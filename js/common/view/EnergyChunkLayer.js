@@ -20,12 +20,10 @@ define( require => {
 
   class EnergyChunkLayer extends Node {
 
-    //REVIEW #247 vestigial @param parentPositionProperty
     /**
      * @param {ObservableArray} energyChunkList
      * @param {ModelViewTransform2} modelViewTransform
      * @param {Object} options
-     * @param {Property.<Vector2>} parentPositionProperty
      */
     constructor( energyChunkList, modelViewTransform, options ) {
       super();

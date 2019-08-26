@@ -96,11 +96,11 @@ define( require => {
    * @param {Rectangle} rectangle2
    * @returns {number}
    */
-  function getHorizontalOverlap( rectangle1, rectangle2 ) {
+  const getHorizontalOverlap = ( rectangle1, rectangle2 ) => {
     const lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
     const highestMin = Math.max( rectangle1.minX, rectangle2.minX );
     return Math.max( lowestMax - highestMin, 0 );
-  }
+  };
 
   /**
    * convenience method for determining overlap of rectangles in Y dimension
@@ -108,11 +108,11 @@ define( require => {
    * @param {Rectangle} rectangle2
    * @returns {number}
    */
-  function getVerticalOverlap( rectangle1, rectangle2 ) {
+  const getVerticalOverlap = ( rectangle1, rectangle2 ) => {
     const lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
     const highestMin = Math.max( rectangle1.minY, rectangle2.minY );
     return Math.max( lowestMax - highestMin, 0 );
-  }
+  };
 
   return energyFormsAndChanges.register( 'ThermalContactArea', ThermalContactArea );
 } );

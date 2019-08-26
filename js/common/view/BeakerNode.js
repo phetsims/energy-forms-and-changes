@@ -91,8 +91,7 @@ define( require => {
       const topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
       const bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
 
-      //REVIEW #247 missing visibility annotation
-      // Add the fluid.  It will adjust its size based on the fluid level.
+      // @private - Add the fluid.  It will adjust its size based on the fluid level.
       this.fluid = new PerspectiveWaterNode(
         beakerBounds,
         beaker.fluidProportionProperty,
