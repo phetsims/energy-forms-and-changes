@@ -67,18 +67,6 @@ define( require => {
       this.perspectiveCompensation = new Vector2( 0, 0 );
     }
 
-    //REVIEW missing visibility annotation
-    //REVIEW why is this needed when this.positionProperty is not read-only?
-    get position() {
-      return this.positionProperty.get();
-    }
-
-    //REVIEW missing visibility annotation
-    //REVIEW why is this needed when this.positionProperty is not read-only?
-    set position( newPosition ) {
-      this.positionProperty.set( newPosition );
-    }
-
     /**
      * method to test whether this element is stacked upon another, always false for non-movable model elements,
      * override as needed in descendant types

@@ -189,7 +189,7 @@ define( require => {
 
               // fake a movement by the user to a point in the beaker where the sensor is not over a brick
               sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
-              sensor.position = new Vector2(
+              sensor.positionProperty.value = new Vector2(
                 beaker.getBounds().maxX - 0.01,
                 beaker.getBounds().minY + beaker.getBounds().height * 0.33
               );
@@ -735,7 +735,7 @@ define( require => {
       const copyOfBlockList = this.blocks.slice( 0 );
 
       copyOfBlockList.sort( ( block1, block2 ) => {
-        if ( block1.position === block2.position ) {
+        if ( block1.positionProperty.value === block2.positionProperty.value ) {
           return 0;
         }
         if ( block2.positionProperty.value.x > block1.positionProperty.value.x ||

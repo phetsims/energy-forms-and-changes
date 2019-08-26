@@ -530,7 +530,7 @@ define( require => {
       const sliceBounds = Bounds2.rect( this.rect.x, this.rect.y.this.rect.width, this.rect.height );
 
       // defaults to a single slice matching the outline rectangle, override for more sophisticated behavior
-      this.slices.push( new EnergyChunkContainerSlice( sliceBounds, 0, this.position ) );
+      this.slices.push( new EnergyChunkContainerSlice( sliceBounds, 0, this.positionProperty.value ) );
     }
 
     /**
