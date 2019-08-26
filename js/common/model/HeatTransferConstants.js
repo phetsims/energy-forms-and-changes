@@ -80,10 +80,10 @@ define( require => {
       return heatTransferConstantsMap[ category1.name ][ category2.name ];
     },
 
-    //REVIEW #247 missing visibility annotation
-    //REVIEW #247 document
     /**
+     * get the heat transfer constant for air to air
      * @returns {number}
+     * @public
      */
     getAirToSurroundingAirHeatTransferFactor() {
       return AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;

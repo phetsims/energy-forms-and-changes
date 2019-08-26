@@ -77,7 +77,8 @@ define( require => {
       this.resetCountdownTimer();
       this.changeVelocityVector();
 
-      //REVIEW #247 document, why is this needed?
+      // if an energy chunk's destination moves, quickly send the chunk to its destination - this is used as a flag to
+      // make sure only one speed increase happens
       let speedIncreased = false;
 
       const handleDestinationChanged = ( newDestination, oldDestination ) => {
@@ -86,7 +87,7 @@ define( require => {
 
         // if the destination changes, speed up and go directly to the destination
         if ( distanceToDestination <= GO_STRAIGHT_HOME_DISTANCE && !speedIncreased ) {
-          const increaseFactor = 8; //REVIEW #247 magic number, describe
+          const increaseFactor = 8; // empirically determined to be fast but still visible
           this.minSpeed = DEFAULT_MIN_SPEED * increaseFactor;
           this.maxSpeed = DEFAULT_MAX_SPEED * increaseFactor;
           speedIncreased = true;
@@ -212,10 +213,10 @@ define( require => {
       return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
     }
 
-    //REVIEW missing visibility annotation
     /**
      * set a new constraint on the wandering
      * @param {Range|null} horizontalWanderConstraint
+     * @public
      */
     setHorizontalWanderConstraint( horizontalWanderConstraint ) {
       this.horizontalWanderConstraint = horizontalWanderConstraint;
