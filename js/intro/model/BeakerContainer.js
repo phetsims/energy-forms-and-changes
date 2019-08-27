@@ -94,10 +94,10 @@ define( require => {
       return isObscured;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * @param {number} dt
      * @override
+     * @private
      */
     animateNonContainedEnergyChunks( dt ) {
       const controllers = this.energyChunkWanderControllers.slice( 0 );
@@ -123,10 +123,10 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * @param {EnergyChunk} energyChunk
      * @override
+     * @public
      */
     addEnergyChunk( energyChunk ) {
       if ( this.isEnergyChunkObscured( energyChunk ) ) {

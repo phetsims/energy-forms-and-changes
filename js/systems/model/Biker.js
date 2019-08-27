@@ -136,13 +136,11 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * step this energy producer forward in time
      * @param  {number} dt - time step in seconds
      * @returns {Energy}
      * @public
-     * @override
      */
     step( dt ) {
 

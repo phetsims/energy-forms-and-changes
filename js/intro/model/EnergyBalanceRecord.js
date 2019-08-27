@@ -41,11 +41,11 @@ define( require => {
       this.recentlyUpdated = true;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * get the other ID in this record
      * @param {string} id
      * @returns {string}
+     * @public
      */
     getOtherID( id ) {
       assert && assert( id === this.fromID || id === this.toID, 'provided ID not in record' );

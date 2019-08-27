@@ -727,13 +727,13 @@ define( require => {
       this.oliveOilBeakerNode.step( dt );
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * Custom layout function for this view so that it floats to the bottom of the window.
      *
      * @param {number} width
      * @param {number} height
      * @override
+     * @public
      */
     layout( width, height ) {
       this.resetTransform();
