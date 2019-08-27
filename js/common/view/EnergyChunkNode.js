@@ -129,10 +129,6 @@ define( require => {
     background.addChild( energyText );
     background.scale( EFACConstants.ENERGY_CHUNK_WIDTH / background.width );
     background.center = Vector2.ZERO;
-    const backgroundBounds = background.bounds;
-    assert && background.on( 'bounds', bounds => {
-      assert( backgroundBounds === bounds, `Energy chunk node bounds should not change: ${bounds}` );
-    } );
     return background;
   };
 
