@@ -1,8 +1,8 @@
 // Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * Abstract base type for a block that contains and exchanges thermal energy.  In the model, a block is two-dimensional,
- * so its shape is represented by a rectangle.
+ * Block that contains and exchanges thermal energy.  In the model, a block is two-dimensional, so its shape is
+ * represented by a rectangle.
  *
  * @author John Blanco
  * @author Chris Klusendorf
