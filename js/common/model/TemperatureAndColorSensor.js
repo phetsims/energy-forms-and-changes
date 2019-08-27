@@ -21,7 +21,6 @@ define( require => {
 
   class TemperatureAndColorSensor extends UserMovableModelElement {
 
-    //REVIEW #247 passing in the entire model is undesirable
     /**
      * @param {EFACIntroModel} model
      * @param {Vector2} initialPosition

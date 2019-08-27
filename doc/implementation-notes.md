@@ -25,6 +25,10 @@ the objects shape, i.e. the center of the shape in the x direction but the botto
 was done to make it easier to detect when a model object is sitting on a
 surface.
 
+**Memory Management:** For the most part, object instances (model and view) persist for the lifetime of the sim. In these
+cases, there is no need to call `unlink`, `removeListener`, `dispose`, etc. In cases where objects are dynamically 
+allocated and deallocated, such as EnergyChunks and ElementFollowers, those memory management functions should exist.
+
 Screen 1
 
 Acceleration is used to make things fall to give it a more natural look.

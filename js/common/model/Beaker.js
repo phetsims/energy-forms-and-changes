@@ -36,7 +36,7 @@ define( require => {
   const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
   const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
 
-  // class var used for measuring performance during startup
+  // file variable used for measuring performance during startup, see usage for more information
   let performanceMeasurementTaken = false;
 
   class Beaker extends RectangularThermalMovableModelElement {
@@ -278,7 +278,7 @@ define( require => {
       this.clearECDistributionCountdown();
 
       // If this is the water beaker, and it's the first time energy chunks have been added, measure the performance
-      // and, if it is found to be low, switch to a higher performace (but visually inferior) algorithm for distributing
+      // and, if it is found to be low, switch to a higher performance (but visually inferior) algorithm for distributing
       // the energy chunks.  This was found to be necessary on some platforms, see
       // https://github.com/phetsims/energy-forms-and-changes/issues/191.
       if ( this.specificHeat === EFACConstants.WATER_SPECIFIC_HEAT && !performanceMeasurementTaken ) {
