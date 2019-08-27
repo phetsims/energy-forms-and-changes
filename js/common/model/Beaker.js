@@ -238,7 +238,7 @@ define( require => {
       const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
       let numECsAdded = 0;
 
-      // go through each slice, adding a number of energy chunks based on proprotion
+      // go through each slice, adding a number of energy chunks based on its proportionate size
       sortedSliceArray.forEach( slice => {
         const sliceArea = slice.bounds.width * slice.bounds.height;
         const sliceCenter = slice.bounds.center;
