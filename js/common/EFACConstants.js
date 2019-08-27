@@ -149,7 +149,7 @@ define( require => {
     ENERGY_CHUNK_WIDTH: 19, // in screen coords, which are close to pixels. Empirically determined to look nice.
 
     // the maximum number of times that the energy chunk distribution algorithm should run when initializing energy
-    // chunks in their containers. containers like the water beaker take more cycles than this threshold, but cause
+    // chunks in their containers. Containers like the water beaker can take more cycles than this threshold, but cause
     // the sim reset time to be too long if not limited.
     MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES: 500,
 
