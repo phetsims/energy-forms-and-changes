@@ -522,7 +522,7 @@ define( require => {
     /**
      * Initialization method that add the "slices" where the energy chunks reside. Should be called only once at
      * initialization.
-     * @private
+     * @protected
      */
     addEnergyChunkSlices() {
       assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
@@ -535,7 +535,7 @@ define( require => {
 
     /**
      *  add initial energy chunks to this model element
-     *  @private
+     *  @protected
      */
     addInitialEnergyChunks() {
 
