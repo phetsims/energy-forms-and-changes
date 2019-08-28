@@ -23,6 +23,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
+  const Range = require( 'DOT/Range' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -64,7 +65,9 @@ define( require => {
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
       // @public (read-only) {NumberProperty} - rotational position of the wheel
-      this.wheelRotationalAngleProperty = new NumberProperty( 0 );
+      this.wheelRotationalAngleProperty = new NumberProperty( 0, {
+        range: new Range( 0, 2 * Math.PI )
+      } );
 
       // @public {BooleanProperty} - a flag that controls "direct coupling mode", which means that the generator wheel
       // turns at a rate that is directly proportional to the incoming energy, with no rotational inertia
@@ -104,7 +107,9 @@ define( require => {
         if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
           const energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
           this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
-          this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
+          this.wheelRotationalAngleProperty.set(
+            calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocity, dt )
+          );
         }
 
       }
@@ -134,7 +139,9 @@ define( require => {
           // prevent the wheel from moving forever
           this.wheelRotationalVelocity = 0;
         }
-        this.wheelRotationalAngleProperty.set( this.wheelRotationalAngleProperty.value + this.wheelRotationalVelocity * dt );
+        this.wheelRotationalAngleProperty.set(
+          calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocity, dt )
+        );
       }
     }
 
@@ -383,6 +390,21 @@ define( require => {
       return chunks;
     }
   }
+
+  /**
+   * calculates the angle of the wheel for the current time step. this supports both positive and negative velocity, so
+   * that regardless of which direction the wheel is spinning, its angle values are constrained between 0 and 2pi.
+   *
+   * @param wheelRotationalAngle
+   * @param wheelRotationalVelocity
+   * @param dt
+   * @returns {number}
+   */
+  const calculateWheelAngle = ( wheelRotationalAngle, wheelRotationalVelocity, dt ) => {
+    const twoPi = 2 * Math.PI;
+    const newAngle = ( wheelRotationalAngle + wheelRotationalVelocity * dt ) % twoPi;
+    return newAngle < 0 ? twoPi + newAngle : newAngle;
+  };
 
   // statics
   Generator.WHEEL_CENTER_OFFSET = WHEEL_CENTER_OFFSET;
