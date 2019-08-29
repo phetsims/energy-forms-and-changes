@@ -73,8 +73,8 @@ define( require => {
         y: faucetHeadOrigin.y,
         closeOnRelease: false,
         shooterOptions: {
-          touchAreaXDilation: 40,
-          touchAreaYDilation: 40
+          touchAreaXDilation: 37,
+          touchAreaYDilation: 60
         }
       } );
 
