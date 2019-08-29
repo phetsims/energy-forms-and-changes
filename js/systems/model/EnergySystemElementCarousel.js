@@ -26,7 +26,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  const TRANSITION_DURATION = 0.75; //REVIEW #247 units?
+  const TRANSITION_DURATION = 0.75; // in seconds
 
   class EnergySystemElementCarousel {
 
@@ -59,9 +59,9 @@ define( require => {
       this.animationInProgressProperty = new BooleanProperty( false );
 
       // @private - variables needed to manage carousel transitions
-      this.elapsedTransitionTime = 0; //REVIEW #247 units?
-      this.currentCarouselOffset = new Vector2( 0, 0 );
-      this.initialCarouselOffset = new Vector2( 0, 0 );
+      this.elapsedTransitionTime = 0; // in seconds
+      this.currentCarouselOffset = new Vector2( 0, 0 ); // in meters
+      this.initialCarouselOffset = new Vector2( 0, 0 ); // in meters
 
       // set up the variables needed for animation each time the target changes
       this.targetIndexProperty.lazyLink( () => {
@@ -132,10 +132,10 @@ define( require => {
       return null;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * step this model element
      * @param {number} dt - time step, in seconds
+     * @public
      */
     step( dt ) {
       if ( !this.atTargetPosition() ) {
@@ -158,8 +158,8 @@ define( require => {
       }
     }
 
-    //REVIEW #247 document
     /**
+     * sets the position in model space of each element based on the state of the carousel
      * @private
      */
     updateManagedElementPositions() {
@@ -170,8 +170,9 @@ define( require => {
       }
     }
 
-    //REVIEW #247 document
     /**
+     * sets the opacity of each element based on the state of the carousel. elements fade out as they get farther from
+     * the active, selected position
      * @private
      */
     updateManagedElementOpacities() {
@@ -184,7 +185,9 @@ define( require => {
 
     //REVIEW #247 document
     /**
+     * whether the current selected element is in its destination spot
      * @private
+     * @returns {boolean}
      */
     atTargetPosition() {
       const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.value );
