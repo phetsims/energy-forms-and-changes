@@ -39,9 +39,9 @@ define( require => {
       }
     }
 
-    //REVIEW #247 document
-    //REVIEW #247 LightAbsorbingShape does not exist
     /**
+     * adds a light absorbing shape to this set of rays that they may or may not intersect with
+     *
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
@@ -51,9 +51,9 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 document
-    //REVIEW #247 LightAbsorbingShape does not exist
     /**
+     * removes a light absorbing shape from this set of rays
+     *
      * @param {LightAbsorbingShape} lightAbsorbingShape
      * @public
      */
