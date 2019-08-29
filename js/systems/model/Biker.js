@@ -127,7 +127,7 @@ define( require => {
 
               this.energyChunkMovers.push( new EnergyChunkPathMover(
                 ec,
-                this.createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, ec.positionProperty.get() ),
+                createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, ec.positionProperty.get() ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY
               ) );
             }
@@ -228,8 +228,9 @@ define( require => {
       return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
     }
 
-    //REVIEW #247 this is a big enough method that it should be documented
     /**
+     * moves energy chunks throughout the biker system and converts them to other energy types as needed
+     *
      * @param {number} dt
      * @private
      */
@@ -261,7 +262,7 @@ define( require => {
 
             // make this chunk travel to the rear hub, where it will become a chunk of thermal energy
             this.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
-              this.createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, chunk.positionProperty.get() ),
+              createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, chunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY )
             );
             this.mechanicalChunksSinceLastThermal = 0;
@@ -451,37 +452,16 @@ define( require => {
       this.energyChunkList.add( newEnergyChunk );
     }
 
-    //REVIEW #247 this can be a private function, it has no dependencies on Biker
     /**
      * find the image index corresponding to this angle in radians
      * @param  {number} angle
      * @returns {number} - image index
-     * @private
+     * @public
      */
     mapAngleToImageIndex( angle ) {
       const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_LEG_IMAGES ) );
       assert && assert( i >= 0 && i < NUMBER_OF_LEG_IMAGES );
       return i;
-    }
-
-    //REVIEW #247 this can be a private function, it has no dependencies on Biker
-    /**
-     * create a path for an energy chunk that will travel to the hub and then become thermal
-     * @param  {Vector2} centerPosition
-     * @param  {Vector2} currentPosition
-     * @returns {Vector2[]}
-     * @private
-     */
-    createMechanicalToThermalEnergyChunkPath( centerPosition, currentPosition ) {
-      const path = [];
-      const crankPosition = centerPosition.plus( BIKE_CRANK_OFFSET );
-      if ( currentPosition.y > crankPosition.y ) {
-
-        // only add the crank position if the current position indicates that the chunk hasn't reached the crank yet
-        path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
-      }
-      path.push( centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET ) );
-      return path;
     }
 
     /**
@@ -517,6 +497,26 @@ define( require => {
       return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     }
   }
+
+  /**
+   * creates a path for an energy chunk that will travel to the hub and then become thermal
+   *
+   * @param  {Vector2} centerPosition
+   * @param  {Vector2} currentPosition
+   * @returns {Vector2[]}
+   * @private
+   */
+  const createMechanicalToThermalEnergyChunkPath = ( centerPosition, currentPosition ) => {
+    const path = [];
+    const crankPosition = centerPosition.plus( BIKE_CRANK_OFFSET );
+    if ( currentPosition.y > crankPosition.y ) {
+
+      // only add the crank position if the current position indicates that the chunk hasn't reached the crank yet
+      path.push( centerPosition.plus( BIKE_CRANK_OFFSET ) );
+    }
+    path.push( centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET ) );
+    return path;
+  };
 
   // statics
   Biker.CENTER_OF_GEAR_OFFSET = CENTER_OF_GEAR_OFFSET;
