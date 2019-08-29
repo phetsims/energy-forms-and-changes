@@ -350,7 +350,7 @@ define( require => {
 
     //REVEIW #247 what are constiables?
     /**
-     * reset some constiables/properties when deactivated by carousel
+     * reset some constiables/Properties when deactivated by carousel
      * @public
      * @override
      */

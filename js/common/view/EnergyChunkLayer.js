@@ -30,7 +30,7 @@ define( require => {
 
       options = _.extend( {
 
-        // Property.<Vector2> - a position property that will be used to compensate the energy chunk layer's position
+        // Property.<Vector2> - a position Property that will be used to compensate the energy chunk layer's position
         // such that it stays in untranslated screen-view coordinates. This is often used for an energy chunk layer that
         // is the child of a node that is being placed in the view according to its position value.
         parentPositionProperty: null

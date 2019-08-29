@@ -122,7 +122,7 @@ define( require => {
     reset() {
       this.positionProperty.reset();
 
-      // note - the top and bottom surface properties are NOT reset here since they are managed by sub-types
+      // note - the top and bottom surface Properties are NOT reset here since they are managed by sub-types
     }
   }
 

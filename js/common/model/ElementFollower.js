@@ -23,7 +23,7 @@ define( require => {
      */
     constructor( trackedPositionProperty ) {
 
-      // @private {Property<Vector2>} - position property of element that will follow another
+      // @private {Property<Vector2>} - position Property of element that will follow another
       this.followerProperty = trackedPositionProperty;
 
       // @private {Property<Vector2>|null} - location of the thing being followed, null if not following anything
@@ -39,7 +39,7 @@ define( require => {
     }
 
     /**
-     * start following the provided property
+     * start following the provided Property
      * @param {Property<Vector2>} locationToFollowProperty - location Property to follow
      * @public
      */

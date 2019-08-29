@@ -27,7 +27,7 @@ define( require => {
       // @private
       this.elementFollower = new ElementFollower( this.positionProperty );
 
-      // Monitor the state of the 'userControlled' property in order to detect when the user drops this thermometer and
+      // Monitor the state of the 'userControlled' Property in order to detect when the user drops this thermometer and
       // determine whether or not it was dropped over anything to which it should stick.
       this.userControlledProperty.link( userControlled => {
 

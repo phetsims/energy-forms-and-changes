@@ -2,7 +2,7 @@
 
 /**
  * base type for a Scenery Node that moves as the associated model element moves and and fades in and out as the opacity
- * property changes
+ * Property changes
  *
  * @author John Blanco
  * @author Andrew Adare

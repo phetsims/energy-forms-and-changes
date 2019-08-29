@@ -148,7 +148,7 @@ define( require => {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
-      // update property by reading how many chunks remain in the biker's body
+      // update Property by reading how many chunks remain in the biker's body
       this.energyChunksRemainingProperty.set( this.energyChunkList.length - this.energyChunkMovers.length );
 
       // if there is no energy, the target speed is 0, otherwise it is the current set point

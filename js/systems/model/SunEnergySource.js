@@ -82,7 +82,7 @@ define( require => {
       // reflected)
       this.energyChunksPassingThroughClouds = [];
 
-      // set up a listener to add/remove clouds based on the value of the cloudiness property
+      // set up a listener to add/remove clouds based on the value of the cloudiness Property
       this.cloudinessProperty.link( cloudiness => {
         const nClouds = this.clouds.length;
         for ( let i = 0; i < nClouds; i++ ) {
