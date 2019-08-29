@@ -18,18 +18,18 @@ define( require => {
      * @param {Vector2} center - Center position of radial rays
      * @param {number} innerRadius - Start point
      * @param {number} outerRadius - End point
-     * @param {number} numRays - How many rays around the sun
+     * @param {number} numberOfRays - How many rays around the sun
      * @param {Color} color - Ray color
      */
-    constructor( center, innerRadius, outerRadius, numRays, color ) {
+    constructor( center, innerRadius, outerRadius, numberOfRays, color ) {
       super();
 
       this.lightRayNodes = [];
       let angle;
       let startPoint;
       let endPoint;
-      for ( let i = 0; i < numRays; i++ ) {
-        angle = ( 2 * Math.PI / numRays ) * i;
+      for ( let i = 0; i < numberOfRays; i++ ) {
+        angle = ( 2 * Math.PI / numberOfRays ) * i;
         startPoint = center.plus( new Vector2( innerRadius, 0 ).rotated( angle ) );
         endPoint = center.plus( new Vector2( outerRadius, 0 ).rotated( angle ) );
 
