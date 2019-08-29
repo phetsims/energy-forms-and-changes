@@ -333,7 +333,7 @@ define( require => {
       for ( let ecSliceCount = 0; ecSliceCount < this.slices.length; ecSliceCount++ ) {
         const slice = this.slices[ sliceIndex ];
         const sliceArea = slice.bounds.width * slice.bounds.height;
-        const energyChunkDensity = slice.getNumEnergyChunks() / sliceArea;
+        const energyChunkDensity = slice.getNumberOfEnergyChunks() / sliceArea;
         if ( sliceIndexWithLowestEnergyDensity === null || energyChunkDensity < lowestEnergyDensityFound ) {
           sliceIndexWithLowestEnergyDensity = sliceIndex;
           lowestEnergyDensityFound = energyChunkDensity;
@@ -416,7 +416,7 @@ define( require => {
     extractEnergyChunkClosestToPoint( point ) {
 
       // make sure this element doesn't give up all its energy chunks
-      if ( this.getNumEnergyChunksInElement() <= 1 ) {
+      if ( this.getNumberOfEnergyChunksInElement() <= 1 ) {
         return null;
       }
 
@@ -453,7 +453,7 @@ define( require => {
     extractEnergyChunkClosestToBounds( destinationBounds ) {
 
       // make sure this element doesn't give up all its energy chunks
-      if ( this.getNumEnergyChunksInElement() <= 1 ) {
+      if ( this.getNumberOfEnergyChunksInElement() <= 1 ) {
         return null;
       }
 
@@ -545,20 +545,22 @@ define( require => {
       } );
 
       // calculate how many energy chunks should be present based on the amount of energy in this container
-      const targetNumECs = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
       const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
 
       // start with the middle slice and cycle through in order, added chunks evenly to each
       let slideIndex = Math.floor( this.slices.length / 2 ) - 1;
-      let numECsAdded = 0;
-      while ( numECsAdded < targetNumECs ) {
+      let numberOfEnergyChunksAdded = 0;
+      while ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
         const slice = this.slices[ slideIndex ];
-        const numECsInSlice = slice.getNumEnergyChunks();
-        const center = slice.bounds.center.plusXY( smallOffset * numECsAdded, smallOffset * numECsInSlice );
+        const numberOfEnergyChunksInSlice = slice.getNumberOfEnergyChunks();
+        const center = slice.bounds.center.plusXY(
+          smallOffset * numberOfEnergyChunksAdded, smallOffset * numberOfEnergyChunksInSlice
+        );
         slice.addEnergyChunk(
           new EnergyChunk( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
         );
-        numECsAdded++;
+        numberOfEnergyChunksAdded++;
         slideIndex = ( slideIndex + 1 ) % this.slices.length;
       }
 
@@ -579,20 +581,20 @@ define( require => {
      * @returns {number}
      * @private
      */
-    getNumEnergyChunksInElement() {
-      let numChunks = 0;
+    getNumberOfEnergyChunksInElement() {
+      let numberOfChunks = 0;
       this.slices.forEach( slice => {
-        numChunks += slice.getNumEnergyChunks();
+        numberOfChunks += slice.getNumberOfEnergyChunks();
       } );
-      return numChunks;
+      return numberOfChunks;
     }
 
     /**
      * @returns {number}
      * @public
      */
-    getNumEnergyChunks() {
-      return this.getNumEnergyChunksInElement() + this.approachingEnergyChunks.length;
+    getNumberOfEnergyChunks() {
+      return this.getNumberOfEnergyChunksInElement() + this.approachingEnergyChunks.length;
     }
 
     /**
@@ -617,11 +619,11 @@ define( require => {
           const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.energyContainerCategory,
             otherEnergyContainer.energyContainerCategory );
 
-          const numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+          const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 
-          const leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-          for ( let i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
-            const timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+          const leftoverTime = dt - ( numberOfFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+          for ( let i = 0; i < numberOfFullTimeStepExchanges + 1; i++ ) {
+            const timeStep = i < numberOfFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
 
             const thermalEnergyGained = ( otherEnergyContainer.getTemperature() - this.getTemperature() ) *
                                         thermalContactLength * heatTransferConstant * timeStep;
@@ -679,7 +681,7 @@ define( require => {
      * @public
      */
     getEnergyChunkBalance() {
-      return this.getNumEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      return this.getNumberOfEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
     }
 
     /**

@@ -64,8 +64,8 @@ define( require => {
      * @private
      */
     renderFallingWater( context ) {
-      const numWaterDrops = this.waterDrops.length;
-      for ( let i = 0; i < numWaterDrops; i++ ) {
+      const numberOfWaterDrops = this.waterDrops.length;
+      for ( let i = 0; i < numberOfWaterDrops; i++ ) {
         this.drawWaterDrop( context, this.waterDrops[ i ] );
       }
     }

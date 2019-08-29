@@ -228,7 +228,7 @@ define( require => {
       } );
 
       // calculate the number of energy chunks to add based on the amount of energy in the beaker
-      const targetNumECs = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
 
       // make a copy of the slice array sorted such that the smallest is first
       let sortedSliceArray = _.sortBy( this.slices, slice => {
@@ -236,31 +236,31 @@ define( require => {
       } );
 
       const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
-      let numECsAdded = 0;
+      let numberOfEnergyChunksAdded = 0;
 
       // go through each slice, adding a number of energy chunks based on its proportionate size
       sortedSliceArray.forEach( slice => {
         const sliceArea = slice.bounds.width * slice.bounds.height;
         const sliceCenter = slice.bounds.center;
-        _.times( Util.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumECs ), index => {
-          if ( numECsAdded < targetNumECs ) {
+        _.times( Util.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
+          if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
             slice.addEnergyChunk( new EnergyChunk(
               EnergyType.THERMAL,
               sliceCenter.plusXY( smallOffset * index, smallOffset * index ),
               Vector2.ZERO,
               this.energyChunksVisibleProperty )
             );
-            numECsAdded++;
+            numberOfEnergyChunksAdded++;
           }
         } );
       } );
 
       // If the total number of added chunks was not quite enough, work through the list of slices from the biggest to
       // the smallest until they have all been added.
-      if ( numECsAdded < targetNumECs ) {
+      if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
         sortedSliceArray = sortedSliceArray.reverse();
         let sliceIndex = 0;
-        while ( numECsAdded < targetNumECs ) {
+        while ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
           const slice = sortedSliceArray[ sliceIndex ];
           const sliceCenter = slice.bounds.center;
           slice.addEnergyChunk( new EnergyChunk(
@@ -269,7 +269,7 @@ define( require => {
             Vector2.ZERO,
             this.energyChunksVisibleProperty )
           );
-          numECsAdded++;
+          numberOfEnergyChunksAdded++;
           sliceIndex = ( sliceIndex + 1 ) % sortedSliceArray.length;
         }
       }
@@ -283,11 +283,11 @@ define( require => {
       // https://github.com/phetsims/energy-forms-and-changes/issues/191.
       if ( this.specificHeat === EFACConstants.WATER_SPECIFIC_HEAT && !performanceMeasurementTaken ) {
         const startTime = window.performance.now();
-        const numIterations = 10; // empirically determined to give a reasonably consistent value
-        for ( let i = 0; i < numIterations; i++ ) {
+        const numberOfIterations = 10; // empirically determined to give a reasonably consistent value
+        for ( let i = 0; i < numberOfIterations; i++ ) {
           energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
         }
-        const averageIterationTime = ( window.performance.now() - startTime ) / numIterations;
+        const averageIterationTime = ( window.performance.now() - startTime ) / numberOfIterations;
         if ( averageIterationTime > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
 
           // Performance on this device is poor, switch to the less computationally intenstive distribution algorithm,

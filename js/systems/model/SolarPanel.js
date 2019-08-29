@@ -342,11 +342,11 @@ define( require => {
       const chunkSpeed = EFACConstants.ENERGY_CHUNK_VELOCITY;
 
       // count the number of chunks currently on the panel
-      let numChunksOnPanel = 0;
+      let numberOfChunksOnPanel = 0;
 
       this.electricalEnergyChunkMovers.forEach( mover => {
         if ( mover.getFinalDestination().equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
-          numChunksOnPanel++;
+          numberOfChunksOnPanel++;
         }
       } );
 
@@ -357,9 +357,9 @@ define( require => {
       let projectedArrivalTime = this.simulationTime + travelTime;
 
       // calculate the minimum spacing based on the number of chunks on the panel
-      const minArrivalTimeSpacing = numChunksOnPanel <= 3 ?
+      const minArrivalTimeSpacing = numberOfChunksOnPanel <= 3 ?
                                     MIN_INTER_CHUNK_TIME :
-                                    MIN_INTER_CHUNK_TIME / ( numChunksOnPanel - 2 );
+                                    MIN_INTER_CHUNK_TIME / ( numberOfChunksOnPanel - 2 );
 
       // if the projected arrival time is too close to the current last chunk, slow down so that the minimum spacing is
       // maintained

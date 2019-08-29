@@ -103,10 +103,10 @@ define( require => {
       if ( Math.abs( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) >
            EFACConstants.SIGNIFICANT_TEMPERATURE_DIFFERENCE ) {
 
-        const numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-        const leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-        _.times( numFullTimeStepExchanges + 1, index => {
-          const timeStep = index < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+        const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        const leftoverTime = dt - ( numberOfFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        _.times( numberOfFullTimeStepExchanges + 1, index => {
+          const timeStep = index < numberOfFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
           const thermalEnergyLost = ( this.getTemperature() - EFACConstants.ROOM_TEMPERATURE ) *
                                     HeatTransferConstants.getAirToSurroundingAirHeatTransferFactor() * timeStep;
           this.changeEnergy( -thermalEnergyLost );
@@ -156,10 +156,10 @@ define( require => {
           this.energyContainerCategory,
           energyContainer.energyContainerCategory
         );
-        const numFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-        const leftoverTime = dt - ( numFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
-        for ( let i = 0; i < numFullTimeStepExchanges + 1; i++ ) {
-          const timeStep = i < numFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
+        const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        const leftoverTime = dt - ( numberOfFullTimeStepExchanges * EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
+        for ( let i = 0; i < numberOfFullTimeStepExchanges + 1; i++ ) {
+          const timeStep = i < numberOfFullTimeStepExchanges ? EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP : leftoverTime;
           const thermalEnergyGained = ( energyContainer.getTemperature() - this.getTemperature() ) *
                                       thermalContactLength * heatTransferConstant * timeStep;
           energyToExchange += thermalEnergyGained;

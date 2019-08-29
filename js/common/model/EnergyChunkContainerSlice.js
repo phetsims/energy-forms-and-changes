@@ -79,7 +79,7 @@ define( require => {
      * @returns {number}
      * @public
      */
-    getNumEnergyChunks() {
+    getNumberOfEnergyChunks() {
       return this.energyChunkList.length;
     }
   }

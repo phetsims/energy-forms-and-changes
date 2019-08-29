@@ -33,7 +33,7 @@ define( require => {
   const wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
 
   // constants
-  const NUM_FAN_IMAGES = fanImages.length;
+  const NUMBER_OF_FAN_IMAGES = fanImages.length;
 
   class FanNode extends MoveFadeModelElementNode {
 
@@ -62,7 +62,7 @@ define( require => {
       const fanBladeImageNodes = [];
 
       // fan blade image nodes
-      for ( let i = 0; i < NUM_FAN_IMAGES; i++ ) {
+      for ( let i = 0; i < NUMBER_OF_FAN_IMAGES; i++ ) {
         fanBladeImageNodes.push( new Image( fanImages[ i ], {
           left: connectorNode.right - 2,
           centerY: connectorNode.centerY,
@@ -96,8 +96,8 @@ define( require => {
    * @returns {number} - image index
    */
   const mapAngleToImageIndex = angle => {
-    const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_FAN_IMAGES ) );
-    assert && assert( i >= 0 && i < NUM_FAN_IMAGES );
+    const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_FAN_IMAGES ) );
+    assert && assert( i >= 0 && i < NUMBER_OF_FAN_IMAGES );
     return i;
   };
 

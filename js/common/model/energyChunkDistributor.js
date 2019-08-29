@@ -150,10 +150,10 @@ define( require => {
 
       // divide the time step up into the largest value known to work consistently for the algorithm
       let particlesRedistributed = false;
-      const numUpdateSteps = Math.floor( dt / MAX_TIME_STEP );
-      const extraTime = dt - numUpdateSteps * MAX_TIME_STEP;
-      for ( let forceCalcStep = 0; forceCalcStep <= numUpdateSteps; forceCalcStep++ ) {
-        const timeStep = forceCalcStep < numUpdateSteps ? MAX_TIME_STEP : extraTime;
+      const numberOfUpdateSteps = Math.floor( dt / MAX_TIME_STEP );
+      const extraTime = dt - numberOfUpdateSteps * MAX_TIME_STEP;
+      for ( let forceCalcStep = 0; forceCalcStep <= numberOfUpdateSteps; forceCalcStep++ ) {
+        const timeStep = forceCalcStep < numberOfUpdateSteps ? MAX_TIME_STEP : extraTime;
         assert && assert( timeStep <= MAX_TIME_STEP );
 
         // update the forces acting on the energy chunk due to its bounding container, other energy chunks, and drag
@@ -348,9 +348,9 @@ define( require => {
       // loop through the slices, and then the energy chunks therein, and update their velocities
       for ( let sliceIndex = 0; sliceIndex < slices.length; sliceIndex++ ) {
 
-        const numEnergyChunksInSlice = slices[ sliceIndex ].energyChunkList.length;
+        const numberOfEnergyChunksInSlice = slices[ sliceIndex ].energyChunkList.length;
 
-        for ( let ecIndex = 0; ecIndex < numEnergyChunksInSlice; ecIndex++ ) {
+        for ( let ecIndex = 0; ecIndex < numberOfEnergyChunksInSlice; ecIndex++ ) {
 
           // force on this chunk
           const force = energyChunkForces[ sliceIndex ][ ecIndex ];
@@ -411,27 +411,27 @@ define( require => {
 
         const sliceBounds = slices[ sliceIndex ].bounds;
         const sliceCenter = sliceBounds.getCenter();
-        const numEnergyChunksInSlice = slices[ sliceIndex ].energyChunkList.length;
-        if ( numEnergyChunksInSlice === 0 ) {
+        const numberOfEnergyChunksInSlice = slices[ sliceIndex ].energyChunkList.length;
+        if ( numberOfEnergyChunksInSlice === 0 ) {
 
           // bail out now if there are no energy chunks to distribute in this slice
           continue;
         }
 
         // number of turns of the spiral
-        const numTurns = 3;
+        const numberOfTurns = 3;
 
-        const maxAngle = numTurns * Math.PI * 2;
+        const maxAngle = numberOfTurns * Math.PI * 2;
         const a = 1 / maxAngle; // the equation for the spiral is generally written as r = a * theta, this is the 'a'
 
         // Define the angular span over which energy chunks will be placed.  This will grow as the number of energy
         // chunks grows.
         let angularSpan;
-        if ( numEnergyChunksInSlice <= 6 ) {
-          angularSpan = 2 * Math.PI * ( 1 - 1 / numEnergyChunksInSlice );
+        if ( numberOfEnergyChunksInSlice <= 6 ) {
+          angularSpan = 2 * Math.PI * ( 1 - 1 / numberOfEnergyChunksInSlice );
         }
         else {
-          angularSpan = Math.min( Math.max( numEnergyChunksInSlice / 19 * maxAngle, 2 * Math.PI ), maxAngle );
+          angularSpan = Math.min( Math.max( numberOfEnergyChunksInSlice / 19 * maxAngle, 2 * Math.PI ), maxAngle );
         }
 
         // The offset faction defined below controls how weighted the algorithm is towards placing chunks towards the
@@ -446,16 +446,16 @@ define( require => {
         const spiralAngleOffset = ( 2 * Math.PI ) / slices.length + Math.PI;
 
         // loop through each energy chunk in this slice and set its position
-        for ( let ecIndex = 0; ecIndex < numEnergyChunksInSlice; ecIndex++ ) {
+        for ( let ecIndex = 0; ecIndex < numberOfEnergyChunksInSlice; ecIndex++ ) {
           const ec = slices[ sliceIndex ].energyChunkList.get( ecIndex );
 
           // calculate the angle to feed into the spiral formula
           let angle;
-          if ( numEnergyChunksInSlice <= 1 ) {
+          if ( numberOfEnergyChunksInSlice <= 1 ) {
             angle = startAngle;
           }
           else {
-            angle = startAngle + Math.pow( ecIndex / ( numEnergyChunksInSlice - 1 ), 0.75 ) * angularSpan;
+            angle = startAngle + Math.pow( ecIndex / ( numberOfEnergyChunksInSlice - 1 ), 0.75 ) * angularSpan;
           }
 
           // calculate a radius value within the "normalized spiral", where the radius is 1 at the max angle
