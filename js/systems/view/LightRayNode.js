@@ -312,6 +312,7 @@ define( require => {
    * @param {KiteLine} line1
    * @param {KiteLine} line2
    * @returns {Vector2}
+   * @private
    */
   const getLineIntersection = ( line1, line2 ) => {
 
