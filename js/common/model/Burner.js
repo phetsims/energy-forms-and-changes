@@ -102,7 +102,6 @@ define( require => {
      * Get a rectangle that defines the outline of the burner.  In the model the burner is essentially a 2D rectangle.
      * @returns {Rectangle} - rectangle that defines the outline in model space.
      * @public
-     * @override
      */
     getBounds() {
       return this.bounds;
