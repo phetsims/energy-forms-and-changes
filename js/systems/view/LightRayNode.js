@@ -126,52 +126,12 @@ define( require => {
       this.addChild( fadingRay );
     }
 
-    //REVIEW #247 can be a private function, no dependencies on LightRayNode
     /**
-     * @param {KiteLine} line1
-     * @param {KiteLine} line2
-     * @returns {Vector2}
-     * @private
-     */
-    getLineIntersection( line1, line2 ) {
-
-      const start1 = line1.start;
-      const start2 = line2.start;
-      const end1 = line1.end;
-      const end2 = line2.end;
-
-      const denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
-                          ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
-
-      // Check if the lines are parallel, and thus don't intersect.
-      if ( denominator === 0 ) {
-        return null;
-      }
-
-      const numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
-                        ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
-      const r = numerator / denominator;
-
-      const numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
-                         ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
-      const s = numerator2 / denominator;
-
-      if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
-        return null;
-      }
-
-      // find intersection point
-      return new Vector2(
-        start1.x + ( r * ( end1.x - start1.x ) ),
-        start1.y + ( r * ( end1.y - start1.y ) )
-      );
-    }
-
-    //REVIEW #247 document
-    /**
-     * @param  {Vector2} origin
-     * @param  {Vector2} endpoint
-     * @param  {Shape} shape
+     * finds the point at which this light ray enters a light absorbing shape
+     *
+     * @param {Vector2} origin
+     * @param {Vector2} endpoint
+     * @param {Shape} shape
      * @returns {Vector2|null}
      * @private
      */
@@ -217,11 +177,12 @@ define( require => {
       return entryPoint;
     }
 
-    //REVIEW #247 document
     /**
-     * @param  {Vector2} origin
-     * @param  {Vector2} endpoint
-     * @param  {Shape} shape
+     * finds the point at which this light ray exits a light absorbing shape
+     *
+     * @param {Vector2} origin
+     * @param {Vector2} endpoint
+     * @param {Shape} shape
      * @returns {Vector2}
      * @private
      */
@@ -250,11 +211,11 @@ define( require => {
       return exitPoint;
     }
 
-    //REVIEW document
     /**
-     * @param  {Vector2} origin
-     * @param  {Vector2} endpoint
-     * @param  {Rectangle} rect
+     * finds the point at which this light ray enters a rectangular shape
+     * @param {Vector2} origin
+     * @param {Vector2} endpoint
+     * @param {Rectangle} rect
      * @returns {Vector2}
      * @private
      */
@@ -272,6 +233,7 @@ define( require => {
     }
 
     /**
+     * finds the point at which this light ray exits a rectangular shape
      * @param  {Vector2} origin
      * @param  {Vector2} endpoint
      * @param  {Rectangle} rect
@@ -299,8 +261,8 @@ define( require => {
     }
 
     /**
-     * @param  {Rectangle} rect
-     * @param  {Line} line
+     * @param {Rectangle} rect
+     * @param {Line} line
      * @returns {Vector2[]}
      */
     getRectangleLineIntersectionPoints( rect, line ) {
@@ -322,7 +284,7 @@ define( require => {
 
       const intersectingPoints = [];
       lines.forEach( rectLine => {
-        const intersectingPoint = this.getLineIntersection( rectLine, line );
+        const intersectingPoint = getLineIntersection( rectLine, line );
         if ( intersectingPoint !== null ) {
           intersectingPoints.push( intersectingPoint );
         }
@@ -345,6 +307,46 @@ define( require => {
       this.fadeValue = fadeValue;
     }
   }
+
+  /**
+   * @param {KiteLine} line1
+   * @param {KiteLine} line2
+   * @returns {Vector2}
+   * @private
+   */
+  const getLineIntersection = ( line1, line2 ) => {
+
+    const start1 = line1.start;
+    const start2 = line2.start;
+    const end1 = line1.end;
+    const end2 = line2.end;
+
+    const denominator = ( ( end1.x - start1.x ) * ( end2.y - start2.y ) ) -
+                        ( ( end1.y - start1.y ) * ( end2.x - start2.x ) );
+
+    // Check if the lines are parallel, and thus don't intersect.
+    if ( denominator === 0 ) {
+      return null;
+    }
+
+    const numerator = ( ( start1.y - start2.y ) * ( end2.x - start2.x ) ) -
+                      ( ( start1.x - start2.x ) * ( end2.y - start2.y ) );
+    const r = numerator / denominator;
+
+    const numerator2 = ( ( start1.y - start2.y ) * ( end1.x - start1.x ) ) -
+                       ( ( start1.x - start2.x ) * ( end1.y - start1.y ) );
+    const s = numerator2 / denominator;
+
+    if ( ( r < 0 || r > 1 ) || ( s < 0 || s > 1 ) ) {
+      return null;
+    }
+
+    // find intersection point
+    return new Vector2(
+      start1.x + ( r * ( end1.x - start1.x ) ),
+      start1.y + ( r * ( end1.y - start1.y ) )
+    );
+  };
 
   return energyFormsAndChanges.register( 'LightRayNode', LightRayNode );
 } );

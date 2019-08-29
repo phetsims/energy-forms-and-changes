@@ -35,8 +35,8 @@ define( require => {
 
       options = _.extend( {
 
-        //REVIEW looking at setHorizontalWanderConstraint type expression should be {Range|null}, describe semantics of null
-        // {Range} - bounding range in the X direction within which the energy chunk's motion should be constrained
+        // {Range|null} - bounding range in the X direction within which the energy chunk's motion should be constrained.
+        // Not all energy chunks need this constraint, so null is an acceptable value
         horizontalWanderConstraint: null,
 
         // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero

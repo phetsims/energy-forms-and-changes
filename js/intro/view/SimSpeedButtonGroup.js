@@ -1,6 +1,5 @@
 // Copyright 2019, University of Colorado Boulder
 
-//REVIEW #247 this duplicates functionality of SCENERY_PHET/TimeControlNode, but the radio buttons there are slow & normal
 /**
  * Button group that controls the sim speed with "Normal" and "Fast Forward" radio buttons.
  *

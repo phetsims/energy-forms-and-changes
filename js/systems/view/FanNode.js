@@ -76,7 +76,7 @@ define( require => {
       let visibleFanNode = fanBladeImageNodes[ 0 ];
       fan.bladePositionProperty.link( angle => {
         assert && assert( angle >= 0 && angle <= 2 * Math.PI, `Angle out of range: ${angle}` );
-        const i = this.mapAngleToImageIndex( angle );
+        const i = mapAngleToImageIndex( angle );
         visibleFanNode.setVisible( false );
         visibleFanNode = fanBladeImageNodes[ i ];
         visibleFanNode.setVisible( true );
@@ -88,20 +88,18 @@ define( require => {
       } ) );
       this.addChild( connectorNode );
     }
-
-    //REVIEW #247 function can be private, no dependencies on FanNode
-    /**
-     * find the image index corresponding to this angle in radians
-     * @param  {number} angle
-     * @returns {number} - image index
-     * @private
-     */
-    mapAngleToImageIndex( angle ) {
-      const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_FAN_IMAGES ) );
-      assert && assert( i >= 0 && i < NUM_FAN_IMAGES );
-      return i;
-    }
   }
+
+  /**
+   * find the image index corresponding to this angle in radians
+   * @param {number} angle
+   * @returns {number} - image index
+   */
+  const mapAngleToImageIndex = angle => {
+    const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUM_FAN_IMAGES ) );
+    assert && assert( i >= 0 && i < NUM_FAN_IMAGES );
+    return i;
+  };
 
   return energyFormsAndChanges.register( 'FanNode', FanNode );
 } );

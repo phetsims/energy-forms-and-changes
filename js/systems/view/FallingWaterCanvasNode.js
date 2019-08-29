@@ -86,10 +86,10 @@ define( require => {
       );
     }
 
-    //REVIEW #247 missing @override
     /**
      * Paints the water drops on the canvas node.
      * @param {CanvasRenderingContext2D} context
+     * @override
      * @public
      */
     paintCanvas( context ) {
