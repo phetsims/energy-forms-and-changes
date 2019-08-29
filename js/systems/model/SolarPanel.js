@@ -102,12 +102,10 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * @param  {number} dt - time step, in seconds
      * @param  {Energy} incomingEnergy - type, amount, direction of energy
      * @returns {Energy}
-     * @override
      * @public
      */
     step( dt, incomingEnergy ) {
@@ -402,10 +400,10 @@ define( require => {
       this.latestChunkArrivalTime = 0;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * get the shape of the area where light can be absorbed
      * @returns {Shape}
+     * @public
      */
     getAbsorptionShape() {
       return this.absorptionShape;

@@ -183,7 +183,6 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 document
     /**
      * whether the current selected element is in its destination spot
      * @private

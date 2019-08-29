@@ -105,8 +105,9 @@ define( require => {
       return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
     }
 
-    //REVIEW #247 document
     /**
+     * if enough energy has been produced since the last energy chunk was emitted, release another one into the system
+     *
      * @private
      */
     addChunkIfEnoughEnergy() {
@@ -117,13 +118,11 @@ define( require => {
       }
     }
 
-    //REVIEW #247 why is this an override? no step in class hierarchy
     /**
      * step in time
      * @param  {number} dt time step, in seconds
      * @returns {Energy}
      * @public
-     * @override
      */
     step( dt ) {
 

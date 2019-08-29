@@ -83,15 +83,12 @@ define( require => {
       this.transferNextAvailableChunk = true;
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * Animation for tea kettle and energy chunks
      *
-     * @param  {number} dt timestep
-     *
+     * @param {number} dt
      * @returns {Energy}
      * @public
-     * @override
      */
     step( dt ) {
 
@@ -143,7 +140,7 @@ define( require => {
           this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
           this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
-            this.createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
+            createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
 
@@ -242,22 +239,6 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 can be a private function, no dependencies on TeaKettle
-    /**
-     * @param  {Vector2}  startPosition
-     * @param  {Vector2}  teaKettlePosition
-     *
-     * @returns {Vector2[]}
-     * @private
-     */
-    createThermalEnergyChunkPath( startPosition, teaKettlePosition ) {
-      const path = [];
-
-      path.push( new Vector2( startPosition.x, teaKettlePosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );
-
-      return path;
-    }
-
     /**
      * @public
      * @override
@@ -305,7 +286,7 @@ define( require => {
           this.energyChunkList.push( energyChunk );
 
           this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
-            this.createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
+            createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
           ) );
 
@@ -356,6 +337,20 @@ define( require => {
       this.energyChunkMovers.length = 0;
     }
   }
+
+  /**
+   * @param {Vector2} startPosition
+   * @param {Vector2} teaKettlePosition
+   * @returns {Vector2[]}
+   * @private
+   */
+  const createThermalEnergyChunkPath = ( startPosition, teaKettlePosition ) => {
+    const path = [];
+
+    path.push( new Vector2( startPosition.x, teaKettlePosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );
+
+    return path;
+  };
 
   // statics
   TeaKettle.SPOUT_EXIT_ANGLE = SPOUT_EXIT_ANGLE;

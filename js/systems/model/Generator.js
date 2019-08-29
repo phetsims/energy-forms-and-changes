@@ -145,14 +145,12 @@ define( require => {
       }
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * step this model element in time
      * @param {number} dt time step
      * @param {Energy} incomingEnergy
      * @returns {Energy}
      * @public
-     * @override
      */
     step( dt, incomingEnergy ) {
       if ( this.activeProperty.value ) {

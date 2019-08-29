@@ -99,11 +99,11 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * step in time
      * @param dt - time step, in seconds
      * @returns {Energy}
+     * @public
      */
     step( dt ) {
       let energyProduced = 0;
@@ -243,10 +243,10 @@ define( require => {
       this.outgoingEnergyChunks.length = 0;
     }
 
-    //REVIEW #247 missing visibility annotation
     /**
      * return a structure containing type, rate, and direction of emitted energy
      * @returns {Energy}
+     * @public
      */
     getEnergyOutputRate() {
       return new Energy(

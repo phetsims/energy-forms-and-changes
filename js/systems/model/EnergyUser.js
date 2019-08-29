@@ -36,9 +36,8 @@ define( require => {
       this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
     }
 
-    //REVIEW #247 this was @protected in the superclass, is @public accurate?
     /**
-     * @public
+     * @protected
      * @override
      */
     clearEnergyChunks() {

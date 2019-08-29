@@ -75,12 +75,10 @@ define( require => {
       this.goRightNextTime = true;
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * @param  {number} dt - time step, in seconds
      * @param  {Energy} incomingEnergy
      * @public
-     * @override
      */
     step( dt, incomingEnergy ) {
       if ( this.activeProperty.value ) {
@@ -219,8 +217,8 @@ define( require => {
           if ( this.hasFilament ) {
             mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
             const path = this.createPathOnFilament( mover.energyChunk.positionProperty.value );
-            const speed = this.getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
-                          this.generateThermalChunkTimeOnFilament();
+            const speed = getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
+                          generateThermalChunkTimeOnFilament();
             this.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
           }
           else {
@@ -326,36 +324,6 @@ define( require => {
       return path;
     }
 
-    //REVIEW #247 can be a private function, has no dependencies on LightBulb
-    /**
-     * @returns {number} time
-     * @private
-     */
-    generateThermalChunkTimeOnFilament() {
-      return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
-             phet.joist.random.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
-    }
-
-    //REVIEW #247 can be a private function, has no dependencies on LightBulb
-    /**
-     * @param {Vector2} startingLocation
-     * @param {Vector2[]} pathPoints
-     * @returns {number}
-     * @private
-     */
-    getTotalPathLength( startingLocation, pathPoints ) {
-      if ( pathPoints.length === 0 ) {
-        return 0;
-      }
-
-      let pathLength = startingLocation.distance( pathPoints[ 0 ] );
-      for ( let i = 0; i < pathPoints.length - 1; i++ ) {
-        pathLength += pathPoints[ i ].distance( pathPoints[ i + 1 ] );
-      }
-
-      return pathLength;
-    }
-
     /**
      * deactivate the light bulb
      * @public
@@ -378,6 +346,34 @@ define( require => {
       this.incomingEnergyChunks.length = 0;
     }
   }
+
+  /**
+   * @returns {number} time
+   * @private
+   */
+  const generateThermalChunkTimeOnFilament = () => {
+    return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
+           phet.joist.random.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
+  };
+
+  /**
+   * @param {Vector2} startingLocation
+   * @param {Vector2[]} pathPoints
+   * @returns {number}
+   * @private
+   */
+  const getTotalPathLength = ( startingLocation, pathPoints ) => {
+    if ( pathPoints.length === 0 ) {
+      return 0;
+    }
+
+    let pathLength = startingLocation.distance( pathPoints[ 0 ] );
+    for ( let i = 0; i < pathPoints.length - 1; i++ ) {
+      pathLength += pathPoints[ i ].distance( pathPoints[ i + 1 ] );
+    }
+
+    return pathLength;
+  };
 
   return energyFormsAndChanges.register( 'LightBulb', LightBulb );
 } );
