@@ -21,6 +21,7 @@ define( require => {
   const Easing = require( 'TWIXT/Easing' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Range = require( 'DOT/Range' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -30,17 +31,11 @@ define( require => {
   class EnergySystemElementCarousel {
 
     /**
-     * @param {Vector2} selectedElementPosition - location were the selected model element should
-     * @param {Vector2} offsetBetweenElements   Offset between elements in the carousel
+     * @param {EnergySystemElement[]} - array of elements to add to this carousel
+     * @param {Vector2} selectedElementPosition - location where the selected model element should be
+     * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
      */
-    constructor( selectedElementPosition, offsetBetweenElements ) {
-
-      // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
-      this.targetIndexProperty = new NumberProperty( 0 );
-
-      // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
-      // to another is in progress
-      this.animationInProgressProperty = new BooleanProperty( false );
+    constructor( elements, selectedElementPosition, offsetBetweenElements ) {
 
       // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
       this.selectedElementPosition = selectedElementPosition;
@@ -51,17 +46,25 @@ define( require => {
       // @public (read-only) {EnergySystemElement[]} - list of the elements whose position is managed by this carousel
       this.managedElements = [];
 
+      // add each element to the array of managed elements
+      elements.forEach( element => this.add( element ) );
+
+      // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
+      this.targetIndexProperty = new NumberProperty( 0, {
+        range: new Range( 0, this.managedElements.length - 1 )
+      } );
+
+      // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
+      // to another is in progress
+      this.animationInProgressProperty = new BooleanProperty( false );
+
       // @private - variables needed to manage carousel transitions
       this.elapsedTransitionTime = 0; //REVIEW #247 units?
       this.currentCarouselOffset = new Vector2( 0, 0 );
       this.initialCarouselOffset = new Vector2( 0, 0 );
 
-      // monitor the target setting and set up the variables needed for animation each time the target changes
+      // set up the variables needed for animation each time the target changes
       this.targetIndexProperty.lazyLink( () => {
-
-        // check bounds
-        const target = this.targetIndexProperty.value;
-        assert && assert( target === 0 || target < this.managedElements.length, `targetIndex out of range: ${target}` );
 
         // set vars for the transition
         this.elapsedTransitionTime = 0;
@@ -85,7 +88,7 @@ define( require => {
     /**
      * add element to list of managed elements
      * @param {EnergySystemElement} element - energy system element to be added to carousel
-     * @publid
+     * @private
      */
     add( element ) {
 
