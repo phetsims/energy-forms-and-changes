@@ -94,12 +94,10 @@ define( require => {
       this.targetVelocity = 0;
     }
 
-    //REVIEW #247 step appears nowhere in the class hierarchy, why is this an override?
     /**
      * @param {number} dt - time step, in seconds
      * @param {Energy} incomingEnergy
      * @public
-     * @override
      */
     step( dt, incomingEnergy ) {
       if ( !this.activeProperty.value ) {
@@ -181,8 +179,9 @@ define( require => {
       this.bladePositionProperty.set( newAngle );
     }
 
-    //REVIEW #247 document
     /**
+     * move electrical energy chunks through the fan's wire
+     *
      * @param  {number} dt - time step, in seconds
      * @private
      */
@@ -210,7 +209,7 @@ define( require => {
 
             // release the energy chunk as mechanical to blow away
             this.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
-              this.createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
+              createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY ) );
           }
           else {
@@ -230,8 +229,9 @@ define( require => {
       } );
     }
 
-    //REVIEW #247 document
     /**
+     * move thermal energy chunks up and away from the fan
+     *
      * @param  {number} dt - time step, in seconds
      * @private
      */
@@ -250,6 +250,8 @@ define( require => {
     }
 
     /**
+     * move mechanical energy chunks out of the motor and away from the blades as wind
+     *
      * @param  {number} dt - time step, in seconds
      * @private
      */
@@ -265,33 +267,6 @@ define( require => {
           _.pull( this.mechanicalEnergyChunkMovers, mover );
         }
       } );
-    }
-
-    //REVIEW #247 function can be private, it has no dependencies on Fan
-    /**
-     * create a path for chunks to follow when blown out of the fan.
-     * @param  {Vector2} startingPoint
-     * @returns {Vector2[]}
-     * @private
-     */
-    createBlownEnergyChunkPath( startingPoint ) {
-      const path = [];
-      const numberOfDirectionChanges = 20; // empirically determined
-      const nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numberOfDirectionChanges, 0 );
-
-      // The first point is straight right the starting point.  This is done because it makes the chunk
-      // move straight out of the fan center cone.
-      let currentPosition = startingPoint.plus( new Vector2( INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE, 0 ) );
-      path.push( currentPosition );
-
-      // add the remaining points in the path
-      for ( let i = 0; i < numberOfDirectionChanges - 1; i++ ) {
-        const movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
-        currentPosition = currentPosition.plus( movement );
-        path.push( currentPosition );
-      }
-
-      return path;
     }
 
     /**
@@ -383,6 +358,32 @@ define( require => {
       }
     }
   }
+
+  /**
+   * create a path for chunks to follow when blown out of the fan.
+   * @param  {Vector2} startingPoint
+   * @returns {Vector2[]}
+   * @private
+   */
+  const createBlownEnergyChunkPath = startingPoint => {
+    const path = [];
+    const numberOfDirectionChanges = 20; // empirically determined
+    const nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numberOfDirectionChanges, 0 );
+
+    // The first point is straight right the starting point.  This is done because it makes the chunk
+    // move straight out of the fan center cone.
+    let currentPosition = startingPoint.plus( new Vector2( INSIDE_FAN_ENERGY_CHUNK_TRAVEL_DISTANCE, 0 ) );
+    path.push( currentPosition );
+
+    // add the remaining points in the path
+    for ( let i = 0; i < numberOfDirectionChanges - 1; i++ ) {
+      const movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+      currentPosition = currentPosition.plus( movement );
+      path.push( currentPosition );
+    }
+
+    return path;
+  };
 
   return energyFormsAndChanges.register( 'Fan', Fan );
 } );
