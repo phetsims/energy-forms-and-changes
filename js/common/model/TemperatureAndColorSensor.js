@@ -34,7 +34,7 @@ define( require => {
 
       // @public (read-only) {NumberProperty}
       this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
-        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE )
+        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ) // in kelvin, empirically determined max
       } );
 
       // @public (read-only) {Property.<Color>}
