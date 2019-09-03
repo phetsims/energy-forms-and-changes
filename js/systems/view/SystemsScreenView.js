@@ -36,7 +36,6 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const PlayPauseStepButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PlayPauseStepButtonGroup' );
   const Property = require( 'AXON/Property' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -47,6 +46,7 @@ define( require => {
   const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
   const TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleNode' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const TimeControlNode = require( 'SCENERY_PHET/TimeControlNode' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -249,9 +249,13 @@ define( require => {
       this.addChild( resetAllButton );
 
       // add the play/pause and step buttons
-      const playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
-      playPauseStepButtonGroup.center = new Vector2( layoutBounds.centerX, resetAllButton.centerY );
-      this.addChild( playPauseStepButtonGroup );
+      const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
+        stepOptions: {
+          listener: () => model.manualStep()
+        }
+      } );
+      this.addChild( timeControlNode );
+      timeControlNode.center = new Vector2( layoutBounds.centerX, resetAllButton.centerY );
 
       // add the energy system element selectors, which are sets of radio buttons
       const energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {

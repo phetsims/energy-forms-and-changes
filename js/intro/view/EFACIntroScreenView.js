@@ -27,6 +27,7 @@ define( require => {
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const efacPositionConstrainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/efacPositionConstrainer' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
+  const EFACTemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EFACTemperatureAndColorSensorNode' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
@@ -41,14 +42,13 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const PlayPauseStepButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PlayPauseStepButtonGroup' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
   const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
-  const EFACTemperatureAndColorSensorNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EFACTemperatureAndColorSensorNode' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const TimeControlNode = require( 'SCENERY_PHET/TimeControlNode' );
   const Util = require( 'DOT/Util' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -137,14 +137,18 @@ define( require => {
       // for layout.
       const centerYBelowSurface = ( this.layoutBounds.height + labBenchSurfaceImage.bottom ) / 2;
 
-      // create the play/pause and step buttons
-      const playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model );
+      // add the play/pause and step buttons
+      const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
+        stepOptions: {
+          listener: () => model.manualStep()
+        }
+      } );
 
       // for testing - option to add fast forward controls
       if ( EFACQueryParameters.showSpeedControls ) {
         const simSpeedButtonGroup = new SimSpeedButtonGroup( model.simSpeedProperty );
         const playPauseStepAndSpeedButtonGroup = new HBox( {
-          children: [ playPauseStepButtonGroup, simSpeedButtonGroup ],
+          children: [ timeControlNode, simSpeedButtonGroup ],
           spacing: 25
         } );
         playPauseStepAndSpeedButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
@@ -153,8 +157,8 @@ define( require => {
       else {
 
         // only play/pause and step are being added, so center them below the lab bench
-        playPauseStepButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
-        backLayer.addChild( playPauseStepButtonGroup );
+        timeControlNode.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
+        backLayer.addChild( timeControlNode );
       }
 
       // make the heat cool levels equal if they become linked
