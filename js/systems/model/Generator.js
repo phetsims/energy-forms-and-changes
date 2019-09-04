@@ -361,6 +361,7 @@ define( require => {
     deactivate() {
       super.deactivate();
       this.wheelRotationalVelocity = 0;
+      this.wheelRotationalAngleProperty.reset();
     }
 
     /**
