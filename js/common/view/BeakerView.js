@@ -39,7 +39,7 @@ define( require => {
   const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
   const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
-  class BeakerView extends Node {
+  class BeakerView {
 
     /**
      * @param {Beaker} beaker - model of a beaker
@@ -50,15 +50,8 @@ define( require => {
     constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
 
       options = _.extend( {
-        label: waterString,
-
-        // This option controls whether this is being constructed as a standalone node that will itthis be added as a
-        // child to another node, or as a set of individual nodes that are added separately as children to an external
-        // parent.  The latter is used when it is necessary to put portions of the beaker on separate layers.
-        composited: true
+        label: waterString
       }, options );
-
-      super();
 
       // @private
       this.modelViewTransform = modelViewTransform;
@@ -69,12 +62,6 @@ define( require => {
       this.frontNode = new Node();
       this.backNode = new Node();
       this.grabNode = new Node( { cursor: 'pointer' } );
-
-      if ( options.composited ) {
-        this.addChild( this.frontNode );
-        this.addChild( this.backNode );
-        this.addChild( this.grabNode );
-      }
 
       // extract the scale transform from the MVT so that we can separate the shape from the position
       const scaleTransform = new Transform3(

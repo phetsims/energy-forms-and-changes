@@ -107,8 +107,8 @@ define( require => {
       // between the front and back of the beaker we put a layer that will hold the radiated energy chunks
       this.addChild( new EnergyChunkLayer(
         beakerHeater.radiatedEnergyChunkList,
-        modelViewTransform,
-        { parentPositionProperty: beakerHeater.positionProperty }
+        modelViewTransform, {
+          parentPositionProperty: beakerHeater.positionProperty }
       ) );
 
       // front of the beaker

@@ -375,9 +375,7 @@ define( require => {
         model.waterBeaker,
         model,
         modelViewTransform,
-        constrainMovableElementMotion, {
-          composited: false
-        }
+        constrainMovableElementMotion
       );
 
       // @private
@@ -386,8 +384,7 @@ define( require => {
         model,
         modelViewTransform,
         constrainMovableElementMotion, {
-          label: oliveOilString,
-          composited: false
+          label: oliveOilString
         }
       );
 
