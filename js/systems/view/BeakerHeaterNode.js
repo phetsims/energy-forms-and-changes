@@ -12,7 +12,7 @@ define( require => {
 
   // modules
   const BeakerHeater = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/BeakerHeater' );
-  const BeakerNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerNode' );
+  const BeakerView = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BeakerView' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
@@ -95,14 +95,14 @@ define( require => {
         modelViewTransform.getMatrix().getScaleVector().x
       );
 
-      // @public (read-only) {BeakerNode}
-      this.BeakerNode = new BeakerNode( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT );
+      // @public (read-only) {BeakerView}
+      this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT );
 
-      // from here on, the BeakerNode's position is updated by this, BeakerHeater
-      this.BeakerNode.setFollowPosition( false );
+      // from here on, the beakerView's position is updated by this, BeakerHeater
+      this.beakerView.setFollowPosition( false );
 
       // back of the beaker
-      this.addChild( this.BeakerNode.backNode );
+      this.addChild( this.beakerView.backNode );
 
       // between the front and back of the beaker we put a layer that will hold the radiated energy chunks
       this.addChild( new EnergyChunkLayer(
@@ -112,7 +112,7 @@ define( require => {
       ) );
 
       // front of the beaker
-      this.addChild( this.BeakerNode.frontNode );
+      this.addChild( this.beakerView.frontNode );
 
       // create a scale-only MVT, since several sub-elements are relatively positioned
       const scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
@@ -141,7 +141,7 @@ define( require => {
      * @public
      */
     step( dt ) {
-      this.BeakerNode.step( dt );
+      this.beakerView.step( dt );
     }
   }
 
