@@ -604,6 +604,8 @@ define( require => {
           spacing: 5
         } ), model.energyChunksVisibleProperty
       );
+      showEnergyCheckbox.touchArea =
+        showEnergyCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
       // Create the control for linking/un-linking the heaters
       const flameNode = new Image( flameImage, {
@@ -619,11 +621,13 @@ define( require => {
           spacing: 5
         } ), model.linkedHeatersProperty
       );
+      linkHeatersCheckbox.touchArea =
+        linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
       // Add the checkbox controls
       const controlPanelCheckboxes = new VBox( {
         children: [ showEnergyCheckbox, linkHeatersCheckbox ],
-        spacing: 8,
+        spacing: 10,
         align: 'left'
       } );
       const controlPanel = new Panel( controlPanelCheckboxes, {

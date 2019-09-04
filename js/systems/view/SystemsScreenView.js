@@ -199,6 +199,8 @@ define( require => {
         } ),
         model.energyChunksVisibleProperty
       );
+      showEnergyChunksCheckbox.touchArea =
+        showEnergyChunksCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
       // add the checkbox that controls the visibility of the energy chunks to a panel
       const showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
