@@ -1,11 +1,11 @@
 {
-  "comment": "# energy-forms-and-changes 1.2.0-dev.2 Thu Sep 05 2019 00:16:28 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.2.0-phetioInstrumentation.1 Thu Sep 05 2019 14:00:25 GMT-0400 (Eastern Daylight Time)",
   "assert": {
     "sha": "201c50a840e082354b013f4ab9e9d45006f98cfe",
     "branch": "master"
   },
   "axon": {
-    "sha": "2a0b1d7c6d542b384272563d67efd5df23edcc31",
+    "sha": "36ed19c9c59ad99554ea081d11584c16377f16ef",
     "branch": "master"
   },
   "brand": {
@@ -21,8 +21,8 @@
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "c5293a7e123b20669648886b71e94a01ef2a9d72",
-    "branch": "master"
+    "sha": "ac41d455d3475e1ecba4dbb8c11874cd158f81ae",
+    "branch": "phetioInstrumentation"
   },
   "joist": {
     "sha": "646f0e912020ad2944cd0fd0ec309c4a9713f360",
@@ -37,7 +37,7 @@
     "branch": "master"
   },
   "phet-io": {
-    "sha": "2165ff6d155d55c700f7854db2b5995f4ef79f63",
+    "sha": "0510d72011d501e21592c6551ef111aae03a726b",
     "branch": "master"
   },
   "phet-io-wrappers": {
@@ -77,7 +77,7 @@
     "branch": "master"
   },
   "tandem": {
-    "sha": "29feaf2cb01de29e1c133c2d534813459eb53541",
+    "sha": "40bf2991e1d812f62ce156883a3ae42deaf232bd",
     "branch": "master"
   },
   "twixt": {
