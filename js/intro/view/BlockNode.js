@@ -25,6 +25,7 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Shape = require( 'KITE/Shape' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const ThermalElementDragHandler = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/ThermalElementDragHandler' );
   const Transform3 = require( 'DOT/Transform3' );
@@ -67,14 +68,18 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( block, modelViewTransform, constrainPosition, simIsPlayingProperty, options ) {
-      super( { cursor: 'pointer' } );
-
       options = _.extend( {
 
         // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
         // the energy chunks that are outside the block don't affect the bounds of the block.
-        approachingEnergyChunksLayer: null
+        approachingEnergyChunksLayer: null,
+        cursor: 'pointer',
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
+
+      super( options );
 
       // extract the scale transform from the MVT so that we can separate the shape from the position of the block
       const scaleVector = modelViewTransform.matrix.getScaleVector();

@@ -25,6 +25,7 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Shape = require( 'KITE/Shape' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Transform3 = require( 'DOT/Transform3' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -50,7 +51,10 @@ define( require => {
     constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
 
       options = _.extend( {
-        label: waterString
+        label: waterString,
+
+        // phet-io
+        tandem: Tandem.optional
       }, options );
 
       // @private
@@ -59,9 +63,16 @@ define( require => {
 
       // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
       // the header comment for info about how these are used.
-      this.frontNode = new Node();
-      this.backNode = new Node();
-      this.grabNode = new Node( { cursor: 'pointer' } );
+      this.frontNode = new Node( {
+        tandem: options.tandem.createTandem( 'frontNode' )
+      } );
+      this.backNode = new Node( {
+        tandem: options.tandem.createTandem( 'backNode' )
+      } );
+      this.grabNode = new Node( {
+        cursor: 'pointer',
+        tandem: options.tandem.createTandem( 'grabNode' )
+      } );
 
       // extract the scale transform from the MVT so that we can separate the shape from the position
       const scaleTransform = new Transform3(
