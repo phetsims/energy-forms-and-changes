@@ -130,8 +130,10 @@ define( require => {
       // add slider panel to control cloudiness
       const slider = new VSlider(
         sun.cloudinessProperty,
-        new Range( 0, 1 ),
-        { top: 0, left: 0 }
+        new Range( 0, 1 ), { 
+          top: 0, left: 0,
+          tandem: tandem.createTandem( 'slider' )
+        }
       );
 
       const tickLabel = label => {
@@ -169,7 +171,8 @@ define( require => {
         cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
         centerX: 0,
         centerY: 0,
-        resize: false
+        resize: false,
+        tandem: tandem.createTandem( 'cloudsPanel' )
       } ) );
 
       // add/remove the light-absorbing shape for the solar panel

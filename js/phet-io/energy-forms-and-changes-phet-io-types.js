@@ -203,6 +203,28 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<Vector2IO, DOMEventIO>",
       "typeName": "ActionIO.<Vector2IO, DOMEventIO>"
     },
+    "ActionIO.<Vector2IO>": {
+      "documentation": "Executes when an event occurs.",
+      "events": [
+        "emitted"
+      ],
+      "methodOrder": [],
+      "methods": {
+        "execute": {
+          "documentation": "Executes the function the Action is wrapping.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "Vector2IO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "Vector2IO"
+      ],
+      "supertype": "ParametricTypeImplIO.<Vector2IO>",
+      "typeName": "ActionIO.<Vector2IO>"
+    },
     "ArrayIO.<StringIO>": {
       "documentation": "A wrapper for the built-in JS array type, with the element type specified.",
       "events": [],
@@ -420,6 +442,31 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<ObjectIO, VoidIO>",
       "typeName": "FunctionIO.(ObjectIO)=>VoidIO"
     },
+    "FunctionIO.(RangeIO)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> RangeIO<br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO",
+        "VoidIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<RangeIO, VoidIO>",
+      "typeName": "FunctionIO.(RangeIO)=>VoidIO"
+    },
+    "FunctionIO.(RangeIO,NullableIO.<RangeIO>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> RangeIO, NullableIO.<RangeIO><br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO",
+        "NullableIO.<RangeIO>",
+        "VoidIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<RangeIO, NullableIO.<RangeIO>, VoidIO>",
+      "typeName": "FunctionIO.(RangeIO,NullableIO.<RangeIO>)=>VoidIO"
+    },
     "FunctionIO.(StringIO)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> StringIO<br><strong>Return Type:</strong> VoidIO",
       "events": [],
@@ -578,6 +625,17 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ParametricTypeImplIO.<NumberIO>",
       "typeName": "NullableIO.<NumberIO>"
+    },
+    "NullableIO.<RangeIO>": {
+      "documentation": "A wrapper to wrap another IOType, adding support for null.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<RangeIO>",
+      "typeName": "NullableIO.<RangeIO>"
     },
     "NullableIO.<StringIO>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -861,6 +919,42 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "ParametricTypeImplIO.<ObjectIO, VoidIO>"
+    },
+    "ParametricTypeImplIO.<RangeIO, NullableIO.<RangeIO>, VoidIO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO",
+        "NullableIO.<RangeIO>",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<RangeIO, NullableIO.<RangeIO>, VoidIO>"
+    },
+    "ParametricTypeImplIO.<RangeIO, VoidIO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<RangeIO, VoidIO>"
+    },
+    "ParametricTypeImplIO.<RangeIO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<RangeIO>"
     },
     "ParametricTypeImplIO.<StringIO, NullableIO.<StringIO>, VoidIO>": {
       "documentation": "A Type that has parameters",
@@ -1427,6 +1521,57 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<NumberIO>",
       "typeName": "PropertyIO.<NumberIO>"
     },
+    "PropertyIO.<RangeIO>": {
+      "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
+      "events": [
+        "changed"
+      ],
+      "methodOrder": [
+        "link",
+        "lazyLink"
+      ],
+      "methods": {
+        "getValue": {
+          "documentation": "Gets the current value.",
+          "parameterTypes": [],
+          "returnType": "RangeIO"
+        },
+        "lazyLink": {
+          "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO.(RangeIO,NullableIO.<RangeIO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "link": {
+          "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO.(RangeIO,NullableIO.<RangeIO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setValue": {
+          "documentation": "Sets the value of the property. If the value differs from the previous value, listeners are notified with the new value.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "RangeIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "unlink": {
+          "documentation": "Removes a listener.",
+          "parameterTypes": [
+            "FunctionIO.(RangeIO)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "RangeIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<RangeIO>",
+      "typeName": "PropertyIO.<RangeIO>"
+    },
     "PropertyIO.<StringIO>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
       "events": [
@@ -1528,6 +1673,39 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ParametricTypeImplIO.<Vector2IO>",
       "typeName": "PropertyIO.<Vector2IO>"
+    },
+    "RangeIO": {
+      "documentation": "A range with \"min\" and a \"max\" members.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "RangeIO"
+    },
+    "SliderIO": {
+      "documentation": "A traditional slider component, with a knob and possibly tick marks",
+      "events": [],
+      "methodOrder": [],
+      "methods": {
+        "setMajorTicksVisible": {
+          "documentation": "Set whether the major tick marks should be shown",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setMinorTicksVisible": {
+          "documentation": "Set whether the minor tick marks should be shown",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "supertype": "NodeIO",
+      "typeName": "SliderIO"
     },
     "StringIO": {
       "documentation": "Wrapper for the built-in JS string type",
