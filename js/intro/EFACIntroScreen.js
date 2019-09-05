@@ -39,7 +39,11 @@ define( require => {
         tandem: tandem
       };
 
-      super( () => new EFACIntroModel(), model => new EFACIntroScreenView( model ), options );
+      super(
+        () => new EFACIntroModel( tandem.createTandem( 'model' ) ),
+        model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),
+        options
+      );
     }
   }
 

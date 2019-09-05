@@ -36,7 +36,11 @@ define( require => {
   const ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION = new Vector2( -0.025, 0 ); // in meters
 
   class SystemsModel {
-    constructor() {
+
+    /**
+     * @param {Tandem} tandem
+     */
+    constructor( tandem ) {
 
       // @public {BooleanProperty} - see in EFACIntroModel for doc
       this.energyChunksVisibleProperty = new BooleanProperty( false );

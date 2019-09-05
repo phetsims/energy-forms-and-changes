@@ -52,7 +52,11 @@ define( require => {
   const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
 
   class EFACIntroModel {
-    constructor() {
+
+    /**
+     * @param {Tandem} tandem
+     */
+    constructor( tandem ) {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
       this.energyChunksVisibleProperty = new BooleanProperty( false );

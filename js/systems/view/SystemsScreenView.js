@@ -62,8 +62,9 @@ define( require => {
 
     /**
      * @param {SystemsModel} model
+     * @param {Tandem} tandem
      */
-    constructor( model ) {
+    constructor( model, tandem ) {
       super();
 
       // @private {SystemsModel}

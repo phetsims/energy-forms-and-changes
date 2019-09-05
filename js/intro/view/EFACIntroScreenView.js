@@ -72,8 +72,9 @@ define( require => {
 
     /**
      * @param {EFACIntroModel} model
+     * @param {Tandem} tandem
      */
-    constructor( model ) {
+    constructor( model, tandem ) {
       super();
 
       // @private {EFACIntroModel}

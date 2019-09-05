@@ -41,7 +41,11 @@ define( require => {
         tandem: tandem
       };
 
-      super( () => new SystemsModel(), model => new SystemsScreenView( model ), options );
+      super(
+        () => new SystemsModel( tandem.createTandem( 'model' ) ),
+        model => new SystemsScreenView( model, tandem.createTandem( 'view' ) ),
+        options
+      );
     }
   }
 
