@@ -96,9 +96,10 @@ define( require => {
      * @param {Biker} biker EnergySource
      * @param {BooleanProperty} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( biker, energyChunksVisibleProperty, modelViewTransform ) {
-      super( biker, modelViewTransform );
+    constructor( biker, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( biker, modelViewTransform, tandem );
 
       // bike part image nodes
       const bicycleFrameNode = new Image( bicycleFrameImage, {

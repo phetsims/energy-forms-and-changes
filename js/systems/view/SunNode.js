@@ -56,9 +56,10 @@ define( require => {
      * @param {SunEnergySource} sun Sun model element
      * @param {Property} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( sun, energyChunksVisibleProperty, modelViewTransform ) {
-      super( sun, modelViewTransform );
+    constructor( sun, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( sun, modelViewTransform, tandem );
 
       const sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
       const sunRadius = modelViewTransform.modelToViewDeltaX( sun.radius );

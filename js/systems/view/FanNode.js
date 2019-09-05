@@ -41,9 +41,10 @@ define( require => {
      * @param {Fan} fan
      * @param {BooleanProperty} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( fan, energyChunksVisibleProperty, modelViewTransform ) {
-      super( fan, modelViewTransform );
+    constructor( fan, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( fan, modelViewTransform, tandem );
 
       // add the images and the layer that will contain the energy chunks
       const wireBottomRightNode = new Image( wireBottomRightShortImage, {

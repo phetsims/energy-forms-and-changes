@@ -142,7 +142,8 @@ define( require => {
       const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
         stepOptions: {
           listener: () => model.manualStep()
-        }
+        },
+        tandem: tandem.createTandem( 'timeControlNode' )
       } );
 
       // for testing - option to add fast forward controls
@@ -233,7 +234,8 @@ define( require => {
       // create right burner node
       const rightBurnerStand = new BurnerStandNode(
         modelViewTransform.modelToViewShape( model.rightBurner.getBounds() ),
-        burnerProjectionAmount );
+        burnerProjectionAmount
+      );
 
       // set up right heater-cooler node
       const rightHeaterCoolerBack = new HeaterCoolerBack( model.rightBurner.heatCoolLevelProperty, {
@@ -358,16 +360,20 @@ define( require => {
         model.brick,
         modelViewTransform,
         constrainMovableElementMotion,
-        model.isPlayingProperty,
-        { setApproachingEnergyChunkParentNode: airLayer }
+        model.isPlayingProperty, {
+          setApproachingEnergyChunkParentNode: airLayer,
+          tandem: tandem.createTandem( 'brickNode' )
+        }
       );
       blockLayer.addChild( brickNode );
       const ironBlockNode = new BlockNode(
         model.ironBlock,
         modelViewTransform,
         constrainMovableElementMotion,
-        model.isPlayingProperty,
-        { setApproachingEnergyChunkParentNode: airLayer }
+        model.isPlayingProperty, {
+          setApproachingEnergyChunkParentNode: airLayer,
+          tandem: tandem.createTandem( 'ironBlockNode' )
+        }
       );
       blockLayer.addChild( ironBlockNode );
 
@@ -376,7 +382,9 @@ define( require => {
         model.waterBeaker,
         model,
         modelViewTransform,
-        constrainMovableElementMotion
+        constrainMovableElementMotion, {
+          tandem: tandem.createTandem( 'waterBeakerView' )
+        }
       );
 
       // @private
@@ -385,7 +393,8 @@ define( require => {
         model,
         modelViewTransform,
         constrainMovableElementMotion, {
-          label: oliveOilString
+          label: oliveOilString,
+          tandem: tandem.createTandem( 'oliveOilBeakerView' )
         }
       );
 
@@ -403,13 +412,15 @@ define( require => {
 
       // create and add the temperature and color sensor nodes, which look like a thermometer with a triangle on the side
       const temperatureAndColorSensorNodes = [];
+      let temperatureAndColorSensorIndex = 0;
       let sensorNodeWidth = 0;
       let sensorNodeHeight = 0;
       model.temperatureAndColorSensors.forEach( sensor => {
         const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode( sensor, {
           modelViewTransform: modelViewTransform,
           dragBounds: modelViewTransform.viewToModelBounds( this.layoutBounds ),
-          draggable: true
+          draggable: true,
+          tandem: tandem.createTandem( `temperatureAndColorSensorNode${temperatureAndColorSensorIndex++}` )
         } );
 
         // sensors need to be behind blocks and beakers while in storage, but in front when them while in use
@@ -442,13 +453,13 @@ define( require => {
         sensorNodeWidth * 2,
         sensorNodeHeight * 1.15,
         EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-        EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-        {
+        EFACConstants.CONTROL_PANEL_CORNER_RADIUS, {
           fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
           stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
           lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
           left: EDGE_INSET,
-          top: EDGE_INSET
+          top: EDGE_INSET,
+          tandem: tandem.createTandem( 'sensorStorageAreaNode' )
         }
       );
       backLayer.addChild( sensorStorageArea );
@@ -603,7 +614,10 @@ define( require => {
       const showEnergyCheckbox = new Checkbox( new HBox( {
           children: [ energySymbolsText, energyChunkNode ],
           spacing: 5
-        } ), model.energyChunksVisibleProperty
+        } ),
+        model.energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'showEnergySymbolsCheckbox' )
+        }
       );
       showEnergyCheckbox.touchArea =
         showEnergyCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
@@ -620,7 +634,10 @@ define( require => {
       const linkHeatersCheckbox = new Checkbox( new HBox( {
           children: [ linkHeatersText, flameNode ],
           spacing: 5
-        } ), model.linkedHeatersProperty
+        } ),
+        model.linkedHeatersProperty, {
+          tandem: tandem.createTandem( 'linkHeatersCheckbox' )
+        }
       );
       linkHeatersCheckbox.touchArea =
         linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
@@ -649,7 +666,8 @@ define( require => {
         },
         radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
         right: this.layoutBounds.maxX - EDGE_INSET,
-        centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2
+        centerY: ( labBenchSurfaceImage.bounds.maxY + this.layoutBounds.maxY ) / 2,
+        tandem: tandem.createTandem( 'resetAllButton' )
       } );
       this.addChild( resetAllButton );
 

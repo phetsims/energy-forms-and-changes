@@ -18,6 +18,7 @@ define( require => {
   const MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Range = require( 'DOT/Range' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const TemperatureAndColorSensorNode = require( 'SCENERY_PHET/TemperatureAndColorSensorNode' );
 
   class EFACTemperatureAndColorSensorNode extends Node {
@@ -28,13 +29,17 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( temperatureAndColorSensor, options ) {
-      super( { cursor: 'pointer' } );
-
       options = _.extend( {
         modelViewTransform: ModelViewTransform2.createIdentity(),
         draggable: false,
-        dragBounds: Bounds2.EVERYTHING
+        dragBounds: Bounds2.EVERYTHING,
+        cursor: 'pointer',
+
+        // phet-io
+        tandem: Tandem.optional
       }, options );
+
+      super( options );
 
       // @public (read-only) {TemperatureAndColorSensorNode} - public so getBounds functions can be called
       this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode(

@@ -18,9 +18,12 @@ define( require => {
     /**
      * @param {PositionableFadableModelElement} modelElement
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( modelElement, modelViewTransform ) {
-      super();
+    constructor( modelElement, modelViewTransform, tandem ) {
+      super( {
+        tandem: tandem
+      } );
 
       // update our position as the model element moves
       modelElement.positionProperty.link( offset => {

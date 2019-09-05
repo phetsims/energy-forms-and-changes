@@ -19,6 +19,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const LightRays = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/LightRays' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -50,7 +51,10 @@ define( require => {
       options = _.extend( {
 
         // LightBulbNode options
-        bulbType: 'fluorescent'
+        bulbType: 'fluorescent',
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
 
       assert && assert(
@@ -58,7 +62,7 @@ define( require => {
         'bulbType should be fluorescent or incandescent'
       );
 
-      super( lightBulb, modelViewTransform );
+      super( lightBulb, modelViewTransform, options.tandem );
 
       const lightRays = new LightRays( Vector2.ZERO, 30, 400, 20, Color.YELLOW );
       this.addChild( lightRays );

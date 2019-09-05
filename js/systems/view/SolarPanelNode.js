@@ -35,9 +35,10 @@ define( require => {
     /**
      * @param {SolarPanel} solarPanel - model of a solar panel
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( solarPanel, modelViewTransform ) {
-      super( solarPanel, modelViewTransform );
+    constructor( solarPanel, modelViewTransform, tandem ) {
+      super( solarPanel, modelViewTransform, tandem );
 
       // create a scale-only MVT since the absorption shape is relatively positioned
       const scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(

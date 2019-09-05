@@ -40,9 +40,10 @@ define( require => {
      * @param {BeakerHeater} beakerHeater
      * @param {Property.<boolean>} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( beakerHeater, energyChunksVisibleProperty, modelViewTransform ) {
-      super( beakerHeater, modelViewTransform );
+    constructor( beakerHeater, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( beakerHeater, modelViewTransform, tandem );
 
       const wireStraightNode = new Image( wireStraightImage, {
         left: -111,

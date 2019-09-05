@@ -38,9 +38,10 @@ define( require => {
      * @param {TeaKettle} teaKettle
      * @param {Property.<boolean>} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( teaKettle, energyChunksVisibleProperty, modelViewTransform ) {
-      super( teaKettle, modelViewTransform );
+    constructor( teaKettle, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( teaKettle, modelViewTransform, tandem );
 
       const teaKettleNode = new Image( teaKettleImage, { right: 114, bottom: 53 } );
 

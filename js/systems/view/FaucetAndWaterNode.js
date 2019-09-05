@@ -30,9 +30,10 @@ define( require => {
      * @param {FaucetAndWater} faucet EnergySource
      * @param {Property.<boolean>} energyChunksVisibleProperty
      * @param {ModelViewTransform2} modelViewTransform
+     * @param {Tandem} tandem
      */
-    constructor( faucet, energyChunksVisibleProperty, modelViewTransform ) {
-      super( faucet, modelViewTransform );
+    constructor( faucet, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+      super( faucet, modelViewTransform, tandem );
 
       const fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
 

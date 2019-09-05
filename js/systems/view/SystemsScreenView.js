@@ -129,24 +129,30 @@ define( require => {
       this.beakerHeaterNode = new BeakerHeaterNode(
         model.beakerHeater,
         model.energyChunksVisibleProperty,
-        modelViewTransform
+        modelViewTransform,
+        tandem.createTandem( 'beakerHeaterNode' )
       );
       const incandescentBulbNode = new LightBulbNode(
         model.incandescentBulb,
         model.energyChunksVisibleProperty,
-        modelViewTransform,
-        { bulbType: 'incandescent' }
+        modelViewTransform, {
+          bulbType: 'incandescent',
+          tandem: tandem.createTandem( 'incandescentBulbNode' )
+        }
       );
       const fluorescentBulbNode = new LightBulbNode(
         model.fluorescentBulb,
         model.energyChunksVisibleProperty,
-        modelViewTransform,
-        { bulbType: 'fluorescent' }
+        modelViewTransform, {
+          bulbType: 'fluorescent',
+          tandem: tandem.createTandem( 'fluorescentBulbNode' )
+        }
       );
       const fanNode = new FanNode(
         model.fan,
         model.energyChunksVisibleProperty,
-        modelViewTransform
+        modelViewTransform,
+        tandem.createTandem( 'fanNode' )
       );
       this.addChild( this.beakerHeaterNode );
       this.addChild( incandescentBulbNode );
@@ -154,15 +160,34 @@ define( require => {
       this.addChild( fanNode );
 
       // create the energy converter nodes
-      const generatorNode = new GeneratorNode( model.generator, modelViewTransform, { addMechanicalEnergyChunkLayer: false } );
-      const beltNode = new BeltNode( model.belt, modelViewTransform );
-      const solarPanelNode = new SolarPanelNode( model.solarPanel, modelViewTransform );
+      const generatorNode = new GeneratorNode(
+        model.generator,
+        modelViewTransform, {
+          addMechanicalEnergyChunkLayer: false,
+          tandem: tandem.createTandem( 'generatorNode' )
+        } );
+      const beltNode = new BeltNode(
+        model.belt,
+        modelViewTransform, {
+          tandem: tandem.createTandem( 'beltNode' )
+        }
+      );
+      const solarPanelNode = new SolarPanelNode(
+        model.solarPanel,
+        modelViewTransform,
+        tandem.createTandem( 'solarPanelNode' )
+      );
       this.addChild( generatorNode );
       this.addChild( beltNode );
       this.addChild( solarPanelNode );
 
       // @private
-      this.faucetNode = new FaucetAndWaterNode( model.faucet, model.energyChunksVisibleProperty, modelViewTransform );
+      this.faucetNode = new FaucetAndWaterNode(
+        model.faucet,
+        model.energyChunksVisibleProperty,
+        modelViewTransform,
+        tandem.createTandem( 'faucetAndWaterNode' )
+      );
       this.addChild( this.faucetNode );
 
       // get the mechanical energy chunk layer from the generator and add it after the faucet has been created. this is
@@ -171,11 +196,26 @@ define( require => {
       this.addChild( generatorNode.getMechanicalEnergyChunkLayer() );
 
       // create the rest of the energy source nodes
-      const sunNode = new SunNode( model.sun, model.energyChunksVisibleProperty, modelViewTransform );
+      const sunNode = new SunNode(
+        model.sun,
+        model.energyChunksVisibleProperty,
+        modelViewTransform,
+        tandem.createTandem( 'sunNode' )
+      );
 
       // @private
-      this.teaKettleNode = new TeaKettleNode( model.teaKettle, model.energyChunksVisibleProperty, modelViewTransform );
-      const bikerNode = new BikerNode( model.biker, model.energyChunksVisibleProperty, modelViewTransform );
+      this.teaKettleNode = new TeaKettleNode(
+        model.teaKettle,
+        model.energyChunksVisibleProperty,
+        modelViewTransform,
+        tandem.createTandem( 'teaKettleNode' )
+      );
+      const bikerNode = new BikerNode(
+        model.biker,
+        model.energyChunksVisibleProperty,
+        modelViewTransform,
+        tandem.createTandem( 'bikerNode' )
+      );
       this.addChild( sunNode );
       this.addChild( bikerNode );
       this.addChild( this.teaKettleNode );
@@ -198,7 +238,9 @@ define( require => {
           orientation: 'horizontal',
           spacing: 5
         } ),
-        model.energyChunksVisibleProperty
+        model.energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'showEnergySymbolsCheckbox' )
+        }
       );
       showEnergyChunksCheckbox.touchArea =
         showEnergyChunksCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
@@ -247,7 +289,8 @@ define( require => {
         },
         radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
         right: layoutBounds.maxX - EDGE_INSET,
-        centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2
+        centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2,
+        tandem: tandem.createTandem( 'resetAllButton' )
       } );
       this.addChild( resetAllButton );
 
@@ -255,7 +298,8 @@ define( require => {
       const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
         stepOptions: {
           listener: () => model.manualStep()
-        }
+        },
+        tandem: tandem.createTandem( 'timeControlNode' )
       } );
       this.addChild( timeControlNode );
       timeControlNode.center = new Vector2( layoutBounds.centerX, resetAllButton.centerY );
@@ -263,15 +307,18 @@ define( require => {
       // add the energy system element selectors, which are sets of radio buttons
       const energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {
         left: EDGE_INSET,
-        bottom: bottomPanel.top - EDGE_INSET
+        bottom: bottomPanel.top - EDGE_INSET,
+        tandem: tandem.createTandem( 'energySourceSelectorPanel' )
       } );
       const energyConverterSelector = new EnergySystemElementSelector( model.energyConvertersCarousel, {
         left: energySourceSelector.right + SELECTOR_SPACING,
-        bottom: bottomPanel.top - EDGE_INSET
+        bottom: bottomPanel.top - EDGE_INSET,
+        tandem: tandem.createTandem( 'energyConverterSelectorPanel' )
       } );
       const energyUserSelector = new EnergySystemElementSelector( model.energyUsersCarousel, {
         left: energyConverterSelector.right + SELECTOR_SPACING,
-        bottom: bottomPanel.top - EDGE_INSET
+        bottom: bottomPanel.top - EDGE_INSET,
+        tandem: tandem.createTandem( 'energyUserSelectorPanel' )
       } );
       this.addChild( energySourceSelector );
       this.addChild( energyConverterSelector );

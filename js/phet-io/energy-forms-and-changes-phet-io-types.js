@@ -19,6 +19,28 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<>",
       "typeName": "ActionIO.<>"
     },
+    "ActionIO.<BooleanIO>": {
+      "documentation": "Executes when an event occurs.",
+      "events": [
+        "emitted"
+      ],
+      "methodOrder": [],
+      "methods": {
+        "execute": {
+          "documentation": "Executes the function the Action is wrapping.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "BooleanIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<BooleanIO>",
+      "typeName": "ActionIO.<BooleanIO>"
+    },
     "ActionIO.<DOMEventIO>": {
       "documentation": "Executes when an event occurs.",
       "events": [
@@ -207,6 +229,26 @@ window.phet.phetio.phetioTypes = assert &&
       "methods": {},
       "supertype": "ObjectIO",
       "typeName": "DOMEventIO"
+    },
+    "DerivedPropertyIO.<BooleanIO>": {
+      "documentation": "Like PropertyIO, but not settable.  Instead it is derived from other DerivedPropertyIO or PropertyIO instances",
+      "events": [],
+      "methodOrder": [],
+      "methods": {
+        "setValue": {
+          "documentation": "Errors out when you try to set a derived property.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "BooleanIO"
+      ],
+      "supertype": "PropertyIO.<BooleanIO>",
+      "typeName": "DerivedPropertyIO.<BooleanIO>"
     },
     "EmitterIO.<>": {
       "documentation": "Emits when an event occurs and calls added listeners.",
@@ -430,6 +472,39 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<StringIO, StringIO, VoidIO>",
       "typeName": "FunctionIO.(StringIO,StringIO)=>VoidIO"
     },
+    "FunctionIO.(Vector2IO)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> Vector2IO<br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO",
+        "VoidIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<Vector2IO, VoidIO>",
+      "typeName": "FunctionIO.(Vector2IO)=>VoidIO"
+    },
+    "FunctionIO.(Vector2IO,NullableIO.<Vector2IO>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> Vector2IO, NullableIO.<Vector2IO><br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO",
+        "NullableIO.<Vector2IO>",
+        "VoidIO"
+      ],
+      "supertype": "ParametricTypeImplIO.<Vector2IO, NullableIO.<Vector2IO>, VoidIO>",
+      "typeName": "FunctionIO.(Vector2IO,NullableIO.<Vector2IO>)=>VoidIO"
+    },
+    "LinkedElementIO": {
+      "documentation": "A LinkedElement",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "LinkedElementIO"
+    },
     "NodeIO": {
       "documentation": "The base type for graphical and potentially interactive objects.  NodeIO has nested PropertyIO values for visibility, pickability and opacity.<br><br>Pickable can take one of three values:<br><ul><li>null: pass-through behavior. Nodes with input listeners are pickable, but nodes without input listeners won't block events for nodes behind it.</li><li>false: The node cannot be interacted with, and it blocks events for nodes behind it.</li><li>true: The node can be interacted with (if it has an input listener).</li></ul>For more about Scenery node pickability, please see <a href=\"http://phetsims.github.io/scenery/doc/implementation-notes#pickability\">http://phetsims.github.io/scenery/doc/implementation-notes#pickability</a>",
       "events": [],
@@ -514,6 +589,17 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ParametricTypeImplIO.<StringIO>",
       "typeName": "NullableIO.<StringIO>"
+    },
+    "NullableIO.<Vector2IO>": {
+      "documentation": "A wrapper to wrap another IOType, adding support for null.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO"
+      ],
+      "supertype": "ParametricTypeImplIO.<Vector2IO>",
+      "typeName": "NullableIO.<Vector2IO>"
     },
     "NumberIO": {
       "documentation": "Wrapper for the built-in JS number type (floating point, but also represents integers)",
@@ -850,6 +936,42 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "ParametricTypeImplIO.<Vector2IO, DOMEventIO>"
+    },
+    "ParametricTypeImplIO.<Vector2IO, NullableIO.<Vector2IO>, VoidIO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO",
+        "NullableIO.<Vector2IO>",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<Vector2IO, NullableIO.<Vector2IO>, VoidIO>"
+    },
+    "ParametricTypeImplIO.<Vector2IO, VoidIO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<Vector2IO, VoidIO>"
+    },
+    "ParametricTypeImplIO.<Vector2IO>": {
+      "documentation": "A Type that has parameters",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "Vector2IO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ParametricTypeImplIO.<Vector2IO>"
     },
     "ParametricTypeImplIO.<VoidIO>": {
       "documentation": "A Type that has parameters",
@@ -1356,6 +1478,57 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ParametricTypeImplIO.<StringIO>",
       "typeName": "PropertyIO.<StringIO>"
     },
+    "PropertyIO.<Vector2IO>": {
+      "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
+      "events": [
+        "changed"
+      ],
+      "methodOrder": [
+        "link",
+        "lazyLink"
+      ],
+      "methods": {
+        "getValue": {
+          "documentation": "Gets the current value.",
+          "parameterTypes": [],
+          "returnType": "Vector2IO"
+        },
+        "lazyLink": {
+          "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO.(Vector2IO,NullableIO.<Vector2IO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "link": {
+          "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO.(Vector2IO,NullableIO.<Vector2IO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setValue": {
+          "documentation": "Sets the value of the property. If the value differs from the previous value, listeners are notified with the new value.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "Vector2IO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "unlink": {
+          "documentation": "Removes a listener.",
+          "parameterTypes": [
+            "FunctionIO.(Vector2IO)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "Vector2IO"
+      ],
+      "supertype": "ParametricTypeImplIO.<Vector2IO>",
+      "typeName": "PropertyIO.<Vector2IO>"
+    },
     "StringIO": {
       "documentation": "Wrapper for the built-in JS string type",
       "events": [],
@@ -1398,6 +1571,16 @@ window.phet.phetio.phetioTypes = assert &&
       },
       "supertype": "NodeIO",
       "typeName": "TextIO"
+    },
+    "ToggleButtonIO": {
+      "documentation": "A button that toggles state (in/out) when pressed",
+      "events": [
+        "toggled"
+      ],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "NodeIO",
+      "typeName": "ToggleButtonIO"
     },
     "Vector2IO": {
       "documentation": "A numerical object with x and y properties, like {x:3,y:4}",

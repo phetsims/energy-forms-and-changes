@@ -11,6 +11,7 @@ define( require => {
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Path = require( 'SCENERY/nodes/Path' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   class BeltNode extends Path {
 
@@ -23,7 +24,10 @@ define( require => {
 
       options = _.extend( {
         stroke: 'black',
-        lineWidth: 4
+        lineWidth: 4,
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
 
       super( modelViewTransform.modelToViewShape( belt.beltShape ), options );

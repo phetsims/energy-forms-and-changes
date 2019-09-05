@@ -16,6 +16,7 @@ define( require => {
   const Generator = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Generator' );
   const Image = require( 'SCENERY/nodes/Image' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -41,10 +42,13 @@ define( require => {
       options = _.extend( {
 
         // {boolean} - whether the mechanical energy chunk layer is added
-        addMechanicalEnergyChunkLayer: true
+        addMechanicalEnergyChunkLayer: true,
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
 
-      super( generator, modelViewTransform );
+      super( generator, modelViewTransform, options.tandem );
 
       const generatorNode = new Image( generatorImage, { left: -107, top: -165 } );
       const spokesNode = new Image( generatorWheelSpokesImage, {

@@ -18,6 +18,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Panel = require( 'SUN/Panel' );
   const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   // constants
   const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
@@ -36,7 +37,10 @@ define( require => {
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
         cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
         xMargin: 10,
-        yMargin: 10
+        yMargin: 10,
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
 
       const buttonElementList = [];
@@ -60,7 +64,8 @@ define( require => {
       const buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
         baseColor: Color.WHITE,
         orientation: 'horizontal',
-        spacing: 15
+        spacing: 15,
+        tandem: options.tandem.createTandem( 'radioButtonGroup' )
       } );
 
       super( buttonGroup, options );
