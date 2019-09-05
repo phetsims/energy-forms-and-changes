@@ -21,7 +21,6 @@ define( require => {
   const Easing = require( 'TWIXT/Easing' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Range = require( 'DOT/Range' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -50,9 +49,23 @@ define( require => {
       // add each element to the array of managed elements
       elements.forEach( element => this.add( element ) );
 
+      /**
+       * calculates the valid target indices for this carousel
+       *
+       * @param {number} numberOfElements
+       * @returns {number[]}
+       */
+      const getValidTargetIndices = numberOfElements => {
+        const validTargetIndices = [];
+        _.times( numberOfElements, index => {
+          validTargetIndices.push( index );
+        } );
+        return validTargetIndices;
+      };
+
       // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
       this.targetIndexProperty = new NumberProperty( 0, {
-        range: new Range( 0, this.managedElements.length - 1 ),
+        validValues: getValidTargetIndices( this.managedElements.length ),
         tandem: tandem.createTandem( 'targetIndexProperty' )
       } );
 
