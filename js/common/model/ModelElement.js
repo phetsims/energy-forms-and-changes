@@ -20,11 +20,14 @@ define( require => {
 
     /**
      * @param {Vector2} initialPosition
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition ) {
+    constructor( initialPosition, tandem ) {
 
       // @public - position of the center bottom of this model element
-      this.positionProperty = new Vector2Property( initialPosition );
+      this.positionProperty = new Vector2Property( initialPosition, {
+        tandem: tandem.createTandem( 'positionProperty' )
+      } );
 
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
       // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.

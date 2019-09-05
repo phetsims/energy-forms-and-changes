@@ -18,13 +18,16 @@ define( require => {
   class UserMovableModelElement extends ModelElement {
 
     /**
-     * {Vector2} initialPosition
+     * @param {Vector2} initialPosition
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition ) {
-      super( initialPosition );
+    constructor( initialPosition, tandem ) {
+      super( initialPosition, tandem );
 
       // @public {BooleanProperty}
-      this.userControlledProperty = new BooleanProperty( false );
+      this.userControlledProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'userControlledProperty' )
+      } );
 
       // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
       // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.

@@ -52,8 +52,9 @@ define( require => {
      * @param {Vector2} initialPosition
      * @param {Property} energyChunksVisibleProperty
      * @param {BlockType} blockType
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition, energyChunksVisibleProperty, blockType ) {
+    constructor( initialPosition, energyChunksVisibleProperty, blockType, tandem ) {
 
       super(
         initialPosition,
@@ -61,7 +62,8 @@ define( require => {
         EFACConstants.BLOCK_SURFACE_WIDTH,
         Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
         BLOCK_COMPOSITION[ blockType ].specificHeat,
-        energyChunksVisibleProperty
+        energyChunksVisibleProperty,
+        tandem
       );
 
       // @public (read-only) {String} - unique ID for this block

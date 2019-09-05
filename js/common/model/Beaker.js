@@ -26,6 +26,7 @@ define( require => {
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -57,7 +58,10 @@ define( require => {
         fluidDensity: EFACConstants.WATER_DENSITY,
         fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
         energyContainerCategory: EnergyContainerCategory.WATER,
-        majorTickMarkDistance: height * 0.95 / 2 // empirically determined
+        majorTickMarkDistance: height * 0.95 / 2, // empirically determined
+
+        // phet-io
+        tandem: Tandem.required
       }, options );
 
       super(
@@ -66,7 +70,8 @@ define( require => {
         height,
         Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_PROPORTION * options.fluidDensity,
         options.fluidSpecificHeat,
-        energyChunksVisibleProperty
+        energyChunksVisibleProperty,
+        options.tandem
       );
 
       // @private

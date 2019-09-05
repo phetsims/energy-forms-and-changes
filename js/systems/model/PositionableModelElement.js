@@ -17,11 +17,14 @@ define( require => {
 
     /**
      * @param {Vector2} initialPosition
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition ) {
+    constructor( initialPosition, tandem ) {
 
       // @public {Vector2Property}
-      this.positionProperty = new Vector2Property( initialPosition );
+      this.positionProperty = new Vector2Property( initialPosition, {
+        tandem: tandem.createTandem( 'positionProperty' )
+      } );
     }
   }
 

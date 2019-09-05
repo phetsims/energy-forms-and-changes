@@ -53,10 +53,11 @@ define( require => {
 
     /**
      * @param {Property.<boolean>} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty ) {
+    constructor( energyChunksVisibleProperty, tandem ) {
 
-      super( new Image( GENERATOR_ICON ) );
+      super( new Image( GENERATOR_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.electricalGenerator.value;
@@ -66,12 +67,15 @@ define( require => {
 
       // @public (read-only) {NumberProperty} - rotational position of the wheel
       this.wheelRotationalAngleProperty = new NumberProperty( 0, {
-        range: new Range( 0, 2 * Math.PI )
+        range: new Range( 0, 2 * Math.PI ),
+        tandem: tandem.createTandem( 'wheelRotationalAngleProperty' )
       } );
 
       // @public {BooleanProperty} - a flag that controls "direct coupling mode", which means that the generator wheel
       // turns at a rate that is directly proportional to the incoming energy, with no rotational inertia
-      this.directCouplingModeProperty = new BooleanProperty( false );
+      this.directCouplingModeProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'directCouplingModeProperty' )
+      } );
 
       // @private
       this.wheelRotationalVelocity = 0;

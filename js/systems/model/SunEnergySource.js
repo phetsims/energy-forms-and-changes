@@ -45,9 +45,10 @@ define( require => {
     /**
      * @param {SolarPanel} solarPanel
      * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( solarPanel, energyChunksVisibleProperty ) {
-      super( new Image( SUN_ICON ) );
+    constructor( solarPanel, energyChunksVisibleProperty, tandem ) {
+      super( new Image( SUN_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.sun.value;
@@ -68,7 +69,8 @@ define( require => {
 
       // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
       this.cloudinessProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'cloudinessProperty' )
       } );
 
       // @private - internal variables used in methods

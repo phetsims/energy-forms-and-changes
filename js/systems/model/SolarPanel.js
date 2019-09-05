@@ -55,9 +55,10 @@ define( require => {
 
     /**
      * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty ) {
-      super( new Image( SOLAR_PANEL_ICON ) );
+    constructor( energyChunksVisibleProperty, tandem ) {
+      super( new Image( SOLAR_PANEL_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.solarPanel.value;

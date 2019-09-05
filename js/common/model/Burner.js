@@ -47,16 +47,18 @@ define( require => {
     /**
      * @param {Vector2} position - the position in model space where this burner exists
      * @param {Property.<boolean>} energyChunksVisibleProperty - controls whether the energy chunks are visible
+     * @param {Tandem} tandem
      */
-    constructor( position, energyChunksVisibleProperty ) {
-      super( position );
+    constructor( position, energyChunksVisibleProperty, tandem ) {
+      super( position, tandem );
 
       // @public (read-only) {string} - unique ID, used for debug
       this.id = `burner-${idCounter++}`;
 
       // @public {NumberProperty}
       this.heatCoolLevelProperty = new NumberProperty( 0, {
-        range: new Range( -1, 1 )
+        range: new Range( -1, 1 ),
+        tandem: tandem.createTandem( 'heatCoolLevelProperty' )
       } );
 
       // @public (read-only) {ObservableArray.<EnergyChunk>}

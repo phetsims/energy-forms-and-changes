@@ -53,31 +53,36 @@ define( require => {
     /**
      * @param {Property.<boolean>} energyChunksVisibleProperty
      * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty ) {
-      super( new Image( BICYCLE_ICON ) );
+    constructor( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty, tandem ) {
+      super( new Image( BICYCLE_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.cyclist.value;
 
       // @public (read-only) {NumberProperty} - angle of the crank arm on the bike, in radians
       this.crankAngleProperty = new NumberProperty( 0, {
-        range: new Range( 0, 2 * Math.PI )
+        range: new Range( 0, 2 * Math.PI ),
+        tandem: tandem.createTandem( 'crankAngleProperty' )
       } );
 
       // @public (read-only) {NumberProperty} - angle of the rear wheel on the bike, in radians
       this.rearWheelAngleProperty = new NumberProperty( 0, {
-        range: new Range( 0, 2 * Math.PI )
+        range: new Range( 0, 2 * Math.PI ),
+        tandem: tandem.createTandem( 'rearWheelAngleProperty' )
       } );
 
       // @public (read-only) {NumberProperty} - number of energy chunks remaining in the biker's body
       this.energyChunksRemainingProperty = new NumberProperty( 0, {
-        range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS )
+        range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS ),
+        tandem: tandem.createTandem( 'energyChunksRemainingProperty' )
       } );
 
       // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians
       this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
-        range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK )
+        range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
+        tandem: tandem.createTandem( 'targetCrankAngularVelocityProperty' )
       } );
 
       // @private - internal variables

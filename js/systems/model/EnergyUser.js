@@ -18,9 +18,10 @@ define( require => {
 
     /**
      * @param {Image} iconImage
+     * @param {Tandem} tandem
      */
-    constructor( iconImage ) {
-      super( iconImage );
+    constructor( iconImage, tandem ) {
+      super( iconImage, tandem );
 
       // @private {EnergyChunk[]}
       this.incomingEnergyChunks = [];

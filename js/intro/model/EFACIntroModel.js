@@ -59,13 +59,19 @@ define( require => {
     constructor( tandem ) {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
-      this.energyChunksVisibleProperty = new BooleanProperty( false );
+      this.energyChunksVisibleProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'energyChunksVisibleProperty' )
+      } );
 
       // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
-      this.linkedHeatersProperty = new BooleanProperty( false );
+      this.linkedHeatersProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'linkedHeatersProperty' )
+      } );
 
       // @public {BooleanProperty} - is the sim running or paused?
-      this.isPlayingProperty = new BooleanProperty( true );
+      this.isPlayingProperty = new BooleanProperty( true, {
+        tandem: tandem.createTandem( 'isPlayingProperty' )
+      } );
 
       // @public
       this.simSpeedProperty = new EnumerationProperty( SimSpeed, SimSpeed.NORMAL );
@@ -92,22 +98,32 @@ define( require => {
       this.ironBlock = new Block(
         new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
         this.energyChunksVisibleProperty,
-        BlockType.IRON
+        BlockType.IRON,
+        tandem.createTandem( 'ironBlock' )
       );
 
       // @public (read-only) {Block}
       this.brick = new Block(
         new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
         this.energyChunksVisibleProperty,
-        BlockType.BRICK
+        BlockType.BRICK,
+        tandem.createTandem( 'brick' )
       );
 
       // @public (read-only) {Block[]} - list of all blocks in sim
       this.blocks = [ this.brick, this.ironBlock ];
 
       // @public (read-only) {Burner} - right and left burners
-      this.leftBurner = new Burner( new Vector2( this.groundSpotXPositions[ 2 ], 0 ), this.energyChunksVisibleProperty );
-      this.rightBurner = new Burner( new Vector2( this.groundSpotXPositions[ 3 ], 0 ), this.energyChunksVisibleProperty );
+      this.leftBurner = new Burner(
+        new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'leftBurner' )
+      );
+      this.rightBurner = new Burner(
+        new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
+        this.energyChunksVisibleProperty,
+      tandem.createTandem( 'rightBurner' )
+    );
 
       const listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
 
@@ -118,7 +134,8 @@ define( require => {
         BEAKER_HEIGHT,
         listOfThingsThatCanGoInBeaker,
         this.energyChunksVisibleProperty, {
-          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE
+          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+          tandem: tandem.createTandem( 'waterBeaker' )
         }
       );
 
@@ -135,7 +152,8 @@ define( require => {
           fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
           fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
           energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
-          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE
+          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+          tandem: tandem.createTandem( 'oliveOilBeaker' )
         }
       );
 
@@ -160,8 +178,14 @@ define( require => {
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.temperatureAndColorSensors = [];
+      let temperatureAndColorSensorIndex = 0;
       _.times( NUMBER_OF_THERMOMETERS, () => {
-        const sensor = new StickyTemperatureAndColorSensor( this, INITIAL_THERMOMETER_LOCATION, false );
+        const sensor = new StickyTemperatureAndColorSensor(
+          this,
+          INITIAL_THERMOMETER_LOCATION,
+          false,
+          tandem.createTandem( `temperatureAndColorSensor${temperatureAndColorSensorIndex++}` )
+        );
         this.temperatureAndColorSensors.push( sensor );
 
         // Add handling for a special case where the user drops something (generally a block) in the beaker behind this

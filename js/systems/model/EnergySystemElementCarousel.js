@@ -34,8 +34,9 @@ define( require => {
      * @param {EnergySystemElement[]} - array of elements to add to this carousel
      * @param {Vector2} selectedElementPosition - location where the selected model element should be
      * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
+     * @param {Tandem} tandem
      */
-    constructor( elements, selectedElementPosition, offsetBetweenElements ) {
+    constructor( elements, selectedElementPosition, offsetBetweenElements, tandem ) {
 
       // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
       this.selectedElementPosition = selectedElementPosition;
@@ -51,12 +52,15 @@ define( require => {
 
       // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
       this.targetIndexProperty = new NumberProperty( 0, {
-        range: new Range( 0, this.managedElements.length - 1 )
+        range: new Range( 0, this.managedElements.length - 1 ),
+        tandem: tandem.createTandem( 'targetIndexProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
       // to another is in progress
-      this.animationInProgressProperty = new BooleanProperty( false );
+      this.animationInProgressProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'animationInProgressProperty' )
+      } );
 
       // @private - variables needed to manage carousel transitions
       this.elapsedTransitionTime = 0; // in seconds

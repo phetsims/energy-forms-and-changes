@@ -25,9 +25,10 @@ define( require => {
      * @param {EFACIntroModel} model
      * @param {Vector2} initialPosition
      * @param {boolean} initiallyActive
+     * @param {Tandem} tandem
      */
-    constructor( model, initialPosition, initiallyActive ) {
-      super( initialPosition );
+    constructor( model, initialPosition, initiallyActive, tandem ) {
+      super( initialPosition, tandem );
 
       // @private
       this.model = model;

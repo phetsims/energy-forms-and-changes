@@ -50,9 +50,10 @@ define( require => {
     /**
      * @param {BooleanProperty} energyChunksVisibleProperty
      * @param {BooleanProperty} waterPowerableElementInPlace
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty ) {
-      super( new Image( FAUCET_ICON ) );
+    constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, tandem ) {
+      super( new Image( FAUCET_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.waterFaucet.value;
@@ -66,7 +67,8 @@ define( require => {
 
       // @public {NumberProperty}
       this.flowProportionProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'flowProportionProperty' )
       } );
 
       // @public {read-only) {WaterDrop[]} - water drops that comprise the stream of water

@@ -20,9 +20,10 @@ define( require => {
      * @param {EFACIntroModel} model
      * @param {Vector2} initialPosition
      * @param {boolean} initiallyActive
+     * @param {Tandem} tandem
      */
-    constructor( model, initialPosition, initiallyActive ) {
-      super( model, initialPosition, initiallyActive );
+    constructor( model, initialPosition, initiallyActive, tandem ) {
+      super( model, initialPosition, initiallyActive, tandem );
 
       // @private
       this.elementFollower = new ElementFollower( this.positionProperty );

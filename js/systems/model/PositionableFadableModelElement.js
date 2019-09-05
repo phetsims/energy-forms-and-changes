@@ -20,13 +20,15 @@ define( require => {
     /**
      * @param {Vector2} initialPosition
      * @param {number} initialOpacity
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition, initialOpacity ) {
-      super( initialPosition );
+    constructor( initialPosition, initialOpacity, tandem ) {
+      super( initialPosition, tandem );
 
       // @public {NumberProperty}
       this.opacityProperty = new NumberProperty( initialOpacity, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'opacityProperty' )
       } );
     }
   }

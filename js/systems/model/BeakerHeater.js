@@ -61,9 +61,10 @@ define( require => {
 
     /**
      * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty ) {
-      super( new Image( WATER_ICON ) );
+    constructor( energyChunksVisibleProperty, tandem ) {
+      super( new Image( WATER_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.beakerOfWater.value;
@@ -73,7 +74,8 @@ define( require => {
 
       // @public (read-only) {NumberProperty}
       this.heatProportionProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'heatProportionProperty' )
       } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
@@ -90,14 +92,17 @@ define( require => {
         this.positionProperty.value.plus( BEAKER_OFFSET ),
         BEAKER_WIDTH,
         BEAKER_HEIGHT,
-        energyChunksVisibleProperty
+        energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'waterBeaker' )
+        }
       );
 
       // @public {TemperatureAndColorSensor} (read-only)
       this.temperatureAndColorSensor = new TemperatureAndColorSensor(
         this,
         new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
-        true
+        true,
+        tandem.createTandem( 'temperatureAndColorSensor' )
       );
 
       // @private, for convenience

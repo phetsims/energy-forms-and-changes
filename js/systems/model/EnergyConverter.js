@@ -18,9 +18,10 @@ define( require => {
 
     /**
      * @param {Image} iconImage Image to identify source on carousel menu
+     * @param {Tandem} tandem
      */
-    constructor( iconImage ) {
-      super( iconImage );
+    constructor( iconImage, tandem ) {
+      super( iconImage, tandem );
       this.incomingEnergyChunks = [];
       this.outgoingEnergyChunks = [];
     }

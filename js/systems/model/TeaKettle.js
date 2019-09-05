@@ -49,21 +49,24 @@ define( require => {
     /**
      * @param {Property.<boolean>} energyChunksVisibleProperty
      * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty ) {
-      super( new Image( TEAPOT_ICON ) );
+    constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, tandem ) {
+      super( new Image( TEAPOT_ICON ), tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.teaKettle.value;
 
       // @public {NumberProperty}
       this.heatProportionProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'heatProportionProperty' )
       } );
 
       // @public (read-only) {NumberProperty}
       this.energyProductionRateProperty = new NumberProperty( 0, {
-        range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE )
+        range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
+        tandem: tandem.createTandem( 'energyProductionRateProperty' )
       } );
 
       // @public

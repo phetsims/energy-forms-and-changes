@@ -21,10 +21,11 @@ define( require => {
 
     /**
      * @param {Image} iconImage
+     * @param {Tandem} tandem
      */
-    constructor( iconImage ) {
+    constructor( iconImage, tandem ) {
 
-      super( new Vector2( 0, 0 ), 1.0 );
+      super( new Vector2( 0, 0 ), 1.0, tandem );
 
       // @public (read-only) {image}
       this.iconImage = iconImage;
@@ -33,7 +34,9 @@ define( require => {
       this.energyChunkList = new ObservableArray();
 
       // @public {BooleanProperty}
-      this.activeProperty = new BooleanProperty( false );
+      this.activeProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'activeProperty' )
+      } );
 
       // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
       this.a11yName = 'name not set';

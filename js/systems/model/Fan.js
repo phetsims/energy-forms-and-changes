@@ -65,13 +65,15 @@ define( require => {
 
     /**
      * @param {Property.<boolean>} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty ) {
-      super( new Image( FAN_ICON ) );
+    constructor( energyChunksVisibleProperty, tandem ) {
+      super( new Image( FAN_ICON ), tandem );
 
       // @public (read-only) {NumberProperty} - the angle of the blade as it's spinning in a circular motion, in radians
       this.bladePositionProperty = new NumberProperty( 0, {
-        range: new Range( 0, 2 * Math.PI )
+        range: new Range( 0, 2 * Math.PI ),
+        tandem: tandem.createTandem( 'bladePositionProperty' )
       } );
 
       // @private - movers that control how the energy chunks move towards and through the fan

@@ -39,9 +39,10 @@ define( require => {
      * @param {number} mass - in kg
      * @param {number} specificHeat - in J/kg-K
      * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty ) {
-      super( initialPosition );
+    constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, tandem ) {
+      super( initialPosition, tandem );
 
       // @public (read-only)
       this.mass = mass;

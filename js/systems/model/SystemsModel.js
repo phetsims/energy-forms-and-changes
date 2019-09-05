@@ -43,20 +43,40 @@ define( require => {
     constructor( tandem ) {
 
       // @public {BooleanProperty} - see in EFACIntroModel for doc
-      this.energyChunksVisibleProperty = new BooleanProperty( false );
+      this.energyChunksVisibleProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'energyChunksVisibleProperty' )
+      } );
 
       // @public (read-only) {BooleanProperty} - is the sim running or paused?
-      this.isPlayingProperty = new BooleanProperty( true );
+      this.isPlayingProperty = new BooleanProperty( true, {
+        tandem: tandem.createTandem( 'isPlayingProperty' )
+      } );
 
       // @public (read-only) energy converters
-      this.generator = new Generator( this.energyChunksVisibleProperty );
-      this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty );
+      this.generator = new Generator( this.energyChunksVisibleProperty, tandem.createTandem( 'generator' ) );
+      this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, tandem.createTandem( 'solarPanel' ) );
 
       // @public (read-only) energy sources
-      this.faucet = new FaucetAndWater( this.energyChunksVisibleProperty, this.generator.activeProperty );
-      this.sun = new SunEnergySource( this.solarPanel, this.energyChunksVisibleProperty );
-      this.teaKettle = new TeaKettle( this.energyChunksVisibleProperty, this.generator.activeProperty );
-      this.biker = new Biker( this.energyChunksVisibleProperty, this.generator.activeProperty );
+      this.faucet = new FaucetAndWater(
+        this.energyChunksVisibleProperty,
+        this.generator.activeProperty,
+        tandem.createTandem( 'faucet' )
+      );
+      this.sun = new SunEnergySource(
+        this.solarPanel,
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'sun' )
+      );
+      this.teaKettle = new TeaKettle(
+        this.energyChunksVisibleProperty,
+        this.generator.activeProperty,
+        tandem.createTandem( 'teaKettle' )
+      );
+      this.biker = new Biker( 
+        this.energyChunksVisibleProperty, 
+        this.generator.activeProperty, 
+        tandem.createTandem( 'biker' ) 
+      );
 
       const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
       const wheel2Center = ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Generator.WHEEL_CENTER_OFFSET );
@@ -65,26 +85,35 @@ define( require => {
       this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
       // @public (read-only) energy users
-      this.fan = new Fan( this.energyChunksVisibleProperty );
-      this.incandescentBulb = new IncandescentBulb( this.energyChunksVisibleProperty );
-      this.fluorescentBulb = new FluorescentBulb( this.energyChunksVisibleProperty );
-      this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty );
+      this.fan = new Fan( this.energyChunksVisibleProperty, tandem.createTandem( 'fan' ) );
+      this.incandescentBulb = new IncandescentBulb( 
+        this.energyChunksVisibleProperty, 
+        tandem.createTandem( 'incandescentBulb' ) 
+      );
+      this.fluorescentBulb = new FluorescentBulb( 
+        this.energyChunksVisibleProperty, 
+        tandem.createTandem( 'fluorescentBulb' ) 
+      );
+      this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty, tandem.createTandem( 'beakerHeater' ) );
 
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
         [ this.faucet, this.sun, this.teaKettle, this.biker ],
         ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
-        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL
+        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
+        tandem.createTandem( 'energySourcesCarousel' )
       );
       this.energyConvertersCarousel = new EnergySystemElementCarousel(
         [ this.generator, this.solarPanel ],
         ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
-        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL
+        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
+        tandem.createTandem( 'energyConvertersCarousel' )
       );
       this.energyUsersCarousel = new EnergySystemElementCarousel(
         [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
         new Vector2( 0.09, 0 ),
-        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL
+        OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
+        tandem.createTandem( 'energyUsersCarousel' )
       );
 
       // @private {EnergySystemElementCarousel[]}

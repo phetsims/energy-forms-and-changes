@@ -22,9 +22,10 @@ define( require => {
 
     /**
      * @param {BooleanProperty} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( energyChunksVisibleProperty ) {
-      super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty );
+    constructor( energyChunksVisibleProperty, tandem ) {
+      super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, tandem );
 
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.incandescentLightBulb.value;

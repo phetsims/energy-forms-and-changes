@@ -52,13 +52,15 @@ define( require => {
      * @param {Image} iconImage
      * @param {boolean} hasFilament
      * @param {Property.<boolean>} energyChunksVisibleProperty
+     * @param {Tandem} tandem
      */
-    constructor( iconImage, hasFilament, energyChunksVisibleProperty ) {
-      super( iconImage );
+    constructor( iconImage, hasFilament, energyChunksVisibleProperty, tandem ) {
+      super( iconImage, tandem );
 
       // @public (read-only) {NumberProperty}
       this.litProportionProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'litProportionProperty' )
       } );
 
       // @private
