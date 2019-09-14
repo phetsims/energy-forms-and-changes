@@ -13,6 +13,8 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanIO = require( 'TANDEM/types/BooleanIO' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
@@ -20,9 +22,14 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const NullableIO = require( 'TANDEM/types/NullableIO' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PerspectiveWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PerspectiveWaterNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const PropertyIO = require( 'AXON/PropertyIO' );
+  const Range = require( 'DOT/Range' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Shape = require( 'KITE/Shape' );
   const Tandem = require( 'TANDEM/Tandem' );
@@ -63,15 +70,36 @@ define( require => {
 
       // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
       // the header comment for info about how these are used.
-      this.frontNode = new Node( {
-        tandem: options.tandem.createTandem( 'frontNode' )
+      this.frontNode = new Node();
+      this.backNode = new Node();
+      this.grabNode = new Node( { cursor: 'pointer' } );
+
+      // control the Node properties of all three layers at once
+      const opacityProperty = new NumberProperty( 1, {
+        range: new Range( 0, 1 ),
+        tandem: options.tandem.createTandem( 'opacityProperty' )
       } );
-      this.backNode = new Node( {
-        tandem: options.tandem.createTandem( 'backNode' )
+      const pickableProperty = new Property( null, {
+        phetioType: PropertyIO( NullableIO( BooleanIO ) ),
+        tandem: options.tandem.createTandem( 'pickableProperty' )
       } );
-      this.grabNode = new Node( {
-        cursor: 'pointer',
-        tandem: options.tandem.createTandem( 'grabNode' )
+      const visibleProperty = new BooleanProperty( true, {
+        tandem: options.tandem.createTandem( 'visibleProperty' )
+      } );
+      opacityProperty.link( opacity => {
+        this.frontNode.opacity = opacity;
+        this.backNode.opacity = opacity;
+        this.grabNode.opacity = opacity;
+      } );
+      pickableProperty.link( pickable => {
+        this.frontNode.pickable = pickable;
+        this.backNode.pickable = pickable;
+        this.grabNode.pickable = pickable;
+      } );
+      visibleProperty.link( visible => {
+        this.frontNode.visible = visible;
+        this.backNode.visible = visible;
+        this.grabNode.visible = visible;
       } );
 
       // extract the scale transform from the MVT so that we can separate the shape from the position
