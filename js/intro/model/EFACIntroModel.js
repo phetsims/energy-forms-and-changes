@@ -177,21 +177,21 @@ define( require => {
       this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
-      this.temperatureAndColorSensors = [];
-      let temperatureAndColorSensorIndex = 0;
+      this.thermometers = [];
+      let thermometerIndex = 0;
       _.times( NUMBER_OF_THERMOMETERS, () => {
-        const sensor = new StickyTemperatureAndColorSensor(
+        const thermometer = new StickyTemperatureAndColorSensor(
           this,
           INITIAL_THERMOMETER_LOCATION,
           false,
-          tandem.createTandem( `temperatureAndColorSensor${temperatureAndColorSensorIndex++}` )
+          tandem.createTandem( `thermometer${++thermometerIndex}` ) // 1 indexed
         );
-        this.temperatureAndColorSensors.push( sensor );
+        this.thermometers.push( thermometer );
 
         // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
-        // thermometer. The action is to automatically move the thermometer to a location where it continues to sense the
-        // beaker temperature. This was requested after interviews.
-        sensor.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+        // thermometer. The action is to automatically move the thermometer to a location where it continues to sense
+        // the beaker temperature. This was requested after interviews.
+        thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
           this.beakers.forEach( beaker => {
             const blockWidthIncludingPerspective = this.ironBlock.getProjectedShape().bounds.width;
@@ -208,20 +208,20 @@ define( require => {
             };
 
             // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
-            // sensor was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
+            // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
             if ( _.some( this.blocks, checkBlocks ) &&
                  oldColor === beaker.fluidColor &&
-                 !sensor.userControlledProperty.get() &&
+                 !thermometer.userControlledProperty.get() &&
                  !beaker.userControlledProperty.get() &&
-                 xRange.contains( sensor.positionProperty.value.x ) ) {
+                 xRange.contains( thermometer.positionProperty.value.x ) ) {
 
-              // fake a movement by the user to a point in the beaker where the sensor is not over a brick
-              sensor.userControlledProperty.set( true ); // must toggle userControlled to enable element following
-              sensor.positionProperty.value = new Vector2(
+              // fake a movement by the user to a point in the beaker where the thermometer is not over a brick
+              thermometer.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+              thermometer.positionProperty.value = new Vector2(
                 beaker.getBounds().maxX - 0.01,
                 beaker.getBounds().minY + beaker.getBounds().height * 0.33
               );
-              sensor.userControlledProperty.set( false );
+              thermometer.userControlledProperty.set( false );
             }
           } );
         } );
@@ -287,8 +287,8 @@ define( require => {
       this.brick.reset();
       this.waterBeaker.reset();
       this.oliveOilBeaker.reset();
-      this.temperatureAndColorSensors.forEach( sensor => {
-        sensor.reset();
+      this.thermometers.forEach( thermometer => {
+        thermometer.reset();
       } );
       this.energyBalanceTracker.clearAllBalances();
     }
@@ -315,8 +315,8 @@ define( require => {
         this.stepModel( dt * multiplier );
       }
 
-      // step the sensors regardless of whether the sim is paused, and fast forward makes no difference
-      this.temperatureAndColorSensors.forEach( thermometer => {
+      // step the thermometers regardless of whether the sim is paused, and fast forward makes no difference
+      this.thermometers.forEach( thermometer => {
         thermometer.step( dt );
       } );
     }
@@ -794,8 +794,8 @@ define( require => {
       }
 
       // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
-      // checked because in the case of a beaker body and another beaker's steam overlapping, the sensor should detect
-      // the beaker body first
+      // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
+      // detect the beaker body first
       for ( let i = 0; i < this.beakers.length && !temperatureAndColorUpdated; i++ ) {
         const beaker = this.beakers[ i ];
         if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {

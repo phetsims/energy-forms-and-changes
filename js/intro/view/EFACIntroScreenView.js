@@ -64,9 +64,9 @@ define( require => {
 
   // constants
   const EDGE_INSET = 10; // screen edge padding, in screen coordinates
-  const SENSOR_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
-  const SENSOR_ANIMATION_SPEED = 0.2; // in meters per second
-  const MAX_SENSOR_ANIMATION_TIME = 1; // max time for sensor return animation to complete, in seconds
+  const THERMOMETER_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
+  const THERMOMETER_ANIMATION_SPEED = 0.2; // in meters per second
+  const MAX_THERMOMETER_ANIMATION_TIME = 1; // max time for thermometer return animation to complete, in seconds
 
   class EFACIntroScreenView extends ScreenView {
 
@@ -406,52 +406,52 @@ define( require => {
       beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
       beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
 
-      // the sensor layer needs to be above the movable objects
-      const sensorLayer = new Node();
-      this.addChild( sensorLayer );
+      // the thermometer layer needs to be above the movable objects
+      const thermometerLayer = new Node();
+      this.addChild( thermometerLayer );
 
-      // create and add the temperature and color sensor nodes, which look like a thermometer with a triangle on the side
-      const temperatureAndColorSensorNodes = [];
-      let temperatureAndColorSensorIndex = 0;
-      let sensorNodeWidth = 0;
-      let sensorNodeHeight = 0;
-      model.temperatureAndColorSensors.forEach( sensor => {
-        const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode( sensor, {
+      // create and add the temperature and color thermometer nodes, which look like a thermometer with a triangle on the side
+      const thermometerNodes = [];
+      let thermometerIndex = 0;
+      let thermometerNodeWidth = 0;
+      let thermometerNodeHeight = 0;
+      model.thermometers.forEach( thermometer => {
+        const thermometerNode = new EFACTemperatureAndColorSensorNode( thermometer, {
           modelViewTransform: modelViewTransform,
           dragBounds: modelViewTransform.viewToModelBounds( this.layoutBounds ),
           draggable: true,
-          tandem: tandem.createTandem( `temperatureAndColorSensorNode${temperatureAndColorSensorIndex++}` )
+          tandem: tandem.createTandem( `thermometerNode${++thermometerIndex}` ) // 1 indexed
         } );
 
-        // sensors need to be behind blocks and beakers while in storage, but in front when them while in use
-        sensor.activeProperty.link( active => {
+        // thermometers need to be behind blocks and beakers while in storage, but in front when them while in use
+        thermometer.activeProperty.link( active => {
           if ( active ) {
-            if ( backLayer.hasChild( temperatureAndColorSensorNode ) ) {
-              backLayer.removeChild( temperatureAndColorSensorNode );
+            if ( backLayer.hasChild( thermometerNode ) ) {
+              backLayer.removeChild( thermometerNode );
             }
-            sensorLayer.addChild( temperatureAndColorSensorNode );
+            thermometerLayer.addChild( thermometerNode );
           }
           else {
-            if ( sensorLayer.hasChild( temperatureAndColorSensorNode ) ) {
-              sensorLayer.removeChild( temperatureAndColorSensorNode );
+            if ( thermometerLayer.hasChild( thermometerNode ) ) {
+              thermometerLayer.removeChild( thermometerNode );
             }
-            backLayer.addChild( temperatureAndColorSensorNode );
+            backLayer.addChild( thermometerNode );
           }
         } );
 
-        temperatureAndColorSensorNodes.push( temperatureAndColorSensorNode );
+        thermometerNodes.push( thermometerNode );
 
         // update the variables that will be used to create the storage area
-        sensorNodeHeight = sensorNodeHeight || temperatureAndColorSensorNode.height;
-        sensorNodeWidth = sensorNodeWidth || temperatureAndColorSensorNode.width;
+        thermometerNodeHeight = thermometerNodeHeight || thermometerNode.height;
+        thermometerNodeWidth = thermometerNodeWidth || thermometerNode.width;
       } );
 
-      // create the storage area for the sensors
-      const sensorStorageArea = new Rectangle(
+      // create the storage area for the thermometers
+      const thermometerStorageArea = new Rectangle(
         0,
         0,
-        sensorNodeWidth * 2,
-        sensorNodeHeight * 1.15,
+        thermometerNodeWidth * 2,
+        thermometerNodeHeight * 1.15,
         EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
         EFACConstants.CONTROL_PANEL_CORNER_RADIUS, {
           fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
@@ -459,105 +459,105 @@ define( require => {
           lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
           left: EDGE_INSET,
           top: EDGE_INSET,
-          tandem: tandem.createTandem( 'sensorStorageAreaNode' )
+          tandem: tandem.createTandem( 'thermometerStorageAreaNode' )
         }
       );
-      backLayer.addChild( sensorStorageArea );
-      sensorStorageArea.moveToBack(); // move behind the temperatureAndColorSensorNodes when they are being stored
+      backLayer.addChild( thermometerStorageArea );
+      thermometerStorageArea.moveToBack(); // move behind the thermometerNodes when they are being stored
 
-      // set initial position for sensors in the storage area, hook up listeners to handle interaction with storage area
-      const interSensorSpacing = ( sensorStorageArea.width - sensorNodeWidth ) / 2;
+      // set initial position for thermometers in the storage area, hook up listeners to handle interaction with storage area
+      const interThermometerSpacing = ( thermometerStorageArea.width - thermometerNodeWidth ) / 2;
       const offsetFromBottomOfStorageArea = 25; // empirically determined
-      const sensorNodePositionX = sensorStorageArea.left + interSensorSpacing;
-      const sensorPositionInStorageArea = new Vector2(
-        modelViewTransform.viewToModelX( sensorNodePositionX ),
-        modelViewTransform.viewToModelY( sensorStorageArea.bottom - offsetFromBottomOfStorageArea ) );
+      const thermometerNodePositionX = thermometerStorageArea.left + interThermometerSpacing;
+      const thermometerPositionInStorageArea = new Vector2(
+        modelViewTransform.viewToModelX( thermometerNodePositionX ),
+        modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea ) );
 
-      model.temperatureAndColorSensors.forEach( ( sensor, index ) => {
+      model.thermometers.forEach( ( thermometer, index ) => {
 
-        // add a listener for when the sensor is removed from or returned to the storage area
-        sensor.userControlledProperty.link( userControlled => {
+        // add a listener for when the thermometer is removed from or returned to the storage area
+        thermometer.userControlledProperty.link( userControlled => {
           if ( userControlled ) {
 
-            // the user has picked up this sensor
-            if ( !sensor.activeProperty.get() ) {
+            // the user has picked up this thermometer
+            if ( !thermometer.activeProperty.get() ) {
 
-              // The sensor was inactive, which means that it was in the storage area.  In this case, we make it jump
+              // The thermometer was inactive, which means that it was in the storage area.  In this case, we make it jump
               // a little to cue the user that this is a movable object.
-              sensor.positionProperty.set(
-                sensor.positionProperty.get().plus( modelViewTransform.viewToModelDelta( SENSOR_JUMP_ON_EXTRACTION ) )
+              thermometer.positionProperty.set(
+                thermometer.positionProperty.get().plus( modelViewTransform.viewToModelDelta( THERMOMETER_JUMP_ON_EXTRACTION ) )
               );
 
-              // activate the sensor
-              sensor.activeProperty.set( true );
+              // activate the thermometer
+              thermometer.activeProperty.set( true );
             }
           }
           else {
 
-            // the user has released this sensor - test if it should go back in the storage area
-            const sensorNode = temperatureAndColorSensorNodes[ index ];
-            const colorIndicatorBounds = sensorNode.localToParentBounds(
-              sensorNode.temperatureAndColorSensorNode.colorIndicatorBounds
+            // the user has released this thermometer - test if it should go back in the storage area
+            const thermometerNode = thermometerNodes[ index ];
+            const colorIndicatorBounds = thermometerNode.localToParentBounds(
+              thermometerNode.temperatureAndColorSensorNode.colorIndicatorBounds
             );
-            const thermometerBounds = sensorNode.localToParentBounds(
-              sensorNode.temperatureAndColorSensorNode.thermometerBounds
+            const thermometerBounds = thermometerNode.localToParentBounds(
+              thermometerNode.temperatureAndColorSensorNode.thermometerBounds
             );
-            if ( colorIndicatorBounds.intersectsBounds( sensorStorageArea.bounds ) ||
-                 thermometerBounds.intersectsBounds( sensorStorageArea.bounds ) ) {
-              returnSensorToStorageArea( sensor, true, sensorNode );
+            if ( colorIndicatorBounds.intersectsBounds( thermometerStorageArea.bounds ) ||
+                 thermometerBounds.intersectsBounds( thermometerStorageArea.bounds ) ) {
+              returnThermometerToStorageArea( thermometer, true, thermometerNode );
             }
           }
         } );
       } );
 
       /**
-       * return a sensor to its initial position in the storage area
-       * @param {StickyTemperatureAndColorSensor} sensor
-       * @param {Boolean} doAnimation - whether the sensor animates back to the storage area
-       * @param {EFACTemperatureAndColorSensorNode} [sensorNode]
+       * return a thermometer to its initial position in the storage area
+       * @param {StickyTemperatureAndColorSensor} thermometer
+       * @param {Boolean} doAnimation - whether the thermometer animates back to the storage area
+       * @param {EFACTemperatureAndColorSensorNode} [thermometerNode]
        */
-      const returnSensorToStorageArea = ( sensor, doAnimation, sensorNode ) => {
-        const currentPosition = sensor.positionProperty.get();
-        if ( !currentPosition.equals( sensorPositionInStorageArea ) && doAnimation ) {
+      const returnThermometerToStorageArea = ( thermometer, doAnimation, thermometerNode ) => {
+        const currentPosition = thermometer.positionProperty.get();
+        if ( !currentPosition.equals( thermometerPositionInStorageArea ) && doAnimation ) {
 
           // calculate the time needed to get to the destination
           const animationDuration = Math.min(
-            sensor.positionProperty.get().distance( sensorPositionInStorageArea ) / SENSOR_ANIMATION_SPEED,
-            MAX_SENSOR_ANIMATION_TIME
+            thermometer.positionProperty.get().distance( thermometerPositionInStorageArea ) / THERMOMETER_ANIMATION_SPEED,
+            MAX_THERMOMETER_ANIMATION_TIME
           );
           const animationOptions = {
-            property: sensor.positionProperty,
-            to: sensorPositionInStorageArea,
+            property: thermometer.positionProperty,
+            to: thermometerPositionInStorageArea,
             duration: animationDuration,
             easing: Easing.CUBIC_IN_OUT
           };
           const translateAnimation = new Animation( animationOptions );
 
-          // make the sensor unpickable while it's animating back to the storage area
+          // make the thermometer unpickable while it's animating back to the storage area
           translateAnimation.animatingProperty.link( isAnimating => {
-            sensorNode && ( sensorNode.pickable = !isAnimating );
+            thermometerNode && ( thermometerNode.pickable = !isAnimating );
           } );
           translateAnimation.start();
         }
-        else if ( !currentPosition.equals( sensorPositionInStorageArea ) && !doAnimation ) {
+        else if ( !currentPosition.equals( thermometerPositionInStorageArea ) && !doAnimation ) {
 
-          // set the initial position for this sensor
-          sensor.positionProperty.set( sensorPositionInStorageArea );
+          // set the initial position for this thermometer
+          thermometer.positionProperty.set( thermometerPositionInStorageArea );
         }
 
-        // sensors are inactive when in the storage area
-        sensor.activeProperty.set( false );
+        // thermometers are inactive when in the storage area
+        thermometer.activeProperty.set( false );
       };
 
-      // returns all sensors to the storage area
-      const returnAllSensorsToStorageArea = () => {
-        model.temperatureAndColorSensors.forEach( sensor => {
-          returnSensorToStorageArea( sensor, false );
+      // returns all thermometers to the storage area
+      const returnAllThermometersToStorageArea = () => {
+        model.thermometers.forEach( thermometer => {
+          returnThermometerToStorageArea( thermometer, false );
         } );
       };
 
-      // put all of the temperature and color sensors into the storage area as part of initialization process
-      returnAllSensorsToStorageArea();
+      // put all of the temperature and color thermometers into the storage area as part of initialization process
+      returnAllThermometersToStorageArea();
 
       // updates the Z-order of the blocks when the user-controlled state changes
       const blockChangeListener = () => {
@@ -662,7 +662,7 @@ define( require => {
       const resetAllButton = new ResetAllButton( {
         listener: () => {
           model.reset();
-          returnAllSensorsToStorageArea();
+          returnAllThermometersToStorageArea();
         },
         radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
         right: this.layoutBounds.maxX - EDGE_INSET,
