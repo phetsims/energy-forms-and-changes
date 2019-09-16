@@ -17,6 +17,7 @@ define( require => {
   const Animation = require( 'TWIXT/Animation' );
   const BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
   const BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
+  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
@@ -355,27 +356,35 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
+      let brickCount = 0;
+      let ironCount = 0;
+      const blockNodes = [];
+      const nodeString = 'Node';
+
       // add the blocks
-      const brickNode = new BlockNode(
-        model.brick,
-        modelViewTransform,
-        constrainMovableElementMotion,
-        model.isPlayingProperty, {
-          setApproachingEnergyChunkParentNode: airLayer,
-          tandem: tandem.createTandem( 'brickNode' )
+      model.blocks.forEach( block => {
+        let blockNodeTandemName = '';
+        if ( block.blockType === BlockType.BRICK ) {
+          blockNodeTandemName = BlockType.BRICK.name.toLowerCase() + nodeString;
+          blockNodeTandemName = model.moreThanOneBrick ? blockNodeTandemName += ++brickCount : blockNodeTandemName;
         }
-      );
-      blockLayer.addChild( brickNode );
-      const ironBlockNode = new BlockNode(
-        model.ironBlock,
-        modelViewTransform,
-        constrainMovableElementMotion,
-        model.isPlayingProperty, {
-          setApproachingEnergyChunkParentNode: airLayer,
-          tandem: tandem.createTandem( 'ironBlockNode' )
+        else if ( block.blockType === BlockType.IRON ) {
+          blockNodeTandemName = BlockType.IRON.name.toLowerCase() + `Block${nodeString}`;
+          blockNodeTandemName = model.moreThanOneIron ? blockNodeTandemName += ++ironCount : blockNodeTandemName;
         }
-      );
-      blockLayer.addChild( ironBlockNode );
+
+        const blockNode = new BlockNode(
+          block,
+          modelViewTransform,
+          constrainMovableElementMotion,
+          model.isPlayingProperty, {
+            setApproachingEnergyChunkParentNode: airLayer,
+            tandem: tandem.createTandem( blockNodeTandemName )
+          }
+        );
+        blockLayer.addChild( blockNode );
+        blockNodes.push( blockNode );
+      } );
 
       // @private
       this.waterBeakerView = new BeakerContainerView(
@@ -559,27 +568,48 @@ define( require => {
       // put all of the temperature and color thermometers into the storage area as part of initialization process
       returnAllThermometersToStorageArea();
 
-      // updates the Z-order of the blocks when the user-controlled state changes
-      const blockChangeListener = () => {
-        if ( model.ironBlock.isStackedUpon( model.brick ) ) {
-          brickNode.moveToBack();
-        }
-        else if ( model.brick.isStackedUpon( model.ironBlock ) ) {
-          ironBlockNode.moveToBack();
-        }
-        else if ( model.ironBlock.getBounds().minX >= model.brick.getBounds().maxX ||
-                  model.ironBlock.getBounds().minY >= model.brick.getBounds().maxY ) {
-          ironBlockNode.moveToFront();
-        }
-        else if ( model.brick.getBounds().minX >= model.ironBlock.getBounds().maxX ||
-                  model.brick.getBounds().minY >= model.ironBlock.getBounds().maxY ) {
-          brickNode.moveToFront();
-        }
+      // updates the Z-order of the blocks when their position changes
+      const blockChangeListener = position => {
+        let currentBlock = null;
+        let currentBlockNode = null;
+
+        model.blocks.forEach( block => {
+          if ( block.positionProperty.value === position ) {
+            currentBlock = block;
+          }
+        } );
+        blockNodes.forEach( blockNode => {
+          if ( blockNode.block === currentBlock ) {
+            currentBlockNode = blockNode;
+          }
+        } );
+
+        model.blocks.forEach( otherBlock => {
+          if ( otherBlock === currentBlock ) {
+            return;
+          }
+
+          let otherBlockNode = null;
+          blockNodes.forEach( blockNode => {
+            if ( blockNode.block === otherBlock ) {
+              otherBlockNode = blockNode;
+            }
+          } );
+
+          if ( currentBlock.getBounds().minX >= otherBlock.getBounds().maxX ||
+               currentBlock.getBounds().minY >= otherBlock.getBounds().maxY ) {
+            currentBlockNode.moveToFront();
+          }
+          else if ( otherBlock.getBounds().minX >= currentBlock.getBounds().maxX ||
+                    otherBlock.getBounds().minY >= currentBlock.getBounds().maxY ) {
+            otherBlockNode.moveToFront();
+          }
+        } );
       };
 
-      // update the Z-order of the blocks whenever the "userControlled" state of either changes
-      model.brick.positionProperty.link( blockChangeListener );
-      model.ironBlock.positionProperty.link( blockChangeListener );
+      model.blocks.forEach( block => {
+        block.positionProperty.link( blockChangeListener );
+      } );
 
       // updates the Z-order of the beakers when the user-controlled state changes
       const beakerChangeListener = () => {

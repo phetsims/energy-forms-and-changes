@@ -81,6 +81,9 @@ define( require => {
 
       super( options );
 
+      // @public (read-only)
+      this.block = block;
+
       // extract the scale transform from the MVT so that we can separate the shape from the position of the block
       const scaleVector = modelViewTransform.matrix.getScaleVector();
       const scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, -scaleVector.y ) );

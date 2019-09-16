@@ -61,11 +61,13 @@ define( require => {
 
       // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
       // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
-      // This assumes the blocks are all the same size and do not change size.
-      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.brick.width );
-      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.brick.height );
-      const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
-      this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+      // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
+      if ( model.blocks.length ) {
+        this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blocks[ 0 ].width );
+        this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blocks[ 0 ].height );
+        const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+        this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
+      }
 
       if ( EFACQueryParameters.showHelperShapes ) {
         this.clipAreaHelperNode = new Path( this.untransformedBeakerClipShape, {
@@ -140,8 +142,10 @@ define( require => {
 
     /**
      * Add shapes corresponded to the provided blocks to the provide clip area shape, accounting for any 3D projection
-     * used for the blocks.  This essentially creates "holes" in the clip mask preventing anything in the parent node
-     * (generally energy chunks) from being rendered in the same place as the blocks.
+     * used for the blocks. This essentially creates "holes" in the clip mask preventing anything in the parent node
+     * (generally energy chunks) from being rendered in the same place as the blocks. This method can handle any number
+     * of blocks stacked in the beaker, but only clips for the bottom two, since the beaker can only fit two blocks,
+     * plus a tiny bit of a third.
      * @param {Block[]} blocks
      * @param {Shape} clipAreaShape
      * @param {ModelViewTransform2} modelViewTransform
@@ -149,15 +153,11 @@ define( require => {
      */
     addProjectedBlocksToClipArea( blocks, clipAreaShape, modelViewTransform ) {
 
-      // Make sure there aren't more blocks than this method can deal with.  There are some assumptions built in that
-      // would not work for more than two blocks, see the code and comments below for details.
-      assert && assert( blocks.length <= 2, 'number of blocks exceeds what this method is designed to handle' );
-
       // hoisted block variable
       let block;
 
       // if neither of the blocks is in the beaker then there are no "holes" to add, use C-style loop for performance
-      const blocksInBeaker = [];
+      let blocksInBeaker = [];
       for ( let i = 0; i < blocks.length; i++ ) {
         block = blocks[ i ];
         if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
@@ -176,24 +176,16 @@ define( require => {
 
       // determine whether the blocks are stacked upon each other
       let blocksAreStacked = false;
-      if ( blocksInBeaker.length === 2 ) {
-        blocksAreStacked = blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ||
-                           blocksInBeaker[ 1 ].isStackedUpon( blocksInBeaker[ 0 ] );
+      if ( blocksInBeaker.length > 1 ) {
+        blocksInBeaker = _.sortBy( blocksInBeaker, block => block.positionProperty.value.y );
+        blocksAreStacked = blocksInBeaker[ 1 ].isStackedUpon( blocksInBeaker[ 0 ] );
       }
 
       if ( blocksAreStacked ) {
 
         // When the blocks are stacked, draw a single shape that encompasses both.  This is necessary because if the
         // shapes are drawn separately and they overlap, a space is created where the energy chunks are not occluded.
-        let bottomBlock;
-        if ( blocksInBeaker[ 0 ].isStackedUpon( blocksInBeaker[ 1 ] ) ) {
-          bottomBlock = blocksInBeaker[ 1 ];
-        }
-        else {
-          bottomBlock = blocksInBeaker[ 0 ];
-        }
-
-        const bottomBlockPositionInView = modelViewTransform.modelToViewPosition( bottomBlock.positionProperty.value );
+        const bottomBlockPositionInView = modelViewTransform.modelToViewPosition( blocksInBeaker[ 0 ].positionProperty.value );
 
         if ( chipAreaShapeBounds.containsPoint( bottomBlockPositionInView ) ) {
           clipAreaShape.moveTo(

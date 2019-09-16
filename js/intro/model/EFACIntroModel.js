@@ -45,7 +45,7 @@ define( require => {
   // (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
   const EDGE_PAD = 0.016;
 
-  // number of snap-to spots on the ground, should match number of thermal containers
+  // number of snap-to spots on the ground, should not be greater than the number of thermal containers
   const NUMBER_OF_GROUND_SPOTS = 6;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
@@ -54,9 +54,11 @@ define( require => {
   class EFACIntroModel {
 
     /**
+     *
+     * @param {BlockType[]} blocksToCreate
      * @param {Tandem} tandem
      */
-    constructor( tandem ) {
+    constructor( blocksToCreate, tandem ) {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
@@ -94,24 +96,46 @@ define( require => {
         );
       }
 
-      // @public (read-only) {Block}
-      this.ironBlock = new Block(
-        new Vector2( this.groundSpotXPositions[ 0 ], 0 ),
-        this.energyChunksVisibleProperty,
-        BlockType.IRON,
-        tandem.createTandem( 'ironBlock' )
-      );
+      // iterate through the blocks and count how many of each type there are
+      let brickCount = 0;
+      let ironCount = 0;
+      blocksToCreate.forEach( blockType => {
+        blockType === BlockType.BRICK && brickCount++;
+        blockType === BlockType.IRON && ironCount++;
+      } );
 
-      // @public (read-only) {Block}
-      this.brick = new Block(
-        new Vector2( this.groundSpotXPositions[ 1 ], 0 ),
-        this.energyChunksVisibleProperty,
-        BlockType.BRICK,
-        tandem.createTandem( 'brick' )
-      );
+      // @public (read-only) {boolean}
+      this.moreThanOneBrick = brickCount > 1;
+      this.moreThanOneIron = ironCount > 1;
 
       // @public (read-only) {Block[]} - list of all blocks in sim
-      this.blocks = [ this.brick, this.ironBlock ];
+      this.blocks = [];
+
+      // reset counts for proper tandem names
+      brickCount = 0;
+      ironCount = 0;
+      let groundSpotPositionIndex = 0;
+
+      // create the blocks
+      blocksToCreate.forEach( blockType => {
+        let blockTandemName = '';
+        if ( blockType === BlockType.BRICK ) {
+          blockTandemName = BlockType.BRICK.name.toLowerCase();
+          blockTandemName = this.moreThanOneBrick ? blockTandemName += ++brickCount : blockTandemName;
+        }
+        else if ( blockType === BlockType.IRON ) {
+          blockTandemName = BlockType.IRON.name.toLowerCase() + 'Block';
+          blockTandemName = this.moreThanOneIron ? blockTandemName += ++ironCount : blockTandemName;
+        }
+
+        const block = new Block(
+          new Vector2( this.groundSpotXPositions[ groundSpotPositionIndex++ ], 0 ),
+          this.energyChunksVisibleProperty,
+          blockType,
+          tandem.createTandem( blockTandemName )
+        );
+        this.blocks.push( block );
+      } );
 
       // @public (read-only) {Burner} - right and left burners
       this.leftBurner = new Burner(
@@ -122,17 +146,15 @@ define( require => {
       this.rightBurner = new Burner(
         new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
         this.energyChunksVisibleProperty,
-      tandem.createTandem( 'rightBurner' )
-    );
-
-      const listOfThingsThatCanGoInBeaker = [ this.brick, this.ironBlock ];
+        tandem.createTandem( 'rightBurner' )
+      );
 
       // @public (read-only) {BeakerContainer)
       this.waterBeaker = new BeakerContainer(
         new Vector2( this.groundSpotXPositions[ 4 ], 0 ),
         BEAKER_WIDTH,
         BEAKER_HEIGHT,
-        listOfThingsThatCanGoInBeaker,
+        this.blocks,
         this.energyChunksVisibleProperty, {
           majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
           tandem: tandem.createTandem( 'waterBeaker' )
@@ -144,7 +166,7 @@ define( require => {
         new Vector2( this.groundSpotXPositions[ 5 ], 0 ),
         BEAKER_WIDTH,
         BEAKER_HEIGHT,
-        listOfThingsThatCanGoInBeaker,
+        this.blocks,
         this.energyChunksVisibleProperty, {
           fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
           steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
@@ -161,7 +183,7 @@ define( require => {
       this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
 
       // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers on a list for easy iteration
-      this.thermalContainers = [ this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
+      this.thermalContainers = [ ...this.blocks, ...this.beakers ];
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
       // each model step.
@@ -174,7 +196,7 @@ define( require => {
       this.burners = [ this.rightBurner, this.leftBurner ];
 
       // @private {ModelElement} - put all of the model elements on a list for easy iteration
-      this.modelElementList = [ this.leftBurner, this.rightBurner, this.brick, this.ironBlock, this.waterBeaker, this.oliveOilBeaker ];
+      this.modelElementList = [ this.leftBurner, this.rightBurner, ...this.thermalContainers ];
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.thermometers = [];
@@ -188,43 +210,45 @@ define( require => {
         );
         this.thermometers.push( thermometer );
 
-        // Add handling for a special case where the user drops something (generally a block) in the beaker behind this
-        // thermometer. The action is to automatically move the thermometer to a location where it continues to sense
-        // the beaker temperature. This was requested after interviews.
-        thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+        // Add handling for a special case where the user drops a block in the beaker behind this thermometer. The
+        // action is to automatically move the thermometer to a location where it continues to sense the beaker
+        // temperature. Not needed if zero blocks are in use. This was requested after interviews.
+        if ( this.blocks.length ) {
+          thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
-          this.beakers.forEach( beaker => {
-            const blockWidthIncludingPerspective = this.ironBlock.getProjectedShape().bounds.width;
+            this.beakers.forEach( beaker => {
+              const blockWidthIncludingPerspective = this.blocks[ 0 ].getProjectedShape().bounds.width;
 
-            const xRange = new Range(
-              beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
-              beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
-            );
-
-            const checkBlocks = block => {
-
-              // see if one of the blocks is being sensed in the beaker
-              return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
-            };
-
-            // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
-            // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-            if ( _.some( this.blocks, checkBlocks ) &&
-                 oldColor === beaker.fluidColor &&
-                 !thermometer.userControlledProperty.get() &&
-                 !beaker.userControlledProperty.get() &&
-                 xRange.contains( thermometer.positionProperty.value.x ) ) {
-
-              // fake a movement by the user to a point in the beaker where the thermometer is not over a brick
-              thermometer.userControlledProperty.set( true ); // must toggle userControlled to enable element following
-              thermometer.positionProperty.value = new Vector2(
-                beaker.getBounds().maxX - 0.01,
-                beaker.getBounds().minY + beaker.getBounds().height * 0.33
+              const xRange = new Range(
+                beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
+                beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
               );
-              thermometer.userControlledProperty.set( false );
-            }
+
+              const checkBlocks = block => {
+
+                // see if one of the blocks is being sensed in the beaker
+                return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
+              };
+
+              // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
+              // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
+              if ( _.some( this.blocks, checkBlocks ) &&
+                   oldColor === beaker.fluidColor &&
+                   !thermometer.userControlledProperty.get() &&
+                   !beaker.userControlledProperty.get() &&
+                   xRange.contains( thermometer.positionProperty.value.x ) ) {
+
+                // fake a movement by the user to a point in the beaker where the thermometer is not over a brick
+                thermometer.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+                thermometer.positionProperty.value = new Vector2(
+                  beaker.getBounds().maxX - 0.01,
+                  beaker.getBounds().minY + beaker.getBounds().height * 0.33
+                );
+                thermometer.userControlledProperty.set( false );
+              }
+            } );
           } );
-        } );
+        }
       } );
 
       // @private {EnergyBalanceTracker} - This is used to track energy exchanges between all of the various energy
@@ -283,8 +307,9 @@ define( require => {
       this.air.reset();
       this.leftBurner.reset();
       this.rightBurner.reset();
-      this.ironBlock.reset();
-      this.brick.reset();
+      this.blocks.forEach( block => {
+        block.reset();
+      } );
       this.waterBeaker.reset();
       this.oliveOilBeaker.reset();
       this.thermometers.forEach( thermometer => {
@@ -342,7 +367,7 @@ define( require => {
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beakers.forEach( beaker => {
-        beaker.updateFluidDisplacement( [ this.brick.getBounds(), this.ironBlock.getBounds() ] );
+        beaker.updateFluidDisplacement( this.blocks.map( block => block.getBounds() ) );
       } );
 
       //=====================================================================

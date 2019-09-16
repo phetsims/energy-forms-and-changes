@@ -10,9 +10,11 @@ define( require => {
   'use strict';
 
   // modules
+  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
   const EFACIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EFACIntroScreenView' );
+  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Property = require( 'AXON/Property' );
@@ -40,7 +42,17 @@ define( require => {
       };
 
       super(
-        () => new EFACIntroModel( tandem.createTandem( 'model' ) ),
+        () => new EFACIntroModel(
+          EFACQueryParameters.blocks.map( blockString => {
+            if ( blockString === 'iron' ) {
+              return BlockType.IRON;
+            }
+            else if ( blockString === 'brick' ) {
+              return BlockType.BRICK;
+            }
+          } ),
+          tandem.createTandem( 'model' )
+        ),
         model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),
         options
       );

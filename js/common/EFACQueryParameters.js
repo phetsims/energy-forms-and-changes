@@ -49,6 +49,19 @@ define( require => {
         'spiral', // use the spiral algorithm, which is after than repulsive but doesn't generally look as good
         'simple' // use the simple algorithm, which just puts all chunks in the center of the slice
       ]
+    },
+
+    // select the startup block configuration
+    // public facing for phet-io clients
+    blocks: {
+      type: 'array',
+      defaultValue: [ 'iron', 'brick' ],
+      elementSchema: { type: 'string' },
+      isValidValue: values => {
+        return values.length <= 4 && values.every( value => {
+          return value === 'iron' || value === 'brick';
+        } );
+      }
     }
 
   } );
