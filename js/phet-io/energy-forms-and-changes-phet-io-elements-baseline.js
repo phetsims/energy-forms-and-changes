@@ -11,7 +11,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.barrierRectangle": {
       "phetioDocumentation": "Semi-transparent barrier used to block input events when a dialog is shown, also fades out the background",
@@ -35,7 +35,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.barrierRectangle.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -47,10 +47,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.barrierRectangle.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -59,7 +59,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.barrierRectangle.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -83,7 +83,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.barrierRectangle.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -95,7 +95,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.browserTabVisibleProperty": {
       "phetioDocumentation": "Indicates whether the browser tab containing the simulation is currently visible",
@@ -107,7 +107,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.controller.input.mouseDownAction": {
       "phetioDocumentation": "Emits when a mouse button is pressed The arguments are:<br/><ol><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -119,7 +119,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.mouseMovedAction": {
       "phetioDocumentation": "Emits when the mouse is moved The arguments are:<br/><ol><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -131,7 +131,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.mouseOutAction": {
       "phetioDocumentation": "Emits when the mouse moves out of the display The arguments are:<br/><ol><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -143,7 +143,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.mouseOverAction": {
       "phetioDocumentation": "Emits when the mouse is moved over a Node The arguments are:<br/><ol><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -155,7 +155,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.mouseUpAction": {
       "phetioDocumentation": "Emits when a mouse button is released The arguments are:<br/><ol><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -167,7 +167,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.penCancelAction": {
       "phetioDocumentation": "Emits when a pen is canceled The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -179,7 +179,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.penEndAction": {
       "phetioDocumentation": "Emits when a pen is lifted The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -191,7 +191,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.penMoveAction": {
       "phetioDocumentation": "Emits when a pen is moved The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -203,7 +203,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.penStartAction": {
       "phetioDocumentation": "Emits when a pen touches the screen The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -215,7 +215,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.touchCancelAction": {
       "phetioDocumentation": "Emits when a touch is canceled The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -227,7 +227,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.touchEndAction": {
       "phetioDocumentation": "Emits when a touch ends The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -239,7 +239,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.touchMoveAction": {
       "phetioDocumentation": "Emits when a touch moves The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -251,7 +251,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.touchStartAction": {
       "phetioDocumentation": "Emits when a touch begins The arguments are:<br/><ol><li>id: NumberIO</li><br/><li>point: Vector2IO</li><br/><li>event: DOMEventIO</li></ol>",
@@ -263,7 +263,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, Vector2IO, DOMEventIO>"
+      "phetioTypeName": "ActionIO<NumberIO, Vector2IO, DOMEventIO>"
     },
     "energyFormsAndChanges.general.controller.input.validatePointersAction": {
       "phetioDocumentation": "A function that executes. No arguments.",
@@ -275,7 +275,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<>"
+      "phetioTypeName": "ActionIO<>"
     },
     "energyFormsAndChanges.general.controller.input.wheelScrollAction": {
       "phetioDocumentation": "Emits when the mouse wheel scrolls The arguments are:<br/><ol><li>event: DOMEventIO</li></ol>",
@@ -287,7 +287,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<DOMEventIO>"
+      "phetioTypeName": "ActionIO<DOMEventIO>"
     },
     "energyFormsAndChanges.general.focusProperty": {
       "phetioDocumentation": "Stores the current focus for the simulation, null if there is not focus. This is not updated based on mouse or touch input, only keyboard and other alternative inputs.",
@@ -299,7 +299,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<FocusIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<FocusIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton": {
       "phetioDocumentation": "",
@@ -323,7 +323,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -335,7 +335,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -359,7 +359,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -371,10 +371,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -383,7 +383,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.homeButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -395,7 +395,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton": {
       "phetioDocumentation": "Button in the navigation bar that selects the 'introScreen' screen",
@@ -419,7 +419,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -431,7 +431,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.icon": {
       "phetioDocumentation": "",
@@ -467,7 +467,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.icon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -479,7 +479,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -503,7 +503,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -515,10 +515,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -527,7 +527,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.text": {
       "phetioDocumentation": "",
@@ -563,7 +563,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -575,7 +575,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -587,7 +587,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.introScreenButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -599,7 +599,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton": {
       "phetioDocumentation": "The button that appears at the right side of the navigation bar, which shows a menu when pressed",
@@ -623,7 +623,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -635,7 +635,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu": {
       "phetioDocumentation": "This menu is displayed when the PhET button is pressed.",
@@ -671,7 +671,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.aboutMenuItem.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -683,10 +683,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.aboutMenuItem.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -695,7 +695,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.aboutMenuItem.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -719,7 +719,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.aboutMenuItem.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -731,7 +731,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.screenshotMenuItem": {
       "phetioDocumentation": "This menu item captures a screenshot from the simulation and saves it to the file system.",
@@ -755,7 +755,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.screenshotMenuItem.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -767,10 +767,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.screenshotMenuItem.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -779,7 +779,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.screenshotMenuItem.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -803,7 +803,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.phetMenu.screenshotMenuItem.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -815,7 +815,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.pickableProperty": {
       "phetioDocumentation": "Set whether the phetButton will be pickable (and hence interactive), see the NodeIO documentation for more details",
@@ -827,7 +827,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -839,10 +839,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.phetButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -851,7 +851,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton": {
       "phetioDocumentation": "Button in the navigation bar that selects the 'systemsScreen' screen",
@@ -875,7 +875,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -887,7 +887,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.icon": {
       "phetioDocumentation": "",
@@ -923,7 +923,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.icon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -935,7 +935,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -959,7 +959,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -971,10 +971,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -983,7 +983,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.text": {
       "phetioDocumentation": "",
@@ -1019,7 +1019,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1031,7 +1031,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1043,7 +1043,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.systemsScreenButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1055,7 +1055,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.navigationBar.titleTextNode": {
       "phetioDocumentation": "Displays the title of the simulation in the navigation bar (bottom left)",
@@ -1091,7 +1091,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.general.navigationBar.titleTextNode.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1103,7 +1103,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.general.navigationBar.titleTextNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1115,7 +1115,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.phetioCommandProcessor": {
       "phetioDocumentation": "Processes messages from the wrapper frame and returns the results. This serves as the source of PhET-iO data stream messages when commands are invoked from the wrapper.",
@@ -1139,7 +1139,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO, NumberIO>"
+      "phetioTypeName": "ActionIO<NumberIO, NumberIO>"
     },
     "energyFormsAndChanges.general.screenIndexProperty": {
       "phetioDocumentation": "Indicates which screen is selected (0-indexed)",
@@ -1163,7 +1163,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.soundEnabledProperty": {
       "phetioDocumentation": "",
@@ -1175,7 +1175,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.general.stepSimulationAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>dt: NumberIO</li></ol>",
@@ -1187,7 +1187,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NumberIO>"
+      "phetioTypeName": "ActionIO<NumberIO>"
     },
     "energyFormsAndChanges.homeScreen.activeProperty": {
       "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
@@ -1199,7 +1199,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view": {
       "phetioDocumentation": "",
@@ -1235,7 +1235,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -1247,10 +1247,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -1259,7 +1259,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -1283,7 +1283,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.text": {
       "phetioDocumentation": "",
@@ -1319,7 +1319,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1331,7 +1331,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1343,7 +1343,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenLargeButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1355,7 +1355,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton": {
       "phetioDocumentation": "A pressable button in the simulation, in the home screen",
@@ -1379,7 +1379,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -1391,10 +1391,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -1403,7 +1403,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -1427,7 +1427,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.text": {
       "phetioDocumentation": "",
@@ -1463,7 +1463,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1475,7 +1475,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1487,7 +1487,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.introScreenSmallButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1499,7 +1499,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -1523,7 +1523,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton": {
       "phetioDocumentation": "A pressable button in the simulation, in the home screen",
@@ -1547,7 +1547,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -1559,10 +1559,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -1571,7 +1571,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -1595,7 +1595,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.text": {
       "phetioDocumentation": "",
@@ -1631,7 +1631,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1643,7 +1643,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1655,7 +1655,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenLargeButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1667,7 +1667,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton": {
       "phetioDocumentation": "A pressable button in the simulation, in the home screen",
@@ -1691,7 +1691,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.inputListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -1703,10 +1703,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.inputListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -1715,7 +1715,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -1739,7 +1739,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.text": {
       "phetioDocumentation": "",
@@ -1775,7 +1775,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.text.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1787,7 +1787,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.text.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1799,7 +1799,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.systemsScreenSmallButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1811,7 +1811,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.title": {
       "phetioDocumentation": "",
@@ -1847,7 +1847,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.homeScreen.view.title.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
@@ -1859,7 +1859,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<StringIO>"
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.homeScreen.view.title.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1871,7 +1871,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.homeScreen.view.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -1883,7 +1883,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.activeProperty": {
       "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
@@ -1895,7 +1895,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.brick.positionProperty": {
       "phetioDocumentation": "",
@@ -1907,7 +1907,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.brick.userControlledProperty": {
       "phetioDocumentation": "",
@@ -1919,7 +1919,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.energyChunksVisibleProperty": {
       "phetioDocumentation": "",
@@ -1931,7 +1931,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.ironBlock.positionProperty": {
       "phetioDocumentation": "",
@@ -1943,7 +1943,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.ironBlock.userControlledProperty": {
       "phetioDocumentation": "",
@@ -1955,7 +1955,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.isPlayingProperty": {
       "phetioDocumentation": "",
@@ -1967,7 +1967,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner.heatCoolLevelProperty": {
       "phetioDocumentation": "",
@@ -1991,7 +1991,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.linkedHeatersProperty": {
       "phetioDocumentation": "",
@@ -2003,7 +2003,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.oliveOilBeaker.positionProperty": {
       "phetioDocumentation": "",
@@ -2015,7 +2015,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.oliveOilBeaker.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2027,7 +2027,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.rightBurner.heatCoolLevelProperty": {
       "phetioDocumentation": "",
@@ -2051,7 +2051,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.positionProperty": {
       "phetioDocumentation": "",
@@ -2063,7 +2063,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2075,7 +2075,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.positionProperty": {
       "phetioDocumentation": "",
@@ -2087,7 +2087,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2099,7 +2099,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.positionProperty": {
       "phetioDocumentation": "",
@@ -2111,7 +2111,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2123,7 +2123,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.positionProperty": {
       "phetioDocumentation": "",
@@ -2135,7 +2135,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2147,7 +2147,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.waterBeaker.positionProperty": {
       "phetioDocumentation": "",
@@ -2159,7 +2159,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.waterBeaker.userControlledProperty": {
       "phetioDocumentation": "",
@@ -2171,7 +2171,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.brickNode": {
       "phetioDocumentation": "",
@@ -2207,7 +2207,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.brickNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2219,7 +2219,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.ironBlockNode": {
       "phetioDocumentation": "",
@@ -2255,7 +2255,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.ironBlockNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2267,7 +2267,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.linkHeatersCheckbox": {
       "phetioDocumentation": "",
@@ -2291,7 +2291,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.linkHeatersCheckbox.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -2315,7 +2315,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.linkHeatersCheckbox.property": {
       "phetioDocumentation": "",
@@ -2339,7 +2339,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<BooleanIO>"
+      "phetioTypeName": "ActionIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.linkHeatersCheckbox.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2351,7 +2351,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.oliveOilBeakerView.opacityProperty": {
       "phetioDocumentation": "",
@@ -2375,7 +2375,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.oliveOilBeakerView.visibleProperty": {
       "phetioDocumentation": "",
@@ -2387,7 +2387,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton": {
       "phetioDocumentation": "The orange, round button that can be used to restore the initial state",
@@ -2411,7 +2411,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -2423,7 +2423,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.isFiringProperty": {
       "phetioDocumentation": "Temporarily becomes true while the Reset All button is firing.  Commonly used to disable audio effects during reset.",
@@ -2435,7 +2435,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "DerivedPropertyIO.<BooleanIO>"
+      "phetioTypeName": "DerivedPropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -2459,7 +2459,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -2471,10 +2471,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -2483,7 +2483,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.introScreen.view.resetAllButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2495,7 +2495,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.showEnergySymbolsCheckbox": {
       "phetioDocumentation": "",
@@ -2519,7 +2519,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.showEnergySymbolsCheckbox.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -2543,7 +2543,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.showEnergySymbolsCheckbox.property": {
       "phetioDocumentation": "",
@@ -2567,7 +2567,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<BooleanIO>"
+      "phetioTypeName": "ActionIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.showEnergySymbolsCheckbox.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2579,7 +2579,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode1": {
       "phetioDocumentation": "",
@@ -2615,7 +2615,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode1.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2627,7 +2627,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode2": {
       "phetioDocumentation": "",
@@ -2663,7 +2663,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode2.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2675,7 +2675,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode3": {
       "phetioDocumentation": "",
@@ -2711,7 +2711,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode3.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2723,7 +2723,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode4": {
       "phetioDocumentation": "",
@@ -2759,7 +2759,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerNode4.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2771,7 +2771,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerStorageAreaNode": {
       "phetioDocumentation": "",
@@ -2807,7 +2807,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerStorageAreaNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2819,7 +2819,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode": {
       "phetioDocumentation": "",
@@ -2843,7 +2843,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -2867,7 +2867,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton": {
       "phetioDocumentation": "",
@@ -2891,7 +2891,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -2915,7 +2915,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -2927,10 +2927,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -2939,7 +2939,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.property": {
       "phetioDocumentation": "",
@@ -2987,7 +2987,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.toggleNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -2999,7 +2999,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.toggledEmitter": {
       "phetioDocumentation": "Emits when the button is toggled No arguments.",
@@ -3011,7 +3011,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3023,7 +3023,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton": {
       "phetioDocumentation": "",
@@ -3047,7 +3047,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -3059,7 +3059,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -3083,7 +3083,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -3095,10 +3095,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -3107,7 +3107,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.stepForwardButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3119,7 +3119,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3131,7 +3131,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.waterBeakerView.opacityProperty": {
       "phetioDocumentation": "",
@@ -3155,7 +3155,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.waterBeakerView.visibleProperty": {
       "phetioDocumentation": "",
@@ -3167,7 +3167,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.activeProperty": {
       "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
@@ -3179,7 +3179,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.activeProperty": {
       "phetioDocumentation": "",
@@ -3191,7 +3191,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.heatProportionProperty": {
       "phetioDocumentation": "",
@@ -3227,7 +3227,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.positionProperty": {
       "phetioDocumentation": "",
@@ -3239,7 +3239,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.userControlledProperty": {
       "phetioDocumentation": "",
@@ -3251,7 +3251,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.positionProperty": {
       "phetioDocumentation": "",
@@ -3263,7 +3263,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.userControlledProperty": {
       "phetioDocumentation": "",
@@ -3275,7 +3275,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.biker.activeProperty": {
       "phetioDocumentation": "",
@@ -3287,7 +3287,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.biker.crankAngleProperty": {
       "phetioDocumentation": "",
@@ -3335,7 +3335,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.biker.rearWheelAngleProperty": {
       "phetioDocumentation": "",
@@ -3371,7 +3371,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.animationInProgressProperty": {
       "phetioDocumentation": "",
@@ -3383,7 +3383,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetIndexProperty": {
       "phetioDocumentation": "",
@@ -3407,7 +3407,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetIndexProperty": {
       "phetioDocumentation": "",
@@ -3431,7 +3431,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetIndexProperty": {
       "phetioDocumentation": "",
@@ -3455,7 +3455,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.fan.bladePositionProperty": {
       "phetioDocumentation": "",
@@ -3491,7 +3491,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.faucet.activeProperty": {
       "phetioDocumentation": "",
@@ -3503,7 +3503,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.faucet.flowProportionProperty": {
       "phetioDocumentation": "",
@@ -3539,7 +3539,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.fluorescentBulb.activeProperty": {
       "phetioDocumentation": "",
@@ -3551,7 +3551,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.fluorescentBulb.litProportionProperty": {
       "phetioDocumentation": "",
@@ -3587,7 +3587,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.generator.activeProperty": {
       "phetioDocumentation": "",
@@ -3599,7 +3599,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.generator.directCouplingModeProperty": {
       "phetioDocumentation": "",
@@ -3611,7 +3611,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.generator.opacityProperty": {
       "phetioDocumentation": "",
@@ -3635,7 +3635,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.generator.wheelRotationalAngleProperty": {
       "phetioDocumentation": "",
@@ -3659,7 +3659,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.incandescentBulb.litProportionProperty": {
       "phetioDocumentation": "",
@@ -3695,7 +3695,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.isPlayingProperty": {
       "phetioDocumentation": "",
@@ -3707,7 +3707,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.solarPanel.activeProperty": {
       "phetioDocumentation": "",
@@ -3719,7 +3719,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.solarPanel.opacityProperty": {
       "phetioDocumentation": "",
@@ -3743,7 +3743,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.sun.activeProperty": {
       "phetioDocumentation": "",
@@ -3755,7 +3755,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.sun.cloudinessProperty": {
       "phetioDocumentation": "",
@@ -3791,7 +3791,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.teaKettle.activeProperty": {
       "phetioDocumentation": "",
@@ -3803,7 +3803,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.teaKettle.energyProductionRateProperty": {
       "phetioDocumentation": "",
@@ -3851,7 +3851,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<Vector2IO>"
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.beakerHeaterNode": {
       "phetioDocumentation": "",
@@ -3887,7 +3887,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.beakerHeaterNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3899,7 +3899,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.beltNode": {
       "phetioDocumentation": "",
@@ -3935,7 +3935,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.beltNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3947,7 +3947,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.bikerNode": {
       "phetioDocumentation": "",
@@ -3983,7 +3983,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.bikerNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -3995,7 +3995,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyConverterSelectorPanel": {
       "phetioDocumentation": "",
@@ -4031,7 +4031,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyConverterSelectorPanel.radioButtonGroup": {
       "phetioDocumentation": "",
@@ -4067,7 +4067,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyConverterSelectorPanel.radioButtonGroup.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4079,7 +4079,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyConverterSelectorPanel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4091,7 +4091,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel": {
       "phetioDocumentation": "",
@@ -4127,7 +4127,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.radioButtonGroup": {
       "phetioDocumentation": "",
@@ -4163,7 +4163,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.radioButtonGroup.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4175,7 +4175,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4187,7 +4187,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyUserSelectorPanel": {
       "phetioDocumentation": "",
@@ -4223,7 +4223,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyUserSelectorPanel.radioButtonGroup": {
       "phetioDocumentation": "",
@@ -4259,7 +4259,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyUserSelectorPanel.radioButtonGroup.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4271,7 +4271,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyUserSelectorPanel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4283,7 +4283,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.fanNode": {
       "phetioDocumentation": "",
@@ -4319,7 +4319,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.fanNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4331,7 +4331,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.faucetAndWaterNode": {
       "phetioDocumentation": "",
@@ -4367,7 +4367,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.faucetAndWaterNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4379,7 +4379,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.fluorescentBulbNode": {
       "phetioDocumentation": "",
@@ -4415,7 +4415,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.fluorescentBulbNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4427,7 +4427,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.generatorNode": {
       "phetioDocumentation": "",
@@ -4463,7 +4463,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.generatorNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4475,7 +4475,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.incandescentBulbNode": {
       "phetioDocumentation": "",
@@ -4511,7 +4511,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.incandescentBulbNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4523,7 +4523,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton": {
       "phetioDocumentation": "The orange, round button that can be used to restore the initial state",
@@ -4547,7 +4547,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -4559,7 +4559,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.isFiringProperty": {
       "phetioDocumentation": "Temporarily becomes true while the Reset All button is firing.  Commonly used to disable audio effects during reset.",
@@ -4571,7 +4571,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "DerivedPropertyIO.<BooleanIO>"
+      "phetioTypeName": "DerivedPropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -4595,7 +4595,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -4607,10 +4607,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -4619,7 +4619,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.resetAllButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4631,7 +4631,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.showEnergySymbolsCheckbox": {
       "phetioDocumentation": "",
@@ -4655,7 +4655,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.showEnergySymbolsCheckbox.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -4679,7 +4679,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.showEnergySymbolsCheckbox.property": {
       "phetioDocumentation": "",
@@ -4703,7 +4703,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<BooleanIO>"
+      "phetioTypeName": "ActionIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.showEnergySymbolsCheckbox.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4715,7 +4715,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.solarPanelNode": {
       "phetioDocumentation": "",
@@ -4751,7 +4751,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.solarPanelNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4763,7 +4763,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode": {
       "phetioDocumentation": "",
@@ -4811,7 +4811,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.cloudsPanel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4823,7 +4823,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -4847,7 +4847,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider": {
       "phetioDocumentation": "",
@@ -4871,7 +4871,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.enabledRangeProperty": {
       "phetioDocumentation": "",
@@ -4883,7 +4883,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<RangeIO>"
+      "phetioTypeName": "PropertyIO<RangeIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -4907,7 +4907,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumb": {
       "phetioDocumentation": "",
@@ -4943,7 +4943,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumb.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -4955,7 +4955,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumbInputListener": {
       "phetioDocumentation": "",
@@ -4979,7 +4979,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumbInputListener.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag end in view coordinates</li></ol>",
@@ -4991,7 +4991,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumbInputListener.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag start in view coordinates</li></ol>",
@@ -5003,7 +5003,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.thumbInputListener.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
@@ -5015,7 +5015,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.track.trackInputListener": {
       "phetioDocumentation": "",
@@ -5039,7 +5039,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.track.trackInputListener.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag end in view coordinates</li></ol>",
@@ -5051,7 +5051,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.track.trackInputListener.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag start in view coordinates</li></ol>",
@@ -5063,7 +5063,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<Vector2IO>"
+      "phetioTypeName": "ActionIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.track.trackInputListener.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
@@ -5075,7 +5075,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.slider.valueProperty": {
       "phetioDocumentation": "",
@@ -5099,7 +5099,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.sunNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5111,7 +5111,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.teaKettleNode": {
       "phetioDocumentation": "",
@@ -5147,7 +5147,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.teaKettleNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5159,7 +5159,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode": {
       "phetioDocumentation": "",
@@ -5183,7 +5183,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -5207,7 +5207,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton": {
       "phetioDocumentation": "",
@@ -5231,7 +5231,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -5255,7 +5255,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -5267,10 +5267,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -5279,7 +5279,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.property": {
       "phetioDocumentation": "",
@@ -5327,7 +5327,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.toggleNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5339,7 +5339,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.toggledEmitter": {
       "phetioDocumentation": "Emits when the button is toggled No arguments.",
@@ -5351,7 +5351,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5363,7 +5363,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton": {
       "phetioDocumentation": "",
@@ -5387,7 +5387,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
@@ -5399,7 +5399,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "EmitterIO.<>"
+      "phetioTypeName": "EmitterIO<>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
@@ -5423,7 +5423,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<NullableIO.<BooleanIO>>"
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the Event. The arguments are:<br/><ol><li>event: EventIO</li></ol>",
@@ -5435,10 +5435,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<EventIO>"
+      "phetioTypeName": "ActionIO<EventIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton.pressListener.releaseAction": {
-      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO.<EventIO></li></ol>",
+      "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<EventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -5447,7 +5447,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "ActionIO.<NullableIO.<EventIO>>"
+      "phetioTypeName": "ActionIO<NullableIO<EventIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.stepForwardButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5459,7 +5459,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.timeControlNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
@@ -5471,7 +5471,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO.<BooleanIO>"
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "phetioEngine": {
       "phetioDocumentation": "Central point for PhET-iO interoperability",
