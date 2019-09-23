@@ -62,15 +62,9 @@ define( require => {
       } );
 
       if( beakersToCreate.length > EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS ) {
-//         assert && assert( false, `Only ${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers may be added, but \
-// ${beakersToCreate.length} were provided: ${beakersToCreate}` );
+        assert && assert( false, `Only ${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers may be added, but \
+${beakersToCreate.length} were provided: ${beakersToCreate}` );
         beakersToCreate = beakersToCreate.slice( 0, EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS );
-        console.log( 'sliced beakers down to: ', beakersToCreate );
-      }
-      
-      if ( beakersToCreate.length + blocksToCreate.length > EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS ) {
-        blocksToCreate = blocksToCreate.slice( 0, EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS - beakersToCreate.length );
-        console.log( 'sliced blocks down to: ', blocksToCreate );
       }
 
       super(
