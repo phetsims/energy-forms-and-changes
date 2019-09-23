@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
@@ -41,16 +42,41 @@ define( require => {
         tandem: tandem
       };
 
+      let blocksToCreate = [];
+      let beakersToCreate = [];
+
+      // map query parameter string to element type and split by blocks vs beakers
+      EFACQueryParameters.elements.forEach( elementKey => {
+        if ( elementKey === EFACConstants.IRON_KEY ) {
+          blocksToCreate.push( BlockType.IRON );
+        }
+        else if ( elementKey === EFACConstants.BRICK_KEY ) {
+          blocksToCreate.push( BlockType.BRICK );
+        }
+        else if ( elementKey === EFACConstants.WATER_KEY ) {
+          beakersToCreate.push( BeakerType.WATER );
+        }
+        else if ( elementKey === EFACConstants.OLIVE_OIL_KEY ) {
+          beakersToCreate.push( BeakerType.OLIVE_OIL );
+        }
+      } );
+
+      if( beakersToCreate.length > EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS ) {
+//         assert && assert( false, `Only ${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers may be added, but \
+// ${beakersToCreate.length} were provided: ${beakersToCreate}` );
+        beakersToCreate = beakersToCreate.slice( 0, EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS );
+        console.log( 'sliced beakers down to: ', beakersToCreate );
+      }
+      
+      if ( beakersToCreate.length + blocksToCreate.length > EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS ) {
+        blocksToCreate = blocksToCreate.slice( 0, EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS - beakersToCreate.length );
+        console.log( 'sliced blocks down to: ', blocksToCreate );
+      }
+
       super(
         () => new EFACIntroModel(
-          EFACQueryParameters.blocks.map( blockString => {
-            if ( blockString === 'iron' ) {
-              return BlockType.IRON;
-            }
-            else if ( blockString === 'brick' ) {
-              return BlockType.BRICK;
-            }
-          } ),
+          blocksToCreate,
+          beakersToCreate,
           tandem.createTandem( 'model' )
         ),
         model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),

@@ -10,7 +10,11 @@ define( require => {
   'use strict';
 
   // modules
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+
+  // constants
+  const defaultElements = [ EFACConstants.IRON_KEY, EFACConstants.BRICK_KEY, EFACConstants.WATER_KEY, EFACConstants.OLIVE_OIL_KEY ];
 
   const EFACQueryParameters = QueryStringMachine.getAll( {
 
@@ -53,15 +57,12 @@ define( require => {
 
     // select the startup block configuration
     // public facing for phet-io clients
-    blocks: {
+    elements: {
       type: 'array',
-      defaultValue: [ 'iron', 'brick' ],
+      defaultValue: defaultElements,
       elementSchema: { type: 'string' },
-      isValidValue: values => {
-        return values.length <= 4 && values.every( value => {
-          return value === 'iron' || value === 'brick';
-        } );
-      }
+      isValidValue: values => _.difference( values, defaultElements ).length === 0 &&
+                              values.length <= EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS
     }
 
   } );

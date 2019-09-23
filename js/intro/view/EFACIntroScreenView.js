@@ -16,6 +16,7 @@ define( require => {
   const AirNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/AirNode' );
   const Animation = require( 'TWIXT/Animation' );
   const BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
+  const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
@@ -58,6 +59,7 @@ define( require => {
   const energySymbolsString = require( 'string!ENERGY_FORMS_AND_CHANGES/energySymbols' );
   const linkHeatersString = require( 'string!ENERGY_FORMS_AND_CHANGES/linkHeaters' );
   const oliveOilString = require( 'string!ENERGY_FORMS_AND_CHANGES/oliveOil' );
+  const waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
 
   // images
   const shelfImage = require( 'image!ENERGY_FORMS_AND_CHANGES/shelf.png' );
@@ -386,34 +388,45 @@ define( require => {
         blockNodes.push( blockNode );
       } );
 
-      // @private
-      this.waterBeakerView = new BeakerContainerView(
-        model.waterBeaker,
-        model,
-        modelViewTransform,
-        constrainMovableElementMotion, {
-          tandem: tandem.createTandem( 'waterBeakerView' )
-        }
-      );
+      if ( model.beaker1 ) {
 
-      // @private
-      this.oliveOilBeakerView = new BeakerContainerView(
-        model.oliveOilBeaker,
-        model,
-        modelViewTransform,
-        constrainMovableElementMotion, {
-          label: oliveOilString,
-          tandem: tandem.createTandem( 'oliveOilBeakerView' )
-        }
-      );
+        const label = model.beaker1.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+
+        // @private
+        this.beaker1View = new BeakerContainerView(
+          model.beaker1,
+          model,
+          modelViewTransform,
+          constrainMovableElementMotion, {
+            label: label,
+            tandem: tandem.createTandem( 'beaker1View' )
+          }
+        );
+      }
+
+      if ( model.beaker2 ) {
+
+        const label = model.beaker2.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+
+        // @private
+        this.beaker2View = new BeakerContainerView(
+          model.beaker2,
+          model,
+          modelViewTransform,
+          constrainMovableElementMotion, {
+            label: label,
+            tandem: tandem.createTandem( 'beaker2View' )
+          }
+        );
+      }
 
       // add the beakers, which are composed of several pieces
-      beakerFrontLayer.addChild( this.waterBeakerView.frontNode );
-      beakerFrontLayer.addChild( this.oliveOilBeakerView.frontNode );
-      beakerBackLayer.addChild( this.waterBeakerView.backNode );
-      beakerBackLayer.addChild( this.oliveOilBeakerView.backNode );
-      beakerGrabLayer.addChild( this.waterBeakerView.grabNode );
-      beakerGrabLayer.addChild( this.oliveOilBeakerView.grabNode );
+      this.beaker1View && beakerFrontLayer.addChild( this.beaker1View.frontNode );
+      this.beaker2View && beakerFrontLayer.addChild( this.beaker2View.frontNode );
+      this.beaker1View && beakerBackLayer.addChild( this.beaker1View.backNode );
+      this.beaker2View && beakerBackLayer.addChild( this.beaker2View.backNode );
+      this.beaker1View && beakerGrabLayer.addChild( this.beaker1View.grabNode );
+      this.beaker2View && beakerGrabLayer.addChild( this.beaker2View.grabNode );
 
       // the thermometer layer needs to be above the movable objects
       const thermometerLayer = new Node();
@@ -611,23 +624,24 @@ define( require => {
         block.positionProperty.link( blockChangeListener );
       } );
 
-      // updates the Z-order of the beakers when the user-controlled state changes
+      // updates the Z-order of the beakers whenever their position changes. only needed when 2 beakers exist
       const beakerChangeListener = () => {
-        if ( model.waterBeaker.getBounds().minY >= model.oliveOilBeaker.getBounds().maxY ) {
-          this.waterBeakerView.frontNode.moveToFront();
-          this.waterBeakerView.backNode.moveToFront();
-          this.waterBeakerView.grabNode.moveToFront();
+        if ( model.beaker1.getBounds().minY >= model.beaker2.getBounds().maxY ) {
+          this.beaker1View.frontNode.moveToFront();
+          this.beaker1View.backNode.moveToFront();
+          this.beaker1View.grabNode.moveToFront();
         }
-        else if ( model.oliveOilBeaker.getBounds().minY >= model.waterBeaker.getBounds().maxY ) {
-          this.oliveOilBeakerView.frontNode.moveToFront();
-          this.oliveOilBeakerView.backNode.moveToFront();
-          this.oliveOilBeakerView.grabNode.moveToFront();
+        else if ( model.beaker2.getBounds().minY >= model.beaker1.getBounds().maxY ) {
+          this.beaker2View.frontNode.moveToFront();
+          this.beaker2View.backNode.moveToFront();
+          this.beaker2View.grabNode.moveToFront();
         }
       };
 
-      // update the Z-order of the beakers whenever the "userControlled" state of either changes
-      model.waterBeaker.positionProperty.link( beakerChangeListener );
-      model.oliveOilBeaker.positionProperty.link( beakerChangeListener );
+      if ( model.beaker1 && model.beaker2 ) {
+        model.beaker1.positionProperty.link( beakerChangeListener );
+        model.beaker2.positionProperty.link( beakerChangeListener );
+      }
 
       // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to
       // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
@@ -777,8 +791,8 @@ define( require => {
      * @public
      */
     stepView( dt ) {
-      this.waterBeakerView.step( dt );
-      this.oliveOilBeakerView.step( dt );
+      this.beaker1View && this.beaker1View.step( dt );
+      this.beaker2View && this.beaker2View.step( dt );
     }
 
     /**

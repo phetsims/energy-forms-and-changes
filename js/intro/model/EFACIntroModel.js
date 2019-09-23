@@ -21,7 +21,6 @@ define( require => {
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const Emitter = require( 'AXON/Emitter' );
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
-  const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const Range = require( 'DOT/Range' );
@@ -58,7 +57,7 @@ define( require => {
      * @param {BlockType[]} blocksToCreate
      * @param {Tandem} tandem
      */
-    constructor( blocksToCreate, tandem ) {
+    constructor( blocksToCreate, beakersToCreate, tandem ) {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
@@ -85,7 +84,10 @@ define( require => {
       // @private {number} - calculate space in between the center points of the snap-to spots on the ground
       this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
                                            ( NUMBER_OF_GROUND_SPOTS - 1 );
-      // @private {number[]} - list of valid x-positions for model elements to rest
+
+      // @private {number[]} - list of valid x-positions for model elements to rest. this is used for the initial
+      // positions of model elements, but also for finding valid spots for the elements to fall to, so it should not it
+      // modified after creation.
       this.groundSpotXPositions = [];
 
       // determine the locations of the snap-to spots, and round them to a few decimal places
@@ -95,6 +97,24 @@ define( require => {
           Util.roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000
         );
       }
+
+      // only used for initial positions of model elements
+      const burnerGroundSpotXPositions = this.groundSpotXPositions.slice( 2, 4 );
+      let movableElementGroundSpotXPositions =
+        this.groundSpotXPositions.slice( 0, 2 ).concat( this.groundSpotXPositions.slice( 4 ) );
+
+      // @public (read-only) {Burner} - right and left burners
+      this.leftBurner = new Burner(
+        new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'leftBurner' )
+      );
+
+      this.rightBurner = new Burner(
+        new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'rightBurner' )
+      );
 
       // iterate through the blocks and count how many of each type there are
       let brickCount = 0;
@@ -114,7 +134,6 @@ define( require => {
       // reset counts for proper tandem names
       brickCount = 0;
       ironCount = 0;
-      let groundSpotPositionIndex = 0;
 
       // create the blocks
       blocksToCreate.forEach( blockType => {
@@ -129,7 +148,7 @@ define( require => {
         }
 
         const block = new Block(
-          new Vector2( this.groundSpotXPositions[ groundSpotPositionIndex++ ], 0 ),
+          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
           this.energyChunksVisibleProperty,
           blockType,
           tandem.createTandem( blockTandemName )
@@ -137,50 +156,49 @@ define( require => {
         this.blocks.push( block );
       } );
 
-      // @public (read-only) {Burner} - right and left burners
-      this.leftBurner = new Burner(
-        new Vector2( this.groundSpotXPositions[ 2 ], 0 ),
-        this.energyChunksVisibleProperty,
-        tandem.createTandem( 'leftBurner' )
-      );
-      this.rightBurner = new Burner(
-        new Vector2( this.groundSpotXPositions[ 3 ], 0 ),
-        this.energyChunksVisibleProperty,
-        tandem.createTandem( 'rightBurner' )
-      );
-
-      // @public (read-only) {BeakerContainer)
-      this.waterBeaker = new BeakerContainer(
-        new Vector2( this.groundSpotXPositions[ 4 ], 0 ),
-        BEAKER_WIDTH,
-        BEAKER_HEIGHT,
-        this.blocks,
-        this.energyChunksVisibleProperty, {
-          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-          tandem: tandem.createTandem( 'waterBeaker' )
-        }
-      );
-
-      // @public (read-only) {BeakerContainer)
-      this.oliveOilBeaker = new BeakerContainer(
-        new Vector2( this.groundSpotXPositions[ 5 ], 0 ),
-        BEAKER_WIDTH,
-        BEAKER_HEIGHT,
-        this.blocks,
-        this.energyChunksVisibleProperty, {
-          fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
-          steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
-          fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
-          fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
-          fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-          energyContainerCategory: EnergyContainerCategory.OLIVE_OIL,
-          majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-          tandem: tandem.createTandem( 'oliveOilBeaker' )
-        }
-      );
-
       // @public (read-only) {BeakerContainer[]}
-      this.beakers = [ this.waterBeaker, this.oliveOilBeaker ];
+      this.beakers = [];
+
+      // ensure any created beakers are initialized in the last two spots
+      movableElementGroundSpotXPositions =
+        movableElementGroundSpotXPositions.slice( movableElementGroundSpotXPositions.length -
+                                                  EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS );
+      const beaker1Type = beakersToCreate[ 0 ];
+      const beaker2Type = beakersToCreate[ 1 ];
+
+      // create any provided beakers
+      if ( beaker1Type ) {
+
+        // @public (read-only) {BeakerContainer)
+        this.beaker1 = new BeakerContainer(
+          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
+          BEAKER_WIDTH,
+          BEAKER_HEIGHT,
+          this.blocks,
+          this.energyChunksVisibleProperty, {
+            beakerType: beaker1Type,
+            majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+            tandem: tandem.createTandem( 'beaker1' )
+          }
+        );
+        this.beakers.push( this.beaker1 );
+      }
+      if ( beaker2Type ) {
+
+        // @public (read-only) {BeakerContainer)
+        this.beaker2 = new BeakerContainer(
+          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
+          BEAKER_WIDTH,
+          BEAKER_HEIGHT,
+          this.blocks,
+          this.energyChunksVisibleProperty, {
+            beakerType: beaker2Type,
+            majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+            tandem: tandem.createTandem( 'beaker2' )
+          }
+        );
+        this.beakers.push( this.beaker2 );
+      }
 
       // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers on a list for easy iteration
       this.thermalContainers = [ ...this.blocks, ...this.beakers ];
@@ -310,8 +328,9 @@ define( require => {
       this.blocks.forEach( block => {
         block.reset();
       } );
-      this.waterBeaker.reset();
-      this.oliveOilBeaker.reset();
+      this.beakers.forEach( beaker => {
+        beaker.reset();
+      } );
       this.thermometers.forEach( thermometer => {
         thermometer.reset();
       } );

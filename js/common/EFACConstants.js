@@ -70,6 +70,14 @@ define( require => {
 
   const EFACConstants = {
 
+    // intro screen customization
+    IRON_KEY: 'iron', // used to validate query parameter values and map to the corresponding Enumeration type
+    BRICK_KEY: 'brick',
+    WATER_KEY: 'water',
+    OLIVE_OIL_KEY: 'oliveOil',
+    MAX_NUMBER_OF_INTRO_ELEMENTS: 4,
+    MAX_NUMBER_OF_INTRO_BEAKERS: 2,
+
     // Cap large dt values, which occur when the tab containing the sim had been hidden and then re-shown
     maxDT: 0.1,
 

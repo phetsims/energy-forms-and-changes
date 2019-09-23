@@ -29,6 +29,7 @@ define( require => {
                                       EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                       Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
+  // TODO: use constants from EFAConstants
   const BLOCK_COMPOSITION = {};
   BLOCK_COMPOSITION[ BlockType.IRON ] = {
     color: new Color( 150, 150, 150 ),

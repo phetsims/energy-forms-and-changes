@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
@@ -37,6 +38,24 @@ define( require => {
   const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
   const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
 
+  const BEAKER_COMPOSITION = {};
+  BEAKER_COMPOSITION[ BeakerType.WATER ] = {
+    fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
+    steamColor: EFACConstants.WATER_STEAM_COLOR,
+    fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
+    fluidDensity: EFACConstants.WATER_DENSITY,
+    fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
+    energyContainerCategory: EnergyContainerCategory.WATER
+  };
+  BEAKER_COMPOSITION[ BeakerType.OLIVE_OIL ] = {
+    fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+    steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
+    fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
+    fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
+    fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
+    energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
+  };
+
   // file variable used for measuring performance during startup, see usage for more information
   let performanceMeasurementTaken = false;
 
@@ -52,24 +71,23 @@ define( require => {
     constructor( initialPosition, width, height, energyChunksVisibleProperty, options ) {
 
       options = _.extend( {
-        fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
-        steamColor: EFACConstants.WATER_STEAM_COLOR,
-        fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
-        fluidDensity: EFACConstants.WATER_DENSITY,
-        fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
-        energyContainerCategory: EnergyContainerCategory.WATER,
+        beakerType: BeakerType.WATER,
         majorTickMarkDistance: height * 0.95 / 2, // empirically determined
 
         // phet-io
         tandem: Tandem.required
       }, options );
 
+      // calculate the mass of the beaker
+      const mass = Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_PROPORTION *
+                   BEAKER_COMPOSITION[ options.beakerType ].fluidDensity;
+
       super(
         initialPosition,
         width,
         height,
-        Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_PROPORTION * options.fluidDensity,
-        options.fluidSpecificHeat,
+        mass,
+        BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
         energyChunksVisibleProperty,
         options.tandem
       );
@@ -77,16 +95,19 @@ define( require => {
       // @private
       this.width = width;
       this.height = height;
-      this._energyContainerCategory = options.energyContainerCategory;
+      this._energyContainerCategory = BEAKER_COMPOSITION[ options.beakerType ].energyContainerCategory;
+
+      // @public {BeakerType} (read-only)
+      this.beakerType = options.beakerType;
 
       // @public {Color) - the color of the fluid in the beaker
-      this.fluidColor = options.fluidColor;
+      this.fluidColor = BEAKER_COMPOSITION[ options.beakerType ].fluidColor;
 
       // @public {Color) - the color of the steam that comes from the beaker
-      this.steamColor = options.steamColor;
+      this.steamColor = BEAKER_COMPOSITION[ options.beakerType ].steamColor;
 
       // @public {number} - the boiling point temperature of the fluid in the beaker
-      this.fluidBoilingPoint = options.fluidBoilingPoint;
+      this.fluidBoilingPoint = BEAKER_COMPOSITION[ options.beakerType ].fluidBoilingPoint;
 
       // @public {number} - the distance between major tick marks on the side of the beaker
       this.majorTickMarkDistance = options.majorTickMarkDistance;
