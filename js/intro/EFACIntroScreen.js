@@ -42,7 +42,7 @@ define( require => {
         tandem: tandem
       };
 
-      let blocksToCreate = [];
+      const blocksToCreate = [];
       let beakersToCreate = [];
 
       // map query parameter string to element type and split by blocks vs beakers
