@@ -86,7 +86,7 @@ define( require => {
                                            ( NUMBER_OF_GROUND_SPOTS - 1 );
 
       // @private {number[]} - list of valid x-positions for model elements to rest. this is used for the initial
-      // positions of model elements, but also for finding valid spots for the elements to fall to, so it should not it
+      // positions of model elements, but also for finding valid spots for the elements to fall to, so it should be
       // modified after creation.
       this.groundSpotXPositions = [];
 
