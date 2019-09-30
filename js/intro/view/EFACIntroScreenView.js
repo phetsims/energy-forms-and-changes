@@ -18,7 +18,6 @@ define( require => {
   const BeakerContainerView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BeakerContainerView' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const BlockNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/BlockNode' );
-  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BurnerStandNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/BurnerStandNode' );
