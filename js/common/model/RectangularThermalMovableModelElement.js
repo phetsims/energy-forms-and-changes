@@ -52,6 +52,10 @@ define( require => {
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
 
+      // @public (read-only) - for phet-io: assign tandem in the model so the corresponding names can be leveraged in
+      // the view
+      this.tandem = tandem;
+
       // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
       this.approachingEnergyChunks = new ObservableArray();
 

@@ -194,7 +194,7 @@ define( require => {
     Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER,
 
     // use the default layout bounds
-    SCREEN_LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS
+    SCREEN_LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
 
     // A note for energy-forms-and-changes-strings_en.json (which cannot have comments): the keys for the screen names
     // are incorrect, as they do not follow the form 'screen.{{screenName}}', but the sim was published and translated

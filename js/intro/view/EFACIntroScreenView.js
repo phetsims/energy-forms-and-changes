@@ -367,30 +367,18 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      let brickCount = 0;
-      let ironCount = 0;
       const blockNodes = [];
       const nodeString = 'Node';
 
       // add the blocks
       model.blocks.forEach( block => {
-        let blockNodeTandemName = '';
-        if ( block.blockType === BlockType.BRICK ) {
-          blockNodeTandemName = BlockType.BRICK.name.toLowerCase() + nodeString;
-          blockNodeTandemName = model.moreThanOneBrick ? blockNodeTandemName += ++brickCount : blockNodeTandemName;
-        }
-        else if ( block.blockType === BlockType.IRON ) {
-          blockNodeTandemName = BlockType.IRON.name.toLowerCase() + `Block${nodeString}`;
-          blockNodeTandemName = model.moreThanOneIron ? blockNodeTandemName += ++ironCount : blockNodeTandemName;
-        }
-
         const blockNode = new BlockNode(
           block,
           modelViewTransform,
           constrainMovableElementMotion,
           model.isPlayingProperty, {
             setApproachingEnergyChunkParentNode: airLayer,
-            tandem: tandem.createTandem( blockNodeTandemName )
+            tandem: tandem.createTandem( block.tandem.name + nodeString )
           }
         );
         blockLayer.addChild( blockNode );

@@ -140,10 +140,6 @@ define( require => {
         blockType === BlockType.IRON && ironCount++;
       } );
 
-      // @public (read-only) {boolean}
-      this.moreThanOneBrick = brickCount > 1;
-      this.moreThanOneIron = ironCount > 1;
-
       // @public (read-only) {Block[]} - list of all blocks in sim
       this.blocks = [];
 
@@ -153,21 +149,12 @@ define( require => {
 
       // create the blocks
       blocksToCreate.forEach( blockType => {
-        let blockTandemName = '';
-        if ( blockType === BlockType.BRICK ) {
-          blockTandemName = BlockType.BRICK.name.toLowerCase();
-          blockTandemName = this.moreThanOneBrick ? blockTandemName += ++brickCount : blockTandemName;
-        }
-        else if ( blockType === BlockType.IRON ) {
-          blockTandemName = BlockType.IRON.name.toLowerCase() + 'Block';
-          blockTandemName = this.moreThanOneIron ? blockTandemName += ++ironCount : blockTandemName;
-        }
-
+        const tandemName = BlockType.getTandemName( blockType ) + ( blockType === BlockType.IRON ? ++ironCount : ++brickCount );
         const block = new Block(
           new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          tandem.createTandem( blockTandemName )
+          tandem.createTandem( tandemName )
         );
         this.blocks.push( block );
       } );
