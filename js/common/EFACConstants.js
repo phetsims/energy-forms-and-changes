@@ -75,7 +75,10 @@ define( require => {
     BRICK_KEY: 'brick',
     WATER_KEY: 'water',
     OLIVE_OIL_KEY: 'oliveOil',
+
+    // modify with caution - the intro screen element layout heavily relies on these
     MAX_NUMBER_OF_INTRO_ELEMENTS: 4,
+    MAX_NUMBER_OF_INTRO_BURNERS: 2,
     MAX_NUMBER_OF_INTRO_BEAKERS: 2,
 
     // Cap large dt values, which occur when the tab containing the sim had been hidden and then re-shown

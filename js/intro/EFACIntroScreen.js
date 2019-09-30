@@ -71,6 +71,7 @@ ${beakersToCreate.length} were provided: ${beakersToCreate}` );
         () => new EFACIntroModel(
           blocksToCreate,
           beakersToCreate,
+          EFACQueryParameters.burners,
           tandem.createTandem( 'model' )
         ),
         model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),

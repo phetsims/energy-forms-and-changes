@@ -55,6 +55,16 @@ define( require => {
       ]
     },
 
+    // number of burners to create on startup
+    // public facing for phet-io clients
+    burners: {
+      type: 'number',
+      defaultValue: EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS,
+
+      // create an array with integer values 1-N, where N is the max number of burners on the intro screen
+      validValues: [ ...Array( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS ).keys() ].map( n => ++n )
+    },
+
     // select the startup block configuration
     // public facing for phet-io clients
     elements: {

@@ -44,8 +44,11 @@ define( require => {
   // (a beaker) when it's sitting at one of the outer snap-to spots on the ground, in meters
   const EDGE_PAD = 0.016;
 
-  // number of snap-to spots on the ground, should not be greater than the number of thermal containers
-  const NUMBER_OF_GROUND_SPOTS = 6;
+  // number of snap-to spots on the ground
+  const NUMBER_OF_GROUND_SPOTS = EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS;
+
+  // of the available ground spots, this is the index at which the burner(s) is/are created
+  const LEFT_BURNER_GROUND_SPOT_INDEX = 2;
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
@@ -55,9 +58,10 @@ define( require => {
     /**
      * @param {BlockType[]} blocksToCreate
      * @param {BeakerType[]} beakersToCreate
+     * @param {number} numberOfBurners
      * @param {Tandem} tandem
      */
-    constructor( blocksToCreate, beakersToCreate, tandem ) {
+    constructor( blocksToCreate, beakersToCreate, numberOfBurners, tandem ) {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
@@ -98,10 +102,17 @@ define( require => {
         );
       }
 
-      // only used for initial positions of model elements
-      const burnerGroundSpotXPositions = this.groundSpotXPositions.slice( 2, 4 );
-      let movableElementGroundSpotXPositions =
-        this.groundSpotXPositions.slice( 0, 2 ).concat( this.groundSpotXPositions.slice( 4 ) );
+      // after creating the burners, the rest of the elements are created starting from this index
+      const indexOfFirstElementAfterLastBeaker = LEFT_BURNER_GROUND_SPOT_INDEX + numberOfBurners;
+
+      // only used for initial positions of model elements. determine which spots are only for burners, then pull those
+      // out of the available indices for movable elements
+      const burnerGroundSpotXPositions =
+        this.groundSpotXPositions.slice( LEFT_BURNER_GROUND_SPOT_INDEX, indexOfFirstElementAfterLastBeaker );
+      let movableElementGroundSpotXPositions = [
+        ...this.groundSpotXPositions.slice( 0, LEFT_BURNER_GROUND_SPOT_INDEX ),
+        ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
+      ];
 
       // @public (read-only) {Burner} - right and left burners
       this.leftBurner = new Burner(
@@ -110,11 +121,16 @@ define( require => {
         tandem.createTandem( 'leftBurner' )
       );
 
-      this.rightBurner = new Burner(
-        new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
-        this.energyChunksVisibleProperty,
-        tandem.createTandem( 'rightBurner' )
-      );
+      // @private {Burner[]} - put burners into a list for easy iteration
+      this.burners = [ this.leftBurner ];
+      if ( numberOfBurners > 1 ) {
+        this.rightBurner = new Burner(
+          new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
+          this.energyChunksVisibleProperty,
+          tandem.createTandem( 'rightBurner' )
+        );
+        this.burners.push( this.rightBurner );
+      }
 
       // iterate through the blocks and count how many of each type there are
       let brickCount = 0;
@@ -159,10 +175,12 @@ define( require => {
       // @public (read-only) {BeakerContainer[]}
       this.beakers = [];
 
-      // ensure any created beakers are initialized in the last two spots
+      // ensure any created beakers are initialized to the right of the burner(s)
       movableElementGroundSpotXPositions =
         movableElementGroundSpotXPositions.slice( movableElementGroundSpotXPositions.length -
-                                                  EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS );
+                                                  EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
+                                                  ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners )
+        );
       const beaker1Type = beakersToCreate[ 0 ];
       const beaker2Type = beakersToCreate[ 1 ];
 
@@ -210,11 +228,8 @@ define( require => {
         this.inThermalContactInfo[ thermalContainer.id ] = [];
       } );
 
-      // @private {Burner[]} - put burners into a list for easy iteration
-      this.burners = [ this.rightBurner, this.leftBurner ];
-
       // @private {ModelElement} - put all of the model elements on a list for easy iteration
-      this.modelElementList = [ this.leftBurner, this.rightBurner, ...this.thermalContainers ];
+      this.modelElementList = [ ...this.burners, ...this.thermalContainers ];
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.thermometers = [];
@@ -323,8 +338,9 @@ define( require => {
       this.isPlayingProperty.reset();
       this.simSpeedProperty.reset();
       this.air.reset();
-      this.leftBurner.reset();
-      this.rightBurner.reset();
+      this.burners.forEach( burner => {
+        burner.reset();
+      } );
       this.blocks.forEach( block => {
         block.reset();
       } );
