@@ -72,10 +72,10 @@ define( require => {
         this.generator.activeProperty,
         tandem.createTandem( 'teaKettle' )
       );
-      this.biker = new Biker( 
-        this.energyChunksVisibleProperty, 
-        this.generator.activeProperty, 
-        tandem.createTandem( 'biker' ) 
+      this.biker = new Biker(
+        this.energyChunksVisibleProperty,
+        this.generator.activeProperty,
+        tandem.createTandem( 'biker' )
       );
 
       const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
@@ -86,13 +86,13 @@ define( require => {
 
       // @public (read-only) energy users
       this.fan = new Fan( this.energyChunksVisibleProperty, tandem.createTandem( 'fan' ) );
-      this.incandescentBulb = new IncandescentBulb( 
-        this.energyChunksVisibleProperty, 
-        tandem.createTandem( 'incandescentBulb' ) 
+      this.incandescentBulb = new IncandescentBulb(
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'incandescentBulb' )
       );
-      this.fluorescentBulb = new FluorescentBulb( 
-        this.energyChunksVisibleProperty, 
-        tandem.createTandem( 'fluorescentBulb' ) 
+      this.fluorescentBulb = new FluorescentBulb(
+        this.energyChunksVisibleProperty,
+        tandem.createTandem( 'fluorescentBulb' )
       );
       this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty, tandem.createTandem( 'beakerHeater' ) );
 
