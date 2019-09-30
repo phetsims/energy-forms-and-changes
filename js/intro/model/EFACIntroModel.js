@@ -53,8 +53,8 @@ define( require => {
   class EFACIntroModel {
 
     /**
-     *
      * @param {BlockType[]} blocksToCreate
+     * @param {BeakerType[]} beakersToCreate
      * @param {Tandem} tandem
      */
     constructor( blocksToCreate, beakersToCreate, tandem ) {
