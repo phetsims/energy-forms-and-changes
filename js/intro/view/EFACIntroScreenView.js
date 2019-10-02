@@ -419,7 +419,6 @@ define( require => {
 
       // create and add the temperature and color thermometer nodes, which look like a thermometer with a triangle on the side
       const thermometerNodes = [];
-      let thermometerIndex = 0;
       let thermometerNodeWidth = 0;
       let thermometerNodeHeight = 0;
       model.thermometers.forEach( thermometer => {
@@ -427,7 +426,7 @@ define( require => {
           modelViewTransform: modelViewTransform,
           dragBounds: modelViewTransform.viewToModelBounds( this.layoutBounds ),
           draggable: true,
-          tandem: tandem.createTandem( `thermometerNode${++thermometerIndex}` ) // 1 indexed
+          tandem: tandem.createTandem( thermometer.tandem.name + nodeString )
         } );
 
         // thermometers need to be behind blocks and beakers while in storage, but in front when them while in use

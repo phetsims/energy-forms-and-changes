@@ -38,6 +38,10 @@ define( require => {
         range: new Range( -4, 0 ) // empirically determined
       } );
 
+      // @public (read-only) - for phet-io: assign tandem in the model so the corresponding names can be leveraged in
+      // the view
+      this.tandem = tandem;
+
       // update internal state when the user picks up this model element
       this.userControlledProperty.link( userControlled => {
         if ( userControlled ) {
