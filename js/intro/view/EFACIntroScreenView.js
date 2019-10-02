@@ -384,45 +384,34 @@ define( require => {
         blockNodes.push( blockNode );
       } );
 
-      if ( model.beaker1 ) {
+      this.beakerViews = [];
+      const viewString = 'View';
 
-        const label = model.beaker1.beakerType === BeakerType.WATER ? waterString : oliveOilString;
-
-        // @private
-        this.beaker1View = new BeakerContainerView(
-          model.beaker1,
+      // add the beakers
+      model.beakers.forEach( beaker => {
+        const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+        const beakerView = new BeakerContainerView(
+          beaker,
           model,
           modelViewTransform,
           constrainMovableElementMotion, {
             label: label,
-            tandem: tandem.createTandem( 'beaker1View' )
+            tandem: tandem.createTandem( beaker.tandem.name + viewString )
           }
         );
-      }
-
-      if ( model.beaker2 ) {
-
-        const label = model.beaker2.beakerType === BeakerType.WATER ? waterString : oliveOilString;
-
-        // @private
-        this.beaker2View = new BeakerContainerView(
-          model.beaker2,
-          model,
-          modelViewTransform,
-          constrainMovableElementMotion, {
-            label: label,
-            tandem: tandem.createTandem( 'beaker2View' )
-          }
-        );
-      }
+        this.beakerViews.push( beakerView );
+      } );
 
       // add the beakers, which are composed of several pieces
-      this.beaker1View && beakerFrontLayer.addChild( this.beaker1View.frontNode );
-      this.beaker2View && beakerFrontLayer.addChild( this.beaker2View.frontNode );
-      this.beaker1View && beakerBackLayer.addChild( this.beaker1View.backNode );
-      this.beaker2View && beakerBackLayer.addChild( this.beaker2View.backNode );
-      this.beaker1View && beakerGrabLayer.addChild( this.beaker1View.grabNode );
-      this.beaker2View && beakerGrabLayer.addChild( this.beaker2View.grabNode );
+      this.beakerViews.forEach( beakerView => {
+        beakerFrontLayer.addChild( beakerView.frontNode );
+      } );
+      this.beakerViews.forEach( beakerView => {
+        beakerBackLayer.addChild( beakerView.backNode );
+      } );
+      this.beakerViews.forEach( beakerView => {
+        beakerGrabLayer.addChild( beakerView.grabNode );
+      } );
 
       // the thermometer layer needs to be above the movable objects
       const thermometerLayer = new Node();
@@ -616,27 +605,38 @@ define( require => {
         } );
       };
 
-      model.blocks.forEach( block => {
-        block.positionProperty.link( blockChangeListener );
-      } );
+      // no need to link z-order-changing listener if there is only one block
+      if ( model.blocks.length > 1 ) {
+        model.blocks.forEach( block => {
+          block.positionProperty.link( blockChangeListener );
+        } );
+      }
 
-      // updates the Z-order of the beakers whenever their position changes. only needed when 2 beakers exist
+      // updates the Z-order of the beakers whenever their position changes
       const beakerChangeListener = () => {
-        if ( model.beaker1.getBounds().minY >= model.beaker2.getBounds().maxY ) {
-          this.beaker1View.frontNode.moveToFront();
-          this.beaker1View.backNode.moveToFront();
-          this.beaker1View.grabNode.moveToFront();
+        if ( model.beakers[ 0 ].getBounds().minY >= model.beakers[ 1 ].getBounds().maxY ) {
+          this.beakerViews[ 0 ].frontNode.moveToFront();
+          this.beakerViews[ 0 ].backNode.moveToFront();
+          this.beakerViews[ 0 ].grabNode.moveToFront();
         }
-        else if ( model.beaker2.getBounds().minY >= model.beaker1.getBounds().maxY ) {
-          this.beaker2View.frontNode.moveToFront();
-          this.beaker2View.backNode.moveToFront();
-          this.beaker2View.grabNode.moveToFront();
+        else if ( model.beakers[ 1 ].getBounds().minY >= model.beakers[ 0 ].getBounds().maxY ) {
+          this.beakerViews[ 1 ].frontNode.moveToFront();
+          this.beakerViews[ 1 ].backNode.moveToFront();
+          this.beakerViews[ 1 ].grabNode.moveToFront();
         }
       };
 
-      if ( model.beaker1 && model.beaker2 ) {
-        model.beaker1.positionProperty.link( beakerChangeListener );
-        model.beaker2.positionProperty.link( beakerChangeListener );
+      // no need to link z-order-changing listener if there is only one beaker
+      if ( model.beakers.length > 1 ) {
+
+        // this particular listener could be generalized to support more than 2 beakers (see the block listener above),
+        // but since other code in this sim limits the number of beakers to 2, i (@chrisklus) think it's better to
+        // leave this listener as simple as it is, since a general version could only worsen performance.
+        assert && assert( model.beakers.length <= 2, 'Only 2 beakers are allowed: ' + model.beakers.length );
+
+        model.beakers.forEach( beaker => {
+          beaker.positionProperty.link( beakerChangeListener );
+        } );
       }
 
       // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to
@@ -792,8 +792,9 @@ define( require => {
      * @public
      */
     stepView( dt ) {
-      this.beaker1View && this.beaker1View.step( dt );
-      this.beaker2View && this.beaker2View.step( dt );
+      this.beakerViews.forEach( beakerView => {
+        beakerView.step();
+      } );
     }
 
     /**

@@ -13,7 +13,13 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
 
   // @public
-  const BeakerType = new Enumeration( [ 'WATER', 'OLIVE_OIL' ] );
+  const BeakerType = new Enumeration( [ 'WATER', 'OLIVE_OIL' ], {
+    beforeFreeze: BeakerType => {
+      BeakerType.getTandemName = beakerType => {
+        return _.camelCase( beakerType.toString() ) + 'Beaker';
+      };
+    }
+  } );
 
   return energyFormsAndChanges.register( 'BeakerType', BeakerType );
 } );

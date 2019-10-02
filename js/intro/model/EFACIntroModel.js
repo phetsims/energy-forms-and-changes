@@ -14,6 +14,7 @@ define( require => {
   const Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   const BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
@@ -132,24 +133,17 @@ define( require => {
         this.burners.push( this.rightBurner );
       }
 
-      // iterate through the blocks and count how many of each type there are
-      let brickCount = 0;
-      let ironCount = 0;
-      blocksToCreate.forEach( blockType => {
-        blockType === BlockType.BRICK && brickCount++;
-        blockType === BlockType.IRON && ironCount++;
-      } );
-
       // @public (read-only) {Block[]} - list of all blocks in sim
       this.blocks = [];
 
-      // reset counts for proper tandem names
-      brickCount = 0;
-      ironCount = 0;
+      // counters for tandem naming
+      let brickCount = 0;
+      let ironCount = 0;
 
-      // create the blocks
+      // create any specified blocks
       blocksToCreate.forEach( blockType => {
-        const tandemName = BlockType.getTandemName( blockType ) + ( blockType === BlockType.IRON ? ++ironCount : ++brickCount );
+        const tandemName = BlockType.getTandemName( blockType ) +
+                           ( blockType === BlockType.IRON ? ++ironCount : ++brickCount );
         const block = new Block(
           new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
           this.energyChunksVisibleProperty,
@@ -168,44 +162,30 @@ define( require => {
                                                   EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
                                                   ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners )
         );
-      const beaker1Type = beakersToCreate[ 0 ];
-      const beaker2Type = beakersToCreate[ 1 ];
 
-      // create any provided beakers
-      if ( beaker1Type ) {
+      // counters for tandem naming
+      let oliveOilCount = 0;
+      let waterCount = 0;
 
-        // @public (read-only) {BeakerContainer)
-        this.beaker1 = new BeakerContainer(
+      // create any specified beakers
+      beakersToCreate.forEach( beakerType => {
+        const tandemName = BeakerType.getTandemName( beakerType ) +
+                           ( beakerType === BeakerType.WATER ? ++waterCount : ++oliveOilCount );
+        const beaker = new BeakerContainer(
           new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
           this.blocks,
           this.energyChunksVisibleProperty, {
-            beakerType: beaker1Type,
+            beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-            tandem: tandem.createTandem( 'beaker1' )
+            tandem: tandem.createTandem( tandemName )
           }
         );
-        this.beakers.push( this.beaker1 );
-      }
-      if ( beaker2Type ) {
+        this.beakers.push( beaker );
+      } );
 
-        // @public (read-only) {BeakerContainer)
-        this.beaker2 = new BeakerContainer(
-          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
-          BEAKER_WIDTH,
-          BEAKER_HEIGHT,
-          this.blocks,
-          this.energyChunksVisibleProperty, {
-            beakerType: beaker2Type,
-            majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-            tandem: tandem.createTandem( 'beaker2' )
-          }
-        );
-        this.beakers.push( this.beaker2 );
-      }
-
-      // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers on a list for easy iteration
+      // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
       this.thermalContainers = [ ...this.blocks, ...this.beakers ];
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
