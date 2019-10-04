@@ -13,20 +13,28 @@ define( require => {
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const ObservableArray = require( 'AXON/ObservableArray' );
+  const PhetioObject = require( 'TANDEM/PhetioObject' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
-  class ModelElement {
+  class ModelElement extends PhetioObject {
 
     /**
      * @param {Vector2} initialPosition
-     * @param {Tandem} tandem
+     * @param {Object} [options]
      */
-    constructor( initialPosition, tandem ) {
+    constructor( initialPosition, options ) {
+
+      options = _.extend( {
+        tandem: Tandem.required
+      }, options );
+
+      super( options );
 
       // @public - position of the center bottom of this model element
       this.positionProperty = new Vector2Property( initialPosition, {
-        tandem: tandem.createTandem( 'positionProperty' )
+        tandem: options.tandem.createTandem( 'positionProperty' )
       } );
 
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be

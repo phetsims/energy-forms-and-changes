@@ -20,6 +20,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -55,7 +56,11 @@ define( require => {
      * @param {BlockType} blockType
      * @param {Tandem} tandem
      */
-    constructor( initialPosition, energyChunksVisibleProperty, blockType, tandem ) {
+    constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
+
+      options = _.extend( {
+        tandem: Tandem.required
+      }, options );
 
       super(
         initialPosition,
@@ -64,7 +69,7 @@ define( require => {
         Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
         BLOCK_COMPOSITION[ blockType ].specificHeat,
         energyChunksVisibleProperty,
-        tandem
+        options
       );
 
       // @public (read-only) {String} - unique ID for this block

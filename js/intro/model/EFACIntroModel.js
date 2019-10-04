@@ -24,7 +24,10 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
+  const Group = require( 'TANDEM/Group' );
+  const GroupIO = require( 'TANDEM/GroupIO' );
   const Range = require( 'DOT/Range' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -133,24 +136,30 @@ define( require => {
         this.burners.push( this.rightBurner );
       }
 
-      // @public (read-only) {Block[]} - list of all blocks in sim
-      this.blocks = [];
+      // @public {Group.<Block>}
+      this.blocks = new Group( 'block', {
+        prototype: {
+          create: ( tandem, prototypeName, blockType, isPrototype = false ) => {
+            const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+            const block = new Block(
+              new Vector2( xPosition, 0 ),
+              this.energyChunksVisibleProperty,
+              blockType, {
+                tandem: tandem,
+                phetioDynamicElement: true
+              }
+            );
+            return block;
+          },
+          defaultArguments: [ BlockType.IRON, true ]
+        }
+      }, {
+        tandem: tandem.createTandem( 'blocks' ),
+        phetioType: GroupIO( ReferenceIO )
+      } );
 
-      // counters for tandem naming
-      let brickCount = 0;
-      let ironCount = 0;
-
-      // create any specified blocks
       blocksToCreate.forEach( blockType => {
-        const tandemName = BlockType.getTandemName( blockType ) +
-                           ( blockType === BlockType.IRON ? ++ironCount : ++brickCount );
-        const block = new Block(
-          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
-          this.energyChunksVisibleProperty,
-          blockType,
-          tandem.createTandem( tandemName )
-        );
-        this.blocks.push( block );
+        this.blocks.createNextGroupMember( blockType );
       } );
 
       // @public (read-only) {BeakerContainer[]}
@@ -185,9 +194,6 @@ define( require => {
         this.beakers.push( beaker );
       } );
 
-      // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
-      this.thermalContainers = [ ...this.blocks, ...this.beakers ];
-
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
       // each model step.
       this.inThermalContactInfo = {};
@@ -217,7 +223,7 @@ define( require => {
           thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
             this.beakers.forEach( beaker => {
-              const blockWidthIncludingPerspective = this.blocks[ 0 ].getProjectedShape().bounds.width;
+              const blockWidthIncludingPerspective = this.blocks.get( 0 ).getProjectedShape().bounds.width;
 
               const xRange = new Range(
                 beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
@@ -232,7 +238,7 @@ define( require => {
 
               // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
               // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-              if ( _.some( this.blocks, checkBlocks ) &&
+              if ( _.some( this.blocks.getArray(), checkBlocks ) &&
                    oldColor === beaker.fluidColor &&
                    !thermometer.userControlledProperty.get() &&
                    !beaker.userControlledProperty.get() &&
@@ -280,6 +286,11 @@ define( require => {
         color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
       }
       return color;
+    }
+
+    // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
+    get thermalContainers() {
+      return [ ...this.blocks.getArray(), ...this.beakers ];
     }
 
     /**
@@ -369,7 +380,7 @@ define( require => {
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beakers.forEach( beaker => {
-        beaker.updateFluidDisplacement( this.blocks.map( block => block.getBounds() ) );
+        beaker.updateFluidDisplacement( this.blocks.getArray().map( block => block.getBounds() ) );
       } );
 
       //=====================================================================
