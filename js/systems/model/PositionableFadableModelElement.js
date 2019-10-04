@@ -27,8 +27,7 @@ define( require => {
 
       // @public {NumberProperty}
       this.opacityProperty = new NumberProperty( initialOpacity, {
-        range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'opacityProperty' )
+        range: new Range( 0, 1 )
       } );
     }
   }
