@@ -20,6 +20,7 @@ define( require => {
   const Emitter = require( 'AXON/Emitter' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergySystemElementCarousel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElementCarousel' );
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
   const Fan = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Fan' );
   const FaucetAndWater = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/FaucetAndWater' );
   const FluorescentBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/FluorescentBulb' );
@@ -99,18 +100,21 @@ define( require => {
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
         [ this.faucet, this.sun, this.teaKettle, this.biker ],
+        new Enumeration( [ 'FAUCET', 'SUN', 'TEA_KETTLE', 'BIKER' ] ),
         ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
         tandem.createTandem( 'energySourcesCarousel' )
       );
       this.energyConvertersCarousel = new EnergySystemElementCarousel(
         [ this.generator, this.solarPanel ],
+        new Enumeration( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
         ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
         tandem.createTandem( 'energyConvertersCarousel' )
       );
       this.energyUsersCarousel = new EnergySystemElementCarousel(
         [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
+        new Enumeration([ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
         new Vector2( 0.09, 0 ),
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
         tandem.createTandem( 'energyUsersCarousel' )
@@ -160,7 +164,7 @@ define( require => {
 
       this.carousels.forEach( carousel => {
         carousel.getSelectedElement().deactivate();
-        carousel.targetIndexProperty.set( 0 );
+        carousel.targetElementNameProperty.reset();
         carousel.getSelectedElement().activate();
       } );
     }

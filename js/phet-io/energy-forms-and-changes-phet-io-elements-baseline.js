@@ -3361,7 +3361,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetIndexProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetElementProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3371,7 +3371,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
+      "phetioTypeName": "PropertyIO<EnumerationIO(GENERATOR|SOLAR_PANEL)>"
     },
     "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.animationInProgressProperty": {
       "phetioDocumentation": "",
@@ -3385,7 +3385,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetIndexProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetElementProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3395,7 +3395,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
+      "phetioTypeName": "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.animationInProgressProperty": {
       "phetioDocumentation": "",
@@ -3409,7 +3409,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetIndexProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetElementProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3419,7 +3419,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
+      "phetioTypeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>"
     },
     "energyFormsAndChanges.systemsScreen.model.fan.activeProperty": {
       "phetioDocumentation": "",

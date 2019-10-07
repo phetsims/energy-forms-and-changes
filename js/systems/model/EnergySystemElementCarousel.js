@@ -20,6 +20,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Easing = require( 'TWIXT/Easing' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -30,12 +31,13 @@ define( require => {
   class EnergySystemElementCarousel {
 
     /**
-     * @param {EnergySystemElement[]} - array of elements to add to this carousel
+     * @param {EnergySystemElement[]} elements - array of elements to add to this carousel
+     * @param {Enumeration} elementNames - the names of the elements being added
      * @param {Vector2} selectedElementPosition - location where the selected model element should be
      * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
      * @param {Tandem} tandem
      */
-    constructor( elements, selectedElementPosition, offsetBetweenElements, tandem ) {
+    constructor( elements, elementNames, selectedElementPosition, offsetBetweenElements, tandem ) {
 
       // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
       this.selectedElementPosition = selectedElementPosition;
@@ -45,6 +47,9 @@ define( require => {
 
       // @public (read-only) {EnergySystemElement[]} - list of the elements whose position is managed by this carousel
       this.managedElements = [];
+
+      // @public (read-only) {Enumeration} - names that correspond to each element
+      this.elementNames = elementNames;
 
       // add each element to the array of managed elements
       elements.forEach( element => this.add( element ) );
@@ -63,10 +68,20 @@ define( require => {
         return validTargetIndices;
       };
 
-      // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected
+      assert && assert( this.managedElements.length === this.elementNames.VALUES.length,
+        'The number of managed elements must equal the number of element name enumeration values' );
+
+      // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected by index.
+      // this index is the ground truth for managing the currently selected element, but is controlled by
+      // targetElementNameProperty below.
       this.targetIndexProperty = new NumberProperty( 0, {
-        validValues: getValidTargetIndices( this.managedElements.length ),
-        tandem: tandem.createTandem( 'targetIndexProperty' )
+        validValues: getValidTargetIndices( this.managedElements.length )
+      } );
+
+      // @public (read-only) {EnumerationProperty} - indicates which element on the carousel is currently selected by
+      // name. this is for phet-io Studio so that Clients can select an element by name instead of index
+      this.targetElementNameProperty = new EnumerationProperty( elementNames, elementNames.VALUES[ 0 ], {
+        tandem: tandem.createTandem( 'targetElementNameProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
@@ -80,8 +95,11 @@ define( require => {
       this.currentCarouselOffset = new Vector2( 0, 0 ); // in meters
       this.initialCarouselOffset = new Vector2( 0, 0 ); // in meters
 
-      // set up the variables needed for animation each time the target changes
-      this.targetIndexProperty.lazyLink( () => {
+      // set the variables needed for animation each time the target changes
+      this.targetElementNameProperty.lazyLink( targetElement => {
+
+        // update the target index
+        this.targetIndexProperty.set( _.findIndex( this.elementNames.VALUES, targetElement ) );
 
         // set vars for the transition
         this.elapsedTransitionTime = 0;

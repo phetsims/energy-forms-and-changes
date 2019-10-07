@@ -47,6 +47,7 @@ define( require => {
 
       for ( let i = 0; i < carousel.managedElements.length; i++ ) {
         const element = carousel.managedElements[ i ];
+        const elementName = carousel.elementNames.VALUES[ i ];
         const iconImage = element.iconImage;
         const width = iconImage.getBounds().getWidth();
         const height = iconImage.getBounds().getHeight();
@@ -56,12 +57,12 @@ define( require => {
 
         iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
         buttonElementList.push( {
-          value: i,
+          value: elementName,
           node: iconImage
         } );
       }
 
-      const buttonGroup = new RadioButtonGroup( carousel.targetIndexProperty, buttonElementList, {
+      const buttonGroup = new RadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
         baseColor: Color.WHITE,
         orientation: 'horizontal',
         spacing: 15,

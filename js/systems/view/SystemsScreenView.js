@@ -88,9 +88,9 @@ define( require => {
       // update the a11y description as the selected element changes
       Property.multilink(
         [
-          model.energySourcesCarousel.targetIndexProperty,
-          model.energyConvertersCarousel.targetIndexProperty,
-          model.energyUsersCarousel.targetIndexProperty
+          model.energySourcesCarousel.targetElementNameProperty,
+          model.energyConvertersCarousel.targetElementNameProperty,
+          model.energyUsersCarousel.targetElementNameProperty
         ],
         () => {
           const energySource = model.energySourcesCarousel.getSelectedElement();
