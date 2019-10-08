@@ -296,13 +296,13 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ActionIO<>",
       "typeName": "EmitterIO<>"
     },
-    "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)": {
-      "documentation": "Possible values: BEAKER_HEATER,INCANDESCENT_BULB,FLOURESCENT_BULB,FAN.",
+    "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)": {
+      "documentation": "Possible values: BEAKER_HEATER,INCANDESCENT_BULB,FLUORESCENT_BULB,FAN.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "supertype": "ObjectIO",
-      "typeName": "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)"
+      "typeName": "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
     },
     "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)": {
       "documentation": "Possible values: FAUCET,SUN,TEA_KETTLE,BIKER.",
@@ -368,18 +368,18 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(BooleanIO,NullableIO<BooleanIO>)=>VoidIO"
     },
-    "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>)=>VoidIO": {
-      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN), NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)><br><strong>Return Type:</strong> VoidIO",
+    "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN), NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)><br><strong>Return Type:</strong> VoidIO",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "parameterTypes": [
-        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)",
-        "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>",
+        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)",
+        "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>",
         "VoidIO"
       ],
       "supertype": "ObjectIO",
-      "typeName": "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>)=>VoidIO"
+      "typeName": "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>)=>VoidIO"
     },
     "FunctionIO(EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER),NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER), NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)><br><strong>Return Type:</strong> VoidIO",
@@ -551,16 +551,16 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "NullableIO<BooleanIO>"
     },
-    "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>": {
+    "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "parameterTypes": [
-        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)"
+        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
       ],
       "supertype": "ObjectIO",
-      "typeName": "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>"
+      "typeName": "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>"
     },
     "NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -1012,7 +1012,7 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<BooleanIO>"
     },
-    "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>": {
+    "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
       "events": [
         "changed"
@@ -1025,19 +1025,19 @@ window.phet.phetio.phetioTypes = assert &&
         "getValue": {
           "documentation": "Gets the current value.",
           "parameterTypes": [],
-          "returnType": "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)"
+          "returnType": "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
         },
         "lazyLink": {
           "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
           "parameterTypes": [
-            "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>)=>VoidIO"
+            "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>)=>VoidIO"
           ],
           "returnType": "VoidIO"
         },
         "link": {
           "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
           "parameterTypes": [
-            "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>)=>VoidIO"
+            "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>)=>VoidIO"
           ],
           "returnType": "VoidIO"
         },
@@ -1045,16 +1045,16 @@ window.phet.phetio.phetioTypes = assert &&
           "documentation": "Sets the value of the Property. If the value differs from the previous value, listeners are notified with the new value.",
           "invocableForReadOnlyElements": false,
           "parameterTypes": [
-            "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)"
+            "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
           ],
           "returnType": "VoidIO"
         }
       },
       "parameterTypes": [
-        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)"
+        "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
       ],
       "supertype": "ObjectIO",
-      "typeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>"
+      "typeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>"
     },
     "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",

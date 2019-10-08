@@ -3361,7 +3361,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetElementProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetElementNameProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3385,7 +3385,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetElementProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetElementNameProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3409,7 +3409,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetElementProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetElementNameProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -3419,7 +3419,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLOURESCENT_BULB|FAN)>"
+      "phetioTypeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>"
     },
     "energyFormsAndChanges.systemsScreen.model.fan.activeProperty": {
       "phetioDocumentation": "",
