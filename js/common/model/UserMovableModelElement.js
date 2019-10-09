@@ -26,7 +26,8 @@ define( require => {
 
       // @public {BooleanProperty}
       this.userControlledProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'userControlledProperty' )
+        tandem: tandem.createTandem( 'userControlledProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
