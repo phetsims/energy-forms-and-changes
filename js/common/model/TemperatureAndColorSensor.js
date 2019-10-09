@@ -11,10 +11,11 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const ColorDef = require( 'SCENERY/util/ColorDef' );
+  const ColorIO = require( 'SCENERY/util/ColorIO' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Property = require( 'AXON/Property' );
+  const PropertyIO = require( 'AXON/PropertyIO' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
@@ -35,12 +36,14 @@ define( require => {
 
       // @public (read-only) {NumberProperty}
       this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
-        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ) // in kelvin, empirically determined max
+        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
+        tandem: tandem.createTandem( 'sensedTemperatureProperty' )
       } );
 
       // @public (read-only) {Property.<Color>}
       this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
-        isValidValue: ColorDef.isColorDef
+        phetioType: PropertyIO( ColorIO ),
+        tandem: tandem.createTandem( 'sensedElementColorProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
