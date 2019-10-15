@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.0.10 Mon Oct 14 2019 13:33:51 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.0.10 Tue Oct 15 2019 13:23:01 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "95d9e04e6cd79c11c797f6b6a8aab369d7adeacc",
+    "sha": "06fffa8bc732a092286109af04a225a32573b0b7",
     "branch": "1.0"
   },
   "joist": {
@@ -33,7 +33,7 @@
     "branch": "HEAD"
   },
   "phet-core": {
-    "sha": "cb3eb4d71ed0a822ecfc1e251e8996bca2e2d7be",
+    "sha": "f16599b941d9fdb11aaee683b1e3d56254fa2e35",
     "branch": "energy-forms-and-changes-1.0"
   },
   "phet-io": {
