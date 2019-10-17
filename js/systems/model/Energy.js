@@ -11,6 +11,7 @@ define( require => {
   'use strict';
 
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
 
   class Energy {
 
@@ -22,7 +23,7 @@ define( require => {
      */
     constructor( type, amount, direction, options ) {
 
-      options = _.extend( {
+      options = merge( {
         creationTime: null
       }, options );
 

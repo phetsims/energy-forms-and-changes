@@ -11,15 +11,16 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -43,7 +44,7 @@ define( require => {
      */
     constructor( modelViewTransform, options ) {
 
-      options = _.extend( {
+      options = merge( {
         fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,

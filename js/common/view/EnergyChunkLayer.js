@@ -16,6 +16,7 @@ define( require => {
   // modules
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
 
   class EnergyChunkLayer extends Node {
@@ -28,7 +29,7 @@ define( require => {
     constructor( energyChunkList, modelViewTransform, options ) {
       super();
 
-      options = _.extend( {
+      options = merge( {
 
         // Property.<Vector2> - a position Property that will be used to compensate the energy chunk layer's position
         // such that it stays in untranslated screen-view coordinates. This is often used for an energy chunk layer that

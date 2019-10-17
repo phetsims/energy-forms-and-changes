@@ -18,6 +18,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Image = require( 'SCENERY/nodes/Image' );
   const LightRays = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/LightRays' );
+  const merge = require( 'PHET_CORE/merge' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -48,7 +49,7 @@ define( require => {
      */
     constructor( lightBulb, energyChunksVisibleProperty, modelViewTransform, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // LightBulbNode options
         bulbType: 'fluorescent',

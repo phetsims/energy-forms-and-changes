@@ -11,6 +11,7 @@ define( require => {
   // modules
   const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Range = require( 'DOT/Range' );
   const TeaKettle = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/TeaKettle' );
   const Util = require( 'DOT/Util' );
@@ -33,7 +34,7 @@ define( require => {
      */
     constructor( steamOrigin, energyOutputProperty, maxEnergyOutput, options ) {
 
-      options = _.extend( {
+      options = merge( {
         steamAngle: TeaKettle.SPOUT_EXIT_ANGLE, // {number}
         steamFill: 'rgb(255,255,255)' // {string} - white
       }, options );

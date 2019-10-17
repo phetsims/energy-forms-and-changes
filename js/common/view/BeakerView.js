@@ -21,6 +21,7 @@ define( require => {
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Matrix3 = require( 'DOT/Matrix3' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NullableIO = require( 'TANDEM/types/NullableIO' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -57,7 +58,7 @@ define( require => {
      */
     constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
 
-      options = _.extend( {
+      options = merge( {
         label: waterString,
 
         // phet-io

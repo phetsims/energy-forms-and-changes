@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Tandem = require( 'TANDEM/Tandem' );
 
@@ -22,7 +23,7 @@ define( require => {
      */
     constructor( belt, modelViewTransform, options ) {
 
-      options = _.extend( {
+      options = merge( {
         stroke: 'black',
         lineWidth: 4,
 

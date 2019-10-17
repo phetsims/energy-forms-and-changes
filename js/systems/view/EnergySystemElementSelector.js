@@ -16,6 +16,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Panel = require( 'SUN/Panel' );
   const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   const Tandem = require( 'TANDEM/Tandem' );
@@ -31,7 +32,7 @@ define( require => {
      */
     constructor( carousel, options ) {
 
-      options = _.extend( {
+      options = merge( {
         fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,

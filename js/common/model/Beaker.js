@@ -23,6 +23,7 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
   const LinearFunction = require( 'DOT/LinearFunction' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
@@ -70,7 +71,7 @@ define( require => {
      */
     constructor( initialPosition, width, height, energyChunksVisibleProperty, options ) {
 
-      options = _.extend( {
+      options = merge( {
         beakerType: BeakerType.WATER,
         majorTickMarkDistance: height * 0.95 / 2, // empirically determined
 

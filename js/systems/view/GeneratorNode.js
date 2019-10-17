@@ -15,6 +15,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Generator = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Generator' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const merge = require( 'PHET_CORE/merge' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -39,7 +40,7 @@ define( require => {
      */
     constructor( generator, modelViewTransform, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // {boolean} - whether the mechanical energy chunk layer is added
         addMechanicalEnergyChunkLayer: true,

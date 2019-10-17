@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Range = require( 'DOT/Range' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -33,7 +34,7 @@ define( require => {
      */
     constructor( energyChunk, destinationProperty, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // {Range|null} - bounding range in the X direction within which the energy chunk's motion should be constrained.
         // Not all energy chunks need this constraint, so null is an acceptable value

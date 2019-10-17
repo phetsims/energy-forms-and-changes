@@ -14,6 +14,7 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -29,7 +30,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( temperatureAndColorSensor, options ) {
-      options = _.extend( {
+      options = merge( {
         modelViewTransform: ModelViewTransform2.createIdentity(),
         draggable: false,
         dragBounds: Bounds2.EVERYTHING,

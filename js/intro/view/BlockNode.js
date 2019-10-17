@@ -20,6 +20,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Matrix3 = require( 'DOT/Matrix3' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -68,7 +69,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( block, modelViewTransform, constrainPosition, simIsPlayingProperty, options ) {
-      options = _.extend( {
+      options = merge( {
 
         // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
         // the energy chunks that are outside the block don't affect the bounds of the block.
