@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Tue Oct 15 2019 13:24:36 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.1.0-rc.2 Fri Oct 18 2019 16:07:40 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "a0f393e28ff98a921ba4709fa39d8e52ab76cb3b",
+    "sha": "43a555b79be6682fa7a5235079917ed0a704a366",
     "branch": "1.1"
   },
   "joist": {
@@ -34,7 +34,7 @@
   },
   "phet-core": {
     "sha": "e5e8f1d462adebcc5f1b4dd6900b6dd09f83e642",
-    "branch": "energy-forms-and-changes-1.1"
+    "branch": "HEAD"
   },
   "phet-io": {
     "sha": "e5c95dd0482a81bc09d35fd4992fca70994ef6e6",
@@ -73,8 +73,8 @@
     "branch": "HEAD"
   },
   "tambo": {
-    "sha": "c6ec85ff3b705d5751a1ee7d1f1aa5da13d945df",
-    "branch": "HEAD"
+    "sha": "c9e9705adc8a3bd36e662d7ab85d4dd8c2a5ebb5",
+    "branch": "energy-forms-and-changes-1.1"
   },
   "tandem": {
     "sha": "807d68f8f36ec9a7349604bfd9af14ed2b8dd288",
