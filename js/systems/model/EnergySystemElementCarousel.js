@@ -118,6 +118,11 @@ define( require => {
           this.getElement( this.targetIndexProperty.value ).activate();
         }
       } );
+
+      // Don't animate the system elements when setting state for better user experience when launching the sim.
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        this.elapsedTransitionTime = 1;
+      } );
     }
 
     /**
