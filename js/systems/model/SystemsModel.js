@@ -152,6 +152,13 @@ define( require => {
           this.preloadEnergyChunks();
         }
       } );
+
+      // Preload energy chunks after state has been set if they're visible and the sim is running
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        if ( this.energyChunksVisibleProperty.value && this.isPlayingProperty.value ) {
+          this.preloadEnergyChunks();
+        }
+      } );
     }
 
     /**
