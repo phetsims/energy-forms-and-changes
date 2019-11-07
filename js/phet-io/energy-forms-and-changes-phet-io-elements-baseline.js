@@ -4018,6 +4018,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
+    "energyFormsAndChanges.systemsScreen.model.biker.crankAngularVelocityProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
     "energyFormsAndChanges.systemsScreen.model.biker.energyChunksRemainingProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,

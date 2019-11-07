@@ -180,7 +180,7 @@ define( require => {
         // biker starts moving. this small change of angle causes the gear to jump a bit when the biker stops, but we can
         // eliminate that jump by checking to see if the biker has any actual velocity, since the angle adjustment only
         // happens when velocity is 0.
-        if ( biker.crankAngularVelocity > 0 ) {
+        if ( biker.crankAngularVelocityProperty.value > 0 ) {
           bicycleGearNode.rotateAround( gearRotationPoint, -delta );
         }
       } );

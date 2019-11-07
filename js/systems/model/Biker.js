@@ -79,16 +79,21 @@ define( require => {
         tandem: tandem.createTandem( 'energyChunksRemainingProperty' )
       } );
 
-      // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians
+      // @public (read-only) {NumberProperty} - target angular velocity of crank, in radians per second
       this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
         range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
         tandem: tandem.createTandem( 'targetCrankAngularVelocityProperty' )
       } );
 
+      // @public (read-only) {NumberProperty} - angular velocity of crank, in radians per second
+      this.crankAngularVelocityProperty = new NumberProperty( 0, {
+        range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
+        tandem: tandem.createTandem( 'crankAngularVelocityProperty' )
+      } );
+
       // @private - internal variables
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
       this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
-      this.crankAngularVelocity = 0; // radians per second
       this.energyChunkMovers = [];
       this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
       this.mechanicalChunksSinceLastThermal = 0;
@@ -160,42 +165,42 @@ define( require => {
       const target = this.bikerHasEnergy() ? this.targetCrankAngularVelocityProperty.value : 0;
 
       // speed up or slow down the angular velocity of the crank
-      const previousAngularVelocity = this.crankAngularVelocity;
+      const previousAngularVelocity = this.crankAngularVelocityProperty.value;
 
-      const dOmega = target - this.crankAngularVelocity;
+      const dOmega = target - this.crankAngularVelocityProperty.value;
 
       if ( dOmega !== 0 ) {
         const change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
 
           // accelerate
-          this.crankAngularVelocity = Math.min(
-            this.crankAngularVelocity + change,
+          this.crankAngularVelocityProperty.value = Math.min(
+            this.crankAngularVelocityProperty.value + change,
             this.targetCrankAngularVelocityProperty.value
           );
         }
         else {
 
           // decelerate
-          this.crankAngularVelocity = Math.max( this.crankAngularVelocity - change, 0 );
+          this.crankAngularVelocityProperty.value = Math.max( this.crankAngularVelocityProperty.value - change, 0 );
         }
       }
 
-      const newAngle = ( this.crankAngleProperty.value + this.crankAngularVelocity * dt ) % ( 2 * Math.PI );
+      const newAngle = ( this.crankAngleProperty.value + this.crankAngularVelocityProperty.value * dt ) % ( 2 * Math.PI );
       this.crankAngleProperty.set( newAngle );
 
       this.rearWheelAngleProperty.set(
         ( this.rearWheelAngleProperty.value +
-          this.crankAngularVelocity * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI )
+          this.crankAngularVelocityProperty.value * dt * CRANK_TO_REAR_WHEEL_RATIO ) % ( 2 * Math.PI )
       );
 
-      if ( this.crankAngularVelocity === 0 && previousAngularVelocity !== 0 ) {
+      if ( this.crankAngularVelocityProperty.value === 0 && previousAngularVelocity !== 0 ) {
 
         // set crank to a good position where animation will start right away when motion is restarted
         this.setCrankToPoisedPosition();
       }
 
-      const fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
+      const fractionalVelocity = this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK;
 
       // determine how much energy is produced in this time step
       if ( this.targetCrankAngularVelocityProperty.value > 0 ) {
@@ -336,7 +341,7 @@ define( require => {
       let preloadComplete = false;
       const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       let energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
-      const fractionalVelocity = this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK;
+      const fractionalVelocity = this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK;
 
       // Simulate energy chunks moving through the system.
       while ( !preloadComplete ) {
@@ -380,7 +385,7 @@ define( require => {
      */
     getEnergyOutputRate() {
       const amount = Math.abs(
-        this.crankAngularVelocity / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
+        this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
       );
       return new Energy( EnergyType.MECHANICAL, amount, -Math.PI / 2 );
     }
@@ -416,7 +421,7 @@ define( require => {
       super.deactivate();
       this.targetCrankAngularVelocityProperty.reset();
       this.rearWheelAngleProperty.reset();
-      this.crankAngularVelocity = this.targetCrankAngularVelocityProperty.value;
+      this.crankAngularVelocityProperty.value = this.targetCrankAngularVelocityProperty.value;
     }
 
     /**
