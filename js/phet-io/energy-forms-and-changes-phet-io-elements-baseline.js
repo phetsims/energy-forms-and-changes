@@ -2362,7 +2362,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2388,7 +2388,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2700,7 +2700,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2726,7 +2726,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -3948,7 +3948,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -3974,7 +3974,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": true,
+      "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
