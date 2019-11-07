@@ -47,7 +47,9 @@ define( require => {
       } );
 
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
-      this.activeProperty = new BooleanProperty( initiallyActive );
+      this.activeProperty = new BooleanProperty( initiallyActive, {
+        tandem: tandem.createTandem( 'activeProperty' )
+      } );
     }
 
     /**

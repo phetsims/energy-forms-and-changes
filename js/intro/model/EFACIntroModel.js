@@ -214,7 +214,7 @@ define( require => {
         // action is to automatically move the thermometer to a location where it continues to sense the beaker
         // temperature. Not needed if zero blocks are in use. This was requested after interviews.
         if ( this.blocks.length ) {
-          thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+            thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
             this.beakers.forEach( beaker => {
               const blockWidthIncludingPerspective = this.blocks[ 0 ].getProjectedShape().bounds.width;

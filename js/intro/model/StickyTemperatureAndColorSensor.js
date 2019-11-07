@@ -28,6 +28,27 @@ define( require => {
       // @private
       this.elementFollower = new ElementFollower( this.positionProperty );
 
+      // if this senor is over a block or beaker, stick to it
+      const followElements = () => {
+        model.blocks.forEach( block => {
+          if ( block.getProjectedShape().containsPoint( this.positionProperty.value ) ) {
+
+            // stick to this block
+            this.elementFollower.startFollowing( block.positionProperty );
+          }
+        } );
+
+        if ( !this.elementFollower.isFollowing() ) {
+          model.beakers.forEach( beaker => {
+            if ( beaker.thermalContactArea.containsPoint( this.positionProperty.value ) ) {
+
+              // stick to this beaker
+              this.elementFollower.startFollowing( beaker.positionProperty );
+            }
+          } );
+        }
+      };
+
       // Monitor the state of the 'userControlled' Property in order to detect when the user drops this thermometer and
       // determine whether or not it was dropped over anything to which it should stick.
       this.userControlledProperty.link( userControlled => {
@@ -39,23 +60,7 @@ define( require => {
 
         // if the thermometer was dropped, see if it was dropped over something that it should follow
         else {
-          model.blocks.forEach( block => {
-            if ( block.getProjectedShape().containsPoint( this.positionProperty.value ) ) {
-
-              // stick to this block
-              this.elementFollower.startFollowing( block.positionProperty );
-            }
-          } );
-
-          if ( !this.elementFollower.isFollowing() ) {
-            model.beakers.forEach( beaker => {
-              if ( beaker.thermalContactArea.containsPoint( this.positionProperty.value ) ) {
-
-                // stick to this beaker
-                this.elementFollower.startFollowing( beaker.positionProperty );
-              }
-            } );
-          }
+          followElements();
         }
       } );
 
@@ -70,6 +75,11 @@ define( require => {
             }
           } );
         }
+      } );
+
+      // Check if any sensors should start following an element after being set by state
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        followElements();
       } );
     }
 
