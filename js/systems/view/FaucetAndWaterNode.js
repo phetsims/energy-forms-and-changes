@@ -58,7 +58,8 @@ define( require => {
 
       // create a mapping between the slider position and the flow proportion that prevents very small values
       this.faucetSettingProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'faucetSettingProperty' )
       } );
       this.faucetSettingProperty.link( setting => {
         const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );

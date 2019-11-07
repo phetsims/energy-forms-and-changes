@@ -47,7 +47,8 @@ define( require => {
 
       // create a mapping between the slider position and the steam proportion, which prevents very small values
       this.heaterSettingProperty = new NumberProperty( 0, {
-        range: new Range( 0, 1 )
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'heaterSettingProperty' )
       } );
       this.heaterSettingProperty.link( setting => {
         const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
