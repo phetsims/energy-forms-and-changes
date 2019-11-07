@@ -116,15 +116,13 @@ define( require => {
       // @public {Property.<number>} - proportion of fluid in the beaker, should only be set in sub-types
       this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_PROPORTION, {
         range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 ),
-        tandem: options.tandem.createTandem( 'fluidProportionProperty' ),
-        phetioReadOnly: true
+        tandem: options.tandem.createTandem( 'fluidProportionProperty' )
       } );
 
       // @public (read-only) {NumberProperty} - temperature of fluid in beaker
       this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),
-        tandem: options.tandem.createTandem( 'temperatureProperty' ),
-        phetioReadOnly: true
+        tandem: options.tandem.createTandem( 'temperatureProperty' )
       } );
 
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
