@@ -59,7 +59,8 @@ define( require => {
         iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
         buttonElementList.push( {
           value: elementName,
-          node: iconImage
+          node: iconImage,
+          tandemName: _.camelCase( elementName.name )
         } );
       }
 
