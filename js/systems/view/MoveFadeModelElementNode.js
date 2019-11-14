@@ -33,12 +33,6 @@ define( require => {
       // update our opacity as the model element fades in and out
       modelElement.opacityProperty.link( opacity => {
         this.setOpacity( opacity );
-        if ( opacity === 0 && this.visible ) {
-          this.visible = false;
-        }
-        else if ( opacity > 0 && !this.visible ) {
-          this.visible = true;
-        }
       } );
     }
   }
