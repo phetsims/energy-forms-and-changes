@@ -638,6 +638,9 @@ define( require => {
         } );
       }
 
+      // use this Tandem for the checkboxes, too, so they appear as a child of the control panel
+      const controlPanelTandem = tandem.createTandem( 'controlPanel' );
+
       // Create the control for showing/hiding energy chunks.  The elements of this control are created separately to
       // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
       // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
@@ -655,7 +658,7 @@ define( require => {
           spacing: 5
         } ),
         model.energyChunksVisibleProperty, {
-          tandem: tandem.createTandem( 'showEnergySymbolsCheckbox' )
+          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' )
         }
       );
       showEnergyCheckbox.touchArea =
@@ -678,7 +681,7 @@ define( require => {
             spacing: 5
           } ),
           model.linkedHeatersProperty, {
-            tandem: tandem.createTandem( 'linkHeatersCheckbox' )
+            tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' )
           }
         );
         linkHeatersCheckbox.touchArea =
@@ -698,7 +701,8 @@ define( require => {
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
         cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
         rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
-        minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
+        minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
+        tandem: controlPanelTandem
       } );
       backLayer.addChild( controlPanel );
 
