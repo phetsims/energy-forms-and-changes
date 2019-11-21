@@ -2666,6 +2666,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
+    "energyFormsAndChanges.introScreen.model.thermometer1.sensedElementNameProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<StringIO>"
+    },
     "energyFormsAndChanges.introScreen.model.thermometer1.sensedTemperatureProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2730,6 +2743,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
+    },
+    "energyFormsAndChanges.introScreen.model.thermometer2.sensedElementNameProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.sensedTemperatureProperty": {
       "phetioDocumentation": "",
@@ -2796,6 +2822,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
+    "energyFormsAndChanges.introScreen.model.thermometer3.sensedElementNameProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<StringIO>"
+    },
     "energyFormsAndChanges.introScreen.model.thermometer3.sensedTemperatureProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2860,6 +2899,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
+    },
+    "energyFormsAndChanges.introScreen.model.thermometer4.sensedElementNameProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.sensedTemperatureProperty": {
       "phetioDocumentation": "",
@@ -4160,6 +4212,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
+    },
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.sensedElementNameProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementPrototype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.sensedTemperatureProperty": {
       "phetioDocumentation": "",

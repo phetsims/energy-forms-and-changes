@@ -70,6 +70,9 @@ define( require => {
       this.a11yName = EFACA11yStrings.beakerOfWater.value;
 
       // @private
+      this.tandemName = tandem.name;
+
+      // @private
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
       // @public (read-only) {NumberProperty}
@@ -220,7 +223,12 @@ define( require => {
      * @param {Property.<Color>} sensedElementColorProperty
      * @public
      */
-    updateTemperatureAndColorAtLocation( position, sensedTemperatureProperty, sensedElementColorProperty ) {
+    updateTemperatureAndColorAndNameAtLocation(
+      position,
+      sensedTemperatureProperty,
+      sensedElementColorProperty,
+      sensedElementNameProperty
+    ) {
 
       // validate that the specified location is inside the beaker, since that's the only supported location
       assert && assert(
@@ -234,6 +242,7 @@ define( require => {
 
       sensedTemperatureProperty.set( this.beaker.getTemperature() );
       sensedElementColorProperty.set( EFACConstants.WATER_COLOR_OPAQUE );
+      sensedElementNameProperty.set( this.tandemName );
     }
 
     /**

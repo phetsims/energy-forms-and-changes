@@ -29,6 +29,9 @@ define( require => {
         tandem: tandem.createTandem( 'positionProperty' )
       } );
 
+      // @public (read-only)
+      this.tandemName = tandem.name;
+
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
       // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.
       this.topSurface = null;
