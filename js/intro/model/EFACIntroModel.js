@@ -200,13 +200,13 @@ define( require => {
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.thermometers = [];
-      let thermometerIndex = 0;
+      let thermometerIndex = NUMBER_OF_THERMOMETERS + 1;
       _.times( NUMBER_OF_THERMOMETERS, () => {
         const thermometer = new StickyTemperatureAndColorSensor(
           this,
           INITIAL_THERMOMETER_LOCATION,
           false,
-          tandem.createTandem( `thermometer${++thermometerIndex}` ) // 1 indexed
+          tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
         );
         this.thermometers.push( thermometer );
 
