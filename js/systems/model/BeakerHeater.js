@@ -101,11 +101,11 @@ define( require => {
       );
 
       // @public {TemperatureAndColorSensor} (read-only)
-      this.temperatureAndColorSensor = new TemperatureAndColorSensor(
+      this.thermometer = new TemperatureAndColorSensor(
         this,
         new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
         true,
-        tandem.createTandem( 'temperatureAndColorSensor' )
+        tandem.createTandem( 'thermometer' )
       );
 
       // @private, for convenience
@@ -212,7 +212,7 @@ define( require => {
       this.moveRadiatedEnergyChunks( dt );
 
       // step sub-elements
-      this.temperatureAndColorSensor.step();
+      this.thermometer.step();
     }
 
     /**

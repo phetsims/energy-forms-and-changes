@@ -4174,7 +4174,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.activeProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.activeProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
@@ -4187,7 +4187,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.positionProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.positionProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
@@ -4200,7 +4200,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.sensedElementColorProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedElementColorProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
@@ -4213,7 +4213,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.sensedElementNameProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedElementNameProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
@@ -4226,7 +4226,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.sensedTemperatureProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedTemperatureProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
@@ -4239,7 +4239,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.model.beakerHeater.temperatureAndColorSensor.userControlledProperty": {
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.userControlledProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementPrototype": false,
