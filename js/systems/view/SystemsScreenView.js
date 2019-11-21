@@ -220,6 +220,9 @@ define( require => {
       this.addChild( bikerNode );
       this.addChild( this.teaKettleNode );
 
+      // use this Tandem for the checkbox, too, so it appears as a child of the panel
+      const controlPanelTandem = tandem.createTandem( 'controlPanel' );
+
       // create the checkbox that controls the visibility of the energy chunks
       // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
       // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
@@ -239,29 +242,30 @@ define( require => {
           spacing: 5
         } ),
         model.energyChunksVisibleProperty, {
-          tandem: tandem.createTandem( 'showEnergySymbolsCheckbox' )
+          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' )
         }
       );
       showEnergyChunksCheckbox.touchArea =
         showEnergyChunksCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
       // add the checkbox that controls the visibility of the energy chunks to a panel
-      const showEnergyChunksPanel = new Panel( showEnergyChunksCheckbox, {
+      const controlPanel = new Panel( showEnergyChunksCheckbox, {
         fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
         lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
         cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
         right: layoutBounds.maxX - EDGE_INSET,
         top: EDGE_INSET,
-        minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH
+        minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
+        tandem: controlPanelTandem
       } );
-      this.addChild( showEnergyChunksPanel );
+      this.addChild( controlPanel );
 
       // add the energy chunk legend
       const energyChunkLegend = new EnergyChunkLegend( modelViewTransform,
         {
           right: layoutBounds.maxX - EDGE_INSET,
-          top: showEnergyChunksPanel.bottom + 10
+          top: controlPanel.bottom + 10
         } );
       this.addChild( energyChunkLegend );
 

@@ -125,7 +125,7 @@ define( require => {
       // Add the thermometer that will indicate the beaker water temperature.  Since the position of the thermometer is
       // relative to the beaker heater, the model view transform must be compensated
       const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode(
-        beakerHeater.temperatureAndColorSensor,
+        beakerHeater.thermometer,
         { modelViewTransform: scaleOnlyMVT }
       );
       this.addChild( temperatureAndColorSensorNode );

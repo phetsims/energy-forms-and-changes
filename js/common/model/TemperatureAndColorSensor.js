@@ -18,6 +18,7 @@ define( require => {
   const PropertyIO = require( 'AXON/PropertyIO' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
+  const StringProperty = require( 'AXON/StringProperty' );
   const UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
 
   class TemperatureAndColorSensor extends UserMovableModelElement {
@@ -46,6 +47,10 @@ define( require => {
         tandem: tandem.createTandem( 'sensedElementColorProperty' )
       } );
 
+      this.sensedElementNameProperty = new StringProperty( '', {
+        tandem: tandem.createTandem( 'sensedElementNameProperty' )
+      } );
+
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
       this.activeProperty = new BooleanProperty( initiallyActive, {
         tandem: tandem.createTandem( 'activeProperty' )
@@ -57,15 +62,17 @@ define( require => {
      */
     step() {
       if ( this.activeProperty.value ) {
-        this.model.updateTemperatureAndColorAtLocation(
+        this.model.updateTemperatureAndColorAndNameAtLocation(
           this.positionProperty.value,
           this.sensedTemperatureProperty,
-          this.sensedElementColorProperty
+          this.sensedElementColorProperty,
+          this.sensedElementNameProperty
         );
       }
       else {
-        this.sensedTemperatureProperty.set( EFACConstants.ROOM_TEMPERATURE );
-        this.sensedElementColorProperty.set( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR );
+        this.sensedTemperatureProperty.reset();
+        this.sensedElementColorProperty.reset();
+        this.sensedElementNameProperty.reset();
       }
     }
 
@@ -75,6 +82,7 @@ define( require => {
     reset() {
       this.sensedTemperatureProperty.reset();
       this.sensedElementColorProperty.reset();
+      this.sensedElementNameProperty.reset();
       this.activeProperty.reset();
     }
   }

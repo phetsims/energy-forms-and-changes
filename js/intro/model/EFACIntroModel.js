@@ -200,13 +200,13 @@ define( require => {
 
       // @public (read-only) {StickyTemperatureAndColorSensor[]}
       this.thermometers = [];
-      let thermometerIndex = 0;
+      let thermometerIndex = NUMBER_OF_THERMOMETERS + 1;
       _.times( NUMBER_OF_THERMOMETERS, () => {
         const thermometer = new StickyTemperatureAndColorSensor(
           this,
           INITIAL_THERMOMETER_LOCATION,
           false,
-          tandem.createTandem( `thermometer${++thermometerIndex}` ) // 1 indexed
+          tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
         );
         this.thermometers.push( thermometer );
 
@@ -782,9 +782,14 @@ define( require => {
      * @param {Property.<Color>} sensedElementColorProperty
      * @public
      */
-    updateTemperatureAndColorAtLocation( position, sensedTemperatureProperty, sensedElementColorProperty ) {
+    updateTemperatureAndColorAndNameAtLocation(
+      position,
+      sensedTemperatureProperty,
+      sensedElementColorProperty,
+      sensedElementNameProperty
+    ) {
 
-      let temperatureAndColorUpdated = false;
+      let temperatureAndColorAndNameUpdated = false;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
       const copyOfBlockList = this.blocks.slice( 0 );
@@ -800,53 +805,58 @@ define( require => {
         return -1;
       } );
 
-      for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColorUpdated; i++ ) {
+      for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColorAndNameUpdated; i++ ) {
         const block = copyOfBlockList[ i ];
         if ( block.getProjectedShape().containsPoint( position ) ) {
           sensedTemperatureProperty.set( block.temperature );
           sensedElementColorProperty.set( block.color );
-          temperatureAndColorUpdated = true;
+          sensedElementNameProperty.set( block.tandemName );
+          temperatureAndColorAndNameUpdated = true;
           break;
         }
       }
 
       // test if this point is in any beaker's fluid
-      for ( let i = 0; i < this.beakers.length && !temperatureAndColorUpdated; i++ ) {
+      for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
         const beaker = this.beakers[ i ];
         if ( beaker.thermalContactArea.containsPoint( position ) ) {
           sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
           sensedElementColorProperty.set( beaker.fluidColor );
-          temperatureAndColorUpdated = true;
+          sensedElementNameProperty.set( beaker.tandemName );
+          temperatureAndColorAndNameUpdated = true;
         }
       }
 
       // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
       // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
       // detect the beaker body first
-      for ( let i = 0; i < this.beakers.length && !temperatureAndColorUpdated; i++ ) {
+      for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
         const beaker = this.beakers[ i ];
         if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
           sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
           sensedElementColorProperty.set( beaker.steamColor );
-          temperatureAndColorUpdated = true;
+          sensedElementNameProperty.set( beaker.tandemName );
+          temperatureAndColorAndNameUpdated = true;
         }
       }
 
       // test if the point is a burner
-      for ( let i = 0; i < this.burners.length && !temperatureAndColorUpdated; i++ ) {
+      for ( let i = 0; i < this.burners.length && !temperatureAndColorAndNameUpdated; i++ ) {
         const burner = this.burners[ i ];
         if ( burner.getFlameIceRect().containsPoint( position ) ) {
           sensedTemperatureProperty.set( burner.getTemperature() );
           sensedElementColorProperty.set( EFACIntroModel.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() ) );
-          temperatureAndColorUpdated = true;
+          sensedElementNameProperty.set( burner.tandemName );
+          temperatureAndColorAndNameUpdated = true;
         }
       }
 
-      if ( !temperatureAndColorUpdated ) {
+      if ( !temperatureAndColorAndNameUpdated ) {
 
         // the position is in nothing else, so set the air temperature and color
         sensedTemperatureProperty.set( this.air.getTemperature() );
         sensedElementColorProperty.set( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR );
+        sensedElementNameProperty.reset();
       }
     }
 
