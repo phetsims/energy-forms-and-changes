@@ -34,6 +34,8 @@ define( require => {
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  const PhetioGroup = require( 'TANDEM/PhetioGroup' );
+  const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
@@ -44,6 +46,7 @@ define( require => {
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
@@ -366,23 +369,40 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      const blockNodes = [];
-      const nodeString = 'Node';
+      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, prototypeName, block ) => {
+          const blockNode = new BlockNode(
+            block,
+            modelViewTransform,
+            constrainMovableElementMotion,
+            model.isPlayingProperty, {
+              setApproachingEnergyChunkParentNode: airLayer,
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+          return blockNode;
+        },
+        [ model.blocks.prototypes.prototype ], {
+          tandem: tandem.createTandem( 'blockNodes' ),
+          phetioType: PhetioGroupIO( ReferenceIO )
+        } );
 
-      // add the blocks
-      model.blocks.forEach( block => {
-        const blockNode = new BlockNode(
-          block,
-          modelViewTransform,
-          constrainMovableElementMotion,
-          model.isPlayingProperty, {
-            setApproachingEnergyChunkParentNode: airLayer,
-            tandem: tandem.createTandem( block.tandem.name + nodeString )
-          }
-        );
+      const blockListener = addedBlock => {
+        const blockNode = blockNodes.createCorrespondingGroupMember( addedBlock, addedBlock );
+
         blockLayer.addChild( blockNode );
-        blockNodes.push( blockNode );
-      } );
+
+        // Add the removal listener for if and when this electric field sensor is removed from the model.
+        model.blocks.addItemRemovedListener( function removalListener( removedBlock ) {
+          if ( removedBlock === addedBlock ) {
+            blockNode.dispose();
+            model.blocks.removeItemRemovedListener( removalListener );
+          }
+        } );
+      };
+
+      model.blocks.forEach( blockListener );
+      model.blocks.addItemAddedListener( blockListener );
 
       this.beakerViews = [];
       const viewString = 'View';
@@ -419,6 +439,7 @@ define( require => {
 
       // create and add the temperature and color thermometer nodes, which look like a thermometer with a triangle on the side
       const thermometerNodes = [];
+      const nodeString = 'Node';
       let thermometerNodeWidth = 0;
       let thermometerNodeHeight = 0;
       model.thermometers.forEach( thermometer => {

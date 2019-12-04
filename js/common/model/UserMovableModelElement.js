@@ -11,22 +11,29 @@ define( require => {
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   class UserMovableModelElement extends ModelElement {
 
     /**
      * @param {Vector2} initialPosition
-     * @param {Tandem} tandem
+     * @param {Object} [options]
      */
-    constructor( initialPosition, tandem ) {
-      super( initialPosition, tandem );
+    constructor( initialPosition, options ) {
+
+      options = merge( {
+        tandem: Tandem.required
+      }, options );
+
+      super( initialPosition, options );
 
       // @public {BooleanProperty}
       this.userControlledProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'userControlledProperty' ),
+        tandem: options.tandem.createTandem( 'userControlledProperty' ),
         phetioReadyOnly: true
       } );
 
@@ -41,7 +48,7 @@ define( require => {
 
       // @public (read-only) - for phet-io: assign tandem in the model so the corresponding names can be leveraged in
       // the view
-      this.tandem = tandem;
+      this.tandem = options.tandem;
 
       // update internal state when the user picks up this model element
       this.userControlledProperty.link( userControlled => {
