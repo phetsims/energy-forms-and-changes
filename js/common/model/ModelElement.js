@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const PhetioObject = require( 'TANDEM/PhetioObject' );
   const Tandem = require( 'TANDEM/Tandem' );
@@ -26,7 +27,7 @@ define( require => {
      */
     constructor( initialPosition, options ) {
 
-      options = _.extend( {
+      options = merge( {
         tandem: Tandem.required
       }, options );
 
@@ -38,7 +39,7 @@ define( require => {
       } );
 
       // @public (read-only)
-      this.tandemName = tandem.name;
+      this.tandemName = options.tandem.name;
 
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
       // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.

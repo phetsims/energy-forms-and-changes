@@ -19,6 +19,7 @@ define( require => {
   const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
+  const merge = require( 'PHET_CORE/merge' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -58,7 +59,7 @@ define( require => {
      */
     constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
 
-      options = _.extend( {
+      options = merge( {
         tandem: Tandem.required
       }, options );
 

@@ -121,8 +121,9 @@ define( require => {
       // @public (read-only) {Burner} - right and left burners
       this.leftBurner = new Burner(
         new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
-        this.energyChunksVisibleProperty,
-        tandem.createTandem( 'leftBurner' )
+        this.energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'leftBurner' )
+        }
       );
 
       // @private {Burner[]} - put burners into a list for easy iteration
@@ -130,8 +131,9 @@ define( require => {
       if ( numberOfBurners > 1 ) {
         this.rightBurner = new Burner(
           new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
-          this.energyChunksVisibleProperty,
-          tandem.createTandem( 'rightBurner' )
+          this.energyChunksVisibleProperty, {
+            tandem: tandem.createTandem( 'rightBurner' )
+          }
         );
         this.burners.push( this.rightBurner );
       }
@@ -216,7 +218,7 @@ define( require => {
         // action is to automatically move the thermometer to a location where it continues to sense the beaker
         // temperature. Not needed if zero blocks are in use. This was requested after interviews.
         if ( this.blocks.length ) {
-            thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+          thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
             this.beakers.forEach( beaker => {
               const blockWidthIncludingPerspective = this.blocks.get( 0 ).getProjectedShape().bounds.width;
