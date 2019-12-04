@@ -34,8 +34,8 @@ define( require => {
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
-  const Group = require( 'TANDEM/Group' );
-  const GroupIO = require( 'TANDEM/GroupIO' );
+  const PhetioGroup = require( 'TANDEM/PhetioGroup' );
+  const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
@@ -369,27 +369,23 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      const blockNodes = new Group( 'blockNode', {
-        prototype: {
-          create: ( tandem, prototypeName, block ) => {
-            const blockNode = new BlockNode(
-              block,
-              modelViewTransform,
-              constrainMovableElementMotion,
-              model.isPlayingProperty, {
-                setApproachingEnergyChunkParentNode: airLayer,
-                tandem: tandem,
-                phetioDynamicElement: true
-              }
-            );
-            return blockNode;
-          },
-          defaultArguments: [ model.blocks.prototypes.prototype ]
-        }
-      }, {
-        tandem: tandem.createTandem( 'blockNodes' ),
-        phetioType: GroupIO( ReferenceIO )
-      } );
+      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, prototypeName, block ) => {
+          const blockNode = new BlockNode(
+            block,
+            modelViewTransform,
+            constrainMovableElementMotion,
+            model.isPlayingProperty, {
+              setApproachingEnergyChunkParentNode: airLayer,
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+          return blockNode;
+        },
+        [ model.blocks.prototypes.prototype ], {
+          tandem: tandem.createTandem( 'blockNodes' ),
+          phetioType: PhetioGroupIO( ReferenceIO )
+        } );
 
       const blockListener = addedBlock => {
         const blockNode = blockNodes.createCorrespondingGroupMember( addedBlock, addedBlock );

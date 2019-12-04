@@ -24,8 +24,8 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
-  const Group = require( 'TANDEM/Group' );
-  const GroupIO = require( 'TANDEM/GroupIO' );
+  const PhetioGroup = require( 'TANDEM/PhetioGroup' );
+  const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const Range = require( 'DOT/Range' );
   const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
@@ -136,27 +136,23 @@ define( require => {
         this.burners.push( this.rightBurner );
       }
 
-      // @public {Group.<Block>}
-      this.blocks = new Group( 'block', {
-        prototype: {
-          create: ( tandem, prototypeName, blockType, isPrototype = false ) => {
-            const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
-            const block = new Block(
-              new Vector2( xPosition, 0 ),
-              this.energyChunksVisibleProperty,
-              blockType, {
-                tandem: tandem,
-                phetioDynamicElement: true
-              }
-            );
-            return block;
-          },
-          defaultArguments: [ BlockType.IRON, true ]
-        }
-      }, {
-        tandem: tandem.createTandem( 'blocks' ),
-        phetioType: GroupIO( ReferenceIO )
-      } );
+      // @public {PhetioGroup.<Block>}
+      this.blocks = new PhetioGroup( 'block', ( tandem, prototypeName, blockType, isPrototype = false ) => {
+          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+          const block = new Block(
+            new Vector2( xPosition, 0 ),
+            this.energyChunksVisibleProperty,
+            blockType, {
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+          return block;
+        },
+        [ BlockType.IRON, true ], {
+          tandem: tandem.createTandem( 'blocks' ),
+          phetioType: PhetioGroupIO( ReferenceIO )
+        } );
 
       blocksToCreate.forEach( blockType => {
         this.blocks.createNextGroupMember( blockType );
