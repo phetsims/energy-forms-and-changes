@@ -195,7 +195,7 @@ define( require => {
         leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
         minWidth: leftBurnerStand.width / 1.5,
         maxWidth: leftBurnerStand.width / 1.5,
-        thumbSize: new Dimension2( 18, 36 ),
+        thumbSize: new Dimension2( 36, 18 ),
         snapToZero: snapToZero
       } );
       heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
@@ -224,7 +224,7 @@ define( require => {
           leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
           minWidth: rightBurnerStand.width / 1.5,
           maxWidth: rightBurnerStand.width / 1.5,
-          thumbSize: new Dimension2( 18, 36 ),
+          thumbSize: new Dimension2( 36, 18 ),
           snapToZero: snapToZero
         } );
         heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
