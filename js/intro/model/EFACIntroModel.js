@@ -151,7 +151,7 @@ define( require => {
         },
         [ BlockType.IRON, true ], {
           tandem: tandem.createTandem( 'blockGroup' ),
-          phetioType: PhetioGroupIO( BlockIO ),
+          phetioType: PhetioGroupIO( BlockIO )
 
           // TODO: see if this applies to group members
           // phetioState: false
