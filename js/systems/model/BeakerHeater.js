@@ -104,8 +104,9 @@ define( require => {
       this.thermometer = new TemperatureAndColorSensor(
         this,
         new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
-        true,
-        tandem.createTandem( 'thermometer' )
+        true, {
+          tandem: tandem.createTandem( 'thermometer' )
+        }
       );
 
       // @private, for convenience

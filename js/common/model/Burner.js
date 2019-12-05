@@ -57,7 +57,7 @@ define( require => {
         tandem: Tandem.required
       }, options );
 
-      super( position, options );
+      super( position );
 
       // @public (read-only) {string} - unique ID, used for debug
       this.id = `burner-${idCounter++}`;

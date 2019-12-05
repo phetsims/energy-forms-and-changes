@@ -369,7 +369,7 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, prototypeName, block ) => {
+      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, block ) => {
           const blockNode = new BlockNode(
             block,
             modelViewTransform,
@@ -382,9 +382,12 @@ define( require => {
           );
           return blockNode;
         },
-        [ model.blocks.prototypes.prototype ], {
-          tandem: tandem.createTandem( 'blockNodes' ),
-          phetioType: PhetioGroupIO( ReferenceIO )
+        [ model.blocks.archetype ], {
+          tandem: tandem.createTandem( 'blockNodesGroup' ),
+          phetioType: PhetioGroupIO( ReferenceIO ),
+
+          // TODO: see if this applies to group members
+          phetioState: false
         } );
 
       const blockListener = addedBlock => {
@@ -393,16 +396,16 @@ define( require => {
         blockLayer.addChild( blockNode );
 
         // Add the removal listener for if and when this electric field sensor is removed from the model.
-        model.blocks.addItemRemovedListener( function removalListener( removedBlock ) {
+        model.blocks.addMemberDisposedListener( function removalListener( removedBlock ) {
           if ( removedBlock === addedBlock ) {
-            blockNode.dispose();
-            model.blocks.removeItemRemovedListener( removalListener );
+            // blockNode.dispose();
+            model.blocks.removeMemberDisposedListener( removalListener );
           }
         } );
       };
 
       model.blocks.forEach( blockListener );
-      model.blocks.addItemAddedListener( blockListener );
+      model.blocks.addMemberCreatedListener( blockListener );
 
       this.beakerViews = [];
       const viewString = 'View';

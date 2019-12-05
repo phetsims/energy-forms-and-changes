@@ -15,6 +15,7 @@ define( require => {
   const merge = require( 'PHET_CORE/merge' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const PhetioObject = require( 'TANDEM/PhetioObject' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
@@ -28,7 +29,8 @@ define( require => {
     constructor( initialPosition, options ) {
 
       options = merge( {
-        tandem: Tandem.required
+        tandem: Tandem.required,
+        phetioType: ReferenceIO
       }, options );
 
       super( options );

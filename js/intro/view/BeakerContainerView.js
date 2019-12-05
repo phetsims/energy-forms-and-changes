@@ -158,7 +158,7 @@ define( require => {
       // if neither of the blocks is in the beaker then there are no "holes" to add, use C-style loop for performance
       let blocksInBeaker = [];
       for ( let i = 0; i < blocks.length; i++ ) {
-        block = blocks[ i ];
+        block = blocks.get( i );
         if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
              this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
           blocksInBeaker.push( block );

@@ -16,6 +16,7 @@ define( require => {
   const BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  const BlockIO = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockIO' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
@@ -27,7 +28,6 @@ define( require => {
   const PhetioGroup = require( 'TANDEM/PhetioGroup' );
   const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const Range = require( 'DOT/Range' );
-  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -139,25 +139,26 @@ define( require => {
       }
 
       // @public {PhetioGroup.<Block>}
-      this.blocks = new PhetioGroup( 'block', ( tandem, prototypeName, blockType, isPrototype = false ) => {
+      this.blocks = new PhetioGroup( 'block', ( tandem, blockType, isPrototype ) => {
           const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
           const block = new Block(
             new Vector2( xPosition, 0 ),
             this.energyChunksVisibleProperty,
             blockType, {
-              tandem: tandem,
-              phetioDynamicElement: true
-            }
-          );
+              tandem: tandem
+            } );
           return block;
         },
         [ BlockType.IRON, true ], {
-          tandem: tandem.createTandem( 'blocks' ),
-          phetioType: PhetioGroupIO( ReferenceIO )
+          tandem: tandem.createTandem( 'blockGroup' ),
+          phetioType: PhetioGroupIO( BlockIO ),
+
+          // TODO: see if this applies to group members
+          // phetioState: false
         } );
 
       blocksToCreate.forEach( blockType => {
-        this.blocks.createNextGroupMember( blockType );
+        this.blocks.createNextMember( blockType, false );
       } );
 
       // @public (read-only) {BeakerContainer[]}
@@ -209,8 +210,9 @@ define( require => {
         const thermometer = new StickyTemperatureAndColorSensor(
           this,
           INITIAL_THERMOMETER_LOCATION,
-          false,
-          tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
+          false, {
+            tandem: tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
+          }
         );
         this.thermometers.push( thermometer );
 
@@ -236,7 +238,7 @@ define( require => {
 
               // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
               // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-              if ( _.some( this.blocks.getArray(), checkBlocks ) &&
+              if ( _.some( this.blocks.array, checkBlocks ) &&
                    oldColor === beaker.fluidColor &&
                    !thermometer.userControlledProperty.get() &&
                    !beaker.userControlledProperty.get() &&
@@ -288,7 +290,7 @@ define( require => {
 
     // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
     get thermalContainers() {
-      return [ ...this.blocks.getArray(), ...this.beakers ];
+      return [ ...this.blocks.array, ...this.beakers ];
     }
 
     /**
@@ -378,7 +380,7 @@ define( require => {
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beakers.forEach( beaker => {
-        beaker.updateFluidDisplacement( this.blocks.getArray().map( block => block.getBounds() ) );
+        beaker.updateFluidDisplacement( this.blocks.array.map( block => block.getBounds() ) );
       } );
 
       //=====================================================================
@@ -801,7 +803,7 @@ define( require => {
       let temperatureAndColorAndNameUpdated = false;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-      const copyOfBlockList = this.blocks.slice( 0 );
+      const copyOfBlockList = this.blocks.array.slice( 0 );
 
       copyOfBlockList.sort( ( block1, block2 ) => {
         if ( block1.positionProperty.value === block2.positionProperty.value ) {
@@ -819,7 +821,7 @@ define( require => {
         if ( block.getProjectedShape().containsPoint( position ) ) {
           sensedTemperatureProperty.set( block.temperature );
           sensedElementColorProperty.set( block.color );
-          sensedElementNameProperty.set( block.tandemName );
+          sensedElementNameProperty.set( block.tandemName + ':' + block.blockType );
           temperatureAndColorAndNameUpdated = true;
           break;
         }

@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
+  const BlockIO = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockIO' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const Color = require( 'SCENERY/util/Color' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -60,7 +61,9 @@ define( require => {
     constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
 
       options = merge( {
-        tandem: Tandem.required
+        tandem: Tandem.required,
+        phetioDynamicElement: true,
+        phetioType: BlockIO
       }, options );
 
       super(

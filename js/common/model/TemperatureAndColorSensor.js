@@ -14,12 +14,14 @@ define( require => {
   const ColorIO = require( 'SCENERY/util/ColorIO' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const PropertyIO = require( 'AXON/PropertyIO' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const StringProperty = require( 'AXON/StringProperty' );
   const UserMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/UserMovableModelElement' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   class TemperatureAndColorSensor extends UserMovableModelElement {
 
@@ -27,10 +29,15 @@ define( require => {
      * @param {EFACIntroModel} model
      * @param {Vector2} initialPosition
      * @param {boolean} initiallyActive
-     * @param {Tandem} tandem
+     * @param {Object} [options]
      */
-    constructor( model, initialPosition, initiallyActive, tandem ) {
-      super( initialPosition, tandem );
+    constructor( model, initialPosition, initiallyActive, options ) {
+
+      options = merge( {
+        tandem: Tandem.required
+      }, options );
+
+      super( initialPosition, options );
 
       // @private
       this.model = model;
@@ -38,22 +45,22 @@ define( require => {
       // @public (read-only) {NumberProperty}
       this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
-        tandem: tandem.createTandem( 'sensedTemperatureProperty' )
+        tandem: options.tandem.createTandem( 'sensedTemperatureProperty' )
       } );
 
       // @public (read-only) {Property.<Color>}
       this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
         phetioType: PropertyIO( ColorIO ),
-        tandem: tandem.createTandem( 'sensedElementColorProperty' )
+        tandem: options.tandem.createTandem( 'sensedElementColorProperty' )
       } );
 
       this.sensedElementNameProperty = new StringProperty( '', {
-        tandem: tandem.createTandem( 'sensedElementNameProperty' )
+        tandem: options.tandem.createTandem( 'sensedElementNameProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
       this.activeProperty = new BooleanProperty( initiallyActive, {
-        tandem: tandem.createTandem( 'activeProperty' )
+        tandem: options.tandem.createTandem( 'activeProperty' )
       } );
     }
 

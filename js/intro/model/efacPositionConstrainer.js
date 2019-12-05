@@ -209,9 +209,9 @@ define( require => {
             // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
             // handling.
             const perspectiveBlockBounds = Bounds2.createFromPool(
-              blockBounds.minX - blocks[ 0 ].perspectiveCompensation.x,
+              blockBounds.minX - blocks.get( 0 ).perspectiveCompensation.x,
               blockBounds.minY,
-              blockBounds.maxX + blocks[ 0 ].perspectiveCompensation.x,
+              blockBounds.maxX + blocks.get( 0 ).perspectiveCompensation.x,
               blockBounds.maxY
             );
 

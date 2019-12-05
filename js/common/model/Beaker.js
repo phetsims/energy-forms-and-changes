@@ -90,7 +90,7 @@ define( require => {
         mass,
         BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
         energyChunksVisibleProperty,
-        options.tandem
+        options
       );
 
       // @private

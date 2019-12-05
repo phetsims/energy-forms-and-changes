@@ -2432,10 +2432,36 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.model.brickBlock1.positionProperty": {
+    "energyFormsAndChanges.introScreen.model.blockGroup": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PhetioGroupIO<BlockIO>"
+    },
+    "energyFormsAndChanges.introScreen.model.blockGroup.archetype": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": true,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "BlockIO"
+    },
+    "energyFormsAndChanges.introScreen.model.blockGroup.archetype.positionProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -2445,10 +2471,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
-    "energyFormsAndChanges.introScreen.model.brickBlock1.userControlledProperty": {
+    "energyFormsAndChanges.introScreen.model.blockGroup.archetype.userControlledProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
+      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -2459,32 +2485,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.energyChunksVisibleProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
-    "energyFormsAndChanges.introScreen.model.ironBlock1.positionProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<Vector2IO>"
-    },
-    "energyFormsAndChanges.introScreen.model.ironBlock1.userControlledProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
@@ -2523,19 +2523,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.model.leftBurner.positionProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<Vector2IO>"
-    },
     "energyFormsAndChanges.introScreen.model.linkedHeatersProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2548,6 +2535,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "energyFormsAndChanges.introScreen.model.oliveOilBeaker1": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.oliveOilBeaker1.fluidProportionProperty": {
       "phetioDocumentation": "",
@@ -2614,7 +2614,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.model.rightBurner.positionProperty": {
+    "energyFormsAndChanges.introScreen.model.thermometer1": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
@@ -2625,7 +2625,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<Vector2IO>"
+      "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.activeProperty": {
       "phetioDocumentation": "",
@@ -2705,6 +2705,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
+    "energyFormsAndChanges.introScreen.model.thermometer2": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
+    },
     "energyFormsAndChanges.introScreen.model.thermometer2.activeProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2782,6 +2795,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "energyFormsAndChanges.introScreen.model.thermometer3": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.activeProperty": {
       "phetioDocumentation": "",
@@ -2861,6 +2887,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
+    "energyFormsAndChanges.introScreen.model.thermometer4": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
+    },
     "energyFormsAndChanges.introScreen.model.thermometer4.activeProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2939,6 +2978,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
+    "energyFormsAndChanges.introScreen.model.waterBeaker1": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
+    },
     "energyFormsAndChanges.introScreen.model.waterBeaker1.fluidProportionProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -2991,7 +3043,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.view.brickBlock1Node": {
+    "energyFormsAndChanges.introScreen.view.blockNodesGroup": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
@@ -3002,12 +3054,25 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
+      "phetioTypeName": "PhetioGroupIO<ReferenceIO>"
+    },
+    "energyFormsAndChanges.introScreen.view.blockNodesGroup.archetype": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": true,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "energyFormsAndChanges.introScreen.view.brickBlock1Node.opacityProperty": {
+    "energyFormsAndChanges.introScreen.view.blockNodesGroup.archetype.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
+      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -3017,10 +3082,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.view.brickBlock1Node.pickableProperty": {
+    "energyFormsAndChanges.introScreen.view.blockNodesGroup.archetype.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
+      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -3030,10 +3095,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.introScreen.view.brickBlock1Node.visibleProperty": {
+    "energyFormsAndChanges.introScreen.view.blockNodesGroup.archetype.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
+      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -3265,58 +3330,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
-      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
-    "energyFormsAndChanges.introScreen.view.ironBlock1Node": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": false,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NodeIO"
-    },
-    "energyFormsAndChanges.introScreen.view.ironBlock1Node.opacityProperty": {
-      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
-    },
-    "energyFormsAndChanges.introScreen.view.ironBlock1Node.pickableProperty": {
-      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
-    },
-    "energyFormsAndChanges.introScreen.view.ironBlock1Node.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
@@ -4174,6 +4187,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
+    },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.activeProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -4251,6 +4277,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioDynamicElementArchetype": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.fluidProportionProperty": {
       "phetioDocumentation": "",
