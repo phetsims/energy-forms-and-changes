@@ -60,7 +60,8 @@ define( require => {
       // @public (read-only) {NumberProperty}
       this.litProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'litProportionProperty' )
+        tandem: tandem.createTandem( 'litProportionProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @private

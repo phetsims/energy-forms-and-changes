@@ -68,7 +68,8 @@ define( require => {
       // @public {NumberProperty}
       this.flowProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'flowProportionProperty' )
+        tandem: tandem.createTandem( 'flowProportionProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public {read-only) {WaterDrop[]} - water drops that comprise the stream of water

@@ -78,7 +78,8 @@ define( require => {
       // @public (read-only) {NumberProperty}
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'heatProportionProperty' )
+        tandem: tandem.createTandem( 'heatProportionProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
