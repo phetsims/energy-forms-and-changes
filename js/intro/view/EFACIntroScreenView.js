@@ -45,6 +45,8 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
+  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -696,26 +698,33 @@ define( require => {
       showEnergyCheckbox.touchArea =
         showEnergyCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
+      // variables needed if the right burner exists
       let controlPanelCheckboxes = null;
-
-      // Create the control for linking/un-linking the heaters, if two burners exist
-      if ( model.rightBurner ) {
-        const flameNode = new Image( flameImage, {
-          maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
-          maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
-        } );
-        const linkHeatersText = new Text( linkHeatersString, {
-          font: new PhetFont( 20 ),
-          maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
-        } );
-        const linkHeatersCheckbox = new Checkbox( new HBox( {
+      const flameNode = new Image( flameImage, {
+        maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
+        maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
+      } );
+      const linkHeatersText = new Text( linkHeatersString, {
+        font: new PhetFont( 20 ),
+        maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
+      } );
+      const linkHeatersCheckboxCapsule = new PhetioCapsule( tandem => {
+        return new Checkbox( new HBox( {
             children: [ linkHeatersText, flameNode ],
             spacing: 5
           } ),
           model.linkedHeatersProperty, {
-            tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' )
-          }
-        );
+            tandem: tandem,
+            phetioDynamicElement: true
+          } );
+      }, [], {
+        tandem: controlPanelTandem.createTandem( 'linkHeatersCheckboxCapsule' ),
+        phetioType: PhetioCapsuleIO( ReferenceIO )
+      } );
+
+      // Create the control for linking/un-linking the heaters, if two burners exist
+      if ( model.rightBurner ) {
+        const linkHeatersCheckbox = linkHeatersCheckboxCapsule.getInstance();
         linkHeatersCheckbox.touchArea =
           linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 

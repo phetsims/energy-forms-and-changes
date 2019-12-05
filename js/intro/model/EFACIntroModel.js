@@ -26,9 +26,12 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
+  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
+  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
   const PhetioGroup = require( 'TANDEM/PhetioGroup' );
   const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const Range = require( 'DOT/Range' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -119,7 +122,7 @@ define( require => {
         ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
       ];
 
-      // @public (read-only) {Burner} - right and left burners
+      // @public (read-only) {Burner} - left burner
       this.leftBurner = new Burner(
         new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
         this.energyChunksVisibleProperty, {
@@ -127,15 +130,27 @@ define( require => {
         }
       );
 
+      // @public (read-only) {null|Burner} - assigned a burner if one is created
+      this.rightBurner = null;
+
+      // @private
+      this.rightBurnerCapsule = new PhetioCapsule( ( tandem, isArchetype ) => {
+        const xPosition = isArchetype ? 0 : burnerGroundSpotXPositions[ 1 ];
+        return new Burner(
+          new Vector2( xPosition, 0 ),
+          this.energyChunksVisibleProperty, {
+            tandem: tandem,
+            phetioDynamicElement: true
+          } );
+      }, [ true ], {
+        tandem: tandem.createTandem( 'rightBurnerCapsule' ),
+        phetioType: PhetioCapsuleIO( ReferenceIO )
+      } );
+
       // @private {Burner[]} - put burners into a list for easy iteration
       this.burners = [ this.leftBurner ];
       if ( numberOfBurners > 1 ) {
-        this.rightBurner = new Burner(
-          new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
-          this.energyChunksVisibleProperty, {
-            tandem: tandem.createTandem( 'rightBurner' )
-          }
-        );
+        this.rightBurner = this.rightBurnerCapsule.getInstance( false );
         this.burners.push( this.rightBurner );
       }
 
