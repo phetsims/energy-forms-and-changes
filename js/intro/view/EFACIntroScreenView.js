@@ -370,7 +370,7 @@ define( require => {
       };
 
       const blockNodes = new PhetioGroup( 'blockNode', ( tandem, block ) => {
-          const blockNode = new BlockNode(
+          return new BlockNode(
             block,
             modelViewTransform,
             constrainMovableElementMotion,
@@ -380,7 +380,6 @@ define( require => {
               phetioDynamicElement: true
             }
           );
-          return blockNode;
         },
         [ model.blocks.archetype ], {
           tandem: tandem.createTandem( 'blockNodesGroup' ),
@@ -407,34 +406,43 @@ define( require => {
       model.blocks.forEach( blockListener );
       model.blocks.addMemberCreatedListener( blockListener );
 
-      this.beakerViews = [];
-      const viewString = 'View';
+      // @private {PhetioGroup.<BeakerContainerView>}
+      this.beakerViews = new PhetioGroup( 'beakerView', ( tandem, beaker ) => {
+          const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+          return new BeakerContainerView(
+            beaker,
+            model,
+            modelViewTransform,
+            constrainMovableElementMotion, {
+              label: label,
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+        },
+        [ model.beakers.archetype ], {
+          tandem: tandem.createTandem( 'beakerViewsGroup' ),
+          phetioType: PhetioGroupIO( ReferenceIO )
+        } );
 
-      // add the beakers
-      model.beakers.forEach( beaker => {
-        const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
-        const beakerView = new BeakerContainerView(
-          beaker,
-          model,
-          modelViewTransform,
-          constrainMovableElementMotion, {
-            label: label,
-            tandem: tandem.createTandem( beaker.tandem.name + viewString )
-          }
-        );
-        this.beakerViews.push( beakerView );
-      } );
+      const beakerListener = addedBeaker => {
+        const beakerView = this.beakerViews.createCorrespondingGroupMember( addedBeaker, addedBeaker );
 
-      // add the beakers, which are composed of several pieces
-      this.beakerViews.forEach( beakerView => {
         beakerFrontLayer.addChild( beakerView.frontNode );
-      } );
-      this.beakerViews.forEach( beakerView => {
         beakerBackLayer.addChild( beakerView.backNode );
-      } );
-      this.beakerViews.forEach( beakerView => {
         beakerGrabLayer.addChild( beakerView.grabNode );
-      } );
+
+        // Add the removal listener for if and when this electric field sensor is removed from the model.
+        model.beakers.addMemberDisposedListener( function removalListener( removedBeaker ) {
+          if ( removedBeaker === addedBeaker ) {
+            // beakerNode.dispose();
+            model.beakers.removeMemberDisposedListener( removalListener );
+          }
+        } );
+      };
+
+      model.beakers.forEach( beakerListener );
+      model.beakers.addMemberCreatedListener( beakerListener );
 
       // the thermometer layer needs to be above the movable objects
       const thermometerLayer = new Node();
@@ -637,15 +645,15 @@ define( require => {
 
       // updates the Z-order of the beakers whenever their position changes
       const beakerChangeListener = () => {
-        if ( model.beakers[ 0 ].getBounds().minY >= model.beakers[ 1 ].getBounds().maxY ) {
-          this.beakerViews[ 0 ].frontNode.moveToFront();
-          this.beakerViews[ 0 ].backNode.moveToFront();
-          this.beakerViews[ 0 ].grabNode.moveToFront();
+        if ( model.beakers.get( 0 ).getBounds().minY >= model.beakers.get( 1 ).getBounds().maxY ) {
+          this.beakerViews.get( 0 ).frontNode.moveToFront();
+          this.beakerViews.get( 0 ).backNode.moveToFront();
+          this.beakerViews.get( 0 ).grabNode.moveToFront();
         }
-        else if ( model.beakers[ 1 ].getBounds().minY >= model.beakers[ 0 ].getBounds().maxY ) {
-          this.beakerViews[ 1 ].frontNode.moveToFront();
-          this.beakerViews[ 1 ].backNode.moveToFront();
-          this.beakerViews[ 1 ].grabNode.moveToFront();
+        else if ( model.beakers.get( 1 ).getBounds().minY >= model.beakers.get( 0 ).getBounds().maxY ) {
+          this.beakerViews.get( 1 ).frontNode.moveToFront();
+          this.beakerViews.get( 1 ).backNode.moveToFront();
+          this.beakerViews.get( 1 ).grabNode.moveToFront();
         }
       };
 

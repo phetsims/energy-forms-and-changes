@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BeakerIO = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerIO' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -76,7 +77,8 @@ define( require => {
         majorTickMarkDistance: height * 0.95 / 2, // empirically determined
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.required,
+        phetioType: BeakerIO
       }, options );
 
       // calculate the mass of the beaker

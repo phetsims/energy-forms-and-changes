@@ -14,6 +14,7 @@ define( require => {
   const Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   const BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  const BeakerIO = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerIO' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
   const BlockIO = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockIO' );
@@ -141,13 +142,12 @@ define( require => {
       // @public {PhetioGroup.<Block>}
       this.blocks = new PhetioGroup( 'block', ( tandem, blockType, isPrototype ) => {
           const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
-          const block = new Block(
+          return new Block(
             new Vector2( xPosition, 0 ),
             this.energyChunksVisibleProperty,
             blockType, {
               tandem: tandem
             } );
-          return block;
         },
         [ BlockType.IRON, true ], {
           tandem: tandem.createTandem( 'blockGroup' ),
@@ -161,9 +161,6 @@ define( require => {
         this.blocks.createNextMember( blockType, false );
       } );
 
-      // @public (read-only) {BeakerContainer[]}
-      this.beakers = [];
-
       // ensure any created beakers are initialized to the right of the burner(s)
       movableElementGroundSpotXPositions =
         movableElementGroundSpotXPositions.slice( movableElementGroundSpotXPositions.length -
@@ -171,26 +168,29 @@ define( require => {
                                                   ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners )
         );
 
-      // counters for tandem naming
-      let oliveOilCount = 0;
-      let waterCount = 0;
+      // @public {PhetioGroup.<BeakerContainer>}
+      this.beakers = new PhetioGroup( 'beaker', ( tandem, beakerType, isPrototype ) => {
+          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+          return new BeakerContainer(
+            new Vector2( xPosition, 0 ),
+            BEAKER_WIDTH,
+            BEAKER_HEIGHT,
+            this.blocks,
+            this.energyChunksVisibleProperty, {
+              beakerType: beakerType,
+              majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+              tandem: tandem,
+              phetioDynamicElement: true
+            } );
+        },
+        [ BeakerType.WATER, true ], {
+          tandem: tandem.createTandem( 'beakerGroup' ),
+          phetioType: PhetioGroupIO( BeakerIO )
+        } );
 
       // create any specified beakers
       beakersToCreate.forEach( beakerType => {
-        const tandemName = BeakerType.getTandemName( beakerType ) +
-                           ( beakerType === BeakerType.WATER ? ++waterCount : ++oliveOilCount );
-        const beaker = new BeakerContainer(
-          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
-          BEAKER_WIDTH,
-          BEAKER_HEIGHT,
-          this.blocks,
-          this.energyChunksVisibleProperty, {
-            beakerType: beakerType,
-            majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-            tandem: tandem.createTandem( tandemName )
-          }
-        );
-        this.beakers.push( beaker );
+        this.beakers.createNextMember( beakerType, false );
       } );
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
@@ -290,7 +290,7 @@ define( require => {
 
     // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
     get thermalContainers() {
-      return [ ...this.blocks.array, ...this.beakers ];
+      return [ ...this.blocks.array, ...this.beakers.array ];
     }
 
     /**
@@ -821,7 +821,7 @@ define( require => {
         if ( block.getProjectedShape().containsPoint( position ) ) {
           sensedTemperatureProperty.set( block.temperature );
           sensedElementColorProperty.set( block.color );
-          sensedElementNameProperty.set( block.tandemName + ':' + block.blockType );
+          sensedElementNameProperty.set( block.tandemName + '-' + _.camelCase( block.blockType ) );
           temperatureAndColorAndNameUpdated = true;
           break;
         }
@@ -829,11 +829,11 @@ define( require => {
 
       // test if this point is in any beaker's fluid
       for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-        const beaker = this.beakers[ i ];
+        const beaker = this.beakers.get( i );
         if ( beaker.thermalContactArea.containsPoint( position ) ) {
           sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
           sensedElementColorProperty.set( beaker.fluidColor );
-          sensedElementNameProperty.set( beaker.tandemName );
+          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
           temperatureAndColorAndNameUpdated = true;
         }
       }
@@ -842,11 +842,11 @@ define( require => {
       // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
       // detect the beaker body first
       for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-        const beaker = this.beakers[ i ];
+        const beaker = this.beakers.get( i );
         if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
           sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
           sensedElementColorProperty.set( beaker.steamColor );
-          sensedElementNameProperty.set( beaker.tandemName );
+          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
           temperatureAndColorAndNameUpdated = true;
         }
       }

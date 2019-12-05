@@ -28,10 +28,12 @@ define( require => {
   const Path = require( 'SCENERY/nodes/Path' );
   const PerspectiveWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PerspectiveWaterNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PhetioObject = require( 'TANDEM/PhetioObject' );
   const Property = require( 'AXON/Property' );
   const PropertyIO = require( 'AXON/PropertyIO' );
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const Shape = require( 'KITE/Shape' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -48,7 +50,7 @@ define( require => {
   const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
   const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
-  class BeakerView {
+  class BeakerView extends PhetioObject {
 
     /**
      * @param {Beaker} beaker - model of a beaker
@@ -62,8 +64,11 @@ define( require => {
         label: waterString,
 
         // phet-io
-        tandem: Tandem.optional
+        tandem: Tandem.optional,
+        phetioType: ReferenceIO
       }, options );
+
+      super( options );
 
       // @private
       this.modelViewTransform = modelViewTransform;

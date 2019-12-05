@@ -233,8 +233,16 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "ArrayIO<StringIO>"
     },
+    "BeakerIO": {
+      "documentation": "Uses BeakerType for toStateObject",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "BeakerIO"
+    },
     "BlockIO": {
-      "documentation": "Uses reference identity for toStateObject/fromStateObject",
+      "documentation": "Uses BlockType for toStateObject",
       "events": [],
       "methodOrder": [],
       "methods": {},
@@ -1067,6 +1075,17 @@ window.phet.phetio.phetioTypes = assert &&
       },
       "supertype": "ObjectIO",
       "typeName": "PhetioEngineIO"
+    },
+    "PhetioGroupIO<BeakerIO>": {
+      "documentation": "An array that sends notifications when its values have changed.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "BeakerIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PhetioGroupIO<BeakerIO>"
     },
     "PhetioGroupIO<BlockIO>": {
       "documentation": "An array that sends notifications when its values have changed.",
