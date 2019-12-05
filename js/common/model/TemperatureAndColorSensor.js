@@ -46,22 +46,26 @@ define( require => {
       this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
         units: 'K',
-        tandem: options.tandem.createTandem( 'sensedTemperatureProperty' )
+        tandem: options.tandem.createTandem( 'sensedTemperatureProperty' ),
+        phetioReadOnly: true
       } );
 
       // @public (read-only) {Property.<Color>}
       this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
         phetioType: PropertyIO( ColorIO ),
-        tandem: options.tandem.createTandem( 'sensedElementColorProperty' )
+        tandem: options.tandem.createTandem( 'sensedElementColorProperty' ),
+        phetioReadOnly: true
       } );
 
       this.sensedElementNameProperty = new StringProperty( '', {
-        tandem: options.tandem.createTandem( 'sensedElementNameProperty' )
+        tandem: options.tandem.createTandem( 'sensedElementNameProperty' ),
+        phetioReadOnly: true
       } );
 
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
       this.activeProperty = new BooleanProperty( initiallyActive, {
-        tandem: options.tandem.createTandem( 'activeProperty' )
+        tandem: options.tandem.createTandem( 'activeProperty' ),
+        phetioReadOnly: true
       } );
     }
 

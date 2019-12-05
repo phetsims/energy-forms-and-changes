@@ -2466,7 +2466,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2492,7 +2492,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2505,7 +2505,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2557,7 +2557,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2648,7 +2648,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2674,7 +2674,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
@@ -2687,7 +2687,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
@@ -2700,7 +2700,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2713,7 +2713,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2739,7 +2739,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2765,7 +2765,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
@@ -2778,7 +2778,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
@@ -2791,7 +2791,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2804,7 +2804,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2830,7 +2830,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2856,7 +2856,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
@@ -2869,7 +2869,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
@@ -2882,7 +2882,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2895,7 +2895,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2921,7 +2921,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -2947,7 +2947,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
@@ -2960,7 +2960,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
@@ -2973,7 +2973,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -2986,7 +2986,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -4143,7 +4143,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -4169,7 +4169,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ColorIO>"
@@ -4182,7 +4182,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
@@ -4195,7 +4195,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -4208,7 +4208,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
@@ -4234,7 +4234,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -4260,7 +4260,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -4273,7 +4273,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioFeatured": false,
       "phetioHighFrequency": false,
       "phetioPlayback": false,
-      "phetioReadOnly": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
