@@ -407,7 +407,7 @@ define( require => {
       model.blocks.addMemberCreatedListener( blockListener );
 
       // @private {PhetioGroup.<BeakerContainerView>}
-      this.beakerViews = new PhetioGroup( 'beakerView', ( tandem, beaker ) => {
+      this.beakerViews = new PhetioGroup( 'beakerProxyNode', ( tandem, beaker ) => {
           const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
           return new BeakerContainerView(
             beaker,
@@ -421,7 +421,7 @@ define( require => {
           );
         },
         [ model.beakers.archetype ], {
-          tandem: tandem.createTandem( 'beakerViewsGroup' ),
+          tandem: tandem.createTandem( 'beakerProxyNodesGroup' ),
           phetioType: PhetioGroupIO( ReferenceIO )
         } );
 

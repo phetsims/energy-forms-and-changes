@@ -2991,7 +2991,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.view.beakerViewsGroup": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodesGroup": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
@@ -3004,7 +3004,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PhetioGroupIO<ReferenceIO>"
     },
-    "energyFormsAndChanges.introScreen.view.beakerViewsGroup.archetype": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodesGroup.archetype": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
@@ -3017,7 +3017,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ReferenceIO"
     },
-    "energyFormsAndChanges.introScreen.view.beakerViewsGroup.archetype.opacityProperty": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodesGroup.archetype.opacityProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
@@ -3030,7 +3030,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.view.beakerViewsGroup.archetype.pickableProperty": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodesGroup.archetype.pickableProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
@@ -3043,7 +3043,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.introScreen.view.beakerViewsGroup.archetype.visibleProperty": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodesGroup.archetype.visibleProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
