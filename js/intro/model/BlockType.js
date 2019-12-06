@@ -13,7 +13,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
 
   // @public
-  const BlockType = new Enumeration( [ 'IRON', 'BRICK' ], {
+  const BlockType = Enumeration.byKeys( [ 'IRON', 'BRICK' ], {
     beforeFreeze: BlockType => {
       BlockType.getTandemName = blockType => {
         return blockType.toString().toLowerCase() + 'Block';

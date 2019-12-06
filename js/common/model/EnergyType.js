@@ -13,7 +13,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
 
   // @public
-  const EnergyType = new Enumeration( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] );
+  const EnergyType = Enumeration.byKeys( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] );
 
   return energyFormsAndChanges.register( 'EnergyType', EnergyType );
 } );

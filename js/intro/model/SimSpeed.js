@@ -14,7 +14,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
 
   // @public
-  const SimSpeed = new Enumeration( [ 'NORMAL', 'FAST_FORWARD' ] );
+  const SimSpeed = Enumeration.byKeys( [ 'NORMAL', 'FAST_FORWARD' ] );
 
   return energyFormsAndChanges.register( 'SimSpeed', SimSpeed );
 } );

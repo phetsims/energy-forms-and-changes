@@ -13,7 +13,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Enumeration = require( 'PHET_CORE/Enumeration' );
 
-  const EnergyContainerCategory = new Enumeration( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] );
+  const EnergyContainerCategory = Enumeration.byKeys( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] );
 
   return energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
 } );
