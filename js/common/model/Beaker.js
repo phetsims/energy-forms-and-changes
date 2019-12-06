@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BeakerIO = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerIO' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -76,7 +77,8 @@ define( require => {
         majorTickMarkDistance: height * 0.95 / 2, // empirically determined
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.required,
+        phetioType: BeakerIO
       }, options );
 
       // calculate the mass of the beaker
@@ -90,7 +92,7 @@ define( require => {
         mass,
         BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
         energyChunksVisibleProperty,
-        options.tandem
+        options
       );
 
       // @private
@@ -116,13 +118,16 @@ define( require => {
       // @public {Property.<number>} - proportion of fluid in the beaker, should only be set in sub-types
       this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_PROPORTION, {
         range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 ),
-        tandem: options.tandem.createTandem( 'fluidProportionProperty' )
+        tandem: options.tandem.createTandem( 'fluidProportionProperty' ),
+        phetioReadOnly: true
       } );
 
       // @public (read-only) {NumberProperty} - temperature of fluid in beaker
       this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),
-        tandem: options.tandem.createTandem( 'temperatureProperty' )
+        units: 'K',
+        tandem: options.tandem.createTandem( 'temperatureProperty' ),
+        phetioReadOnly: true
       } );
 
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no

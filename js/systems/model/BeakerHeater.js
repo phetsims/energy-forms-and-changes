@@ -78,7 +78,8 @@ define( require => {
       // @public (read-only) {NumberProperty}
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'heatProportionProperty' )
+        tandem: tandem.createTandem( 'heatProportionProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
@@ -104,8 +105,9 @@ define( require => {
       this.thermometer = new TemperatureAndColorSensor(
         this,
         new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
-        true,
-        tandem.createTandem( 'thermometer' )
+        true, {
+          tandem: tandem.createTandem( 'thermometer' )
+        }
       );
 
       // @private, for convenience

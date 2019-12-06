@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
+  const BlockIO = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockIO' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const Color = require( 'SCENERY/util/Color' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
@@ -19,7 +20,9 @@ define( require => {
   const EnergyContainerCategory = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyContainerCategory' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
+  const merge = require( 'PHET_CORE/merge' );
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -55,7 +58,13 @@ define( require => {
      * @param {BlockType} blockType
      * @param {Tandem} tandem
      */
-    constructor( initialPosition, energyChunksVisibleProperty, blockType, tandem ) {
+    constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
+
+      options = merge( {
+        tandem: Tandem.required,
+        phetioDynamicElement: true,
+        phetioType: BlockIO
+      }, options );
 
       super(
         initialPosition,
@@ -64,7 +73,7 @@ define( require => {
         Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
         BLOCK_COMPOSITION[ blockType ].specificHeat,
         energyChunksVisibleProperty,
-        tandem
+        options
       );
 
       // @public (read-only) {String} - unique ID for this block

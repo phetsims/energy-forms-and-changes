@@ -87,7 +87,8 @@ define( require => {
       // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
       // to another is in progress
       this.animationInProgressProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'animationInProgressProperty' )
+        tandem: tandem.createTandem( 'animationInProgressProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @private - variables needed to manage carousel transitions

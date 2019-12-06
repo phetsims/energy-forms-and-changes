@@ -233,6 +233,22 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "ArrayIO<StringIO>"
     },
+    "BeakerIO": {
+      "documentation": "Uses BeakerType for toStateObject",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "BeakerIO"
+    },
+    "BlockIO": {
+      "documentation": "Uses BlockType for toStateObject",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "BlockIO"
+    },
     "BooleanIO": {
       "documentation": "Wrapper for the built-in JS boolean type (true/false)",
       "events": [],
@@ -837,6 +853,17 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PhetioCapsuleIO<DialogIO>"
     },
+    "PhetioCapsuleIO<ReferenceIO>": {
+      "documentation": "An array that sends notifications when its values have changed.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "ReferenceIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PhetioCapsuleIO<ReferenceIO>"
+    },
     "PhetioCommandProcessorIO": {
       "documentation": "Invokes PhET-iO API commands on a running simulation.",
       "events": [
@@ -1059,6 +1086,39 @@ window.phet.phetio.phetioTypes = assert &&
       },
       "supertype": "ObjectIO",
       "typeName": "PhetioEngineIO"
+    },
+    "PhetioGroupIO<BeakerIO>": {
+      "documentation": "An array that sends notifications when its values have changed.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "BeakerIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PhetioGroupIO<BeakerIO>"
+    },
+    "PhetioGroupIO<BlockIO>": {
+      "documentation": "An array that sends notifications when its values have changed.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "BlockIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PhetioGroupIO<BlockIO>"
+    },
+    "PhetioGroupIO<ReferenceIO>": {
+      "documentation": "An array that sends notifications when its values have changed.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "ReferenceIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PhetioGroupIO<ReferenceIO>"
     },
     "PropertyIO<BooleanIO>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
@@ -1551,6 +1611,14 @@ window.phet.phetio.phetioTypes = assert &&
       "methods": {},
       "supertype": "ObjectIO",
       "typeName": "RangeIO"
+    },
+    "ReferenceIO": {
+      "documentation": "Uses reference identity for toStateObject/fromStateObject",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "ReferenceIO"
     },
     "ResetAllButtonIO": {
       "documentation": "Button that performs an action while it is being pressed, and stops the action when released",

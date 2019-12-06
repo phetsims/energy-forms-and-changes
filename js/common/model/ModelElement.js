@@ -12,25 +12,36 @@ define( require => {
 
   // modules
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
+  const merge = require( 'PHET_CORE/merge' );
   const ObservableArray = require( 'AXON/ObservableArray' );
+  const PhetioObject = require( 'TANDEM/PhetioObject' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
-  class ModelElement {
+  class ModelElement extends PhetioObject {
 
     /**
      * @param {Vector2} initialPosition
-     * @param {Tandem} tandem
+     * @param {Object} [options]
      */
-    constructor( initialPosition, tandem ) {
+    constructor( initialPosition, options ) {
+
+      options = merge( {
+        tandem: Tandem.required,
+        phetioType: ReferenceIO
+      }, options );
+
+      super( options );
 
       // @public - position of the center bottom of this model element
       this.positionProperty = new Vector2Property( initialPosition, {
-        tandem: tandem.createTandem( 'positionProperty' )
+        tandem: options.tandem.createTandem( 'positionProperty' )
       } );
 
       // @public (read-only)
-      this.tandemName = tandem.name;
+      this.tandemName = options.tandem.name;
 
       // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
       // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.

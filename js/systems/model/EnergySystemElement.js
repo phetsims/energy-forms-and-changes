@@ -35,7 +35,8 @@ define( require => {
 
       // @public {BooleanProperty}
       this.activeProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'activeProperty' )
+        tandem: tandem.createTandem( 'activeProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types

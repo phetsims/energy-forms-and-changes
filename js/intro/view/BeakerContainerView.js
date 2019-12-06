@@ -62,12 +62,11 @@ define( require => {
       // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
       // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
       // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
-      if ( model.blocks.length ) {
-        this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blocks[ 0 ].width );
-        this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blocks[ 0 ].height );
-        const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
-        this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
-      }
+      assert && assert( model.blocks.length, 'blocks should exist on startup' );
+      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blocks.get( 0 ).width );
+      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blocks.get( 0 ).height );
+      const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+      this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
 
       if ( EFACQueryParameters.showHelperShapes ) {
         this.clipAreaHelperNode = new Path( this.untransformedBeakerClipShape, {
@@ -159,7 +158,7 @@ define( require => {
       // if neither of the blocks is in the beaker then there are no "holes" to add, use C-style loop for performance
       let blocksInBeaker = [];
       for ( let i = 0; i < blocks.length; i++ ) {
-        block = blocks[ i ];
+        block = blocks.get( i );
         if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
              this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
           blocksInBeaker.push( block );

@@ -60,13 +60,15 @@ define( require => {
       // @public {NumberProperty}
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'heatProportionProperty' )
+        tandem: tandem.createTandem( 'heatProportionProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public (read-only) {NumberProperty}
       this.energyProductionRateProperty = new NumberProperty( 0, {
         range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
-        tandem: tandem.createTandem( 'energyProductionRateProperty' )
+        tandem: tandem.createTandem( 'energyProductionRateProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public

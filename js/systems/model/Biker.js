@@ -64,13 +64,15 @@ define( require => {
       // @public (read-only) {NumberProperty} - angle of the crank arm on the bike, in radians
       this.crankAngleProperty = new NumberProperty( 0, {
         range: new Range( 0, 2 * Math.PI ),
-        tandem: tandem.createTandem( 'crankAngleProperty' )
+        tandem: tandem.createTandem( 'crankAngleProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public (read-only) {NumberProperty} - angle of the rear wheel on the bike, in radians
       this.rearWheelAngleProperty = new NumberProperty( 0, {
         range: new Range( 0, 2 * Math.PI ),
-        tandem: tandem.createTandem( 'rearWheelAngleProperty' )
+        tandem: tandem.createTandem( 'rearWheelAngleProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @public (read-only) {NumberProperty} - number of energy chunks remaining in the biker's body
@@ -88,7 +90,8 @@ define( require => {
       // @public (read-only) {NumberProperty} - angular velocity of crank, in radians per second
       this.crankAngularVelocityProperty = new NumberProperty( 0, {
         range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
-        tandem: tandem.createTandem( 'crankAngularVelocityProperty' )
+        tandem: tandem.createTandem( 'crankAngularVelocityProperty' ),
+        phetioReadyOnly: true
       } );
 
       // @private - internal variables

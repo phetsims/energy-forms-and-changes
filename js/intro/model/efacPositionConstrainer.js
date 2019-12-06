@@ -136,7 +136,7 @@ define( require => {
           // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there
           // are currently only two beakers. this will need to be generalized to check for each other beaker that is not
           // stacked on this modelElement if the time comes when more than two beakers exist.
-          const otherBeaker = beakers[ 1 - beakers.indexOf( beaker ) ];
+          const otherBeaker = beakers.get( 1 - beakers.array.indexOf( beaker ) );
 
           // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
           const otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
@@ -209,9 +209,9 @@ define( require => {
             // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
             // handling.
             const perspectiveBlockBounds = Bounds2.createFromPool(
-              blockBounds.minX - blocks[ 0 ].perspectiveCompensation.x,
+              blockBounds.minX - blocks.get( 0 ).perspectiveCompensation.x,
               blockBounds.minY,
-              blockBounds.maxX + blocks[ 0 ].perspectiveCompensation.x,
+              blockBounds.maxX + blocks.get( 0 ).perspectiveCompensation.x,
               blockBounds.maxY
             );
 

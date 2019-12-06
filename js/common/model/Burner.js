@@ -19,11 +19,13 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HorizontalSurface = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HorizontalSurface' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
@@ -47,10 +49,15 @@ define( require => {
     /**
      * @param {Vector2} position - the position in model space where this burner exists
      * @param {Property.<boolean>} energyChunksVisibleProperty - controls whether the energy chunks are visible
-     * @param {Tandem} tandem
+     * @param {Object} options
      */
-    constructor( position, energyChunksVisibleProperty, tandem ) {
-      super( position, tandem );
+    constructor( position, energyChunksVisibleProperty, options ) {
+
+      options = merge( {
+        tandem: Tandem.required
+      }, options );
+
+      super( position, options );
 
       // @public (read-only) {string} - unique ID, used for debug
       this.id = `burner-${idCounter++}`;
@@ -58,7 +65,7 @@ define( require => {
       // @public {NumberProperty}
       this.heatCoolLevelProperty = new NumberProperty( 0, {
         range: new Range( -1, 1 ),
-        tandem: tandem.createTandem( 'heatCoolLevelProperty' )
+        tandem: options.tandem.createTandem( 'heatCoolLevelProperty' )
       } );
 
       // @public (read-only) {ObservableArray.<EnergyChunk>}

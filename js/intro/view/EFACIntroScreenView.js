@@ -34,6 +34,8 @@ define( require => {
   const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
+  const PhetioGroup = require( 'TANDEM/PhetioGroup' );
+  const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
@@ -43,7 +45,10 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
+  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SimSpeedButtonGroup = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/SimSpeedButtonGroup' );
@@ -192,7 +197,7 @@ define( require => {
         leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
         minWidth: leftBurnerStand.width / 1.5,
         maxWidth: leftBurnerStand.width / 1.5,
-        thumbSize: new Dimension2( 18, 36 ),
+        thumbSize: new Dimension2( 36, 18 ),
         snapToZero: snapToZero
       } );
       heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
@@ -221,7 +226,7 @@ define( require => {
           leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
           minWidth: rightBurnerStand.width / 1.5,
           maxWidth: rightBurnerStand.width / 1.5,
-          thumbSize: new Dimension2( 18, 36 ),
+          thumbSize: new Dimension2( 36, 18 ),
           snapToZero: snapToZero
         } );
         heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
@@ -366,52 +371,80 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      const blockNodes = [];
-      const nodeString = 'Node';
+      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, block ) => {
+          return new BlockNode(
+            block,
+            modelViewTransform,
+            constrainMovableElementMotion,
+            model.isPlayingProperty, {
+              setApproachingEnergyChunkParentNode: airLayer,
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+        },
+        [ model.blocks.archetype ], {
+          tandem: tandem.createTandem( 'blockNodesGroup' ),
+          phetioType: PhetioGroupIO( ReferenceIO ),
 
-      // add the blocks
-      model.blocks.forEach( block => {
-        const blockNode = new BlockNode(
-          block,
-          modelViewTransform,
-          constrainMovableElementMotion,
-          model.isPlayingProperty, {
-            setApproachingEnergyChunkParentNode: airLayer,
-            tandem: tandem.createTandem( block.tandem.name + nodeString )
-          }
-        );
+          // TODO: see if this applies to group members
+          phetioState: false
+        } );
+
+      const blockListener = addedBlock => {
+        const blockNode = blockNodes.createCorrespondingGroupMember( addedBlock, addedBlock );
+
         blockLayer.addChild( blockNode );
-        blockNodes.push( blockNode );
-      } );
 
-      this.beakerViews = [];
-      const viewString = 'View';
-
-      // add the beakers
-      model.beakers.forEach( beaker => {
-        const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
-        const beakerView = new BeakerContainerView(
-          beaker,
-          model,
-          modelViewTransform,
-          constrainMovableElementMotion, {
-            label: label,
-            tandem: tandem.createTandem( beaker.tandem.name + viewString )
+        // Add the removal listener for if and when this electric field sensor is removed from the model.
+        model.blocks.addMemberDisposedListener( function removalListener( removedBlock ) {
+          if ( removedBlock === addedBlock ) {
+            // blockNode.dispose();
+            model.blocks.removeMemberDisposedListener( removalListener );
           }
-        );
-        this.beakerViews.push( beakerView );
-      } );
+        } );
+      };
 
-      // add the beakers, which are composed of several pieces
-      this.beakerViews.forEach( beakerView => {
+      model.blocks.forEach( blockListener );
+      model.blocks.addMemberCreatedListener( blockListener );
+
+      // @private {PhetioGroup.<BeakerContainerView>}
+      this.beakerViews = new PhetioGroup( 'beakerProxyNode', ( tandem, beaker ) => {
+          const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+          return new BeakerContainerView(
+            beaker,
+            model,
+            modelViewTransform,
+            constrainMovableElementMotion, {
+              label: label,
+              tandem: tandem,
+              phetioDynamicElement: true
+            }
+          );
+        },
+        [ model.beakers.archetype ], {
+          tandem: tandem.createTandem( 'beakerProxyNodesGroup' ),
+          phetioType: PhetioGroupIO( ReferenceIO )
+        } );
+
+      const beakerListener = addedBeaker => {
+        const beakerView = this.beakerViews.createCorrespondingGroupMember( addedBeaker, addedBeaker );
+
         beakerFrontLayer.addChild( beakerView.frontNode );
-      } );
-      this.beakerViews.forEach( beakerView => {
         beakerBackLayer.addChild( beakerView.backNode );
-      } );
-      this.beakerViews.forEach( beakerView => {
         beakerGrabLayer.addChild( beakerView.grabNode );
-      } );
+
+        // Add the removal listener for if and when this electric field sensor is removed from the model.
+        model.beakers.addMemberDisposedListener( function removalListener( removedBeaker ) {
+          if ( removedBeaker === addedBeaker ) {
+            // beakerNode.dispose();
+            model.beakers.removeMemberDisposedListener( removalListener );
+          }
+        } );
+      };
+
+      model.beakers.forEach( beakerListener );
+      model.beakers.addMemberCreatedListener( beakerListener );
 
       // the thermometer layer needs to be above the movable objects
       const thermometerLayer = new Node();
@@ -419,6 +452,7 @@ define( require => {
 
       // create and add the temperature and color thermometer nodes, which look like a thermometer with a triangle on the side
       const thermometerNodes = [];
+      const nodeString = 'Node';
       let thermometerNodeWidth = 0;
       let thermometerNodeHeight = 0;
       model.thermometers.forEach( thermometer => {
@@ -613,15 +647,15 @@ define( require => {
 
       // updates the Z-order of the beakers whenever their position changes
       const beakerChangeListener = () => {
-        if ( model.beakers[ 0 ].getBounds().minY >= model.beakers[ 1 ].getBounds().maxY ) {
-          this.beakerViews[ 0 ].frontNode.moveToFront();
-          this.beakerViews[ 0 ].backNode.moveToFront();
-          this.beakerViews[ 0 ].grabNode.moveToFront();
+        if ( model.beakers.get( 0 ).getBounds().minY >= model.beakers.get( 1 ).getBounds().maxY ) {
+          this.beakerViews.get( 0 ).frontNode.moveToFront();
+          this.beakerViews.get( 0 ).backNode.moveToFront();
+          this.beakerViews.get( 0 ).grabNode.moveToFront();
         }
-        else if ( model.beakers[ 1 ].getBounds().minY >= model.beakers[ 0 ].getBounds().maxY ) {
-          this.beakerViews[ 1 ].frontNode.moveToFront();
-          this.beakerViews[ 1 ].backNode.moveToFront();
-          this.beakerViews[ 1 ].grabNode.moveToFront();
+        else if ( model.beakers.get( 1 ).getBounds().minY >= model.beakers.get( 0 ).getBounds().maxY ) {
+          this.beakerViews.get( 1 ).frontNode.moveToFront();
+          this.beakerViews.get( 1 ).backNode.moveToFront();
+          this.beakerViews.get( 1 ).grabNode.moveToFront();
         }
       };
 
@@ -664,26 +698,33 @@ define( require => {
       showEnergyCheckbox.touchArea =
         showEnergyCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
+      // variables needed if the right burner exists
       let controlPanelCheckboxes = null;
-
-      // Create the control for linking/un-linking the heaters, if two burners exist
-      if ( model.rightBurner ) {
-        const flameNode = new Image( flameImage, {
-          maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
-          maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
-        } );
-        const linkHeatersText = new Text( linkHeatersString, {
-          font: new PhetFont( 20 ),
-          maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
-        } );
-        const linkHeatersCheckbox = new Checkbox( new HBox( {
+      const flameNode = new Image( flameImage, {
+        maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
+        maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
+      } );
+      const linkHeatersText = new Text( linkHeatersString, {
+        font: new PhetFont( 20 ),
+        maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
+      } );
+      const linkHeatersCheckboxCapsule = new PhetioCapsule( tandem => {
+        return new Checkbox( new HBox( {
             children: [ linkHeatersText, flameNode ],
             spacing: 5
           } ),
           model.linkedHeatersProperty, {
-            tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' )
-          }
-        );
+            tandem: tandem,
+            phetioDynamicElement: true
+          } );
+      }, [], {
+        tandem: controlPanelTandem.createTandem( 'linkHeatersCheckboxCapsule' ),
+        phetioType: PhetioCapsuleIO( ReferenceIO )
+      } );
+
+      // Create the control for linking/un-linking the heaters, if two burners exist
+      if ( model.rightBurner ) {
+        const linkHeatersCheckbox = linkHeatersCheckboxCapsule.getInstance();
         linkHeatersCheckbox.touchArea =
           linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 

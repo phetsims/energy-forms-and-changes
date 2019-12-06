@@ -14,8 +14,10 @@ define( require => {
   const Air = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Air' );
   const Beaker = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Beaker' );
   const BeakerContainer = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BeakerContainer' );
+  const BeakerIO = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerIO' );
   const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
   const Block = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/Block' );
+  const BlockIO = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockIO' );
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
@@ -24,7 +26,12 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
+  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
+  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
+  const PhetioGroup = require( 'TANDEM/PhetioGroup' );
+  const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const Range = require( 'DOT/Range' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -115,46 +122,59 @@ define( require => {
         ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
       ];
 
-      // @public (read-only) {Burner} - right and left burners
+      // @public (read-only) {Burner} - left burner
       this.leftBurner = new Burner(
         new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
-        this.energyChunksVisibleProperty,
-        tandem.createTandem( 'leftBurner' )
+        this.energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'leftBurner' )
+        }
       );
+
+      // @public (read-only) {null|Burner} - assigned a burner if one is created
+      this.rightBurner = null;
+
+      // @private
+      this.rightBurnerCapsule = new PhetioCapsule( ( tandem, isArchetype ) => {
+        const xPosition = isArchetype ? 0 : burnerGroundSpotXPositions[ 1 ];
+        return new Burner(
+          new Vector2( xPosition, 0 ),
+          this.energyChunksVisibleProperty, {
+            tandem: tandem,
+            phetioDynamicElement: true
+          } );
+      }, [ true ], {
+        tandem: tandem.createTandem( 'rightBurnerCapsule' ),
+        phetioType: PhetioCapsuleIO( ReferenceIO )
+      } );
 
       // @private {Burner[]} - put burners into a list for easy iteration
       this.burners = [ this.leftBurner ];
       if ( numberOfBurners > 1 ) {
-        this.rightBurner = new Burner(
-          new Vector2( burnerGroundSpotXPositions[ 1 ], 0 ),
-          this.energyChunksVisibleProperty,
-          tandem.createTandem( 'rightBurner' )
-        );
+        this.rightBurner = this.rightBurnerCapsule.getInstance( false );
         this.burners.push( this.rightBurner );
       }
 
-      // @public (read-only) {Block[]} - list of all blocks in sim
-      this.blocks = [];
+      // @public {PhetioGroup.<Block>}
+      this.blocks = new PhetioGroup( 'block', ( tandem, blockType, isPrototype ) => {
+          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+          return new Block(
+            new Vector2( xPosition, 0 ),
+            this.energyChunksVisibleProperty,
+            blockType, {
+              tandem: tandem
+            } );
+        },
+        [ BlockType.IRON, true ], {
+          tandem: tandem.createTandem( 'blockGroup' ),
+          phetioType: PhetioGroupIO( BlockIO )
 
-      // counters for tandem naming
-      let brickCount = 0;
-      let ironCount = 0;
+          // TODO: see if this applies to group members
+          // phetioState: false
+        } );
 
-      // create any specified blocks
       blocksToCreate.forEach( blockType => {
-        const tandemName = BlockType.getTandemName( blockType ) +
-                           ( blockType === BlockType.IRON ? ++ironCount : ++brickCount );
-        const block = new Block(
-          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
-          this.energyChunksVisibleProperty,
-          blockType,
-          tandem.createTandem( tandemName )
-        );
-        this.blocks.push( block );
+        this.blocks.createNextMember( blockType, false );
       } );
-
-      // @public (read-only) {BeakerContainer[]}
-      this.beakers = [];
 
       // ensure any created beakers are initialized to the right of the burner(s)
       movableElementGroundSpotXPositions =
@@ -163,30 +183,30 @@ define( require => {
                                                   ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners )
         );
 
-      // counters for tandem naming
-      let oliveOilCount = 0;
-      let waterCount = 0;
+      // @public {PhetioGroup.<BeakerContainer>}
+      this.beakers = new PhetioGroup( 'beaker', ( tandem, beakerType, isPrototype ) => {
+          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+          return new BeakerContainer(
+            new Vector2( xPosition, 0 ),
+            BEAKER_WIDTH,
+            BEAKER_HEIGHT,
+            this.blocks,
+            this.energyChunksVisibleProperty, {
+              beakerType: beakerType,
+              majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
+              tandem: tandem,
+              phetioDynamicElement: true
+            } );
+        },
+        [ BeakerType.WATER, true ], {
+          tandem: tandem.createTandem( 'beakerGroup' ),
+          phetioType: PhetioGroupIO( BeakerIO )
+        } );
 
       // create any specified beakers
       beakersToCreate.forEach( beakerType => {
-        const tandemName = BeakerType.getTandemName( beakerType ) +
-                           ( beakerType === BeakerType.WATER ? ++waterCount : ++oliveOilCount );
-        const beaker = new BeakerContainer(
-          new Vector2( movableElementGroundSpotXPositions.shift(), 0 ),
-          BEAKER_WIDTH,
-          BEAKER_HEIGHT,
-          this.blocks,
-          this.energyChunksVisibleProperty, {
-            beakerType: beakerType,
-            majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
-            tandem: tandem.createTandem( tandemName )
-          }
-        );
-        this.beakers.push( beaker );
+        this.beakers.createNextMember( beakerType, false );
       } );
-
-      // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
-      this.thermalContainers = [ ...this.blocks, ...this.beakers ];
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
       // each model step.
@@ -205,8 +225,9 @@ define( require => {
         const thermometer = new StickyTemperatureAndColorSensor(
           this,
           INITIAL_THERMOMETER_LOCATION,
-          false,
-          tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
+          false, {
+            tandem: tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
+          }
         );
         this.thermometers.push( thermometer );
 
@@ -214,10 +235,10 @@ define( require => {
         // action is to automatically move the thermometer to a location where it continues to sense the beaker
         // temperature. Not needed if zero blocks are in use. This was requested after interviews.
         if ( this.blocks.length ) {
-            thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
+          thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
             this.beakers.forEach( beaker => {
-              const blockWidthIncludingPerspective = this.blocks[ 0 ].getProjectedShape().bounds.width;
+              const blockWidthIncludingPerspective = this.blocks.get( 0 ).getProjectedShape().bounds.width;
 
               const xRange = new Range(
                 beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
@@ -232,7 +253,7 @@ define( require => {
 
               // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
               // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-              if ( _.some( this.blocks, checkBlocks ) &&
+              if ( _.some( this.blocks.array, checkBlocks ) &&
                    oldColor === beaker.fluidColor &&
                    !thermometer.userControlledProperty.get() &&
                    !beaker.userControlledProperty.get() &&
@@ -280,6 +301,11 @@ define( require => {
         color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
       }
       return color;
+    }
+
+    // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
+    get thermalContainers() {
+      return [ ...this.blocks.array, ...this.beakers.array ];
     }
 
     /**
@@ -369,7 +395,7 @@ define( require => {
 
       // update the fluid level in the beaker, which could be displaced by one or more of the blocks
       this.beakers.forEach( beaker => {
-        beaker.updateFluidDisplacement( this.blocks.map( block => block.getBounds() ) );
+        beaker.updateFluidDisplacement( this.blocks.array.map( block => block.getBounds() ) );
       } );
 
       //=====================================================================
@@ -792,7 +818,7 @@ define( require => {
       let temperatureAndColorAndNameUpdated = false;
 
       // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-      const copyOfBlockList = this.blocks.slice( 0 );
+      const copyOfBlockList = this.blocks.array.slice( 0 );
 
       copyOfBlockList.sort( ( block1, block2 ) => {
         if ( block1.positionProperty.value === block2.positionProperty.value ) {
@@ -810,7 +836,7 @@ define( require => {
         if ( block.getProjectedShape().containsPoint( position ) ) {
           sensedTemperatureProperty.set( block.temperature );
           sensedElementColorProperty.set( block.color );
-          sensedElementNameProperty.set( block.tandemName );
+          sensedElementNameProperty.set( block.tandemName + '-' + _.camelCase( block.blockType ) );
           temperatureAndColorAndNameUpdated = true;
           break;
         }
@@ -818,11 +844,11 @@ define( require => {
 
       // test if this point is in any beaker's fluid
       for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-        const beaker = this.beakers[ i ];
+        const beaker = this.beakers.get( i );
         if ( beaker.thermalContactArea.containsPoint( position ) ) {
           sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
           sensedElementColorProperty.set( beaker.fluidColor );
-          sensedElementNameProperty.set( beaker.tandemName );
+          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
           temperatureAndColorAndNameUpdated = true;
         }
       }
@@ -831,11 +857,11 @@ define( require => {
       // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
       // detect the beaker body first
       for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-        const beaker = this.beakers[ i ];
+        const beaker = this.beakers.get( i );
         if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
           sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
           sensedElementColorProperty.set( beaker.steamColor );
-          sensedElementNameProperty.set( beaker.tandemName );
+          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
           temperatureAndColorAndNameUpdated = true;
         }
       }
