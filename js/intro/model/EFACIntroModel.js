@@ -155,25 +155,22 @@ define( require => {
       }
 
       // @public {PhetioGroup.<Block>}
-      this.blocks = new PhetioGroup( 'block', ( tandem, blockType, isPrototype ) => {
-          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+      this.blocks = new PhetioGroup( 'block', ( tandem, blockType, initialXPosition ) => {
           return new Block(
-            new Vector2( xPosition, 0 ),
+            new Vector2( initialXPosition, 0 ),
             this.energyChunksVisibleProperty,
             blockType, {
               tandem: tandem
             } );
         },
-        [ BlockType.IRON, true ], {
+        [ BlockType.IRON, 0 ], {
           tandem: tandem.createTandem( 'blockGroup' ),
-          phetioType: PhetioGroupIO( BlockIO )
-
-          // TODO: see if this applies to group members
-          // phetioState: false
+          phetioType: PhetioGroupIO( BlockIO ),
+          supportsDynamicState: false
         } );
 
       blocksToCreate.forEach( blockType => {
-        this.blocks.createNextMember( blockType, false );
+        this.blocks.createNextMember( blockType, movableElementGroundSpotXPositions.shift() );
       } );
 
       // ensure any created beakers are initialized to the right of the burner(s)
@@ -184,10 +181,9 @@ define( require => {
         );
 
       // @public {PhetioGroup.<BeakerContainer>}
-      this.beakers = new PhetioGroup( 'beaker', ( tandem, beakerType, isPrototype ) => {
-          const xPosition = isPrototype ? 0 : movableElementGroundSpotXPositions.shift();
+      this.beakers = new PhetioGroup( 'beaker', ( tandem, beakerType, initialXPosition ) => {
           return new BeakerContainer(
-            new Vector2( xPosition, 0 ),
+            new Vector2( initialXPosition, 0 ),
             BEAKER_WIDTH,
             BEAKER_HEIGHT,
             this.blocks,
@@ -198,14 +194,15 @@ define( require => {
               phetioDynamicElement: true
             } );
         },
-        [ BeakerType.WATER, true ], {
+        [ BeakerType.WATER, 0 ], {
           tandem: tandem.createTandem( 'beakerGroup' ),
-          phetioType: PhetioGroupIO( BeakerIO )
+          phetioType: PhetioGroupIO( BeakerIO ),
+          supportsDynamicState: false
         } );
 
       // create any specified beakers
       beakersToCreate.forEach( beakerType => {
-        this.beakers.createNextMember( beakerType, false );
+        this.beakers.createNextMember( beakerType, movableElementGroundSpotXPositions.shift() );
       } );
 
       // @private {Object} - an object that is used to track which thermal containers are in contact with one another in

@@ -384,11 +384,9 @@ define( require => {
           );
         },
         [ model.blocks.archetype ], {
-          tandem: tandem.createTandem( 'blockNodesGroup' ),
+          tandem: tandem.createTandem( 'blockNodeGroup' ),
           phetioType: PhetioGroupIO( ReferenceIO ),
-
-          // TODO: see if this applies to group members
-          phetioState: false
+          supportsDynamicState: false
         } );
 
       const blockListener = addedBlock => {
@@ -423,8 +421,9 @@ define( require => {
           );
         },
         [ model.beakers.archetype ], {
-          tandem: tandem.createTandem( 'beakerProxyNodesGroup' ),
-          phetioType: PhetioGroupIO( ReferenceIO )
+          tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
+          phetioType: PhetioGroupIO( ReferenceIO ),
+          supportsDynamicState: false
         } );
 
       const beakerListener = addedBeaker => {
