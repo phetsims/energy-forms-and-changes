@@ -25,6 +25,7 @@ define( require => {
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const Shape = require( 'KITE/Shape' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -77,7 +78,8 @@ define( require => {
         cursor: 'pointer',
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.required,
+        phetioType: ReferenceIO
       }, options );
 
       super( options );

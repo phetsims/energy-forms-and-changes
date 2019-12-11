@@ -714,7 +714,8 @@ define( require => {
           } ),
           model.linkedHeatersProperty, {
             tandem: tandem,
-            phetioDynamicElement: true
+            phetioDynamicElement: true,
+            phetioType: ReferenceIO
           } );
       }, [], {
         tandem: controlPanelTandem.createTandem( 'linkHeatersCheckboxCapsule' ),
