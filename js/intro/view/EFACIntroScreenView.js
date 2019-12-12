@@ -43,6 +43,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const NodeIO = require( 'SCENERY/nodes/NodeIO' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
@@ -385,7 +386,7 @@ define( require => {
         },
         [ model.blocks.archetype ], {
           tandem: tandem.createTandem( 'blockNodeGroup' ),
-          phetioType: PhetioGroupIO( ReferenceIO ),
+          phetioType: PhetioGroupIO( NodeIO ),
           supportsDynamicState: false
         } );
 
@@ -715,11 +716,11 @@ define( require => {
           model.linkedHeatersProperty, {
             tandem: tandem,
             phetioDynamicElement: true,
-            phetioType: ReferenceIO
+            phetioType: NodeIO
           } );
       }, [], {
         tandem: controlPanelTandem.createTandem( 'linkHeatersCheckboxCapsule' ),
-        phetioType: PhetioCapsuleIO( ReferenceIO )
+        phetioType: PhetioCapsuleIO( NodeIO )
       } );
 
       // Create the control for linking/un-linking the heaters, if two burners exist

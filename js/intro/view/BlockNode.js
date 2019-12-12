@@ -22,10 +22,10 @@ define( require => {
   const Matrix3 = require( 'DOT/Matrix3' );
   const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const NodeIO = require( 'SCENERY/nodes/NodeIO' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const Shape = require( 'KITE/Shape' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -79,7 +79,7 @@ define( require => {
 
         // phet-io
         tandem: Tandem.required,
-        phetioType: ReferenceIO
+        phetioType: NodeIO
       }, options );
 
       super( options );
