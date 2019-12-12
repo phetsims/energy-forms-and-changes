@@ -134,7 +134,7 @@ define( require => {
       this.rightBurner = null;
 
       // @private
-      this.rightBurnerCapsule = new PhetioCapsule( ( tandem, isArchetype ) => {
+      this.rightBurnerCapsule = new PhetioCapsule( 'rightBurner', ( tandem, isArchetype ) => {
         const xPosition = isArchetype ? 0 : burnerGroundSpotXPositions[ 1 ];
         return new Burner(
           new Vector2( xPosition, 0 ),

@@ -708,7 +708,7 @@ define( require => {
         font: new PhetFont( 20 ),
         maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
       } );
-      const linkHeatersCheckboxCapsule = new PhetioCapsule( tandem => {
+      const linkHeatersCheckboxCapsule = new PhetioCapsule( 'linkHeatersCheckbox', tandem => {
         return new Checkbox( new HBox( {
             children: [ linkHeatersText, flameNode ],
             spacing: 5
