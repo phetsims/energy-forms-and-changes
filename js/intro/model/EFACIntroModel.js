@@ -134,15 +134,14 @@ define( require => {
       this.rightBurner = null;
 
       // @private
-      this.rightBurnerCapsule = new PhetioCapsule( 'rightBurner', ( tandem, isArchetype ) => {
-        const xPosition = isArchetype ? 0 : burnerGroundSpotXPositions[ 1 ];
+      this.rightBurnerCapsule = new PhetioCapsule( 'rightBurner', ( tandem, xPosition ) => {
         return new Burner(
           new Vector2( xPosition, 0 ),
           this.energyChunksVisibleProperty, {
             tandem: tandem,
             phetioDynamicElement: true
           } );
-      }, [ true ], {
+      }, [ 0 ], {
         tandem: tandem.createTandem( 'rightBurnerCapsule' ),
         phetioType: PhetioCapsuleIO( ReferenceIO )
       } );
@@ -150,7 +149,7 @@ define( require => {
       // @private {Burner[]} - put burners into a list for easy iteration
       this.burners = [ this.leftBurner ];
       if ( numberOfBurners > 1 ) {
-        this.rightBurner = this.rightBurnerCapsule.getInstance( false );
+        this.rightBurner = this.rightBurnerCapsule.getInstance( burnerGroundSpotXPositions[ 1 ] );
         this.burners.push( this.rightBurner );
       }
 
