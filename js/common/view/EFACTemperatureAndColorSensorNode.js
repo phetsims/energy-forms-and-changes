@@ -37,7 +37,7 @@ define( require => {
         cursor: 'pointer',
 
         // phet-io
-        tandem: Tandem.optional
+        tandem: Tandem.OPTIONAL
       }, options );
 
       super( options );

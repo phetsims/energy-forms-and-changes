@@ -61,7 +61,7 @@ define( require => {
     constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
 
       options = merge( {
-        tandem: Tandem.required,
+        tandem: Tandem.REQUIRED,
         phetioDynamicElement: true,
         phetioType: BlockIO
       }, options );

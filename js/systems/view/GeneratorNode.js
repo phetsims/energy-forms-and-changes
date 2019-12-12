@@ -46,7 +46,7 @@ define( require => {
         addMechanicalEnergyChunkLayer: true,
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.REQUIRED
       }, options );
 
       super( generator, modelViewTransform, options.tandem );

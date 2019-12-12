@@ -41,7 +41,7 @@ define( require => {
         yMargin: 10,
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.REQUIRED
       }, options );
 
       const buttonElementList = [];

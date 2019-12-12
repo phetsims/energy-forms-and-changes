@@ -64,7 +64,7 @@ define( require => {
         label: waterString,
 
         // phet-io
-        tandem: Tandem.optional,
+        tandem: Tandem.OPTIONAL,
         phetioType: ReferenceIO
       }, options );
 

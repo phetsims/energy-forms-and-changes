@@ -78,7 +78,7 @@ define( require => {
         cursor: 'pointer',
 
         // phet-io
-        tandem: Tandem.required,
+        tandem: Tandem.REQUIRED,
         phetioType: ReferenceIO
       }, options );
 

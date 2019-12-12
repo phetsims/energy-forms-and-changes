@@ -28,7 +28,7 @@ define( require => {
         lineWidth: 4,
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.REQUIRED
       }, options );
 
       super( modelViewTransform.modelToViewShape( belt.beltShape ), options );

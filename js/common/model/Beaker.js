@@ -77,7 +77,7 @@ define( require => {
         majorTickMarkDistance: height * 0.95 / 2, // empirically determined
 
         // phet-io
-        tandem: Tandem.required,
+        tandem: Tandem.REQUIRED,
         phetioType: BeakerIO
       }, options );
 

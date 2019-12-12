@@ -55,7 +55,7 @@ define( require => {
         bulbType: 'fluorescent',
 
         // phet-io
-        tandem: Tandem.required
+        tandem: Tandem.REQUIRED
       }, options );
 
       assert && assert(
