@@ -300,7 +300,7 @@ define( require => {
 
       // add the play/pause and step buttons
       const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
-        stepOptions: {
+        stepForwardOptions: {
           listener: () => model.manualStep()
         },
         tandem: tandem.createTandem( 'timeControlNode' )
