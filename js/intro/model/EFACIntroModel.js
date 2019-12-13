@@ -134,7 +134,7 @@ define( require => {
       this.rightBurner = null;
 
       // @private
-      this.rightBurnerCapsule = new PhetioCapsule( 'rightBurner', ( tandem, xPosition ) => {
+      this.rightBurnerCapsule = new PhetioCapsule( ( tandem, xPosition ) => {
         return new Burner(
           new Vector2( xPosition, 0 ),
           this.energyChunksVisibleProperty, {
@@ -154,7 +154,7 @@ define( require => {
       }
 
       // @public {PhetioGroup.<Block>}
-      this.blocks = new PhetioGroup( 'block', ( tandem, blockType, initialXPosition ) => {
+      this.blocks = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
           return new Block(
             new Vector2( initialXPosition, 0 ),
             this.energyChunksVisibleProperty,
@@ -180,7 +180,7 @@ define( require => {
         );
 
       // @public {PhetioGroup.<BeakerContainer>}
-      this.beakers = new PhetioGroup( 'beaker', ( tandem, beakerType, initialXPosition ) => {
+      this.beakers = new PhetioGroup( ( tandem, beakerType, initialXPosition ) => {
           return new BeakerContainer(
             new Vector2( initialXPosition, 0 ),
             BEAKER_WIDTH,

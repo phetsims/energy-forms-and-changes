@@ -372,7 +372,7 @@ define( require => {
         return viewAndModelConstrainedPosition;
       };
 
-      const blockNodes = new PhetioGroup( 'blockNode', ( tandem, block ) => {
+      const blockNodes = new PhetioGroup( ( tandem, block ) => {
           return new BlockNode(
             block,
             modelViewTransform,
@@ -408,7 +408,7 @@ define( require => {
       model.blocks.addMemberCreatedListener( blockListener );
 
       // @private {PhetioGroup.<BeakerContainerView>}
-      this.beakerViews = new PhetioGroup( 'beakerProxyNode', ( tandem, beaker ) => {
+      this.beakerViews = new PhetioGroup( ( tandem, beaker ) => {
           const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
           return new BeakerContainerView(
             beaker,
@@ -708,7 +708,7 @@ define( require => {
         font: new PhetFont( 20 ),
         maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
       } );
-      const linkHeatersCheckboxCapsule = new PhetioCapsule( 'linkHeatersCheckbox', tandem => {
+      const linkHeatersCheckboxCapsule = new PhetioCapsule( tandem => {
         return new Checkbox( new HBox( {
             children: [ linkHeatersText, flameNode ],
             spacing: 5
