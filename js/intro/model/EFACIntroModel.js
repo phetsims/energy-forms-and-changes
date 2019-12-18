@@ -832,7 +832,7 @@ define( require => {
         if ( block.getProjectedShape().containsPoint( position ) ) {
           sensedTemperatureProperty.set( block.temperature );
           sensedElementColorProperty.set( block.color );
-          sensedElementNameProperty.set( block.tandemName + '-' + _.camelCase( block.blockType ) );
+          sensedElementNameProperty.set( block.tandem.phetioID );
           temperatureAndColorAndNameUpdated = true;
           break;
         }
@@ -844,7 +844,7 @@ define( require => {
         if ( beaker.thermalContactArea.containsPoint( position ) ) {
           sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
           sensedElementColorProperty.set( beaker.fluidColor );
-          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
+          sensedElementNameProperty.set( beaker.tandem.phetioID );
           temperatureAndColorAndNameUpdated = true;
         }
       }
@@ -857,7 +857,7 @@ define( require => {
         if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
           sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
           sensedElementColorProperty.set( beaker.steamColor );
-          sensedElementNameProperty.set( beaker.tandemName + '-' + _.camelCase( beaker.beakerType ) );
+          sensedElementNameProperty.set( beaker.tandem.phetioID );
           temperatureAndColorAndNameUpdated = true;
         }
       }
@@ -868,7 +868,7 @@ define( require => {
         if ( burner.getFlameIceRect().containsPoint( position ) ) {
           sensedTemperatureProperty.set( burner.getTemperature() );
           sensedElementColorProperty.set( EFACIntroModel.mapHeatCoolLevelToColor( burner.heatCoolLevelProperty.get() ) );
-          sensedElementNameProperty.set( burner.tandemName );
+          sensedElementNameProperty.set( burner.tandem.phetioID );
           temperatureAndColorAndNameUpdated = true;
         }
       }
