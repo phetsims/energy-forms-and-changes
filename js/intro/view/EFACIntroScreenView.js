@@ -46,8 +46,6 @@ define( require => {
   const NodeIO = require( 'SCENERY/nodes/NodeIO' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
-  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -708,27 +706,18 @@ define( require => {
         font: new PhetFont( 20 ),
         maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
       } );
-      const linkHeatersCheckboxCapsule = new PhetioCapsule( tandem => {
-        return new Checkbox( new HBox( {
-            children: [ linkHeatersText, flameNode ],
-            spacing: 5
-          } ),
-          model.linkedHeatersProperty, {
-            tandem: tandem,
-            phetioDynamicElement: true,
-            phetioType: NodeIO
-          } );
-      }, [], {
-        tandem: controlPanelTandem.createTandem( 'linkHeatersCheckboxCapsule' ),
-        phetioType: PhetioCapsuleIO( NodeIO )
-      } );
+      const linkHeatersCheckbox = new Checkbox( new HBox( {
+          children: [ linkHeatersText, flameNode ],
+          spacing: 5
+        } ),
+        model.linkedHeatersProperty, {
+          tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' )
+        } );
+      linkHeatersCheckbox.touchArea =
+        linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
-      // Create the control for linking/un-linking the heaters, if two burners exist
+      // Create the control for linking/un-linking the heaters, if the right burner exists
       if ( model.rightBurner ) {
-        const linkHeatersCheckbox = linkHeatersCheckboxCapsule.getInstance();
-        linkHeatersCheckbox.touchArea =
-          linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
-
         controlPanelCheckboxes = new VBox( {
           children: [ showEnergyCheckbox, linkHeatersCheckbox ],
           spacing: 10,

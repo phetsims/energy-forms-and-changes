@@ -853,17 +853,6 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PhetioCapsuleIO<DialogIO>"
     },
-    "PhetioCapsuleIO<NodeIO>": {
-      "documentation": "An array that sends notifications when its values have changed.",
-      "events": [],
-      "methodOrder": [],
-      "methods": {},
-      "parameterTypes": [
-        "NodeIO"
-      ],
-      "supertype": "ObjectIO",
-      "typeName": "PhetioCapsuleIO<NodeIO>"
-    },
     "PhetioCapsuleIO<ReferenceIO>": {
       "documentation": "An array that sends notifications when its values have changed.",
       "events": [],
