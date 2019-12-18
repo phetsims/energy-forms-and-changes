@@ -120,7 +120,8 @@ define( require => {
      * @public
      */
     changeEnergy( deltaEnergy ) {
-      this.energy += deltaEnergy;
+      // TODO: The energy transfer is commented out to test never having the air gain or lose energy, see https://github.com/phetsims/energy-forms-and-changes/issues/301
+      // this.energy += deltaEnergy;
     }
 
     /**
