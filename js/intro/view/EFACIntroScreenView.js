@@ -111,10 +111,8 @@ define( require => {
       this.addChild( airLayer );
       const leftBurnerEnergyChunkLayer = new EnergyChunkLayer( model.leftBurner.energyChunkList, modelViewTransform );
       this.addChild( leftBurnerEnergyChunkLayer );
-      if ( model.rightBurner ) {
-        const rightBurnerEnergyChunkLayer = new EnergyChunkLayer( model.rightBurner.energyChunkList, modelViewTransform );
-        this.addChild( rightBurnerEnergyChunkLayer );
-      }
+      const rightBurnerEnergyChunkLayer = new EnergyChunkLayer( model.rightBurner.energyChunkList, modelViewTransform );
+      this.addChild( rightBurnerEnergyChunkLayer );
       const heaterCoolerFrontLayer = new Node();
       this.addChild( heaterCoolerFrontLayer );
       const beakerFrontLayer = new Node();
@@ -206,7 +204,7 @@ define( require => {
       let rightBurnerBounds = null;
 
       // only add the right burner and handle linking heaters if the right one exists in the model
-      if ( model.rightBurner ) {
+      if ( model.twoBurners ) {
 
         // create right burner node
         const rightBurnerStand = new BurnerStandNode(
@@ -717,7 +715,7 @@ define( require => {
         linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
       // Create the control for linking/un-linking the heaters, if the right burner exists
-      if ( model.rightBurner ) {
+      if ( model.twoBurners ) {
         controlPanelCheckboxes = new VBox( {
           children: [ showEnergyCheckbox, linkHeatersCheckbox ],
           spacing: 10,

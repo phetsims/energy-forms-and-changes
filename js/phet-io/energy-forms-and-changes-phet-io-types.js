@@ -853,17 +853,6 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PhetioCapsuleIO<DialogIO>"
     },
-    "PhetioCapsuleIO<ReferenceIO>": {
-      "documentation": "An array that sends notifications when its values have changed.",
-      "events": [],
-      "methodOrder": [],
-      "methods": {},
-      "parameterTypes": [
-        "ReferenceIO"
-      ],
-      "supertype": "ObjectIO",
-      "typeName": "PhetioCapsuleIO<ReferenceIO>"
-    },
     "PhetioCommandProcessorIO": {
       "documentation": "Invokes PhET-iO API commands on a running simulation.",
       "events": [

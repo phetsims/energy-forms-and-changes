@@ -1666,7 +1666,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ActionIO<NumberIO>"
     },
     "energyFormsAndChanges.homeScreen.activeProperty": {
-      "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
+      "phetioDocumentation": "Indicates whether the screen is currently displayed in the simulation.  For single-screen simulations, there is only one screen and it is always active.",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
@@ -2420,7 +2420,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.activeProperty": {
-      "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
+      "phetioDocumentation": "Indicates whether the screen is currently displayed in the simulation.  For single-screen simulations, there is only one screen and it is always active.",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
@@ -2589,7 +2589,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "always appears in the simulation, but may be the only burner",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
@@ -2640,23 +2640,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.model.rightBurnerCapsule": {
-      "phetioDocumentation": "",
+    "energyFormsAndChanges.introScreen.model.rightBurner": {
+      "phetioDocumentation": "does not appear in the simulation if the query parameter value burners=1 is provided",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": false,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PhetioCapsuleIO<ReferenceIO>"
-    },
-    "energyFormsAndChanges.introScreen.model.rightBurnerCapsule.archetype": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -2666,10 +2653,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ReferenceIO"
     },
-    "energyFormsAndChanges.introScreen.model.rightBurnerCapsule.archetype.heatCoolLevelProperty": {
+    "energyFormsAndChanges.introScreen.model.rightBurner.heatCoolLevelProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": true,
+      "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -2679,10 +2666,10 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.model.rightBurnerCapsule.archetype.positionProperty": {
+    "energyFormsAndChanges.introScreen.model.rightBurner.positionProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
-      "phetioDynamicElementArchetype": true,
+      "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
       "phetioHighFrequency": false,
@@ -4136,7 +4123,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.activeProperty": {
-      "phetioDocumentation": "Indicates whether the screen is active.  For single-screen simulations, the screen is always active.",
+      "phetioDocumentation": "Indicates whether the screen is currently displayed in the simulation.  For single-screen simulations, there is only one screen and it is always active.",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",

@@ -26,12 +26,9 @@ define( require => {
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
-  const PhetioCapsule = require( 'TANDEM/PhetioCapsule' );
-  const PhetioCapsuleIO = require( 'TANDEM/PhetioCapsuleIO' );
   const PhetioGroup = require( 'TANDEM/PhetioGroup' );
   const PhetioGroupIO = require( 'TANDEM/PhetioGroupIO' );
   const Range = require( 'DOT/Range' );
-  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
   const SimSpeed = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/SimSpeed' );
   const StickyTemperatureAndColorSensor = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/StickyTemperatureAndColorSensor' );
   const Util = require( 'DOT/Util' );
@@ -110,6 +107,9 @@ define( require => {
         );
       }
 
+      // @public (read-only) {boolean}
+      this.twoBurners = numberOfBurners === 2;
+
       // after creating the burners, the rest of the elements are created starting from this index
       const indexOfFirstElementAfterLastBeaker = LEFT_BURNER_GROUND_SPOT_INDEX + numberOfBurners;
 
@@ -122,34 +122,26 @@ define( require => {
         ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
       ];
 
-      // @public (read-only) {Burner} - left burner
+      // @public (read-only) {Burner}
       this.leftBurner = new Burner(
         new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
         this.energyChunksVisibleProperty, {
-          tandem: tandem.createTandem( 'leftBurner' )
+          tandem: tandem.createTandem( 'leftBurner' ),
+          phetioDocumentation: 'always appears in the simulation, but may be the only burner'
         }
       );
 
-      // @public (read-only) {null|Burner} - assigned a burner if one is created
-      this.rightBurner = null;
-
-      // @private
-      this.rightBurnerCapsule = new PhetioCapsule( ( tandem, xPosition ) => {
-        return new Burner(
-          new Vector2( xPosition, 0 ),
-          this.energyChunksVisibleProperty, {
-            tandem: tandem,
-            phetioDynamicElement: true
-          } );
-      }, [ 0 ], {
-        tandem: tandem.createTandem( 'rightBurnerCapsule' ),
-        phetioType: PhetioCapsuleIO( ReferenceIO )
-      } );
+      // @public (read-only) {Burner}
+      this.rightBurner = new Burner(
+        new Vector2( burnerGroundSpotXPositions[ 1 ] || 0, 0 ),
+        this.energyChunksVisibleProperty, {
+          tandem: tandem.createTandem( 'rightBurner' ),
+          phetioDocumentation: 'does not appear in the simulation if the query parameter value burners=1 is provided'
+        } );
 
       // @private {Burner[]} - put burners into a list for easy iteration
       this.burners = [ this.leftBurner ];
-      if ( numberOfBurners > 1 ) {
-        this.rightBurner = this.rightBurnerCapsule.getInstance( burnerGroundSpotXPositions[ 1 ] );
+      if ( this.twoBurners ) {
         this.burners.push( this.rightBurner );
       }
 
