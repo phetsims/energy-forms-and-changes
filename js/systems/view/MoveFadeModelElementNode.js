@@ -22,7 +22,8 @@ define( require => {
      */
     constructor( modelElement, modelViewTransform, tandem ) {
       super( {
-        tandem: tandem
+        tandem: tandem,
+        phetioComponentOptions: { opacityProperty: { phetioReadOnly: true } }
       } );
 
       // update our position as the model element moves
