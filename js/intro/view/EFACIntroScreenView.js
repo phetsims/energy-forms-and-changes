@@ -825,7 +825,7 @@ define( require => {
      */
     stepView( dt ) {
       this.beakerViews.forEach( beakerView => {
-        beakerView.step();
+        beakerView.step( dt );
       } );
     }
 
