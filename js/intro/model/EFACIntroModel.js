@@ -70,17 +70,20 @@ define( require => {
 
       // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'energyChunksVisibleProperty' )
+        tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
+        phetioDocumentation: 'whether the energy chunks are visible'
       } );
 
       // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
       this.linkedHeatersProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'linkedHeatersProperty' )
+        tandem: tandem.createTandem( 'linkedHeatersProperty' ),
+        phetioDocumentation: 'whether the heaters are synced together or independent of each other'
       } );
 
       // @public {BooleanProperty} - is the sim running or paused?
       this.isPlayingProperty = new BooleanProperty( true, {
-        tandem: tandem.createTandem( 'isPlayingProperty' )
+        tandem: tandem.createTandem( 'isPlayingProperty' ),
+        phetioDocumentation: 'whether the screen is playing or paused'
       } );
 
       // @public
