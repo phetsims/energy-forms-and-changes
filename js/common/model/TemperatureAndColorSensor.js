@@ -47,7 +47,8 @@ define( require => {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
         units: 'K',
         tandem: options.tandem.createTandem( 'sensedTemperatureProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioHighFrequency: true
       } );
 
       // @public (read-only) {Property.<Color>}

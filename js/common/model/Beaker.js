@@ -127,7 +127,8 @@ define( require => {
         range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),
         units: 'K',
         tandem: options.tandem.createTandem( 'temperatureProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioHighFrequency: true
       } );
 
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
