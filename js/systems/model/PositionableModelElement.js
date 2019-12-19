@@ -23,8 +23,10 @@ define( require => {
 
       // @public {Vector2Property}
       this.positionProperty = new Vector2Property( initialPosition, {
+        units: 'm',
         tandem: tandem.createTandem( 'positionProperty' ),
-        phetioReadyOnly: true
+        phetioReadyOnly: true,
+        phetioHighFrequency: true
       } );
     }
   }

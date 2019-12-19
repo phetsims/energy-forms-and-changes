@@ -37,7 +37,10 @@ define( require => {
 
       // @public - position of the center bottom of this model element
       this.positionProperty = new Vector2Property( initialPosition, {
-        tandem: options.tandem.createTandem( 'positionProperty' )
+        units: 'm',
+        tandem: options.tandem.createTandem( 'positionProperty' ),
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the position of the center-bottom of the element'
       } );
 
       // @public (read-only)
