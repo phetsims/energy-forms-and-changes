@@ -2472,12 +2472,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2537,12 +2537,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "BlockIO"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": true,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2615,12 +2615,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2667,12 +2667,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.rightBurner.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2706,12 +2706,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2797,12 +2797,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2888,12 +2888,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -2979,12 +2979,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -4201,12 +4201,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
@@ -4292,12 +4292,12 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.positionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the position of the center-bottom of the element",
       "phetioDynamicElement": false,
       "phetioDynamicElementArchetype": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
       "phetioPlayback": false,
       "phetioReadOnly": false,
       "phetioState": true,
