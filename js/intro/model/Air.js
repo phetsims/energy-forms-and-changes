@@ -120,8 +120,14 @@ define( require => {
      * @public
      */
     changeEnergy( deltaEnergy ) {
-      // TODO: The energy transfer is commented out to test never having the air gain or lose energy, see https://github.com/phetsims/energy-forms-and-changes/issues/301
-      // this.energy += deltaEnergy;
+
+      // This was changed in Dec 2019 such that the air never gains or loses energy.  The motives for this change are
+      // explained in https://github.com/phetsims/energy-forms-and-changes/issues/301.  This means that some of the
+      // methods in this class, such as the one for equalizing the air temperature with the surrounding air, are
+      // probably never called.  If this change endures, it may be possible to simplify the Air class in the future by
+      // removing such unused methods.
+
+      // do nothing - the air is considered to be a heat sink that can take or supply energy without changing temperature
     }
 
     /**
