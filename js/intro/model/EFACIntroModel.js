@@ -21,6 +21,7 @@ define( require => {
   const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Burner = require( 'ENERGY_FORMS_AND_CHANGES/common/model/Burner' );
+  const Color = require( 'SCENERY/util/Color' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const Emitter = require( 'AXON/Emitter' );
   const EnergyBalanceTracker = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EnergyBalanceTracker' );
@@ -57,6 +58,10 @@ define( require => {
 
   // initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
   const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
+
+  // colors
+  const FLAME_ORANGE = new Color( 'orange' );
+  const ICE_BLUE = new Color( '#87CEFA' );
 
   class EFACIntroModel {
 
@@ -283,10 +288,10 @@ define( require => {
     static mapHeatCoolLevelToColor( heatCoolLevel ) {
       let color;
       if ( heatCoolLevel > 0 ) {
-        color = 'orange';
+        color = FLAME_ORANGE;
       }
       else if ( heatCoolLevel < 0 ) {
-        color = '#87CEFA';
+        color = ICE_BLUE;
       }
       else {
         color = EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR;
