@@ -62,7 +62,8 @@ define( require => {
       defaultValue: EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS,
 
       // create an array with integer values 1-N, where N is the max number of burners on the intro screen
-      validValues: [ ...Array( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS ).keys() ].map( n => ++n )
+      validValues: [ ...Array( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS ).keys() ].map( n => ++n ),
+      isGraceful: true
     },
 
     // select the startup block configuration
@@ -72,7 +73,8 @@ define( require => {
       defaultValue: defaultElements,
       elementSchema: { type: 'string' },
       isValidValue: values => _.difference( values, defaultElements ).length === 0 &&
-                              values.length <= EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS
+                              values.length <= EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS,
+      isGraceful: true
     }
 
   } );
