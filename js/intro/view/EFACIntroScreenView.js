@@ -195,7 +195,9 @@ define( require => {
         minWidth: leftBurnerStand.width / 1.5,
         maxWidth: leftBurnerStand.width / 1.5,
         thumbSize: new Dimension2( 36, 18 ),
-        snapToZero: snapToZero
+        snapToZero: snapToZero,
+        heaterCoolerBack: leftHeaterCoolerBack,
+        tandem: tandem.createTandem( 'leftHeaterCoolerNode' )
       } );
       heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
       backLayer.addChild( leftHeaterCoolerBack );
@@ -224,7 +226,9 @@ define( require => {
           minWidth: rightBurnerStand.width / 1.5,
           maxWidth: rightBurnerStand.width / 1.5,
           thumbSize: new Dimension2( 36, 18 ),
-          snapToZero: snapToZero
+          snapToZero: snapToZero,
+          heaterCoolerBack: rightHeaterCoolerBack,
+          tandem: tandem.createTandem( 'rightHeaterCoolerNode' )
         } );
         heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
         backLayer.addChild( rightHeaterCoolerBack );

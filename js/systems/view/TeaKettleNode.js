@@ -60,7 +60,10 @@ define( require => {
       const heaterCoolerFront = new HeaterCoolerFront( this.heaterSettingProperty, {
         snapToZero: false,
         coolEnabled: false,
-        scale: HEATER_COOLER_NODE_SCALE
+        scale: HEATER_COOLER_NODE_SCALE,
+        linkHeaterCoolerBack: heaterCoolerBack,
+        tandem: tandem.createTandem( 'heaterCoolerNode' ),
+        heaterCoolerBack: heaterCoolerBack
       } );
 
       // burner stand node
