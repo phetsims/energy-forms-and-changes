@@ -24,7 +24,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Range = require( 'DOT/Range' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -134,7 +134,7 @@ define( require => {
         const torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
         const angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
         const newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
-        this.wheelRotationalVelocity = Util.clamp(
+        this.wheelRotationalVelocity = Utils.clamp(
           newAngularVelocity,
           -MAX_ROTATIONAL_VELOCITY,
           MAX_ROTATIONAL_VELOCITY

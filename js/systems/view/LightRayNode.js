@@ -19,7 +19,7 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -110,7 +110,7 @@ define( require => {
         const distanceFromPreviousPoint = sortedPointAndFadeValues[ i ].point.distance( sortedPointAndFadeValues[ i + 1 ].point );
 
         let intensityAtEndPoint = prevIntensity * Math.pow( Math.E, -sortedPointAndFadeValues[ i ].fadeValue * distanceFromPreviousPoint );
-        intensityAtEndPoint = Util.roundSymmetric( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
+        intensityAtEndPoint = Utils.roundSymmetric( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
 
         const endPointColor = this.color.copy().setAlpha( intensityAtEndPoint );
         rayGradient.addColorStop( distanceFromOrigin / rayLength, endPointColor );

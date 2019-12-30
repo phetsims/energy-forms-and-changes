@@ -31,7 +31,7 @@ define( require => {
   const RectangularThermalMovableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/RectangularThermalMovableModelElement' );
   const Tandem = require( 'TANDEM/Tandem' );
   const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -241,7 +241,7 @@ define( require => {
       if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
         // the fluid is emitting some amount of steam - set the proportionate amount
-        this.steamingProportion = Util.clamp( 1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE, 0, 1 );
+        this.steamingProportion = Utils.clamp( 1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE, 0, 1 );
       }
       else {
         this.steamingProportion = 0;
@@ -277,7 +277,7 @@ define( require => {
       sortedSliceArray.forEach( slice => {
         const sliceArea = slice.bounds.width * slice.bounds.height;
         const sliceCenter = slice.bounds.center;
-        _.times( Util.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
+        _.times( Utils.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
           if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
             slice.addEnergyChunk( new EnergyChunk(
               EnergyType.THERMAL,

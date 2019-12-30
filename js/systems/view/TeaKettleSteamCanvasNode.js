@@ -14,7 +14,7 @@ define( require => {
   const merge = require( 'PHET_CORE/merge' );
   const Range = require( 'DOT/Range' );
   const TeaKettle = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/TeaKettle' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const STEAM_BUBBLE_SPEED_RANGE = new Range( 120, 150 ); // in screen coordinates / second
@@ -100,7 +100,7 @@ define( require => {
 
         // allow for a small variation from the previous angle, as long as it's within the valid angle range
         let bubbleAngle = this.lastSteamAngle * ( phet.joist.random.nextDouble() * ( 1.015 - 0.985 ) + 0.985 );
-        bubbleAngle = Util.clamp( bubbleAngle, this.steamAngleRange.min, this.steamAngleRange.max );
+        bubbleAngle = Utils.clamp( bubbleAngle, this.steamAngleRange.min, this.steamAngleRange.max );
         this.lastSteamAngle = bubbleAngle;
 
         // add new bubbles
@@ -135,7 +135,7 @@ define( require => {
 
         // fade out the bubble as it reaches the end of its range
         const steamBubbleMaxHeight = STEAM_BUBBLE_HEIGHT_RANGE.min + steamingProportion * STEAM_BUBBLE_HEIGHT_RANGE.getLength();
-        const heightFraction = Util.clamp( ( this.steamOrigin.y - steamBubblesCopy[ i ].y ) / steamBubbleMaxHeight, 0, 1 );
+        const heightFraction = Utils.clamp( ( this.steamOrigin.y - steamBubblesCopy[ i ].y ) / steamBubbleMaxHeight, 0, 1 );
         steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * STEAM_BUBBLE_MAX_OPACITY;
 
         this.drawSteamBubble( context, steamBubblesCopy[ i ] );

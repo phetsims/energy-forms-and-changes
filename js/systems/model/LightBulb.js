@@ -18,7 +18,7 @@ define( require => {
   const EnergyUser = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergyUser' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -152,7 +152,7 @@ define( require => {
         // energy chunks not currently visible
         else {
           if ( this.activeProperty.value && incomingEnergy.type === EnergyType.ELECTRICAL ) {
-            this.litProportionProperty.set( Util.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
+            this.litProportionProperty.set( Utils.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
           }
           else {
             this.litProportionProperty.set( 0.0 );

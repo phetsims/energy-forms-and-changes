@@ -22,7 +22,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -183,7 +183,7 @@ define( require => {
         this.elapsedTransitionTime += dt;
         const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
         const totalTravelVector = targetCarouselOffset.minus( this.initialCarouselOffset );
-        const transitionProportion = Util.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
+        const transitionProportion = Utils.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
         this.currentCarouselOffset =
           this.initialCarouselOffset.plus( totalTravelVector.times( Easing.CUBIC_IN_OUT.value( transitionProportion ) ) );
         this.updateManagedElementPositions();
@@ -219,7 +219,7 @@ define( require => {
     updateManagedElementOpacities() {
       this.managedElements.forEach( managedElement => {
         const distanceToSelection = managedElement.positionProperty.value.distance( this.selectedElementPosition );
-        const opacity = Util.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
+        const opacity = Utils.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
         managedElement.opacityProperty.set( opacity );
       } );
     }

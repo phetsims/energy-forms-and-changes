@@ -47,7 +47,7 @@ define( require => {
   const TeaKettleNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/TeaKettleNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TimeControlNode = require( 'SCENERY_PHET/TimeControlNode' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // strings
@@ -115,8 +115,8 @@ define( require => {
       // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model, which is on the
       // middle of the screen above the counter as located in the view. Final arg is zoom factor from original Java sim -
       // smaller zooms out, larger zooms in.
-      const mvtOriginX = Util.roundSymmetric( layoutBounds.width * 0.5 );
-      const mvtOriginY = Util.roundSymmetric( layoutBounds.height * 0.475 );
+      const mvtOriginX = Utils.roundSymmetric( layoutBounds.width * 0.5 );
+      const mvtOriginY = Utils.roundSymmetric( layoutBounds.height * 0.475 );
       const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
         Vector2.ZERO,
         new Vector2( mvtOriginX, mvtOriginY ),

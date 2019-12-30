@@ -13,7 +13,7 @@ define( require => {
   const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Range = require( 'DOT/Range' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const STEAMING_RANGE = 10; // number of degrees Kelvin over which steam is visible
@@ -89,7 +89,7 @@ define( require => {
 
         // the water is emitting some amount of steam - set the proportionate amount
         steamingProportion = 1 - ( ( this.fluidBoilingPoint - this.temperatureProperty.value ) / STEAMING_RANGE );
-        steamingProportion = Util.clamp( steamingProportion, 0, 1 );
+        steamingProportion = Utils.clamp( steamingProportion, 0, 1 );
       }
 
       // add any new steam bubbles
@@ -145,14 +145,14 @@ define( require => {
           steamBubblesCopy[ i ].x += distanceFromCenterX * 0.2 * this.dt;
 
           // fade the bubble as it reaches the end of its range
-          const heightFraction = Util.clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
+          const heightFraction = Utils.clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
           steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
         }
 
         // fade new bubble in
         else {
           const distanceFromWater = this.steamOrigin - steamBubblesCopy[ i ].y;
-          const opacityFraction = Util.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
+          const opacityFraction = Utils.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
           steamBubblesCopy[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
 

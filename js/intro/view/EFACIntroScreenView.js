@@ -54,7 +54,7 @@ define( require => {
   const SkyNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/SkyNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TimeControlNode = require( 'SCENERY_PHET/TimeControlNode' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -92,8 +92,8 @@ define( require => {
       const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
         Vector2.ZERO,
         new Vector2(
-          Util.roundSymmetric( this.layoutBounds.width * 0.5 ),
-          Util.roundSymmetric( this.layoutBounds.height * 0.85 )
+          Utils.roundSymmetric( this.layoutBounds.width * 0.5 ),
+          Utils.roundSymmetric( this.layoutBounds.height * 0.85 )
         ),
         EFACConstants.INTRO_MVT_SCALE_FACTOR
       );

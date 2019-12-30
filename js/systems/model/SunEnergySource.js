@@ -21,7 +21,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -90,7 +90,7 @@ define( require => {
         for ( let i = 0; i < nClouds; i++ ) {
 
           // stagger the existence strength of the clouds
-          const value = Util.clamp( cloudiness * nClouds - i, 0, 1 );
+          const value = Utils.clamp( cloudiness * nClouds - i, 0, 1 );
           this.clouds[ i ].existenceStrengthProperty.set( value );
         }
       } );

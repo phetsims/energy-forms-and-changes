@@ -15,7 +15,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const LinearFunction = require( 'DOT/LinearFunction' );
   const ScreenView = require( 'JOIST/ScreenView' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants used for creating projections that have a 3D-ish look.
@@ -109,7 +109,7 @@ define( require => {
     SIGNIFICANT_TEMPERATURE_DIFFERENCE: 1E-3, // in degrees Kelvin
 
     ENERGY_TO_NUM_CHUNKS_MAPPER: energy => {
-      return Math.max( Util.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS( energy ) ), 0 );
+      return Math.max( Utils.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS( energy ) ), 0 );
     },
 
     ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY( 1 ),
