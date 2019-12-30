@@ -39,7 +39,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HeaterCoolerBack = require( 'SCENERY_PHET/HeaterCoolerBack' );
   const HeaterCoolerFront = require( 'SCENERY_PHET/HeaterCoolerFront' );
-  const KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
+  const KeyboardUtils = require( 'SCENERY/accessibility/KeyboardUtils' );
   const Image = require( 'SCENERY/nodes/Image' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -276,12 +276,12 @@ define( require => {
         // listen to keyboard events on the left heater-cooler
         leftHeaterCoolerFront.addInputListener( {
           keydown: event => {
-            if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+            if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
               leftHeaterCoolerDownInputAction();
             }
           },
           keyup: event => {
-            if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+            if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
               leftHeaterCoolerUpInputAction();
             }
           }
@@ -308,12 +308,12 @@ define( require => {
         // listen to keyboard events on the right heater-cooler
         rightHeaterCoolerFront.addInputListener( {
           keydown: event => {
-            if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+            if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
               rightHeaterCoolerDownInputAction();
             }
           },
           keyup: event => {
-            if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
+            if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
               rightHeaterCoolerUpInputAction();
             }
           }
