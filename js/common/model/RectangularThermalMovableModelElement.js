@@ -19,8 +19,10 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const HeatTransferConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/model/HeatTransferConstants' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ObservableArray = require( 'AXON/ObservableArray' );
+  const Range = require( 'DOT/Range' );
   const Rectangle = require( 'DOT/Rectangle' );
   const Shape = require( 'KITE/Shape' );
   const ThermalContactArea = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ThermalContactArea' );
@@ -52,6 +54,9 @@ define( require => {
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
 
+      assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
+      assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
+
       // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
       this.approachingEnergyChunks = new ObservableArray();
 
@@ -64,6 +69,15 @@ define( require => {
       // @protected {ThermalContactArea} - the 2D area for this element where it can be in contact with another thermal
       // elements and thus exchange heat, generally set by descendant classes
       this.thermalContactArea = new ThermalContactArea( Bounds2.NOTHING.copy(), false );
+
+      // @public (read-only) {NumberProperty}
+      this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
+        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
+        units: 'K',
+        tandem: options.tandem.createTandem( 'temperatureProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true
+      } );
 
       // update the composite bounds as the model element moves
       this.positionProperty.link( position => {
@@ -226,8 +240,6 @@ define( require => {
      */
     getTemperature() {
       assert && assert( this.energy >= 0, `Invalid energy: ${this.energy}` );
-      assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
-      assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
       return this.energy / ( this.mass * this.specificHeat );
     }
 
@@ -242,6 +254,7 @@ define( require => {
     reset() {
       super.reset();
       this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
+      this.temperatureProperty.reset();
       this.addInitialEnergyChunks();
       this.approachingEnergyChunks.reset();
       this.clearECDistributionCountdown();
@@ -253,6 +266,7 @@ define( require => {
      * @public
      */
     step( dt ) {
+      this.temperatureProperty.set( this.getTemperature() );
 
       if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 

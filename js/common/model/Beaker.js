@@ -122,15 +122,6 @@ define( require => {
         phetioReadOnly: true
       } );
 
-      // @public (read-only) {NumberProperty} - temperature of fluid in beaker
-      this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
-        range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),
-        units: 'K',
-        tandem: options.tandem.createTandem( 'temperatureProperty' ),
-        phetioReadOnly: true,
-        phetioHighFrequency: true
-      } );
-
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
       // steam, 1 is the max amount (full boil)
       this.steamingProportion = 0;
@@ -236,7 +227,6 @@ define( require => {
      * @public
      */
     step( dt ) {
-      this.temperatureProperty.set( this.getTemperature() );
       const temperature = this.temperatureProperty.get();
       if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
@@ -430,7 +420,6 @@ define( require => {
      */
     getTemperature() {
       const temperature = super.getTemperature();
-      assert && assert( temperature >= 0, `Invalid temperature: ${temperature}` );
       return Math.min( temperature, this.fluidBoilingPoint );
     }
 
@@ -491,7 +480,6 @@ define( require => {
      */
     reset() {
       this.fluidProportionProperty.reset();
-      this.temperatureProperty.reset();
       this.resetEmitter.emit();
       super.reset();
     }
