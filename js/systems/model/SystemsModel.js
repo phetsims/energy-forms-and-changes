@@ -45,12 +45,14 @@ define( require => {
 
       // @public {BooleanProperty} - see in EFACIntroModel for doc
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'energyChunksVisibleProperty' )
+        tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
+        phetioDocumentation: 'whether the energy chunks are visible'
       } );
 
       // @public (read-only) {BooleanProperty} - is the sim running or paused?
       this.isPlayingProperty = new BooleanProperty( true, {
-        tandem: tandem.createTandem( 'isPlayingProperty' )
+        tandem: tandem.createTandem( 'isPlayingProperty' ),
+        phetioDocumentation: 'whether the screen is playing or paused'
       } );
 
       // @public (read-only) energy converters

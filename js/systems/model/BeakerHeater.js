@@ -79,7 +79,8 @@ define( require => {
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'heatProportionProperty' ),
-        phetioReadyOnly: true
+        phetioReadyOnly: true,
+        phetioDocumentation: 'the proportion of how much heat the coils have'
       } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the

@@ -61,7 +61,8 @@ define( require => {
       this.litProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'litProportionProperty' ),
-        phetioReadyOnly: true
+        phetioReadyOnly: true,
+        phetioDocumentation: 'the proportion of how much this light bulb is lit'
       } );
 
       // @private

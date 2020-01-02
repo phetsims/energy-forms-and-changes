@@ -78,17 +78,18 @@ define( require => {
         validValues: getValidTargetIndices( this.managedElements.length )
       } );
 
-      // @public (read-only) {EnumerationProperty} - indicates which element on the carousel is currently selected by
-      // name. this is for phet-io Studio so that Clients can select an element by name instead of index
+      // @public (read-only) {EnumerationProperty} - this is for phet-io Studio so that Clients can select an element
+      // by name instead of index
       this.targetElementNameProperty = new EnumerationProperty( elementNames, elementNames.VALUES[ 0 ], {
-        tandem: tandem.createTandem( 'targetElementNameProperty' )
+        tandem: tandem.createTandem( 'targetElementNameProperty' ),
+        phetioDocumentation: 'indicates which element on the carousel is currently selected by name'
       } );
 
-      // @public (read-only) {BooleanProperty} - a flag indicating whether or not an animation from one carousel position
-      // to another is in progress
+      // @public (read-only) {BooleanProperty}
       this.animationInProgressProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'animationInProgressProperty' ),
-        phetioReadyOnly: true
+        phetioReadyOnly: true,
+        phetioDocumentation: 'indicates whether an animation from one carousel position to another is in progress'
       } );
 
       // @private - variables needed to manage carousel transitions

@@ -4812,7 +4812,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.heatProportionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the proportion of how much heat the coils have",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5085,7 +5085,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.energyChunksVisibleProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the energy chunks are visible",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5098,7 +5098,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.animationInProgressProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates whether an animation from one carousel position to another is in progress",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5111,7 +5111,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyConvertersCarousel.targetElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates which element on the carousel is currently selected by name",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5124,7 +5124,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<EnumerationIO(GENERATOR|SOLAR_PANEL)>"
     },
     "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.animationInProgressProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates whether an animation from one carousel position to another is in progress",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5137,7 +5137,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energySourcesCarousel.targetElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates which element on the carousel is currently selected by name",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5150,7 +5150,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.animationInProgressProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates whether an animation from one carousel position to another is in progress",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5163,7 +5163,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "indicates which element on the carousel is currently selected by name",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5189,7 +5189,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.fan.bladePositionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the angle of the blade as it's spinning in a circular motion, in radians",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5267,7 +5267,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.fluorescentBulb.litProportionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the proportion of how much this light bulb is lit",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5358,7 +5358,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.incandescentBulb.litProportionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the proportion of how much this light bulb is lit",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5384,7 +5384,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.isPlayingProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the screen is playing or paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
