@@ -88,7 +88,7 @@ define( require => {
       // @public (read-only) {BooleanProperty}
       this.animationInProgressProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'animationInProgressProperty' ),
-        phetioReadyOnly: true,
+        phetioReadOnly: true,
         phetioDocumentation: 'indicates whether an animation from one carousel position to another is in progress'
       } );
 

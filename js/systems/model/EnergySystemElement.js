@@ -36,7 +36,8 @@ define( require => {
       // @public {BooleanProperty}
       this.activeProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'activeProperty' ),
-        phetioReadyOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'whether the system element is active. system elements are active when visible on the screen'
       } );
 
       // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types

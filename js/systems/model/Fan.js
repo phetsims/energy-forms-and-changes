@@ -73,9 +73,10 @@ define( require => {
       // @public (read-only) {NumberProperty}
       this.bladePositionProperty = new NumberProperty( 0, {
         range: new Range( 0, 2 * Math.PI ),
+        units: 'radians',
         tandem: tandem.createTandem( 'bladePositionProperty' ),
-        phetioReadyOnly: true,
-        phetioDocumentation: 'the angle of the blade as it\'s spinning in a circular motion, in radians'
+        phetioReadOnly: true,
+        phetioDocumentation: 'the angle of the blade'
       } );
 
       // @private - movers that control how the energy chunks move towards and through the fan

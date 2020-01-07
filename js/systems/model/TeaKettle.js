@@ -61,14 +61,15 @@ define( require => {
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'heatProportionProperty' ),
-        phetioReadyOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'proportion of heat coming from the heater'
       } );
 
       // @public (read-only) {NumberProperty}
       this.energyProductionRateProperty = new NumberProperty( 0, {
         range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
         tandem: tandem.createTandem( 'energyProductionRateProperty' ),
-        phetioReadyOnly: true
+        phetioReadOnly: true
       } );
 
       // @public

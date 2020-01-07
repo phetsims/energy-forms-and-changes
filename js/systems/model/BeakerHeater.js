@@ -69,8 +69,8 @@ define( require => {
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.beakerOfWater.value;
 
-      // @private
-      this.tandemName = tandem.name;
+      // @private {Tandem}
+      this.tandem = tandem;
 
       // @private
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -79,8 +79,8 @@ define( require => {
       this.heatProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'heatProportionProperty' ),
-        phetioReadyOnly: true,
-        phetioDocumentation: 'the proportion of how much heat the coils have'
+        phetioReadOnly: true,
+        phetioDocumentation: 'proportion of how much heat the coils have'
       } );
 
       // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
@@ -99,7 +99,7 @@ define( require => {
         BEAKER_HEIGHT,
         energyChunksVisibleProperty, {
           tandem: tandem.createTandem( 'waterBeaker' ),
-          phetioDocumentation: 'a beaker that contains water'
+          phetioDocumentation: 'beaker that contains water'
         }
       );
 
@@ -246,7 +246,7 @@ define( require => {
 
       sensedTemperatureProperty.set( this.beaker.getTemperature() );
       sensedElementColorProperty.set( EFACConstants.WATER_COLOR_OPAQUE );
-      sensedElementNameProperty.set( this.tandemName );
+      sensedElementNameProperty.set( this.tandem.phetioID );
     }
 
     /**

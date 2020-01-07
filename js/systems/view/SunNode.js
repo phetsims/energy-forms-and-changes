@@ -129,7 +129,7 @@ define( require => {
 
       // add slider panel to control cloudiness
       const slider = new VSlider(
-        sun.cloudinessProperty,
+        sun.cloudinessProportionProperty,
         new Range( 0, 1 ), {
           top: 0, left: 0,
           tandem: tandem.createTandem( 'slider' )

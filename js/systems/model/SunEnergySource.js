@@ -68,9 +68,10 @@ define( require => {
       ];
 
       // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
-      this.cloudinessProperty = new NumberProperty( 0, {
+      this.cloudinessProportionProperty = new NumberProperty( 0, {
         range: new Range( 0, 1 ),
-        tandem: tandem.createTandem( 'cloudinessProperty' )
+        tandem: tandem.createTandem( 'cloudinessProportionProperty' ),
+        phetioDocumentation: 'proportion of clouds blocking the sun'
       } );
 
       // @private - internal variables used in methods
@@ -85,7 +86,7 @@ define( require => {
       this.energyChunksPassingThroughClouds = [];
 
       // set up a listener to add/remove clouds based on the value of the cloudiness Property
-      this.cloudinessProperty.link( cloudiness => {
+      this.cloudinessProportionProperty.link( cloudiness => {
         const nClouds = this.clouds.length;
         for ( let i = 0; i < nClouds; i++ ) {
 
@@ -123,7 +124,7 @@ define( require => {
         // move the energy chunks
         this.updateEnergyChunkPositions( dt );
 
-        let energyProducedProportion = 1 - this.cloudinessProperty.value;
+        let energyProducedProportion = 1 - this.cloudinessProportionProperty.value;
 
         // map energy produced proportion to eliminate very low values
         energyProducedProportion = energyProducedProportion === 0 ? 0 : 0.1 + ( energyProducedProportion * 0.9 );
@@ -253,7 +254,7 @@ define( require => {
     getEnergyOutputRate() {
       return new Energy(
         EnergyType.LIGHT,
-        EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProperty.value )
+        EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value )
       );
     }
 
@@ -297,7 +298,7 @@ define( require => {
      */
     deactivate() {
       super.deactivate();
-      this.cloudinessProperty.reset();
+      this.cloudinessProportionProperty.reset();
       this.energyChunksPassingThroughClouds = [];
     }
 

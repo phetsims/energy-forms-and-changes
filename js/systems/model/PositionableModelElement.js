@@ -25,8 +25,9 @@ define( require => {
       this.positionProperty = new Vector2Property( initialPosition, {
         units: 'm',
         tandem: tandem.createTandem( 'positionProperty' ),
-        phetioReadyOnly: true,
-        phetioHighFrequency: true
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the position of the system element'
       } );
     }
   }

@@ -65,18 +65,22 @@ define( require => {
       // @private {BooleanProperty}
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-      // @public (read-only) {NumberProperty} - rotational position of the wheel
+      // @public (read-only) {NumberProperty}
       this.wheelRotationalAngleProperty = new NumberProperty( 0, {
         range: new Range( 0, 2 * Math.PI ),
+        units: 'radians',
         tandem: tandem.createTandem( 'wheelRotationalAngleProperty' ),
-        phetioReadyOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'the angle of the wheel'
       } );
 
-      // @public {BooleanProperty} - a flag that controls "direct coupling mode", which means that the generator wheel
-      // turns at a rate that is directly proportional to the incoming energy, with no rotational inertia
+      // @public {BooleanProperty}
       this.directCouplingModeProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'directCouplingModeProperty' ),
-        phetioReadyOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'whether the wheel is in "direct coupling mode", meaning the generator wheel turns at a ' +
+                             'rate that is directly proportional to the incoming energy, with no rotational inertia. ' +
+                             'true when the generator is paired with the biker.'
       } );
 
       // @private
