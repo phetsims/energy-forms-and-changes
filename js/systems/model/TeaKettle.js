@@ -71,7 +71,7 @@ define( require => {
         range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
         tandem: tandem.createTandem( 'energyProductionRateProperty' ),
         phetioReadOnly: true,
-        phetioHighFrequency: true,
+        phetioHighFrequency: true
       } );
 
       // @public
