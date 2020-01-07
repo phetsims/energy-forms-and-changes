@@ -149,8 +149,7 @@ define( require => {
         stepForwardOptions: {
           listener: () => model.manualStep()
         },
-        tandem: tandem.createTandem( 'timeControlNode' ),
-        phetioDocumentation: 'controls that include a "play/pause" button and a "step forward" button'
+        tandem: tandem.createTandem( 'timeControlNode' )
       } );
 
       // for testing - option to add fast forward controls

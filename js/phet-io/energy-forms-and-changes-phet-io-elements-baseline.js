@@ -4448,7 +4448,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode": {
-      "phetioDocumentation": "controls that include a \"play/pause\" button and a \"step forward\" button",
+      "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5670,7 +5670,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.controlPanel": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "panel in the upper right corner of the screen",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5709,7 +5709,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.systemsScreen.view.controlPanel.showEnergySymbolsCheckbox": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "checkbox that shows the energy symbols",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,

@@ -242,7 +242,8 @@ define( require => {
           spacing: 5
         } ),
         model.energyChunksVisibleProperty, {
-          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' )
+          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
+          phetioDocumentation: 'checkbox that shows the energy symbols'
         }
       );
       showEnergyChunksCheckbox.touchArea =
@@ -257,7 +258,8 @@ define( require => {
         right: layoutBounds.maxX - EDGE_INSET,
         top: EDGE_INSET,
         minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
-        tandem: controlPanelTandem
+        tandem: controlPanelTandem,
+        phetioDocumentation: 'panel in the upper right corner of the screen'
       } );
       this.addChild( controlPanel );
 
