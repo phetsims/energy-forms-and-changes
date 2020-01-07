@@ -76,7 +76,8 @@ define( require => {
         units: 'K',
         tandem: options.tandem.createTandem( 'temperatureProperty' ),
         phetioReadOnly: true,
-        phetioHighFrequency: true
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the temperature of the element'
       } );
 
       // update the composite bounds as the model element moves

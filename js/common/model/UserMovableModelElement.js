@@ -34,7 +34,8 @@ define( require => {
       // @public {BooleanProperty}
       this.userControlledProperty = new BooleanProperty( false, {
         tandem: options.tandem.createTandem( 'userControlledProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'whether the element is being directly held or moved by a user'
       } );
 
       // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the

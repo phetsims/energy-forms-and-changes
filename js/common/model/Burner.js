@@ -65,7 +65,8 @@ define( require => {
       // @public {NumberProperty}
       this.heatCoolLevelProperty = new NumberProperty( 0, {
         range: new Range( -1, 1 ),
-        tandem: options.tandem.createTandem( 'heatCoolLevelProperty' )
+        tandem: options.tandem.createTandem( 'heatCoolLevelProperty' ),
+        phetioDocumentation: 'the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating'
       } );
 
       // @public (read-only) {ObservableArray.<EnergyChunk>}

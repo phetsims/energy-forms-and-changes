@@ -1,8 +1,8 @@
 // Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * Model element that represents a beaker that contains water.  The water contains energy, which includes energy chunks,
- * and has temperature.
+ * Model element that represents a beaker which contains a fluid. The fluid contains energy, which includes energy
+ * chunks, and has a temperature.
  *
  * @author John Blanco
  */
@@ -78,7 +78,8 @@ define( require => {
 
         // phet-io
         tandem: Tandem.REQUIRED,
-        phetioType: BeakerIO
+        phetioType: BeakerIO,
+        phetioDocumentation: 'beaker that contains either water or olive oil, and may also contain blocks'
       }, options );
 
       // calculate the mass of the beaker
@@ -119,7 +120,8 @@ define( require => {
       this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_PROPORTION, {
         range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 ),
         tandem: options.tandem.createTandem( 'fluidProportionProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'the proportion of fluid in the beaker'
       } );
 
       // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no

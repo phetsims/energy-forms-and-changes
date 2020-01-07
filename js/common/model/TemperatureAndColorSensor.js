@@ -34,7 +34,11 @@ define( require => {
     constructor( model, initialPosition, initiallyActive, options ) {
 
       options = merge( {
-        tandem: Tandem.REQUIRED
+        tandem: Tandem.REQUIRED,
+        positionPropertyOptions: {
+          phetioDocumentation: 'the position of the tip of the thermometer\'s color sensor'
+        },
+        phetioDocumentation: 'thermometer that can sense the temperature, color, and phet-io ID of an element'
       }, options );
 
       super( initialPosition, options );
@@ -48,25 +52,30 @@ define( require => {
         units: 'K',
         tandem: options.tandem.createTandem( 'sensedTemperatureProperty' ),
         phetioReadOnly: true,
-        phetioHighFrequency: true
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the temperature of the sensed element'
       } );
 
       // @public (read-only) {Property.<Color>}
       this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
         phetioType: PropertyIO( ColorIO ),
         tandem: options.tandem.createTandem( 'sensedElementColorProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'the color of the sensed element'
       } );
 
       this.sensedElementNameProperty = new StringProperty( '', {
         tandem: options.tandem.createTandem( 'sensedElementNameProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'the phet-io ID of the sensed element'
       } );
 
       // @public (read-only) {BooleanProperty} - used to control visibility in the view
       this.activeProperty = new BooleanProperty( initiallyActive, {
         tandem: options.tandem.createTandem( 'activeProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'whether the thermometer is active. thermometers are active when not in the storage ' +
+                             'area, regardless of whether the sim is paused'
       } );
     }
 

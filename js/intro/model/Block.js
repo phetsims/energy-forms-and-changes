@@ -63,7 +63,8 @@ define( require => {
       options = merge( {
         tandem: Tandem.REQUIRED,
         phetioDynamicElement: true,
-        phetioType: BlockIO
+        phetioType: BlockIO,
+        phetioDocumentation: 'block that can be of type iron or brick'
       }, options );
 
       super(

@@ -98,7 +98,8 @@ define( require => {
         BEAKER_WIDTH,
         BEAKER_HEIGHT,
         energyChunksVisibleProperty, {
-          tandem: tandem.createTandem( 'waterBeaker' )
+          tandem: tandem.createTandem( 'waterBeaker' ),
+          phetioDocumentation: 'a beaker that contains water'
         }
       );
 

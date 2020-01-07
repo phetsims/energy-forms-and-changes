@@ -165,7 +165,8 @@ define( require => {
         [ BlockType.IRON, 0 ], {
           tandem: tandem.createTandem( 'blockGroup' ),
           phetioType: PhetioGroupIO( BlockIO ),
-          supportsDynamicState: false
+          supportsDynamicState: false,
+          phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS + ' blocks'
         } );
 
       blocksToCreate.forEach( blockType => {
@@ -196,7 +197,8 @@ define( require => {
         [ BeakerType.WATER, 0 ], {
           tandem: tandem.createTandem( 'beakerGroup' ),
           phetioType: PhetioGroupIO( BeakerIO ),
-          supportsDynamicState: false
+          supportsDynamicState: false,
+          phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS+ ' beakers'
         } );
 
       // create any specified beakers

@@ -30,18 +30,20 @@ define( require => {
 
       options = merge( {
         tandem: Tandem.REQUIRED,
-        phetioType: ReferenceIO
+        phetioType: ReferenceIO,
+        positionPropertyOptions: {
+          units: 'm',
+          phetioHighFrequency: true,
+          phetioDocumentation: 'the center-bottom position of the element'
+        }
       }, options );
 
       super( options );
 
-      // @public - position of the center bottom of this model element
-      this.positionProperty = new Vector2Property( initialPosition, {
-        units: 'm',
-        tandem: options.tandem.createTandem( 'positionProperty' ),
-        phetioHighFrequency: true,
-        phetioDocumentation: 'the position of the center-bottom of the element'
-      } );
+      // @public
+      this.positionProperty = new Vector2Property( initialPosition, merge( {
+        tandem: options.tandem.createTandem( 'positionProperty' )
+      }, options.positionPropertyOptions ) );
 
       // @public (read-only)
       this.tandemName = options.tandem.name;

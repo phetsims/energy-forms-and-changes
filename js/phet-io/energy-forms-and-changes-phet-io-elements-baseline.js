@@ -2433,7 +2433,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "group that contains 0-2 beakers",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2446,7 +2446,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PhetioGroupIO<BeakerIO>"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "beaker that contains either water or olive oil, and may also contain blocks",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2459,7 +2459,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "BeakerIO"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.fluidProportionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the proportion of fluid in the beaker",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2472,7 +2472,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the center-bottom position of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2485,7 +2485,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.temperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2498,7 +2498,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2511,7 +2511,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "group that contains 0-4 blocks",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2524,7 +2524,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PhetioGroupIO<BlockIO>"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "block that can be of type iron or brick",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2537,7 +2537,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "BlockIO"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the center-bottom position of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2550,7 +2550,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.temperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2563,7 +2563,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2615,7 +2615,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner.heatCoolLevelProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2628,7 +2628,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the center-bottom position of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2667,7 +2667,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.rightBurner.heatCoolLevelProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2680,7 +2680,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.rightBurner.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the center-bottom position of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2693,7 +2693,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "thermometer that can sense the temperature, color, and phet-io ID of an element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2706,7 +2706,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.activeProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2719,7 +2719,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the position of the tip of the thermometer's color sensor",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2732,7 +2732,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.sensedElementColorProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the color of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2745,7 +2745,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.sensedElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the phet-io ID of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2758,7 +2758,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.sensedTemperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2771,7 +2771,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2784,7 +2784,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "thermometer that can sense the temperature, color, and phet-io ID of an element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2797,7 +2797,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.activeProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2810,7 +2810,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the position of the tip of the thermometer's color sensor",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2823,7 +2823,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.sensedElementColorProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the color of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2836,7 +2836,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.sensedElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the phet-io ID of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2849,7 +2849,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.sensedTemperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2862,7 +2862,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2875,7 +2875,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "thermometer that can sense the temperature, color, and phet-io ID of an element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2888,7 +2888,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.activeProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2901,7 +2901,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the position of the tip of the thermometer's color sensor",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2914,7 +2914,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.sensedElementColorProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the color of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2927,7 +2927,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.sensedElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the phet-io ID of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2940,7 +2940,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.sensedTemperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2953,7 +2953,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2966,7 +2966,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "thermometer that can sense the temperature, color, and phet-io ID of an element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2979,7 +2979,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.activeProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -2992,7 +2992,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the position of the tip of the thermometer's color sensor",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3005,7 +3005,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.sensedElementColorProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the color of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3018,7 +3018,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.sensedElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the phet-io ID of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3031,7 +3031,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.sensedTemperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3044,7 +3044,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4838,7 +4838,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "thermometer that can sense the temperature, color, and phet-io ID of an element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4851,7 +4851,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "ReferenceIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.activeProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4864,7 +4864,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the position of the tip of the thermometer's color sensor",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4877,7 +4877,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedElementColorProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the color of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4890,7 +4890,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ColorIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedElementNameProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the phet-io ID of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4903,7 +4903,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<StringIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.sensedTemperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the sensed element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4916,7 +4916,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.thermometer.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4929,7 +4929,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "a beaker that contains water",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4942,7 +4942,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "BeakerIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.fluidProportionProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the proportion of fluid in the beaker",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4955,7 +4955,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.positionProperty": {
-      "phetioDocumentation": "the position of the center-bottom of the element",
+      "phetioDocumentation": "the center-bottom position of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4968,7 +4968,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.temperatureProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the temperature of the element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4981,7 +4981,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.beakerHeater.waterBeaker.userControlledProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "whether the element is being directly held or moved by a user",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
