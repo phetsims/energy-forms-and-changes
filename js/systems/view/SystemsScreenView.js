@@ -67,6 +67,11 @@ define( require => {
     constructor( model, tandem ) {
       super();
 
+      // tandems to nest energy systems in Studio
+      const energySourcesTandem = tandem.createTandem( 'energySources' );
+      const energyConvertersTandem = tandem.createTandem( 'energyConverters' );
+      const energyUsersTandem = tandem.createTandem( 'energyUsers' );
+
       // @private {SystemsModel}
       this.model = model;
 
@@ -130,14 +135,14 @@ define( require => {
         model.beakerHeater,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'beakerHeaterNode' )
+        energyUsersTandem.createTandem( 'beakerHeaterNode' )
       );
       const incandescentBulbNode = new LightBulbNode(
         model.incandescentBulb,
         model.energyChunksVisibleProperty,
         modelViewTransform, {
           bulbType: 'incandescent',
-          tandem: tandem.createTandem( 'incandescentBulbNode' )
+          tandem: energyUsersTandem.createTandem( 'incandescentBulbNode' )
         }
       );
       const fluorescentBulbNode = new LightBulbNode(
@@ -145,14 +150,14 @@ define( require => {
         model.energyChunksVisibleProperty,
         modelViewTransform, {
           bulbType: 'fluorescent',
-          tandem: tandem.createTandem( 'fluorescentBulbNode' )
+          tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
         }
       );
       const fanNode = new FanNode(
         model.fan,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'fanNode' )
+        energyUsersTandem.createTandem( 'fanNode' )
       );
       this.addChild( this.beakerHeaterNode );
       this.addChild( incandescentBulbNode );
@@ -164,18 +169,18 @@ define( require => {
         model.generator,
         modelViewTransform, {
           addMechanicalEnergyChunkLayer: false,
-          tandem: tandem.createTandem( 'generatorNode' )
+          tandem: energyConvertersTandem.createTandem( 'generatorNode' )
         } );
       const beltNode = new BeltNode(
         model.belt,
         modelViewTransform, {
-          tandem: tandem.createTandem( 'beltNode' )
+          tandem: energyConvertersTandem.createTandem( 'beltNode' )
         }
       );
       const solarPanelNode = new SolarPanelNode(
         model.solarPanel,
         modelViewTransform,
-        tandem.createTandem( 'solarPanelNode' )
+        energyConvertersTandem.createTandem( 'solarPanelNode' )
       );
       this.addChild( generatorNode );
       this.addChild( beltNode );
@@ -186,7 +191,7 @@ define( require => {
         model.faucet,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'faucetAndWaterNode' )
+        energySourcesTandem.createTandem( 'faucetAndWaterNode' )
       );
       this.addChild( this.faucetNode );
 
@@ -200,7 +205,7 @@ define( require => {
         model.sun,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'sunNode' )
+        energySourcesTandem.createTandem( 'sunNode' )
       );
 
       // @private
@@ -208,13 +213,13 @@ define( require => {
         model.teaKettle,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'teaKettleNode' )
+        energySourcesTandem.createTandem( 'teaKettleNode' )
       );
       const bikerNode = new BikerNode(
         model.biker,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        tandem.createTandem( 'bikerNode' )
+        energySourcesTandem.createTandem( 'bikerNode' )
       );
       this.addChild( sunNode );
       this.addChild( bikerNode );

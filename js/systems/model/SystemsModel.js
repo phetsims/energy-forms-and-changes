@@ -43,6 +43,11 @@ define( require => {
      */
     constructor( tandem ) {
 
+      // tandems to nest energy systems in Studio
+      const energySourcesTandem = tandem.createTandem( 'energySources' );
+      const energyConvertersTandem = tandem.createTandem( 'energyConverters' );
+      const energyUsersTandem = tandem.createTandem( 'energyUsers' );
+
       // @public {BooleanProperty} - see in EFACIntroModel for doc
       this.energyChunksVisibleProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
@@ -56,29 +61,29 @@ define( require => {
       } );
 
       // @public (read-only) energy converters
-      this.generator = new Generator( this.energyChunksVisibleProperty, tandem.createTandem( 'generator' ) );
-      this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, tandem.createTandem( 'solarPanel' ) );
+      this.generator = new Generator( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'generator' ) );
+      this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
 
       // @public (read-only) energy sources
       this.faucet = new FaucetAndWater(
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
-        tandem.createTandem( 'faucet' )
+        energySourcesTandem.createTandem( 'faucet' )
       );
       this.sun = new SunEnergySource(
         this.solarPanel,
         this.energyChunksVisibleProperty,
-        tandem.createTandem( 'sun' )
+        energySourcesTandem.createTandem( 'sun' )
       );
       this.teaKettle = new TeaKettle(
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
-        tandem.createTandem( 'teaKettle' )
+        energySourcesTandem.createTandem( 'teaKettle' )
       );
       this.biker = new Biker(
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
-        tandem.createTandem( 'biker' )
+        energySourcesTandem.createTandem( 'biker' )
       );
 
       const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
@@ -88,16 +93,16 @@ define( require => {
       this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
       // @public (read-only) energy users
-      this.fan = new Fan( this.energyChunksVisibleProperty, tandem.createTandem( 'fan' ) );
+      this.fan = new Fan( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'fan' ) );
       this.incandescentBulb = new IncandescentBulb(
         this.energyChunksVisibleProperty,
-        tandem.createTandem( 'incandescentBulb' )
+        energyUsersTandem.createTandem( 'incandescentBulb' )
       );
       this.fluorescentBulb = new FluorescentBulb(
         this.energyChunksVisibleProperty,
-        tandem.createTandem( 'fluorescentBulb' )
+        energyUsersTandem.createTandem( 'fluorescentBulb' )
       );
-      this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty, tandem.createTandem( 'beakerHeater' ) );
+      this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'beakerHeater' ) );
 
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
