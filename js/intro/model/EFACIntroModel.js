@@ -82,7 +82,7 @@ define( require => {
       // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
       this.linkedHeatersProperty = new BooleanProperty( false, {
         tandem: tandem.createTandem( 'linkedHeatersProperty' ),
-        phetioDocumentation: 'whether the heaters are synced together or independent of each other'
+        phetioDocumentation: 'whether the heaters are linked together or independent of each other'
       } );
 
       // @public {BooleanProperty} - is the sim running or paused?

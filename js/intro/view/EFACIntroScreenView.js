@@ -149,7 +149,8 @@ define( require => {
         stepForwardOptions: {
           listener: () => model.manualStep()
         },
-        tandem: tandem.createTandem( 'timeControlNode' )
+        tandem: tandem.createTandem( 'timeControlNode' ),
+        phetioDocumentation: 'controls that include a "play/pause" button and a "step forward" button'
       } );
 
       // for testing - option to add fast forward controls
@@ -197,7 +198,8 @@ define( require => {
         thumbSize: new Dimension2( 36, 18 ),
         snapToZero: snapToZero,
         heaterCoolerBack: leftHeaterCoolerBack,
-        tandem: tandem.createTandem( 'leftHeaterCoolerNode' )
+        tandem: tandem.createTandem( 'leftHeaterCoolerNode' ),
+        phetioDocumentation: 'the heater/cooler on the left'
       } );
       heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
       backLayer.addChild( leftHeaterCoolerBack );
@@ -228,7 +230,8 @@ define( require => {
           thumbSize: new Dimension2( 36, 18 ),
           snapToZero: snapToZero,
           heaterCoolerBack: rightHeaterCoolerBack,
-          tandem: tandem.createTandem( 'rightHeaterCoolerNode' )
+          tandem: tandem.createTandem( 'rightHeaterCoolerNode' ),
+          phetioDocumentation: 'the heater/cooler on the right, which may not exist in the simulation'
         } );
         heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
         backLayer.addChild( rightHeaterCoolerBack );
@@ -487,7 +490,7 @@ define( require => {
       } );
 
       // create the storage area for the thermometers
-      const thermometerStorageArea = new Rectangle(
+      const thermometerStorageAreaNode = new Rectangle(
         0,
         0,
         thermometerNodeWidth * 2,
@@ -499,19 +502,20 @@ define( require => {
           lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
           left: EDGE_INSET,
           top: EDGE_INSET,
-          tandem: tandem.createTandem( 'thermometerStorageAreaNode' )
+          tandem: tandem.createTandem( 'thermometerStorageAreaNode' ),
+          phetioDocumentation: 'panel where the thermometers are stored'
         }
       );
-      backLayer.addChild( thermometerStorageArea );
-      thermometerStorageArea.moveToBack(); // move behind the thermometerNodes when they are being stored
+      backLayer.addChild( thermometerStorageAreaNode );
+      thermometerStorageAreaNode.moveToBack(); // move behind the thermometerNodes when they are being stored
 
       // set initial position for thermometers in the storage area, hook up listeners to handle interaction with storage area
-      const interThermometerSpacing = ( thermometerStorageArea.width - thermometerNodeWidth ) / 2;
+      const interThermometerSpacing = ( thermometerStorageAreaNode.width - thermometerNodeWidth ) / 2;
       const offsetFromBottomOfStorageArea = 25; // empirically determined
-      const thermometerNodePositionX = thermometerStorageArea.left + interThermometerSpacing;
+      const thermometerNodePositionX = thermometerStorageAreaNode.left + interThermometerSpacing;
       const thermometerPositionInStorageArea = new Vector2(
         modelViewTransform.viewToModelX( thermometerNodePositionX ),
-        modelViewTransform.viewToModelY( thermometerStorageArea.bottom - offsetFromBottomOfStorageArea ) );
+        modelViewTransform.viewToModelY( thermometerStorageAreaNode.bottom - offsetFromBottomOfStorageArea ) );
 
       model.thermometers.forEach( ( thermometer, index ) => {
 
@@ -542,8 +546,8 @@ define( require => {
             const thermometerBounds = thermometerNode.localToParentBounds(
               thermometerNode.temperatureAndColorSensorNode.thermometerBounds
             );
-            if ( colorIndicatorBounds.intersectsBounds( thermometerStorageArea.bounds ) ||
-                 thermometerBounds.intersectsBounds( thermometerStorageArea.bounds ) ) {
+            if ( colorIndicatorBounds.intersectsBounds( thermometerStorageAreaNode.bounds ) ||
+                 thermometerBounds.intersectsBounds( thermometerStorageAreaNode.bounds ) ) {
               returnThermometerToStorageArea( thermometer, true, thermometerNode );
             }
           }
@@ -692,7 +696,8 @@ define( require => {
           spacing: 5
         } ),
         model.energyChunksVisibleProperty, {
-          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' )
+          tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
+          phetioDocumentation: 'checkbox that shows the energy symbols'
         }
       );
       showEnergyCheckbox.touchArea =
@@ -713,7 +718,8 @@ define( require => {
           spacing: 5
         } ),
         model.linkedHeatersProperty, {
-          tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' )
+          tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' ),
+          phetioDocumentation: 'checkbox that links the heaters together. only appears in the simulation when two burners exist'
         } );
       linkHeatersCheckbox.touchArea =
         linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
@@ -735,7 +741,8 @@ define( require => {
         cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS,
         rightTop: new Vector2( this.layoutBounds.width - EDGE_INSET, EDGE_INSET ),
         minWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_MIN_WIDTH,
-        tandem: controlPanelTandem
+        tandem: controlPanelTandem,
+        phetioDocumentation: 'panel in the upper right corner of the screen'
       } );
       backLayer.addChild( controlPanel );
 

@@ -2641,7 +2641,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "energyFormsAndChanges.introScreen.model.linkedHeatersProperty": {
-      "phetioDocumentation": "whether the heaters are synced together or independent of each other",
+      "phetioDocumentation": "whether the heaters are linked together or independent of each other",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3187,7 +3187,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.controlPanel": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "panel in the upper right corner of the screen",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3200,7 +3200,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NodeIO"
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.linkHeatersCheckbox": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "checkbox that links the heaters together. only appears in the simulation when two burners exist",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -3317,7 +3317,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.showEnergySymbolsCheckbox": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "checkbox that shows the energy symbols",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
       "phetioFeatured": false,
@@ -3421,7 +3421,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.leftHeaterCoolerNode": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the heater/cooler on the left",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -3863,7 +3863,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.rightHeaterCoolerNode": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "the heater/cooler on the right, which may not exist in the simulation",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4396,7 +4396,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.thermometerStorageAreaNode": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "panel where the thermometers are stored",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -4448,7 +4448,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.view.timeControlNode": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "controls that include a \"play/pause\" button and a \"step forward\" button",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
