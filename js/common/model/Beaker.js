@@ -121,6 +121,7 @@ define( require => {
         range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 ),
         tandem: options.tandem.createTandem( 'fluidProportionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'the proportion of fluid in the beaker'
       } );
 

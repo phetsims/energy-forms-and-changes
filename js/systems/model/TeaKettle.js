@@ -62,6 +62,7 @@ define( require => {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'heatProportionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'proportion of heat coming from the heater'
       } );
 
@@ -69,7 +70,8 @@ define( require => {
       this.energyProductionRateProperty = new NumberProperty( 0, {
         range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
         tandem: tandem.createTandem( 'energyProductionRateProperty' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
       } );
 
       // @public

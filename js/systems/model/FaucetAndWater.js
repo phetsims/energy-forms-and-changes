@@ -70,6 +70,7 @@ define( require => {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'flowProportionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'proportion of water flowing from the faucet'
       } );
 

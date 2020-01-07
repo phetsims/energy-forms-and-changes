@@ -67,6 +67,7 @@ define( require => {
         units: 'radians',
         tandem: tandem.createTandem( 'crankAngleProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'angle of the crank arm on the bike'
       } );
 
@@ -76,6 +77,7 @@ define( require => {
         units: 'radians',
         tandem: tandem.createTandem( 'rearWheelAngleProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'angle of the rear wheel on the bike'
       } );
 
@@ -84,6 +86,7 @@ define( require => {
         range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS ),
         tandem: tandem.createTandem( 'energyChunksRemainingProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'number of energy chunks remaining in the biker\'s body'
       } );
 
@@ -101,6 +104,7 @@ define( require => {
         units: 'radians/second',
         tandem: tandem.createTandem( 'crankAngularVelocityProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'angular velocity of crank'
       } );
 

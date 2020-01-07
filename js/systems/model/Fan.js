@@ -76,6 +76,7 @@ define( require => {
         units: 'radians',
         tandem: tandem.createTandem( 'bladePositionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'the angle of the blade'
       } );
 

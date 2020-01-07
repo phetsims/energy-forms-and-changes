@@ -62,6 +62,7 @@ define( require => {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'litProportionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'proportion of brightness from the bulb'
       } );
 

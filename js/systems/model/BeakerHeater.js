@@ -80,6 +80,7 @@ define( require => {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'heatProportionProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'proportion of how much heat the coils have'
       } );
 
