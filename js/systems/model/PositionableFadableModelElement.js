@@ -10,6 +10,7 @@
 define( require => {
   'use strict';
 
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableModelElement' );
@@ -29,6 +30,9 @@ define( require => {
       this.opacityProperty = new NumberProperty( initialOpacity, {
         range: new Range( 0, 1 )
       } );
+
+      // @public {BooleanProperty}
+      this.visibleProperty = new BooleanProperty( initialOpacity > 0 );
     }
   }
 

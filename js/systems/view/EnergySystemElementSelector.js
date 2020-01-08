@@ -71,6 +71,13 @@ define( require => {
         tandem: options.tandem.createTandem( 'radioButtonGroup' )
       } );
 
+      // link the visibility of the buttons to their corresponding system elements, see https://github.com/phetsims/energy-forms-and-changes/issues/305
+      buttonGroup.children.forEach( ( button, index ) => {
+        button.on( 'visibility', () => {
+          carousel.managedElements[ index ].visibleProperty.value = button.visible;
+        } );
+      } );
+
       super( buttonGroup, options );
     }
   }

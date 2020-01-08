@@ -23,7 +23,10 @@ define( require => {
     constructor( modelElement, modelViewTransform, tandem ) {
       super( {
         tandem: tandem,
-        phetioComponentOptions: { opacityProperty: { phetioReadOnly: true } }
+        phetioComponentOptions: {
+          opacityProperty: { phetioReadOnly: true },
+          visibleProperty: { phetioReadOnly: true }
+        }
       } );
 
       // update our position as the model element moves
@@ -33,7 +36,12 @@ define( require => {
 
       // update our opacity as the model element fades in and out
       modelElement.opacityProperty.link( opacity => {
-        this.setOpacity( opacity );
+        this.opacity = opacity;
+      } );
+
+      // update the visibility as the model element's visibility changes
+      modelElement.visibleProperty.link( visible => {
+        this.visible = visible;
       } );
     }
   }
