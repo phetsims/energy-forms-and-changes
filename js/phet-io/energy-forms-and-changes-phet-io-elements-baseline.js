@@ -5279,19 +5279,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.thermometer.userControlledProperty": {
-      "phetioDocumentation": "whether the element is being directly held or moved by a user",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.waterBeaker": {
       "phetioDocumentation": "beaker that contains water",
       "phetioDynamicElement": false,
@@ -5343,19 +5330,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
-    },
-    "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.waterBeaker.userControlledProperty": {
-      "phetioDocumentation": "whether the element is being directly held or moved by a user",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.activeProperty": {
       "phetioDocumentation": "whether the system element is active. system elements are active when visible on the screen",

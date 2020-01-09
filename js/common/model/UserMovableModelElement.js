@@ -26,17 +26,11 @@ define( require => {
     constructor( initialPosition, options ) {
 
       options = merge( {
-        tandem: Tandem.REQUIRED
+        tandem: Tandem.REQUIRED,
+        userControllable: true
       }, options );
 
       super( initialPosition, options );
-
-      // @public {BooleanProperty}
-      this.userControlledProperty = new BooleanProperty( false, {
-        tandem: options.tandem.createTandem( 'userControlledProperty' ),
-        phetioReadOnly: true,
-        phetioDocumentation: 'whether the element is being directly held or moved by a user'
-      } );
 
       // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
       // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
@@ -51,14 +45,25 @@ define( require => {
       // the view
       this.tandem = options.tandem;
 
-      // update internal state when the user picks up this model element
-      this.userControlledProperty.link( userControlled => {
-        if ( userControlled ) {
+      // create userControlledProperty unless opted out
+      if ( options.userControllable ) {
 
-          // the user has picked up this model element, so it is no longer sitting on any surface
-          this.clearSupportingSurface();
-        }
-      } );
+        // @public {BooleanProperty}
+        this.userControlledProperty = new BooleanProperty( false, {
+          tandem: options.tandem.createTandem( 'userControlledProperty' ),
+          phetioReadOnly: true,
+          phetioDocumentation: 'whether the element is being directly held or moved by a user'
+        } );
+
+        // update internal state when the user picks up this model element
+        this.userControlledProperty.link( userControlled => {
+          if ( userControlled ) {
+
+            // the user has picked up this model element, so it is no longer sitting on any surface
+            this.clearSupportingSurface();
+          }
+        } );
+      }
 
       // @private - observer that moves this model element if and when the surface that is supporting it moves
       this.surfaceMotionObserver = position => {
@@ -72,7 +77,7 @@ define( require => {
      */
     reset() {
       this.clearSupportingSurface();
-      this.userControlledProperty.reset();
+      this.userControlledProperty && this.userControlledProperty.reset();
       this.verticalVelocityProperty.reset();
       super.reset();
     }

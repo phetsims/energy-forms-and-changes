@@ -100,7 +100,8 @@ define( require => {
         BEAKER_HEIGHT,
         energyChunksVisibleProperty, {
           tandem: this.waterBeakerTandem,
-          phetioDocumentation: 'beaker that contains water'
+          phetioDocumentation: 'beaker that contains water',
+          userControllable: false
         }
       );
 
@@ -109,7 +110,8 @@ define( require => {
         this,
         new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
         true, {
-          tandem: tandem.createTandem( 'thermometer' )
+          tandem: tandem.createTandem( 'thermometer' ),
+          userControllable: false
         }
       );
 
