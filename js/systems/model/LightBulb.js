@@ -141,7 +141,7 @@ define( require => {
 
           if ( lightChunksInLitRadius > 0 ) {
 
-            // light is on - empirically determined max to match the
+            // light is on - empirically determined max to match the max from most energy sources when chunks are off
             this.litProportionProperty.set( Math.min( 0.7, this.litProportionProperty.get() + LIGHT_CHANGE_RATE * dt ) );
           }
           else {
