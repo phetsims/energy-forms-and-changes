@@ -192,7 +192,7 @@ define( require => {
         model.faucet,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        energySourcesTandem.createTandem( 'faucetAndWaterNode' )
+        energySourcesTandem.createTandem( 'faucetNode' )
       );
       this.addChild( this.faucetNode );
 

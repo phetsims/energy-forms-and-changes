@@ -6800,7 +6800,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6813,7 +6813,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetSettingProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetSettingProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6826,7 +6826,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.opacityProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6839,7 +6839,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.pickableProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6852,7 +6852,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
