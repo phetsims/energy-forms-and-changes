@@ -197,7 +197,9 @@ define( require => {
         baseColor: 'rgba(0,220,0,1)',
         centerX: cyclistTorsoNodes[ 0 ].centerTop.x,
         centerY: cyclistTorsoNodes[ 0 ].centerTop.y - 15,
-        minHeight: 30
+        minHeight: 30,
+        tandem: tandem.createTandem( 'feedMeButton' ),
+        phetioReadOnly: true
       } );
       this.addChild( feedMeButton );
 
