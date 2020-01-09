@@ -174,7 +174,8 @@ define( require => {
       const beltNode = new BeltNode(
         model.belt,
         modelViewTransform, {
-          tandem: energyConvertersTandem.createTandem( 'beltNode' )
+          tandem: energyConvertersTandem.createTandem( 'beltNode' ),
+          phetioReadOnly: true
         }
       );
       const solarPanelNode = new SolarPanelNode(
