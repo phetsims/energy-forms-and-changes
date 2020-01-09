@@ -185,7 +185,7 @@ define( require => {
         }
       } );
 
-      // add button to replenish the biker's energy (when she runs out)
+      // add feedMeButton
       const feedMeButton = new RectangularPushButton( {
         content: new Text( feedMeString, {
           font: new PhetFont( 18 ),
@@ -199,7 +199,8 @@ define( require => {
         centerY: cyclistTorsoNodes[ 0 ].centerTop.y - 15,
         minHeight: 30,
         tandem: tandem.createTandem( 'feedMeButton' ),
-        phetioReadOnly: true
+        phetioReadOnly: true,
+        phetioDocumentation: 'button that replenish\'s the biker\'s energy. only visible when the biker is out of energy'
       } );
       this.addChild( feedMeButton );
 
