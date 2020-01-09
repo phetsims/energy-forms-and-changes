@@ -141,8 +141,8 @@ define( require => {
 
           if ( lightChunksInLitRadius > 0 ) {
 
-            // light is on
-            this.litProportionProperty.set( Math.min( 1, this.litProportionProperty.get() + LIGHT_CHANGE_RATE * dt ) );
+            // light is on - empirically determined max to match the
+            this.litProportionProperty.set( Math.min( 0.7, this.litProportionProperty.get() + LIGHT_CHANGE_RATE * dt ) );
           }
           else {
 
