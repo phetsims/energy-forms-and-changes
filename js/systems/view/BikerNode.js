@@ -241,12 +241,12 @@ define( require => {
       // slider to control crank speed
       const crankSlider = new HSlider(
         biker.targetCrankAngularVelocityProperty,
-        new Range( 0, Biker.MAX_ANGULAR_VELOCITY_OF_CRANK ),
-        {
+        new Range( 0, Biker.MAX_ANGULAR_VELOCITY_OF_CRANK ), {
           trackSize: new Dimension2( 200, 5 ),
           thumbSize: new Dimension2( 20, 40 ),
           thumbTouchAreaXDilation: 11,
-          thumbTouchAreaYDilation: 11
+          thumbTouchAreaYDilation: 11,
+          tandem: tandem.createTandem( 'slider' )
         }
       );
 
