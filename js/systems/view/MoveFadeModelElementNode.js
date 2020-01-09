@@ -1,4 +1,4 @@
-// Copyright 2016-2019, University of Colorado Boulder
+// Copyright 2016-2020, University of Colorado Boulder
 
 /**
  * base type for a Scenery Node that moves as the associated model element moves and and fades in and out as the opacity
