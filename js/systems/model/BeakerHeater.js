@@ -69,9 +69,6 @@ define( require => {
       // @public {string} - a11y name
       this.a11yName = EFACA11yStrings.beakerOfWater.value;
 
-      // @private {Tandem}
-      this.tandem = tandem;
-
       // @private
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
@@ -93,13 +90,16 @@ define( require => {
       // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
       this.radiatedEnergyChunkList = new ObservableArray();
 
+      // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
+      this.waterBeakerTandem = tandem.createTandem( 'waterBeaker' );
+
       // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
       this.beaker = new Beaker(
         this.positionProperty.value.plus( BEAKER_OFFSET ),
         BEAKER_WIDTH,
         BEAKER_HEIGHT,
         energyChunksVisibleProperty, {
-          tandem: tandem.createTandem( 'waterBeaker' ),
+          tandem: this.waterBeakerTandem,
           phetioDocumentation: 'beaker that contains water'
         }
       );
@@ -247,7 +247,7 @@ define( require => {
 
       sensedTemperatureProperty.set( this.beaker.getTemperature() );
       sensedElementColorProperty.set( EFACConstants.WATER_COLOR_OPAQUE );
-      sensedElementNameProperty.set( this.tandem.phetioID );
+      sensedElementNameProperty.set( this.waterBeakerTandem.phetioID );
     }
 
     /**
