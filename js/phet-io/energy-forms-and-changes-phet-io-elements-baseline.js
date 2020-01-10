@@ -6658,7 +6658,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NodeIO"
     },
     "energyFormsAndChanges.systemsScreen.view.energySources.bikerNode.feedMeButton": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "button that replenish's the biker's energy. only visible when the biker is out of energy",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
