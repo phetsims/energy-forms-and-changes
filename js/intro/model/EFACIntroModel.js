@@ -198,7 +198,7 @@ define( require => {
           tandem: tandem.createTandem( 'beakerGroup' ),
           phetioType: PhetioGroupIO( BeakerIO ),
           supportsDynamicState: false,
-          phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS+ ' beakers'
+          phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS + ' beakers'
         } );
 
       // create any specified beakers
@@ -280,6 +280,13 @@ define( require => {
 
       // @public - used to notify the view that a manual step was called
       this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
+
+      // preload energy chunks in blocks and beakers after state has been set
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        this.thermalContainers.forEach( thermalContainer => {
+          thermalContainer.addInitialEnergyChunks();
+        } );
+      } );
     }
 
     /**
