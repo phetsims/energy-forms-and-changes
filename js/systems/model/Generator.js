@@ -71,6 +71,7 @@ define( require => {
         units: 'radians',
         tandem: tandem.createTandem( 'wheelRotationalAngleProperty' ),
         phetioReadOnly: true,
+        phetioHighFrequency: true,
         phetioDocumentation: 'the angle of the wheel'
       } );
 
@@ -84,7 +85,13 @@ define( require => {
       } );
 
       // @private
-      this.wheelRotationalVelocity = 0;
+      this.wheelRotationalVelocityProperty = new NumberProperty( 0, {
+        units: 'radians/second',
+        tandem: tandem.createTandem( 'wheelRotationalVelocityProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the angular velocity of the wheel'
+      } );
       this.energyChunkMovers = [];
 
       // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
@@ -116,9 +123,9 @@ define( require => {
         // treat the wheel as though it is directly coupled to the energy source, e.g. through a belt or drive shaft
         if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
           const energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
-          this.wheelRotationalVelocity = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
+          this.wheelRotationalVelocityProperty.value = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
           this.wheelRotationalAngleProperty.set(
-            calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocity, dt )
+            calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocityProperty.value, dt )
           );
         }
 
@@ -135,22 +142,22 @@ define( require => {
           torqueFromIncomingEnergy = incomingEnergy.amount * WHEEL_RADIUS * energyToTorqueConstant * sign;
         }
 
-        const torqueFromResistance = -this.wheelRotationalVelocity * RESISTANCE_CONSTANT;
+        const torqueFromResistance = -this.wheelRotationalVelocityProperty.value * RESISTANCE_CONSTANT;
         const angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
-        const newAngularVelocity = this.wheelRotationalVelocity + ( angularAcceleration * dt );
-        this.wheelRotationalVelocity = Utils.clamp(
+        const newAngularVelocity = this.wheelRotationalVelocityProperty.value + ( angularAcceleration * dt );
+        this.wheelRotationalVelocityProperty.value = Utils.clamp(
           newAngularVelocity,
           -MAX_ROTATIONAL_VELOCITY,
           MAX_ROTATIONAL_VELOCITY
         );
 
-        if ( Math.abs( this.wheelRotationalVelocity ) < 1E-3 ) {
+        if ( Math.abs( this.wheelRotationalVelocityProperty.value ) < 1E-3 ) {
 
           // prevent the wheel from moving forever
-          this.wheelRotationalVelocity = 0;
+          this.wheelRotationalVelocityProperty.value = 0;
         }
         this.wheelRotationalAngleProperty.set(
-          calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocity, dt )
+          calculateWheelAngle( this.wheelRotationalAngleProperty.value, this.wheelRotationalVelocityProperty.value, dt )
         );
       }
     }
@@ -201,7 +208,7 @@ define( require => {
       } // this.active
 
       // produce the appropriate amount of energy
-      const speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      const speedFraction = this.wheelRotationalVelocityProperty.value / MAX_ROTATIONAL_VELOCITY;
       const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE ) * dt;
       return new Energy( EnergyType.ELECTRICAL, energy, 0 );
     }
@@ -358,7 +365,7 @@ define( require => {
      * @override
      */
     getEnergyOutputRate() {
-      const speedFraction = this.wheelRotationalVelocity / MAX_ROTATIONAL_VELOCITY;
+      const speedFraction = this.wheelRotationalVelocityProperty.value / MAX_ROTATIONAL_VELOCITY;
       const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
       return new Energy( EnergyType.ELECTRICAL, energy, 0 );
     }
@@ -370,7 +377,7 @@ define( require => {
      */
     deactivate() {
       super.deactivate();
-      this.wheelRotationalVelocity = 0;
+      this.wheelRotationalVelocityProperty.reset();
       this.wheelRotationalAngleProperty.reset();
     }
 

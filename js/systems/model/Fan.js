@@ -86,7 +86,14 @@ define( require => {
       this.mechanicalEnergyChunkMovers = [];
 
       // @private
-      this.bladeAngularVelocity = 0;
+      this.bladeAngularVelocityProperty = new NumberProperty( 0, {
+        units: 'radians/second',
+        tandem: tandem.createTandem( 'bladeAngularVelocityProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the angular velocity of the blade'
+      } );
+
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
       // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
@@ -97,7 +104,13 @@ define( require => {
       // degrees Celsius
       this.internalTemperature = ROOM_TEMPERATURE;
 
-      this.targetVelocity = 0;
+      this.targetVelocityProperty = new NumberProperty( 0, {
+        units: 'radians/second',
+        tandem: tandem.createTandem( 'targetVelocityProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the target velocity of the blade'
+      } );
     }
 
     /**
@@ -146,7 +159,7 @@ define( require => {
         this.internalEnergyFromEnergyChunks = Math.min( this.internalEnergyFromEnergyChunks, MAX_INTERNAL_ENERGY );
 
         // when chunks are on, use internal energy of the fan to determine the target velocity
-        this.targetVelocity = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
+        this.targetVelocityProperty.value = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
 
         // lose a proportion of the energy
         this.internalEnergyFromEnergyChunks = Math.max(
@@ -157,31 +170,31 @@ define( require => {
       else {
 
         // when chunks are off, get a smooth target velocity from incoming energy by using dt
-        this.targetVelocity = incomingEnergy.amount * INCOMING_ENERGY_VELOCITY_COEFFICIENT / dt;
+        this.targetVelocityProperty.value = incomingEnergy.amount * INCOMING_ENERGY_VELOCITY_COEFFICIENT / dt;
       }
-      this.targetVelocity = this.targetVelocity < MINIMUM_TARGET_VELOCITY ? 0 : this.targetVelocity;
+      this.targetVelocityProperty.value = this.targetVelocityProperty.value < MINIMUM_TARGET_VELOCITY ? 0 : this.targetVelocityProperty.value;
 
       // dump any internal energy that was left around from when chunks were on
-      this.internalEnergyFromEnergyChunks = this.targetVelocity === 0 ? 0 : this.internalEnergyFromEnergyChunks;
+      this.internalEnergyFromEnergyChunks = this.targetVelocityProperty.value === 0 ? 0 : this.internalEnergyFromEnergyChunks;
 
-      const dOmega = this.targetVelocity - this.bladeAngularVelocity;
+      const dOmega = this.targetVelocityProperty.value - this.bladeAngularVelocityProperty.value;
       if ( dOmega !== 0 ) {
         const change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
 
           // accelerate
-          this.bladeAngularVelocity = Math.min(
-            this.bladeAngularVelocity + change,
-            this.targetVelocity
+          this.bladeAngularVelocityProperty.value = Math.min(
+            this.bladeAngularVelocityProperty.value + change,
+            this.targetVelocityProperty.value
           );
         }
         else {
 
           // decelerate
-          this.bladeAngularVelocity = Math.max( this.bladeAngularVelocity - change, 0 );
+          this.bladeAngularVelocityProperty.value = Math.max( this.bladeAngularVelocityProperty.value - change, 0 );
         }
       }
-      const newAngle = ( this.bladePositionProperty.value + this.bladeAngularVelocity * dt ) % ( 2 * Math.PI );
+      const newAngle = ( this.bladePositionProperty.value + this.bladeAngularVelocityProperty.value * dt ) % ( 2 * Math.PI );
       this.bladePositionProperty.set( newAngle );
     }
 
@@ -283,8 +296,8 @@ define( require => {
     deactivate() {
       super.deactivate();
       this.bladePositionProperty.reset();
-      this.bladeAngularVelocity = 0;
-      this.targetVelocity = 0;
+      this.bladeAngularVelocityProperty.reset();
+      this.targetVelocityProperty.reset();
       this.internalEnergyFromEnergyChunks = 0;
       this.internalTemperature = ROOM_TEMPERATURE;
     }
@@ -310,7 +323,7 @@ define( require => {
 
       this.clearEnergyChunks();
 
-      if ( this.targetVelocity < MINIMUM_TARGET_VELOCITY ||
+      if ( this.targetVelocityProperty.value < MINIMUM_TARGET_VELOCITY ||
            incomingEnergy.type !== EnergyType.ELECTRICAL ) {
 
         // no energy chunk pre-loading needed

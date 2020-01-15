@@ -4855,7 +4855,20 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
-      "phetioHighFrequency": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "energyFormsAndChanges.systemsScreen.model.energyConverters.generator.wheelRotationalVelocityProperty": {
+      "phetioDocumentation": "the angular velocity of the wheel",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
       "phetioReadOnly": true,
@@ -4875,6 +4888,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "energyFormsAndChanges.systemsScreen.model.energyConverters.solarPanel.energyOutputRateProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.energyConverters.solarPanel.positionProperty": {
       "phetioDocumentation": "the position of the system element",
@@ -5344,6 +5370,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
+    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.bladeAngularVelocityProperty": {
+      "phetioDocumentation": "the angular velocity of the blade",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.bladePositionProperty": {
       "phetioDocumentation": "the angle of the blade",
       "phetioDynamicElement": false,
@@ -5369,6 +5408,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.targetVelocityProperty": {
+      "phetioDocumentation": "the target velocity of the blade",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.fluorescentBulb.activeProperty": {
       "phetioDocumentation": "whether the system element is active. system elements are active when visible on the screen",

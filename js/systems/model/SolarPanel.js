@@ -24,6 +24,7 @@ define( require => {
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -67,9 +68,13 @@ define( require => {
       this.electricalEnergyChunkMovers = [];
       this.lightEnergyChunkMovers = [];
       this.latestChunkArrivalTime = 0;
-      this.energyOutputRate = 0;
       this.numberOfConvertedChunks = 0;
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+      this.energyOutputRateProperty = new NumberProperty( 0, {
+        tandem: tandem.createTandem( 'energyOutputRateProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true
+      } );
 
       // @private - counter to mimic function of IClock in original Java code
       this.simulationTime = 0;
@@ -175,7 +180,7 @@ define( require => {
         // panel (this way, the fan moves at the same speed when chunks are on or off).
         energyProduced = incomingEnergy.amount * 0.68;
       }
-      this.energyOutputRate = energyProduced / dt;
+      this.energyOutputRateProperty.value = energyProduced / dt;
 
       this.simulationTime += dt;
 
@@ -328,7 +333,7 @@ define( require => {
      * @returns {Energy} type, amount, direction of emitted energy
      */
     getEnergyOutputRate() {
-      return new Energy( EnergyType.ELECTRICAL, this.energyOutputRate, 0 );
+      return new Energy( EnergyType.ELECTRICAL, this.energyOutputRateProperty.value, 0 );
     }
 
     /**
