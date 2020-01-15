@@ -175,7 +175,7 @@ define( require => {
      * @public
      */
     getEnergyBeyondMaxTemperature() {
-      return Math.max( this.energy - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
+      return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
     }
   }
 

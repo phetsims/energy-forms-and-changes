@@ -256,7 +256,7 @@ define( require => {
       } );
 
       // calculate the number of energy chunks to add based on the amount of energy in the beaker
-      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
 
       // make a copy of the slice array sorted such that the smallest is first
       let sortedSliceArray = _.sortBy( this.slices, slice => {
@@ -412,7 +412,7 @@ define( require => {
      * @returns {number}
      */
     getEnergyBeyondMaxTemperature() {
-      return Math.max( this.energy - ( this.fluidBoilingPoint * this.mass * this.specificHeat ), 0 );
+      return Math.max( this.energyProperty.value - ( this.fluidBoilingPoint * this.mass * this.specificHeat ), 0 );
     }
 
     /**

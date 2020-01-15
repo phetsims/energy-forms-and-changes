@@ -2458,6 +2458,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "BeakerIO"
     },
+    "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.energyProperty": {
+      "phetioDocumentation": "the amount of energy in the model element",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": true,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.fluidProportionProperty": {
       "phetioDocumentation": "the proportion of fluid in the beaker",
       "phetioDynamicElement": false,
@@ -2535,6 +2548,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "BlockIO"
+    },
+    "energyFormsAndChanges.introScreen.model.blockGroup.archetype.energyProperty": {
+      "phetioDocumentation": "the amount of energy in the model element",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": true,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.positionProperty": {
       "phetioDocumentation": "the center-bottom position of the element",
@@ -5317,6 +5343,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "BeakerIO"
+    },
+    "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.waterBeaker.energyProperty": {
+      "phetioDocumentation": "the amount of energy in the model element",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": true,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.waterBeaker.fluidProportionProperty": {
       "phetioDocumentation": "the proportion of fluid in the beaker",

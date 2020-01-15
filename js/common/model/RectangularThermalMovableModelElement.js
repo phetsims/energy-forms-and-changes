@@ -52,7 +52,15 @@ define( require => {
       this.height = height;
       this.specificHeat = specificHeat;
       this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-      this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
+
+      // @public (read-only) {NumberProperty}
+      this.energyProperty = new NumberProperty( this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE, {
+        units: 'joules',
+        tandem: options.tandem.createTandem( 'energyProperty' ),
+        phetioReadOnly: true,
+        phetioHighFrequency: true,
+        phetioDocumentation: 'the amount of energy in the model element'
+      } );
 
       assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
       assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
@@ -213,7 +221,7 @@ define( require => {
      */
     changeEnergy( deltaEnergy ) {
       assert && assert( !_.isNaN( deltaEnergy ), `invalided deltaEnergy, value = ${deltaEnergy}` );
-      this.energy += deltaEnergy;
+      this.energyProperty.value += deltaEnergy;
     }
 
     /**
@@ -222,7 +230,7 @@ define( require => {
      * @public
      */
     getEnergy() {
-      return this.energy;
+      return this.energyProperty.value;
     }
 
     /**
@@ -231,7 +239,7 @@ define( require => {
      * @public
      */
     getEnergyAboveMinimum() {
-      return this.energy - this.minEnergy;
+      return this.energyProperty.value - this.minEnergy;
     }
 
     /**
@@ -240,8 +248,8 @@ define( require => {
      * @public
      */
     getTemperature() {
-      assert && assert( this.energy >= 0, `Invalid energy: ${this.energy}` );
-      return this.energy / ( this.mass * this.specificHeat );
+      assert && assert( this.energyProperty.value >= 0, `Invalid energy: ${this.energyProperty.value}` );
+      return this.energyProperty.value / ( this.mass * this.specificHeat );
     }
 
     get temperature() {
@@ -254,7 +262,7 @@ define( require => {
      */
     reset() {
       super.reset();
-      this.energy = this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE;
+      this.energyProperty.reset();
       this.temperatureProperty.reset();
       this.addInitialEnergyChunks();
       this.approachingEnergyChunks.reset();
@@ -561,7 +569,7 @@ define( require => {
       } );
 
       // calculate how many energy chunks should be present based on the amount of energy in this container
-      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
       const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
 
       // start with the middle slice and cycle through in order, added chunks evenly to each
@@ -697,7 +705,7 @@ define( require => {
      * @public
      */
     getEnergyChunkBalance() {
-      return this.getNumberOfEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energy );
+      return this.getNumberOfEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
     }
 
     /**
