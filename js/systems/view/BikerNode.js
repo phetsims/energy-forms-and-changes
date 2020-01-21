@@ -192,6 +192,7 @@ define( require => {
           maxWidth: 100
         } ),
         listener: () => {
+          biker.energyChunksRemainingProperty.reset();
           biker.replenishBikerEnergyChunks();
         },
         baseColor: 'rgba(0,220,0,1)',

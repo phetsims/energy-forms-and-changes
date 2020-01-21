@@ -81,8 +81,8 @@ define( require => {
         phetioDocumentation: 'angle of the rear wheel on the bike'
       } );
 
-      // @public (read-only) {NumberProperty}
-      this.energyChunksRemainingProperty = new NumberProperty( 0, {
+      // @public {NumberProperty}
+      this.energyChunksRemainingProperty = new NumberProperty( INITIAL_NUMBER_OF_ENERGY_CHUNKS, {
         range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS ),
         tandem: tandem.createTandem( 'energyChunksRemainingProperty' ),
         phetioReadOnly: true,
@@ -123,9 +123,6 @@ define( require => {
         } );
       }
 
-      // add initial set of energy chunks
-      this.replenishBikerEnergyChunks();
-
       // get the crank into a position where animation will start right away
       this.setCrankToPoisedPosition();
 
@@ -138,14 +135,14 @@ define( require => {
 
         movers.forEach( mover => {
 
-          const ec = mover.energyChunk;
+          const energyChunk = mover.energyChunk;
 
-          if ( ec.energyTypeProperty.get() === EnergyType.MECHANICAL ) {
-            if ( ec.positionProperty.get().x > hubPosition.x ) {
+          if ( energyChunk.energyTypeProperty.get() === EnergyType.MECHANICAL ) {
+            if ( energyChunk.positionProperty.get().x > hubPosition.x ) {
 
               // remove this energy chunk
               _.pull( this.energyChunkMovers, mover );
-              this.energyChunkList.remove( ec );
+              this.energyChunkList.remove( energyChunk );
             }
             else {
 
@@ -153,8 +150,8 @@ define( require => {
               _.pull( this.energyChunkMovers, mover );
 
               this.energyChunkMovers.push( new EnergyChunkPathMover(
-                ec,
-                createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, ec.positionProperty.get() ),
+                energyChunk,
+                createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, energyChunk.positionProperty.get() ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY
               ) );
             }
@@ -175,11 +172,8 @@ define( require => {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
-      // update Property by reading how many chunks remain in the biker's body
-      this.energyChunksRemainingProperty.set( this.energyChunkList.length - this.energyChunkMovers.length );
-
       // if there is no energy, the target speed is 0, otherwise it is the current set point
-      const target = this.bikerHasEnergy() ? this.targetCrankAngularVelocityProperty.value : 0;
+      const target = this.energyChunksRemainingProperty.value > 0 ? this.targetCrankAngularVelocityProperty.value : 0;
 
       // speed up or slow down the angular velocity of the crank
       const previousAngularVelocity = this.crankAngularVelocityProperty.value;
@@ -235,7 +229,7 @@ define( require => {
            this.targetCrankAngularVelocityProperty.value > 0 ) {
 
         // start a new chunk moving
-        if ( this.bikerHasEnergy() ) {
+        if ( this.energyChunksRemainingProperty.value > 0 ) {
           const energyChunk = this.findNonMovingEnergyChunk();
           this.energyChunkMovers.push( new EnergyChunkPathMover(
             energyChunk,
@@ -243,6 +237,9 @@ define( require => {
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
           this.energyProducedSinceLastChunkEmitted = 0;
+
+          // update by reading how many chunks remain in the biker's body
+          this.energyChunksRemainingProperty.set( this.energyChunkList.length - this.energyChunkMovers.length );
         }
       }
 
@@ -350,11 +347,12 @@ define( require => {
 
       // Return if biker is not pedaling, or is out of energy, or is not hooked up to a compatible system
       if ( this.targetCrankAngularVelocityProperty.get() === 0 ||
-           !this.bikerHasEnergy() ||
+           this.energyChunksRemainingProperty.value === 0 ||
            !this.mechanicalPoweredSystemIsNextProperty.get() ) {
         return;
       }
 
+      this.replenishBikerEnergyChunks();
       let preloadComplete = false;
       const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
       let energySinceLastChunk = EFACConstants.ENERGY_PER_CHUNK * 0.99;
@@ -437,6 +435,7 @@ define( require => {
     deactivate() {
       super.deactivate();
       this.targetCrankAngularVelocityProperty.reset();
+      this.energyChunksRemainingProperty.reset();
       this.rearWheelAngleProperty.reset();
       this.crankAngularVelocityProperty.value = this.targetCrankAngularVelocityProperty.value;
     }
@@ -455,7 +454,8 @@ define( require => {
      * @public
      */
     replenishBikerEnergyChunks() {
-      for ( let i = 0; i < INITIAL_NUMBER_OF_ENERGY_CHUNKS; i++ ) {
+      this.clearEnergyChunks();
+      for ( let i = 0; i < this.energyChunksRemainingProperty.value; i++ ) {
         this.addEnergyChunkToBiker();
       }
     }
@@ -512,16 +512,6 @@ define( require => {
         }
       } );
       return nonMovingEnergyChunk;
-    }
-
-    /**
-     * Say whether the biker has energy to pedal.
-     * @returns {boolean}
-     * @private
-     */
-    bikerHasEnergy() {
-      const nChunks = this.energyChunkList.length;
-      return nChunks > 0 && nChunks > this.energyChunkMovers.length;
     }
   }
 
