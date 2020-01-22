@@ -346,9 +346,9 @@ define( require => {
     preloadEnergyChunks() {
 
       // Return if biker is not pedaling, or is out of energy, or is not hooked up to a compatible system
-      if ( this.targetCrankAngularVelocityProperty.get() === 0 ||
+      if ( this.crankAngularVelocityProperty.value === 0 ||
            this.energyChunksRemainingProperty.value === 0 ||
-           !this.mechanicalPoweredSystemIsNextProperty.get() ) {
+           !this.mechanicalPoweredSystemIsNextProperty.value ) {
         return;
       }
 
