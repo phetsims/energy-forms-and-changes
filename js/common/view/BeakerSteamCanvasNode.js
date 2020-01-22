@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
   const Range = require( 'DOT/Range' );
   const Utils = require( 'DOT/Utils' );
@@ -43,10 +44,10 @@ define( require => {
       this.temperatureProperty = temperatureProperty;
       this.fluidBoilingPoint = fluidBoilingPoint;
       this.steamColor = steamColor;
+      this.preloadComplete = true;
 
       // @private
       this.bubbleProductionRemainder = 0;
-      this.dt = 0;
       this.steamOrigin = 0;
       this.steamBubbles = [];
 
@@ -76,14 +77,19 @@ define( require => {
       } );
 
       this.mutate( options );
+
+      // Preload steam animation after state has been set
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        this.preloadSteam();
+      } );
     }
 
     /**
-     * Renders the steam bubbles on the canvas node.
-     * @param {CanvasRenderingContext2D} context
+     * Updates the number of steam bubbles and the position, size, and opacity of each one.
+     * @param {number} dt
      * @private
      */
-    renderSteam( context ) {
+    animateSteam( dt ) {
       let steamingProportion = 0;
       if ( this.fluidBoilingPoint - this.temperatureProperty.value < STEAMING_RANGE ) {
 
@@ -95,7 +101,7 @@ define( require => {
       // add any new steam bubbles
       if ( steamingProportion > 0 ) {
         const bubblesToProduceCalc =
-          ( STEAM_BUBBLE_RATE_RANGE.min + STEAM_BUBBLE_RATE_RANGE.getLength() * steamingProportion ) * this.dt;
+          ( STEAM_BUBBLE_RATE_RANGE.min + STEAM_BUBBLE_RATE_RANGE.getLength() * steamingProportion ) * dt;
         let bubblesToProduce = Math.floor( bubblesToProduceCalc );
 
         this.bubbleProductionRemainder += bubblesToProduceCalc - bubblesToProduce;
@@ -122,6 +128,10 @@ define( require => {
           this.steamBubbles.push( steamBubble );
         }
       }
+      else {
+        this.preloadComplete = true;
+        return;
+      }
 
       // update the position and appearance of the existing steam bubbles
       const steamBubbleSpeed = STEAM_BUBBLE_SPEED_RANGE.min + steamingProportion * STEAM_BUBBLE_SPEED_RANGE.getLength();
@@ -133,16 +143,16 @@ define( require => {
       for ( let i = 0; i < steamBubblesCopy.length; i++ ) {
 
         // float the bubbles upward from the beaker
-        steamBubblesCopy[ i ].y += -this.dt * steamBubbleSpeed;
+        steamBubblesCopy[ i ].y += -dt * steamBubbleSpeed;
 
         if ( steamBubblesCopy[ i ].y < this.containerOutlineRect.minY ) {
 
           // increase radius
-          steamBubblesCopy[ i ].radius = steamBubblesCopy[ i ].radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * this.dt ) ) / 2;
+          steamBubblesCopy[ i ].radius = steamBubblesCopy[ i ].radius * 2 * ( 1 + ( STEAM_BUBBLE_GROWTH_RATE * dt ) ) / 2;
 
           // give bubble some lateral drift motion
           const distanceFromCenterX = steamBubblesCopy[ i ].x;
-          steamBubblesCopy[ i ].x += distanceFromCenterX * 0.2 * this.dt;
+          steamBubblesCopy[ i ].x += distanceFromCenterX * 0.2 * dt;
 
           // fade the bubble as it reaches the end of its range
           const heightFraction = Utils.clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
@@ -156,13 +166,14 @@ define( require => {
           steamBubblesCopy[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
         }
 
-        this.drawSteamBubble( context, steamBubblesCopy[ i ] );
-
         // remove bubble that has floated out of view
         if ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y > MAX_STEAM_BUBBLE_HEIGHT ) {
           this.steamBubbles.splice( i, 1 );
+          this.preloadComplete = true;
         }
       }
+
+      this.preloadComplete && this.invalidatePaint();
     }
 
     /*
@@ -188,7 +199,9 @@ define( require => {
      * @public
      */
     paintCanvas( context ) {
-      this.renderSteam( context );
+      for ( let i = 0; i < this.steamBubbles.length; i++ ) {
+        this.drawSteamBubble( context, this.steamBubbles[ i ] );
+      }
     }
 
     /**
@@ -203,8 +216,20 @@ define( require => {
      * @param {number} dt - the change in time
      */
     step( dt ) {
-      this.dt = dt;
-      this.invalidatePaint();
+      this.animateSteam( dt );
+    }
+
+    /**
+     * Preloads the steam animation.
+     * @private
+     */
+    preloadSteam() {
+      this.preloadComplete = false;
+      const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+
+      while ( !this.preloadComplete ) {
+        this.step( dt );
+      }
     }
   }
 

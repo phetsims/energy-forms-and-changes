@@ -59,6 +59,7 @@ define( require => {
         stroke: this.fluidColor.colorUtilsDarker( 0.2 )
       } );
 
+      // @private
       this.steamCanvasNode = new BeakerSteamCanvasNode(
         this.beakerOutlineRect,
         this.fluidProportionProperty,
