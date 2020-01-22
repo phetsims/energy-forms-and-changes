@@ -302,7 +302,8 @@ define( require => {
         radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
         right: layoutBounds.maxX - EDGE_INSET,
         centerY: ( bottomPanel.top + layoutBounds.maxY ) / 2,
-        tandem: tandem.createTandem( 'resetAllButton' )
+        tandem: tandem.createTandem( 'resetAllButton' ),
+        phetioRestoreScreenStateOnReset: true
       } );
       this.addChild( resetAllButton );
 
