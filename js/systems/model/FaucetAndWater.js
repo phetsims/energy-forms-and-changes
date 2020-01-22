@@ -135,32 +135,7 @@ define( require => {
         return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
       }
 
-      // add water droplets as needed based on flow rate
-      if ( this.flowProportionProperty.value > 0 ) {
-        const initialPosition = new Vector2( 0, 0 );
-        const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
-                             ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
-        const initialSize = new Dimension2( initialWidth, initialWidth );
-        this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
-      }
-
-      // make the water droplets fall
-      this.waterDrops.forEach( drop => {
-        const v = drop.velocityProperty.value;
-        drop.velocityProperty.set( v.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
-        drop.position.set( drop.position.plus( v.times( dt ) ) );
-      } );
-
-      // remove drops that have run their course by iterating over a copy and checking for matches
-      const waterDropsCopy = this.waterDrops;
-      waterDropsCopy.forEach( drop => {
-        if ( drop.position.distance( this.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
-          const index = this.waterDrops.indexOf( drop );
-          if ( index !== -1 ) {
-            this.waterDrops.splice( index, 1 );
-          }
-        }
-      } );
+      this.stepWaterDrops( dt );
 
       // check if time to emit an energy chunk and, if so, do it
       this.energySinceLastChunk += EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value * dt;
@@ -227,6 +202,40 @@ define( require => {
     }
 
     /**
+     * steps only the water dops
+     * @param {number} dt
+     */
+    stepWaterDrops( dt ) {
+
+      // add water droplets as needed based on flow rate
+      if ( this.flowProportionProperty.value > 0 ) {
+        const initialPosition = new Vector2( 0, 0 );
+        const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
+                             ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
+        const initialSize = new Dimension2( initialWidth, initialWidth );
+        this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
+      }
+
+      // make the water droplets fall
+      this.waterDrops.forEach( drop => {
+        const v = drop.velocityProperty.value;
+        drop.velocityProperty.set( v.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
+        drop.position.set( drop.position.plus( v.times( dt ) ) );
+      } );
+
+      // remove drops that have run their course by iterating over a copy and checking for matches
+      const waterDropsCopy = this.waterDrops;
+      waterDropsCopy.forEach( drop => {
+        if ( drop.position.distance( this.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
+          const index = this.waterDrops.indexOf( drop );
+          if ( index !== -1 ) {
+            this.waterDrops.splice( index, 1 );
+          }
+        }
+      } );
+    }
+
+    /**
      * @public
      * @override
      */
@@ -246,6 +255,8 @@ define( require => {
 
       // simulate energy chunks moving through the system
       while ( preloadTime > 0 ) {
+        this.stepWaterDrops( dt );
+
         this.energySinceLastChunk += this.getEnergyOutputRate().amount * dt;
         if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           tempEnergyChunkList.push( this.createNewChunk() );
