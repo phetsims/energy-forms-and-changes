@@ -171,7 +171,7 @@ define( require => {
         }
       }
 
-      this.preloadComplete && this.invalidatePaint();
+      this.preloadComplete && this.steamBubbles.length && this.invalidatePaint();
     }
 
     /**
