@@ -87,19 +87,18 @@ define( require => {
     /**
      * Updates the number of steam bubbles and the position, size, and opacity of each one.
      * @param {number} dt
-     * @private
+     * @public
      */
-    animateSteam( dt ) {
+    step( dt ) {
       let steamingProportion = 0;
+
+      // add any new steam bubbles
       if ( this.fluidBoilingPoint - this.temperatureProperty.value < STEAMING_RANGE ) {
 
         // the water is emitting some amount of steam - set the proportionate amount
         steamingProportion = 1 - ( ( this.fluidBoilingPoint - this.temperatureProperty.value ) / STEAMING_RANGE );
         steamingProportion = Utils.clamp( steamingProportion, 0, 1 );
-      }
 
-      // add any new steam bubbles
-      if ( steamingProportion > 0 ) {
         const bubblesToProduceCalc =
           ( STEAM_BUBBLE_RATE_RANGE.min + STEAM_BUBBLE_RATE_RANGE.getLength() * steamingProportion ) * dt;
         let bubblesToProduce = Math.floor( bubblesToProduceCalc );
@@ -130,7 +129,6 @@ define( require => {
       }
       else {
         this.preloadComplete = true;
-        return;
       }
 
       // update the position and appearance of the existing steam bubbles
@@ -176,7 +174,7 @@ define( require => {
       this.preloadComplete && this.invalidatePaint();
     }
 
-    /*
+    /**
      * Draws a steam bubble.
      * @param {CanvasRenderingContext2D} context
      * @param {Object} steamBubble
@@ -209,14 +207,6 @@ define( require => {
      */
     reset() {
       this.steamBubbles.length = 0;
-    }
-
-    /**
-     * @public
-     * @param {number} dt - the change in time
-     */
-    step( dt ) {
-      this.animateSteam( dt );
     }
 
     /**
