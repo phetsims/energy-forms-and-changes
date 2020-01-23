@@ -130,6 +130,13 @@ define( require => {
     step( dt ) {
       this.steamCanvasNode.step( dt );
     }
+
+    /**
+     * @public
+     */
+    reset() {
+      this.steamCanvasNode.reset();
+    }
   }
 
   return energyFormsAndChanges.register( 'TeaKettleNode', TeaKettleNode );

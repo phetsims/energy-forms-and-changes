@@ -289,11 +289,6 @@ define( require => {
         const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
         this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
       } );
-
-      // listen to the resetEmitter in the beaker model
-      beaker.resetEmitter.addListener( () => {
-        this.reset();
-      } );
     }
 
     /**

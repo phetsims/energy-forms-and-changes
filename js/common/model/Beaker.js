@@ -15,7 +15,6 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  const Emitter = require( 'AXON/Emitter' );
   const EnergyChunk = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunk' );
   const EnergyChunkContainerSlice = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyChunkContainerSlice' );
   const energyChunkDistributor = require( 'ENERGY_FORMS_AND_CHANGES/common/model/energyChunkDistributor' );
@@ -177,9 +176,6 @@ define( require => {
         width,
         this
       );
-
-      // @public - used to notify the view that reset was called
-      this.resetEmitter = new Emitter();
 
       // update internal state when the position changes
       this.positionProperty.link( position => {
@@ -483,7 +479,6 @@ define( require => {
      */
     reset() {
       this.fluidProportionProperty.reset();
-      this.resetEmitter.emit();
       super.reset();
     }
   }

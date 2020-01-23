@@ -750,6 +750,9 @@ define( require => {
         listener: () => {
           model.reset();
           returnAllThermometersToStorageArea();
+          this.beakerViews.forEach( beakerView => {
+            beakerView.reset();
+          } );
         },
         radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
         right: this.layoutBounds.maxX - EDGE_INSET,

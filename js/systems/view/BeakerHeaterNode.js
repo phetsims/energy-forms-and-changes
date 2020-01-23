@@ -144,6 +144,13 @@ define( require => {
     step( dt ) {
       this.beakerView.step( dt );
     }
+
+    /**
+     * @public
+     */
+    reset() {
+      this.beakerView.reset();
+    }
   }
 
   return energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
