@@ -6735,7 +6735,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.bladeAngularVelocityProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.angularVelocityProperty": {
       "phetioDocumentation": "the angular velocity of the blade",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6748,7 +6748,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.bladeAngularVelocityProperty.rangeProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energyUsers.fan.angularVelocityProperty.rangeProperty": {
       "phetioDocumentation": "provides the range of possible values for the parent NumberProperty",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

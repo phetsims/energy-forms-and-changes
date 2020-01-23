@@ -86,9 +86,9 @@ define( require => {
       this.mechanicalEnergyChunkMovers = [];
 
       // @private
-      this.bladeAngularVelocityProperty = new NumberProperty( 0, {
+      this.angularVelocityProperty = new NumberProperty( 0, {
         units: 'radians/second',
-        tandem: tandem.createTandem( 'bladeAngularVelocityProperty' ),
+        tandem: tandem.createTandem( 'angularVelocityProperty' ),
         phetioReadOnly: true,
         phetioHighFrequency: true,
         phetioDocumentation: 'the angular velocity of the blade'
@@ -177,24 +177,24 @@ define( require => {
       // dump any internal energy that was left around from when chunks were on
       this.internalEnergyFromEnergyChunks = this.targetVelocityProperty.value === 0 ? 0 : this.internalEnergyFromEnergyChunks;
 
-      const dOmega = this.targetVelocityProperty.value - this.bladeAngularVelocityProperty.value;
+      const dOmega = this.targetVelocityProperty.value - this.angularVelocityProperty.value;
       if ( dOmega !== 0 ) {
         const change = ANGULAR_ACCELERATION * dt;
         if ( dOmega > 0 ) {
 
           // accelerate
-          this.bladeAngularVelocityProperty.value = Math.min(
-            this.bladeAngularVelocityProperty.value + change,
+          this.angularVelocityProperty.value = Math.min(
+            this.angularVelocityProperty.value + change,
             this.targetVelocityProperty.value
           );
         }
         else {
 
           // decelerate
-          this.bladeAngularVelocityProperty.value = Math.max( this.bladeAngularVelocityProperty.value - change, 0 );
+          this.angularVelocityProperty.value = Math.max( this.angularVelocityProperty.value - change, 0 );
         }
       }
-      const newAngle = ( this.bladePositionProperty.value + this.bladeAngularVelocityProperty.value * dt ) % ( 2 * Math.PI );
+      const newAngle = ( this.bladePositionProperty.value + this.angularVelocityProperty.value * dt ) % ( 2 * Math.PI );
       this.bladePositionProperty.set( newAngle );
     }
 
@@ -296,7 +296,7 @@ define( require => {
     deactivate() {
       super.deactivate();
       this.bladePositionProperty.reset();
-      this.bladeAngularVelocityProperty.reset();
+      this.angularVelocityProperty.reset();
       this.targetVelocityProperty.reset();
       this.internalEnergyFromEnergyChunks = 0;
       this.internalTemperature = ROOM_TEMPERATURE;
