@@ -34,6 +34,7 @@ define( require => {
   const MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
   const ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.07, 0.08 );
   const FALLING_WATER_DELAY = 0.4; // time to pass before wheel starts turning after faucet starts, in seconds
+  const DT = 1 / EFACConstants.FRAMES_PER_SECOND; // artificial time step, in seconds
 
   // where the water and energy chunks originate inside the faucet head, not where they emerge from the faucet
   const OFFSET_FROM_CENTER_TO_WATER_ORIGIN = new Vector2( 0.069, 0.105 );
@@ -89,6 +90,14 @@ define( require => {
       // @private {boolean} - flag for whether next chunk should be transferred or kept, used to alternate transfer with
       // non-transfer
       this.transferNextAvailableChunk = true;
+
+      // @private {boolean} - whether the water drops have been preloaded. initially set to false whenever preloadWaterDrops is called.
+      this.waterDropsPreloaded = true;
+
+      // Preload falling water animation after state has been set
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        this.preloadWaterDrops();
+      } );
     }
 
     /**
@@ -202,7 +211,7 @@ define( require => {
     }
 
     /**
-     * steps only the water dops
+     * steps only the water drops
      * @param {number} dt
      */
     stepWaterDrops( dt ) {
@@ -214,6 +223,9 @@ define( require => {
                              ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
         const initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
+      }
+      else {
+        this.waterDropsPreloaded = true;
       }
 
       // make the water droplets fall
@@ -230,6 +242,7 @@ define( require => {
           const index = this.waterDrops.indexOf( drop );
           if ( index !== -1 ) {
             this.waterDrops.splice( index, 1 );
+            this.waterDropsPreloaded = true;
           }
         }
       } );
@@ -250,29 +263,38 @@ define( require => {
       };
 
       let preloadTime = 3; // In seconds, empirically determined.
-      const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
+
       const tempEnergyChunkList = [];
 
       // simulate energy chunks moving through the system
       while ( preloadTime > 0 ) {
-        this.stepWaterDrops( dt );
-
-        this.energySinceLastChunk += this.getEnergyOutputRate().amount * dt;
+        this.energySinceLastChunk += this.getEnergyOutputRate().amount * DT;
         if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
           tempEnergyChunkList.push( this.createNewChunk() );
           this.energySinceLastChunk = this.energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
         }
 
         // make the chunks fall
-        translateChunks( tempEnergyChunkList, dt );
+        translateChunks( tempEnergyChunkList, DT );
 
-        preloadTime -= dt;
+        preloadTime -= DT;
       }
 
       // now that they are positioned, add these to the 'real' list of energy chunks
       tempEnergyChunkList.forEach( ec => {
         this.energyChunkList.push( ec );
       } );
+    }
+
+    /**
+     * Preloads the falling water animation to be in
+     * @public
+     */
+    preloadWaterDrops() {
+      this.waterDropsPreloaded = false;
+      while ( !this.waterDropsPreloaded ) {
+        this.stepWaterDrops( DT );
+      }
     }
 
     /**
