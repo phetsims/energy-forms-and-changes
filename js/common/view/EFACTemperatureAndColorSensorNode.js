@@ -37,7 +37,7 @@ define( require => {
         cursor: 'pointer',
 
         // phet-io
-        tandem: Tandem.OPTIONAL
+        tandem: Tandem.REQUIRED
       }, options );
 
       super( options );
@@ -71,7 +71,8 @@ define( require => {
           },
           endDrag: () => {
             temperatureAndColorSensor.userControlledProperty.set( false );
-          }
+          },
+          tandem: options.tandem.createTandem( 'inputListener' )
         } ) );
       }
     }

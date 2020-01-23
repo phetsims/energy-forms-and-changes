@@ -381,6 +381,17 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "EventIO"
     },
+    "FaucetNodeIO": {
+      "documentation": "Faucet that emits fluid, typically user-controllable",
+      "events": [
+        "startTapToDispense",
+        "endTapToDispense"
+      ],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "NodeIO",
+      "typeName": "FaucetNodeIO"
+    },
     "FocusIO": {
       "documentation": "A IO type for the instance in the simulation which currently has keyboard focus. FocusIO is serialized into and Object with key `focusedPhetioElement` that is a list of PhET-iO elements, from parent-most to child-most cooresponding to the PhET-iO element that was instrumented.",
       "events": [],

@@ -278,7 +278,8 @@ define( require => {
         this,
         modelViewTransform,
         constrainPosition,
-        simIsPlayingProperty
+        simIsPlayingProperty,
+        options.tandem.createTandem( 'inputListener' )
       ) );
     }
 

@@ -124,11 +124,13 @@ define( require => {
 
       // Add the thermometer that will indicate the beaker water temperature.  Since the position of the thermometer is
       // relative to the beaker heater, the model view transform must be compensated
-      const temperatureAndColorSensorNode = new EFACTemperatureAndColorSensorNode(
-        beakerHeater.thermometer,
-        { modelViewTransform: scaleOnlyMVT }
+      const thermometerNode = new EFACTemperatureAndColorSensorNode(
+        beakerHeater.thermometer, {
+          modelViewTransform: scaleOnlyMVT,
+          tandem: tandem.createTandem( 'thermometerNode' )
+        }
       );
-      this.addChild( temperatureAndColorSensorNode );
+      this.addChild( thermometerNode );
 
       // update the transparency of the hot element to make the dark element appear to heat up
       beakerHeater.heatProportionProperty.link( litProportion => {

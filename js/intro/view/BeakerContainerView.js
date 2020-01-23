@@ -94,7 +94,8 @@ define( require => {
         this.grabNode,
         modelViewTransform,
         constrainPosition,
-        model.isPlayingProperty
+        model.isPlayingProperty,
+        options.tandem.createTandem( 'inputListener' )
       ) );
     }
 

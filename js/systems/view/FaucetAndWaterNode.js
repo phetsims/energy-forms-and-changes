@@ -77,7 +77,8 @@ define( require => {
         shooterOptions: {
           touchAreaXDilation: 77,
           touchAreaYDilation: 100
-        }
+        },
+        tandem: tandem.createTandem( 'faucetNode' )
       } );
 
       // create the energy chunk layer

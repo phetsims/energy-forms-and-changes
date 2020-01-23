@@ -19,13 +19,15 @@ define( require => {
      * @param {ModelViewTransform2} modelViewTransform
      * @param {function} constrainPosition
      * @param {BooleanProperty} simIsPlayingProperty
+     * @param {Tandem} tandem
      */
     constructor(
       modelElement,
       screenViewChildNode,
       modelViewTransform,
       constrainPosition,
-      simIsPlayingProperty
+      simIsPlayingProperty,
+      tandem
     ) {
 
       const dragStartOffset = new Vector2( 0, 0 );
@@ -35,7 +37,6 @@ define( require => {
 
         // allow moving a finger (touch) across a screenViewChildNode to pick it up
         allowTouchSnag: true,
-
         start: event => {
 
           // make sure the sim is playing when an element is grabbed - this will resume the sim if it is paused
@@ -49,18 +50,17 @@ define( require => {
             dragStartPosition.y - modelElementViewPosition.y
           );
         },
-
         drag: event => {
           const dragPosition = currentTarget.globalToParentPoint( event.pointer.point );
           const modelElementViewPosition = dragPosition.minus( dragStartOffset );
           const modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
           modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
         },
-
         end: () => {
           modelElement.userControlledProperty.set( false );
           currentTarget = null;
-        }
+        },
+        tandem: tandem
       } );
     }
   }
