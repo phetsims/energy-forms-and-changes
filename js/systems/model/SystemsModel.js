@@ -65,10 +65,10 @@ define( require => {
       this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
 
       // @public (read-only) energy sources
-      this.faucet = new FaucetAndWater(
+      this.faucetAndWater = new FaucetAndWater(
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
-        energySourcesTandem.createTandem( 'faucet' )
+        energySourcesTandem.createTandem( 'faucetAndWater' )
       );
       this.sun = new SunEnergySource(
         this.solarPanel,
@@ -106,7 +106,7 @@ define( require => {
 
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
-        [ this.faucet, this.sun, this.teaKettle, this.biker ],
+        [ this.faucetAndWater, this.sun, this.teaKettle, this.biker ],
         Enumeration.byKeys( [ 'FAUCET', 'SUN', 'TEA_KETTLE', 'BIKER' ] ),
         ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
