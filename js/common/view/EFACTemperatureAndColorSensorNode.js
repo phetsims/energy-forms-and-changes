@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * A Scenery Node that portrays a thermometer and a triangular indicator of the precise location where the temperature
