@@ -280,13 +280,6 @@ define( require => {
 
       // @public - used to notify the view that a manual step was called
       this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
-
-      // preload energy chunks in blocks and beakers after state has been set
-      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
-        this.thermalContainers.forEach( thermalContainer => {
-          thermalContainer.addInitialEnergyChunks();
-        } );
-      } );
     }
 
     /**
