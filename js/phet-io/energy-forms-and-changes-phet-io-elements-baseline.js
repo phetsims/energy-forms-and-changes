@@ -5669,7 +5669,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.model.energySources.faucet.activeProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energySources.faucetAndWater.activeProperty": {
       "phetioDocumentation": "whether the system element is active. system elements are active when visible on the screen",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5682,7 +5682,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.model.energySources.faucet.flowProportionProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energySources.faucetAndWater.flowProportionProperty": {
       "phetioDocumentation": "proportion of water flowing from the faucet",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5695,7 +5695,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.model.energySources.faucet.positionProperty": {
+    "energyFormsAndChanges.systemsScreen.model.energySources.faucetAndWater.positionProperty": {
       "phetioDocumentation": "the position of the system element",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7775,7 +7775,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7788,7 +7788,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -7801,7 +7801,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "FaucetNodeIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.inputListener": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -7814,7 +7814,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.inputListener.dragAction": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7827,7 +7827,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.inputListener.dragEndAction": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7840,7 +7840,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.inputListener.dragStartAction": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO. the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7853,7 +7853,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.inputListener.isDraggingProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7866,7 +7866,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.opacityProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7879,7 +7879,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.pickableProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7892,7 +7892,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetNode.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7905,7 +7905,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.faucetSettingProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetSettingProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7918,7 +7918,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.opacityProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7931,7 +7931,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.pickableProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7944,7 +7944,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetNode.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

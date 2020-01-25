@@ -160,6 +160,11 @@ define( require => {
 
       // add the initial energy chunks
       this.addInitialEnergyChunks();
+
+      // preload energy chunks after state has been set
+      _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        this.addInitialEnergyChunks();
+      } );
     }
 
     /**

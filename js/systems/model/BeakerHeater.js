@@ -367,14 +367,9 @@ define( require => {
           preloadComplete = true;
         }
       }
-
-      // match beaker's energy chunks to its energy level
-      this.beaker.addInitialEnergyChunks();
     }
 
-    //REVEIW #247 what are constiables?
     /**
-     * reset some constiables/Properties when deactivated by carousel
      * @public
      * @override
      */

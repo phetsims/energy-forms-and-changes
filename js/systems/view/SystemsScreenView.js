@@ -188,13 +188,13 @@ define( require => {
       this.addChild( solarPanelNode );
 
       // @private
-      this.faucetNode = new FaucetAndWaterNode(
-        model.faucet,
+      this.faucetAndWaterNode = new FaucetAndWaterNode(
+        model.faucetAndWater,
         model.energyChunksVisibleProperty,
         modelViewTransform,
-        energySourcesTandem.createTandem( 'faucetNode' )
+        energySourcesTandem.createTandem( 'faucetAndWaterNode' )
       );
-      this.addChild( this.faucetNode );
+      this.addChild( this.faucetAndWaterNode );
 
       // get the mechanical energy chunk layer from the generator and add it after the faucet has been created. this is
       // desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks that
@@ -379,7 +379,7 @@ define( require => {
     stepView( dt ) {
       this.teaKettleNode.step( dt );
       this.beakerHeaterNode.step( dt );
-      this.faucetNode.step( dt );
+      this.faucetAndWaterNode.step( dt );
     }
 
     /**
