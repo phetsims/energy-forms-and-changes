@@ -40,6 +40,12 @@ define( require => {
   const ironTextureFrontImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_front.png' );
   const ironTextureRightImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_right.png' );
   const ironTextureTopImage = require( 'image!ENERGY_FORMS_AND_CHANGES/iron_texture_top.png' );
+
+  // strings
+  const brickString = require( 'string!ENERGY_FORMS_AND_CHANGES/brick' );
+  const ironString = require( 'string!ENERGY_FORMS_AND_CHANGES/iron' );
+
+  // constants
   const BLOCK_IMAGES = {};
   BLOCK_IMAGES[ BlockType.BRICK ] = {
     front: brickTextureFrontImage,
@@ -51,14 +57,12 @@ define( require => {
     side: ironTextureRightImage,
     top: ironTextureTopImage
   };
-
-  // constants
   const LABEL_FONT = new PhetFont( 26 );
   const OUTLINE_LINE_WIDTH = 3;
   const PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
   const BLOCK_ATTRIBUTES = {};
-  BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: require( 'string!ENERGY_FORMS_AND_CHANGES/iron' ) };
-  BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: require( 'string!ENERGY_FORMS_AND_CHANGES/brick' ) };
+  BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: ironString };
+  BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
 
   class BlockNode extends Node {
 

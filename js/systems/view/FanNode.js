@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * a scenery node that represents a fan in the view
@@ -17,23 +17,25 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
 
   // images
-  const fanImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' )
-  ];
   const connectorImage = require( 'image!ENERGY_FORMS_AND_CHANGES/connector.png' );
+  const fan01Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_01.png' );
+  const fan02Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_02.png' );
+  const fan03Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_03.png' );
+  const fan04Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_04.png' );
+  const fan05Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_05.png' );
+  const fan06Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_06.png' );
+  const fan07Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_07.png' );
+  const fan08Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_08.png' );
+  const fan09Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_09.png' );
+  const fan10Image = require( 'image!ENERGY_FORMS_AND_CHANGES/fan_10.png' );
   const wireBottomRightShortImage = require( 'image!ENERGY_FORMS_AND_CHANGES/wire_bottom_right_short.png' );
 
   // constants
-  const NUMBER_OF_FAN_IMAGES = fanImages.length;
+  const FAN_IMAGES = [
+    fan01Image, fan02Image, fan03Image, fan04Image, fan05Image,
+    fan06Image, fan07Image, fan08Image, fan09Image, fan10Image
+  ];
+  const NUMBER_OF_FAN_IMAGES = FAN_IMAGES.length;
 
   class FanNode extends MoveFadeModelElementNode {
 
@@ -64,7 +66,7 @@ define( require => {
 
       // fan blade image nodes
       for ( let i = 0; i < NUMBER_OF_FAN_IMAGES; i++ ) {
-        fanBladeImageNodes.push( new Image( fanImages[ i ], {
+        fanBladeImageNodes.push( new Image( FAN_IMAGES[ i ], {
           left: connectorNode.right - 2,
           centerY: connectorNode.centerY,
           scale: 0.74
