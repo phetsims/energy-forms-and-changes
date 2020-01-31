@@ -27,60 +27,104 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
 
   // images
+  const cyclistLegBack1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_01.png' );
+  const cyclistLegBack2 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_02.png' );
+  const cyclistLegBack3 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_03.png' );
+  const cyclistLegBack4 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_04.png' );
+  const cyclistLegBack5 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_05.png' );
+  const cyclistLegBack6 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_06.png' );
+  const cyclistLegBack7 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_07.png' );
+  const cyclistLegBack8 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_08.png' );
+  const cyclistLegBack9 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_09.png' );
+  const cyclistLegBack10 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_10.png' );
+  const cyclistLegBack11 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_11.png' );
+  const cyclistLegBack12 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_12.png' );
+  const cyclistLegBack13 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_13.png' );
+  const cyclistLegBack14 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_14.png' );
+  const cyclistLegBack15 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_15.png' );
+  const cyclistLegBack16 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_16.png' );
+  const cyclistLegBack17 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_17.png' );
+  const cyclistLegBack18 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_18.png' );
+  const cyclistLegFront1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_01.png' );
+  const cyclistLegFront2 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_02.png' );
+  const cyclistLegFront3 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_03.png' );
+  const cyclistLegFront4 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_04.png' );
+  const cyclistLegFront5 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_05.png' );
+  const cyclistLegFront6 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_06.png' );
+  const cyclistLegFront7 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_07.png' );
+  const cyclistLegFront8 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_08.png' );
+  const cyclistLegFront9 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_09.png' );
+  const cyclistLegFront10 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_10.png' );
+  const cyclistLegFront11 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_11.png' );
+  const cyclistLegFront12 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_12.png' );
+  const cyclistLegFront13 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_13.png' );
+  const cyclistLegFront14 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_14.png' );
+  const cyclistLegFront15 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_15.png' );
+  const cyclistLegFront16 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_16.png' );
+  const cyclistLegFront17 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_17.png' );
+  const cyclistLegFront18 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_18.png' );
+  const cyclistTorso = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso.png' );
+  const cyclistTorsoTired1 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_1.png' );
+  const cyclistTorsoTired2 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_2.png' );
+  const cyclistTorsoTired3 = require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_3.png' );
+  const bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame.png' );
+  const bicycleGearImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_gear.png' );
+  const bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
+
   const cyclistBackLegImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_back_18.png' )
+    cyclistLegBack1,
+    cyclistLegBack2,
+    cyclistLegBack3,
+    cyclistLegBack4,
+    cyclistLegBack5,
+    cyclistLegBack6,
+    cyclistLegBack7,
+    cyclistLegBack8,
+    cyclistLegBack9,
+    cyclistLegBack10,
+    cyclistLegBack11,
+    cyclistLegBack12,
+    cyclistLegBack13,
+    cyclistLegBack14,
+    cyclistLegBack15,
+    cyclistLegBack16,
+    cyclistLegBack17,
+    cyclistLegBack18
   ];
+
   const cyclistFrontLegImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_01.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_02.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_03.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_04.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_05.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_06.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_07.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_08.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_09.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_10.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_11.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_12.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_13.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_14.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_15.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_16.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_17.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_leg_front_18.png' )
+    cyclistLegFront1,
+    cyclistLegFront2,
+    cyclistLegFront3,
+    cyclistLegFront4,
+    cyclistLegFront5,
+    cyclistLegFront6,
+    cyclistLegFront7,
+    cyclistLegFront8,
+    cyclistLegFront9,
+    cyclistLegFront10,
+    cyclistLegFront11,
+    cyclistLegFront12,
+    cyclistLegFront13,
+    cyclistLegFront14,
+    cyclistLegFront15,
+    cyclistLegFront16,
+    cyclistLegFront17,
+    cyclistLegFront18
   ];
+
   const cyclistTorsoImages = [
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_1.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_2.png' ),
-    require( 'image!ENERGY_FORMS_AND_CHANGES/cyclist_torso_tired_3.png' )
+    cyclistTorso,
+    cyclistTorsoTired1,
+    cyclistTorsoTired2,
+    cyclistTorsoTired3
   ];
   assert && assert( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
     'NUMBER_OF_LEG_IMAGES in Biker.js must match the number of images used for the legs in BikerNode.js'
   );
   const NUMBER_OF_LEG_IMAGES = cyclistFrontLegImages.length;
   const NUMBER_OF_TORSO_IMAGES = cyclistTorsoImages.length;
-  const bicycleFrameImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_frame.png' );
-  const bicycleGearImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_gear.png' );
-  const bicycleSpokesImage = require( 'image!ENERGY_FORMS_AND_CHANGES/bicycle_spokes.png' );
+
 
   // constants
   const BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
