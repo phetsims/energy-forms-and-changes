@@ -72,8 +72,13 @@ define( require => {
       type: 'array',
       defaultValue: defaultElements,
       elementSchema: { type: 'string' },
-      isValidValue: values => _.difference( values, defaultElements ).length === 0 &&
-                              values.length <= EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS,
+      isValidValue: values => {
+        const beakers = _.filter( values, value => value === EFACConstants.WATER_KEY || value === EFACConstants.OLIVE_OIL_KEY );
+
+        return _.difference( values, defaultElements ).length === 0 &&
+        values.length <= EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS &&
+        beakers.length <= EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS;
+      },
       public: true
     }
 

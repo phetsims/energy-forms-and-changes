@@ -43,7 +43,7 @@ define( require => {
       };
 
       const blocksToCreate = [];
-      let beakersToCreate = [];
+      const beakersToCreate = [];
 
       // map query parameter string to element type and split by blocks vs beakers
       EFACQueryParameters.elements.forEach( elementKey => {
@@ -60,12 +60,6 @@ define( require => {
           beakersToCreate.push( BeakerType.OLIVE_OIL );
         }
       } );
-
-      if( beakersToCreate.length > EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS ) {
-        assert && assert( false, `Only ${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers may be added, but \
-${beakersToCreate.length} were provided: ${beakersToCreate}` );
-        beakersToCreate = beakersToCreate.slice( 0, EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS );
-      }
 
       super(
         () => new EFACIntroModel(
