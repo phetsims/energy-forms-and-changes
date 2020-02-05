@@ -49,7 +49,7 @@ define( require => {
     /**
      * @param {Vector2} position - the position in model space where this burner exists
      * @param {Property.<boolean>} energyChunksVisibleProperty - controls whether the energy chunks are visible
-     * @param {Object} options
+     * @param {Object} [options]
      */
     constructor( position, energyChunksVisibleProperty, options ) {
 

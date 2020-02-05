@@ -24,7 +24,7 @@ define( require => {
     /**
      * @param {ObservableArray} energyChunkList
      * @param {ModelViewTransform2} modelViewTransform
-     * @param {Object} options
+     * @param {Object} [options]
      */
     constructor( energyChunkList, modelViewTransform, options ) {
       super();
