@@ -1,4 +1,4 @@
-// Copyright 2014-2019, University of Colorado Boulder
+// Copyright 2014-2020, University of Colorado Boulder
 
 /**
  * This node monitors the comings and goings of energy chunks on a observable list and adds/removes nodes that
