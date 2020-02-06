@@ -125,7 +125,6 @@ define( require => {
   const NUMBER_OF_LEG_IMAGES = cyclistFrontLegImages.length;
   const NUMBER_OF_TORSO_IMAGES = cyclistTorsoImages.length;
 
-
   // constants
   const BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
   const BICYCLE_SYSTEM_TOP_OFFSET = -249;
