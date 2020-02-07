@@ -25,6 +25,9 @@ window.phet.phetio.phetioElementsOverrides =
   "energyFormsAndChanges.introScreen.model.energyChunksVisibleProperty": {
     "phetioFeatured": true
   },
+  "energyFormsAndChanges.introScreen.model.isPlayingProperty": {
+    "phetioFeatured": true
+  },
   "energyFormsAndChanges.introScreen.model.leftBurner.heatCoolLevelProperty": {
     "phetioFeatured": true
   },
@@ -146,6 +149,9 @@ window.phet.phetio.phetioElementsOverrides =
     "phetioFeatured": true
   },
   "energyFormsAndChanges.systemsScreen.model.energyUsersCarousel.targetElementNameProperty": {
+    "phetioFeatured": true
+  },
+  "energyFormsAndChanges.systemsScreen.model.isPlayingProperty": {
     "phetioFeatured": true
   },
   "energyFormsAndChanges.systemsScreen.view.controlPanel.visibleProperty": {
