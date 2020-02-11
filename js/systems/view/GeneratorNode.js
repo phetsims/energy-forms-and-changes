@@ -17,7 +17,9 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const merge = require( 'PHET_CORE/merge' );
   const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Tandem = require( 'TANDEM/Tandem' );
+  const Text = require( 'SCENERY/nodes/Text' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -30,6 +32,9 @@ define( require => {
 
   // constants
   const SPOKES_AND_PADDLES_CENTER_Y_OFFSET = -65;
+
+  // strings
+  const generatorString = require( 'string!ENERGY_FORMS_AND_CHANGES/generator' );
 
   class GeneratorNode extends MoveFadeModelElementNode {
 
@@ -52,6 +57,11 @@ define( require => {
       super( generator, modelViewTransform, options.tandem );
 
       const generatorNode = new Image( generatorImage, { left: -107, top: -165 } );
+      const generatorText = new Text( generatorString, {
+        font: new PhetFont( 19 ),
+        centerX: generatorNode.centerX,
+        bottom: generatorNode.bottom - 6
+      } );
       const spokesNode = new Image( generatorWheelSpokesImage, {
         centerX: generatorNode.centerX,
         centerY: generatorNode.centerY + SPOKES_AND_PADDLES_CENTER_Y_OFFSET
@@ -80,6 +90,7 @@ define( require => {
         parentPositionProperty: generator.positionProperty
       } ) );
       this.addChild( generatorNode );
+      this.addChild( generatorText );
       this.addChild( connectorNode );
       this.addChild( spokesNode );
       this.addChild( paddlesNode );

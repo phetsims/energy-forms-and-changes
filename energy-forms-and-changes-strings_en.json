@@ -23,6 +23,9 @@
   "oliveOil": {
     "value": "Olive Oil"
   },
+  "generator": {
+    "value": "Generator"
+  },
   "clouds": {
     "value": "Clouds"
   },
