@@ -65,6 +65,11 @@ define( require => {
       this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
 
       // @public (read-only) energy sources
+      this.biker = new Biker(
+        this.energyChunksVisibleProperty,
+        this.generator.activeProperty,
+        energySourcesTandem.createTandem( 'biker' )
+      );
       this.faucetAndWater = new FaucetAndWater(
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
@@ -79,11 +84,6 @@ define( require => {
         this.energyChunksVisibleProperty,
         this.generator.activeProperty,
         energySourcesTandem.createTandem( 'teaKettle' )
-      );
-      this.biker = new Biker(
-        this.energyChunksVisibleProperty,
-        this.generator.activeProperty,
-        energySourcesTandem.createTandem( 'biker' )
       );
 
       const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
@@ -106,8 +106,8 @@ define( require => {
 
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
-        [ this.faucetAndWater, this.sun, this.teaKettle, this.biker ],
-        Enumeration.byKeys( [ 'FAUCET', 'SUN', 'TEA_KETTLE', 'BIKER' ] ),
+        [ this.biker, this.sun, this.teaKettle, this.faucetAndWater ],
+        Enumeration.byKeys( [ 'BIKER', 'SUN', 'TEA_KETTLE', 'FAUCET' ] ),
         ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
         tandem.createTandem( 'energySourcesCarousel' )
