@@ -5773,6 +5773,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
+    "energyFormsAndChanges.systemsScreen.model.energySources.sun.sunProportionProperty": {
+      "phetioDocumentation": "proportion of sun reaching the solar panel",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "DerivedPropertyIO<NumberIO>"
+    },
     "energyFormsAndChanges.systemsScreen.model.energySources.teaKettle.activeProperty": {
       "phetioDocumentation": "whether the system element is active. system elements are active when visible on the screen",
       "phetioDynamicElement": false,

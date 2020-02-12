@@ -11,6 +11,8 @@ define( require => {
 
   // modules
   const Cloud = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Cloud' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const DerivedPropertyIO = require( 'AXON/DerivedPropertyIO' );
   const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
   const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
   const Energy = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Energy' );
@@ -20,6 +22,7 @@ define( require => {
   const EnergyType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/EnergyType' );
   const Image = require( 'SCENERY/nodes/Image' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const NumberIO = require( 'TANDEM/types/NumberIO' );
   const Range = require( 'DOT/Range' );
   const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -72,6 +75,16 @@ define( require => {
         range: new Range( 0, 1 ),
         tandem: tandem.createTandem( 'cloudinessProportionProperty' ),
         phetioDocumentation: 'proportion of clouds blocking the sun'
+      } );
+
+      // @public - exists only for phet-io
+      this.sunProportionProperty = new DerivedProperty( [ this.cloudinessProportionProperty ], cloudinessProportion => {
+        return 1 - cloudinessProportion;
+      }, {
+        range: new Range( 0, 1 ),
+        tandem: tandem.createTandem( 'sunProportionProperty' ),
+        phetioDocumentation: 'proportion of sun reaching the solar panel',
+        phetioType: DerivedPropertyIO( NumberIO )
       } );
 
       // @private - internal variables used in methods
