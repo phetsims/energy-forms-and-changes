@@ -126,13 +126,14 @@ define( require => {
         parentPositionProperty: sun.positionProperty
       } ) );
       this.addChild( sunPath );
+      const cloudsPanelTandem = tandem.createTandem( 'cloudsPanel' );
 
       // add slider panel to control cloudiness
       const slider = new VSlider(
         sun.cloudinessProportionProperty,
         new Range( 0, 1 ), {
           top: 0, left: 0,
-          tandem: tandem.createTandem( 'slider' )
+          tandem: cloudsPanelTandem.createTandem( 'slider' )
         }
       );
 
@@ -172,7 +173,7 @@ define( require => {
         centerX: 0,
         centerY: 0,
         resize: false,
-        tandem: tandem.createTandem( 'cloudsPanel' )
+        tandem: cloudsPanelTandem
       } ) );
 
       // add/remove the light-absorbing shape for the solar panel
