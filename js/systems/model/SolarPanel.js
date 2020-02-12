@@ -27,6 +27,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const Shape = require( 'KITE/Shape' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -180,7 +181,7 @@ define( require => {
         // panel (this way, the fan moves at the same speed when chunks are on or off).
         energyProduced = incomingEnergy.amount * 0.68;
       }
-      this.energyOutputRateProperty.value = energyProduced / dt;
+      this.energyOutputRateProperty.value = Utils.toFixedNumber( energyProduced / dt, 11 );
 
       this.simulationTime += dt;
 
