@@ -5244,7 +5244,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
@@ -5849,7 +5849,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>"
+      "phetioTypeName": "PropertyIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.activeProperty": {
       "phetioDocumentation": "whether the system element is active. system elements are active when visible on the screen",
@@ -9807,7 +9807,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,

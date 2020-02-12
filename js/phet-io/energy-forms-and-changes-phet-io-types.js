@@ -357,13 +357,13 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)"
     },
-    "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)": {
-      "documentation": "Possible values: FAUCET,SUN,TEA_KETTLE,BIKER.",
+    "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)": {
+      "documentation": "Possible values: BIKER,FAUCET,SUN,TEA_KETTLE.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "supertype": "ObjectIO",
-      "typeName": "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)"
+      "typeName": "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)"
     },
     "EnumerationIO(GENERATOR|SOLAR_PANEL)": {
       "documentation": "Possible values: GENERATOR,SOLAR_PANEL.",
@@ -458,18 +458,18 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN),NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>)=>VoidIO"
     },
-    "FunctionIO(EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER),NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>)=>VoidIO": {
-      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER), NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)><br><strong>Return Type:</strong> VoidIO",
+    "FunctionIO(EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE),NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE), NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)><br><strong>Return Type:</strong> VoidIO",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "parameterTypes": [
-        "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)",
-        "NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>",
+        "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)",
+        "NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>",
         "VoidIO"
       ],
       "supertype": "ObjectIO",
-      "typeName": "FunctionIO(EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER),NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>)=>VoidIO"
+      "typeName": "FunctionIO(EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE),NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>)=>VoidIO"
     },
     "FunctionIO(EnumerationIO(GENERATOR|SOLAR_PANEL),NullableIO<EnumerationIO(GENERATOR|SOLAR_PANEL)>)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(GENERATOR|SOLAR_PANEL), NullableIO<EnumerationIO(GENERATOR|SOLAR_PANEL)><br><strong>Return Type:</strong> VoidIO",
@@ -662,16 +662,16 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "NullableIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>"
     },
-    "NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>": {
+    "NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "parameterTypes": [
-        "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)"
+        "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)"
       ],
       "supertype": "ObjectIO",
-      "typeName": "NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>"
+      "typeName": "NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>"
     },
     "NullableIO<EnumerationIO(GENERATOR|SOLAR_PANEL)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -1255,7 +1255,7 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<EnumerationIO(BEAKER_HEATER|INCANDESCENT_BULB|FLUORESCENT_BULB|FAN)>"
     },
-    "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>": {
+    "PropertyIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
       "events": [
         "changed"
@@ -1268,19 +1268,19 @@ window.phet.phetio.phetioTypes = assert &&
         "getValue": {
           "documentation": "Gets the current value.",
           "parameterTypes": [],
-          "returnType": "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)"
+          "returnType": "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)"
         },
         "lazyLink": {
           "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
           "parameterTypes": [
-            "FunctionIO(EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER),NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>)=>VoidIO"
+            "FunctionIO(EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE),NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>)=>VoidIO"
           ],
           "returnType": "VoidIO"
         },
         "link": {
           "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
           "parameterTypes": [
-            "FunctionIO(EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER),NullableIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>)=>VoidIO"
+            "FunctionIO(EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE),NullableIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>)=>VoidIO"
           ],
           "returnType": "VoidIO"
         },
@@ -1288,16 +1288,16 @@ window.phet.phetio.phetioTypes = assert &&
           "documentation": "Sets the value of the Property. If the value differs from the previous value, listeners are notified with the new value.",
           "invocableForReadOnlyElements": false,
           "parameterTypes": [
-            "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)"
+            "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)"
           ],
           "returnType": "VoidIO"
         }
       },
       "parameterTypes": [
-        "EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)"
+        "EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)"
       ],
       "supertype": "ObjectIO",
-      "typeName": "PropertyIO<EnumerationIO(FAUCET|SUN|TEA_KETTLE|BIKER)>"
+      "typeName": "PropertyIO<EnumerationIO(BIKER|FAUCET|SUN|TEA_KETTLE)>"
     },
     "PropertyIO<EnumerationIO(GENERATOR|SOLAR_PANEL)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
