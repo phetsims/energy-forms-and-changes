@@ -283,6 +283,8 @@ define( require => {
         bicycleSpokesNode.rotateAround( wheelRotationPoint, -delta );
       } );
 
+      const controlPanelTandem = tandem.createTandem( 'controlPanel' );
+
       // slider to control crank speed
       const crankSlider = new HSlider(
         biker.targetCrankAngularVelocityProperty,
@@ -291,7 +293,7 @@ define( require => {
           thumbSize: new Dimension2( 20, 40 ),
           thumbTouchAreaXDilation: 11,
           thumbTouchAreaYDilation: 11,
-          tandem: tandem.createTandem( 'slider' )
+          tandem: controlPanelTandem.createTandem( 'slider' )
         }
       );
 
@@ -302,7 +304,8 @@ define( require => {
         cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
         centerX: 0,
         centerY: 110,
-        resize: false
+        resize: false,
+        tandem: controlPanelTandem
       } ) );
 
       // add the other images used
