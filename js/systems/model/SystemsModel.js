@@ -106,8 +106,8 @@ define( require => {
 
       // @public (read-only) carousels that control the positions of the energy sources, converters, and users
       this.energySourcesCarousel = new EnergySystemElementCarousel(
-        [ this.biker, this.sun, this.teaKettle, this.faucetAndWater ],
-        Enumeration.byKeys( [ 'BIKER', 'SUN', 'TEA_KETTLE', 'FAUCET' ] ),
+        [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
+        Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
         ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
         OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
         tandem.createTandem( 'energySourcesCarousel' )
