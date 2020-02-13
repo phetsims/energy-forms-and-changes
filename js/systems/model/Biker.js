@@ -229,8 +229,8 @@ define( require => {
            this.targetCrankAngularVelocityProperty.value > 0 ) {
 
         // start a new chunk moving
-        if ( this.energyChunksRemainingProperty.value > 0 ) {
-          const energyChunk = this.findNonMovingEnergyChunk();
+        const energyChunk = this.findNonMovingEnergyChunk();
+        if ( energyChunk ) {
           this.energyChunkMovers.push( new EnergyChunkPathMover(
             energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
