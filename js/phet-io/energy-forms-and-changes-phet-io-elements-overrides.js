@@ -1,6 +1,9 @@
 /* eslint-disable */
 window.phet.phetio.phetioElementsOverrides =
   {
+    "energyFormsAndChanges.introScreen.model.beakerGroup.archetype": {
+      "phetioFeatured": true
+    },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.energyProperty": {
       "phetioFeatured": true
     },
@@ -11,6 +14,9 @@ window.phet.phetio.phetioElementsOverrides =
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.temperatureProperty": {
+      "phetioFeatured": true
+    },
+    "energyFormsAndChanges.introScreen.model.blockGroup.archetype": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.model.blockGroup.archetype.energyProperty": {
