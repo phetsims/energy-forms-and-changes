@@ -254,21 +254,15 @@ define( require => {
 
         // only set the state by numberOfChunksRemaining if the biker is active, otherwise set initial state. this is
         // needed for the biker to initially look correct when selected from the carousel
-        if ( biker.activeProperty.get() ) {
-          const percentageOfChunksRemaining = numberOfChunksRemaining / Biker.INITIAL_NUMBER_OF_ENERGY_CHUNKS;
-          visibleTorso.setVisible( false );
+        const percentageOfChunksRemaining = numberOfChunksRemaining / Biker.INITIAL_NUMBER_OF_ENERGY_CHUNKS;
+        visibleTorso.setVisible( false );
 
-          // select how tired the cyclist appears by how much energy the have remaining
-          visibleTorso = percentageOfChunksRemaining > 0.67 ? cyclistTorsoNodes[ 0 ] :
-                         percentageOfChunksRemaining > 0.33 ? cyclistTorsoNodes[ 1 ] :
-                         percentageOfChunksRemaining > 0 ? cyclistTorsoNodes[ 2 ] : cyclistTorsoNodes[ 3 ];
-          visibleTorso.setVisible( true );
-          feedMeButton.setVisible( numberOfChunksRemaining === 0 );
-        }
-        else {
-          visibleTorso.setVisible( true );
-          feedMeButton.setVisible( false );
-        }
+        // select how tired the cyclist appears by how much energy the have remaining
+        visibleTorso = percentageOfChunksRemaining > 0.67 ? cyclistTorsoNodes[ 0 ] :
+                       percentageOfChunksRemaining > 0.33 ? cyclistTorsoNodes[ 1 ] :
+                       percentageOfChunksRemaining > 0 ? cyclistTorsoNodes[ 2 ] : cyclistTorsoNodes[ 3 ];
+        visibleTorso.setVisible( true );
+        feedMeButton.setVisible( numberOfChunksRemaining === 0 );
       } );
 
       // add a listener that will turn the back wheel
