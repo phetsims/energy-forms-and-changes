@@ -207,6 +207,7 @@ define( require => {
      */
     reset() {
       this.steamBubbles.length = 0;
+      this.invalidatePaint();
     }
 
     /**
