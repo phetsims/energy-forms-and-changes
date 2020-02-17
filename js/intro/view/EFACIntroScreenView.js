@@ -604,40 +604,35 @@ define( require => {
 
       // updates the Z-order of the blocks when their position changes
       const blockChangeListener = position => {
-        let currentBlock = null;
-        let currentBlockNode = null;
+        const blocks = [ ...model.blocks.array ];
 
-        model.blocks.forEach( block => {
-          if ( block.positionProperty.value === position ) {
-            currentBlock = block;
+        blocks.sort( ( a, b ) => {
+          // a block that's completely to the right of another block should always be in front
+          if ( a.bounds.minX >= b.bounds.maxX ) {
+            return 1;
+          }
+          else if ( a.bounds.maxX <= b.bounds.minX ) {
+            return -1;
+          }
+
+          // a block that's above another should always be in front if they overlap in the x direction
+          if ( a.bounds.minY > b.bounds.minY ) {
+            return 1;
+          }
+          else if ( b.bounds.minY > a.bounds.minY ) {
+            return -1;
+          }
+          else {
+            return 0;
           }
         } );
-        blockNodes.forEach( blockNode => {
-          if ( blockNode.block === currentBlock ) {
-            currentBlockNode = blockNode;
-          }
-        } );
 
-        model.blocks.forEach( otherBlock => {
-          if ( otherBlock === currentBlock ) {
-            return;
-          }
-
-          let otherBlockNode = null;
+        blocks.forEach( block => {
           blockNodes.forEach( blockNode => {
-            if ( blockNode.block === otherBlock ) {
-              otherBlockNode = blockNode;
+            if ( blockNode.block === block ) {
+              blockNode.moveToFront();
             }
-          } );
-
-          if ( currentBlock.getBounds().minX >= otherBlock.getBounds().maxX ||
-               currentBlock.getBounds().minY >= otherBlock.getBounds().maxY ) {
-            currentBlockNode.moveToFront();
-          }
-          else if ( otherBlock.getBounds().minX >= currentBlock.getBounds().maxX ||
-                    otherBlock.getBounds().minY >= currentBlock.getBounds().maxY ) {
-            otherBlockNode.moveToFront();
-          }
+          } )
         } );
       };
 
