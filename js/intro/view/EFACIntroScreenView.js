@@ -632,7 +632,7 @@ define( require => {
             if ( blockNode.block === block ) {
               blockNode.moveToFront();
             }
-          } )
+          } );
         } );
       };
 
