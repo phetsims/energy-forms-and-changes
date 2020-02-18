@@ -630,6 +630,8 @@ define( require => {
         blocks.forEach( block => {
           blockNodes.forEach( blockNode => {
             if ( blockNode.block === block ) {
+              // @samreid and @chrisklus looked for any performance bottlenecks caused by re-layering every frame but
+              // could not find anything so we suspect Scenery know not to if the order is already correct
               blockNode.moveToFront();
             }
           } );
