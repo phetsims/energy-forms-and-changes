@@ -1,19 +1,19 @@
 {
-  "comment": "# energy-forms-and-changes 1.2.0-dev.9 Fri Feb 21 2020 13:19:47 GMT-0500 (Eastern Standard Time)",
+  "comment": "# energy-forms-and-changes 1.2.0-dev.10 Mon Feb 24 2020 13:36:10 GMT-0500 (Eastern Standard Time)",
   "assert": {
     "sha": "a99a9ce9ee0774bf3ef509bf3e31ca7383f67478",
     "branch": "master"
   },
   "axon": {
-    "sha": "86fa287c5911f34a4b3b9b9c267c72f06c693f4d",
+    "sha": "e1c69917a9d4150daaa96126ccdf35ea02fff6b5",
     "branch": "master"
   },
   "brand": {
-    "sha": "75f1b9c7d123307f1dc46bca3a3ade5b2a712609",
+    "sha": "9b84d988d1e0fa9bef8f62507294caef13f15c9a",
     "branch": "master"
   },
   "chipper": {
-    "sha": "586ba7bb0de5bc6a8eacfce2dc7d77a13c20d979",
+    "sha": "6b41f1eae915723ab2640544a07075cdc28a1178",
     "branch": "master"
   },
   "dot": {
@@ -21,11 +21,11 @@
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "635636ef3f55563976968a43a360b9f8111ac75c",
+    "sha": "6920b58c982df4d9ef7807ce7a15e1b418999e84",
     "branch": "master"
   },
   "joist": {
-    "sha": "ea3f51d0f497775752d2c86dc46ba995b9167255",
+    "sha": "1828d186ca343eedf10b2bb419e3a07576b81729",
     "branch": "master"
   },
   "kite": {
@@ -57,11 +57,11 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "106b9c9cf4e73b24bfc76ba508aa0fda456577ea",
+    "sha": "e5b3415503ec109a1372f1403da1cbe11588633e",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "6fbc7ff8706c6654c078fe0b9a46f5f00c21c60b",
+    "sha": "79a407ec2c29e532cfcd0178cf0054c491eb2411",
     "branch": "master"
   },
   "sherpa": {
@@ -81,7 +81,7 @@
     "branch": "master"
   },
   "tandem": {
-    "sha": "8bca6229f2e2c29c5170fbcf3b9cd60545229798",
+    "sha": "a67d85966f21dab17e126fb4b4ca27241a3ad720",
     "branch": "master"
   },
   "twixt": {
