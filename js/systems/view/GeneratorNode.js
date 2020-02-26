@@ -57,10 +57,11 @@ define( require => {
       super( generator, modelViewTransform, options.tandem );
 
       const generatorNode = new Image( generatorImage, { left: -107, top: -165 } );
-      const generatorText = new Text( generatorString, {
+      const labelNode = new Text( generatorString, {
         font: new PhetFont( 19 ),
         centerX: generatorNode.centerX,
-        bottom: generatorNode.bottom - 6
+        bottom: generatorNode.bottom - 6,
+        tandem: options.tandem.createTandem( 'labelNode' )
       } );
       const spokesNode = new Image( generatorWheelSpokesImage, {
         centerX: generatorNode.centerX,
@@ -90,7 +91,7 @@ define( require => {
         parentPositionProperty: generator.positionProperty
       } ) );
       this.addChild( generatorNode );
-      this.addChild( generatorText );
+      this.addChild( labelNode );
       this.addChild( connectorNode );
       this.addChild( spokesNode );
       this.addChild( paddlesNode );

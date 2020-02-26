@@ -64,7 +64,7 @@ define( require => {
         label: waterString,
 
         // phet-io
-        tandem: Tandem.OPTIONAL,
+        tandem: Tandem.REQUIRED,
         phetioType: ReferenceIO
       }, options );
 
@@ -214,16 +214,17 @@ define( require => {
       this.backNode.pickable = false;
 
       // add the label, positioning it just below the front, top water line
-      const label = new Text( options.label, {
+        const labelNode = new Text( options.label, {
         font: LABEL_FONT,
-        maxWidth: beakerBounds.width * 0.7 // empirically determined to look nice
+        maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
+        tandem: options.tandem.createTandem( 'labelNode' )
       } );
-      label.translation = new Vector2(
-        beakerBounds.centerX - label.bounds.width / 2,
+      labelNode.translation = new Vector2(
+        beakerBounds.centerX - labelNode.bounds.width / 2,
         beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
       );
-      label.pickable = false;
-      this.frontNode.addChild( label );
+      labelNode.pickable = false;
+      this.frontNode.addChild( labelNode );
 
       // @protected {Node} - the layer where the contained energy chunk nodes will be placed
       this.energyChunkRootNode = new Node();
@@ -285,7 +286,7 @@ define( require => {
 
       // adjust the transparency of the water and label based on energy chunk visibility
       energyChunksVisibleProperty.link( energyChunksVisible => {
-        label.opacity = energyChunksVisible ? 0.5 : 1;
+        labelNode.opacity = energyChunksVisible ? 0.5 : 1;
         const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
         this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
       } );

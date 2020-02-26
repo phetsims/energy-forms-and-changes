@@ -97,7 +97,9 @@ define( require => {
       );
 
       // @public (read-only) {BeakerView}
-      this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT );
+      this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT, {
+        tandem: tandem.createTandem( 'beakerProxyNode' )
+      } );
 
       // from here on, the beakerView's position is updated by this, BeakerHeater
       this.beakerView.setFollowPosition( false );
