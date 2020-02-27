@@ -7,44 +7,42 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Node = require( 'SCENERY/nodes/Node' );
+import Node from '../../../../scenery/js/nodes/Node.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  class MoveFadeModelElementNode extends Node {
+class MoveFadeModelElementNode extends Node {
 
-    /**
-     * @param {PositionableFadableModelElement} modelElement
-     * @param {ModelViewTransform2} modelViewTransform
-     * @param {Tandem} tandem
-     */
-    constructor( modelElement, modelViewTransform, tandem ) {
-      super( {
-        tandem: tandem,
-        phetioComponentOptions: {
-          opacityProperty: { phetioReadOnly: true },
-          visibleProperty: { phetioReadOnly: true }
-        }
-      } );
+  /**
+   * @param {PositionableFadableModelElement} modelElement
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Tandem} tandem
+   */
+  constructor( modelElement, modelViewTransform, tandem ) {
+    super( {
+      tandem: tandem,
+      phetioComponentOptions: {
+        opacityProperty: { phetioReadOnly: true },
+        visibleProperty: { phetioReadOnly: true }
+      }
+    } );
 
-      // update our position as the model element moves
-      modelElement.positionProperty.link( offset => {
-        this.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
-      } );
+    // update our position as the model element moves
+    modelElement.positionProperty.link( offset => {
+      this.setTranslation( modelViewTransform.modelToViewPosition( offset ) );
+    } );
 
-      // update our opacity as the model element fades in and out
-      modelElement.opacityProperty.link( opacity => {
-        this.opacity = opacity;
-      } );
+    // update our opacity as the model element fades in and out
+    modelElement.opacityProperty.link( opacity => {
+      this.opacity = opacity;
+    } );
 
-      // update the visibility as the model element's visibility changes
-      modelElement.visibleProperty.link( visible => {
-        this.visible = visible;
-      } );
-    }
+    // update the visibility as the model element's visibility changes
+    modelElement.visibleProperty.link( visible => {
+      this.visible = visible;
+    } );
   }
+}
 
-  return energyFormsAndChanges.register( 'MoveFadeModelElementNode', MoveFadeModelElementNode );
-} );
+energyFormsAndChanges.register( 'MoveFadeModelElementNode', MoveFadeModelElementNode );
+export default MoveFadeModelElementNode;

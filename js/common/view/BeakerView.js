@@ -9,315 +9,311 @@
  * @author Andrew Adare
  */
 
-define( require => {
-  'use strict';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import PropertyIO from '../../../../axon/js/PropertyIO.js';
+import Matrix3 from '../../../../dot/js/Matrix3.js';
+import Range from '../../../../dot/js/Range.js';
+import Transform3 from '../../../../dot/js/Transform3.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Shape from '../../../../kite/js/Shape.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainerSliceNode.js';
+import EFACConstants from '../EFACConstants.js';
+import EFACQueryParameters from '../EFACQueryParameters.js';
+import EnergyChunkNode from './EnergyChunkNode.js';
+import PerspectiveWaterNode from './PerspectiveWaterNode.js';
 
-  // modules
-  const BooleanIO = require( 'TANDEM/types/BooleanIO' );
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  const EnergyChunkContainerSliceNode = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EnergyChunkContainerSliceNode' );
-  const EnergyChunkNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkNode' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Matrix3 = require( 'DOT/Matrix3' );
-  const merge = require( 'PHET_CORE/merge' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const NullableIO = require( 'TANDEM/types/NullableIO' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const PerspectiveWaterNode = require( 'ENERGY_FORMS_AND_CHANGES/common/view/PerspectiveWaterNode' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const PhetioObject = require( 'TANDEM/PhetioObject' );
-  const Property = require( 'AXON/Property' );
-  const PropertyIO = require( 'AXON/PropertyIO' );
-  const Range = require( 'DOT/Range' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const ReferenceIO = require( 'TANDEM/types/ReferenceIO' );
-  const Shape = require( 'KITE/Shape' );
-  const Tandem = require( 'TANDEM/Tandem' );
-  const Text = require( 'SCENERY/nodes/Text' );
-  const Transform3 = require( 'DOT/Transform3' );
-  const Vector2 = require( 'DOT/Vector2' );
+const waterString = energyFormsAndChangesStrings.water;
 
-  // strings
-  const waterString = require( 'string!ENERGY_FORMS_AND_CHANGES/water' );
+// constants
+const OUTLINE_COLOR = 'rgb( 160, 160, 160 )';
+const PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
+const LABEL_FONT = new PhetFont( 26 );
+const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
+const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
-  // constants
-  const OUTLINE_COLOR = 'rgb( 160, 160, 160 )';
-  const PERSPECTIVE_PROPORTION = -EFACConstants.Z_TO_Y_OFFSET_MULTIPLIER;
-  const LABEL_FONT = new PhetFont( 26 );
-  const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
-  const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
+class BeakerView extends PhetioObject {
 
-  class BeakerView extends PhetioObject {
+  /**
+   * @param {Beaker} beaker - model of a beaker
+   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
+   */
+  constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
 
-    /**
-     * @param {Beaker} beaker - model of a beaker
-     * @param {Property.<boolean>} energyChunksVisibleProperty
-     * @param {ModelViewTransform2} modelViewTransform
-     * @param {Object} [options]
-     */
-    constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
+    options = merge( {
+      label: waterString,
 
-      options = merge( {
-        label: waterString,
+      // phet-io
+      tandem: Tandem.REQUIRED,
+      phetioType: ReferenceIO
+    }, options );
 
-        // phet-io
-        tandem: Tandem.REQUIRED,
-        phetioType: ReferenceIO
-      }, options );
+    super( options );
 
-      super( options );
+    // @private
+    this.modelViewTransform = modelViewTransform;
+    this.followPosition = true;
 
-      // @private
-      this.modelViewTransform = modelViewTransform;
-      this.followPosition = true;
+    // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
+    // the header comment for info about how these are used.
+    this.frontNode = new Node();
+    this.backNode = new Node();
+    this.grabNode = new Node( { cursor: 'pointer' } );
 
-      // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
-      // the header comment for info about how these are used.
-      this.frontNode = new Node();
-      this.backNode = new Node();
-      this.grabNode = new Node( { cursor: 'pointer' } );
+    // control the Node properties of all three layers at once
+    const opacityProperty = new NumberProperty( 1, {
+      range: new Range( 0, 1 ),
+      tandem: options.tandem.createTandem( 'opacityProperty' )
+    } );
+    const pickableProperty = new Property( null, {
+      phetioType: PropertyIO( NullableIO( BooleanIO ) ),
+      tandem: options.tandem.createTandem( 'pickableProperty' )
+    } );
+    const visibleProperty = new BooleanProperty( true, {
+      tandem: options.tandem.createTandem( 'visibleProperty' )
+    } );
+    opacityProperty.link( opacity => {
+      this.frontNode.opacity = opacity;
+      this.backNode.opacity = opacity;
+      this.grabNode.opacity = opacity;
+    } );
+    pickableProperty.link( pickable => {
+      this.frontNode.pickable = pickable;
+      this.backNode.pickable = pickable;
+      this.grabNode.pickable = pickable;
+    } );
+    visibleProperty.link( visible => {
+      this.frontNode.visible = visible;
+      this.backNode.visible = visible;
+      this.grabNode.visible = visible;
+    } );
 
-      // control the Node properties of all three layers at once
-      const opacityProperty = new NumberProperty( 1, {
-        range: new Range( 0, 1 ),
-        tandem: options.tandem.createTandem( 'opacityProperty' )
-      } );
-      const pickableProperty = new Property( null, {
-        phetioType: PropertyIO( NullableIO( BooleanIO ) ),
-        tandem: options.tandem.createTandem( 'pickableProperty' )
-      } );
-      const visibleProperty = new BooleanProperty( true, {
-        tandem: options.tandem.createTandem( 'visibleProperty' )
-      } );
-      opacityProperty.link( opacity => {
-        this.frontNode.opacity = opacity;
-        this.backNode.opacity = opacity;
-        this.grabNode.opacity = opacity;
-      } );
-      pickableProperty.link( pickable => {
-        this.frontNode.pickable = pickable;
-        this.backNode.pickable = pickable;
-        this.grabNode.pickable = pickable;
-      } );
-      visibleProperty.link( visible => {
-        this.frontNode.visible = visible;
-        this.backNode.visible = visible;
-        this.grabNode.visible = visible;
-      } );
+    // extract the scale transform from the MVT so that we can separate the shape from the position
+    const scaleTransform = new Transform3(
+      Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() )
+    );
 
-      // extract the scale transform from the MVT so that we can separate the shape from the position
-      const scaleTransform = new Transform3(
-        Matrix3.scaling( modelViewTransform.matrix.m00(), modelViewTransform.matrix.m11() )
+    // get a Bounds2 object defining the beaker size and location in the view
+    const beakerBounds = scaleTransform.transformShape( beaker.getUntransformedBounds() );
+
+    // Create the shapes for the top and bottom of the beaker.  These are ellipses in order to create a 3D-ish look.
+    const ellipseHeight = beakerBounds.getWidth() * PERSPECTIVE_PROPORTION;
+    const beakerHalfWidth = beakerBounds.width / 2;
+    const beakerEllipseHalfHeight = ellipseHeight / 2;
+    const topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
+    const bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
+
+    // @private - Add the fluid.  It will adjust its size based on the fluid level.
+    this.fluid = new PerspectiveWaterNode(
+      beakerBounds,
+      beaker.fluidProportionProperty,
+      beaker.temperatureProperty,
+      beaker.fluidBoilingPoint,
+      beaker.fluidColor,
+      beaker.steamColor
+    );
+    this.frontNode.addChild( this.fluid );
+
+    // create and add the node for the body of the beaker
+    const beakerBody = new Shape()
+      .moveTo( beakerBounds.minX, beakerBounds.minY ) // Top left of the beaker body.
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0, Math.PI, 0, true )
+      .lineTo( beakerBounds.maxX, beakerBounds.maxY ) // Bottom right of the beaker body.
+      .ellipticalArc( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0, 0, Math.PI, false )
+      .close();
+
+    this.frontNode.addChild( new Path( beakerBody, {
+      fill: BEAKER_COLOR,
+      lineWidth: 3,
+      stroke: OUTLINE_COLOR
+    } ) );
+
+    // vars used for drawing the tick marks
+    const numberOfMajorTicks = Math.floor( beaker.height / beaker.majorTickMarkDistance );
+    const numberOfTicks = numberOfMajorTicks * ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ); // total number of ticks
+    const majorTickLengthAngle = 0.13 * Math.PI; // empirically determined
+    const minorTickLengthAngle = majorTickLengthAngle / 2; // empirically determined
+    const spaceBetweenEachTickMark = Math.abs( modelViewTransform.modelToViewDeltaY( beaker.majorTickMarkDistance ) /
+                                               ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) );
+
+    // x-distance between the left edge of the beaker and the start of the ticks along an ellipse, in radians
+    const xOriginAngle = 0.1 * Math.PI;
+    let yPosition = beakerBounds.maxY;
+
+    // create the tick marks shape
+    const tickMarks = new Shape().moveTo( beakerBounds.minX, beakerBounds.maxY ); // bottom left of the beaker body
+
+    // draw the tick marks
+    for ( let tickIndex = 0; tickIndex < numberOfTicks; tickIndex++ ) {
+      yPosition -= spaceBetweenEachTickMark;
+      const startAngle = Math.PI - xOriginAngle;
+      const tickLengthAngle = ( tickIndex + 1 ) % ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) === 0 ? majorTickLengthAngle : minorTickLengthAngle;
+      const endAngle = startAngle - tickLengthAngle;
+
+      tickMarks.newSubpath(); // don't connect the tick marks with additional lines
+      tickMarks.ellipticalArc(
+        beakerBounds.centerX,
+        yPosition,
+        beakerHalfWidth,
+        beakerEllipseHalfHeight,
+        0,
+        startAngle,
+        endAngle,
+        true
       );
+    }
 
-      // get a Bounds2 object defining the beaker size and location in the view
-      const beakerBounds = scaleTransform.transformShape( beaker.getUntransformedBounds() );
+    // add the tick marks
+    this.frontNode.addChild( new Path( tickMarks, {
+      lineWidth: 1,
+      stroke: 'black'
+    } ) );
 
-      // Create the shapes for the top and bottom of the beaker.  These are ellipses in order to create a 3D-ish look.
-      const ellipseHeight = beakerBounds.getWidth() * PERSPECTIVE_PROPORTION;
-      const beakerHalfWidth = beakerBounds.width / 2;
-      const beakerEllipseHalfHeight = ellipseHeight / 2;
-      const topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
-      const bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
+    // add the bottom ellipse
+    this.backNode.addChild( new Path( bottomEllipse, {
+      fill: BEAKER_COLOR,
+      lineWidth: 3,
+      stroke: OUTLINE_COLOR
+    } ) );
 
-      // @private - Add the fluid.  It will adjust its size based on the fluid level.
-      this.fluid = new PerspectiveWaterNode(
-        beakerBounds,
-        beaker.fluidProportionProperty,
-        beaker.temperatureProperty,
-        beaker.fluidBoilingPoint,
-        beaker.fluidColor,
-        beaker.steamColor
-      );
-      this.frontNode.addChild( this.fluid );
+    // Add the top ellipse.  It is behind the water for proper Z-order behavior.
+    this.backNode.addChild( new Path( topEllipse, {
+      fill: BEAKER_COLOR,
+      stroke: OUTLINE_COLOR,
+      lineWidth: 3
+    } ) );
 
-      // create and add the node for the body of the beaker
-      const beakerBody = new Shape()
-        .moveTo( beakerBounds.minX, beakerBounds.minY ) // Top left of the beaker body.
-        .ellipticalArc( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0, Math.PI, 0, true )
-        .lineTo( beakerBounds.maxX, beakerBounds.maxY ) // Bottom right of the beaker body.
-        .ellipticalArc( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0, 0, Math.PI, false )
-        .close();
+    // add a rectangle to the back that is invisible but allows the user to grab the beaker
+    this.backNode.addChild( new Rectangle( beakerBounds, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) );
 
-      this.frontNode.addChild( new Path( beakerBody, {
-        fill: BEAKER_COLOR,
-        lineWidth: 3,
-        stroke: OUTLINE_COLOR
-      } ) );
+    // Make the front and back nodes non-pickable so that the grab node can be used for grabbing. This makes it possible
+    // to remove things from the beaker.
+    this.frontNode.pickable = false;
+    this.backNode.pickable = false;
 
-      // vars used for drawing the tick marks
-      const numberOfMajorTicks = Math.floor( beaker.height / beaker.majorTickMarkDistance );
-      const numberOfTicks = numberOfMajorTicks * ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ); // total number of ticks
-      const majorTickLengthAngle = 0.13 * Math.PI; // empirically determined
-      const minorTickLengthAngle = majorTickLengthAngle / 2; // empirically determined
-      const spaceBetweenEachTickMark = Math.abs( modelViewTransform.modelToViewDeltaY( beaker.majorTickMarkDistance ) /
-                                                 ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) );
+    // add the label, positioning it just below the front, top water line
+    const labelNode = new Text( options.label, {
+      font: LABEL_FONT,
+      maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
+      tandem: options.tandem.createTandem( 'labelNode' )
+    } );
+    labelNode.translation = new Vector2(
+      beakerBounds.centerX - labelNode.bounds.width / 2,
+      beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
+    );
+    labelNode.pickable = false;
+    this.frontNode.addChild( labelNode );
 
-      // x-distance between the left edge of the beaker and the start of the ticks along an ellipse, in radians
-      const xOriginAngle = 0.1 * Math.PI;
-      let yPosition = beakerBounds.maxY;
+    // @protected {Node} - the layer where the contained energy chunk nodes will be placed
+    this.energyChunkRootNode = new Node();
+    this.backNode.addChild( this.energyChunkRootNode );
 
-      // create the tick marks shape
-      const tickMarks = new Shape().moveTo( beakerBounds.minX, beakerBounds.maxY ); // bottom left of the beaker body
+    // add the energy chunk container slice nodes to the energy chunk layer
+    beaker.slices.forEach( slice => {
+      this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( slice, modelViewTransform ) );
+    } );
 
-      // draw the tick marks
-      for ( let tickIndex = 0; tickIndex < numberOfTicks; tickIndex++ ) {
-        yPosition -= spaceBetweenEachTickMark;
-        const startAngle = Math.PI - xOriginAngle;
-        const tickLengthAngle = ( tickIndex + 1 ) % ( NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK + 1 ) === 0 ? majorTickLengthAngle : minorTickLengthAngle;
-        const endAngle = startAngle - tickLengthAngle;
+    // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
+    // needed.
+    beaker.approachingEnergyChunks.addItemAddedListener( addedEnergyChunk => {
+      const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
+      this.energyChunkRootNode.addChild( energyChunkNode );
 
-        tickMarks.newSubpath(); // don't connect the tick marks with additional lines
-        tickMarks.ellipticalArc(
-          beakerBounds.centerX,
-          yPosition,
-          beakerHalfWidth,
-          beakerEllipseHalfHeight,
-          0,
-          startAngle,
-          endAngle,
-          true
-        );
-      }
-
-      // add the tick marks
-      this.frontNode.addChild( new Path( tickMarks, {
-        lineWidth: 1,
-        stroke: 'black'
-      } ) );
-
-      // add the bottom ellipse
-      this.backNode.addChild( new Path( bottomEllipse, {
-        fill: BEAKER_COLOR,
-        lineWidth: 3,
-        stroke: OUTLINE_COLOR
-      } ) );
-
-      // Add the top ellipse.  It is behind the water for proper Z-order behavior.
-      this.backNode.addChild( new Path( topEllipse, {
-        fill: BEAKER_COLOR,
-        stroke: OUTLINE_COLOR,
-        lineWidth: 3
-      } ) );
-
-      // add a rectangle to the back that is invisible but allows the user to grab the beaker
-      this.backNode.addChild( new Rectangle( beakerBounds, {
-        fill: 'rgba( 0, 0, 0, 0 )'
-      } ) );
-
-      // Make the front and back nodes non-pickable so that the grab node can be used for grabbing. This makes it possible
-      // to remove things from the beaker.
-      this.frontNode.pickable = false;
-      this.backNode.pickable = false;
-
-      // add the label, positioning it just below the front, top water line
-        const labelNode = new Text( options.label, {
-        font: LABEL_FONT,
-        maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
-        tandem: options.tandem.createTandem( 'labelNode' )
-      } );
-      labelNode.translation = new Vector2(
-        beakerBounds.centerX - labelNode.bounds.width / 2,
-        beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
-      );
-      labelNode.pickable = false;
-      this.frontNode.addChild( labelNode );
-
-      // @protected {Node} - the layer where the contained energy chunk nodes will be placed
-      this.energyChunkRootNode = new Node();
-      this.backNode.addChild( this.energyChunkRootNode );
-
-      // add the energy chunk container slice nodes to the energy chunk layer
-      beaker.slices.forEach( slice => {
-        this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( slice, modelViewTransform ) );
-      } );
-
-      // Watch for coming and going of energy chunks that are approaching this model element and add/remove them as
-      // needed.
-      beaker.approachingEnergyChunks.addItemAddedListener( addedEnergyChunk => {
-        const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
-        this.energyChunkRootNode.addChild( energyChunkNode );
-
-        const removalListener = removedEnergyChunk => {
-          if ( removedEnergyChunk === addedEnergyChunk ) {
-            this.energyChunkRootNode.removeChild( energyChunkNode );
-            energyChunkNode.dispose();
-            beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
-          }
-        };
-        beaker.approachingEnergyChunks.addItemRemovedListener( removalListener );
-      } );
-
-      // add the node that can be used to grab and move the beaker
-      const grabNodeShape = beakerBody;
-      this.grabNode.addChild( new Path( grabNodeShape, {
-        fill: 'rgba( 0, 0, 0, 0 )'
-      } ) ); // invisible, yet pickable
-      this.grabNode.addChild( new Path( topEllipse, {
-        fill: 'rgba( 0, 0, 0, 0 )'
-      } ) );
-
-      // if enabled (for debug), show the outline of the rectangle that represents the beaker's position in the model
-      if ( EFACQueryParameters.show2DBeakerBounds ) {
-        this.frontNode.addChild( new Rectangle( beakerBounds, {
-          fill: 'red',
-          stroke: 'lime',
-          lineWidth: 2
-        } ) );
-      }
-
-      // update the offset if and when the model position changes
-      beaker.positionProperty.link( position => {
-
-        if ( this.followPosition ) {
-          const offset = modelViewTransform.modelToViewPosition( position );
-
-          this.frontNode.translation = offset;
-          this.backNode.translation = offset;
-          this.grabNode.translation = offset;
+      const removalListener = removedEnergyChunk => {
+        if ( removedEnergyChunk === addedEnergyChunk ) {
+          this.energyChunkRootNode.removeChild( energyChunkNode );
+          energyChunkNode.dispose();
+          beaker.approachingEnergyChunks.removeItemRemovedListener( removalListener );
         }
+      };
+      beaker.approachingEnergyChunks.addItemRemovedListener( removalListener );
+    } );
 
-        // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
-        this.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
-      } );
+    // add the node that can be used to grab and move the beaker
+    const grabNodeShape = beakerBody;
+    this.grabNode.addChild( new Path( grabNodeShape, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) ); // invisible, yet pickable
+    this.grabNode.addChild( new Path( topEllipse, {
+      fill: 'rgba( 0, 0, 0, 0 )'
+    } ) );
 
-      // adjust the transparency of the water and label based on energy chunk visibility
-      energyChunksVisibleProperty.link( energyChunksVisible => {
-        labelNode.opacity = energyChunksVisible ? 0.5 : 1;
-        const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
-        this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
-      } );
+    // if enabled (for debug), show the outline of the rectangle that represents the beaker's position in the model
+    if ( EFACQueryParameters.show2DBeakerBounds ) {
+      this.frontNode.addChild( new Rectangle( beakerBounds, {
+        fill: 'red',
+        stroke: 'lime',
+        lineWidth: 2
+      } ) );
     }
 
-    /**
-     * @public
-     */
-    reset() {
-      this.fluid.reset();
-    }
+    // update the offset if and when the model position changes
+    beaker.positionProperty.link( position => {
 
-    /**
-     * step this view element
-     * @param dt - time step, in seconds
-     * @public
-     */
-    step( dt ) {
-      this.fluid.step( dt );
-    }
+      if ( this.followPosition ) {
+        const offset = modelViewTransform.modelToViewPosition( position );
 
-    /**
-     * set whether this node should follow its beaker position. this is useful for the case where its parent node is
-     * handling its position
-     * @param {boolean} followPosition
-     * @public
-     */
-    setFollowPosition( followPosition ) {
-      this.followPosition = followPosition;
-    }
+        this.frontNode.translation = offset;
+        this.backNode.translation = offset;
+        this.grabNode.translation = offset;
+      }
+
+      // compensate the energy chunk layer so that the energy chunk nodes can handle their own positioning
+      this.energyChunkRootNode.translation = modelViewTransform.modelToViewPosition( position ).rotated( Math.PI );
+    } );
+
+    // adjust the transparency of the water and label based on energy chunk visibility
+    energyChunksVisibleProperty.link( energyChunksVisible => {
+      labelNode.opacity = energyChunksVisible ? 0.5 : 1;
+      const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
+      this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
+    } );
   }
 
-  return energyFormsAndChanges.register( 'BeakerView', BeakerView );
-} );
+  /**
+   * @public
+   */
+  reset() {
+    this.fluid.reset();
+  }
+
+  /**
+   * step this view element
+   * @param dt - time step, in seconds
+   * @public
+   */
+  step( dt ) {
+    this.fluid.step( dt );
+  }
+
+  /**
+   * set whether this node should follow its beaker position. this is useful for the case where its parent node is
+   * handling its position
+   * @param {boolean} followPosition
+   * @public
+   */
+  setFollowPosition( followPosition ) {
+    this.followPosition = followPosition;
+  }
+}
+
+energyFormsAndChanges.register( 'BeakerView', BeakerView );
+export default BeakerView;

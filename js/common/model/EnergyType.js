@@ -6,15 +6,12 @@
  * @author John Blanco
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  // @public
-  const EnergyType = Enumeration.byKeys( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] );
+// @public
+const EnergyType = Enumeration.byKeys( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] );
 
-  return energyFormsAndChanges.register( 'EnergyType', EnergyType );
-} );
-
+energyFormsAndChanges.register( 'EnergyType', EnergyType );
+export default EnergyType;

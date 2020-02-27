@@ -6,269 +6,263 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Cloud = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/Cloud' );
-  const Color = require( 'SCENERY/util/Color' );
-  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  const EnergyChunkLayer = require( 'ENERGY_FORMS_AND_CHANGES/common/view/EnergyChunkLayer' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const HBox = require( 'SCENERY/nodes/HBox' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const LightRays = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/LightRays' );
-  const Matrix3 = require( 'DOT/Matrix3' );
-  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  const MoveFadeModelElementNode = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/MoveFadeModelElementNode' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Panel = require( 'SUN/Panel' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  const Property = require( 'AXON/Property' );
-  const RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  const Range = require( 'DOT/Range' );
-  const Shape = require( 'KITE/Shape' );
-  const SunEnergySource = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SunEnergySource' );
-  const Text = require( 'SCENERY/nodes/Text' );
-  const VBox = require( 'SCENERY/nodes/VBox' );
-  const Vector2 = require( 'DOT/Vector2' );
-  const VSlider = require( 'SUN/VSlider' );
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import Matrix3 from '../../../../dot/js/Matrix3.js';
+import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Shape from '../../../../kite/js/Shape.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import HBox from '../../../../scenery/js/nodes/HBox.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import VBox from '../../../../scenery/js/nodes/VBox.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
+import Panel from '../../../../sun/js/Panel.js';
+import VSlider from '../../../../sun/js/VSlider.js';
+import cloudImage from '../../../images/cloud_png.js';
+import EFACConstants from '../../common/EFACConstants.js';
+import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Cloud from '../model/Cloud.js';
+import SunEnergySource from '../model/SunEnergySource.js';
+import LightRays from './LightRays.js';
+import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
-  // images
-  const cloudImage = require( 'image!ENERGY_FORMS_AND_CHANGES/cloud.png' );
+const cloudsString = energyFormsAndChangesStrings.clouds;
+const lotsString = energyFormsAndChangesStrings.lots;
+const noneString = energyFormsAndChangesStrings.none;
 
-  // strings
-  const cloudsString = require( 'string!ENERGY_FORMS_AND_CHANGES/clouds' );
-  const lotsString = require( 'string!ENERGY_FORMS_AND_CHANGES/lots' );
-  const noneString = require( 'string!ENERGY_FORMS_AND_CHANGES/none' );
+// constants
+const CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
+const CONTROL_PANEL_TEXT_MAX_WIDTH = 50;
+const SLIDER_LABEL_FONT = new PhetFont( 12 );
 
-  // constants
-  const CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );
-  const CONTROL_PANEL_TEXT_MAX_WIDTH = 50;
-  const SLIDER_LABEL_FONT = new PhetFont( 12 );
+class SunNode extends MoveFadeModelElementNode {
 
-  class SunNode extends MoveFadeModelElementNode {
+  /**
+   * @param {SunEnergySource} sun Sun model element
+   * @param {Property} energyChunksVisibleProperty
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Tandem} tandem
+   */
+  constructor( sun, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+    super( sun, modelViewTransform, tandem );
 
-    /**
-     * @param {SunEnergySource} sun Sun model element
-     * @param {Property} energyChunksVisibleProperty
-     * @param {ModelViewTransform2} modelViewTransform
-     * @param {Tandem} tandem
-     */
-    constructor( sun, energyChunksVisibleProperty, modelViewTransform, tandem ) {
-      super( sun, modelViewTransform, tandem );
+    const sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
+    const sunRadius = modelViewTransform.modelToViewDeltaX( sun.radius );
+    const lightRays = new LightRays( sunCenter, sunRadius, 1000, 40, Color.YELLOW );
 
-      const sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
-      const sunRadius = modelViewTransform.modelToViewDeltaX( sun.radius );
-      const lightRays = new LightRays( sunCenter, sunRadius, 1000, 40, Color.YELLOW );
+    this.addChild( lightRays );
 
-      this.addChild( lightRays );
+    // turn off light rays when energy chunks are visible
+    energyChunksVisibleProperty.link( chunksVisible => {
+      lightRays.setVisible( !chunksVisible );
+    } );
 
-      // turn off light rays when energy chunks are visible
-      energyChunksVisibleProperty.link( chunksVisible => {
-        lightRays.setVisible( !chunksVisible );
+    // add the sun
+    const sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
+    const sunPath = new Path( sunShape, {
+      fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
+        .addColorStop( 0, 'white' )
+        .addColorStop( 0.25, 'white' )
+        .addColorStop( 1, '#FFD700' ),
+      lineWidth: 1,
+      stroke: 'yellow'
+    } );
+
+    sunPath.setTranslation( sunCenter );
+
+    // create a scale-only MVT since translation of the absorption shapes is done separately
+    const scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      Vector2.ZERO,
+      modelViewTransform.getMatrix().getScaleVector().x
+    );
+
+    // add clouds, initially transparent
+    sun.clouds.forEach( cloud => {
+
+      // make a light-absorbing shape from the cloud's absorption ellipse
+      const cloudAbsorptionShape = cloud.getCloudAbsorptionReflectionShape();
+      const translatedCloudAbsorptionShape = cloudAbsorptionShape.transformed( Matrix3.translation(
+        -sun.positionProperty.value.x,
+        -sun.positionProperty.value.y
+      ) );
+      const scaledAndTranslatedCloudAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedCloudAbsorptionShape );
+      const lightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedCloudAbsorptionShape, 0 );
+
+      cloud.existenceStrengthProperty.link( existenceStrength => {
+        lightAbsorbingShape.absorptionCoefficientProperty.set( existenceStrength / 10 );
       } );
 
-      // add the sun
-      const sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
-      const sunPath = new Path( sunShape, {
-        fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
-          .addColorStop( 0, 'white' )
-          .addColorStop( 0.25, 'white' )
-          .addColorStop( 1, '#FFD700' ),
-        lineWidth: 1,
-        stroke: 'yellow'
-      } );
+      lightRays.addLightAbsorbingShape( lightAbsorbingShape );
 
-      sunPath.setTranslation( sunCenter );
-
-      // create a scale-only MVT since translation of the absorption shapes is done separately
-      const scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-        Vector2.ZERO,
-        Vector2.ZERO,
-        modelViewTransform.getMatrix().getScaleVector().x
-      );
-
-      // add clouds, initially transparent
-      sun.clouds.forEach( cloud => {
-
-        // make a light-absorbing shape from the cloud's absorption ellipse
-        const cloudAbsorptionShape = cloud.getCloudAbsorptionReflectionShape();
-        const translatedCloudAbsorptionShape = cloudAbsorptionShape.transformed( Matrix3.translation(
-          -sun.positionProperty.value.x,
-          -sun.positionProperty.value.y
-        ) );
-        const scaledAndTranslatedCloudAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedCloudAbsorptionShape );
-        const lightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedCloudAbsorptionShape, 0 );
-
-        cloud.existenceStrengthProperty.link( existenceStrength => {
-          lightAbsorbingShape.absorptionCoefficientProperty.set( existenceStrength / 10 );
-        } );
-
-        lightRays.addLightAbsorbingShape( lightAbsorbingShape );
-
-        const cloudNode = new CloudNode( cloud, modelViewTransform );
-        cloudNode.opacity = 0;
-        this.addChild( cloudNode );
-
-        if ( EFACQueryParameters.showHelperShapes ) {
-          this.addChild( new Path( scaledAndTranslatedCloudAbsorptionShape, {
-            stroke: 'red'
-          } ) );
-        }
-      } );
-
-      // add the energy chunks, which reside on their own layer
-      this.addChild( new EnergyChunkLayer( sun.energyChunkList, modelViewTransform, {
-        parentPositionProperty: sun.positionProperty
-      } ) );
-      this.addChild( sunPath );
-      const cloudsPanelTandem = tandem.createTandem( 'cloudsPanel' );
-
-      // add slider panel to control cloudiness
-      const slider = new VSlider(
-        sun.cloudinessProportionProperty,
-        new Range( 0, 1 ), {
-          top: 0, left: 0,
-          tandem: cloudsPanelTandem.createTandem( 'slider' )
-        }
-      );
-
-      const tickLabel = label => {
-        return new Text( label, {
-          font: SLIDER_LABEL_FONT,
-          maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
-        } );
-      };
-
-      slider.addMajorTick( 0, tickLabel( noneString ) );
-      slider.addMajorTick( 1, tickLabel( lotsString ) );
-
-      const titleText = new Text( cloudsString, {
-        font: CONTROL_PANEL_TITLE_FONT,
-        maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
-      } );
-
-      const iconNode = new Image( cloudImage, { scale: 0.25 } );
-
-      const titleBox = new HBox( {
-        children: [ titleText, iconNode ],
-        spacing: 10
-      } );
-
-      const panelContent = new VBox( {
-        children: [ titleBox, slider ],
-        spacing: 10,
-        resize: false
-      } );
-
-      this.addChild( new Panel( panelContent, {
-        fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-        stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-        lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-        cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-        centerX: 0,
-        centerY: 0,
-        resize: false,
-        tandem: cloudsPanelTandem
-      } ) );
-
-      // add/remove the light-absorbing shape for the solar panel
-      let currentLightAbsorbingShape = null;
-
-      // visible absorption shape used for debugging
-      let helperAbsorptionNode = null;
-
-      Property.multilink(
-        [ sun.activeProperty, sun.solarPanel.activeProperty ],
-        ( sunActive, solarPanelActive ) => {
-
-          if ( sunActive && solarPanelActive ) {
-            const absorptionShape = sun.solarPanel.getAbsorptionShape();
-            const translatedAbsorptionShape = absorptionShape.transformed( Matrix3.translation(
-              -sun.positionProperty.value.x,
-              -sun.positionProperty.value.y
-            ) );
-            const scaledAndTranslatedAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedAbsorptionShape );
-            currentLightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedAbsorptionShape, 1 );
-
-            lightRays.addLightAbsorbingShape( currentLightAbsorbingShape );
-
-            // for debug, show absorption shape outline with dotted line visible on top of SolarPanel's helper shape
-            if ( EFACQueryParameters.showHelperShapes ) {
-              helperAbsorptionNode = new Path( scaledAndTranslatedAbsorptionShape, {
-                stroke: 'lime',
-                lineDash: [ 4, 8 ]
-              } );
-              this.addChild( helperAbsorptionNode );
-            }
-          }
-          else if ( currentLightAbsorbingShape !== null ) {
-            lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
-            currentLightAbsorbingShape = null;
-
-            // for debug
-            if ( EFACQueryParameters.showHelperShapes && helperAbsorptionNode ) {
-              this.removeChild( helperAbsorptionNode );
-              helperAbsorptionNode = null;
-            }
-          }
-        }
-      );
-    }
-  }
-
-  class LightAbsorbingShape {
-
-    /**
-     * inner type - a shape with observable light absorption coefficient
-     * @param {Shape} shape
-     * @param {number} initialAbsorptionCoefficient
-     */
-    constructor( shape, initialAbsorptionCoefficient ) {
-
-      // @public {NumberProperty}
-      this.absorptionCoefficientProperty = new NumberProperty( initialAbsorptionCoefficient, {
-        range: new Range( 0, 1 )
-      } );
-
-      // @public (read-only) {Shape}
-      this.shape = shape;
-    }
-
-    reset() {
-      this.absorptionCoefficientProperty.reset();
-    }
-  }
-
-  class CloudNode extends Node {
-
-    /**
-     * inner type - a cloud
-     * @param cloud
-     * @param modelViewTransform
-     */
-    constructor( cloud, modelViewTransform ) {
-      super();
-
-      const cloudNode = new Image( cloudImage );
-      cloudNode.scale(
-        modelViewTransform.modelToViewDeltaX( Cloud.WIDTH ) / cloudNode.width,
-        -modelViewTransform.modelToViewDeltaY( Cloud.HEIGHT ) / cloudNode.height
-      );
+      const cloudNode = new CloudNode( cloud, modelViewTransform );
+      cloudNode.opacity = 0;
       this.addChild( cloudNode );
 
-      this.center = modelViewTransform.modelToViewDelta( cloud.offsetFromParent );
+      if ( EFACQueryParameters.showHelperShapes ) {
+        this.addChild( new Path( scaledAndTranslatedCloudAbsorptionShape, {
+          stroke: 'red'
+        } ) );
+      }
+    } );
 
-      cloud.existenceStrengthProperty.link( opacity => {
-        this.opacity = opacity;
+    // add the energy chunks, which reside on their own layer
+    this.addChild( new EnergyChunkLayer( sun.energyChunkList, modelViewTransform, {
+      parentPositionProperty: sun.positionProperty
+    } ) );
+    this.addChild( sunPath );
+    const cloudsPanelTandem = tandem.createTandem( 'cloudsPanel' );
+
+    // add slider panel to control cloudiness
+    const slider = new VSlider(
+      sun.cloudinessProportionProperty,
+      new Range( 0, 1 ), {
+        top: 0, left: 0,
+        tandem: cloudsPanelTandem.createTandem( 'slider' )
+      }
+    );
+
+    const tickLabel = label => {
+      return new Text( label, {
+        font: SLIDER_LABEL_FONT,
+        maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
       } );
-    }
+    };
+
+    slider.addMajorTick( 0, tickLabel( noneString ) );
+    slider.addMajorTick( 1, tickLabel( lotsString ) );
+
+    const titleText = new Text( cloudsString, {
+      font: CONTROL_PANEL_TITLE_FONT,
+      maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
+    } );
+
+    const iconNode = new Image( cloudImage, { scale: 0.25 } );
+
+    const titleBox = new HBox( {
+      children: [ titleText, iconNode ],
+      spacing: 10
+    } );
+
+    const panelContent = new VBox( {
+      children: [ titleBox, slider ],
+      spacing: 10,
+      resize: false
+    } );
+
+    this.addChild( new Panel( panelContent, {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      centerX: 0,
+      centerY: 0,
+      resize: false,
+      tandem: cloudsPanelTandem
+    } ) );
+
+    // add/remove the light-absorbing shape for the solar panel
+    let currentLightAbsorbingShape = null;
+
+    // visible absorption shape used for debugging
+    let helperAbsorptionNode = null;
+
+    Property.multilink(
+      [ sun.activeProperty, sun.solarPanel.activeProperty ],
+      ( sunActive, solarPanelActive ) => {
+
+        if ( sunActive && solarPanelActive ) {
+          const absorptionShape = sun.solarPanel.getAbsorptionShape();
+          const translatedAbsorptionShape = absorptionShape.transformed( Matrix3.translation(
+            -sun.positionProperty.value.x,
+            -sun.positionProperty.value.y
+          ) );
+          const scaledAndTranslatedAbsorptionShape = scaleOnlyMVT.modelToViewShape( translatedAbsorptionShape );
+          currentLightAbsorbingShape = new LightAbsorbingShape( scaledAndTranslatedAbsorptionShape, 1 );
+
+          lightRays.addLightAbsorbingShape( currentLightAbsorbingShape );
+
+          // for debug, show absorption shape outline with dotted line visible on top of SolarPanel's helper shape
+          if ( EFACQueryParameters.showHelperShapes ) {
+            helperAbsorptionNode = new Path( scaledAndTranslatedAbsorptionShape, {
+              stroke: 'lime',
+              lineDash: [ 4, 8 ]
+            } );
+            this.addChild( helperAbsorptionNode );
+          }
+        }
+        else if ( currentLightAbsorbingShape !== null ) {
+          lightRays.removeLightAbsorbingShape( currentLightAbsorbingShape );
+          currentLightAbsorbingShape = null;
+
+          // for debug
+          if ( EFACQueryParameters.showHelperShapes && helperAbsorptionNode ) {
+            this.removeChild( helperAbsorptionNode );
+            helperAbsorptionNode = null;
+          }
+        }
+      }
+    );
+  }
+}
+
+class LightAbsorbingShape {
+
+  /**
+   * inner type - a shape with observable light absorption coefficient
+   * @param {Shape} shape
+   * @param {number} initialAbsorptionCoefficient
+   */
+  constructor( shape, initialAbsorptionCoefficient ) {
+
+    // @public {NumberProperty}
+    this.absorptionCoefficientProperty = new NumberProperty( initialAbsorptionCoefficient, {
+      range: new Range( 0, 1 )
+    } );
+
+    // @public (read-only) {Shape}
+    this.shape = shape;
   }
 
-  return energyFormsAndChanges.register( 'SunNode', SunNode );
-} );
+  reset() {
+    this.absorptionCoefficientProperty.reset();
+  }
+}
 
+class CloudNode extends Node {
+
+  /**
+   * inner type - a cloud
+   * @param cloud
+   * @param modelViewTransform
+   */
+  constructor( cloud, modelViewTransform ) {
+    super();
+
+    const cloudNode = new Image( cloudImage );
+    cloudNode.scale(
+      modelViewTransform.modelToViewDeltaX( Cloud.WIDTH ) / cloudNode.width,
+      -modelViewTransform.modelToViewDeltaY( Cloud.HEIGHT ) / cloudNode.height
+    );
+    this.addChild( cloudNode );
+
+    this.center = modelViewTransform.modelToViewDelta( cloud.offsetFromParent );
+
+    cloud.existenceStrengthProperty.link( opacity => {
+      this.opacity = opacity;
+    } );
+  }
+}
+
+energyFormsAndChanges.register( 'SunNode', SunNode );
+export default SunNode;

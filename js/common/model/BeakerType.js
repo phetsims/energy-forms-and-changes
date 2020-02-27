@@ -5,21 +5,18 @@
  *
  * @author Chris Klusendorf
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  // @public
-  const BeakerType = Enumeration.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
-    beforeFreeze: BeakerType => {
-      BeakerType.getTandemName = beakerType => {
-        return _.camelCase( beakerType.toString() ) + 'Beaker';
-      };
-    }
-  } );
-
-  return energyFormsAndChanges.register( 'BeakerType', BeakerType );
+// @public
+const BeakerType = Enumeration.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
+  beforeFreeze: BeakerType => {
+    BeakerType.getTandemName = beakerType => {
+      return _.camelCase( beakerType.toString() ) + 'Beaker';
+    };
+  }
 } );
+
+energyFormsAndChanges.register( 'BeakerType', BeakerType );
+export default BeakerType;

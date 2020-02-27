@@ -6,11 +6,7 @@
  * @author Jesse Greenberg
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Namespace = require( 'PHET_CORE/Namespace' );
+import Namespace from '../../phet-core/js/Namespace.js';
 
-  return new Namespace( 'energyFormsAndChanges' );
-} );
+export default new Namespace( 'energyFormsAndChanges' );

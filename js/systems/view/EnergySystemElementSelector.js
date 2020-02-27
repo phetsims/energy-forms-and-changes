@@ -9,79 +9,75 @@
  * @author Jesse Greenberg
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Color = require( 'SCENERY/util/Color' );
-  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const merge = require( 'PHET_CORE/merge' );
-  const Panel = require( 'SUN/Panel' );
-  const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  const Tandem = require( 'TANDEM/Tandem' );
+import merge from '../../../../phet-core/js/merge.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import EFACConstants from '../../common/EFACConstants.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  // constants
-  const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
+// constants
+const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
-  class EnergySystemElementSelector extends Panel {
+class EnergySystemElementSelector extends Panel {
 
-    /**
-     * @param {EnergySystemElementCarousel} carousel
-     * @param {Object} [options]
-     */
-    constructor( carousel, options ) {
+  /**
+   * @param {EnergySystemElementCarousel} carousel
+   * @param {Object} [options]
+   */
+  constructor( carousel, options ) {
 
-      options = merge( {
-        fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-        stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
-        lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
-        cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
-        xMargin: 10,
-        yMargin: 10,
+    options = merge( {
+      fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+      stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
+      lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
+      cornerRadius: EFACConstants.CONTROL_PANEL_CORNER_RADIUS,
+      xMargin: 10,
+      yMargin: 10,
 
-        // phet-io
-        tandem: Tandem.REQUIRED
-      }, options );
+      // phet-io
+      tandem: Tandem.REQUIRED
+    }, options );
 
-      const buttonElementList = [];
+    const buttonElementList = [];
 
-      for ( let i = 0; i < carousel.managedElements.length; i++ ) {
-        const element = carousel.managedElements[ i ];
-        const elementName = carousel.elementNames.VALUES[ i ];
-        const iconImage = element.iconImage;
-        const width = iconImage.getBounds().getWidth();
-        const height = iconImage.getBounds().getHeight();
-        const denominator = ( width > height ) ? width : height;
+    for ( let i = 0; i < carousel.managedElements.length; i++ ) {
+      const element = carousel.managedElements[ i ];
+      const elementName = carousel.elementNames.VALUES[ i ];
+      const iconImage = element.iconImage;
+      const width = iconImage.getBounds().getWidth();
+      const height = iconImage.getBounds().getHeight();
+      const denominator = ( width > height ) ? width : height;
 
-        assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
+      assert && assert( denominator > 0, 'Largest image dimension = 0 --> division by 0' );
 
-        iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
-        buttonElementList.push( {
-          value: elementName,
-          node: iconImage,
-          tandemName: _.camelCase( elementName.name )
-        } );
-      }
-
-      const buttonGroup = new RadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
-        baseColor: Color.WHITE,
-        orientation: 'horizontal',
-        spacing: 15,
-        tandem: options.tandem.createTandem( 'radioButtonGroup' )
+      iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
+      buttonElementList.push( {
+        value: elementName,
+        node: iconImage,
+        tandemName: _.camelCase( elementName.name )
       } );
-
-      // link the visibility of the buttons to their corresponding system elements, see https://github.com/phetsims/energy-forms-and-changes/issues/305
-      buttonGroup.children.forEach( ( button, index ) => {
-        button.on( 'visibility', () => {
-          carousel.managedElements[ index ].visibleProperty.value = button.visible;
-        } );
-      } );
-
-      super( buttonGroup, options );
     }
+
+    const buttonGroup = new RadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
+      baseColor: Color.WHITE,
+      orientation: 'horizontal',
+      spacing: 15,
+      tandem: options.tandem.createTandem( 'radioButtonGroup' )
+    } );
+
+    // link the visibility of the buttons to their corresponding system elements, see https://github.com/phetsims/energy-forms-and-changes/issues/305
+    buttonGroup.children.forEach( ( button, index ) => {
+      button.on( 'visibility', () => {
+        carousel.managedElements[ index ].visibleProperty.value = button.visible;
+      } );
+    } );
+
+    super( buttonGroup, options );
   }
+}
 
-  return energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
-} );
-
+energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
+export default EnergySystemElementSelector;

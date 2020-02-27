@@ -8,76 +8,73 @@
  * @author Andrew Adare
  * @author Jesse Greenberg
  */
-define( require => {
-  'use strict';
 
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const ObservableArray = require( 'AXON/ObservableArray' );
-  const PositionableFadableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableFadableModelElement' );
-  const Vector2 = require( 'DOT/Vector2' );
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import PositionableFadableModelElement from './PositionableFadableModelElement.js';
 
-  class EnergySystemElement extends PositionableFadableModelElement {
+class EnergySystemElement extends PositionableFadableModelElement {
 
-    /**
-     * @param {Image} iconImage
-     * @param {Tandem} tandem
-     */
-    constructor( iconImage, tandem ) {
+  /**
+   * @param {Image} iconImage
+   * @param {Tandem} tandem
+   */
+  constructor( iconImage, tandem ) {
 
-      super( new Vector2( 0, 0 ), 1.0, tandem );
+    super( new Vector2( 0, 0 ), 1.0, tandem );
 
-      // @public (read-only) {image}
-      this.iconImage = iconImage;
+    // @public (read-only) {image}
+    this.iconImage = iconImage;
 
-      // @public (read-only) {ObservableArray.<EnergyChunk>}
-      this.energyChunkList = new ObservableArray();
+    // @public (read-only) {ObservableArray.<EnergyChunk>}
+    this.energyChunkList = new ObservableArray();
 
-      // @public {BooleanProperty}
-      this.activeProperty = new BooleanProperty( false, {
-        tandem: tandem.createTandem( 'activeProperty' ),
-        phetioReadOnly: true,
-        phetioDocumentation: 'whether the system element is active. system elements are active when visible on the screen'
+    // @public {BooleanProperty}
+    this.activeProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'activeProperty' ),
+      phetioReadOnly: true,
+      phetioDocumentation: 'whether the system element is active. system elements are active when visible on the screen'
+    } );
+
+    // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
+    this.a11yName = 'name not set';
+
+    // at initialization, oldPosition is null, so skip that case with lazyLink
+    this.positionProperty.lazyLink( ( newPosition, oldPosition ) => {
+      const deltaPosition = newPosition.minus( oldPosition );
+      this.energyChunkList.forEach( chunk => {
+        chunk.translate( deltaPosition.x, deltaPosition.y );
       } );
-
-      // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
-      this.a11yName = 'name not set';
-
-      // at initialization, oldPosition is null, so skip that case with lazyLink
-      this.positionProperty.lazyLink( ( newPosition, oldPosition ) => {
-        const deltaPosition = newPosition.minus( oldPosition );
-        this.energyChunkList.forEach( chunk => {
-          chunk.translate( deltaPosition.x, deltaPosition.y );
-        } );
-      } );
-    }
-
-    /**
-     * activate this element
-     * @public
-     */
-    activate() {
-      this.activeProperty.set( true );
-    }
-
-    /**
-     * deactivate this element - this causes all energy chunks to be removed
-     * @public
-     */
-    deactivate() {
-      this.activeProperty.set( false );
-      this.clearEnergyChunks();
-    }
-
-    /**
-     * clear daughter energy chunks
-     * @protected
-     */
-    clearEnergyChunks() {
-      this.energyChunkList.clear();
-    }
+    } );
   }
 
-  return energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
-} );
+  /**
+   * activate this element
+   * @public
+   */
+  activate() {
+    this.activeProperty.set( true );
+  }
 
+  /**
+   * deactivate this element - this causes all energy chunks to be removed
+   * @public
+   */
+  deactivate() {
+    this.activeProperty.set( false );
+    this.clearEnergyChunks();
+  }
+
+  /**
+   * clear daughter energy chunks
+   * @protected
+   */
+  clearEnergyChunks() {
+    this.energyChunkList.clear();
+  }
+}
+
+energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
+export default EnergySystemElement;

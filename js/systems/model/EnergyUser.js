@@ -7,46 +7,42 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElement' );
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergySystemElement from './EnergySystemElement.js';
 
-  class EnergyUser extends EnergySystemElement {
+class EnergyUser extends EnergySystemElement {
 
-    /**
-     * @param {Image} iconImage
-     * @param {Tandem} tandem
-     */
-    constructor( iconImage, tandem ) {
-      super( iconImage, tandem );
+  /**
+   * @param {Image} iconImage
+   * @param {Tandem} tandem
+   */
+  constructor( iconImage, tandem ) {
+    super( iconImage, tandem );
 
-      // @private {EnergyChunk[]}
-      this.incomingEnergyChunks = [];
-    }
-
-    /**
-     * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
-     * to move, convert, and otherwise manage them.
-     * @param {Array{EnergyChunk}} energyChunks - list of energy chunks to inject
-     * @public
-     */
-    injectEnergyChunks( energyChunks ) {
-      this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    clearEnergyChunks() {
-      super.clearEnergyChunks();
-      this.incomingEnergyChunks.length = 0;
-    }
+    // @private {EnergyChunk[]}
+    this.incomingEnergyChunks = [];
   }
 
-  return energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
-} );
+  /**
+   * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
+   * to move, convert, and otherwise manage them.
+   * @param {Array{EnergyChunk}} energyChunks - list of energy chunks to inject
+   * @public
+   */
+  injectEnergyChunks( energyChunks ) {
+    this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
+  }
 
+  /**
+   * @protected
+   * @override
+   */
+  clearEnergyChunks() {
+    super.clearEnergyChunks();
+    this.incomingEnergyChunks.length = 0;
+  }
+}
+
+energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
+export default EnergyUser;

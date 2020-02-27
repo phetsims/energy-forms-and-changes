@@ -7,31 +7,28 @@
  * @author Jesse Greenberg
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Vector2Property = require( 'DOT/Vector2Property' );
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  class PositionableModelElement {
+class PositionableModelElement {
 
-    /**
-     * @param {Vector2} initialPosition
-     * @param {Tandem} tandem
-     */
-    constructor( initialPosition, tandem ) {
+  /**
+   * @param {Vector2} initialPosition
+   * @param {Tandem} tandem
+   */
+  constructor( initialPosition, tandem ) {
 
-      // @public {Vector2Property}
-      this.positionProperty = new Vector2Property( initialPosition, {
-        units: 'm',
-        tandem: tandem.createTandem( 'positionProperty' ),
-        phetioReadOnly: true,
-        phetioHighFrequency: true,
-        phetioDocumentation: 'the position of the system element'
-      } );
-    }
+    // @public {Vector2Property}
+    this.positionProperty = new Vector2Property( initialPosition, {
+      units: 'm',
+      tandem: tandem.createTandem( 'positionProperty' ),
+      phetioReadOnly: true,
+      phetioHighFrequency: true,
+      phetioDocumentation: 'the position of the system element'
+    } );
   }
+}
 
-  return energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
-} );
-
+energyFormsAndChanges.register( 'PositionableModelElement', PositionableModelElement );
+export default PositionableModelElement;

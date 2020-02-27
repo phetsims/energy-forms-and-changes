@@ -8,47 +8,42 @@
  * @author Andrew Adare
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const Property = require( 'AXON/Property' );
-  const Screen = require( 'JOIST/Screen' );
-  const SystemsModel = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/SystemsModel' );
-  const SystemsScreenView = require( 'ENERGY_FORMS_AND_CHANGES/systems/view/SystemsScreenView' );
+import Property from '../../../axon/js/Property.js';
+import Screen from '../../../joist/js/Screen.js';
+import Image from '../../../scenery/js/nodes/Image.js';
+import systemsScreenIcon from '../../images/systems_screen_icon_png.js';
+import EFACConstants from '../common/EFACConstants.js';
+import energyFormsAndChangesStrings from '../energy-forms-and-changes-strings.js';
+import energyFormsAndChanges from '../energyFormsAndChanges.js';
+import SystemsModel from './model/SystemsModel.js';
+import SystemsScreenView from './view/SystemsScreenView.js';
 
-  // strings
-  const systemsString = require( 'string!ENERGY_FORMS_AND_CHANGES/systems' );
+const systemsString = energyFormsAndChangesStrings.systems;
 
-  // images
-  const systemsScreenIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/systems_screen_icon.png' );
 
-  class SystemsScreen extends Screen {
+class SystemsScreen extends Screen {
 
-    /**
-     * @param {Tandem} tandem
-     */
-    constructor( tandem ) {
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
 
-      const options = {
-        name: systemsString,
-        backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
-        homeScreenIcon: new Image( systemsScreenIcon ),
-        maxDT: EFACConstants.maxDT,
-        tandem: tandem
-      };
+    const options = {
+      name: systemsString,
+      backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
+      homeScreenIcon: new Image( systemsScreenIcon ),
+      maxDT: EFACConstants.maxDT,
+      tandem: tandem
+    };
 
-      super(
-        () => new SystemsModel( tandem.createTandem( 'model' ) ),
-        model => new SystemsScreenView( model, tandem.createTandem( 'view' ) ),
-        options
-      );
-    }
+    super(
+      () => new SystemsModel( tandem.createTandem( 'model' ) ),
+      model => new SystemsScreenView( model, tandem.createTandem( 'view' ) ),
+      options
+    );
   }
+}
 
-  return energyFormsAndChanges.register( 'SystemsScreen', SystemsScreen );
-} );
-
+energyFormsAndChanges.register( 'SystemsScreen', SystemsScreen );
+export default SystemsScreen;

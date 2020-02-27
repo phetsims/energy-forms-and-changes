@@ -6,32 +6,26 @@
  * @author John Blanco
  * @author Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const EFACA11yStrings = require( 'ENERGY_FORMS_AND_CHANGES/EFACA11yStrings' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const LightBulb = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/LightBulb' );
+import Image from '../../../../scenery/js/nodes/Image.js';
+import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
+import EFACA11yStrings from '../../EFACA11yStrings.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import LightBulb from './LightBulb.js';
 
-  // images
-  const INCANDESCENT_ICON = require( 'image!ENERGY_FORMS_AND_CHANGES/incandescent_icon.png' );
+class IncandescentBulb extends LightBulb {
 
-  class IncandescentBulb extends LightBulb {
+  /**
+   * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {Tandem} tandem
+   */
+  constructor( energyChunksVisibleProperty, tandem ) {
+    super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, tandem );
 
-    /**
-     * @param {BooleanProperty} energyChunksVisibleProperty
-     * @param {Tandem} tandem
-     */
-    constructor( energyChunksVisibleProperty, tandem ) {
-      super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, tandem );
-
-      // @public {string} - a11y name
-      this.a11yName = EFACA11yStrings.incandescentLightBulb.value;
-    }
+    // @public {string} - a11y name
+    this.a11yName = EFACA11yStrings.incandescentLightBulb.value;
   }
+}
 
-  return energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );
-} );
-
+energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );
+export default IncandescentBulb;

@@ -6,73 +6,69 @@
  * @author John Blanco
  * @author Martin Veillette (Berea College)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const BeakerType = require( 'ENERGY_FORMS_AND_CHANGES/common/model/BeakerType' );
-  const BlockType = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/BlockType' );
-  const EFACConstants = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACConstants' );
-  const EFACIntroModel = require( 'ENERGY_FORMS_AND_CHANGES/intro/model/EFACIntroModel' );
-  const EFACIntroScreenView = require( 'ENERGY_FORMS_AND_CHANGES/intro/view/EFACIntroScreenView' );
-  const EFACQueryParameters = require( 'ENERGY_FORMS_AND_CHANGES/common/EFACQueryParameters' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const Property = require( 'AXON/Property' );
-  const Screen = require( 'JOIST/Screen' );
+import Property from '../../../axon/js/Property.js';
+import Screen from '../../../joist/js/Screen.js';
+import Image from '../../../scenery/js/nodes/Image.js';
+import introScreenIcon from '../../images/intro_screen_icon_png.js';
+import EFACConstants from '../common/EFACConstants.js';
+import EFACQueryParameters from '../common/EFACQueryParameters.js';
+import BeakerType from '../common/model/BeakerType.js';
+import energyFormsAndChangesStrings from '../energy-forms-and-changes-strings.js';
+import energyFormsAndChanges from '../energyFormsAndChanges.js';
+import BlockType from './model/BlockType.js';
+import EFACIntroModel from './model/EFACIntroModel.js';
+import EFACIntroScreenView from './view/EFACIntroScreenView.js';
 
-  // strings
-  const introString = require( 'string!ENERGY_FORMS_AND_CHANGES/intro' );
+const introString = energyFormsAndChangesStrings.intro;
 
-  // images
-  const introScreenIcon = require( 'image!ENERGY_FORMS_AND_CHANGES/intro_screen_icon.png' );
 
-  class EFACIntroScreen extends Screen {
+class EFACIntroScreen extends Screen {
 
-    /**
-     * @param {Tandem} tandem
-     */
-    constructor( tandem ) {
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
 
-      const options = {
-        name: introString,
-        backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
-        homeScreenIcon: new Image( introScreenIcon ),
-        maxDT: EFACConstants.maxDT,
-        tandem: tandem
-      };
+    const options = {
+      name: introString,
+      backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
+      homeScreenIcon: new Image( introScreenIcon ),
+      maxDT: EFACConstants.maxDT,
+      tandem: tandem
+    };
 
-      const blocksToCreate = [];
-      const beakersToCreate = [];
+    const blocksToCreate = [];
+    const beakersToCreate = [];
 
-      // map query parameter string to element type and split by blocks vs beakers
-      EFACQueryParameters.elements.forEach( elementKey => {
-        if ( elementKey === EFACConstants.IRON_KEY ) {
-          blocksToCreate.push( BlockType.IRON );
-        }
-        else if ( elementKey === EFACConstants.BRICK_KEY ) {
-          blocksToCreate.push( BlockType.BRICK );
-        }
-        else if ( elementKey === EFACConstants.WATER_KEY ) {
-          beakersToCreate.push( BeakerType.WATER );
-        }
-        else if ( elementKey === EFACConstants.OLIVE_OIL_KEY ) {
-          beakersToCreate.push( BeakerType.OLIVE_OIL );
-        }
-      } );
+    // map query parameter string to element type and split by blocks vs beakers
+    EFACQueryParameters.elements.forEach( elementKey => {
+      if ( elementKey === EFACConstants.IRON_KEY ) {
+        blocksToCreate.push( BlockType.IRON );
+      }
+      else if ( elementKey === EFACConstants.BRICK_KEY ) {
+        blocksToCreate.push( BlockType.BRICK );
+      }
+      else if ( elementKey === EFACConstants.WATER_KEY ) {
+        beakersToCreate.push( BeakerType.WATER );
+      }
+      else if ( elementKey === EFACConstants.OLIVE_OIL_KEY ) {
+        beakersToCreate.push( BeakerType.OLIVE_OIL );
+      }
+    } );
 
-      super(
-        () => new EFACIntroModel(
-          blocksToCreate,
-          beakersToCreate,
-          EFACQueryParameters.burners,
-          tandem.createTandem( 'model' )
-        ),
-        model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),
-        options
-      );
-    }
+    super(
+      () => new EFACIntroModel(
+        blocksToCreate,
+        beakersToCreate,
+        EFACQueryParameters.burners,
+        tandem.createTandem( 'model' )
+      ),
+      model => new EFACIntroScreenView( model, tandem.createTandem( 'view' ) ),
+      options
+    );
   }
+}
 
-  return energyFormsAndChanges.register( 'EFACIntroScreen', EFACIntroScreen );
-} );
+energyFormsAndChanges.register( 'EFACIntroScreen', EFACIntroScreen );
+export default EFACIntroScreen;

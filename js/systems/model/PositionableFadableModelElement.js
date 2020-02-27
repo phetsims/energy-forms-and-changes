@@ -7,35 +7,32 @@
  * @author Andrew Adare
  * @author Jesse Greenberg
  */
-define( require => {
-  'use strict';
 
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  const PositionableModelElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/PositionableModelElement' );
-  const Range = require( 'DOT/Range' );
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import PositionableModelElement from './PositionableModelElement.js';
 
-  class PositionableFadableModelElement extends PositionableModelElement {
+class PositionableFadableModelElement extends PositionableModelElement {
 
-    /**
-     * @param {Vector2} initialPosition
-     * @param {number} initialOpacity
-     * @param {Tandem} tandem
-     */
-    constructor( initialPosition, initialOpacity, tandem ) {
-      super( initialPosition, tandem );
+  /**
+   * @param {Vector2} initialPosition
+   * @param {number} initialOpacity
+   * @param {Tandem} tandem
+   */
+  constructor( initialPosition, initialOpacity, tandem ) {
+    super( initialPosition, tandem );
 
-      // @public {NumberProperty}
-      this.opacityProperty = new NumberProperty( initialOpacity, {
-        range: new Range( 0, 1 )
-      } );
+    // @public {NumberProperty}
+    this.opacityProperty = new NumberProperty( initialOpacity, {
+      range: new Range( 0, 1 )
+    } );
 
-      // @public {BooleanProperty}
-      this.visibleProperty = new BooleanProperty( initialOpacity > 0 );
-    }
+    // @public {BooleanProperty}
+    this.visibleProperty = new BooleanProperty( initialOpacity > 0 );
   }
+}
 
-  return energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
-} );
-
+energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
+export default PositionableFadableModelElement;

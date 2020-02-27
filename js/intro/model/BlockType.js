@@ -5,21 +5,18 @@
  *
  * @author Chris Klusendorf
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  // @public
-  const BlockType = Enumeration.byKeys( [ 'IRON', 'BRICK' ], {
-    beforeFreeze: BlockType => {
-      BlockType.getTandemName = blockType => {
-        return blockType.toString().toLowerCase() + 'Block';
-      };
-    }
-  } );
-
-  return energyFormsAndChanges.register( 'BlockType', BlockType );
+// @public
+const BlockType = Enumeration.byKeys( [ 'IRON', 'BRICK' ], {
+  beforeFreeze: BlockType => {
+    BlockType.getTandemName = blockType => {
+      return blockType.toString().toLowerCase() + 'Block';
+    };
+  }
 } );
+
+energyFormsAndChanges.register( 'BlockType', BlockType );
+export default BlockType;

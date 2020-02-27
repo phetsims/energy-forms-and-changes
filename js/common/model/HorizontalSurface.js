@@ -8,59 +8,55 @@
  * @author John Blanco
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const ModelElement = require( 'ENERGY_FORMS_AND_CHANGES/common/model/ModelElement' );
-  const Property = require( 'AXON/Property' );
-  const Range = require( 'DOT/Range' );
-  const Vector2Property = require( 'DOT/Vector2Property' );
+import Property from '../../../../axon/js/Property.js';
+import Range from '../../../../dot/js/Range.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import ModelElement from './ModelElement.js';
 
-  class HorizontalSurface {
+class HorizontalSurface {
 
-    /**
-     * @param {Vector2} initialPosition
-     * @param {number} width
-     * @param {ModelElement} owner
-     * @param {ModelElement} [initialElementOnSurface] - model element that is already on this surface
-     */
-    constructor( initialPosition, width, owner, initialElementOnSurface ) {
+  /**
+   * @param {Vector2} initialPosition
+   * @param {number} width
+   * @param {ModelElement} owner
+   * @param {ModelElement} [initialElementOnSurface] - model element that is already on this surface
+   */
+  constructor( initialPosition, width, owner, initialElementOnSurface ) {
 
-      // @public (read-write)
-      this.positionProperty = new Vector2Property( initialPosition );
+    // @public (read-write)
+    this.positionProperty = new Vector2Property( initialPosition );
 
-      // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
-      // one, null if nothing there, use the API below to update
-      this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null, {
-        valueType: [ ModelElement, null ]
-      } );
+    // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
+    // one, null if nothing there, use the API below to update
+    this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null, {
+      valueType: [ ModelElement, null ]
+    } );
 
-      // monitor the element on the surface for legitimate settings
-      assert && this.elementOnSurfaceProperty.link( ( elementOnSurface, previousElementOnSurface ) => {
-        assert( elementOnSurface === null || elementOnSurface instanceof ModelElement );
-        assert( elementOnSurface !== this, 'can\'t sit on top of ourself' );
-        assert(
-          elementOnSurface === null || previousElementOnSurface === null,
-          'one element should be removed before another is added'
-        );
-      } );
+    // monitor the element on the surface for legitimate settings
+    assert && this.elementOnSurfaceProperty.link( ( elementOnSurface, previousElementOnSurface ) => {
+      assert( elementOnSurface === null || elementOnSurface instanceof ModelElement );
+      assert( elementOnSurface !== this, 'can\'t sit on top of ourself' );
+      assert(
+        elementOnSurface === null || previousElementOnSurface === null,
+        'one element should be removed before another is added'
+      );
+    } );
 
-      // @public (read-only) {number}
-      this.width = width;
+    // @public (read-only) {number}
+    this.width = width;
 
-      // @public (read-only) {Range} - the range of space in the horizontal direction occupied by this surface
-      this.xRange = new Range( initialPosition.x - this.width / 2, initialPosition.x + this.width / 2 );
-      this.positionProperty.link( position => {
-        this.xRange.setMinMax( position.x - this.width / 2, position.x + this.width / 2 );
-      } );
+    // @public (read-only) {Range} - the range of space in the horizontal direction occupied by this surface
+    this.xRange = new Range( initialPosition.x - this.width / 2, initialPosition.x + this.width / 2 );
+    this.positionProperty.link( position => {
+      this.xRange.setMinMax( position.x - this.width / 2, position.x + this.width / 2 );
+    } );
 
-      // @public (read-only) {ModelElement} - this should be accessed through getter/setter methods
-      this.owner = owner;
-    }
+    // @public (read-only) {ModelElement} - this should be accessed through getter/setter methods
+    this.owner = owner;
   }
+}
 
-  return energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
-} );
-
+energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
+export default HorizontalSurface;

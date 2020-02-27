@@ -7,39 +7,37 @@
  * @author  John Blanco
  * @author  Andrew Adare
  */
-define( require => {
-  'use strict';
 
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const merge = require( 'PHET_CORE/merge' );
+import merge from '../../../../phet-core/js/merge.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  class Energy {
+class Energy {
 
-    /**
-     * @param {EnergyType} type - energy type
-     * @param {number} amount - amount of energy, in joules
-     * @param {number} direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
-     * to the right, PI/2 is up, and so forth.
-     */
-    constructor( type, amount, direction, options ) {
+  /**
+   * @param {EnergyType} type - energy type
+   * @param {number} amount - amount of energy, in joules
+   * @param {number} direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
+   * to the right, PI/2 is up, and so forth.
+   */
+  constructor( type, amount, direction, options ) {
 
-      options = merge( {
-        creationTime: null
-      }, options );
+    options = merge( {
+      creationTime: null
+    }, options );
 
-      // @public (read-only) {EnergyType}
-      this.type = type;
+    // @public (read-only) {EnergyType}
+    this.type = type;
 
-      // @public (read-only) {number}
-      this.amount = amount;
+    // @public (read-only) {number}
+    this.amount = amount;
 
-      // @public (read-only) {number}
-      this.direction = direction;
+    // @public (read-only) {number}
+    this.direction = direction;
 
-      // @public (read-only) {number}
-      this.creationTime = options.creationTime;
-    }
+    // @public (read-only) {number}
+    this.creationTime = options.creationTime;
   }
+}
 
-  return energyFormsAndChanges.register( 'Energy', Energy );
-} );
+energyFormsAndChanges.register( 'Energy', Energy );
+export default Energy;

@@ -8,49 +8,46 @@
  * @author Andrew Adare
  * @author Jesse Greenberg
  */
-define( require => {
-  'use strict';
 
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const EnergySystemElement = require( 'ENERGY_FORMS_AND_CHANGES/systems/model/EnergySystemElement' );
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergySystemElement from './EnergySystemElement.js';
 
-  class EnergySource extends EnergySystemElement {
+class EnergySource extends EnergySystemElement {
 
-    /**
-     * @param {Image} iconImage Image to identify source on carousel menu
-     * @param {Tandem} tandem
-     */
-    constructor( iconImage, tandem ) {
-      super( iconImage, tandem );
-      this.outgoingEnergyChunks = [];
-    }
-
-    /**
-     * Get the energy chunks that this source wants to transfer to the next energy system element. This is a mutating
-     * operation: it removes all outgoing chunks from both this.energyChunkList and this.outgoingEnergyChunks.
-     * @returns {EnergyChunk[]} List of energy chunks to transfer
-     * @public
-     */
-    extractOutgoingEnergyChunks() {
-
-      // remove all outgoing chunks from this.energyChunkList
-      this.energyChunkList.removeAll( this.outgoingEnergyChunks );
-
-      // return a copy of the outgoing chunk list and clear it in one fell swoop
-      return this.outgoingEnergyChunks.splice( 0 );
-    }
-
-    /**
-     * clear internal list of energy chunks and outgoing energy chunks
-     * @protected
-     * @override
-     */
-    clearEnergyChunks() {
-      super.clearEnergyChunks();
-      this.outgoingEnergyChunks.length = 0;
-    }
+  /**
+   * @param {Image} iconImage Image to identify source on carousel menu
+   * @param {Tandem} tandem
+   */
+  constructor( iconImage, tandem ) {
+    super( iconImage, tandem );
+    this.outgoingEnergyChunks = [];
   }
 
-  return energyFormsAndChanges.register( 'EnergySource', EnergySource );
-} );
+  /**
+   * Get the energy chunks that this source wants to transfer to the next energy system element. This is a mutating
+   * operation: it removes all outgoing chunks from both this.energyChunkList and this.outgoingEnergyChunks.
+   * @returns {EnergyChunk[]} List of energy chunks to transfer
+   * @public
+   */
+  extractOutgoingEnergyChunks() {
 
+    // remove all outgoing chunks from this.energyChunkList
+    this.energyChunkList.removeAll( this.outgoingEnergyChunks );
+
+    // return a copy of the outgoing chunk list and clear it in one fell swoop
+    return this.outgoingEnergyChunks.splice( 0 );
+  }
+
+  /**
+   * clear internal list of energy chunks and outgoing energy chunks
+   * @protected
+   * @override
+   */
+  clearEnergyChunks() {
+    super.clearEnergyChunks();
+    this.outgoingEnergyChunks.length = 0;
+  }
+}
+
+energyFormsAndChanges.register( 'EnergySource', EnergySource );
+export default EnergySource;

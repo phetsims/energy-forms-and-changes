@@ -5,40 +5,37 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const energyFormsAndChanges = require( 'ENERGY_FORMS_AND_CHANGES/energyFormsAndChanges' );
-  const merge = require( 'PHET_CORE/merge' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const Tandem = require( 'TANDEM/Tandem' );
+import merge from '../../../../phet-core/js/merge.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-  class BeltNode extends Path {
+class BeltNode extends Path {
 
-    /**
-     * @param {Belt} belt
-     * @param {ModelViewTransform2} modelViewTransform
-     * @param {Object} [options]
-     */
-    constructor( belt, modelViewTransform, options ) {
+  /**
+   * @param {Belt} belt
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
+   */
+  constructor( belt, modelViewTransform, options ) {
 
-      options = merge( {
-        stroke: 'black',
-        lineWidth: 4,
+    options = merge( {
+      stroke: 'black',
+      lineWidth: 4,
 
-        // phet-io
-        tandem: Tandem.REQUIRED
-      }, options );
+      // phet-io
+      tandem: Tandem.REQUIRED
+    }, options );
 
-      super( modelViewTransform.modelToViewShape( belt.beltShape ), options );
+    super( modelViewTransform.modelToViewShape( belt.beltShape ), options );
 
-      // control visibility of the belt
-      belt.isVisibleProperty.link( isVisible => {
-        this.setVisible( isVisible );
-      } );
-    }
+    // control visibility of the belt
+    belt.isVisibleProperty.link( isVisible => {
+      this.setVisible( isVisible );
+    } );
   }
+}
 
-  return energyFormsAndChanges.register( 'BeltNode', BeltNode );
-} );
+energyFormsAndChanges.register( 'BeltNode', BeltNode );
+export default BeltNode;
