@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * Button group that controls the sim speed with "Normal" and "Fast Forward" radio buttons. It is only used as a helper

@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * A singleton that encapsulates the information and algorithms necessary to constrain the motion of model elements such

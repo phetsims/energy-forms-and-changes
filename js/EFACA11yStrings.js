@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * Single location of all accessibility strings. These strings are not meant to be translatable yet. Rosetta needs

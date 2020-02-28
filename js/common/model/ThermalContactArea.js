@@ -1,4 +1,4 @@
-// Copyright 2014-2019, University of Colorado Boulder
+// Copyright 2014-2020, University of Colorado Boulder
 
 /**
  * A type that represents a 2D space that can come into contact with other thermal areas, leading to the exchange of
