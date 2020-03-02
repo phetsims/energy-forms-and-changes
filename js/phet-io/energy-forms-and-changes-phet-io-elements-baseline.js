@@ -7827,6 +7827,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "FaucetNodeIO"
     },
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.flowRateProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": true,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "LinkedElementIO"
+    },
     "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetNode.inputListener": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
