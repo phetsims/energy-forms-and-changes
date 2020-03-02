@@ -19,32 +19,8 @@
 
   window.phet = window.phet || {};
   window.phet.chipper = window.phet.chipper || {};
-  window.phet.chipper.packageObject = {
-    "name": "energy-forms-and-changes",
-    "version": "1.2.0-dev.10",
-    "license": "GPL-3.0",
-    "repository": { "type": "git", "url": "https://github.com/phetsims/energy-forms-and-changes.git" },
-    "devDependencies": { "grunt": "~1.0.0" },
-    "phet": {
-      "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES",
-      "phetLibs": [ "twixt" ],
-      "runnable": true,
-      "supportedBrands": [ "phet", "phet-io", "adapted-from-phet" ],
-      "accessible": true,
-      "simulation": true
-    },
-    "eslintConfig": { "extends": "../chipper/eslint/sim_eslintrc.js" }
-  };
-  window.phet.chipper.stringRepos = [ {
-    "repo": "energy-forms-and-changes",
-    "requirejsNamespace": "ENERGY_FORMS_AND_CHANGES"
-  }, { "repo": "joist", "requirejsNamespace": "JOIST" }, {
-    "repo": "scenery-phet",
-    "requirejsNamespace": "SCENERY_PHET"
-  }, { "repo": "sun", "requirejsNamespace": "SUN" }, {
-    "repo": "tambo",
-    "requirejsNamespace": "TAMBO"
-  }, { "repo": "twixt", "requirejsNamespace": "TWIXT" } ];
+  window.phet.chipper.packageObject = {"name":"energy-forms-and-changes","version":"1.2.0-dev.10","license":"GPL-3.0","repository":{"type":"git","url":"https://github.com/phetsims/energy-forms-and-changes.git"},"devDependencies":{"grunt":"~1.0.0"},"phet":{"requirejsNamespace":"ENERGY_FORMS_AND_CHANGES","phetLibs":["twixt"],"runnable":true,"supportedBrands":["phet","phet-io","adapted-from-phet"],"accessible":true,"simulation":true},"eslintConfig":{"extends":"../chipper/eslint/sim_eslintrc.js"}};
+  window.phet.chipper.stringRepos = [{"repo":"energy-forms-and-changes","requirejsNamespace":"ENERGY_FORMS_AND_CHANGES"},{"repo":"joist","requirejsNamespace":"JOIST"},{"repo":"scenery-phet","requirejsNamespace":"SCENERY_PHET"},{"repo":"sun","requirejsNamespace":"SUN"},{"repo":"tambo","requirejsNamespace":"TAMBO"},{"repo":"twixt","requirejsNamespace":"TWIXT"}];
 
   // Identify the brand (assume generated brand if not provided with query parameters)
   const brandMatch = location.search.match( /brand=([^&]+)/ );
