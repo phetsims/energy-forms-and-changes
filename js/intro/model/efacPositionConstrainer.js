@@ -32,8 +32,8 @@ const efacPositionConstrainer = {
    * be easy to reuse.
    * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
    * @param {Vector2} proposedPosition - the position where the model element would like to go
-   * @param {Beaker[]} beakers - the beakers that are present in the model
-   * @param {Block[]} blocks - the blocks that are present in the model
+   * @param {PhetioGroup.<BeakerContainer>} beakers - the beakers that are present in the model
+   * @param {PhetioGroup.<Block>} blocks - the blocks that are present in the model
    * @param {Bounds2} burnerBlockingRect - the space occupied by the burners in the model
    * @returns {Vector2} the original proposed position if valid, or alternative position if not
    * @public
@@ -130,39 +130,43 @@ const efacPositionConstrainer = {
       }
       else {
 
-        // if beaker A is stacked on the current modelElement, get beaker B directly as the otherBeaker because there
-        // are currently only two beakers. this will need to be generalized to check for each other beaker that is not
-        // stacked on this modelElement if the time comes when more than two beakers exist.
+        // if beaker A is stacked on the current modelElement, get beaker B directly as otherBeaker because currently
+        // there can't be more than two beakers. this will need to be generalized to check for each other beaker that is not
+        // stacked on this modelElement if the time comes when more than two beakers can exist.
         const otherBeaker = beakers.get( 1 - beakers.array.indexOf( beaker ) );
 
-        // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
-        const otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
-        const currentBeakerBounds = beaker.getBounds();
+        // a second beaker may not exist
+        if ( otherBeaker ) {
 
-        allowedTranslation = determineAllowedTranslation(
-          currentBeakerBounds,
-          otherBeakerBoundsList[ 0 ],
-          allowedTranslation.x,
-          allowedTranslation.y,
-          true,
-          allowedTranslation
-        );
-        allowedTranslation = determineAllowedTranslation(
-          currentBeakerBounds,
-          otherBeakerBoundsList[ 1 ],
-          allowedTranslation.x,
-          allowedTranslation.y,
-          true,
-          allowedTranslation
-        );
-        allowedTranslation = determineAllowedTranslation(
-          currentBeakerBounds,
-          otherBeakerBoundsList[ 2 ],
-          allowedTranslation.x,
-          allowedTranslation.y,
-          true,
-          allowedTranslation
-        );
+          // get the bounds of the other beaker and the bounds of the beaker stacked on top of this modelElement
+          const otherBeakerBoundsList = otherBeaker.translatedPositionTestingBoundsList;
+          const currentBeakerBounds = beaker.getBounds();
+
+          allowedTranslation = determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 0 ],
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
+          );
+          allowedTranslation = determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 1 ],
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
+          );
+          allowedTranslation = determineAllowedTranslation(
+            currentBeakerBounds,
+            otherBeakerBoundsList[ 2 ],
+            allowedTranslation.x,
+            allowedTranslation.y,
+            true,
+            allowedTranslation
+          );
+        }
       }
 
       modelElementBoundsWithTopAndSidePerspective.freeToPool();
