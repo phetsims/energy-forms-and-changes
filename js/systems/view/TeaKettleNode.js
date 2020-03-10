@@ -93,6 +93,21 @@ class TeaKettleNode extends MoveFadeModelElementNode {
       scale: gasPipeScale
     } );
 
+    // since the gas pipes are part of the heater/coolers, link their NodeIO Properties to listen to the heater/cooler's
+    // NodeIO Properties
+    heaterCoolerFront.on( 'opacity', () => {
+      leftGasPipe.opacity = heaterCoolerFront.opacity;
+      rightGasPipe.opacity = heaterCoolerFront.opacity;
+    } );
+    heaterCoolerFront.on( 'pickability', () => {
+      leftGasPipe.pickable = heaterCoolerFront.pickable;
+      rightGasPipe.pickable = heaterCoolerFront.pickable;
+    } );
+    heaterCoolerFront.on( 'visibility', () => {
+      leftGasPipe.visible = heaterCoolerFront.visible;
+      rightGasPipe.visible = heaterCoolerFront.visible;
+    } );
+
     const energyChunkLayer = new EnergyChunkLayer(
       teaKettle.energyChunkList,
       modelViewTransform,

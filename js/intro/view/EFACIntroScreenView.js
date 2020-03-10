@@ -178,9 +178,9 @@ class EFACIntroScreenView extends ScreenView {
     );
 
     /**
-     * Creates a gas pipe image used as part of the HeaterCoolerNodes for this screen and links its opacity, pickability,
-     * and visibility so the gas pipe follows any changes that occur to the provided Node. It also uses the provided
-     * node to correctly position itself.
+     * Creates a gas pipe image used as part of the HeaterCoolerNodes for this screen and links its NodeIO Properties
+     * so the gas pipe follows any changes that occur to the provided Node. It also uses the provided node to correctly
+     * position itself.
      *
      * @param (Node} node
      * @returns {Node}
