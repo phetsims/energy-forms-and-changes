@@ -39,6 +39,7 @@ import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import gasPipeIntroImage from '../../../images/gas_pipe_intro_png.js';
 import shelfImage from '../../../images/shelf_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
@@ -176,6 +177,33 @@ class EFACIntroScreenView extends ScreenView {
       burnerProjectionAmount
     );
 
+    /**
+     * Creates a gas pipe image used as part of the HeaterCoolerNodes for this screen and links its opacity, pickability,
+     * and visibility so the gas pipe follows any changes that occur to the provided Node. It also uses the provided
+     * node to correctly position itself.
+     *
+     * @param (Node} node
+     * @returns {Node}
+     */
+    const createAndLinkPipeImageNode = node => {
+      const gasPipeNode = new Image( gasPipeIntroImage, {
+        right: node.left + 15,
+        bottom: node.bottom - 6,
+        scale: 0.4
+      } );
+      node.on( 'opacity', () => {
+        gasPipeNode.opacity = node.opacity;
+      } );
+      node.on( 'pickability', () => {
+        gasPipeNode.pickable = node.pickable;
+      } );
+      node.on( 'visibility', () => {
+        gasPipeNode.visible = node.visible;
+      } );
+
+      return gasPipeNode;
+    };
+
     // for testing - option to keep the heater coolers sticky
     const snapToZero = !EFACQueryParameters.stickyBurners;
 
@@ -196,9 +224,12 @@ class EFACIntroScreenView extends ScreenView {
       tandem: tandem.createTandem( 'leftHeaterCoolerNode' ),
       phetioDocumentation: 'the heater/cooler on the left'
     } );
+    const leftGasPipe = createAndLinkPipeImageNode( leftHeaterCoolerFront );
+
     heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( leftBurnerStand );
+    backLayer.addChild( leftGasPipe );
 
     let rightBurnerBounds = null;
 
@@ -228,9 +259,12 @@ class EFACIntroScreenView extends ScreenView {
         tandem: tandem.createTandem( 'rightHeaterCoolerNode' ),
         phetioDocumentation: 'the heater/cooler on the right, which may not exist in the simulation'
       } );
+      const rightGasPipe = createAndLinkPipeImageNode( rightHeaterCoolerFront );
+
       heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
       backLayer.addChild( rightHeaterCoolerBack );
       backLayer.addChild( rightBurnerStand );
+      backLayer.addChild( rightGasPipe );
 
       // make the heat cool levels equal if they become linked
       model.linkedHeatersProperty.link( linked => {

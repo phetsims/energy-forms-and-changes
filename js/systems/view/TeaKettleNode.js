@@ -14,6 +14,8 @@ import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import gasPipeSystemsLongImage from '../../../images/gas_pipe_systems_long_png.js';
+import gasPipeSystemsShortImage from '../../../images/gas_pipe_systems_short_png.js';
 import teaKettleImage from '../../../images/tea_kettle_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
@@ -71,6 +73,26 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     heaterCoolerBack.bottom = burnerStandNode.bottom - burnerProjection / 2;
     heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
 
+    const gasPipeScale = 0.9;
+
+    // create the left part of the gas pipe that connects to the heater cooler node. while it appears to be one pipe,
+    // it's created as two separate nodes so that once part is behind the burner stand and one part is in front of the
+    // the burner stand (to avoid splitting the burner stand into even more pieces). this is the part that's behind the
+    // front of the burner stand. See https://github.com/phetsims/energy-forms-and-changes/issues/311
+    const leftGasPipe = new Image( gasPipeSystemsLongImage, {
+      right: heaterCoolerFront.left - 30, // empirically determined
+      bottom: heaterCoolerFront.bottom - 20, // empirically determined
+      scale: gasPipeScale
+    } );
+
+    // create the right part of the gas pipe that connects to the heater cooler node. this is a shorter segment that
+    // goes in front of the burner stand but behind the heater cooler node.
+    const rightGasPipe = new Image( gasPipeSystemsShortImage, {
+      left: leftGasPipe.right,
+      centerY: leftGasPipe.centerY,
+      scale: gasPipeScale
+    } );
+
     const energyChunkLayer = new EnergyChunkLayer(
       teaKettle.energyChunkList,
       modelViewTransform,
@@ -93,7 +115,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
     this.addChild( heaterCoolerBack );
     this.addChild( energyChunkLayer );
-    this.addChild( heaterCoolerFront );
+    this.addChild( leftGasPipe );
 
     // create a separate layer for the tea kettle, stand, and steam, which all become transparent when energy chunks
     // are turned on. the steam canvas node does not like its opacity to be set when it's not rendering anything, but
@@ -103,6 +125,8 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     kettleAndStand.addChild( this.steamCanvasNode );
     kettleAndStand.addChild( teaKettleNode );
     this.addChild( kettleAndStand );
+    this.addChild( rightGasPipe );
+    this.addChild( heaterCoolerFront );
 
     // make the tea kettle, stand, and steam transparent when energy chunks are visible
     energyChunksVisibleProperty.link( chunksVisible => {
