@@ -821,7 +821,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "TODO https://github.com/phetsims/energy-forms-and-changes/issues/318"
+    "notes": "created by Amy Rouinfar"
   },
   "gas_pipe_systems_long.png": {
     "text": [
@@ -829,7 +829,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "TODO https://github.com/phetsims/energy-forms-and-changes/issues/318"
+    "notes": "created by Amy Rouinfar"
   },
   "gas_pipe_systems_short.png": {
     "text": [
@@ -837,6 +837,6 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "TODO https://github.com/phetsims/energy-forms-and-changes/issues/318"
+    "notes": "created by Amy Rouinfar"
   }
 }
