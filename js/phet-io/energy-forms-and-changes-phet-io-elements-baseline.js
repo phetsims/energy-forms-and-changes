@@ -2415,7 +2415,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioIsArchetype": false,
       "phetioPlayback": false,
       "phetioReadOnly": false,
-      "phetioState": true,
+      "phetioState": false,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
