@@ -23,6 +23,7 @@ import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
+import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
 import KeyboardUtils from '../../../../scenery/js/accessibility/KeyboardUtils.js';
 import DownUpListener from '../../../../scenery/js/input/DownUpListener.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
@@ -57,13 +58,11 @@ import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
 import BlockNode from './BlockNode.js';
-import SimSpeedButtonGroup from './SimSpeedButtonGroup.js';
 
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
 const linkHeatersString = energyFormsAndChangesStrings.linkHeaters;
 const oliveOilString = energyFormsAndChangesStrings.oliveOil;
 const waterString = energyFormsAndChangesStrings.water;
-
 
 // constants
 const EDGE_INSET = 10; // screen edge padding, in screen coordinates
@@ -143,28 +142,19 @@ class EFACIntroScreenView extends ScreenView {
 
     // add the play/pause and step buttons
     const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
-      stepForwardOptions: {
-        listener: () => model.manualStep()
+      timeControlSpeedProperty: EFACQueryParameters.showSpeedControls ? model.timeControlSpeedProperty : null,
+      timeControlSpeeds: [ TimeControlSpeed.NORMAL, TimeControlSpeed.FAST ],
+      playPauseStepButtonOptions: {
+        stepForwardButtonOptions: {
+          listener: () => model.manualStep()
+        }
       },
       tandem: tandem.createTandem( 'timeControlNode' )
     } );
 
-    // for testing - option to add fast forward controls
-    if ( EFACQueryParameters.showSpeedControls ) {
-      const simSpeedButtonGroup = new SimSpeedButtonGroup( model.simSpeedProperty );
-      const playPauseStepAndSpeedButtonGroup = new HBox( {
-        children: [ timeControlNode, simSpeedButtonGroup ],
-        spacing: 25
-      } );
-      playPauseStepAndSpeedButtonGroup.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
-      backLayer.addChild( playPauseStepAndSpeedButtonGroup );
-    }
-    else {
-
-      // only play/pause and step are being added, so center them below the lab bench
-      timeControlNode.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
-      backLayer.addChild( timeControlNode );
-    }
+    // center time controls below the lab bench
+    timeControlNode.center = new Vector2( this.layoutBounds.centerX, centerYBelowSurface );
+    backLayer.addChild( timeControlNode );
 
     // add the burners
     const burnerProjectionAmount = modelViewTransform.modelToViewDeltaX(

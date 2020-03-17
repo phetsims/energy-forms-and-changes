@@ -14,6 +14,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
@@ -29,7 +30,6 @@ import Block from './Block.js';
 import BlockIO from './BlockIO.js';
 import BlockType from './BlockType.js';
 import EnergyBalanceTracker from './EnergyBalanceTracker.js';
-import SimSpeed from './SimSpeed.js';
 import StickyTemperatureAndColorSensor from './StickyTemperatureAndColorSensor.js';
 
 // constants
@@ -88,8 +88,9 @@ class EFACIntroModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    // @public
-    this.simSpeedProperty = new EnumerationProperty( SimSpeed, SimSpeed.NORMAL );
+    // @public {EnumerationProperty.<TimeControlSpeed>} - for debugging, controls play speed of the
+    // simulation
+    this.timeControlSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
@@ -324,7 +325,7 @@ class EFACIntroModel {
     this.energyChunksVisibleProperty.reset();
     this.linkedHeatersProperty.reset();
     this.isPlayingProperty.reset();
-    this.simSpeedProperty.reset();
+    this.timeControlSpeedProperty.reset();
     this.air.reset();
     this.burners.forEach( burner => {
       burner.reset();
@@ -359,7 +360,7 @@ class EFACIntroModel {
 
     // only step the model if not paused
     if ( this.isPlayingProperty.get() ) {
-      const multiplier = this.simSpeedProperty.get() === SimSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
+      const multiplier = this.timeControlSpeedProperty.get() === TimeControlSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
       this.stepModel( dt * multiplier );
     }
 

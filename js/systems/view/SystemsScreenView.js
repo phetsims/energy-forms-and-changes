@@ -307,8 +307,10 @@ class SystemsScreenView extends ScreenView {
 
     // add the play/pause and step buttons
     const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
-      stepForwardOptions: {
-        listener: () => model.manualStep()
+      playPauseStepButtonOptions: {
+        stepForwardButtonOptions: {
+          listener: () => model.manualStep()
+        }
       },
       tandem: tandem.createTandem( 'timeControlNode' )
     } );
