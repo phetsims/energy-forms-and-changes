@@ -88,7 +88,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     // create the right part of the gas pipe that connects to the heater cooler node. this is a shorter segment that
     // goes in front of the burner stand but behind the heater cooler node.
     const rightGasPipe = new Image( gasPipeSystemsShortImage, {
-      left: leftGasPipe.right,
+      left: leftGasPipe.right - 1,
       centerY: leftGasPipe.centerY,
       scale: gasPipeScale
     } );
