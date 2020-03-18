@@ -15,7 +15,7 @@ import BICYCLE_ICON from '../../../images/bicycle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import EFACA11yStrings from '../../EFACA11yStrings.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -55,7 +55,7 @@ class Biker extends EnergySource {
     super( new Image( BICYCLE_ICON ), tandem );
 
     // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.cyclist.value;
+    this.a11yName = energyFormsAndChangesStrings.a11y.cyclist;
 
     // @public (read-only) {NumberProperty}
     this.crankAngleProperty = new NumberProperty( 0, {

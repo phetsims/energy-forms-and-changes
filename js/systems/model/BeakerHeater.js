@@ -19,8 +19,8 @@ import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
-import EFACA11yStrings from '../../EFACA11yStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyUser from './EnergyUser.js';
 
@@ -62,7 +62,7 @@ class BeakerHeater extends EnergyUser {
     super( new Image( WATER_ICON ), tandem );
 
     // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.beakerOfWater.value;
+    this.a11yName = energyFormsAndChangesStrings.a11y.beakerOfWater;
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;

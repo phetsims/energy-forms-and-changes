@@ -9,7 +9,7 @@
 
 import Image from '../../../../scenery/js/nodes/Image.js';
 import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
-import EFACA11yStrings from '../../EFACA11yStrings.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightBulb from './LightBulb.js';
 
@@ -23,7 +23,7 @@ class IncandescentBulb extends LightBulb {
     super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, tandem );
 
     // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.incandescentLightBulb.value;
+    this.a11yName = energyFormsAndChangesStrings.a11y.incandescentLightBulb;
   }
 }
 

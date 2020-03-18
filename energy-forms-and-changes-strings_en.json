@@ -67,5 +67,46 @@
   },
   "energyChunkLabel": {
     "value": "E"
+  },
+  "a11y": {
+    "systemsScreenSummaryDescription": {
+      "value": "This is an interactive sim. It changes as you play with it. It has a Play Area and a Control Area. In the play area, construct an energy system with an energy producer, converter and consumer. Adjust the energy production and observe the flow of energy in the system. Inspect the energy forms and changes with energy symbols. In the control panel, use the play, pause and step buttons or reset the sim."
+    },
+    "systemsScreenInteractionHint": {
+      "value": "Adjust the energy producer to begin observations."
+    },
+    "energySystem": {
+      "value": "Energy System"
+    },
+    "energySystemHelpText": {
+      "value": "Energy system contains a {{producer}}, {{converter}}, and {{user}}."
+    },
+    "waterFaucet": {
+      "value": "water faucet"
+    },
+    "sun": {
+      "value": "sun"
+    },
+    "teaKettle": {
+      "value": "tea kettle"
+    },
+    "cyclist": {
+      "value": "cyclist"
+    },
+    "electricalGenerator": {
+      "value": "wheel generator"
+    },
+    "solarPanel": {
+      "value": "solar panel"
+    },
+    "beakerOfWater": {
+      "value": "beaker of water on heating element"
+    },
+    "incandescentLightBulb": {
+      "value": "incandescent light bulb"
+    },
+    "fluorescentLightBulb": {
+      "value": "fluorescent light bulb"
+    }
   }
 }

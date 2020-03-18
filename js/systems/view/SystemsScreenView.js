@@ -32,7 +32,6 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import EFACA11yStrings from '../../EFACA11yStrings.js';
 import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerHeaterNode from './BeakerHeaterNode.js';
@@ -75,15 +74,15 @@ class SystemsScreenView extends ScreenView {
     // a11y - the screen summary to be read by assistive technology
     this.addChild( new Node( {
       tagName: 'div',
-      innerContent: EFACA11yStrings.systemsScreenInteractionHint.value,
-      descriptionContent: EFACA11yStrings.systemsScreenSummaryDescription.value
+      innerContent: energyFormsAndChangesStrings.a11y.systemsScreenInteractionHint,
+      descriptionContent: energyFormsAndChangesStrings.a11y.systemsScreenSummaryDescription
     } ) );
 
     // a11y - a description of the current configuration of the energy system to be read by assistive technology
     const energySystemConfigDescription = new Node( {
       tagName: 'h3',
-      innerContent: EFACA11yStrings.energySystem.value,
-      descriptionContent: EFACA11yStrings.energySystemHelpText.value
+      innerContent: energyFormsAndChangesStrings.a11y.energySystem,
+      descriptionContent: energyFormsAndChangesStrings.a11y.energySystemHelpText
     } );
     this.addChild( energySystemConfigDescription );
 
@@ -100,7 +99,7 @@ class SystemsScreenView extends ScreenView {
         const energyUser = model.energyUsersCarousel.getSelectedElement();
         assert && assert( energySource.a11yName, 'the selected element has no accessibility name specified' );
         energySystemConfigDescription.descriptionContent = StringUtils.fillIn(
-          EFACA11yStrings.energySystemHelpText.value,
+          energyFormsAndChangesStrings.a11y.energySystemHelpText,
           {
             producer: energySource.a11yName,
             converter: energyConverter.a11yName,

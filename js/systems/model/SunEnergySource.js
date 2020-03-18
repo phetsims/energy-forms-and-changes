@@ -19,7 +19,7 @@ import SUN_ICON from '../../../images/sun_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import EFACA11yStrings from '../../EFACA11yStrings.js';
+import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Cloud from './Cloud.js';
 import Energy from './Energy.js';
@@ -51,7 +51,7 @@ class SunEnergySource extends EnergySource {
     super( new Image( SUN_ICON ), tandem );
 
     // @public {string} - a11y name
-    this.a11yName = EFACA11yStrings.sun.value;
+    this.a11yName = energyFormsAndChangesStrings.a11y.sun;
 
     // @public (read-only) {SolarPanel}
     this.solarPanel = solarPanel;
