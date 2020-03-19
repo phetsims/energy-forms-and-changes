@@ -4997,7 +4997,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
@@ -5201,8 +5201,8 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton": {
-      "phetioDocumentation": "Progress the simulation a single model step backwards.",
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton": {
+      "phetioDocumentation": "Progress the simulation a single model step forwards.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -5214,7 +5214,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.enabledProperty": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5227,7 +5227,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.firedEmitter": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5240,7 +5240,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.opacityProperty": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5253,7 +5253,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pickableProperty": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5266,7 +5266,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pressListener.pressAction": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5279,7 +5279,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pressListener.releaseAction": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5292,7 +5292,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.visibleProperty": {
+    "energyFormsAndChanges.introScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5309,7 +5309,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
@@ -9833,7 +9833,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
@@ -10037,8 +10037,8 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton": {
-      "phetioDocumentation": "Progress the simulation a single model step backwards.",
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton": {
+      "phetioDocumentation": "Progress the simulation a single model step forwards.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -10050,7 +10050,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.enabledProperty": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10063,7 +10063,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.firedEmitter": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.firedEmitter": {
       "phetioDocumentation": "Emits when the button is fired No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10076,7 +10076,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.opacityProperty": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10089,7 +10089,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pickableProperty": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10102,7 +10102,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pressListener.pressAction": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10115,7 +10115,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.pressListener.releaseAction": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10128,7 +10128,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepBackwardButton.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.timeControlNode.playPauseStepButtons.stepForwardButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10145,7 +10145,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
-      "phetioFeatured": false,
+      "phetioFeatured": true,
       "phetioHighFrequency": false,
       "phetioIsArchetype": false,
       "phetioPlayback": false,
