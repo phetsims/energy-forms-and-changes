@@ -57,7 +57,8 @@ class EnergyChunkLayer extends Node {
       energyChunkList.addItemRemovedListener( itemRemovedListener );
     };
 
-    // add the named observer function
+    // add the named observer function for existing chunks and new chunks
+    energyChunkList.forEach( chunkAddedListener );
     energyChunkList.addItemAddedListener( chunkAddedListener );
 
     if ( options.parentPositionProperty ) {
