@@ -56,7 +56,8 @@ class GeneratorNode extends MoveFadeModelElementNode {
       font: new PhetFont( 19 ),
       centerX: generatorNode.centerX,
       bottom: generatorNode.bottom - 6,
-      tandem: options.tandem.createTandem( 'labelNode' )
+      tandem: options.tandem.createTandem( 'labelNode' ),
+      maxWidth: 160 // empirially determined
     } );
     const spokesNode = new Image( generatorWheelSpokesImage, {
       centerX: generatorNode.centerX,
