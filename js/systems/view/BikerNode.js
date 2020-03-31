@@ -62,7 +62,7 @@ import cyclistTorsoTired2 from '../../../images/cyclist_torso_tired_2_png.js';
 import cyclistTorsoTired3 from '../../../images/cyclist_torso_tired_3_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Biker from '../model/Biker.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';

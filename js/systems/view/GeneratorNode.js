@@ -21,7 +21,7 @@ import generatorWheelSpokesImage from '../../../images/generator_wheel_spokes_pn
 import wireBottomLeftImage from '../../../images/wire_bottom_left_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Generator from '../model/Generator.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';

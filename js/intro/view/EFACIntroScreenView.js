@@ -52,7 +52,7 @@ import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperature
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import AirNode from './AirNode.js';

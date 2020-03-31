@@ -31,7 +31,7 @@ import ironTextureTopImage from '../../../images/iron_texture_top_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType from '../model/BlockType.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';

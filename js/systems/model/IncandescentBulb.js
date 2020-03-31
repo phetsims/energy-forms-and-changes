@@ -9,7 +9,7 @@
 
 import Image from '../../../../scenery/js/nodes/Image.js';
 import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightBulb from './LightBulb.js';
 

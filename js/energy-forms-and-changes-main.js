@@ -11,7 +11,7 @@
 import Sim from '../../joist/js/Sim.js';
 import SimLauncher from '../../joist/js/SimLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import energyFormsAndChangesStrings from './energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from './energyFormsAndChangesStrings.js';
 import EFACIntroScreen from './intro/EFACIntroScreen.js';
 import SystemsScreen from './systems/SystemsScreen.js';
 

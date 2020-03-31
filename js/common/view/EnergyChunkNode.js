@@ -20,7 +20,7 @@ import hiddenEnergyImage from '../../../images/energy_hidden_png.js';
 import lightEnergyImage from '../../../images/energy_light_png.js';
 import mechanicalEnergyImage from '../../../images/energy_mechanical_png.js';
 import thermalEnergyImage from '../../../images/energy_thermal_png.js';
-import energyFormsAndChangesStrings from '../../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';

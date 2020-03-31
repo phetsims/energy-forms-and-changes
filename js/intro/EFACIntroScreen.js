@@ -14,7 +14,7 @@ import introScreenIcon from '../../images/intro_screen_icon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';
 import BeakerType from '../common/model/BeakerType.js';
-import energyFormsAndChangesStrings from '../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';

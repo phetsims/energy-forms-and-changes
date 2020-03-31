@@ -14,7 +14,7 @@ import Screen from '../../../joist/js/Screen.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import systemsScreenIcon from '../../images/systems_screen_icon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
-import energyFormsAndChangesStrings from '../energy-forms-and-changes-strings.js';
+import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
