@@ -37,6 +37,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -445,7 +446,7 @@ class EFACIntroScreenView extends ScreenView {
       },
       [ model.beakers.archetype ], {
         tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
-        phetioType: PhetioGroupIO( ReferenceIO ),
+        phetioType: PhetioGroupIO( ReferenceIO( ObjectIO ) ),
         supportsDynamicState: false
       } );
 
