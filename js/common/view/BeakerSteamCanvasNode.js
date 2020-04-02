@@ -76,7 +76,7 @@ class BeakerSteamCanvasNode extends CanvasNode {
     this.mutate( options );
 
     // Preload steam animation after state has been set
-    _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    _.hasIn( window, 'phet.phetio.phetioEngine' ) && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
       this.preloadSteam();
     } );
   }

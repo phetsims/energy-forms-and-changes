@@ -75,7 +75,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
     } );
 
     // Check if any sensors should start following an element after being set by state
-    _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    _.hasIn( window, 'phet.phetio.phetioEngine' ) && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
       followElements();
     } );
   }
