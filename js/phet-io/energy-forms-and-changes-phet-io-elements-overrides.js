@@ -1,5 +1,5 @@
 /* eslint-disable */
-window.phet.phetio.preload.phetioElementsOverrides =
+window.phet.preloads.phetio.phetioElementsOverrides =
   {
     "energyFormsAndChanges.introScreen.model.beakerGroup.archetype.energyProperty": {
       "phetioFeatured": true
