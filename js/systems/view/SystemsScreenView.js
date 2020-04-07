@@ -71,14 +71,14 @@ class SystemsScreenView extends ScreenView {
     // @private {SystemsModel}
     this.model = model;
 
-    // a11y - the screen summary to be read by assistive technology
+    // pdom - the screen summary to be read by assistive technology
     this.addChild( new Node( {
       tagName: 'div',
       innerContent: energyFormsAndChangesStrings.a11y.systemsScreenInteractionHint,
       descriptionContent: energyFormsAndChangesStrings.a11y.systemsScreenSummaryDescription
     } ) );
 
-    // a11y - a description of the current configuration of the energy system to be read by assistive technology
+    // pdom - a description of the current configuration of the energy system to be read by assistive technology
     const energySystemConfigDescription = new Node( {
       tagName: 'h3',
       innerContent: energyFormsAndChangesStrings.a11y.energySystem,
