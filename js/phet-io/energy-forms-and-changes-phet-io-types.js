@@ -1193,16 +1193,16 @@ window.phet.preloads.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PhetioGroupIO<NodeIO>"
     },
-    "PhetioGroupIO<ReferenceIO>": {
+    "PhetioGroupIO<ReferenceIO<ObjectIO>>": {
       "documentation": "An array that sends notifications when its values have changed.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "parameterTypes": [
-        "ReferenceIO"
+        "ReferenceIO<ObjectIO>"
       ],
       "supertype": "ObjectIO",
-      "typeName": "PhetioGroupIO<ReferenceIO>"
+      "typeName": "PhetioGroupIO<ReferenceIO<ObjectIO>>"
     },
     "PropertyIO<BooleanIO>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
@@ -1784,13 +1784,13 @@ window.phet.preloads.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "RangeIO"
     },
-    "ReferenceIO": {
-      "documentation": "Uses reference identity for toStateObject/fromStateObject and validates based on its parameter IO Type.",
+    "ReferenceIO<ObjectIO>": {
+      "documentation": "Uses reference identity for serializing and deserializing, and validates based on its parameter IO Type.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "supertype": "ObjectIO",
-      "typeName": "ReferenceIO"
+      "typeName": "ReferenceIO<ObjectIO>"
     },
     "RichTextIO": {
       "documentation": "The tandem IO type for the scenery RichText node",
@@ -1824,7 +1824,7 @@ window.phet.preloads.phetio.phetioTypes = assert &&
       "events": [],
       "methodOrder": [],
       "methods": {},
-      "supertype": "ReferenceIO",
+      "supertype": "ReferenceIO<ObjectIO>",
       "typeName": "ScreenIO"
     },
     "SliderIO": {

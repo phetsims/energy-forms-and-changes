@@ -2664,7 +2664,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.leftBurner.heatCoolLevelProperty": {
       "phetioDocumentation": "the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating",
@@ -2716,7 +2716,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.rightBurner.heatCoolLevelProperty": {
       "phetioDocumentation": "the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating",
@@ -2755,7 +2755,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer1.activeProperty": {
       "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
@@ -2846,7 +2846,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer2.activeProperty": {
       "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
@@ -2937,7 +2937,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer3.activeProperty": {
       "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
@@ -3028,7 +3028,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.model.thermometer4.activeProperty": {
       "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
@@ -3132,7 +3132,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": false,
       "phetioStudioControl": true,
-      "phetioTypeName": "PhetioGroupIO<ReferenceIO>"
+      "phetioTypeName": "PhetioGroupIO<ReferenceIO<ObjectIO>>"
     },
     "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype": {
       "phetioDocumentation": "",
@@ -3145,7 +3145,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.inputListener.dragAction": {
       "phetioDocumentation": "Emits whenever a drag occurs with an SceneryEventIO argument. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
@@ -5823,7 +5823,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.systemsScreen.model.energyUsers.beakerHeater.thermometer.activeProperty": {
       "phetioDocumentation": "whether the thermometer is active. thermometers are active when not in the storage area, regardless of whether the sim is paused",
@@ -9385,7 +9385,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "ReferenceIO"
+      "phetioTypeName": "ReferenceIO<ObjectIO>"
     },
     "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelNode": {
       "phetioDocumentation": "",
