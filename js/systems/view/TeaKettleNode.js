@@ -95,15 +95,15 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
     // since the gas pipes are part of the heater/coolers, link their NodeIO Properties to listen to the heater/cooler's
     // NodeIO Properties
-    heaterCoolerFront.on( 'opacity', () => {
+    heaterCoolerFront.opacityProperty.lazyLink( () => {
       leftGasPipe.opacity = heaterCoolerFront.opacity;
       rightGasPipe.opacity = heaterCoolerFront.opacity;
     } );
-    heaterCoolerFront.on( 'pickability', () => {
+    heaterCoolerFront.pickableProperty.lazyLink( () => {
       leftGasPipe.pickable = heaterCoolerFront.pickable;
       rightGasPipe.pickable = heaterCoolerFront.pickable;
     } );
-    heaterCoolerFront.on( 'visibility', () => {
+    heaterCoolerFront.visibleProperty.lazyLink( () => {
       leftGasPipe.visible = heaterCoolerFront.visible;
       rightGasPipe.visible = heaterCoolerFront.visible;
     } );

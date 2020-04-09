@@ -70,7 +70,7 @@ class EnergySystemElementSelector extends Panel {
 
     // link the visibility of the buttons to their corresponding system elements, see https://github.com/phetsims/energy-forms-and-changes/issues/305
     buttonGroup.children.forEach( ( button, index ) => {
-      button.on( 'visibility', () => {
+      button.visibleProperty.lazyLink( () => {
         carousel.managedElements[ index ].visibleProperty.value = button.visible;
       } );
     } );

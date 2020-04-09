@@ -182,13 +182,13 @@ class EFACIntroScreenView extends ScreenView {
         bottom: node.bottom - 6,
         scale: 0.4
       } );
-      node.on( 'opacity', () => {
+      node.opacityProperty.lazyLink( () => {
         gasPipeNode.opacity = node.opacity;
       } );
-      node.on( 'pickability', () => {
+      node.pickableProperty.lazyLink( () => {
         gasPipeNode.pickable = node.pickable;
       } );
-      node.on( 'visibility', () => {
+      node.visibleProperty.lazyLink( () => {
         gasPipeNode.visible = node.visible;
       } );
 
