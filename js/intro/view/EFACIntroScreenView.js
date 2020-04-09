@@ -16,6 +16,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import flameImage from '../../../../scenery-phet/images/flame_png.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
@@ -53,8 +54,8 @@ import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperature
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
@@ -63,7 +64,6 @@ import BlockNode from './BlockNode.js';
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
 const linkHeatersString = energyFormsAndChangesStrings.linkHeaters;
 const oliveOilString = energyFormsAndChangesStrings.oliveOil;
-const waterString = energyFormsAndChangesStrings.water;
 
 // constants
 const EDGE_INSET = 10; // screen edge padding, in screen coordinates
@@ -432,16 +432,22 @@ class EFACIntroScreenView extends ScreenView {
 
     // @private {PhetioGroup.<BeakerContainerView>}
     this.beakerViews = new PhetioGroup( ( tandem, beaker ) => {
-        const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+        let options = {
+          tandem: tandem,
+          phetioDynamicElement: true
+        };
+        if ( beaker.beakerType === BeakerType.OLIVE_OIL ) {
+          options = merge( {
+            label: oliveOilString
+          }, options );
+        }
+
         return new BeakerContainerView(
           beaker,
           model,
           modelViewTransform,
-          constrainMovableElementMotion, {
-            label: label,
-            tandem: tandem,
-            phetioDynamicElement: true
-          }
+          constrainMovableElementMotion,
+          options
         );
       },
       [ model.beakers.archetype ], {
@@ -449,6 +455,8 @@ class EFACIntroScreenView extends ScreenView {
         phetioType: PhetioGroupIO( ReferenceIO( ObjectIO ) ),
         supportsDynamicState: false
       } );
+
+    console.log( 'Trying using water\'s default option' );
 
     const beakerListener = addedBeaker => {
       const beakerView = this.beakerViews.createCorrespondingGroupMember( addedBeaker, addedBeaker );
