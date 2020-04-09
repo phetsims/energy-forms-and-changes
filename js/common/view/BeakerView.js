@@ -216,7 +216,7 @@ class BeakerView extends PhetioObject {
       maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
       tandem: options.tandem.createTandem( 'labelNode' )
     } );
-    console.log( 'Trying RichText' );
+
     labelNode.translation = new Vector2(
       beakerBounds.centerX - labelNode.bounds.width / 2,
       beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
