@@ -23,7 +23,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -211,11 +211,12 @@ class BeakerView extends PhetioObject {
     this.backNode.pickable = false;
 
     // add the label, positioning it just below the front, top water line
-    const labelNode = new Text( options.label, {
+    const labelNode = new RichText( options.label, {
       font: LABEL_FONT,
       maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
       tandem: options.tandem.createTandem( 'labelNode' )
     } );
+    console.log( 'Trying RichText' );
     labelNode.translation = new Vector2(
       beakerBounds.centerX - labelNode.bounds.width / 2,
       beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
