@@ -36,7 +36,7 @@ const EFACQueryParameters = QueryStringMachine.getAll( {
   showSpeedControls: { type: 'flag' },
 
   // make the first screen burners sticky
-  // For internal use only, not public facing.
+  // @public, see https://github.com/phetsims/energy-forms-and-changes/issues/232
   stickyBurners: { type: 'flag' },
 
   // force the energy chunk distributor to use a particular algorithm
@@ -53,7 +53,7 @@ const EFACQueryParameters = QueryStringMachine.getAll( {
   },
 
   // number of burners to create on startup
-  // public facing for phet-io clients
+  // @public, for phet-io clients
   burners: {
     type: 'number',
     defaultValue: EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS,
@@ -64,7 +64,7 @@ const EFACQueryParameters = QueryStringMachine.getAll( {
   },
 
   // select the startup block configuration
-  // public facing for phet-io clients
+  // @public, for phet-io clients
   elements: {
     type: 'array',
     defaultValue: defaultElements,
