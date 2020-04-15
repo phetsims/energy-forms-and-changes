@@ -1990,19 +1990,6 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<ScreenIO>"
     },
-    "energyFormsAndChanges.homeScreen.nameProperty": {
-      "phetioDocumentation": "The name of the screen. Changing this value will update the screen name for the screen's corresponding button on the navigation bar and home screen, if they exist. May be null for single-screen simulations.",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": true,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<NullableIO<StringIO>>"
-    },
     "energyFormsAndChanges.homeScreen.view": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -3109,7 +3096,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.introScreen.nameProperty": {
-      "phetioDocumentation": "The name of the screen. Changing this value will update the screen name for the screen's corresponding button on the navigation bar and home screen, if they exist. May be null for single-screen simulations.",
+      "phetioDocumentation": "The name of the screen. Changing this value will update the screen name for the screen's corresponding button on the navigation bar and home screen, if they exist.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": true,
@@ -6138,7 +6125,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "energyFormsAndChanges.systemsScreen.nameProperty": {
-      "phetioDocumentation": "The name of the screen. Changing this value will update the screen name for the screen's corresponding button on the navigation bar and home screen, if they exist. May be null for single-screen simulations.",
+      "phetioDocumentation": "The name of the screen. Changing this value will update the screen name for the screen's corresponding button on the navigation bar and home screen, if they exist.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": true,
