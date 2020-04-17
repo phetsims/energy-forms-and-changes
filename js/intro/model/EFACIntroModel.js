@@ -168,7 +168,7 @@ class EFACIntroModel {
       } );
 
     blocksToCreate.forEach( blockType => {
-      this.blocks.createNextMember( blockType, movableElementGroundSpotXPositions.shift() );
+      this.blocks.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
     } );
 
     // ensure any created beakers are initialized to the right of the burner(s)
@@ -201,7 +201,7 @@ class EFACIntroModel {
 
     // create any specified beakers
     beakersToCreate.forEach( beakerType => {
-      this.beakers.createNextMember( beakerType, movableElementGroundSpotXPositions.shift() );
+      this.beakers.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
     } );
 
     // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
