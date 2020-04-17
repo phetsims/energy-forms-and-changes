@@ -419,16 +419,16 @@ class EFACIntroScreenView extends ScreenView {
       blockLayer.addChild( blockNode );
 
       // Add the removal listener for if and when this electric field sensor is removed from the model.
-      model.blocks.addMemberDisposedListener( function removalListener( removedBlock ) {
+      model.blocks.elementDisposedEmitter.addListener( function removalListener( removedBlock ) {
         if ( removedBlock === addedBlock ) {
           // blockNode.dispose();
-          model.blocks.removeMemberDisposedListener( removalListener );
+          model.blocks.elementDisposedEmitter.removeListener( removalListener );
         }
       } );
     };
 
     model.blocks.forEach( blockListener );
-    model.blocks.addMemberCreatedListener( blockListener );
+    model.blocks.elementCreatedEmitter.addListener( blockListener );
 
     // @private {PhetioGroup.<BeakerContainerView>}
     this.beakerViews = new PhetioGroup( ( tandem, beaker ) => {
@@ -458,16 +458,16 @@ class EFACIntroScreenView extends ScreenView {
       beakerGrabLayer.addChild( beakerView.grabNode );
 
       // Add the removal listener for if and when this electric field sensor is removed from the model.
-      model.beakers.addMemberDisposedListener( function removalListener( removedBeaker ) {
+      model.beakers.elementDisposedEmitter.addListener( function removalListener( removedBeaker ) {
         if ( removedBeaker === addedBeaker ) {
           // beakerNode.dispose();
-          model.beakers.removeMemberDisposedListener( removalListener );
+          model.beakers.elementDisposedEmitter.removeListener( removalListener );
         }
       } );
     };
 
     model.beakers.forEach( beakerListener );
-    model.beakers.addMemberCreatedListener( beakerListener );
+    model.beakers.elementCreatedEmitter.addListener( beakerListener );
 
     // the thermometer layer needs to be above the movable objects
     const thermometerLayer = new Node();
