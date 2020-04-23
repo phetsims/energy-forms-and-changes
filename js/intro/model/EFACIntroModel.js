@@ -179,7 +179,7 @@ class EFACIntroModel {
       );
 
     // @public {PhetioGroup.<BeakerContainer>}
-    this.beakers = new PhetioGroup( ( tandem, beakerType, initialXPosition ) => {
+    this.beakerGroup = new PhetioGroup( ( tandem, beakerType, initialXPosition ) => {
         return new BeakerContainer(
           new Vector2( initialXPosition, 0 ),
           BEAKER_WIDTH,
@@ -201,7 +201,7 @@ class EFACIntroModel {
 
     // create any specified beakers
     beakersToCreate.forEach( beakerType => {
-      this.beakers.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
+      this.beakerGroup.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
     } );
 
     // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
@@ -233,7 +233,7 @@ class EFACIntroModel {
       if ( this.blockGroup.length ) {
         thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
-          this.beakers.forEach( beaker => {
+          this.beakerGroup.forEach( beaker => {
             const blockWidthIncludingPerspective = this.blockGroup.get( 0 ).getProjectedShape().bounds.width;
 
             const xRange = new Range(
@@ -301,7 +301,7 @@ class EFACIntroModel {
 
   // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
   get thermalContainers() {
-    return [ ...this.blockGroup.array, ...this.beakers.array ];
+    return [ ...this.blockGroup.array, ...this.beakerGroup.array ];
   }
 
   /**
@@ -333,7 +333,7 @@ class EFACIntroModel {
     this.blockGroup.forEach( block => {
       block.reset();
     } );
-    this.beakers.forEach( beaker => {
+    this.beakerGroup.forEach( beaker => {
       beaker.reset();
     } );
     this.thermometers.forEach( thermometer => {
@@ -390,7 +390,7 @@ class EFACIntroModel {
     } );
 
     // update the fluid level in the beaker, which could be displaced by one or more of the blocks
-    this.beakers.forEach( beaker => {
+    this.beakerGroup.forEach( beaker => {
       beaker.updateFluidDisplacement( this.blockGroup.array.map( block => block.getBounds() ) );
     } );
 
@@ -444,7 +444,7 @@ class EFACIntroModel {
 
       // detect elements that are immersed in a beaker and don't allow them to exchange energy directly with the air
       let immersedInBeaker = false;
-      this.beakers.forEach( beaker => {
+      this.beakerGroup.forEach( beaker => {
         if ( this.isImmersedIn( container1, beaker ) ) {
 
           // this model element is immersed in the beaker
@@ -839,8 +839,8 @@ class EFACIntroModel {
     }
 
     // test if this point is in any beaker's fluid
-    for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-      const beaker = this.beakers.get( i );
+    for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
+      const beaker = this.beakerGroup.get( i );
       if ( beaker.thermalContactArea.containsPoint( position ) ) {
         sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
         sensedElementColorProperty.set( beaker.fluidColor );
@@ -852,8 +852,8 @@ class EFACIntroModel {
     // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
     // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
     // detect the beaker body first
-    for ( let i = 0; i < this.beakers.length && !temperatureAndColorAndNameUpdated; i++ ) {
-      const beaker = this.beakers.get( i );
+    for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
+      const beaker = this.beakerGroup.get( i );
       if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
         sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
         sensedElementColorProperty.set( beaker.steamColor );

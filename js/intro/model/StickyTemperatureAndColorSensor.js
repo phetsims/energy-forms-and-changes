@@ -36,7 +36,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
       } );
 
       if ( !this.elementFollower.isFollowing() ) {
-        model.beakers.forEach( beaker => {
+        model.beakerGroup.forEach( beaker => {
           if ( beaker.thermalContactArea.containsPoint( this.positionProperty.value ) ) {
 
             // stick to this beaker
@@ -63,7 +63,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
     this.sensedElementColorProperty.link( () => {
       if ( this.elementFollower.isFollowing() ) {
-        model.beakers.forEach( beaker => {
+        model.beakerGroup.forEach( beaker => {
           if ( beaker.bounds.containsPoint( this.positionProperty.value ) &&
                !beaker.thermalContactArea.containsPoint( this.positionProperty.value ) ) {
 

@@ -386,7 +386,7 @@ class EFACIntroScreenView extends ScreenView {
       const viewAndModelConstrainedPosition = efacPositionConstrainer.constrainPosition(
         modelElement,
         viewConstrainedPosition,
-        model.beakers,
+        model.beakerGroup,
         model.blockGroup,
         this.burnerBlockingRect
       );
@@ -444,7 +444,7 @@ class EFACIntroScreenView extends ScreenView {
           }
         );
       },
-      [ model.beakers.archetype ], {
+      [ model.beakerGroup.archetype ], {
         tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
         phetioType: PhetioGroupIO( ReferenceIO( ObjectIO ) ),
         supportsDynamicState: false
@@ -458,16 +458,16 @@ class EFACIntroScreenView extends ScreenView {
       beakerGrabLayer.addChild( beakerView.grabNode );
 
       // Add the removal listener for if and when this electric field sensor is removed from the model.
-      model.beakers.elementDisposedEmitter.addListener( function removalListener( removedBeaker ) {
+      model.beakerGroup.elementDisposedEmitter.addListener( function removalListener( removedBeaker ) {
         if ( removedBeaker === addedBeaker ) {
           // beakerNode.dispose();
-          model.beakers.elementDisposedEmitter.removeListener( removalListener );
+          model.beakerGroup.elementDisposedEmitter.removeListener( removalListener );
         }
       } );
     };
 
-    model.beakers.forEach( beakerListener );
-    model.beakers.elementCreatedEmitter.addListener( beakerListener );
+    model.beakerGroup.forEach( beakerListener );
+    model.beakerGroup.elementCreatedEmitter.addListener( beakerListener );
 
     // the thermometer layer needs to be above the movable objects
     const thermometerLayer = new Node();
@@ -668,12 +668,12 @@ class EFACIntroScreenView extends ScreenView {
 
     // updates the Z-order of the beakers whenever their position changes
     const beakerChangeListener = () => {
-      if ( model.beakers.get( 0 ).getBounds().minY >= model.beakers.get( 1 ).getBounds().maxY ) {
+      if ( model.beakerGroup.get( 0 ).getBounds().minY >= model.beakerGroup.get( 1 ).getBounds().maxY ) {
         this.beakerViews.get( 0 ).frontNode.moveToFront();
         this.beakerViews.get( 0 ).backNode.moveToFront();
         this.beakerViews.get( 0 ).grabNode.moveToFront();
       }
-      else if ( model.beakers.get( 1 ).getBounds().minY >= model.beakers.get( 0 ).getBounds().maxY ) {
+      else if ( model.beakerGroup.get( 1 ).getBounds().minY >= model.beakerGroup.get( 0 ).getBounds().maxY ) {
         this.beakerViews.get( 1 ).frontNode.moveToFront();
         this.beakerViews.get( 1 ).backNode.moveToFront();
         this.beakerViews.get( 1 ).grabNode.moveToFront();
@@ -681,14 +681,14 @@ class EFACIntroScreenView extends ScreenView {
     };
 
     // no need to link z-order-changing listener if there is only one beaker
-    if ( model.beakers.length > 1 ) {
+    if ( model.beakerGroup.length > 1 ) {
 
       // this particular listener could be generalized to support more than 2 beakers (see the block listener above),
       // but since other code in this sim limits the number of beakers to 2, i (@chrisklus) think it's better to
       // leave this listener as simple as it is, since a general version could only worsen performance.
-      assert && assert( model.beakers.length <= 2, 'Only 2 beakers are allowed: ' + model.beakers.length );
+      assert && assert( model.beakerGroup.length <= 2, 'Only 2 beakers are allowed: ' + model.beakerGroup.length );
 
-      model.beakers.forEach( beaker => {
+      model.beakerGroup.forEach( beaker => {
         beaker.positionProperty.link( beakerChangeListener );
       } );
     }
