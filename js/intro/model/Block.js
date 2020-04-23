@@ -33,14 +33,14 @@ const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
 const BLOCK_COMPOSITION = {};
 BLOCK_COMPOSITION[ BlockType.IRON ] = {
   color: new Color( 150, 150, 150 ),
-  density: 7800,
-  specificHeat: 450,
+  density: EFACConstants.IRON_DENSITY,
+  specificHeat: EFACConstants.IRON_SPECIFIC_HEAT,
   energyContainerCategory: EnergyContainerCategory.IRON
 };
 BLOCK_COMPOSITION[ BlockType.BRICK ] = {
   color: new Color( 223, 22, 12 ),
-  density: 3300,
-  specificHeat: 840,
+  density: EFACConstants.BRICK_DENSITY,
+  specificHeat: EFACConstants.BRICK_SPECIFIC_HEAT,
   energyContainerCategory: EnergyContainerCategory.BRICK
 };
 
