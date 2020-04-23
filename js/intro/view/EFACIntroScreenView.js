@@ -431,7 +431,7 @@ class EFACIntroScreenView extends ScreenView {
     model.blockGroup.elementCreatedEmitter.addListener( blockListener );
 
     // @private {PhetioGroup.<BeakerContainerView>}
-    this.beakerViews = new PhetioGroup( ( tandem, beaker ) => {
+    this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
         const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
         return new BeakerContainerView(
           beaker,
@@ -451,11 +451,11 @@ class EFACIntroScreenView extends ScreenView {
       } );
 
     const beakerListener = addedBeaker => {
-      const beakerView = this.beakerViews.createCorrespondingGroupElement( addedBeaker, addedBeaker );
+      const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker, addedBeaker );
 
-      beakerFrontLayer.addChild( beakerView.frontNode );
-      beakerBackLayer.addChild( beakerView.backNode );
-      beakerGrabLayer.addChild( beakerView.grabNode );
+      beakerFrontLayer.addChild( beakerProxyNode.frontNode );
+      beakerBackLayer.addChild( beakerProxyNode.backNode );
+      beakerGrabLayer.addChild( beakerProxyNode.grabNode );
 
       // Add the removal listener for if and when this electric field sensor is removed from the model.
       model.beakerGroup.elementDisposedEmitter.addListener( function removalListener( removedBeaker ) {
@@ -669,14 +669,14 @@ class EFACIntroScreenView extends ScreenView {
     // updates the Z-order of the beakers whenever their position changes
     const beakerChangeListener = () => {
       if ( model.beakerGroup.get( 0 ).getBounds().minY >= model.beakerGroup.get( 1 ).getBounds().maxY ) {
-        this.beakerViews.get( 0 ).frontNode.moveToFront();
-        this.beakerViews.get( 0 ).backNode.moveToFront();
-        this.beakerViews.get( 0 ).grabNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 0 ).frontNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 0 ).backNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 0 ).grabNode.moveToFront();
       }
       else if ( model.beakerGroup.get( 1 ).getBounds().minY >= model.beakerGroup.get( 0 ).getBounds().maxY ) {
-        this.beakerViews.get( 1 ).frontNode.moveToFront();
-        this.beakerViews.get( 1 ).backNode.moveToFront();
-        this.beakerViews.get( 1 ).grabNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 1 ).frontNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 1 ).backNode.moveToFront();
+        this.beakerProxyNodeGroup.get( 1 ).grabNode.moveToFront();
       }
     };
 
@@ -768,8 +768,8 @@ class EFACIntroScreenView extends ScreenView {
       listener: () => {
         model.reset();
         returnAllThermometersToStorageArea();
-        this.beakerViews.forEach( beakerView => {
-          beakerView.reset();
+        this.beakerProxyNodeGroup.forEach( beakerProxyNode => {
+          beakerProxyNode.reset();
         } );
       },
       radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
@@ -855,8 +855,8 @@ class EFACIntroScreenView extends ScreenView {
    * @public
    */
   stepView( dt ) {
-    this.beakerViews.forEach( beakerView => {
-      beakerView.step( dt );
+    this.beakerProxyNodeGroup.forEach( beakerProxyNode => {
+      beakerProxyNode.step( dt );
     } );
   }
 

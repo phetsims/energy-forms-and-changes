@@ -92,15 +92,15 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
     );
 
     // @public (read-only) {BeakerView}
-    this.beakerView = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT, {
+    this.beakerProxyNode = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT, {
       tandem: tandem.createTandem( 'beakerProxyNode' )
     } );
 
     // from here on, the beakerView's position is updated by this, BeakerHeater
-    this.beakerView.setFollowPosition( false );
+    this.beakerProxyNode.setFollowPosition( false );
 
     // back of the beaker
-    this.addChild( this.beakerView.backNode );
+    this.addChild( this.beakerProxyNode.backNode );
 
     // between the front and back of the beaker we put a layer that will hold the radiated energy chunks
     this.addChild( new EnergyChunkLayer(
@@ -111,7 +111,7 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
     ) );
 
     // front of the beaker
-    this.addChild( this.beakerView.frontNode );
+    this.addChild( this.beakerProxyNode.frontNode );
 
     // create a scale-only MVT, since several sub-elements are relatively positioned
     const scaleOnlyMVT = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
@@ -142,14 +142,14 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
    * @public
    */
   step( dt ) {
-    this.beakerView.step( dt );
+    this.beakerProxyNode.step( dt );
   }
 
   /**
    * @public
    */
   reset() {
-    this.beakerView.reset();
+    this.beakerProxyNode.reset();
   }
 }
 
