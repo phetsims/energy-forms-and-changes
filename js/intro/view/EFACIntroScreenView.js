@@ -395,7 +395,7 @@ class EFACIntroScreenView extends ScreenView {
       return viewAndModelConstrainedPosition;
     };
 
-    const blockNodes = new PhetioGroup( ( tandem, block ) => {
+    const blockNodeGroup = new PhetioGroup( ( tandem, block ) => {
         return new BlockNode(
           block,
           modelViewTransform,
@@ -414,7 +414,7 @@ class EFACIntroScreenView extends ScreenView {
       } );
 
     const blockListener = addedBlock => {
-      const blockNode = blockNodes.createCorrespondingGroupElement( addedBlock, addedBlock );
+      const blockNode = blockNodeGroup.createCorrespondingGroupElement( addedBlock, addedBlock );
 
       blockLayer.addChild( blockNode );
 
@@ -649,7 +649,7 @@ class EFACIntroScreenView extends ScreenView {
       } );
 
       blocks.forEach( block => {
-        blockNodes.forEach( blockNode => {
+        blockNodeGroup.forEach( blockNode => {
           if ( blockNode.block === block ) {
             // @samreid and @chrisklus looked for any performance bottlenecks caused by re-layering every frame but
             // could not find anything so we suspect Scenery know not to if the order is already correct
