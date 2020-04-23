@@ -387,7 +387,7 @@ class EFACIntroScreenView extends ScreenView {
         modelElement,
         viewConstrainedPosition,
         model.beakers,
-        model.blocks,
+        model.blockGroup,
         this.burnerBlockingRect
       );
 
@@ -407,7 +407,7 @@ class EFACIntroScreenView extends ScreenView {
           }
         );
       },
-      [ model.blocks.archetype ], {
+      [ model.blockGroup.archetype ], {
         tandem: tandem.createTandem( 'blockNodeGroup' ),
         phetioType: PhetioGroupIO( NodeIO ),
         supportsDynamicState: false
@@ -419,16 +419,16 @@ class EFACIntroScreenView extends ScreenView {
       blockLayer.addChild( blockNode );
 
       // Add the removal listener for if and when this electric field sensor is removed from the model.
-      model.blocks.elementDisposedEmitter.addListener( function removalListener( removedBlock ) {
+      model.blockGroup.elementDisposedEmitter.addListener( function removalListener( removedBlock ) {
         if ( removedBlock === addedBlock ) {
           // blockNode.dispose();
-          model.blocks.elementDisposedEmitter.removeListener( removalListener );
+          model.blockGroup.elementDisposedEmitter.removeListener( removalListener );
         }
       } );
     };
 
-    model.blocks.forEach( blockListener );
-    model.blocks.elementCreatedEmitter.addListener( blockListener );
+    model.blockGroup.forEach( blockListener );
+    model.blockGroup.elementCreatedEmitter.addListener( blockListener );
 
     // @private {PhetioGroup.<BeakerContainerView>}
     this.beakerViews = new PhetioGroup( ( tandem, beaker ) => {
@@ -625,7 +625,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // updates the Z-order of the blocks when their position changes
     const blockChangeListener = position => {
-      const blocks = [ ...model.blocks.array ];
+      const blocks = [ ...model.blockGroup.array ];
 
       blocks.sort( ( a, b ) => {
         // a block that's completely to the right of another block should always be in front
@@ -660,8 +660,8 @@ class EFACIntroScreenView extends ScreenView {
     };
 
     // no need to link z-order-changing listener if there is only one block
-    if ( model.blocks.length > 1 ) {
-      model.blocks.forEach( block => {
+    if ( model.blockGroup.length > 1 ) {
+      model.blockGroup.forEach( block => {
         block.positionProperty.link( blockChangeListener );
       } );
     }

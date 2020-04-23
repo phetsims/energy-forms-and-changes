@@ -59,9 +59,9 @@ class BeakerContainerView extends BeakerView {
     // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
     // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
     // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
-    if ( model.blocks.length ) {
-      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blocks.get( 0 ).width );
-      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blocks.get( 0 ).height );
+    if ( model.blockGroup.length ) {
+      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blockGroup.get( 0 ).width );
+      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blockGroup.get( 0 ).height );
       const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
       this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
     }
@@ -77,13 +77,13 @@ class BeakerContainerView extends BeakerView {
     // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
     // distracting, as though the energy chunks in the beaker are behind the blocks.
     const propertiesThatInfluenceClipArea = [];
-    model.blocks.forEach( block => {
+    model.blockGroup.forEach( block => {
       propertiesThatInfluenceClipArea.push( block.positionProperty );
     } );
     propertiesThatInfluenceClipArea.push( beaker.positionProperty );
     propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
     Property.multilink( propertiesThatInfluenceClipArea, () => {
-      this.updateEnergyChunkClipArea( beaker, model.blocks, model.energyChunksVisibleProperty.value, modelViewTransform );
+      this.updateEnergyChunkClipArea( beaker, model.blockGroup, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
 
     // add an input listener to make this draggable

@@ -152,7 +152,7 @@ class EFACIntroModel {
     }
 
     // @public {PhetioGroup.<Block>}
-    this.blocks = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
+    this.blockGroup = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
         return new Block(
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
@@ -168,7 +168,7 @@ class EFACIntroModel {
       } );
 
     blocksToCreate.forEach( blockType => {
-      this.blocks.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
+      this.blockGroup.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
     } );
 
     // ensure any created beakers are initialized to the right of the burner(s)
@@ -184,7 +184,7 @@ class EFACIntroModel {
           new Vector2( initialXPosition, 0 ),
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
-          this.blocks,
+          this.blockGroup,
           this.energyChunksVisibleProperty, {
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
@@ -230,11 +230,11 @@ class EFACIntroModel {
       // Add handling for a special case where the user drops a block in the beaker behind this thermometer. The
       // action is to automatically move the thermometer to a location where it continues to sense the beaker
       // temperature. Not needed if zero blocks are in use. This was requested after interviews.
-      if ( this.blocks.length ) {
+      if ( this.blockGroup.length ) {
         thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
           this.beakers.forEach( beaker => {
-            const blockWidthIncludingPerspective = this.blocks.get( 0 ).getProjectedShape().bounds.width;
+            const blockWidthIncludingPerspective = this.blockGroup.get( 0 ).getProjectedShape().bounds.width;
 
             const xRange = new Range(
               beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
@@ -249,7 +249,7 @@ class EFACIntroModel {
 
             // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
             // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-            if ( _.some( this.blocks.array, checkBlocks ) &&
+            if ( _.some( this.blockGroup.array, checkBlocks ) &&
                  oldColor === beaker.fluidColor &&
                  !thermometer.userControlledProperty.get() &&
                  !beaker.userControlledProperty.get() &&
@@ -301,7 +301,7 @@ class EFACIntroModel {
 
   // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
   get thermalContainers() {
-    return [ ...this.blocks.array, ...this.beakers.array ];
+    return [ ...this.blockGroup.array, ...this.beakers.array ];
   }
 
   /**
@@ -330,7 +330,7 @@ class EFACIntroModel {
     this.burners.forEach( burner => {
       burner.reset();
     } );
-    this.blocks.forEach( block => {
+    this.blockGroup.forEach( block => {
       block.reset();
     } );
     this.beakers.forEach( beaker => {
@@ -391,7 +391,7 @@ class EFACIntroModel {
 
     // update the fluid level in the beaker, which could be displaced by one or more of the blocks
     this.beakers.forEach( beaker => {
-      beaker.updateFluidDisplacement( this.blocks.array.map( block => block.getBounds() ) );
+      beaker.updateFluidDisplacement( this.blockGroup.array.map( block => block.getBounds() ) );
     } );
 
     //=====================================================================
@@ -814,7 +814,7 @@ class EFACIntroModel {
     let temperatureAndColorAndNameUpdated = false;
 
     // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-    const copyOfBlockList = this.blocks.array.slice( 0 );
+    const copyOfBlockList = this.blockGroup.array.slice( 0 );
 
     copyOfBlockList.sort( ( block1, block2 ) => {
       if ( block1.positionProperty.value === block2.positionProperty.value ) {
