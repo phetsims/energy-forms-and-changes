@@ -53,8 +53,8 @@ import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperature
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
@@ -625,7 +625,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // updates the Z-order of the blocks when their position changes
     const blockChangeListener = position => {
-      const blocks = [ ...model.blockGroup.array ];
+      const blocks = [ ...model.blockGroup.getArray() ];
 
       blocks.sort( ( a, b ) => {
         // a block that's completely to the right of another block should always be in front
@@ -668,15 +668,15 @@ class EFACIntroScreenView extends ScreenView {
 
     // updates the Z-order of the beakers whenever their position changes
     const beakerChangeListener = () => {
-      if ( model.beakerGroup.get( 0 ).getBounds().minY >= model.beakerGroup.get( 1 ).getBounds().maxY ) {
-        this.beakerProxyNodeGroup.get( 0 ).frontNode.moveToFront();
-        this.beakerProxyNodeGroup.get( 0 ).backNode.moveToFront();
-        this.beakerProxyNodeGroup.get( 0 ).grabNode.moveToFront();
+      if ( model.beakerGroup.getElement( 0 ).getBounds().minY >= model.beakerGroup.getElement( 1 ).getBounds().maxY ) {
+        this.beakerProxyNodeGroup.getElement( 0 ).frontNode.moveToFront();
+        this.beakerProxyNodeGroup.getElement( 0 ).backNode.moveToFront();
+        this.beakerProxyNodeGroup.getElement( 0 ).grabNode.moveToFront();
       }
-      else if ( model.beakerGroup.get( 1 ).getBounds().minY >= model.beakerGroup.get( 0 ).getBounds().maxY ) {
-        this.beakerProxyNodeGroup.get( 1 ).frontNode.moveToFront();
-        this.beakerProxyNodeGroup.get( 1 ).backNode.moveToFront();
-        this.beakerProxyNodeGroup.get( 1 ).grabNode.moveToFront();
+      else if ( model.beakerGroup.getElement( 1 ).getBounds().minY >= model.beakerGroup.getElement( 0 ).getBounds().maxY ) {
+        this.beakerProxyNodeGroup.getElement( 1 ).frontNode.moveToFront();
+        this.beakerProxyNodeGroup.getElement( 1 ).backNode.moveToFront();
+        this.beakerProxyNodeGroup.getElement( 1 ).grabNode.moveToFront();
       }
     };
 

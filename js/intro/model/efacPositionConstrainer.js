@@ -10,6 +10,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
@@ -32,13 +33,16 @@ const efacPositionConstrainer = {
    * be easy to reuse.
    * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
    * @param {Vector2} proposedPosition - the position where the model element would like to go
-   * @param {PhetioGroup.<BeakerContainer>} beakers - the beakers that are present in the model
-   * @param {PhetioGroup.<Block>} blocks - the blocks that are present in the model
+   * @param {PhetioGroup.<BeakerContainer>} beakerGroup - the beakers that are present in the model
+   * @param {PhetioGroup.<Block>} blockGroup - the blocks that are present in the model
    * @param {Bounds2} burnerBlockingRect - the space occupied by the burners in the model
    * @returns {Vector2} the original proposed position if valid, or alternative position if not
    * @public
    */
-  constrainPosition: ( modelElement, proposedPosition, beakers, blocks, burnerBlockingRect ) => {
+  constrainPosition: ( modelElement, proposedPosition, beakerGroup, blockGroup, burnerBlockingRect ) => {
+
+    assert && assert( beakerGroup instanceof PhetioGroup, 'invalid beakerGroup' );
+    assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
 
     const modelElementPosition = modelElement.positionProperty.get();
 
@@ -73,7 +77,7 @@ const efacPositionConstrainer = {
     );
 
     // now check the model element's motion against each of the beakers
-    beakers.forEach( beaker => {
+    beakerGroup.forEach( beaker => {
 
       if ( beaker === modelElement ) {
 
@@ -133,7 +137,7 @@ const efacPositionConstrainer = {
         // if beaker A is stacked on the current modelElement, get beaker B directly as otherBeaker because currently
         // there can't be more than two beakers. this will need to be generalized to check for each other beaker that is not
         // stacked on this modelElement if the time comes when more than two beakers can exist.
-        const otherBeaker = beakers.get( 1 - beakers.array.indexOf( beaker ) );
+        const otherBeaker = beakerGroup.getElement( 1 - beakerGroup.indexOf( beaker ) );
 
         // a second beaker may not exist
         if ( otherBeaker ) {
@@ -173,7 +177,7 @@ const efacPositionConstrainer = {
     } );
 
     // now check the model element's motion against each of the blocks
-    blocks.forEach( block => {
+    blockGroup.forEach( block => {
 
       if ( block === modelElement ) {
 
@@ -210,9 +214,9 @@ const efacPositionConstrainer = {
           // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
           // handling.
           const perspectiveBlockBounds = Bounds2.createFromPool(
-            blockBounds.minX - blocks.get( 0 ).perspectiveCompensation.x,
+            blockBounds.minX - blockGroup.getElement( 0 ).perspectiveCompensation.x,
             blockBounds.minY,
-            blockBounds.maxX + blocks.get( 0 ).perspectiveCompensation.x,
+            blockBounds.maxX + blockGroup.getElement( 0 ).perspectiveCompensation.x,
             blockBounds.maxY
           );
 

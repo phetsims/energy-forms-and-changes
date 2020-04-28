@@ -17,6 +17,7 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import BeakerView from '../../common/view/BeakerView.js';
@@ -60,8 +61,8 @@ class BeakerContainerView extends BeakerView {
     // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
     // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
     if ( model.blockGroup.length ) {
-      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blockGroup.get( 0 ).width );
-      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blockGroup.get( 0 ).height );
+      this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blockGroup.getElement( 0 ).width );
+      this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blockGroup.getElement( 0 ).height );
       const perspectiveEdgeSize = this.blockWidthInView * BLOCK_PERSPECTIVE_EDGE_PROPORTION;
       this.forwardProjectionVector = new Vector2( -perspectiveEdgeSize / 2, 0 ).rotated( -BLOCK_PERSPECTIVE_ANGLE );
     }
@@ -144,20 +145,21 @@ class BeakerContainerView extends BeakerView {
    * (generally energy chunks) from being rendered in the same place as the blocks. This method can handle any number
    * of blocks stacked in the beaker, but only clips for the bottom two, since the beaker can only fit two blocks,
    * plus a tiny bit of a third.
-   * @param {Block[]} blocks
+   * @param {PhetioGroup.<Block>} blockGroup
    * @param {Shape} clipAreaShape
    * @param {ModelViewTransform2} modelViewTransform
    * @private
    */
-  addProjectedBlocksToClipArea( blocks, clipAreaShape, modelViewTransform ) {
+  addProjectedBlocksToClipArea( blockGroup, clipAreaShape, modelViewTransform ) {
+    assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
 
     // hoisted block variable
     let block;
 
     // if neither of the blocks is in the beaker then there are no "holes" to add, use C-style loop for performance
     let blocksInBeaker = [];
-    for ( let i = 0; i < blocks.length; i++ ) {
-      block = blocks.get( i );
+    for ( let i = 0; i < blockGroup.length; i++ ) {
+      block = blockGroup.getElement( i );
       if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
            this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
         blocksInBeaker.push( block );

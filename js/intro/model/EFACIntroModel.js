@@ -234,7 +234,7 @@ class EFACIntroModel {
         thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
           this.beakerGroup.forEach( beaker => {
-            const blockWidthIncludingPerspective = this.blockGroup.get( 0 ).getProjectedShape().bounds.width;
+            const blockWidthIncludingPerspective = this.blockGroup.getElement( 0 ).getProjectedShape().bounds.width;
 
             const xRange = new Range(
               beaker.getBounds().centerX - blockWidthIncludingPerspective / 2,
@@ -249,7 +249,7 @@ class EFACIntroModel {
 
             // if the new color matches any of the blocks (which are the only things that can go in a beaker), and the
             // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
-            if ( _.some( this.blockGroup.array, checkBlocks ) &&
+            if ( _.some( this.blockGroup.getArray(), checkBlocks ) &&
                  oldColor === beaker.fluidColor &&
                  !thermometer.userControlledProperty.get() &&
                  !beaker.userControlledProperty.get() &&
@@ -301,7 +301,7 @@ class EFACIntroModel {
 
   // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
   get thermalContainers() {
-    return [ ...this.blockGroup.array, ...this.beakerGroup.array ];
+    return [ ...this.blockGroup.getArray(), ...this.beakerGroup.getArray() ];
   }
 
   /**
@@ -391,7 +391,7 @@ class EFACIntroModel {
 
     // update the fluid level in the beaker, which could be displaced by one or more of the blocks
     this.beakerGroup.forEach( beaker => {
-      beaker.updateFluidDisplacement( this.blockGroup.array.map( block => block.getBounds() ) );
+      beaker.updateFluidDisplacement( this.blockGroup.map( block => block.getBounds() ) );
     } );
 
     //=====================================================================
@@ -814,7 +814,7 @@ class EFACIntroModel {
     let temperatureAndColorAndNameUpdated = false;
 
     // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-    const copyOfBlockList = this.blockGroup.array.slice( 0 );
+    const copyOfBlockList = this.blockGroup.getArrayCopy();
 
     copyOfBlockList.sort( ( block1, block2 ) => {
       if ( block1.positionProperty.value === block2.positionProperty.value ) {
@@ -840,7 +840,7 @@ class EFACIntroModel {
 
     // test if this point is in any beaker's fluid
     for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
-      const beaker = this.beakerGroup.get( i );
+      const beaker = this.beakerGroup.getElement( i );
       if ( beaker.thermalContactArea.containsPoint( position ) ) {
         sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
         sensedElementColorProperty.set( beaker.fluidColor );
@@ -853,7 +853,7 @@ class EFACIntroModel {
     // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
     // detect the beaker body first
     for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
-      const beaker = this.beakerGroup.get( i );
+      const beaker = this.beakerGroup.getElement( i );
       if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
         sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
         sensedElementColorProperty.set( beaker.steamColor );
