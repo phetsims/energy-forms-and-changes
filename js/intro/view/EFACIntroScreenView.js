@@ -666,20 +666,6 @@ class EFACIntroScreenView extends ScreenView {
       } );
     }
 
-    // updates the Z-order of the beakers whenever their position changes
-    const beakerChangeListener = () => {
-      if ( model.beakerGroup.getElement( 0 ).getBounds().minY >= model.beakerGroup.getElement( 1 ).getBounds().maxY ) {
-        this.beakerProxyNodeGroup.getElement( 0 ).frontNode.moveToFront();
-        this.beakerProxyNodeGroup.getElement( 0 ).backNode.moveToFront();
-        this.beakerProxyNodeGroup.getElement( 0 ).grabNode.moveToFront();
-      }
-      else if ( model.beakerGroup.getElement( 1 ).getBounds().minY >= model.beakerGroup.getElement( 0 ).getBounds().maxY ) {
-        this.beakerProxyNodeGroup.getElement( 1 ).frontNode.moveToFront();
-        this.beakerProxyNodeGroup.getElement( 1 ).backNode.moveToFront();
-        this.beakerProxyNodeGroup.getElement( 1 ).grabNode.moveToFront();
-      }
-    };
-
     // no need to link z-order-changing listener if there is only one beaker
     if ( model.beakerGroup.length > 1 ) {
 
@@ -688,6 +674,19 @@ class EFACIntroScreenView extends ScreenView {
       // leave this listener as simple as it is, since a general version could only worsen performance.
       assert && assert( model.beakerGroup.length <= 2, 'Only 2 beakers are allowed: ' + model.beakerGroup.length );
 
+      const beakerOneIndex = 0;
+      const beakerTwoIndex = 1;
+
+      // updates the Z-order of the beakers whenever their position changes
+      const beakerChangeListener = () => {
+        if ( model.beakerGroup.getElement( beakerOneIndex ).getBounds().centerY >
+             model.beakerGroup.getElement( beakerTwoIndex ).getBounds().centerY ) {
+          this.beakerProxyNodeGroup.getElement( beakerOneIndex ).moveToFront();
+        }
+        else {
+          this.beakerProxyNodeGroup.getElement( beakerTwoIndex ).moveToFront();
+        }
+      };
       model.beakerGroup.forEach( beaker => {
         beaker.positionProperty.link( beakerChangeListener );
       } );

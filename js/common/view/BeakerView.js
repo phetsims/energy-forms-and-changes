@@ -315,6 +315,16 @@ class BeakerView extends PhetioObject {
   setFollowPosition( followPosition ) {
     this.followPosition = followPosition;
   }
+
+  /**
+   * moves all layers to the front of their respective node layers
+   * @public
+   */
+  moveToFront() {
+    this.backNode.moveToFront();
+    this.frontNode.moveToFront();
+    this.grabNode.moveToFront();
+  }
 }
 
 energyFormsAndChanges.register( 'BeakerView', BeakerView );
