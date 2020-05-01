@@ -414,7 +414,7 @@ class EFACIntroScreenView extends ScreenView {
       } );
 
     const blockListener = addedBlock => {
-      const blockNode = blockNodeGroup.createCorrespondingGroupElement( addedBlock, addedBlock );
+      const blockNode = blockNodeGroup.createCorrespondingGroupElement( addedBlock.tandem.name, addedBlock );
 
       blockLayer.addChild( blockNode );
 
@@ -451,7 +451,7 @@ class EFACIntroScreenView extends ScreenView {
       } );
 
     const beakerListener = addedBeaker => {
-      const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker, addedBeaker );
+      const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker.tandem.name, addedBeaker );
 
       beakerFrontLayer.addChild( beakerProxyNode.frontNode );
       beakerBackLayer.addChild( beakerProxyNode.backNode );
