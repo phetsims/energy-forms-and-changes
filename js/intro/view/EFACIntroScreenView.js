@@ -660,19 +660,19 @@ class EFACIntroScreenView extends ScreenView {
     };
 
     // no need to link z-order-changing listener if there is only one block
-    if ( model.blockGroup.length > 1 ) {
+    if ( model.blockGroup.count > 1 ) {
       model.blockGroup.forEach( block => {
         block.positionProperty.link( blockChangeListener );
       } );
     }
 
     // no need to link z-order-changing listener if there is only one beaker
-    if ( model.beakerGroup.length > 1 ) {
+    if ( model.beakerGroup.count > 1 ) {
 
       // this particular listener could be generalized to support more than 2 beakers (see the block listener above),
       // but since other code in this sim limits the number of beakers to 2, i (@chrisklus) think it's better to
       // leave this listener as simple as it is, since a general version could only worsen performance.
-      assert && assert( model.beakerGroup.length <= 2, 'Only 2 beakers are allowed: ' + model.beakerGroup.length );
+      assert && assert( model.beakerGroup.count <= 2, 'Only 2 beakers are allowed: ' + model.beakerGroup.count );
 
       const beakerOneIndex = 0;
       const beakerTwoIndex = 1;

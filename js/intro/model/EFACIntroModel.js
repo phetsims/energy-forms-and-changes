@@ -230,7 +230,7 @@ class EFACIntroModel {
       // Add handling for a special case where the user drops a block in the beaker behind this thermometer. The
       // action is to automatically move the thermometer to a location where it continues to sense the beaker
       // temperature. Not needed if zero blocks are in use. This was requested after interviews.
-      if ( this.blockGroup.length ) {
+      if ( this.blockGroup.count ) {
         thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
 
           this.beakerGroup.forEach( beaker => {
@@ -839,7 +839,7 @@ class EFACIntroModel {
     }
 
     // test if this point is in any beaker's fluid
-    for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
+    for ( let i = 0; i < this.beakerGroup.count && !temperatureAndColorAndNameUpdated; i++ ) {
       const beaker = this.beakerGroup.getElement( i );
       if ( beaker.thermalContactArea.containsPoint( position ) ) {
         sensedTemperatureProperty.set( beaker.temperatureProperty.get() );
@@ -852,7 +852,7 @@ class EFACIntroModel {
     // test if this point is in any beaker's steam. this check happens separately after all beakers' fluid have been
     // checked because in the case of a beaker body and another beaker's steam overlapping, the thermometer should
     // detect the beaker body first
-    for ( let i = 0; i < this.beakerGroup.length && !temperatureAndColorAndNameUpdated; i++ ) {
+    for ( let i = 0; i < this.beakerGroup.count && !temperatureAndColorAndNameUpdated; i++ ) {
       const beaker = this.beakerGroup.getElement( i );
       if ( beaker.getSteamArea().containsPoint( position ) && beaker.steamingProportion > 0 ) {
         sensedTemperatureProperty.set( beaker.getSteamTemperature( position.y - beaker.getSteamArea().minY ) );
