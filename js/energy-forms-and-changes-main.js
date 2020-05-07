@@ -9,7 +9,7 @@
  */
 
 import Sim from '../../joist/js/Sim.js';
-import SimLauncher from '../../joist/js/SimLauncher.js';
+import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import energyFormsAndChangesStrings from './energyFormsAndChangesStrings.js';
 import EFACIntroScreen from './intro/EFACIntroScreen.js';
@@ -31,7 +31,7 @@ const simOptions = {
   }
 };
 
-SimLauncher.launch( () => {
+simLauncher.launch( () => {
 
   const sim = new Sim( energyFormsAndChangesTitleString, [
     new EFACIntroScreen( tandem.createTandem( 'introScreen' ) ),
