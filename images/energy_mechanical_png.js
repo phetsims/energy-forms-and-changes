@@ -1,7 +1,7 @@
 /* eslint-disable */
-import SimLauncher from '../../joist/js/SimLauncher.js';
+import simLauncher from '../../joist/js/simLauncher.js';
 const image = new Image();
-const unlock = SimLauncher.createLock( image );
+const unlock = simLauncher.createLock( image );
 image.onload = unlock;
 image.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAk5JREFUeNrsl89uElEUxr+ZcWYoDWQGWNpkVrWGqu1CDXVTNe6Kr1D8s9DEhY/QpKkujYnRpX0C9QWsbJSFmoIRtKvuCUQLzgDhz3jOLeAAddOh0cWc5AsTZu75nXMvw/0u8B+FQdog7ZPcKYrzPRyHSZ7rJdI7LiC1cgUXL12GaVAtknTsTmQaWy6XsbPzFt9KRf4qT7pK+umFc8f7p+fmjFu37yKZXEQsZiIaiUBRlGPDJYLzeNtxkM1m8XhrE7ZtcwHLfP9U/7knM+GwsZ65g4WFszBNAzHThEGd+4HLsgRVVdFut3EznYZj23i0tckznCFtD+CZVGoFlmUhFAphhhSNRoQkH9POoSgydF0TS7C2lsab169QKhXXB/BVfujC0jJVKotOuVqOSqXiC+66rphFXdehahpmZ8NYPHee4aveaR8+7Lo98dlqtdDtdn2/PgcHNSQSCZGr1+vR7yn5Z1kmyz18N6YV3AhnPGxsNLP8L/9UAngAD+ABPIAH8JOF857LGt/+/Pg4TsX7udjTPXlHzATfbJKJIJMnrJSmqb7B7GLq9fpQXwqFEXiWLwr5XczPn0Gz2UStVhPGlm2P7MNGMdxxGuh0OqKparWKUvHrwEIPO9/O5T5krl2/gXg8ThX+ogFdMQN+4TJ5Ql7GRqOBz58+Ym/vO9966vXtFmmXffu9+w9EAQMzKfmEs3g5yTTixfNnaDjO0LdPnFjYv7ONZjc7jSAYLWkeudz7iRPLUWe1l6QfJ3BW2+jnP/KsNh5WX34j/7dOfwswAPIy/ltlTuOoAAAAAElFTkSuQmCC';
 export default image;
