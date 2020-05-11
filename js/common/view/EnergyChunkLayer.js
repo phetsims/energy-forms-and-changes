@@ -64,7 +64,7 @@ class EnergyChunkLayer extends Node {
     if ( options.parentPositionProperty ) {
 
       // Since the energy chunk positions are in uncompensated model coordinates, this node must maintain a position
-      // that is offset from the parent in order for the energy chunks to be in the correct location in the view.
+      // that is offset from the parent in order for the energy chunks to be in the correct position in the view.
       options.parentPositionProperty.link( position => {
         this.x = -modelViewTransform.modelToViewX( position.x );
         this.y = -modelViewTransform.modelToViewY( position.y );

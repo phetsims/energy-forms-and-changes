@@ -60,7 +60,7 @@ let performanceMeasurementTaken = false;
 class Beaker extends RectangularThermalMovableModelElement {
 
   /**
-   * @param {Vector2} initialPosition - location where center bottom of beaker will be in model space
+   * @param {Vector2} initialPosition - position where center bottom of beaker will be in model space
    * @param {number} width
    * @param {number} height
    * @param {Property.<boolean>} energyChunksVisibleProperty

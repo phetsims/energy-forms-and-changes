@@ -1,7 +1,7 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
 /**
- * a model element that has a position (a.k.a. a location) which can be changed
+ * a model element that has a position which can be changed
  *
  * @author John Blanco
  * @author Jesse Greenberg

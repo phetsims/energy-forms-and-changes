@@ -160,7 +160,7 @@ const EFACConstants = {
   // the sim reset time to be too long if not limited.
   MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES: 500,
 
-  // max travel height of energy chunks, in meters. the y-center location and zoom factors are different on each
+  // max travel height of energy chunks, in meters. the y-center position and zoom factors are different on each
   // screen, so these were empirically determined to visually match on both screens
   INTRO_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.85,
   SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT: 0.55,

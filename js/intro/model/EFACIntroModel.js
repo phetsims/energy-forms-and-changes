@@ -53,8 +53,8 @@ const NUMBER_OF_GROUND_SPOTS = EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS + EFACC
 // of the available ground spots, this is the index at which the burner(s) is/are created
 const LEFT_BURNER_GROUND_SPOT_INDEX = 2;
 
-// initial thermometer location, intended to be away from any model objects so that they don't get stuck to anything
-const INITIAL_THERMOMETER_LOCATION = new Vector2( 100, 100 );
+// initial thermometer position, intended to be away from any model objects so that they don't get stuck to anything
+const INITIAL_THERMOMETER_POSITION = new Vector2( 100, 100 );
 
 // colors
 const FLAME_ORANGE = new Color( 'orange' );
@@ -105,7 +105,7 @@ class EFACIntroModel {
     // modified after creation.
     this.groundSpotXPositions = [];
 
-    // determine the locations of the snap-to spots, and round them to a few decimal places
+    // determine the positions of the snap-to spots, and round them to a few decimal places
     const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
     for ( let i = 0; i < NUMBER_OF_GROUND_SPOTS; i++ ) {
       this.groundSpotXPositions.push(
@@ -220,7 +220,7 @@ class EFACIntroModel {
     _.times( NUMBER_OF_THERMOMETERS, () => {
       const thermometer = new StickyTemperatureAndColorSensor(
         this,
-        INITIAL_THERMOMETER_LOCATION,
+        INITIAL_THERMOMETER_POSITION,
         false, {
           tandem: tandem.createTandem( `thermometer${--thermometerIndex}` ) // 1 indexed
         }
@@ -228,7 +228,7 @@ class EFACIntroModel {
       this.thermometers.push( thermometer );
 
       // Add handling for a special case where the user drops a block in the beaker behind this thermometer. The
-      // action is to automatically move the thermometer to a location where it continues to sense the beaker
+      // action is to automatically move the thermometer to a position where it continues to sense the beaker
       // temperature. Not needed if zero blocks are in use. This was requested after interviews.
       if ( this.blockGroup.count ) {
         thermometer.sensedElementColorProperty.link( ( newColor, oldColor ) => {
@@ -796,15 +796,15 @@ class EFACIntroModel {
   }
 
   /**
-   * Updates the temperature and color that would be sensed by a thermometer at the provided location.  This is done
+   * Updates the temperature and color that would be sensed by a thermometer at the provided position.  This is done
    * as a single operation instead of having separate methods for getting temperature and color because it is more
    * efficient to do it like this.
-   * @param {Vector2} position - location to be sensed
+   * @param {Vector2} position - position to be sensed
    * @param {Property.<number>} sensedTemperatureProperty
    * @param {Property.<Color>} sensedElementColorProperty
    * @public
    */
-  updateTemperatureAndColorAndNameAtLocation(
+  updateTemperatureAndColorAndNameAtPosition(
     position,
     sensedTemperatureProperty,
     sensedElementColorProperty,

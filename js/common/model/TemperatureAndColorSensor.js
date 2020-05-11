@@ -80,7 +80,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
    */
   step() {
     if ( this.activeProperty.value ) {
-      this.model.updateTemperatureAndColorAndNameAtLocation(
+      this.model.updateTemperatureAndColorAndNameAtPosition(
         this.positionProperty.value,
         this.sensedTemperatureProperty,
         this.sensedElementColorProperty,

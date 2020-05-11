@@ -289,7 +289,7 @@ class SolarPanel extends EnergyConverter {
         }
         else {
 
-          // choose a random location along the center portion of the cross line
+          // choose a random position along the center portion of the cross line
           initialPosition = lowerLeftOfPanel.plus(
             new Vector2( crossLineLength * ( 0.5 * phet.joist.random.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle )
           );

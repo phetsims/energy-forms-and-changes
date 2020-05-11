@@ -30,7 +30,7 @@ class EnergySystemElementCarousel {
   /**
    * @param {EnergySystemElement[]} elements - array of elements to add to this carousel
    * @param {Enumeration} elementNames - the names of the elements being added
-   * @param {Vector2} selectedElementPosition - location where the selected model element should be
+   * @param {Vector2} selectedElementPosition - position where the selected model element should be
    * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
    * @param {Tandem} tandem
    */
@@ -106,7 +106,7 @@ class EnergySystemElementCarousel {
       this.animationInProgressProperty.set( true );
     } );
 
-    // activate and deactivate energy system elements as they come into the center location
+    // activate and deactivate energy system elements as they come into the center position
     this.animationInProgressProperty.lazyLink( animationInProgress => {
       if ( animationInProgress ) {
         this.managedElements.forEach( element => {

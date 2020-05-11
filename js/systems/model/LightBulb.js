@@ -359,17 +359,17 @@ const generateThermalChunkTimeOnFilament = () => {
 };
 
 /**
- * @param {Vector2} startingLocation
+ * @param {Vector2} startingPosition
  * @param {Vector2[]} pathPoints
  * @returns {number}
  * @private
  */
-const getTotalPathLength = ( startingLocation, pathPoints ) => {
+const getTotalPathLength = ( startingPosition, pathPoints ) => {
   if ( pathPoints.length === 0 ) {
     return 0;
   }
 
-  let pathLength = startingLocation.distance( pathPoints[ 0 ] );
+  let pathLength = startingPosition.distance( pathPoints[ 0 ] );
   for ( let i = 0; i < pathPoints.length - 1; i++ ) {
     pathLength += pathPoints[ i ].distance( pathPoints[ i + 1 ] );
   }

@@ -22,45 +22,45 @@ class ElementFollower {
     // @private {Property<Vector2>} - position Property of element that will follow another
     this.followerProperty = trackedPositionProperty;
 
-    // @private {Property<Vector2>|null} - location of the thing being followed, null if not following anything
-    this.locationBeingFollowedProperty = null;
+    // @private {Property<Vector2>|null} - position of the thing being followed, null if not following anything
+    this.positionBeingFollowedProperty = null;
 
     // @private {Vector2} - offset from following position
     this.offset = Vector2.ZERO;
 
     // @private {function} - function that gets linked/unlinked when the thermometer is following/unfollowing.
-    this.followerFunction = location => {
-      this.followerProperty.set( location.plus( this.offset ) );
+    this.followerFunction = position => {
+      this.followerProperty.set( position.plus( this.offset ) );
     };
   }
 
   /**
    * start following the provided Property
-   * @param {Property<Vector2>} locationToFollowProperty - location Property to follow
+   * @param {Property<Vector2>} positionToFollowProperty - position Property to follow
    * @public
    */
-  startFollowing( locationToFollowProperty ) {
+  startFollowing( positionToFollowProperty ) {
 
     // if this was previously following something else, un-follow it
-    if ( this.locationBeingFollowedProperty ) {
-      this.locationBeingFollowedProperty.unlink( this.followerFunction );
+    if ( this.positionBeingFollowedProperty ) {
+      this.positionBeingFollowedProperty.unlink( this.followerFunction );
     }
 
     // keep track of the offset based on where the following started, allows following from anywhere on element
-    this.offset = this.followerProperty.get().minus( locationToFollowProperty.get() );
+    this.offset = this.followerProperty.get().minus( positionToFollowProperty.get() );
 
     // hook up the listener
-    locationToFollowProperty.link( this.followerFunction );
-    this.locationBeingFollowedProperty = locationToFollowProperty;
+    positionToFollowProperty.link( this.followerFunction );
+    this.positionBeingFollowedProperty = positionToFollowProperty;
   }
 
   /**
    * @public
    */
   stopFollowing() {
-    if ( this.locationBeingFollowedProperty ) {
-      this.locationBeingFollowedProperty.unlink( this.followerFunction );
-      this.locationBeingFollowedProperty = null;
+    if ( this.positionBeingFollowedProperty ) {
+      this.positionBeingFollowedProperty.unlink( this.followerFunction );
+      this.positionBeingFollowedProperty = null;
     }
   }
 
@@ -69,7 +69,7 @@ class ElementFollower {
    * @returns {boolean}
    */
   isFollowing() {
-    return this.locationBeingFollowedProperty !== null;
+    return this.positionBeingFollowedProperty !== null;
   }
 
   /**
@@ -77,7 +77,7 @@ class ElementFollower {
    */
   reset() {
     this.followerProperty.reset();
-    this.locationBeingFollowedProperty.reset();
+    this.positionBeingFollowedProperty.reset();
   }
 }
 

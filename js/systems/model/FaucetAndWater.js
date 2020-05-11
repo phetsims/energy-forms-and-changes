@@ -151,7 +151,7 @@ class FaucetAndWater extends EnergySource {
       // make the chunk fall
       chunk.translateBasedOnVelocity( dt );
 
-      // see if chunk is in the location where it can be transferred to the next energy system
+      // see if chunk is in the position where it can be transferred to the next energy system
       const yPosition = this.positionProperty.get().plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y -
                         chunk.positionProperty.value.y;
       const chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( yPosition );

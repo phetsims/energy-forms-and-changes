@@ -218,28 +218,28 @@ class BeakerHeater extends EnergyUser {
   }
 
   /**
-   * update the temperature and color at the specified location within the beaker
+   * update the temperature and color at the specified position within the beaker
    *
-   * @param {Vector2} position - location to be sensed
+   * @param {Vector2} position - position to be sensed
    * @param {Property.<number>} sensedTemperatureProperty
    * @param {Property.<Color>} sensedElementColorProperty
    * @public
    */
-  updateTemperatureAndColorAndNameAtLocation(
+  updateTemperatureAndColorAndNameAtPosition(
     position,
     sensedTemperatureProperty,
     sensedElementColorProperty,
     sensedElementNameProperty
   ) {
 
-    // validate that the specified location is inside the beaker, since that's the only supported location
+    // validate that the specified position is inside the beaker, since that's the only supported position
     assert && assert(
     position.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && position.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
-      'location is not inside of beaker'
+      'position is not inside of beaker'
     );
     assert && assert(
     position.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && position.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
-      'location is not inside of beaker'
+      'position is not inside of beaker'
     );
 
     sensedTemperatureProperty.set( this.beaker.getTemperature() );
