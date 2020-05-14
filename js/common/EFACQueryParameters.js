@@ -37,7 +37,10 @@ const EFACQueryParameters = QueryStringMachine.getAll( {
 
   // make the first screen burners sticky
   // @public, see https://github.com/phetsims/energy-forms-and-changes/issues/232
-  stickyBurners: { type: 'flag' },
+  stickyBurners: {
+    type: 'flag',
+    public: true
+  },
 
   // force the energy chunk distributor to use a particular algorithm
   // For internal use only, not public facing.
