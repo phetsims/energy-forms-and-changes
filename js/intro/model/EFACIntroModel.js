@@ -14,7 +14,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
+import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
@@ -88,9 +88,9 @@ class EFACIntroModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    // @public {EnumerationProperty.<TimeControlSpeed>} - for debugging, controls play speed of the
+    // @public {EnumerationProperty.<TimeSpeed>} - for debugging, controls play speed of the
     // simulation
-    this.timeControlSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL );
+    this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
@@ -325,7 +325,7 @@ class EFACIntroModel {
     this.energyChunksVisibleProperty.reset();
     this.linkedHeatersProperty.reset();
     this.isPlayingProperty.reset();
-    this.timeControlSpeedProperty.reset();
+    this.timeSpeedProperty.reset();
     this.air.reset();
     this.burners.forEach( burner => {
       burner.reset();
@@ -360,7 +360,7 @@ class EFACIntroModel {
 
     // only step the model if not paused
     if ( this.isPlayingProperty.get() ) {
-      const multiplier = this.timeControlSpeedProperty.get() === TimeControlSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
+      const multiplier = this.timeSpeedProperty.get() === TimeSpeed.NORMAL ? 1 : FAST_FORWARD_MULTIPLIER;
       this.stepModel( dt * multiplier );
     }
 

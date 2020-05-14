@@ -23,7 +23,7 @@ import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
-import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
+import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import KeyboardUtils from '../../../../scenery/js/accessibility/KeyboardUtils.js';
 import DownUpListener from '../../../../scenery/js/input/DownUpListener.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
@@ -143,8 +143,8 @@ class EFACIntroScreenView extends ScreenView {
 
     // add the play/pause and step buttons
     const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
-      timeControlSpeedProperty: EFACQueryParameters.showSpeedControls ? model.timeControlSpeedProperty : null,
-      timeControlSpeeds: [ TimeControlSpeed.NORMAL, TimeControlSpeed.FAST ],
+      timeSpeedProperty: EFACQueryParameters.showSpeedControls ? model.timeSpeedProperty : null,
+      timeSpeeds: [ TimeSpeed.NORMAL, TimeSpeed.FAST ],
       playPauseStepButtonOptions: {
         stepForwardButtonOptions: {
           listener: () => model.manualStep()
