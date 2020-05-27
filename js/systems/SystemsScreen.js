@@ -11,11 +11,12 @@
 
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import systemsScreenIcon from '../../images/systems_screen_icon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
-import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
 import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
 
@@ -32,7 +33,10 @@ class SystemsScreen extends Screen {
     const options = {
       name: systemsString,
       backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
-      homeScreenIcon: new Image( systemsScreenIcon ),
+      homeScreenIcon: new ScreenIcon( new Image( systemsScreenIcon ), {
+        maxIconWidthProportion: 1,
+        maxIconHeightProportion: 1
+      } ),
       maxDT: EFACConstants.maxDT,
       tandem: tandem
     };
