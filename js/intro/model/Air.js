@@ -154,6 +154,7 @@ class Air {
   /**
    * @param {EnergyChunk} energyChunk
    * @param {Range} horizontalWanderConstraint
+   * @public
    */
   addEnergyChunk( energyChunk, horizontalWanderConstraint ) {
     energyChunk.zPositionProperty.value = 0;

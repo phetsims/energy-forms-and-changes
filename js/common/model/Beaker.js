@@ -238,6 +238,7 @@ class Beaker extends RectangularThermalMovableModelElement {
   /**
    * add the initial energy chunks to this container
    * @override
+   * @protected
    */
   addInitialEnergyChunks() {
     let totalSliceArea = 0;
@@ -425,6 +426,7 @@ class Beaker extends RectangularThermalMovableModelElement {
    * surface.
    * @param {Vector2} point
    * @override
+   * @public
    */
   extractEnergyChunkClosestToPoint( point ) {
     let pointIsAboveWaterSurface = true;

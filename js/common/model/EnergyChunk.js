@@ -68,6 +68,7 @@ class EnergyChunk {
   /**
    * translate the energy chunk based on its velocity
    * @param {number} dt - delta time
+   * @public
    */
   translateBasedOnVelocity( dt ) {
     this.translate( this.velocity.x * dt, this.velocity.y * dt );

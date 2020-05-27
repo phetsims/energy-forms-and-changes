@@ -261,6 +261,7 @@ class LightRayNode extends Node {
    * @param {Rectangle} rect
    * @param {Line} line
    * @returns {Vector2[]}
+   * @private
    */
   getRectangleLineIntersectionPoints( rect, line ) {
 

@@ -170,6 +170,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * your 2D bounds be if you were at this position?"
    * @param {Vector2} position
    * @param {Bounds2} [bounds] - an optional pre-allocated bounds instance, saves memory allocations
+   * @public
    */
   getCompositeBoundsForPosition( position, bounds ) {
 
@@ -211,6 +212,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * get the bounds for this model element, meaning the full rectangular space that it occupies
    * @returns {Bounds2}
+   * @public
    */
   getBounds() {
     return this.bounds;

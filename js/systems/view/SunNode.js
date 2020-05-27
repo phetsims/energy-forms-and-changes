@@ -233,10 +233,6 @@ class LightAbsorbingShape {
     // @public (read-only) {Shape}
     this.shape = shape;
   }
-
-  reset() {
-    this.absorptionCoefficientProperty.reset();
-  }
 }
 
 class CloudNode extends Node {

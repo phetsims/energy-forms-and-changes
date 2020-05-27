@@ -327,6 +327,7 @@ class SolarPanel extends EnergyConverter {
 
   /**
    * @returns {Energy} type, amount, direction of emitted energy
+   * @public
    */
   getEnergyOutputRate() {
     return new Energy( EnergyType.ELECTRICAL, this.energyOutputRateProperty.value, 0 );

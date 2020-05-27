@@ -208,6 +208,7 @@ class FaucetAndWater extends EnergySource {
   /**
    * steps only the water drops
    * @param {number} dt
+   * @private
    */
   stepWaterDrops( dt ) {
 

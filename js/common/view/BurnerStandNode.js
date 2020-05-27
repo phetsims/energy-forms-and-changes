@@ -42,6 +42,7 @@ class BurnerStandNode extends Node {
    * @param {number} height
    * @param {number} edgeLength
    * @returns {Path}
+   * @private
    */
   createBurnerStandSide( topCenter, height, edgeLength ) {
 
@@ -78,6 +79,7 @@ class BurnerStandNode extends Node {
    * @param {number} width
    * @param {number} edgeLength
    * @returns {Path}
+   * @private
    */
   createBurnerStandTop( leftCenter, width, edgeLength ) {
 
