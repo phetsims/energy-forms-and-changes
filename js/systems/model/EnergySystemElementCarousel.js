@@ -19,6 +19,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
@@ -119,7 +120,7 @@ class EnergySystemElementCarousel {
     } );
 
     // Don't animate the system elements when setting state for better user experience when launching the sim.
-    _.hasIn( window, 'phet.phetio.phetioEngine' ) && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
       this.elapsedTransitionTime = 1;
     } );
   }

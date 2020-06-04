@@ -7,6 +7,7 @@
  * @author Jesse Greenberg
  */
 
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -75,7 +76,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
     } );
 
     // Check if any sensors should start following an element after being set by state
-    _.hasIn( window, 'phet.phetio.phetioEngine' ) && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
       followElements();
     } );
   }
