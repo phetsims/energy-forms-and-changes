@@ -15,8 +15,8 @@ import BICYCLE_ICON from '../../../images/bicycle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySource from './EnergySource.js';
@@ -340,6 +340,12 @@ class Biker extends EnergySource {
    * @override
    */
   preloadEnergyChunks() {
+
+    // if we're not supposed to have any chunks, clear any existing ones out of the biker. this is needed for stateSet,
+    // see https://github.com/phetsims/energy-forms-and-changes/issues/335
+    if ( this.energyChunksRemainingProperty.value === 0 ) {
+      this.clearEnergyChunks();
+    }
 
     // Return if biker is not pedaling, or is out of energy, or is not hooked up to a compatible system
     if ( this.crankAngularVelocityProperty.value === 0 ||
