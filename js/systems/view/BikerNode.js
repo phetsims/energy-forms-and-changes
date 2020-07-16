@@ -231,7 +231,7 @@ class BikerNode extends MoveFadeModelElementNode {
       } ),
       listener: () => {
         biker.energyChunksRemainingProperty.reset();
-        biker.replenishBikerEnergyChunks();
+        biker.replenishBikerEnergyChunks( false ); // don't clear out existing chunks when adding more
       },
       baseColor: 'rgba(0,220,0,1)',
       centerX: cyclistTorsoNodes[ 0 ].centerTop.x,

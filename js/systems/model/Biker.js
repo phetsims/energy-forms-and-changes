@@ -452,11 +452,13 @@ class Biker extends EnergySource {
   }
 
   /**
-   * add/restore initial number of energy chunks to biker
+   * adds the current number of energy chunks remaining to the biker
+   * @param {boolean} [clearEnergyChunks] - whether to clear the existing chunks out of the biker before adding them
+   * back.
    * @public
    */
-  replenishBikerEnergyChunks() {
-    this.clearEnergyChunks();
+  replenishBikerEnergyChunks( clearEnergyChunks = true ) {
+    clearEnergyChunks && this.clearEnergyChunks();
     for ( let i = 0; i < this.energyChunksRemainingProperty.value; i++ ) {
       this.addEnergyChunkToBiker();
     }
