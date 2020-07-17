@@ -28,7 +28,11 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
     // if this senor is over a block or beaker, stick to it
     const followElements = () => {
-      model.blockGroup.forEach( block => {
+
+      // sort blocks by zIndex so sensors stick to the highest one that the sensor is over
+      const blocks = _.sortBy( [ ...model.blockGroup.getArray() ], block => block.zIndex );
+
+      blocks.forEach( block => {
         if ( block.getProjectedShape().containsPoint( this.positionProperty.value ) ) {
 
           // stick to this block

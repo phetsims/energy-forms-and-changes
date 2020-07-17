@@ -648,15 +648,16 @@ class EFACIntroScreenView extends ScreenView {
         }
       } );
 
-      blocks.forEach( block => {
+      for ( let i = 0; i < blocks.length; i++ ) {
+        blocks[ i ].zIndex = i; // mark so the model is aware of its z-index (the sensors need to know this).
         blockNodeGroup.forEach( blockNode => {
-          if ( blockNode.block === block ) {
+          if ( blockNode.block === blocks[ i ] ) {
             // @samreid and @chrisklus looked for any performance bottlenecks caused by re-layering every frame but
             // could not find anything so we suspect Scenery know not to if the order is already correct
             blockNode.moveToFront();
           }
         } );
-      } );
+      }
     };
 
     // no need to link z-order-changing listener if there is only one block

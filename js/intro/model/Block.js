@@ -80,6 +80,10 @@ class Block extends RectangularThermalMovableModelElement {
     // @public
     this.blockType = blockType;
 
+    // @public {number} - the z-index of this block in relation to other blocks. updated when a user interacts with any
+    // block.
+    this.zIndex = instanceCount;
+
     // add position test bounds (see definition in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2(
       -EFACConstants.BLOCK_SURFACE_WIDTH / 2,
