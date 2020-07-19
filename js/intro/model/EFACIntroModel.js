@@ -813,28 +813,16 @@ class EFACIntroModel {
 
     let temperatureAndColorAndNameUpdated = false;
 
-    // Test blocks first.  This is a little complicated since the z-order must be taken into account.
-    const copyOfBlockList = this.blockGroup.getArrayCopy();
+    // Test blocks first. Sort them by zIndex so sensors stick to the highest one that the sensor is over
+    const blocks = _.sortBy( this.blockGroup.getArrayCopy(), block => block.zIndex );
 
-    copyOfBlockList.sort( ( block1, block2 ) => {
-      if ( block1.positionProperty.value === block2.positionProperty.value ) {
-        return 0;
-      }
-      if ( block2.positionProperty.value.x > block1.positionProperty.value.x ||
-           block2.positionProperty.value.y > block1.positionProperty.value.y ) {
-        return 1;
-      }
-      return -1;
-    } );
-
-    for ( let i = 0; i < copyOfBlockList.length && !temperatureAndColorAndNameUpdated; i++ ) {
-      const block = copyOfBlockList[ i ];
+    for ( let i = blocks.length - 1; i >= 0 && !temperatureAndColorAndNameUpdated; i-- ) {
+      const block = blocks[ i ];
       if ( block.getProjectedShape().containsPoint( position ) ) {
         sensedTemperatureProperty.set( block.temperature );
         sensedElementColorProperty.set( block.color );
         sensedElementNameProperty.set( block.tandem.phetioID );
         temperatureAndColorAndNameUpdated = true;
-        break;
       }
     }
 
