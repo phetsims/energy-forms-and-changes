@@ -813,7 +813,7 @@ class EFACIntroModel {
 
     let temperatureAndColorAndNameUpdated = false;
 
-    // Test blocks first. Sort them by zIndex so sensors stick to the highest one that the sensor is over
+    // Test blocks first. Sort them by zIndex so sensors measure the highest one that the sensor is over
     const blocks = _.sortBy( this.blockGroup.getArrayCopy(), block => block.zIndex );
 
     for ( let i = blocks.length - 1; i >= 0 && !temperatureAndColorAndNameUpdated; i-- ) {
