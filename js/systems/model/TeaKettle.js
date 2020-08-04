@@ -16,8 +16,8 @@ import TEAPOT_ICON from '../../../images/tea_kettle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySource from './EnergySource.js';
@@ -219,7 +219,7 @@ class TeaKettle extends EnergySource {
             this.transferNextAvailableChunk = false;
           }
 
-            // Don't transfer this chunk.
+          // Don't transfer this chunk.
           // Set up to transfer the next one.
           else {
             this.exemptFromTransferEnergyChunks.push( chunk );
@@ -228,7 +228,7 @@ class TeaKettle extends EnergySource {
           }
         }
 
-          // if a chunk has reached the position where it should transfer to the next system, but no steam powerable
+        // if a chunk has reached the position where it should transfer to the next system, but no steam powerable
         // element is in place, add the chunk to the list of non transfers
         else if ( !this.steamPowerableElementInPlaceProperty.get() &&
                   ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains(
@@ -260,7 +260,14 @@ class TeaKettle extends EnergySource {
 
     // Simulate energy chunks moving through the system.
     while ( !preloadComplete ) {
-      energySinceLastChunk += this.energyProductionRateProperty.get() * dt;
+      if ( this.heatProportionProperty.value > 0 ) {
+        // if the heater is on, determine the rate of chunk release by its level
+        energySinceLastChunk += this.heatProportionProperty.value * EFACConstants.MAX_ENERGY_PRODUCTION_RATE * dt;
+      }
+      else {
+        // otherwise, determine by the existing energy in the kettle
+        energySinceLastChunk += this.energyProductionRateProperty.get() * dt;
+      }
 
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
         let initialPosition;
