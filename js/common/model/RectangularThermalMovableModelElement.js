@@ -160,8 +160,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     this.addInitialEnergyChunks();
 
     // preload energy chunks after state has been set
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
-      this.addInitialEnergyChunks();
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
+      options.tandem.hasAncestor( scopeTandem ) && this.addInitialEnergyChunks();
     } );
   }
 

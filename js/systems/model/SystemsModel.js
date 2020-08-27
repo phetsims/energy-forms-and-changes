@@ -159,9 +159,9 @@ class SystemsModel {
     } );
 
     // Preload energy chunks after state has been set if they're visible and the sim is running
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
       if ( this.energyChunksVisibleProperty.value ) {
-        this.preloadEnergyChunks();
+        tandem.hasAncestor( scopeTandem ) && this.preloadEnergyChunks();
       }
     } );
   }
