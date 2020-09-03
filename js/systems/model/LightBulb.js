@@ -106,7 +106,7 @@ class LightBulb extends EnergyUser {
             );
           }
 
-          // yy design, this shouldn't happen, so warn if it does
+          // by design, this shouldn't happen, so warn if it does
           else {
             assert && assert(
               false,
