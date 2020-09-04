@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.3.0-rc.1 Wed Aug 12 2020 12:00:14 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.3.0-rc.1 Thu Sep 03 2020 16:17:14 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -13,15 +13,15 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "bd228a8a821dd775e61fd3c8de0a5f7fa21a5562",
-    "branch": "HEAD"
+    "sha": "63707bec9ceb7e17522e07110b514fa21634931f",
+    "branch": "energy-forms-and-changes-1.3"
   },
   "dot": {
     "sha": "3aa05218545989fcd42fcf53c6c4e6982605a6f2",
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "46e81082b10b3100cf1a5c86dcb0929291524230",
+    "sha": "7a5ea3b1a1eab6e7beab1fbf0ff7dd87042cd7bb",
     "branch": "1.3"
   },
   "joist": {
@@ -78,7 +78,7 @@
   },
   "sun": {
     "sha": "3b05514077cac56a73ef3e09524ccc35c9da7394",
-    "branch": "energy-forms-and-changes-1.3"
+    "branch": "HEAD"
   },
   "tambo": {
     "sha": "36a7159581b76a7dea8e090adc8c22ec1d8bfa78",
