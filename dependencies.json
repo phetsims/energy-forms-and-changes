@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Thu Aug 27 2020 12:34:31 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Thu Sep 03 2020 16:19:58 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -13,15 +13,15 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "29b616a083a386ecb9744a5c55caccef1f2ab34d",
-    "branch": "HEAD"
+    "sha": "a7011e29b2e410b25c376812157d694d963e82eb",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "dot": {
     "sha": "9800d977587820cb2fcc90e7a6dd2a1b9025b208",
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "3a5158326a7709c2036729a326cb4cb30a2b17f3",
+    "sha": "75f1ae341cb95510458f64fe518c658be7e5fa22",
     "branch": "1.4"
   },
   "joist": {
