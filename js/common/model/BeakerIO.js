@@ -46,7 +46,7 @@ BeakerIO.validator = ObjectIO.validator;
  */
 BeakerIO.documentation = 'Uses BeakerType for toStateObject';
 BeakerIO.typeName = 'BeakerIO';
-ObjectIO.validateSubtype( BeakerIO );
+ObjectIO.validateIOType( BeakerIO );
 
 energyFormsAndChanges.register( 'BeakerIO', BeakerIO );
 export default BeakerIO;

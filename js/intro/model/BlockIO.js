@@ -48,7 +48,7 @@ BlockIO.validator = ObjectIO.validator;
  */
 BlockIO.documentation = 'Uses BlockType for toStateObject';
 BlockIO.typeName = 'BlockIO';
-ObjectIO.validateSubtype( BlockIO );
+ObjectIO.validateIOType( BlockIO );
 
 energyFormsAndChanges.register( 'BlockIO', BlockIO );
 export default BlockIO;
