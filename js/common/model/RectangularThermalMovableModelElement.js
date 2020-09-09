@@ -15,7 +15,6 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -158,11 +157,6 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // add the initial energy chunks
     this.addInitialEnergyChunks();
-
-    // preload energy chunks after state has been set
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
-      options.tandem.hasAncestor( scopeTandem ) && this.addInitialEnergyChunks();
-    } );
   }
 
   /**

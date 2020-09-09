@@ -11,7 +11,10 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableFadableModelElement from './PositionableFadableModelElement.js';
 
@@ -29,7 +32,10 @@ class EnergySystemElement extends PositionableFadableModelElement {
     this.iconImage = iconImage;
 
     // @public (read-only) {ObservableArray.<EnergyChunk>}
-    this.energyChunkList = new ObservableArray();
+    this.energyChunkList = new ObservableArray( {
+      tandem: tandem.createTandem( 'energyChunkList' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // @public {BooleanProperty}
     this.activeProperty = new BooleanProperty( false, {

@@ -8,6 +8,10 @@
  * @author Andrew Adare
  */
 
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
@@ -21,17 +25,24 @@ class EnergyUser extends EnergySystemElement {
     super( iconImage, tandem );
 
     // @private {EnergyChunk[]}
-    this.incomingEnergyChunks = [];
+    this.incomingEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'incomingEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
   }
 
   /**
    * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
    * to move, convert, and otherwise manage them.
-   * @param {Array{EnergyChunk}} energyChunks - list of energy chunks to inject
+   * @param {Array.<EnergyChunk>} energyChunks - list of energy chunks to inject
    * @public
    */
   injectEnergyChunks( energyChunks ) {
-    this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
+    energyChunks.forEach( energyChunk => {
+      if ( !this.incomingEnergyChunks.includes( energyChunk ) ) {
+        this.incomingEnergyChunks.push( energyChunk );
+      }
+    } );
   }
 
   /**
@@ -40,7 +51,7 @@ class EnergyUser extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.incomingEnergyChunks.length = 0;
+    this.incomingEnergyChunks.clear();
   }
 }
 

@@ -8,6 +8,10 @@
  * @author Andrew Adare
  */
 
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
@@ -19,8 +23,14 @@ class EnergyConverter extends EnergySystemElement {
    */
   constructor( iconImage, tandem ) {
     super( iconImage, tandem );
-    this.incomingEnergyChunks = [];
-    this.outgoingEnergyChunks = [];
+    this.incomingEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'incomingEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO(EnergyChunk.EnergyChunkIO ) )
+    } );
+    this.outgoingEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO(EnergyChunk.EnergyChunkIO ) )
+    } );
   }
 
   /**
@@ -31,17 +41,24 @@ class EnergyConverter extends EnergySystemElement {
    */
   extractOutgoingEnergyChunks() {
     this.energyChunkList.removeAll( this.outgoingEnergyChunks );
-    return this.outgoingEnergyChunks.splice( 0 );
+
+    const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.getArrayCopy();
+    this.outgoingEnergyChunks.clear();
+    return outgoingEnergyChunksCopy;
   }
 
   /**
    * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
    * to move, convert, and otherwise manage them.
-   * @parameter {EnergyChunk[]} energyChunks
+   * @param {EnergyChunk[]} energyChunks
    * @public
    */
   injectEnergyChunks( energyChunks ) {
-    this.incomingEnergyChunks = _.union( this.incomingEnergyChunks, energyChunks );
+    energyChunks.forEach( energyChunk => {
+      if ( !this.incomingEnergyChunks.includes( energyChunk ) ) {
+        this.incomingEnergyChunks.push( energyChunk );
+      }
+    } );
   }
 
   /**
@@ -50,8 +67,8 @@ class EnergyConverter extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.incomingEnergyChunks.length = 0;
-    this.outgoingEnergyChunks.length = 0;
+    this.incomingEnergyChunks.clear();
+    this.outgoingEnergyChunks.clear();
   }
 }
 

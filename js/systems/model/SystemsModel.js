@@ -11,23 +11,24 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
+import Property from '../../../../axon/js/Property.js';
+import PropertyIO from '../../../../axon/js/PropertyIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerHeater from './BeakerHeater.js';
 import Belt from './Belt.js';
 import Biker from './Biker.js';
+import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
-import Fan from './Fan.js';
-import FaucetAndWater from './FaucetAndWater.js';
-import FluorescentBulb from './FluorescentBulb.js';
 import Generator from './Generator.js';
-import IncandescentBulb from './IncandescentBulb.js';
-import SolarPanel from './SolarPanel.js';
-import SunEnergySource from './SunEnergySource.js';
-import TeaKettle from './TeaKettle.js';
 
 // constants
 const OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL = new Vector2( 0, -0.4 ); // in meters
@@ -58,31 +59,49 @@ class SystemsModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
+    this.energyChunkPhetioGroup = new EnergyChunkPhetioGroup( {
+      tandem: tandem.createTandem( 'energyChunkPhetioGroup' ),
+      phetioType: PhetioGroupIO( EnergyChunk.EnergyChunkIO )
+    } );
+
+    this.energyChunkPathMoverPhetioGroup = new EnergyChunkPathMoverPhetioGroup( this.energyChunkPhetioGroup, {
+      tandem: tandem.createTandem( 'energyChunkPathMoverPhetioGroup' ),
+      phetioType: PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
+    } );
+
     // @public (read-only) energy converters
-    this.generator = new Generator( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'generator' ) );
-    this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
+    this.generator = new Generator(
+      this.energyChunksVisibleProperty,
+      this.energyChunkPhetioGroup,
+      this.energyChunkPathMoverPhetioGroup,
+      energyConvertersTandem.createTandem( 'generator' ) );
+    // this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
 
     // @public (read-only) energy sources
     this.biker = new Biker(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
+      this.energyChunkPhetioGroup,
+      this.energyChunkPathMoverPhetioGroup,
       energySourcesTandem.createTandem( 'biker' )
     );
-    this.faucetAndWater = new FaucetAndWater(
-      this.energyChunksVisibleProperty,
-      this.generator.activeProperty,
-      energySourcesTandem.createTandem( 'faucetAndWater' )
-    );
-    this.sun = new SunEnergySource(
-      this.solarPanel,
-      this.energyChunksVisibleProperty,
-      energySourcesTandem.createTandem( 'sun' )
-    );
-    this.teaKettle = new TeaKettle(
-      this.energyChunksVisibleProperty,
-      this.generator.activeProperty,
-      energySourcesTandem.createTandem( 'teaKettle' )
-    );
+
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // this.faucetAndWater = new FaucetAndWater(
+    //   this.energyChunksVisibleProperty,
+    //   this.generator.activeProperty,
+    //   energySourcesTandem.createTandem( 'faucetAndWater' )
+    // );
+    // this.sun = new SunEnergySource(
+    //   this.solarPanel,
+    //   this.energyChunksVisibleProperty,
+    //   energySourcesTandem.createTandem( 'sun' )
+    // );
+    // this.teaKettle = new TeaKettle(
+    //   this.energyChunksVisibleProperty,
+    //   this.generator.activeProperty,
+    //   energySourcesTandem.createTandem( 'teaKettle' )
+    // );
 
     const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
     const wheel2Center = ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Generator.WHEEL_CENTER_OFFSET );
@@ -90,36 +109,52 @@ class SystemsModel {
     // @public (read-only) belt that connects biker to generator, which is not on a carousel
     this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
-    // @public (read-only) energy users
-    this.fan = new Fan( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'fan' ) );
-    this.incandescentBulb = new IncandescentBulb(
-      this.energyChunksVisibleProperty,
-      energyUsersTandem.createTandem( 'incandescentBulb' )
-    );
-    this.fluorescentBulb = new FluorescentBulb(
-      this.energyChunksVisibleProperty,
-      energyUsersTandem.createTandem( 'fluorescentBulb' )
-    );
-    this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'beakerHeater' ) );
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // // @public (read-only) energy users
+    // this.fan = new Fan( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'fan' ) );
+    // this.incandescentBulb = new IncandescentBulb(
+    //   this.energyChunksVisibleProperty,
+    //   energyUsersTandem.createTandem( 'incandescentBulb' )
+    // );
+    // this.fluorescentBulb = new FluorescentBulb(
+    //   this.energyChunksVisibleProperty,
+    //   energyUsersTandem.createTandem( 'fluorescentBulb' )
+    // );
+    this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty,
+      this.energyChunkPhetioGroup,
+      this.energyChunkPathMoverPhetioGroup,
+      energyUsersTandem.createTandem( 'beakerHeater' ) );
 
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
-      [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
-      Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
+      // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+      [ this.biker ],
+      Enumeration.byKeys( [ 'BIKER' ] ),
+      // [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
+      // Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
+
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energySourcesCarousel' )
     );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
-      [ this.generator, this.solarPanel ],
-      Enumeration.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
+      // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+      [ this.generator ],
+      Enumeration.byKeys( [ 'GENERATOR' ] ),
+      // [ this.generator, this.solarPanel ],
+      // Enumeration.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
+
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
-      [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+      // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+      [ this.beakerHeater ],
+      Enumeration.byKeys( [ 'BEAKER_HEATER' ] ),
+      // [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
+      // Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyUsersCarousel' )
@@ -153,15 +188,10 @@ class SystemsModel {
 
     // monitor the visibility of the energy chunks and make sure they are in the right places when this changes
     this.energyChunksVisibleProperty.link( energyChunksVisible => {
-      if ( energyChunksVisible ) {
-        this.preloadEnergyChunks();
-      }
-    } );
 
-    // Preload energy chunks after state has been set if they're visible and the sim is running
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
-      if ( this.energyChunksVisibleProperty.value ) {
-        tandem.hasAncestor( scopeTandem ) && this.preloadEnergyChunks();
+      // When setting PhET-iO state, energy chunks are positioned based on the state.
+      if ( energyChunksVisible && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        this.preloadEnergyChunks();
       }
     } );
   }
@@ -217,7 +247,7 @@ class SystemsModel {
     const converter = this.energyConvertersCarousel.getSelectedElement();
     const user = this.energyUsersCarousel.getSelectedElement();
 
-    // step the currently selected energy system elements and transfer energy chunks in between each step
+    // {Energy} - step the currently selected energy system elements and transfer energy chunks in between each step
     const energyFromSource = source.step( dt );
     converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
     const energyFromConverter = converter.step( dt, energyFromSource );
@@ -238,6 +268,45 @@ class SystemsModel {
     source.preloadEnergyChunks();
     converter.preloadEnergyChunks( source.getEnergyOutputRate() );
     user.preloadEnergyChunks( converter.getEnergyOutputRate() );
+  }
+}
+
+
+// TODO: these go somewhere else https://github.com/phetsims/energy-forms-and-changes/issues/350
+class EnergyChunkPhetioGroup extends PhetioGroup {
+
+  constructor( options ) {
+
+    // TODO: making your own visibleProperty default?
+    const defaultPositionProperty = new Property( true, {
+      tandem: options.tandem.createTandem( 'positionProperty' ),
+      phetioType: PropertyIO( BooleanIO )
+    } );
+    super( EnergyChunkPhetioGroup.createEnergyChunk,
+      [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, defaultPositionProperty, {} ], options );
+  }
+
+  // @public
+  static createEnergyChunk( tandem, energyType, position, velocity, visibleProperty, options ) {
+    return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( {}, options, { tandem: tandem } ) );
+  }
+}
+
+class EnergyChunkPathMoverPhetioGroup extends PhetioGroup {
+
+  /**
+   *
+   * @param energyChunkPhetioGroup
+   * @param options
+   */
+  constructor( energyChunkPhetioGroup, options ) {
+    super( EnergyChunkPathMoverPhetioGroup.createEnergyChunkPathMover,
+      [ energyChunkPhetioGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
+  }
+
+  // @public
+  static createEnergyChunkPathMover( tandem, energyChunk, path, speed, options ) {
+    return new EnergyChunkPathMover( energyChunk, path, speed, merge( {}, options, { tandem: tandem } ) );
   }
 }
 

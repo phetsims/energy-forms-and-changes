@@ -8,13 +8,14 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import WATER_ICON from '../../../images/water_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
@@ -56,9 +57,13 @@ class BeakerHeater extends EnergyUser {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {EnergyChunkPhetioGroup} energyChunkPhetioGroup
+   * @param {EnergyChunkPathMoverPhetioGroup} energyChunkPathMoverPhetioGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkPhetioGroup,
+               energyChunkPathMoverPhetioGroup,
+               tandem ) {
     super( new Image( WATER_ICON ), tandem );
 
     // @public {string} - a11y name
@@ -66,6 +71,8 @@ class BeakerHeater extends EnergyUser {
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunkPhetioGroup = energyChunkPhetioGroup;
+    this.energyChunkPathMoverPhetioGroup = energyChunkPathMoverPhetioGroup;
 
     // @public (read-only) {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {
@@ -76,11 +83,20 @@ class BeakerHeater extends EnergyUser {
       phetioDocumentation: 'proportion of how much heat the coils have'
     } );
 
-    // @private {EnergyChunkPathMover[]} - arrays that move the energy chunks as they move into, within, and out of the
+    // @private {ObservableArray.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
     // beaker
-    this.electricalEnergyChunkMovers = [];
-    this.heatingElementEnergyChunkMovers = [];
-    this.radiatedEnergyChunkMovers = [];
+    this.electricalEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.heatingElementEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.radiatedEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
 
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = new ObservableArray();
@@ -146,13 +162,13 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
       } );
 
       // clear incoming chunks array
-      this.incomingEnergyChunks.length = 0;
+      this.incomingEnergyChunks.clear();
     }
     this.moveElectricalEnergyChunks( dt );
     this.moveThermalEnergyChunks( dt );
@@ -221,7 +237,7 @@ class BeakerHeater extends EnergyUser {
         ec.zPositionProperty.set( 0 ); // move to front of z order
         this.radiatedEnergyChunkList.push( ec );
         this.radiatedEnergyChunkMovers.push(
-          new EnergyChunkPathMover(
+          this.energyChunkPathMoverPhetioGroup.createNextElement(
             ec,
             EnergyChunkPathMover.createRadiatedPath( ec.positionProperty.value, 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -271,7 +287,7 @@ class BeakerHeater extends EnergyUser {
    * @private
    */
   moveRadiatedEnergyChunks( dt ) {
-    const movers = this.radiatedEnergyChunkMovers.slice();
+    const movers = this.radiatedEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -280,7 +296,7 @@ class BeakerHeater extends EnergyUser {
 
         // remove this energy chunk entirely
         this.radiatedEnergyChunkList.remove( mover.energyChunk );
-        _.pull( this.radiatedEnergyChunkMovers, mover );
+        this.radiatedEnergyChunkMovers.remove( mover );
       }
     } );
   }
@@ -290,7 +306,7 @@ class BeakerHeater extends EnergyUser {
    * @private
    */
   moveThermalEnergyChunks( dt ) {
-    const movers = _.clone( this.heatingElementEnergyChunkMovers );
+    const movers = this.heatingElementEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -301,7 +317,7 @@ class BeakerHeater extends EnergyUser {
         // the chunk.
         this.beaker.addEnergyChunk( mover.energyChunk );
         this.energyChunkList.remove( mover.energyChunk );
-        _.pull( this.heatingElementEnergyChunkMovers, mover );
+        this.heatingElementEnergyChunkMovers.remove( mover );
       }
     } );
   }
@@ -311,7 +327,7 @@ class BeakerHeater extends EnergyUser {
    * @private
    */
   moveElectricalEnergyChunks( dt ) {
-    const movers = _.clone( this.electricalEnergyChunkMovers );
+    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -319,11 +335,11 @@ class BeakerHeater extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
 
         // the electrical energy chunk has reached the burner, so it needs to change into thermal energy
-        _.pull( this.electricalEnergyChunkMovers, mover );
+        this.electricalEnergyChunkMovers.remove( mover );
         mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
         // have the thermal energy move a little on the element before moving into the beaker
-        this.heatingElementEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+        this.heatingElementEnergyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( mover.energyChunk,
           this.createHeaterElementEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
           HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY ) );
       }
@@ -355,7 +371,7 @@ class BeakerHeater extends EnergyUser {
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
 
         // create and add a new chunk
-        const newEnergyChunk = new EnergyChunk(
+        const newEnergyChunk = this.energyChunkPhetioGroup.createNextElement(
           EnergyType.ELECTRICAL,
           this.positionProperty.get().plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
@@ -364,7 +380,7 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( newEnergyChunk,
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
         );
@@ -401,9 +417,9 @@ class BeakerHeater extends EnergyUser {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.electricalEnergyChunkMovers.length = 0;
-    this.heatingElementEnergyChunkMovers.length = 0;
-    this.radiatedEnergyChunkMovers.length = 0;
+    this.electricalEnergyChunkMovers.clear();
+    this.heatingElementEnergyChunkMovers.clear();
+    this.radiatedEnergyChunkMovers.clear();
     this.radiatedEnergyChunkList.clear();
   }
 
