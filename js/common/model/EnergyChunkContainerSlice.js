@@ -16,16 +16,32 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergyChunk from './EnergyChunk.js';
 
-class EnergyChunkContainerSlice {
+class EnergyChunkContainerSlice extends PhetioObject {
 
   /**
    * @param {Bounds2} bounds
    * @param {number} zPosition - used to give appearance of depth
    * @param {Property.<Vector2>} anchorPointProperty
+   * @param {Object} [options]
    */
-  constructor( bounds, zPosition, anchorPointProperty ) {
+  constructor( bounds, zPosition, anchorPointProperty, options ) {
+
+    // TODO: not tested, this is next, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    options = merge( {
+      tandem: Tandem.OPTIONAL,
+      phetioDynamicElement: true,
+      phetioType: EnergyChunkContainerSliceIO
+    }, options );
+
+    super();
 
     // @public {Property.<Vector2>} - position of this slice in model space
     this.anchorPointProperty = anchorPointProperty;
@@ -80,6 +96,30 @@ class EnergyChunkContainerSlice {
     return this.energyChunkList.length;
   }
 }
+
+// TODO: not tested, this is next, https://github.com/phetsims/energy-forms-and-changes/issues/350
+class EnergyChunkContainerSliceIO extends ObjectIO {
+
+  // @public @override
+  static toStateObject( energyChunkContainerSlice ) { return energyChunkContainerSlice.toStateObject(); }
+
+  // @public @override
+  static applyState( energyChunkContainerSlice ) { return energyChunkContainerSlice.applyState(); }
+
+  // @public @override
+  static stateToArgsForConstructor( state ) { return EnergyChunkContainerSlice.stateToArgsForConstructor( state ); }
+
+  // @public - use refence serialization when a member of another data structure like ObservableArray
+  static fromStateObject( stateObject ) {
+    return ReferenceIO( EnergyChunkContainerSliceIO ).fromStateObject( stateObject.phetioID );
+  }
+}
+
+EnergyChunkContainerSliceIO.documentation = 'My Documentation';
+EnergyChunkContainerSliceIO.typeName = 'EnergyChunkContainerSliceIO';
+EnergyChunkContainerSliceIO.validator = { valueType: EnergyChunkContainerSlice };
+
+EnergyChunk.EnergyChunkContainerSliceIO = EnergyChunkContainerSliceIO;
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;

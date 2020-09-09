@@ -10,17 +10,19 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import GENERATOR_ICON from '../../../images/generator_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyConverter from './EnergyConverter.js';
@@ -48,9 +50,11 @@ class Generator extends EnergyConverter {
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {EnergyChunkPhetioGroup} energyChunkPhetioGroup
+   * @param {EnergyChunkPathMoverPhetioGroup} energyChunkPathMoverPhetioGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkPhetioGroup, energyChunkPathMoverPhetioGroup, tandem ) {
 
     super( new Image( GENERATOR_ICON ), tandem );
 
@@ -59,6 +63,8 @@ class Generator extends EnergyConverter {
 
     // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunkPhetioGroup = energyChunkPhetioGroup;
+    this.energyChunkPathMoverPhetioGroup = energyChunkPathMoverPhetioGroup;
 
     // @public (read-only) {NumberProperty}
     this.wheelRotationalAngleProperty = new NumberProperty( 0, {
@@ -87,15 +93,24 @@ class Generator extends EnergyConverter {
       phetioHighFrequency: true,
       phetioDocumentation: 'the angular velocity of the wheel'
     } );
-    this.energyChunkMovers = [];
+    this.energyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'energyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
     // support placing them on a different layer in the view.
-    this.electricalEnergyChunks = new ObservableArray();
+    this.electricalEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'electricalEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
     // mainly for code clarity
-    this.hiddenEnergyChunks = new ObservableArray();
+    this.hiddenEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'hiddenEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
   }
 
   /**
@@ -172,7 +187,7 @@ class Generator extends EnergyConverter {
       // handle any incoming energy chunks
       if ( this.incomingEnergyChunks.length > 0 ) {
 
-        const incomingChunks = _.clone( this.incomingEnergyChunks );
+        const incomingChunks = this.incomingEnergyChunks.getArrayCopy();
         incomingChunks.forEach( chunk => {
 
           // validate energy type
@@ -182,10 +197,10 @@ class Generator extends EnergyConverter {
 
           // transfer chunk from incoming list to current list
           this.energyChunkList.push( chunk );
-          _.pull( this.incomingEnergyChunks, chunk );
+          this.incomingEnergyChunks.remove( chunk );
 
           // add a "mover" that will move this energy chunk to the center of the wheel
-          this.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -214,7 +229,7 @@ class Generator extends EnergyConverter {
    * @private
    */
   updateEnergyChunkPositions( dt ) {
-    const chunkMovers = _.clone( this.energyChunkMovers );
+    const chunkMovers = this.energyChunkMovers.getArrayCopy();
 
     chunkMovers.forEach( mover => {
 
@@ -242,14 +257,14 @@ class Generator extends EnergyConverter {
           // on its way.  Also add a "hidden" chunk so that the movement through the generator can be seen by the
           // user.
           this.energyChunkList.remove( chunk );
-          _.pull( this.energyChunkMovers, mover );
+          this.energyChunkMovers.remove( mover ); // TODO: is this the same as _.pull? I think so https://github.com/phetsims/energy-forms-and-changes/issues/350
           chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
           this.electricalEnergyChunks.push( chunk );
-          this.energyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, electricalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
-          const hiddenChunk = new EnergyChunk(
+          const hiddenChunk = this.energyChunkPhetioGroup.createNextElement(
             EnergyType.HIDDEN,
             chunk.positionProperty.get(),
             Vector2.ZERO,
@@ -258,7 +273,7 @@ class Generator extends EnergyConverter {
           hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
           this.hiddenEnergyChunks.push( hiddenChunk );
           const hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
-          this.energyChunkMovers.push( new EnergyChunkPathMover( hiddenChunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( hiddenChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, hiddenEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -269,7 +284,7 @@ class Generator extends EnergyConverter {
 
           // This electrical energy chunk has traveled to the end of its path, so transfer it to the next energy
           // system.
-          _.pull( this.energyChunkMovers, mover );
+          this.energyChunkMovers.remove( mover );
           this.outgoingEnergyChunks.push( chunk );
 
           break;
@@ -278,7 +293,7 @@ class Generator extends EnergyConverter {
           // This hidden energy chunk has traveled to the end of its path, so just remove it, because the electrical
           // energy chunk to which is corresponds should now be visible to the user.
           this.hiddenEnergyChunks.remove( chunk );
-          _.pull( this.energyChunkMovers, mover );
+          this.energyChunkMovers.remove( mover );
 
           break;
         default:
@@ -320,7 +335,7 @@ class Generator extends EnergyConverter {
 
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK && !skipThisChunk ) {
-        const newChunk = new EnergyChunk(
+        const newChunk = this.energyChunkPhetioGroup.createNextElement(
           EnergyType.MECHANICAL,
           this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
           Vector2.ZERO,
@@ -330,7 +345,7 @@ class Generator extends EnergyConverter {
         this.energyChunkList.push( newChunk );
 
         // add a 'mover' for this energy chunk
-        this.energyChunkMovers.push( new EnergyChunkPathMover( newChunk,
+        this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( newChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
         );
@@ -384,7 +399,7 @@ class Generator extends EnergyConverter {
     super.clearEnergyChunks();
     this.electricalEnergyChunks.clear();
     this.hiddenEnergyChunks.clear();
-    this.energyChunkMovers.length = 0;
+    this.energyChunkMovers.clear();
   }
 
   /**
@@ -392,11 +407,11 @@ class Generator extends EnergyConverter {
    * @override
    */
   extractOutgoingEnergyChunks() {
-    const chunks = _.clone( this.outgoingEnergyChunks );
+    const chunks = this.outgoingEnergyChunks.getArrayCopy();
 
     // Remove outgoing chunks from electrical energy chunks list
     this.electricalEnergyChunks.removeAll( chunks );
-    this.outgoingEnergyChunks.length = 0;
+    this.outgoingEnergyChunks.clear();
 
     return chunks;
   }

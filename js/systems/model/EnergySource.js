@@ -9,6 +9,10 @@
  * @author Jesse Greenberg
  */
 
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
@@ -20,7 +24,10 @@ class EnergySource extends EnergySystemElement {
    */
   constructor( iconImage, tandem ) {
     super( iconImage, tandem );
-    this.outgoingEnergyChunks = [];
+    this.outgoingEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
   }
 
   /**
@@ -32,10 +39,11 @@ class EnergySource extends EnergySystemElement {
   extractOutgoingEnergyChunks() {
 
     // remove all outgoing chunks from this.energyChunkList
-    this.energyChunkList.removeAll( this.outgoingEnergyChunks );
+    this.energyChunkList.removeAll( this.outgoingEnergyChunks.getArray() );
 
-    // return a copy of the outgoing chunk list and clear it in one fell swoop
-    return this.outgoingEnergyChunks.splice( 0 );
+    const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.getArrayCopy();
+    this.outgoingEnergyChunks.clear();
+    return outgoingEnergyChunksCopy;
   }
 
   /**
@@ -45,7 +53,7 @@ class EnergySource extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.outgoingEnergyChunks.length = 0;
+    this.outgoingEnergyChunks.clear();
   }
 }
 

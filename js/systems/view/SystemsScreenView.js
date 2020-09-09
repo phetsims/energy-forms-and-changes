@@ -32,20 +32,22 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import BeakerHeaterNode from './BeakerHeaterNode.js';
 import BeltNode from './BeltNode.js';
 import BikerNode from './BikerNode.js';
 import EnergyChunkLegend from './EnergyChunkLegend.js';
 import EnergySystemElementSelector from './EnergySystemElementSelector.js';
-import FanNode from './FanNode.js';
-import FaucetAndWaterNode from './FaucetAndWaterNode.js';
 import GeneratorNode from './GeneratorNode.js';
-import LightBulbNode from './LightBulbNode.js';
-import SolarPanelNode from './SolarPanelNode.js';
-import SunNode from './SunNode.js';
-import TeaKettleNode from './TeaKettleNode.js';
+
+// TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+// import FanNode from './FanNode.js';
+// import FaucetAndWaterNode from './FaucetAndWaterNode.js';
+// import LightBulbNode from './LightBulbNode.js';
+// import SolarPanelNode from './SolarPanelNode.js';
+// import SunNode from './SunNode.js';
+// import TeaKettleNode from './TeaKettleNode.js';
 
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
 
@@ -133,32 +135,34 @@ class SystemsScreenView extends ScreenView {
       modelViewTransform,
       energyUsersTandem.createTandem( 'beakerHeaterNode' )
     );
-    const incandescentBulbNode = new LightBulbNode(
-      model.incandescentBulb,
-      model.energyChunksVisibleProperty,
-      modelViewTransform, {
-        bulbType: 'incandescent',
-        tandem: energyUsersTandem.createTandem( 'incandescentBulbNode' )
-      }
-    );
-    const fluorescentBulbNode = new LightBulbNode(
-      model.fluorescentBulb,
-      model.energyChunksVisibleProperty,
-      modelViewTransform, {
-        bulbType: 'fluorescent',
-        tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
-      }
-    );
-    const fanNode = new FanNode(
-      model.fan,
-      model.energyChunksVisibleProperty,
-      modelViewTransform,
-      energyUsersTandem.createTandem( 'fanNode' )
-    );
+
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // const incandescentBulbNode = new LightBulbNode(
+    //   model.incandescentBulb,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform, {
+    //     bulbType: 'incandescent',
+    //     tandem: energyUsersTandem.createTandem( 'incandescentBulbNode' )
+    //   }
+    // );
+    // const fluorescentBulbNode = new LightBulbNode(
+    //   model.fluorescentBulb,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform, {
+    //     bulbType: 'fluorescent',
+    //     tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
+    //   }
+    // );
+    // const fanNode = new FanNode(
+    //   model.fan,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform,
+    //   energyUsersTandem.createTandem( 'fanNode' )
+    // );
     this.addChild( this.beakerHeaterNode );
-    this.addChild( incandescentBulbNode );
-    this.addChild( fluorescentBulbNode );
-    this.addChild( fanNode );
+    // this.addChild( incandescentBulbNode );
+    // this.addChild( fluorescentBulbNode );
+    // this.addChild( fanNode );
 
     // create the energy converter nodes
     const generatorNode = new GeneratorNode(
@@ -174,53 +178,58 @@ class SystemsScreenView extends ScreenView {
         phetioReadOnly: true
       }
     );
-    const solarPanelNode = new SolarPanelNode(
-      model.solarPanel,
-      modelViewTransform,
-      energyConvertersTandem.createTandem( 'solarPanelNode' )
-    );
+
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // const solarPanelNode = new SolarPanelNode(
+    //   model.solarPanel,
+    //   modelViewTransform,
+    //   energyConvertersTandem.createTandem( 'solarPanelNode' )
+    // );
     this.addChild( generatorNode );
     this.addChild( beltNode );
-    this.addChild( solarPanelNode );
+    // this.addChild( solarPanelNode );
 
-    // @private
-    this.faucetAndWaterNode = new FaucetAndWaterNode(
-      model.faucetAndWater,
-      model.energyChunksVisibleProperty,
-      modelViewTransform,
-      energySourcesTandem.createTandem( 'faucetAndWaterNode' )
-    );
-    this.addChild( this.faucetAndWaterNode );
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // // @private
+    // this.faucetAndWaterNode = new FaucetAndWaterNode(
+    //   model.faucetAndWater,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform,
+    //   energySourcesTandem.createTandem( 'faucetAndWaterNode' )
+    // );
+    // this.addChild( this.faucetAndWaterNode );
 
     // get the mechanical energy chunk layer from the generator and add it after the faucet has been created. this is
     // desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks that
     // are traveling on top of the falling water now remain in front of the water once the generator owns them.
     this.addChild( generatorNode.getMechanicalEnergyChunkLayer() );
 
-    // create the rest of the energy source nodes
-    const sunNode = new SunNode(
-      model.sun,
-      model.energyChunksVisibleProperty,
-      modelViewTransform,
-      energySourcesTandem.createTandem( 'sunNode' )
-    );
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    //
+    // // create the rest of the energy source nodes
+    // const sunNode = new SunNode(
+    //   model.sun,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform,
+    //   energySourcesTandem.createTandem( 'sunNode' )
+    // );
 
     // @private
-    this.teaKettleNode = new TeaKettleNode(
-      model.teaKettle,
-      model.energyChunksVisibleProperty,
-      modelViewTransform,
-      energySourcesTandem.createTandem( 'teaKettleNode' )
-    );
+    // this.teaKettleNode = new TeaKettleNode(
+    //   model.teaKettle,
+    //   model.energyChunksVisibleProperty,
+    //   modelViewTransform,
+    //   energySourcesTandem.createTandem( 'teaKettleNode' )
+    // );
     const bikerNode = new BikerNode(
       model.biker,
       model.energyChunksVisibleProperty,
       modelViewTransform,
       energySourcesTandem.createTandem( 'bikerNode' )
     );
-    this.addChild( sunNode );
+    // this.addChild( sunNode );
     this.addChild( bikerNode );
-    this.addChild( this.teaKettleNode );
+    // this.addChild( this.teaKettleNode );
 
     // use this Tandem for the checkbox, too, so it appears as a child of the panel
     const controlPanelTandem = tandem.createTandem( 'controlPanel' );
@@ -375,9 +384,11 @@ class SystemsScreenView extends ScreenView {
    * @public
    */
   stepView( dt ) {
-    this.teaKettleNode.step( dt );
+
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+    // this.teaKettleNode.step( dt );
     this.beakerHeaterNode.step( dt );
-    this.faucetAndWaterNode.step( dt );
+    // this.faucetAndWaterNode.step( dt );
   }
 
   /**

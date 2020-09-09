@@ -9,23 +9,43 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2IO from '../../../../dot/js/Vector2IO.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-class EnergyChunkPathMover {
+class EnergyChunkPathMover extends PhetioObject {
 
   /**
    * @param {EnergyChunk} energyChunk - energy chunk to be moved
    * @param {Vector2[]} path - points along energy chunk path
    * @param {number} speed - in meters per second
+   * @param {Object} [options]
    */
-  constructor( energyChunk, path, speed ) {
+  constructor( energyChunk, path, speed, options ) {
+
+    options = merge( {
+
+      // phet-io
+      tandem: Tandem.OPTIONAL, // TODO: should this become REQUIRED?
+      phetioType: EnergyChunkPathMoverIO,
+      phetioDynamicElement: true
+    }, options );
 
     // validate args
     assert && assert( energyChunk instanceof EnergyChunk, `energyChunk is not of correct type: ${energyChunk}` );
     assert && assert( path.length > 0, 'Path must have at least one point' );
     assert && assert( speed >= 0, `speed must be a non-negative scalar. Received: ${speed}` );
+
+    super( options );
+
+    assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( energyChunk.isPhetioInstrumented() );
 
     // @public (read-only) {EnergyChunk}
     this.energyChunk = energyChunk;
@@ -36,6 +56,33 @@ class EnergyChunkPathMover {
     this.pathFullyTraversed = false;
     this.nextPoint = path[ 0 ];
   }
+
+  // @public
+  toStateObject() {
+    return {
+      path: ArrayIO( Vector2IO ).toStateObject( this.path ),
+      speed: this.speed,
+      pathFullyTraversed: this.pathFullyTraversed,
+      nextPoint: this.nextPoint,
+      energyChunkPhetioID: this.energyChunk.tandem.phetioID,
+      phetioID: this.tandem.phetioID
+    };
+  }
+
+  // @public
+  static stateToArgsForConstructor( stateObject ) {
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
+    const path = ArrayIO( Vector2IO ).fromStateObject( stateObject.path );
+    return [ energyChunk, path, stateObject.speed ];
+  }
+
+
+  // @public
+  applyState( stateObject ) {
+    this.pathFullyTraversed = stateObject.pathFullyTraversed;
+    this.nextPoint = stateObject.nextPoint;
+  }
+
 
   /**
    * advance chunk position along the path
@@ -167,7 +214,40 @@ class EnergyChunkPathMover {
 
     return path;
   }
+
+  /**
+   * @public
+   * @override
+   */
+  dispose() {
+    // this.energyChunk = null;
+    super.dispose();
+  }
 }
+
+// Strategy A
+class EnergyChunkPathMoverIO extends ObjectIO {
+
+  // @public @override
+  static toStateObject( energyChunk ) { return energyChunk.toStateObject(); }
+
+  // @public @override
+  static stateToArgsForConstructor( state ) { return EnergyChunkPathMover.stateToArgsForConstructor( state ); }
+
+  // @public - use refence serialization when a member of another data structure like ObservableArray
+  static fromStateObject( stateObject ) {
+    return ReferenceIO( EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID );
+  }
+
+  // @public @override
+  static applyState( energyChunk, stateObject ) { energyChunk.applyState( stateObject ); }
+}
+
+EnergyChunkPathMoverIO.documentation = 'My Documentation';
+EnergyChunkPathMoverIO.typeName = 'EnergyChunkPathMoverIO';
+EnergyChunkPathMoverIO.validator = { valueType: EnergyChunkPathMover };
+
+EnergyChunkPathMover.EnergyChunkPathMoverIO = EnergyChunkPathMoverIO;
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
 export default EnergyChunkPathMover;
