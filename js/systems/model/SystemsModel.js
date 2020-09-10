@@ -23,7 +23,9 @@ import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
 import Fan from './Fan.js';
 import FaucetAndWater from './FaucetAndWater.js';
+import FluorescentBulb from './FluorescentBulb.js';
 import Generator from './Generator.js';
+import IncandescentBulb from './IncandescentBulb.js';
 import SolarPanel from './SolarPanel.js';
 import SunEnergySource from './SunEnergySource.js';
 import TeaKettle from './TeaKettle.js';
@@ -120,15 +122,18 @@ class SystemsModel {
       this.energyChunkGroup,
       this.energyChunkPathMoverGroup,
       energyUsersTandem.createTandem( 'fan' ) );
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    // this.incandescentBulb = new IncandescentBulb(
-    //   this.energyChunksVisibleProperty,
-    //   energyUsersTandem.createTandem( 'incandescentBulb' )
-    // );
-    // this.fluorescentBulb = new FluorescentBulb(
-    //   this.energyChunksVisibleProperty,
-    //   energyUsersTandem.createTandem( 'fluorescentBulb' )
-    // );
+    this.incandescentBulb = new IncandescentBulb(
+      this.energyChunksVisibleProperty,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
+      energyUsersTandem.createTandem( 'incandescentBulb' )
+    );
+    this.fluorescentBulb = new FluorescentBulb(
+      this.energyChunksVisibleProperty,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
+      energyUsersTandem.createTandem( 'fluorescentBulb' )
+    );
     this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty,
       this.energyChunkGroup,
       this.energyChunkPathMoverGroup,
@@ -150,11 +155,8 @@ class SystemsModel {
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
-      // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-      [ this.beakerHeater, this.fan ],
-      Enumeration.byKeys( [ 'BEAKER_HEATER', 'FAN' ] ),
-      // [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      // Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+      [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
+      Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
 
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,

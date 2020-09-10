@@ -9,18 +9,20 @@
 
 import Image from '../../../../scenery/js/nodes/Image.js';
 import FLUORESCENT_ICON from '../../../images/fluorescent_icon_png.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import LightBulb from './LightBulb.js';
 
 class FluorescentBulb extends LightBulb {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, tandem ) {
-    super( new Image( FLUORESCENT_ICON ), false, energyChunksVisibleProperty, tandem );
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
+    super( new Image( FLUORESCENT_ICON ), false, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.fluorescentLightBulb;

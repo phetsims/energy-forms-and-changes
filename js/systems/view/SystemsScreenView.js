@@ -43,6 +43,7 @@ import EnergySystemElementSelector from './EnergySystemElementSelector.js';
 import FanNode from './FanNode.js';
 import GeneratorNode from './GeneratorNode.js';
 import FaucetAndWaterNode from './FaucetAndWaterNode.js';
+import LightBulbNode from './LightBulbNode.js';
 import SolarPanelNode from './SolarPanelNode.js';
 import SunNode from './SunNode.js';
 import TeaKettleNode from './TeaKettleNode.js';
@@ -134,23 +135,22 @@ class SystemsScreenView extends ScreenView {
       energyUsersTandem.createTandem( 'beakerHeaterNode' )
     );
 
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    // const incandescentBulbNode = new LightBulbNode(
-    //   model.incandescentBulb,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform, {
-    //     bulbType: 'incandescent',
-    //     tandem: energyUsersTandem.createTandem( 'incandescentBulbNode' )
-    //   }
-    // );
-    // const fluorescentBulbNode = new LightBulbNode(
-    //   model.fluorescentBulb,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform, {
-    //     bulbType: 'fluorescent',
-    //     tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
-    //   }
-    // );
+    const incandescentBulbNode = new LightBulbNode(
+      model.incandescentBulb,
+      model.energyChunksVisibleProperty,
+      modelViewTransform, {
+        bulbType: 'incandescent',
+        tandem: energyUsersTandem.createTandem( 'incandescentBulbNode' )
+      }
+    );
+    const fluorescentBulbNode = new LightBulbNode(
+      model.fluorescentBulb,
+      model.energyChunksVisibleProperty,
+      modelViewTransform, {
+        bulbType: 'fluorescent',
+        tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
+      }
+    );
     const fanNode = new FanNode(
       model.fan,
       model.energyChunksVisibleProperty,
@@ -158,8 +158,8 @@ class SystemsScreenView extends ScreenView {
       energyUsersTandem.createTandem( 'fanNode' )
     );
     this.addChild( this.beakerHeaterNode );
-    // this.addChild( incandescentBulbNode );
-    // this.addChild( fluorescentBulbNode );
+    this.addChild( incandescentBulbNode );
+    this.addChild( fluorescentBulbNode );
     this.addChild( fanNode );
 
     // create the energy converter nodes
