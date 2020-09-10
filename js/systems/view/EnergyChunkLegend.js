@@ -16,6 +16,7 @@ import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
@@ -90,7 +91,7 @@ class EnergyChunkLegend extends Panel {
     // The EnergyChunks that are created here are not going to be used in the simulation, they are only needed for the
     // EnergyChunkNodes that are displayed in the legend.
     const iconNode = new EnergyChunkNode(
-      new EnergyChunk( energyType, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ) ),
+      new EnergyChunk( energyType, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
       modelViewTransform
     );
 

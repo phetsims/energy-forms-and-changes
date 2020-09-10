@@ -19,7 +19,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
-import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
@@ -45,9 +44,10 @@ class Burner extends ModelElement {
   /**
    * @param {Vector2} position - the position in model space where this burner exists
    * @param {Property.<boolean>} energyChunksVisibleProperty - controls whether the energy chunks are visible
+   * @param {EnergyChunkGroup} energyChunkGroup
    * @param {Object} [options]
    */
-  constructor( position, energyChunksVisibleProperty, options ) {
+  constructor( position, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -87,6 +87,9 @@ class Burner extends ModelElement {
       position.x + SIDE_LENGTH / 2,
       position.y + SIDE_LENGTH
     );
+
+    // @private
+    this.energyChunkGroup = energyChunkGroup;
 
     // add position test bounds (see definition in base class for more info)
     this.relativePositionTestingBoundsList.push( new Bounds2( -SIDE_LENGTH / 2, 0, SIDE_LENGTH / 2, SIDE_LENGTH ) );
@@ -222,7 +225,7 @@ class Burner extends ModelElement {
     if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
 
       // create an energy chunk
-      closestEnergyChunk = new EnergyChunk(
+      closestEnergyChunk = this.energyChunkGroup.createNextElement(
         EnergyType.THERMAL,
         this.getCenterPoint(), // will originate from the center of this burner
         new Vector2( 0, 0 ),

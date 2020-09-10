@@ -38,7 +38,7 @@ class EnergyChunk extends PhetioObject {
     options = merge( {
 
       // phet-io
-      tandem: Tandem.OPTIONAL, // TODO: should this become REQUIRED? https://github.com/phetsims/energy-forms-and-changes/issues/350
+      tandem: Tandem.REQUIRED,
       phetioType: EnergyChunkIO,
       phetioDynamicElement: true,
 

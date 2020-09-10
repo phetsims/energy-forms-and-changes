@@ -23,6 +23,7 @@ import Beaker from '../../common/model/Beaker.js';
 import BeakerIO from '../../common/model/BeakerIO.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
+import EnergyChunkContainerSliceGroup from '../../common/model/EnergyChunkContainerSliceGroup.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
@@ -129,10 +130,20 @@ class EFACIntroModel {
       ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
     ];
 
+
+    // @private
+    this.energyChunkGroup = new EnergyChunkGroup( {
+      tandem: tandem.createTandem( 'EnergyChunkGroup' )
+    } );
+
+    const energyChunkSliceGroup = new EnergyChunkContainerSliceGroup( this.energyChunksVisibleProperty, {
+      tandem: tandem.createTandem( 'energyChunkSliceGroup' )
+    } );
+
     // @public (read-only) {Burner}
     this.leftBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
-      this.energyChunksVisibleProperty, {
+      this.energyChunksVisibleProperty, this.energyChunkGroup, {
         tandem: tandem.createTandem( 'leftBurner' ),
         phetioDocumentation: 'always appears in the simulation, but may be the only burner'
       }
@@ -141,7 +152,7 @@ class EFACIntroModel {
     // @public (read-only) {Burner}
     this.rightBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 1 ] || 0, 0 ),
-      this.energyChunksVisibleProperty, {
+      this.energyChunksVisibleProperty, this.energyChunkGroup, {
         tandem: tandem.createTandem( 'rightBurner' ),
         phetioDocumentation: 'does not appear in the simulation if the query parameter value burners=1 is provided'
       } );
@@ -152,18 +163,14 @@ class EFACIntroModel {
       this.burners.push( this.rightBurner );
     }
 
-    // @private
-    this.energyChunkGroup = new EnergyChunkGroup( {
-      tandem: tandem.createTandem( 'EnergyChunkGroup' )
-    } );
-
     // @public {PhetioGroup.<Block>}
     this.blockGroup = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
         return new Block(
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          this.energyChunkGroup, {
+          this.energyChunkGroup,
+          energyChunkSliceGroup, {
             tandem: tandem
           } );
       },
@@ -193,7 +200,8 @@ class EFACIntroModel {
           BEAKER_HEIGHT,
           this.blockGroup,
           this.energyChunksVisibleProperty,
-          this.energyChunkGroup,{
+          this.energyChunkGroup,
+          energyChunkSliceGroup, {
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,

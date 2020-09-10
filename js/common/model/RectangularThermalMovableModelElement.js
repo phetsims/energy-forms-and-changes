@@ -41,16 +41,17 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @param {number} mass - in kg
    * @param {number} specificHeat - in J/kg-K
    * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {PhetioGroup} energyChunkGroup
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkContainerSliceGroup} energyChunkSliceGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup,
+               energyChunkSliceGroup, options ) {
 
     options = merge( {
 
       // phet-io
-      tandem: Tandem.REQUIRED,
-      energyChunkSliceGroup: null // if provided, use this to create EnergyChunkContainerSlices instead of using `new`
+      tandem: Tandem.REQUIRED
     }, options );
 
     super( initialPosition, options );
@@ -83,8 +84,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
 
-    // @private - {PhetioGroup|null} - null because first screen doesn't yet support this group. TODO:  https://github.com/phetsims/energy-forms-and-changes/issues/350
-    this.energyChunkSliceGroup = options.energyChunkSliceGroup;
+    // @private - {PhetioGroup}
+    this.energyChunkSliceGroup = energyChunkSliceGroup;
 
     // @private - {PhetioGroup}
     this.energyChunkGroup = energyChunkGroup;
