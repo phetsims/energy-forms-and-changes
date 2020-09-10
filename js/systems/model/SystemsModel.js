@@ -21,6 +21,7 @@ import Belt from './Belt.js';
 import Biker from './Biker.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
+import FaucetAndWater from './FaucetAndWater.js';
 import Generator from './Generator.js';
 
 // constants
@@ -79,12 +80,12 @@ class SystemsModel {
       energySourcesTandem.createTandem( 'biker' )
     );
 
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    // this.faucetAndWater = new FaucetAndWater(
-    //   this.energyChunksVisibleProperty,
-    //   this.generator.activeProperty,
-    //   energySourcesTandem.createTandem( 'faucetAndWater' )
-    // );
+    this.faucetAndWater = new FaucetAndWater(
+      this.energyChunksVisibleProperty,
+      this.generator.activeProperty,
+      this.energyChunkGroup,
+      energySourcesTandem.createTandem( 'faucetAndWater' )
+    );
     // this.sun = new SunEnergySource(
     //   this.solarPanel,
     //   this.energyChunksVisibleProperty,
@@ -121,8 +122,8 @@ class SystemsModel {
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
       // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-      [ this.biker ],
-      Enumeration.byKeys( [ 'BIKER' ] ),
+      [ this.biker, this.faucetAndWater ],
+      Enumeration.byKeys( [ 'BIKER', 'FAUCET' ] ),
       // [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
       // Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
 
