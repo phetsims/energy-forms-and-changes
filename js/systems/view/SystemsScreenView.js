@@ -45,6 +45,7 @@ import GeneratorNode from './GeneratorNode.js';
 import FaucetAndWaterNode from './FaucetAndWaterNode.js';
 import SolarPanelNode from './SolarPanelNode.js';
 import SunNode from './SunNode.js';
+import TeaKettleNode from './TeaKettleNode.js';
 
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
 
@@ -208,12 +209,12 @@ class SystemsScreenView extends ScreenView {
     );
 
     // @private
-    // this.teaKettleNode = new TeaKettleNode(
-    //   model.teaKettle,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform,
-    //   energySourcesTandem.createTandem( 'teaKettleNode' )
-    // );
+    this.teaKettleNode = new TeaKettleNode(
+      model.teaKettle,
+      model.energyChunksVisibleProperty,
+      modelViewTransform,
+      energySourcesTandem.createTandem( 'teaKettleNode' )
+    );
     const bikerNode = new BikerNode(
       model.biker,
       model.energyChunksVisibleProperty,
@@ -222,7 +223,7 @@ class SystemsScreenView extends ScreenView {
     );
     this.addChild( sunNode );
     this.addChild( bikerNode );
-    // this.addChild( this.teaKettleNode );
+    this.addChild( this.teaKettleNode );
 
     // use this Tandem for the checkbox, too, so it appears as a child of the panel
     const controlPanelTandem = tandem.createTandem( 'controlPanel' );
@@ -297,7 +298,7 @@ class SystemsScreenView extends ScreenView {
       listener: () => {
         model.reset();
         this.beakerHeaterNode.reset();
-        // this.teaKettleNode.reset();
+        this.teaKettleNode.reset();
       },
       radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
       right: layoutBounds.maxX - EDGE_INSET,
@@ -377,7 +378,7 @@ class SystemsScreenView extends ScreenView {
    * @public
    */
   stepView( dt ) {
-    // this.teaKettleNode.step( dt );
+    this.teaKettleNode.step( dt );
     this.beakerHeaterNode.step( dt );
     this.faucetAndWaterNode.step( dt );
   }

@@ -9,9 +9,12 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import TEAPOT_ICON from '../../../images/tea_kettle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -44,9 +47,11 @@ class TeaKettle extends EnergySource {
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
     super( new Image( TEAPOT_ICON ), tandem );
 
     // @public {string} - a11y name
@@ -75,12 +80,19 @@ class TeaKettle extends EnergySource {
     // @private
     this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
-    this.energyChunkMovers = [];
+    this.energyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'energyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
-    // List of chunks that are not being transferred to the next energy system
+    // @private - List of chunks that are not being transferred to the next energy system
     // element.
-    this.exemptFromTransferEnergyChunks = [];
-
+    this.exemptFromTransferEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
     // Flag for whether next chunk should be transferred or kept, used to
     // alternate transfer with non-transfer.
     this.transferNextAvailableChunk = true;
@@ -131,7 +143,7 @@ class TeaKettle extends EnergySource {
         const y0 = this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
         const initialPosition = new Vector2( x0, y0 );
 
-        const energyChunk = new EnergyChunk(
+        const energyChunk = this.energyChunkGroup.createNextElement(
           EnergyType.THERMAL,
           initialPosition,
           Vector2.ZERO,
@@ -142,7 +154,7 @@ class TeaKettle extends EnergySource {
 
         this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
-        this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
       }
@@ -158,7 +170,7 @@ class TeaKettle extends EnergySource {
    * @private
    */
   moveEnergyChunks( dt ) {
-    const chunkMovers = _.clone( this.energyChunkMovers );
+    const chunkMovers = this.energyChunkMovers.getArrayCopy();
 
     chunkMovers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -166,7 +178,7 @@ class TeaKettle extends EnergySource {
 
       if ( mover.pathFullyTraversed ) {
 
-        _.pull( this.energyChunkMovers, mover );
+        this.energyChunkMovers.remove( mover );
 
         // This is a thermal chunk that is coming out of the water.
         if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
@@ -181,14 +193,14 @@ class TeaKettle extends EnergySource {
           const travelDistance = chunk.positionProperty.get().distance( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
           // create path mover to spout bottom
-          this.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
         }
 
         // This chunk is moving out of the spout.
         else if ( chunk.positionProperty.get().equals( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
-          this.energyChunkMovers.push( new EnergyChunkPathMover( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createStraightPath( this.positionProperty.value, SPOUT_EXIT_ANGLE ),
             EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
         }
@@ -207,19 +219,19 @@ class TeaKettle extends EnergySource {
         if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
              this.steamPowerableElementInPlaceProperty.get() &&
              ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( this.positionProperty.value.distance( chunk.positionProperty.get() ) ) &&
-             !_.includes( this.exemptFromTransferEnergyChunks, chunk ) ) {
+             !this.exemptFromTransferEnergyChunks.includes( chunk ) ) {
 
           // Send this chunk to the next energy system.
           if ( this.transferNextAvailableChunk ) {
             this.outgoingEnergyChunks.push( chunk );
 
-            _.pull( this.energyChunkMovers, mover );
+            this.energyChunkMovers.remove( mover );
 
             // Alternate sending or keeping chunks.
             this.transferNextAvailableChunk = false;
           }
 
-          // Don't transfer this chunk.
+            // Don't transfer this chunk.
           // Set up to transfer the next one.
           else {
             this.exemptFromTransferEnergyChunks.push( chunk );
@@ -228,13 +240,13 @@ class TeaKettle extends EnergySource {
           }
         }
 
-        // if a chunk has reached the position where it should transfer to the next system, but no steam powerable
+          // if a chunk has reached the position where it should transfer to the next system, but no steam powerable
         // element is in place, add the chunk to the list of non transfers
         else if ( !this.steamPowerableElementInPlaceProperty.get() &&
                   ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains(
                     this.positionProperty.value.distance( chunk.positionProperty.get() )
                   ) &&
-                  !_.includes( this.exemptFromTransferEnergyChunks, chunk ) ) {
+                  !this.exemptFromTransferEnergyChunks.includes( chunk ) ) {
           this.exemptFromTransferEnergyChunks.push( chunk );
         }
       }
@@ -287,7 +299,7 @@ class TeaKettle extends EnergySource {
           initialPosition = new Vector2( this.positionProperty.value.x, this.positionProperty.value.y );
         }
 
-        const energyChunk = new EnergyChunk(
+        const energyChunk = this.energyChunkGroup.createNextElement(
           EnergyType.THERMAL,
           initialPosition,
           Vector2.ZERO,
@@ -295,7 +307,7 @@ class TeaKettle extends EnergySource {
         );
         this.energyChunkList.push( energyChunk );
 
-        this.energyChunkMovers.push( new EnergyChunkPathMover( energyChunk,
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
         ) );
@@ -343,8 +355,8 @@ class TeaKettle extends EnergySource {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.exemptFromTransferEnergyChunks.length = 0;
-    this.energyChunkMovers.length = 0;
+    this.exemptFromTransferEnergyChunks.clear();
+    this.energyChunkMovers.clear();
   }
 }
 
