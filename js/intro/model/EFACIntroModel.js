@@ -23,6 +23,7 @@ import Beaker from '../../common/model/Beaker.js';
 import BeakerIO from '../../common/model/BeakerIO.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
 import BeakerContainer from './BeakerContainer.js';
@@ -151,12 +152,18 @@ class EFACIntroModel {
       this.burners.push( this.rightBurner );
     }
 
+    // @private
+    this.energyChunkGroup = new EnergyChunkGroup( {
+      tandem: tandem.createTandem( 'EnergyChunkGroup' )
+    } );
+
     // @public {PhetioGroup.<Block>}
     this.blockGroup = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
         return new Block(
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
-          blockType, {
+          blockType,
+          this.energyChunkGroup, {
             tandem: tandem
           } );
       },
@@ -185,7 +192,8 @@ class EFACIntroModel {
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
           this.blockGroup,
-          this.energyChunksVisibleProperty, {
+          this.energyChunksVisibleProperty,
+          this.energyChunkGroup,{
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,
