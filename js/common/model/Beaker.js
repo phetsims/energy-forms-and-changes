@@ -21,7 +21,6 @@ import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import BeakerIO from './BeakerIO.js';
 import BeakerType from './BeakerType.js';
-import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
 import EnergyType from './EnergyType.js';
@@ -64,9 +63,10 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @param {number} height
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {PhetioGroup} energyChunkGroup
+   * @param {EnergyChunkContainerSliceGroup} energyChunkSliceGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, energyChunkSliceGroup, options ) {
 
     options = merge( {
       beakerType: BeakerType.WATER,
@@ -90,6 +90,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
       energyChunksVisibleProperty,
       energyChunkGroup,
+      energyChunkSliceGroup,
       options
     );
 
@@ -390,16 +391,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       const zPosition = -proportion * this.width;
       const sliceBounds = Bounds2.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
 
-      // TODO: support groups here in the first screen, https://github.com/phetsims/energy-forms-and-changes/issues/350
-      let newSlice = null;
-      if ( this.energyChunkSliceGroup ) {
-
-        newSlice = this.energyChunkSliceGroup.createNextElement( sliceBounds, zPosition, this.positionProperty );
-      }
-      else {
-        newSlice = new EnergyChunkContainerSlice( sliceBounds, zPosition, this.positionProperty );
-      }
-      this.slices.push( newSlice );
+      this.slices.push( this.energyChunkSliceGroup.createNextElement( sliceBounds, zPosition, this.positionProperty ) );
     }
   }
 

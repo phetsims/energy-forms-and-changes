@@ -37,6 +37,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import Animation from '../../../../twixt/js/Animation.js';
@@ -700,7 +701,7 @@ class EFACIntroScreenView extends ScreenView {
     // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
     // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
     const energyChunkNode = new EnergyChunkNode(
-      new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ) ),
+      new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
       modelViewTransform
     );
     energyChunkNode.pickable = false;
