@@ -109,14 +109,14 @@ class EnergySystemElementCarousel {
 
     // activate and deactivate energy system elements as they come into the center position
     this.animationInProgressProperty.lazyLink( animationInProgress => {
-      if ( animationInProgress ) {
-        this.managedElements.forEach( element => {
 
-          // prevent deactivation from overwriting state values, see https://github.com/phetsims/energy-forms-and-changes/issues/337
-          if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-            element.deactivate();
-          }
-        } );
+      // prevent deactivation from overwriting state values, see https://github.com/phetsims/energy-forms-and-changes/issues/337
+      // activation can create extra EnergyChunks (which are instrumented since https://github.com/phetsims/energy-forms-and-changes/issues/350)
+      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        return;
+      }
+      if ( animationInProgress ) {
+        this.managedElements.forEach( element => element.deactivate() );
       }
       else {
         this.getElement( this.targetIndexProperty.value ).activate();
