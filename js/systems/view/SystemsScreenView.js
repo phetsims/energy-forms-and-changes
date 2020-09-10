@@ -40,15 +40,11 @@ import BeltNode from './BeltNode.js';
 import BikerNode from './BikerNode.js';
 import EnergyChunkLegend from './EnergyChunkLegend.js';
 import EnergySystemElementSelector from './EnergySystemElementSelector.js';
+import FanNode from './FanNode.js';
 import GeneratorNode from './GeneratorNode.js';
-
-// TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-// import FanNode from './FanNode.js';
 import FaucetAndWaterNode from './FaucetAndWaterNode.js';
-// import LightBulbNode from './LightBulbNode.js';
 import SolarPanelNode from './SolarPanelNode.js';
 import SunNode from './SunNode.js';
-// import TeaKettleNode from './TeaKettleNode.js';
 
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
 
@@ -154,16 +150,16 @@ class SystemsScreenView extends ScreenView {
     //     tandem: energyUsersTandem.createTandem( 'fluorescentBulbNode' )
     //   }
     // );
-    // const fanNode = new FanNode(
-    //   model.fan,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform,
-    //   energyUsersTandem.createTandem( 'fanNode' )
-    // );
+    const fanNode = new FanNode(
+      model.fan,
+      model.energyChunksVisibleProperty,
+      modelViewTransform,
+      energyUsersTandem.createTandem( 'fanNode' )
+    );
     this.addChild( this.beakerHeaterNode );
     // this.addChild( incandescentBulbNode );
     // this.addChild( fluorescentBulbNode );
-    // this.addChild( fanNode );
+    this.addChild( fanNode );
 
     // create the energy converter nodes
     const generatorNode = new GeneratorNode(
@@ -189,7 +185,6 @@ class SystemsScreenView extends ScreenView {
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
     // @private
     this.faucetAndWaterNode = new FaucetAndWaterNode(
       model.faucetAndWater,
@@ -203,8 +198,6 @@ class SystemsScreenView extends ScreenView {
     // desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks that
     // are traveling on top of the falling water now remain in front of the water once the generator owns them.
     this.addChild( generatorNode.getMechanicalEnergyChunkLayer() );
-
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
 
     // create the rest of the energy source nodes
     const sunNode = new SunNode(
