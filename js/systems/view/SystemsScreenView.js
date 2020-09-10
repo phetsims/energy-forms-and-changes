@@ -46,8 +46,8 @@ import GeneratorNode from './GeneratorNode.js';
 // import FanNode from './FanNode.js';
 import FaucetAndWaterNode from './FaucetAndWaterNode.js';
 // import LightBulbNode from './LightBulbNode.js';
-// import SolarPanelNode from './SolarPanelNode.js';
-// import SunNode from './SunNode.js';
+import SolarPanelNode from './SolarPanelNode.js';
+import SunNode from './SunNode.js';
 // import TeaKettleNode from './TeaKettleNode.js';
 
 const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
@@ -180,15 +180,14 @@ class SystemsScreenView extends ScreenView {
       }
     );
 
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    // const solarPanelNode = new SolarPanelNode(
-    //   model.solarPanel,
-    //   modelViewTransform,
-    //   energyConvertersTandem.createTandem( 'solarPanelNode' )
-    // );
+    const solarPanelNode = new SolarPanelNode(
+      model.solarPanel,
+      modelViewTransform,
+      energyConvertersTandem.createTandem( 'solarPanelNode' )
+    );
     this.addChild( generatorNode );
     this.addChild( beltNode );
-    // this.addChild( solarPanelNode );
+    this.addChild( solarPanelNode );
 
     // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
     // @private
@@ -206,14 +205,14 @@ class SystemsScreenView extends ScreenView {
     this.addChild( generatorNode.getMechanicalEnergyChunkLayer() );
 
     // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    //
-    // // create the rest of the energy source nodes
-    // const sunNode = new SunNode(
-    //   model.sun,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform,
-    //   energySourcesTandem.createTandem( 'sunNode' )
-    // );
+
+    // create the rest of the energy source nodes
+    const sunNode = new SunNode(
+      model.sun,
+      model.energyChunksVisibleProperty,
+      modelViewTransform,
+      energySourcesTandem.createTandem( 'sunNode' )
+    );
 
     // @private
     // this.teaKettleNode = new TeaKettleNode(
@@ -228,7 +227,7 @@ class SystemsScreenView extends ScreenView {
       modelViewTransform,
       energySourcesTandem.createTandem( 'bikerNode' )
     );
-    // this.addChild( sunNode );
+    this.addChild( sunNode );
     this.addChild( bikerNode );
     // this.addChild( this.teaKettleNode );
 
