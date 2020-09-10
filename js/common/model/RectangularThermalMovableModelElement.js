@@ -9,15 +9,18 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
-import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
@@ -38,9 +41,18 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @param {number} mass - in kg
    * @param {number} specificHeat - in J/kg-K
    * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {PhetioGroup} energyChunkGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, options ) {
+  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
+
+    options = merge( {
+
+      // phet-io
+      tandem: Tandem.REQUIRED,
+      energyChunkSliceGroup: null // if provided, use this to create EnergyChunkContainerSlices instead of using `new`
+    }, options );
+
     super( initialPosition, options );
 
     // @public (read-only)
@@ -70,6 +82,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
+
+    // @private - {PhetioGroup|null} - null because first screen doesn't yet support this group. TODO:  https://github.com/phetsims/energy-forms-and-changes/issues/350
+    this.energyChunkSliceGroup = options.energyChunkSliceGroup;
+
+    // @private - {PhetioGroup}
+    this.energyChunkGroup = energyChunkGroup;
 
     // @protected {ThermalContactArea} - the 2D area for this element where it can be in contact with another thermal
     // elements and thus exchange heat, generally set by descendant classes
@@ -148,9 +166,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // @private {number} - minimum amount of energy that this is allowed to have
     this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
 
-    // @public (read-only) {EnergyChunkContainerSlice[]} 2D "slices" of the container, used for 3D layering of energy
+    // @public (read-only) {ObservableArray.<EnergyChunkContainerSlice>} 2D "slices" of the container, used for 3D layering of energy
     // chunks in the view
-    this.slices = [];
+    this.slices = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'slices' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkContainerSlice.EnergyChunkContainerSliceIO ) )
+    } );
 
     // add the slices
     this.addEnergyChunkSlices();
@@ -279,7 +300,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 
       // distribute the energy chunks contained within this model element
-      const redistributed = energyChunkDistributor.updatePositions( this.slices, dt );
+      const redistributed = energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), dt );
 
       if ( !redistributed ) {
 
@@ -354,7 +375,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     let lowestEnergyDensityFound = Number.NEGATIVE_INFINITY;
 
     for ( let ecSliceCount = 0; ecSliceCount < this.slices.length; ecSliceCount++ ) {
-      const slice = this.slices[ sliceIndex ];
+      const slice = this.slices.get( sliceIndex );
       const sliceArea = slice.bounds.width * slice.bounds.height;
       const energyChunkDensity = slice.getNumberOfEnergyChunks() / sliceArea;
       if ( sliceIndexWithLowestEnergyDensity === null || energyChunkDensity < lowestEnergyDensityFound ) {
@@ -365,7 +386,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     }
 
     // add the energy chunk to the slice with the lowest density of energy chunks
-    this.slices[ sliceIndexWithLowestEnergyDensity ].addEnergyChunk( energyChunk );
+    this.slices.get( sliceIndexWithLowestEnergyDensity ).addEnergyChunk( energyChunk );
 
     // trigger redistribution of the energy chunks
     this.resetECDistributionCountdown();
@@ -527,10 +548,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // fail safe - if nothing found, get the first chunk
     if ( chunkToExtract === null ) {
       console.warn( 'No energy chunk found by extraction algorithm, trying first available..' );
-      const length = this.slices.length;
-      for ( let i = 0; i < length; i++ ) {
-        if ( this.slices[ i ].energyChunkList.length > 0 ) {
-          chunkToExtract = this.slices[ i ].energyChunkList.get( 0 );
+      for ( let i = 0; i < this.slices.length; i++ ) {
+        if ( this.slices.get( i ).energyChunkList.length > 0 ) {
+          chunkToExtract = this.slices.get( i ).energyChunkList.get( 0 );
           break;
         }
       }
@@ -575,13 +595,13 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     let slideIndex = Math.floor( this.slices.length / 2 ) - 1;
     let numberOfEnergyChunksAdded = 0;
     while ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
-      const slice = this.slices[ slideIndex ];
+      const slice = this.slices.get( slideIndex );
       const numberOfEnergyChunksInSlice = slice.getNumberOfEnergyChunks();
       const center = slice.bounds.center.plusXY(
         smallOffset * numberOfEnergyChunksAdded, smallOffset * numberOfEnergyChunksInSlice
       );
       slice.addEnergyChunk(
-        new EnergyChunk( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
+        this.energyChunkGroup.createNextElement( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
       );
       numberOfEnergyChunksAdded++;
       slideIndex = ( slideIndex + 1 ) % this.slices.length;
@@ -592,7 +612,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // distribute the initial energy chunks within the container using the repulsive algorithm
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
-      const distributed = energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      const distributed = energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       if ( !distributed ) {
         break;
       }

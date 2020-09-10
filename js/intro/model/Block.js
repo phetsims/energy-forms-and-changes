@@ -55,7 +55,7 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {BlockType} blockType
    * @param {Tandem} tandem
    */
-  constructor( initialPosition, energyChunksVisibleProperty, blockType, options ) {
+  constructor( initialPosition, energyChunksVisibleProperty, blockType, energyChunkGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -71,6 +71,7 @@ class Block extends RectangularThermalMovableModelElement {
       Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
       BLOCK_COMPOSITION[ blockType ].specificHeat,
       energyChunksVisibleProperty,
+      energyChunkGroup,
       options
     );
 
