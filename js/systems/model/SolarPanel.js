@@ -11,6 +11,8 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
@@ -18,12 +20,12 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import SOLAR_PANEL_ICON from '../../../images/solar_panel_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyConverter from './EnergyConverter.js';
@@ -52,17 +54,25 @@ class SolarPanel extends EnergyConverter {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
     super( new Image( SOLAR_PANEL_ICON ), tandem );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.solarPanel;
 
     // @private
-    this.electricalEnergyChunkMovers = [];
-    this.lightEnergyChunkMovers = [];
+    this.electricalEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.lightEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'lightEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
     this.latestChunkArrivalTime = 0;
     this.numberOfConvertedChunks = 0;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
@@ -74,6 +84,8 @@ class SolarPanel extends EnergyConverter {
 
     // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // A shape used to describe where the collection area is relative to the model position.  The collection area is at
     // the top, and the energy chunks flow through wires and connectors below.
@@ -127,7 +139,7 @@ class SolarPanel extends EnergyConverter {
               this.energyChunkList.push( incomingChunk );
 
               // add a "mover" that will move this energy chunk to the bottom of the solar panel
-              this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+              this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
                 this.chooseChunkSpeedOnPanel( incomingChunk ) )
@@ -141,7 +153,7 @@ class SolarPanel extends EnergyConverter {
               this.energyChunkList.push( incomingChunk );
 
               // add a "mover" that will reflect this energy chunk up and away from the panel
-              this.lightEnergyChunkMovers.push( new EnergyChunkPathMover(
+              this.lightEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
                 incomingChunk,
                 EnergyChunkPathMover.createStraightPath( incomingChunk.positionProperty.get(), REFLECTION_ANGLE ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -160,7 +172,7 @@ class SolarPanel extends EnergyConverter {
           }
         } );
 
-        this.incomingEnergyChunks.length = 0;
+        this.incomingEnergyChunks.clear();
       }
 
       // move the energy chunks that are currently under management
@@ -191,7 +203,7 @@ class SolarPanel extends EnergyConverter {
   moveElectricalEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = _.clone( this.electricalEnergyChunkMovers );
+    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
 
@@ -199,7 +211,7 @@ class SolarPanel extends EnergyConverter {
 
       if ( mover.pathFullyTraversed ) {
 
-        _.pull( this.electricalEnergyChunkMovers, mover );
+        this.electricalEnergyChunkMovers.remove( mover );
         const pathThroughConverterOffsets = [
           WIRE_CURVE_POINT_1_OFFSET,
           WIRE_CURVE_POINT_2_OFFSET,
@@ -211,7 +223,7 @@ class SolarPanel extends EnergyConverter {
 
         // energy chunk has reached the bottom of the panel and now needs to move through the converter
         if ( mover.energyChunk.positionProperty.value.equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
-          this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+          this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, pathThroughConverterOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
@@ -234,14 +246,14 @@ class SolarPanel extends EnergyConverter {
   moveReflectedEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = _.clone( this.lightEnergyChunkMovers );
+    const movers = this.lightEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
 
       // remove this energy chunk entirely
       if ( mover.pathFullyTraversed ) {
-        _.pull( this.lightEnergyChunkMovers, mover );
+        this.lightEnergyChunkMovers.remove( mover );
         this.energyChunkList.remove( mover.energyChunk );
       }
     } );
@@ -253,7 +265,6 @@ class SolarPanel extends EnergyConverter {
    * @override
    */
   preloadEnergyChunks( incomingEnergy ) {
-
     this.clearEnergyChunks();
 
     if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.LIGHT ) {
@@ -295,7 +306,7 @@ class SolarPanel extends EnergyConverter {
           );
         }
 
-        const newEnergyChunk = new EnergyChunk(
+        const newEnergyChunk = this.energyChunkGroup.createNextElement(
           EnergyType.ELECTRICAL,
           initialPosition,
           Vector2.ZERO,
@@ -305,7 +316,7 @@ class SolarPanel extends EnergyConverter {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk to the bottom of the solar panel
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
           this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
@@ -399,7 +410,8 @@ class SolarPanel extends EnergyConverter {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.electricalEnergyChunkMovers.length = 0;
+    this.electricalEnergyChunkMovers.clear();
+    this.lightEnergyChunkMovers.clear();
     this.latestChunkArrivalTime = 0;
   }
 

@@ -10,17 +10,20 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedPropertyIO from '../../../../axon/js/DerivedPropertyIO.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import SUN_ICON from '../../../images/sun_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Cloud from './Cloud.js';
 import Energy from './Energy.js';
 import EnergySource from './EnergySource.js';
@@ -45,9 +48,10 @@ class SunEnergySource extends EnergySource {
   /**
    * @param {SolarPanel} solarPanel
    * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
    * @param {Tandem} tandem
    */
-  constructor( solarPanel, energyChunksVisibleProperty, tandem ) {
+  constructor( solarPanel, energyChunksVisibleProperty, energyChunkGroup, tandem ) {
     super( new Image( SUN_ICON ), tandem );
 
     // @public {string} - a11y name
@@ -93,7 +97,13 @@ class SunEnergySource extends EnergySource {
 
     // @private - list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
     // reflected)
-    this.energyChunksPassingThroughClouds = [];
+    this.energyChunksPassingThroughClouds = new ObservableArray( {
+      tandem: tandem.createTandem( 'energyChunksPassingThroughClouds' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
+
+    // @private
+    this.energyChunkGroup = energyChunkGroup;
 
     // set up a listener to add/remove clouds based on the value of the cloudiness Property
     this.cloudinessProportionProperty.link( cloudiness => {
@@ -161,6 +171,7 @@ class SunEnergySource extends EnergySource {
 
       // this energy chunk was absorbed by the solar panel, so put it on the list of outgoing chunks
       if ( this.solarPanel.activeProperty.value && this.solarPanel.getAbsorptionShape().containsPoint( chunk.positionProperty.value ) ) {
+        this.energyChunkList.remove( chunk );
         this.outgoingEnergyChunks.push( chunk );
       }
 
@@ -170,7 +181,7 @@ class SunEnergySource extends EnergySource {
                 chunk.positionProperty.value.y > EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
       ) {
         this.energyChunkList.remove( chunk );
-        _.pull( this.energyChunksPassingThroughClouds, chunk );
+        this.energyChunksPassingThroughClouds.remove( chunk );
       }
 
       // chunks encountering clouds
@@ -178,7 +189,7 @@ class SunEnergySource extends EnergySource {
         this.clouds.forEach( cloud => {
 
           const inClouds = cloud.getCloudAbsorptionReflectionShape().containsPoint( chunk.positionProperty.value );
-          const inList = _.includes( this.energyChunksPassingThroughClouds, chunk );
+          const inList = this.energyChunksPassingThroughClouds.includes( chunk );
           const deltaPhi = chunk.velocity.angle - chunk.positionProperty.value.minus( this.sunPosition ).angle;
 
           if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {
@@ -226,7 +237,7 @@ class SunEnergySource extends EnergySource {
     const emissionAngle = this.chooseNextEmissionAngle();
     const velocity = new Vector2( EFACConstants.ENERGY_CHUNK_VELOCITY, 0 ).rotated( emissionAngle );
     const startPoint = this.sunPosition.plus( new Vector2( RADIUS / 2, 0 ).rotated( emissionAngle ) );
-    const chunk = new EnergyChunk( EnergyType.LIGHT, startPoint, velocity, this.energyChunksVisibleProperty );
+    const chunk = this.energyChunkGroup.createNextElement( EnergyType.LIGHT, startPoint, velocity, this.energyChunksVisibleProperty );
 
     this.energyChunkList.add( chunk );
   }
@@ -253,7 +264,7 @@ class SunEnergySource extends EnergySource {
     }
 
     // remove any chunks that actually made it to the solar panel
-    this.outgoingEnergyChunks.length = 0;
+    this.outgoingEnergyChunks.clear();
   }
 
   /**
@@ -309,7 +320,7 @@ class SunEnergySource extends EnergySource {
   deactivate() {
     super.deactivate();
     this.cloudinessProportionProperty.reset();
-    this.energyChunksPassingThroughClouds = [];
+    this.energyChunksPassingThroughClouds.clear();
   }
 
 }

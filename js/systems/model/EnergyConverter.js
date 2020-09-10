@@ -25,11 +25,11 @@ class EnergyConverter extends EnergySystemElement {
     super( iconImage, tandem );
     this.incomingEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'incomingEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO(EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
     this.outgoingEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO(EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 
@@ -40,7 +40,7 @@ class EnergyConverter extends EnergySystemElement {
    * @public
    */
   extractOutgoingEnergyChunks() {
-    this.energyChunkList.removeAll( this.outgoingEnergyChunks );
+    this.energyChunkList.removeAll( this.outgoingEnergyChunks.getArray() );
 
     const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.getArrayCopy();
     this.outgoingEnergyChunks.clear();
