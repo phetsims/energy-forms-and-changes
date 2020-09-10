@@ -51,12 +51,12 @@ class Biker extends EnergySource {
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
-   * @param {EnergyChunkPhetioGroup} energyChunkPhetioGroup
-   * @param {EnergyChunkPathMoverPhetioGroup} energyChunkPathMoverPhetioGroup
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
   constructor( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty,
-               energyChunkPhetioGroup, energyChunkPathMoverPhetioGroup,
+               energyChunkGroup, energyChunkPathMoverGroup,
                tandem ) {
     super( new Image( BICYCLE_ICON ), tandem );
 
@@ -123,8 +123,8 @@ class Biker extends EnergySource {
     this.mechanicalChunksSinceLastThermal = 0;
 
     // @private
-    this.energyChunkPhetioGroup = energyChunkPhetioGroup;
-    this.energyChunkPathMoverPhetioGroup = energyChunkPathMoverPhetioGroup;
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // monitor target rotation rate for validity
     if ( assert ) {
@@ -160,7 +160,7 @@ class Biker extends EnergySource {
             // make sure that this energy chunk turns into thermal energy
             this.energyChunkMovers.remove( mover );
 
-            this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement(
+            this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
               energyChunk,
               createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, energyChunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -242,7 +242,7 @@ class Biker extends EnergySource {
       // start a new chunk moving
       const energyChunk = this.findNonMovingEnergyChunk();
       if ( energyChunk ) {
-        this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement(
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -296,7 +296,7 @@ class Biker extends EnergySource {
              !this.mechanicalPoweredSystemIsNextProperty.get() ) {
 
           // make this chunk travel to the rear hub, where it will become a chunk of thermal energy
-          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -311,7 +311,7 @@ class Biker extends EnergySource {
           ];
 
           // send this chunk to the next energy system
-          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), mechanicalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -326,7 +326,7 @@ class Biker extends EnergySource {
         // this is a mechanical energy chunk that has traveled to the hub and should now become thermal energy
         this.energyChunkMovers.remove( mover );
         chunk.energyTypeProperty.set( EnergyType.THERMAL );
-        this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createRadiatedPath( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
         );
@@ -394,7 +394,7 @@ class Biker extends EnergySource {
 
         // we know the biker is not out of energy, so get one of the remaining chunks
         const energyChunk = this.findNonMovingEnergyChunk();
-        this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement(
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -488,7 +488,7 @@ class Biker extends EnergySource {
     const displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
     const position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
-    const newEnergyChunk = this.energyChunkPhetioGroup.createNextElement(
+    const newEnergyChunk = this.energyChunkGroup.createNextElement(
       EnergyType.CHEMICAL,
       position,
       Vector2.ZERO,
