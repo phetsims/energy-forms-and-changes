@@ -8,11 +8,13 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -49,9 +51,11 @@ class LightBulb extends EnergyUser {
    * @param {Image} iconImage
    * @param {boolean} hasFilament
    * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( iconImage, hasFilament, energyChunksVisibleProperty, tandem ) {
+  constructor( iconImage, hasFilament, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
     super( iconImage, tandem );
 
     // @public (read-only) {NumberProperty}
@@ -66,14 +70,25 @@ class LightBulb extends EnergyUser {
     // @private
     this.hasFilament = hasFilament;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // @private {number} - fewer thermal energy chunks are radiated for bulbs without a filament
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
 
     // @private - movers and flags that control how the energy chunks move through the light bulb
-    this.electricalEnergyChunkMovers = [];
-    this.filamentEnergyChunkMovers = [];
-    this.radiatedEnergyChunkMovers = [];
+    this.electricalEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.filamentEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'filamentEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.radiatedEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
     this.goRightNextTime = true;
   }
 
@@ -88,7 +103,7 @@ class LightBulb extends EnergyUser {
       // handle any incoming energy chunks
       if ( this.incomingEnergyChunks.length > 0 ) {
 
-        const incomingChunks = _.clone( this.incomingEnergyChunks );
+        const incomingChunks = this.incomingEnergyChunks.getArrayCopy();
 
         incomingChunks.forEach( incomingChunk => {
 
@@ -99,7 +114,7 @@ class LightBulb extends EnergyUser {
 
             // add a "mover" that will move this energy chunk through the wire to the bulb
             this.electricalEnergyChunkMovers.push(
-              new EnergyChunkPathMover(
+              this.energyChunkPathMoverGroup.createNextElement(
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -115,7 +130,7 @@ class LightBulb extends EnergyUser {
           }
         } );
 
-        this.incomingEnergyChunks.length = 0;
+        this.incomingEnergyChunks.clear();
       }
 
       // move all of the energy chunks
@@ -167,7 +182,7 @@ class LightBulb extends EnergyUser {
   moveRadiatedEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = _.clone( this.radiatedEnergyChunkMovers );
+    const movers = this.radiatedEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -175,7 +190,7 @@ class LightBulb extends EnergyUser {
       // remove the chunk and its mover
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
-        _.pull( this.radiatedEnergyChunkMovers, mover );
+        this.radiatedEnergyChunkMovers.remove( mover );
       }
     } );
   }
@@ -187,14 +202,14 @@ class LightBulb extends EnergyUser {
   moveFilamentEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = _.clone( this.filamentEnergyChunkMovers );
+    const movers = this.filamentEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
 
       // cause this energy chunk to be radiated from the bulb
       if ( mover.pathFullyTraversed ) {
-        _.pull( this.filamentEnergyChunkMovers, mover );
+        this.filamentEnergyChunkMovers.remove( mover );
         this.radiateEnergyChunk( mover.energyChunk );
       }
     } );
@@ -207,13 +222,13 @@ class LightBulb extends EnergyUser {
   moveElectricalEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = _.clone( this.electricalEnergyChunkMovers );
+    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
 
       if ( mover.pathFullyTraversed ) {
-        _.pull( this.electricalEnergyChunkMovers, mover );
+        this.electricalEnergyChunkMovers.remove( mover );
 
         // turn this energy chunk into thermal energy on the filament
         if ( this.hasFilament ) {
@@ -221,7 +236,7 @@ class LightBulb extends EnergyUser {
           const path = this.createPathOnFilament( mover.energyChunk.positionProperty.value );
           const speed = getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
                         generateThermalChunkTimeOnFilament();
-          this.filamentEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk, path, speed ) );
+          this.filamentEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk, path, speed ) );
         }
         else {
 
@@ -258,7 +273,7 @@ class LightBulb extends EnergyUser {
 
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-        const newEnergyChunk = new EnergyChunk(
+        const newEnergyChunk = this.energyChunkGroup.createNextElement(
           EnergyType.ELECTRICAL,
           this.positionProperty.value.plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
@@ -268,7 +283,7 @@ class LightBulb extends EnergyUser {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -301,7 +316,7 @@ class LightBulb extends EnergyUser {
       energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
     }
 
-    this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
+    this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
       energyChunk,
       EnergyChunkPathMover.createRandomStraightPath(
         this.positionProperty.value,
@@ -342,10 +357,10 @@ class LightBulb extends EnergyUser {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.electricalEnergyChunkMovers.length = 0;
-    this.filamentEnergyChunkMovers.length = 0;
-    this.radiatedEnergyChunkMovers.length = 0;
-    this.incomingEnergyChunks.length = 0;
+    this.electricalEnergyChunkMovers.clear();
+    this.filamentEnergyChunkMovers.clear();
+    this.radiatedEnergyChunkMovers.clear();
+    this.incomingEnergyChunks.clear();
   }
 }
 
