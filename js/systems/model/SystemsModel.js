@@ -11,22 +11,15 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import Property from '../../../../axon/js/Property.js';
-import PropertyIO from '../../../../axon/js/PropertyIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
-import merge from '../../../../phet-core/js/merge.js';
-import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerHeater from './BeakerHeater.js';
 import Belt from './Belt.js';
 import Biker from './Biker.js';
-import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
 import Generator from './Generator.js';
 
@@ -59,21 +52,21 @@ class SystemsModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    this.energyChunkPhetioGroup = new EnergyChunkPhetioGroup( {
-      tandem: tandem.createTandem( 'energyChunkPhetioGroup' ),
-      phetioType: PhetioGroupIO( EnergyChunk.EnergyChunkIO )
+    // @private
+    this.energyChunkGroup = new EnergyChunkGroup( {
+      tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    this.energyChunkPathMoverPhetioGroup = new EnergyChunkPathMoverPhetioGroup( this.energyChunkPhetioGroup, {
-      tandem: tandem.createTandem( 'energyChunkPathMoverPhetioGroup' ),
-      phetioType: PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
+    // @private
+    this.energyChunkPathMoverGroup = new EnergyChunkPathMoverGroup( this.energyChunkGroup, {
+      tandem: tandem.createTandem( 'energyChunkPathMoverGroup' )
     } );
 
     // @public (read-only) energy converters
     this.generator = new Generator(
       this.energyChunksVisibleProperty,
-      this.energyChunkPhetioGroup,
-      this.energyChunkPathMoverPhetioGroup,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
       energyConvertersTandem.createTandem( 'generator' ) );
     // this.solarPanel = new SolarPanel( this.energyChunksVisibleProperty, energyConvertersTandem.createTandem( 'solarPanel' ) );
 
@@ -81,8 +74,8 @@ class SystemsModel {
     this.biker = new Biker(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
-      this.energyChunkPhetioGroup,
-      this.energyChunkPathMoverPhetioGroup,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
       energySourcesTandem.createTandem( 'biker' )
     );
 
@@ -121,8 +114,8 @@ class SystemsModel {
     //   energyUsersTandem.createTandem( 'fluorescentBulb' )
     // );
     this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty,
-      this.energyChunkPhetioGroup,
-      this.energyChunkPathMoverPhetioGroup,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
       energyUsersTandem.createTandem( 'beakerHeater' ) );
 
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
@@ -268,45 +261,6 @@ class SystemsModel {
     source.preloadEnergyChunks();
     converter.preloadEnergyChunks( source.getEnergyOutputRate() );
     user.preloadEnergyChunks( converter.getEnergyOutputRate() );
-  }
-}
-
-
-// TODO: these go somewhere else https://github.com/phetsims/energy-forms-and-changes/issues/350
-class EnergyChunkPhetioGroup extends PhetioGroup {
-
-  constructor( options ) {
-
-    // TODO: making your own visibleProperty default?
-    const defaultPositionProperty = new Property( true, {
-      tandem: options.tandem.createTandem( 'positionProperty' ),
-      phetioType: PropertyIO( BooleanIO )
-    } );
-    super( EnergyChunkPhetioGroup.createEnergyChunk,
-      [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, defaultPositionProperty, {} ], options );
-  }
-
-  // @public
-  static createEnergyChunk( tandem, energyType, position, velocity, visibleProperty, options ) {
-    return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( {}, options, { tandem: tandem } ) );
-  }
-}
-
-class EnergyChunkPathMoverPhetioGroup extends PhetioGroup {
-
-  /**
-   *
-   * @param energyChunkPhetioGroup
-   * @param options
-   */
-  constructor( energyChunkPhetioGroup, options ) {
-    super( EnergyChunkPathMoverPhetioGroup.createEnergyChunkPathMover,
-      [ energyChunkPhetioGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
-  }
-
-  // @public
-  static createEnergyChunkPathMover( tandem, energyChunk, path, speed, options ) {
-    return new EnergyChunkPathMover( energyChunk, path, speed, merge( {}, options, { tandem: tandem } ) );
   }
 }
 

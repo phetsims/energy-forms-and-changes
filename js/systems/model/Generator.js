@@ -50,11 +50,11 @@ class Generator extends EnergyConverter {
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {EnergyChunkPhetioGroup} energyChunkPhetioGroup
-   * @param {EnergyChunkPathMoverPhetioGroup} energyChunkPathMoverPhetioGroup
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, energyChunkPhetioGroup, energyChunkPathMoverPhetioGroup, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
 
     super( new Image( GENERATOR_ICON ), tandem );
 
@@ -63,8 +63,8 @@ class Generator extends EnergyConverter {
 
     // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-    this.energyChunkPhetioGroup = energyChunkPhetioGroup;
-    this.energyChunkPathMoverPhetioGroup = energyChunkPathMoverPhetioGroup;
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // @public (read-only) {NumberProperty}
     this.wheelRotationalAngleProperty = new NumberProperty( 0, {
@@ -200,7 +200,7 @@ class Generator extends EnergyConverter {
           this.incomingEnergyChunks.remove( chunk );
 
           // add a "mover" that will move this energy chunk to the center of the wheel
-          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( chunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -260,11 +260,11 @@ class Generator extends EnergyConverter {
           this.energyChunkMovers.remove( mover ); // TODO: is this the same as _.pull? I think so https://github.com/phetsims/energy-forms-and-changes/issues/350
           chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
           this.electricalEnergyChunks.push( chunk );
-          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( mover.energyChunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, electricalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
-          const hiddenChunk = this.energyChunkPhetioGroup.createNextElement(
+          const hiddenChunk = this.energyChunkGroup.createNextElement(
             EnergyType.HIDDEN,
             chunk.positionProperty.get(),
             Vector2.ZERO,
@@ -273,7 +273,7 @@ class Generator extends EnergyConverter {
           hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
           this.hiddenEnergyChunks.push( hiddenChunk );
           const hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
-          this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( hiddenChunk,
+          this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( hiddenChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, hiddenEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
@@ -335,7 +335,7 @@ class Generator extends EnergyConverter {
 
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK && !skipThisChunk ) {
-        const newChunk = this.energyChunkPhetioGroup.createNextElement(
+        const newChunk = this.energyChunkGroup.createNextElement(
           EnergyType.MECHANICAL,
           this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
           Vector2.ZERO,
@@ -345,7 +345,7 @@ class Generator extends EnergyConverter {
         this.energyChunkList.push( newChunk );
 
         // add a 'mover' for this energy chunk
-        this.energyChunkMovers.push( this.energyChunkPathMoverPhetioGroup.createNextElement( newChunk,
+        this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( newChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
         );
