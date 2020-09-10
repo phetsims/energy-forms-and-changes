@@ -304,7 +304,7 @@ class SystemsScreenView extends ScreenView {
       listener: () => {
         model.reset();
         this.beakerHeaterNode.reset();
-        this.teaKettleNode.reset();
+        // this.teaKettleNode.reset();
       },
       radius: EFACConstants.RESET_ALL_BUTTON_RADIUS,
       right: layoutBounds.maxX - EDGE_INSET,

@@ -9,13 +9,18 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import WATER_ICON from '../../../images/water_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
@@ -99,20 +104,34 @@ class BeakerHeater extends EnergyUser {
     } );
 
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
-    this.radiatedEnergyChunkList = new ObservableArray();
+    this.radiatedEnergyChunkList = new ObservableArray({
+      tandem: tandem.createTandem( 'radiatedEnergyChunkList' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    });
 
     // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
     this.waterBeakerTandem = tandem.createTandem( 'waterBeaker' );
+
+    const createEnergyChunkContainerSlice = ( tandem, bounds, zPosition, anchorPointProperty ) => {
+      return new EnergyChunkContainerSlice( bounds, zPosition, anchorPointProperty, { tandem: tandem } );
+    };
+    const energyChunkSliceGroup = new PhetioGroup( createEnergyChunkContainerSlice,
+      [ new Bounds2( 0, 0, 10, 10 ), 0, energyChunksVisibleProperty ], {
+        tandem: tandem.createTandem( 'energyChunkSliceGroup' ),
+        phetioType: PhetioGroupIO( EnergyChunkContainerSlice.EnergyChunkContainerSliceIO )
+      } );
 
     // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
     this.beaker = new Beaker(
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
-      energyChunksVisibleProperty, {
+      energyChunksVisibleProperty,
+      energyChunkPhetioGroup, {
         tandem: this.waterBeakerTandem,
         phetioDocumentation: 'beaker that contains water',
-        userControllable: false
+        userControllable: false,
+        energyChunkSliceGroup: energyChunkSliceGroup
       }
     );
 

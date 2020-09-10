@@ -21,7 +21,6 @@ import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import BeakerIO from './BeakerIO.js';
 import BeakerType from './BeakerType.js';
-import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
@@ -64,9 +63,10 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @param {number} width
    * @param {number} height
    * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {PhetioGroup} energyChunkGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, energyChunksVisibleProperty, options ) {
+  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
       beakerType: BeakerType.WATER,
@@ -89,6 +89,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       mass,
       BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
       energyChunksVisibleProperty,
+      energyChunkGroup,
       options
     );
 
@@ -253,7 +254,7 @@ class Beaker extends RectangularThermalMovableModelElement {
     const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
 
     // make a copy of the slice array sorted such that the smallest is first
-    let sortedSliceArray = _.sortBy( this.slices, slice => {
+    let sortedSliceArray = _.sortBy( this.slices.getArray(), slice => {
       return slice.bounds.width * slice.bounds.height;
     } );
 
@@ -266,7 +267,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       const sliceCenter = slice.bounds.center;
       _.times( Utils.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
         if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
-          slice.addEnergyChunk( new EnergyChunk(
+          slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
             EnergyType.THERMAL,
             sliceCenter.plusXY( smallOffset * index, smallOffset * index ),
             Vector2.ZERO,
@@ -285,7 +286,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       while ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
         const slice = sortedSliceArray[ sliceIndex ];
         const sliceCenter = slice.bounds.center;
-        slice.addEnergyChunk( new EnergyChunk(
+        slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
           EnergyType.THERMAL,
           sliceCenter,
           Vector2.ZERO,
@@ -307,7 +308,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       const startTime = window.performance.now();
       const numberOfIterations = 10; // empirically determined to give a reasonably consistent value
       for ( let i = 0; i < numberOfIterations; i++ ) {
-        energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       }
       const averageIterationTime = ( window.performance.now() - startTime ) / numberOfIterations;
       if ( averageIterationTime > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
@@ -323,7 +324,7 @@ class Beaker extends RectangularThermalMovableModelElement {
 
     // distribute the initial energy chunks within the container
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
-      const distributed = energyChunkDistributor.updatePositions( this.slices, EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      const distributed = energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       if ( !distributed ) {
         break;
       }
@@ -388,7 +389,17 @@ class Beaker extends RectangularThermalMovableModelElement {
 
       const zPosition = -proportion * this.width;
       const sliceBounds = Bounds2.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
-      this.slices.push( new EnergyChunkContainerSlice( sliceBounds, zPosition, this.positionProperty ) );
+
+      // TODO: support groups here in the first screen, https://github.com/phetsims/energy-forms-and-changes/issues/350
+      let newSlice = null;
+      if ( this.energyChunkSliceGroup ) {
+
+        newSlice = this.energyChunkSliceGroup.createNextElement( sliceBounds, zPosition, this.positionProperty );
+      }
+      else {
+        newSlice = new EnergyChunkContainerSlice( sliceBounds, zPosition, this.positionProperty );
+      }
+      this.slices.push( newSlice );
     }
   }
 
@@ -431,7 +442,7 @@ class Beaker extends RectangularThermalMovableModelElement {
   extractEnergyChunkClosestToPoint( point ) {
     let pointIsAboveWaterSurface = true;
     for ( let i = 0; i < this.slices.length; i++ ) {
-      if ( point.y < this.slices[ i ].bounds.maxY ) {
+      if ( point.y < this.slices.get( i ).bounds.maxY ) {
         pointIsAboveWaterSurface = false;
         break;
       }

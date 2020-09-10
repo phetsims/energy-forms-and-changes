@@ -16,6 +16,10 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import PropertyIO from '../../../../axon/js/PropertyIO.js';
+import Bounds2IO from '../../../../dot/js/Bounds2IO.js';
+import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -34,14 +38,16 @@ class EnergyChunkContainerSlice extends PhetioObject {
    */
   constructor( bounds, zPosition, anchorPointProperty, options ) {
 
-    // TODO: not tested, this is next, https://github.com/phetsims/energy-forms-and-changes/issues/350
     options = merge( {
       tandem: Tandem.OPTIONAL,
       phetioDynamicElement: true,
       phetioType: EnergyChunkContainerSliceIO
     }, options );
 
-    super();
+    super( options );
+
+    assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( anchorPointProperty.isPhetioInstrumented(),
+      'provided Property should be instrumented if I am.' );
 
     // @public {Property.<Vector2>} - position of this slice in model space
     this.anchorPointProperty = anchorPointProperty;
@@ -53,7 +59,14 @@ class EnergyChunkContainerSlice extends PhetioObject {
     this.zPosition = zPosition;
 
     // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
-    this.energyChunkList = new ObservableArray();
+    this.energyChunkList = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkList' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
+
+    assert && this.isPhetioInstrumented() && this.energyChunkList.addItemAddedListener( energyChunk => {
+      assert( energyChunk.isPhetioInstrumented(), 'EnergyChunk should be instrumented if I am.' );
+    } );
 
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
     this.anchorPointProperty.lazyLink( ( newPosition, oldPosition ) => {
@@ -68,6 +81,28 @@ class EnergyChunkContainerSlice extends PhetioObject {
         this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
       }
     } );
+  }
+
+  /**
+   * @private
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      bounds: Bounds2IO.toStateObject( this.bounds ),
+      zPosition: this.zPosition,
+      anchorPointPropertyPhetioID: this.anchorPointProperty.tandem.phetioID,
+      phetioID: this.tandem.phetioID
+    };
+  }
+
+  /**
+   * @private
+   * @param {Object} stateObject
+   */
+  static stateToArgsForConstructor( stateObject ) {
+    const anchorPointProperty = ReferenceIO( PropertyIO( Vector2IO ) ).fromStateObject( stateObject.anchorPointPropertyPhetioID );
+    return [ Bounds2IO.fromStateObject( stateObject.bounds ), stateObject.zPosition, anchorPointProperty ];
   }
 
   /**
@@ -95,21 +130,25 @@ class EnergyChunkContainerSlice extends PhetioObject {
   getNumberOfEnergyChunks() {
     return this.energyChunkList.length;
   }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.energyChunkList.dispose();
+    super.dispose();
+  }
 }
 
-// TODO: not tested, this is next, https://github.com/phetsims/energy-forms-and-changes/issues/350
 class EnergyChunkContainerSliceIO extends ObjectIO {
 
   // @public @override
   static toStateObject( energyChunkContainerSlice ) { return energyChunkContainerSlice.toStateObject(); }
 
   // @public @override
-  static applyState( energyChunkContainerSlice ) { return energyChunkContainerSlice.applyState(); }
-
-  // @public @override
   static stateToArgsForConstructor( state ) { return EnergyChunkContainerSlice.stateToArgsForConstructor( state ); }
 
-  // @public - use refence serialization when a member of another data structure like ObservableArray
+  // @public - use reference serialization when a member of another data structure like ObservableArray
   static fromStateObject( stateObject ) {
     return ReferenceIO( EnergyChunkContainerSliceIO ).fromStateObject( stateObject.phetioID );
   }
@@ -119,7 +158,7 @@ EnergyChunkContainerSliceIO.documentation = 'My Documentation';
 EnergyChunkContainerSliceIO.typeName = 'EnergyChunkContainerSliceIO';
 EnergyChunkContainerSliceIO.validator = { valueType: EnergyChunkContainerSlice };
 
-EnergyChunk.EnergyChunkContainerSliceIO = EnergyChunkContainerSliceIO;
+EnergyChunkContainerSlice.EnergyChunkContainerSliceIO = EnergyChunkContainerSliceIO;
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;

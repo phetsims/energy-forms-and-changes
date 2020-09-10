@@ -31,8 +31,8 @@ import ironTextureTopImage from '../../../images/iron_texture_top_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import BlockType from '../model/BlockType.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
@@ -175,7 +175,7 @@ class BlockNode extends Node {
     this.energyChunkRootNode = new Node();
     this.addChild( this.energyChunkRootNode );
     for ( let i = block.slices.length - 1; i >= 0; i-- ) {
-      this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices[ i ], modelViewTransform ) );
+      this.energyChunkRootNode.addChild( new EnergyChunkContainerSliceNode( block.slices.get( i ), modelViewTransform ) );
     }
 
     // add the face, top, and sides of the block
