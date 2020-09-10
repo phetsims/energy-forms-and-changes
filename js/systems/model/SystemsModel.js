@@ -21,6 +21,7 @@ import Belt from './Belt.js';
 import Biker from './Biker.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
+import Fan from './Fan.js';
 import FaucetAndWater from './FaucetAndWater.js';
 import Generator from './Generator.js';
 import SolarPanel from './SolarPanel.js';
@@ -110,9 +111,13 @@ class SystemsModel {
     // @public (read-only) belt that connects biker to generator, which is not on a carousel
     this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
     // // @public (read-only) energy users
-    // this.fan = new Fan( this.energyChunksVisibleProperty, energyUsersTandem.createTandem( 'fan' ) );
+    this.fan = new Fan(
+      this.energyChunksVisibleProperty,
+      this.energyChunkGroup,
+      this.energyChunkPathMoverGroup,
+      energyUsersTandem.createTandem( 'fan' ) );
+    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
     // this.incandescentBulb = new IncandescentBulb(
     //   this.energyChunksVisibleProperty,
     //   energyUsersTandem.createTandem( 'incandescentBulb' )
@@ -147,8 +152,8 @@ class SystemsModel {
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
       // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-      [ this.beakerHeater ],
-      Enumeration.byKeys( [ 'BEAKER_HEATER' ] ),
+      [ this.beakerHeater, this.fan ],
+      Enumeration.byKeys( [ 'BEAKER_HEATER', 'FAN' ] ),
       // [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
       // Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
 

@@ -8,12 +8,14 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import FAN_ICON from '../../../images/fan_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -61,9 +63,11 @@ class Fan extends EnergyUser {
 
   /**
    * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
     super( new Image( FAN_ICON ), tandem );
 
     // @public (read-only) {NumberProperty}
@@ -77,9 +81,18 @@ class Fan extends EnergyUser {
     } );
 
     // @private - movers that control how the energy chunks move towards and through the fan
-    this.electricalEnergyChunkMovers = [];
-    this.radiatedEnergyChunkMovers = [];
-    this.mechanicalEnergyChunkMovers = [];
+    this.electricalEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.mechanicalEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'mechanicalEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
+    this.radiatedEnergyChunkMovers = new ObservableArray( {
+      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+    } );
 
     // @private
     this.angularVelocityProperty = new NumberProperty( 0, {
@@ -90,7 +103,10 @@ class Fan extends EnergyUser {
       phetioDocumentation: 'the angular velocity of the blade'
     } );
 
+    // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.energyChunkGroup = energyChunkGroup;
+    this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
     // incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
@@ -132,13 +148,13 @@ class Fan extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover( chunk,
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
       } );
 
       // clear incoming chunks array
-      this.incomingEnergyChunks.length = 0;
+      this.incomingEnergyChunks.clear();
     }
     this.moveElectricalEnergyChunks( dt );
     this.moveRadiatedEnergyChunks( dt );
@@ -201,7 +217,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveElectricalEnergyChunks( dt ) {
-    const movers = _.clone( this.electricalEnergyChunkMovers );
+    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -209,7 +225,7 @@ class Fan extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
 
         // the electrical energy chunk has reached the motor, so it needs to change into mechanical or thermal energy
-        _.pull( this.electricalEnergyChunkMovers, mover );
+        this.electricalEnergyChunkMovers.remove( mover );
         this.hasEnergy = true;
 
         if ( this.internalTemperature < THERMAL_RELEASE_TEMPERATURE ) {
@@ -223,7 +239,7 @@ class Fan extends EnergyUser {
           mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
           // release the energy chunk as mechanical to blow away
-          this.mechanicalEnergyChunkMovers.push( new EnergyChunkPathMover( mover.energyChunk,
+          this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
@@ -231,7 +247,7 @@ class Fan extends EnergyUser {
           mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
           // release the energy chunk as thermal to radiate away
-          this.radiatedEnergyChunkMovers.push( new EnergyChunkPathMover(
+          this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
             mover.energyChunk,
             EnergyChunkPathMover.createRadiatedPath( mover.energyChunk.positionProperty.get(), 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -251,7 +267,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveRadiatedEnergyChunks( dt ) {
-    const movers = _.clone( this.radiatedEnergyChunkMovers );
+    const movers = this.radiatedEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -259,7 +275,7 @@ class Fan extends EnergyUser {
       // remove this energy chunk entirely
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
-        _.pull( this.radiatedEnergyChunkMovers, mover );
+        this.radiatedEnergyChunkMovers.remove( mover );
       }
     } );
   }
@@ -271,7 +287,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveBlownEnergyChunks( dt ) {
-    const movers = _.clone( this.mechanicalEnergyChunkMovers );
+    const movers = this.mechanicalEnergyChunkMovers.getArrayCopy();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -279,7 +295,7 @@ class Fan extends EnergyUser {
       // remove this energy chunk entirely
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
-        _.pull( this.mechanicalEnergyChunkMovers, mover );
+        this.mechanicalEnergyChunkMovers.remove( mover );
       }
     } );
   }
@@ -304,10 +320,10 @@ class Fan extends EnergyUser {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.electricalEnergyChunkMovers.length = 0;
-    this.radiatedEnergyChunkMovers.length = 0;
-    this.mechanicalEnergyChunkMovers.length = 0;
-    this.incomingEnergyChunks.length = 0;
+    this.electricalEnergyChunkMovers.clear();
+    this.radiatedEnergyChunkMovers.clear();
+    this.mechanicalEnergyChunkMovers.clear();
+    this.incomingEnergyChunks.clear();
   }
 
   /**
@@ -339,7 +355,7 @@ class Fan extends EnergyUser {
 
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-        const newEnergyChunk = new EnergyChunk(
+        const newEnergyChunk = this.energyChunkGroup.createNextElement(
           EnergyType.ELECTRICAL,
           this.positionProperty.value.plus( WIRE_START_OFFSET ),
           Vector2.ZERO,
@@ -349,7 +365,7 @@ class Fan extends EnergyUser {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        this.electricalEnergyChunkMovers.push( new EnergyChunkPathMover(
+        this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
