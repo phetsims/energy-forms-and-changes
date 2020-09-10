@@ -9,17 +9,20 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import FAUCET_ICON from '../../../images/faucet_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergySource from './EnergySource.js';
 import WaterDrop from './WaterDrop.js';
@@ -46,10 +49,11 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {BooleanProperty} waterPowerableElementInPlace
+   * @param {BooleanProperty} waterPowerableElementInPlaceProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
    * @param {Tandem} tandem
    */
-  constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, tandem ) {
+  constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, energyChunkGroup, tandem ) {
     super( new Image( FAUCET_ICON ), tandem );
 
     // @public {string} - a11y name
@@ -75,7 +79,10 @@ class FaucetAndWater extends EnergySource {
     this.waterDrops = [];
 
     // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
-    this.exemptFromTransferEnergyChunks = [];
+    this.exemptFromTransferEnergyChunks = new ObservableArray( {
+      tandem: tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // @private {Energy[]} - list of Energy to be sent after a delay has passed
     this.flowEnergyDelay = [];
@@ -89,6 +96,9 @@ class FaucetAndWater extends EnergySource {
 
     // @private {boolean} - whether the water drops have been preloaded. initially set to false whenever preloadWaterDrops is called.
     this.waterDropsPreloaded = true;
+
+    // @private {EnergyChunkGroup}
+    this.energyChunkGroup = energyChunkGroup;
 
     // Preload falling water animation after state has been set
     Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
@@ -112,7 +122,7 @@ class FaucetAndWater extends EnergySource {
 
     const velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
 
-    return new EnergyChunk( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
+    return this.energyChunkGroup.createNextElement( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
   }
 
   /**
@@ -156,7 +166,7 @@ class FaucetAndWater extends EnergySource {
       const yPosition = this.positionProperty.get().plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y -
                         chunk.positionProperty.value.y;
       const chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( yPosition );
-      const chunkExempt = this.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
+      const chunkExempt = this.exemptFromTransferEnergyChunks.getArray().indexOf( chunk ) >= 0;
 
       if ( this.waterPowerableElementInPlaceProperty.value && chunkInRange && !chunkExempt ) {
         if ( this.transferNextAvailableChunk ) {
@@ -182,7 +192,7 @@ class FaucetAndWater extends EnergySource {
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.positionProperty.value );
       if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
         this.energyChunkList.remove( chunk );
-        _.pull( this.exemptFromTransferEnergyChunks, chunk );
+        this.exemptFromTransferEnergyChunks.remove( chunk );
       }
     } );
 
@@ -322,7 +332,7 @@ class FaucetAndWater extends EnergySource {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.exemptFromTransferEnergyChunks.length = 0;
+    this.exemptFromTransferEnergyChunks.clear();
   }
 }
 

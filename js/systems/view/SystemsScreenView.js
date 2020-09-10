@@ -43,7 +43,7 @@ import GeneratorNode from './GeneratorNode.js';
 
 // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
 // import FanNode from './FanNode.js';
-// import FaucetAndWaterNode from './FaucetAndWaterNode.js';
+import FaucetAndWaterNode from './FaucetAndWaterNode.js';
 // import LightBulbNode from './LightBulbNode.js';
 // import SolarPanelNode from './SolarPanelNode.js';
 // import SunNode from './SunNode.js';
@@ -190,14 +190,14 @@ class SystemsScreenView extends ScreenView {
     // this.addChild( solarPanelNode );
 
     // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
-    // // @private
-    // this.faucetAndWaterNode = new FaucetAndWaterNode(
-    //   model.faucetAndWater,
-    //   model.energyChunksVisibleProperty,
-    //   modelViewTransform,
-    //   energySourcesTandem.createTandem( 'faucetAndWaterNode' )
-    // );
-    // this.addChild( this.faucetAndWaterNode );
+    // @private
+    this.faucetAndWaterNode = new FaucetAndWaterNode(
+      model.faucetAndWater,
+      model.energyChunksVisibleProperty,
+      modelViewTransform,
+      energySourcesTandem.createTandem( 'faucetAndWaterNode' )
+    );
+    this.addChild( this.faucetAndWaterNode );
 
     // get the mechanical energy chunk layer from the generator and add it after the faucet has been created. this is
     // desirable because the water from the faucet appears on top of the generator wheel, but the energy chunks that
@@ -384,11 +384,9 @@ class SystemsScreenView extends ScreenView {
    * @public
    */
   stepView( dt ) {
-
-    // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
     // this.teaKettleNode.step( dt );
     this.beakerHeaterNode.step( dt );
-    // this.faucetAndWaterNode.step( dt );
+    this.faucetAndWaterNode.step( dt );
   }
 
   /**

@@ -33,7 +33,7 @@ class EnergyChunkPathMover extends PhetioObject {
     options = merge( {
 
       // phet-io
-      tandem: Tandem.OPTIONAL, // TODO: should this become REQUIRED?
+      tandem: Tandem.OPTIONAL, // TODO: should this become REQUIRED? // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
       phetioType: EnergyChunkPathMoverIO,
       phetioDynamicElement: true
     }, options );
