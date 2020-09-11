@@ -224,8 +224,12 @@ class Fan extends EnergyUser {
 
       if ( mover.pathFullyTraversed ) {
 
+        const chunk = mover.energyChunk;
+
         // the electrical energy chunk has reached the motor, so it needs to change into mechanical or thermal energy
         this.electricalEnergyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
+
         this.hasEnergy = true;
 
         if ( this.internalTemperature < THERMAL_RELEASE_TEMPERATURE ) {
@@ -236,22 +240,21 @@ class Fan extends EnergyUser {
           // add the energy from this chunk to the fan's internal energy
           this.internalEnergyFromEnergyChunks += EFACConstants.ENERGY_PER_CHUNK;
 
-          mover.energyChunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+          chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
           // release the energy chunk as mechanical to blow away
-          this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
-            createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
+          this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
+            createBlownEnergyChunkPath( chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
 
-          this.energyChunkPathMoverGroup.disposeElement( mover );
         }
         else {
-          mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
+          chunk.energyTypeProperty.set( EnergyType.THERMAL );
 
           // release the energy chunk as thermal to radiate away
           this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-            mover.energyChunk,
-            EnergyChunkPathMover.createRadiatedPath( mover.energyChunk.positionProperty.get(), 0 ),
+            chunk,
+            EnergyChunkPathMover.createRadiatedPath( chunk.positionProperty.get(), 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
           ) );
 
