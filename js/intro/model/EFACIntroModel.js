@@ -23,7 +23,6 @@ import Beaker from '../../common/model/Beaker.js';
 import BeakerIO from '../../common/model/BeakerIO.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
-import EnergyChunkContainerSliceGroup from '../../common/model/EnergyChunkContainerSliceGroup.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
@@ -136,10 +135,6 @@ class EFACIntroModel {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    const energyChunkSliceGroup = new EnergyChunkContainerSliceGroup( this.energyChunksVisibleProperty, {
-      tandem: tandem.createTandem( 'energyChunkSliceGroup' )
-    } );
-
     // @public (read-only) {Burner}
     this.leftBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
@@ -169,8 +164,7 @@ class EFACIntroModel {
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          this.energyChunkGroup,
-          energyChunkSliceGroup, {
+          this.energyChunkGroup, {
             tandem: tandem
           } );
       },
@@ -200,8 +194,7 @@ class EFACIntroModel {
           BEAKER_HEIGHT,
           this.blockGroup,
           this.energyChunksVisibleProperty,
-          this.energyChunkGroup,
-          energyChunkSliceGroup, {
+          this.energyChunkGroup, {
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,

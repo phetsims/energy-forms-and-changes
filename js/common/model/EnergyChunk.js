@@ -182,6 +182,7 @@ class EnergyChunkIO extends ObjectIO {
   static stateToArgsForConstructor( state ) { return EnergyChunk.stateToArgsForConstructor( state ); }
 
   // @public - use refence serialization when a member of another data structure like ObservableArray
+  // TODO: get rid of this, it isn't needed https://github.com/phetsims/energy-forms-and-changes/issues/350
   static fromStateObject( stateObject ) {
     return ReferenceIO( EnergyChunkIO ).fromStateObject( stateObject.phetioID );
   }

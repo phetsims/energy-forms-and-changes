@@ -17,13 +17,9 @@
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
-import PropertyIO from '../../../../axon/js/PropertyIO.js';
-import Bounds2IO from '../../../../dot/js/Bounds2IO.js';
-import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -39,9 +35,8 @@ class EnergyChunkContainerSlice extends PhetioObject {
   constructor( bounds, zPosition, anchorPointProperty, options ) {
 
     options = merge( {
-      tandem: Tandem.OPTIONAL,
-      phetioDynamicElement: true,
-      phetioType: EnergyChunkContainerSliceIO
+      tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
+      phetioState: false
     }, options );
 
     super( options );
@@ -92,28 +87,6 @@ class EnergyChunkContainerSlice extends PhetioObject {
   }
 
   /**
-   * @private
-   * @returns {Object}
-   */
-  toStateObject() {
-    return {
-      bounds: Bounds2IO.toStateObject( this.bounds ),
-      zPosition: this.zPosition,
-      anchorPointPropertyPhetioID: this.anchorPointProperty.tandem.phetioID,
-      phetioID: this.tandem.phetioID
-    };
-  }
-
-  /**
-   * @private
-   * @param {Object} stateObject
-   */
-  static stateToArgsForConstructor( stateObject ) {
-    const anchorPointProperty = ReferenceIO( PropertyIO( Vector2IO ) ).fromStateObject( stateObject.anchorPointPropertyPhetioID );
-    return [ Bounds2IO.fromStateObject( stateObject.bounds ), stateObject.zPosition, anchorPointProperty ];
-  }
-
-  /**
    * @param {EnergyChunk} energyChunk
    * @public
    */
@@ -147,26 +120,6 @@ class EnergyChunkContainerSlice extends PhetioObject {
     super.dispose();
   }
 }
-
-class EnergyChunkContainerSliceIO extends ObjectIO {
-
-  // @public @override
-  static toStateObject( energyChunkContainerSlice ) { return energyChunkContainerSlice.toStateObject(); }
-
-  // @public @override
-  static stateToArgsForConstructor( state ) { return EnergyChunkContainerSlice.stateToArgsForConstructor( state ); }
-
-  // @public - use reference serialization when a member of another data structure like ObservableArray
-  static fromStateObject( stateObject ) {
-    return ReferenceIO( EnergyChunkContainerSliceIO ).fromStateObject( stateObject.phetioID );
-  }
-}
-
-EnergyChunkContainerSliceIO.documentation = 'My Documentation';
-EnergyChunkContainerSliceIO.typeName = 'EnergyChunkContainerSliceIO';
-EnergyChunkContainerSliceIO.validator = { valueType: EnergyChunkContainerSlice };
-
-EnergyChunkContainerSlice.EnergyChunkContainerSliceIO = EnergyChunkContainerSliceIO;
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;
