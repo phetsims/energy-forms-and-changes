@@ -213,7 +213,6 @@ class LightBulb extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
         this.filamentEnergyChunkMovers.remove( mover );
         this.radiateEnergyChunk( mover.energyChunk );
-        this.energyChunkGroup.disposeElement( mover.energyChunk );
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
       }
