@@ -369,8 +369,6 @@ class LightBulb extends EnergyUser {
     this.filamentEnergyChunkMovers.clear();
     this.radiatedEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.radiatedEnergyChunkMovers.clear();
-    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
-    this.incomingEnergyChunks.clear();
   }
 }
 
