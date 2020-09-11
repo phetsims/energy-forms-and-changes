@@ -565,7 +565,6 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @abstract
    */
   addEnergyChunkSlices() {
-    assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
     assert && assert( false, 'subtypes should implement their chunk slice creation' );
   }
 
