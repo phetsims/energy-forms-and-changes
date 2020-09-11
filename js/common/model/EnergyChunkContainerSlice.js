@@ -66,14 +66,20 @@ class EnergyChunkContainerSlice extends PhetioObject {
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
     const anchorPointListener = ( newPosition, oldPosition ) => {
 
-      const xTranslation = newPosition.x - oldPosition.x;
-      const yTranslation = newPosition.y - oldPosition.y;
+      // Don't let the PhET-iO state engine call this (as the second time) when the anchorPointProperty changes. This line of
+      // code could be replaced with altering the for-loop below to be based on each EnergyChunk's position, but that
+      // would be too slow, and performance is important here. See https://github.com/phetsims/energy-forms-and-changes/issues/353
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
-      this.bounds.shift( xTranslation, yTranslation );
+        const xTranslation = newPosition.x - oldPosition.x;
+        const yTranslation = newPosition.y - oldPosition.y;
 
-      // c-style loop for best performance
-      for ( let i = 0; i < this.energyChunkList.length; i++ ) {
-        this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
+        this.bounds.shift( xTranslation, yTranslation );
+
+        // c-style loop for best performance
+        for ( let i = 0; i < this.energyChunkList.length; i++ ) {
+          this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
+        }
       }
     };
     this.anchorPointProperty.lazyLink( anchorPointListener );
