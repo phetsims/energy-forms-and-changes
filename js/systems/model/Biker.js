@@ -141,6 +141,12 @@ class Biker extends EnergySource {
     // swapped out
     this.mechanicalPoweredSystemIsNextProperty.link( () => {
 
+      // While setting PhET-iO state, make sure that if this Property changed, it doesn't cascade to changing the
+      // placement of energyChunks/Movers.
+      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        return;
+      }
+
       const movers = this.energyChunkMovers.getArrayCopy();
       const hubPosition = this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET );
 
