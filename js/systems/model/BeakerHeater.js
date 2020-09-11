@@ -308,6 +308,8 @@ class BeakerHeater extends EnergyUser {
         // remove this energy chunk entirely
         this.radiatedEnergyChunkList.remove( mover.energyChunk );
         this.radiatedEnergyChunkMovers.remove( mover );
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
@@ -329,6 +331,7 @@ class BeakerHeater extends EnergyUser {
         this.beaker.addEnergyChunk( mover.energyChunk );
         this.energyChunkList.remove( mover.energyChunk );
         this.heatingElementEnergyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
@@ -353,6 +356,7 @@ class BeakerHeater extends EnergyUser {
         this.heatingElementEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
           this.createHeaterElementEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
           HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY ) );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }

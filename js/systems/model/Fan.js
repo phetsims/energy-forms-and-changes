@@ -242,6 +242,8 @@ class Fan extends EnergyUser {
           this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             createBlownEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
+
+          this.energyChunkPathMoverGroup.disposeElement( mover );
         }
         else {
           mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
@@ -276,6 +278,9 @@ class Fan extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
         this.radiatedEnergyChunkMovers.remove( mover );
+
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
@@ -296,6 +301,9 @@ class Fan extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
         this.mechanicalEnergyChunkMovers.remove( mover );
+
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }

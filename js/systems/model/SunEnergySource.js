@@ -182,6 +182,7 @@ class SunEnergySource extends EnergySource {
       ) {
         this.energyChunkList.remove( chunk );
         this.energyChunksPassingThroughClouds.remove( chunk );
+        this.energyChunkGroup.disposeElement( chunk );
       }
 
       // chunks encountering clouds

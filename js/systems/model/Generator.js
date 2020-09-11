@@ -257,7 +257,8 @@ class Generator extends EnergyConverter {
           // on its way.  Also add a "hidden" chunk so that the movement through the generator can be seen by the
           // user.
           this.energyChunkList.remove( chunk );
-          this.energyChunkMovers.remove( mover ); // TODO: is this the same as _.pull? I think so https://github.com/phetsims/energy-forms-and-changes/issues/350
+          this.energyChunkMovers.remove( mover );
+
           chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
           this.electricalEnergyChunks.push( chunk );
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
@@ -278,6 +279,8 @@ class Generator extends EnergyConverter {
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
 
+          this.energyChunkPathMoverGroup.disposeElement( mover );
+
           break;
         }
         case EnergyType.ELECTRICAL:
@@ -286,6 +289,7 @@ class Generator extends EnergyConverter {
           // system.
           this.energyChunkMovers.remove( mover );
           this.outgoingEnergyChunks.push( chunk );
+          this.energyChunkPathMoverGroup.disposeElement( mover );
 
           break;
         case EnergyType.HIDDEN:
@@ -294,6 +298,8 @@ class Generator extends EnergyConverter {
           // energy chunk to which is corresponds should now be visible to the user.
           this.hiddenEnergyChunks.remove( chunk );
           this.energyChunkMovers.remove( mover );
+          this.energyChunkGroup.disposeElement( chunk );
+          this.energyChunkPathMoverGroup.disposeElement( mover );
 
           break;
         default:

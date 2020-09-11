@@ -179,6 +179,7 @@ class TeaKettle extends EnergySource {
       if ( mover.pathFullyTraversed ) {
 
         this.energyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
 
         // This is a thermal chunk that is coming out of the water.
         if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
@@ -208,6 +209,8 @@ class TeaKettle extends EnergySource {
         // This chunk is out of view, and we are done with it.
         else {
           this.energyChunkList.remove( chunk );
+          this.exemptFromTransferEnergyChunks.remove( chunk );
+          this.energyChunkGroup.disposeElement( chunk );
         }
       }
 
@@ -226,6 +229,7 @@ class TeaKettle extends EnergySource {
             this.outgoingEnergyChunks.push( chunk );
 
             this.energyChunkMovers.remove( mover );
+            this.energyChunkPathMoverGroup.disposeElement( mover );
 
             // Alternate sending or keeping chunks.
             this.transferNextAvailableChunk = false;
