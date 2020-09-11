@@ -142,6 +142,7 @@ class Block extends RectangularThermalMovableModelElement {
    * @public
    */
   addEnergyChunkSlices() {
+    assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
 
     // the slices for the block are intended to match the projection used in the view
     const projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
