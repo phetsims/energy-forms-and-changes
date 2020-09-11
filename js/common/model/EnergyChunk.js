@@ -163,7 +163,6 @@ class EnergyChunk extends PhetioObject {
    * @override
    */
   dispose() {
-    // this.visibleProperty = null;
     this.positionProperty.dispose();
     this.zPositionProperty.dispose();
     this.energyTypeProperty.dispose();

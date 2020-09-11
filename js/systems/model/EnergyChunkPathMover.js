@@ -214,15 +214,6 @@ class EnergyChunkPathMover extends PhetioObject {
 
     return path;
   }
-
-  /**
-   * @public
-   * @override
-   */
-  dispose() {
-    // this.energyChunk = null;
-    super.dispose();
-  }
 }
 
 // Strategy A
