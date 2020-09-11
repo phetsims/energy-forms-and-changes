@@ -172,6 +172,7 @@ class SunEnergySource extends EnergySource {
       // this energy chunk was absorbed by the solar panel, so put it on the list of outgoing chunks
       if ( this.solarPanel.activeProperty.value && this.solarPanel.getAbsorptionShape().containsPoint( chunk.positionProperty.value ) ) {
         this.energyChunkList.remove( chunk );
+        this.energyChunksPassingThroughClouds.remove( chunk );
         this.outgoingEnergyChunks.push( chunk );
       }
 
