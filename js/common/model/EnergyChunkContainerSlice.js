@@ -69,7 +69,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
     } );
 
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
-    this.anchorPointProperty.lazyLink( ( newPosition, oldPosition ) => {
+    const anchorPointListener = ( newPosition, oldPosition ) => {
 
       const xTranslation = newPosition.x - oldPosition.x;
       const yTranslation = newPosition.y - oldPosition.y;
@@ -80,7 +80,15 @@ class EnergyChunkContainerSlice extends PhetioObject {
       for ( let i = 0; i < this.energyChunkList.length; i++ ) {
         this.energyChunkList.get( i ).translate( xTranslation, yTranslation );
       }
-    } );
+    };
+    this.anchorPointProperty.lazyLink( anchorPointListener );
+
+    // @private
+    this.disposeEnergyChunkContainerSlice = () => {
+      this.energyChunkList.clear();
+      this.energyChunkList.dispose();
+      this.anchorPointProperty.unlink( anchorPointListener );
+    };
   }
 
   /**
@@ -135,7 +143,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
    * @public
    */
   dispose() {
-    this.energyChunkList.dispose();
+    this.disposeEnergyChunkContainerSlice();
     super.dispose();
   }
 }
