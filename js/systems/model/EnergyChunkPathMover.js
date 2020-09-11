@@ -57,7 +57,7 @@ class EnergyChunkPathMover extends PhetioObject {
     this.nextPoint = path[ 0 ];
   }
 
-  // @public
+  // @private
   toStateObject() {
     return {
       path: ArrayIO( Vector2IO ).toStateObject( this.path ),
@@ -69,20 +69,18 @@ class EnergyChunkPathMover extends PhetioObject {
     };
   }
 
-  // @public
+  // @private
   static stateToArgsForConstructor( stateObject ) {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
     const path = ArrayIO( Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
 
-
-  // @public
+  // @private
   applyState( stateObject ) {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
-    this.nextPoint = stateObject.nextPoint;
+    this.nextPoint = Vector2IO.fromStateObject( stateObject.nextPoint );
   }
-
 
   /**
    * advance chunk position along the path
