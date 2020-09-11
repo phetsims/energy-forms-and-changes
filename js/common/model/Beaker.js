@@ -21,6 +21,7 @@ import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import BeakerIO from './BeakerIO.js';
 import BeakerType from './BeakerType.js';
+import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
 import EnergyType from './EnergyType.js';
@@ -63,10 +64,9 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @param {number} height
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {PhetioGroup} energyChunkGroup
-   * @param {EnergyChunkContainerSliceGroup} energyChunkSliceGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, energyChunkSliceGroup, options ) {
+  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup,  options ) {
 
     options = merge( {
       beakerType: BeakerType.WATER,
@@ -90,7 +90,6 @@ class Beaker extends RectangularThermalMovableModelElement {
       BEAKER_COMPOSITION[ options.beakerType ].fluidSpecificHeat,
       energyChunksVisibleProperty,
       energyChunkGroup,
-      energyChunkSliceGroup,
       options
     );
 
@@ -391,7 +390,9 @@ class Beaker extends RectangularThermalMovableModelElement {
       const zPosition = -proportion * this.width;
       const sliceBounds = Bounds2.rect( fluidRect.centerX - sliceWidth / 2, bottomY, sliceWidth, fluidRect.height );
 
-      this.slices.push( this.energyChunkSliceGroup.createNextElement( sliceBounds, zPosition, this.positionProperty ) );
+      this.slices.push( new EnergyChunkContainerSlice( sliceBounds, zPosition, this.positionProperty, {
+        tandem: this.tandem.createTandem( `energyChunkContainerSlice${i}` )
+      } ) );
     }
   }
 

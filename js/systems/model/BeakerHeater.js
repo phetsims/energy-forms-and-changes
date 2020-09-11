@@ -17,7 +17,6 @@ import WATER_ICON from '../../../images/water_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyChunkContainerSliceGroup from '../../common/model/EnergyChunkContainerSliceGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
@@ -109,18 +108,13 @@ class BeakerHeater extends EnergyUser {
     // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
     this.waterBeakerTandem = tandem.createTandem( 'waterBeaker' );
 
-    const energyChunkSliceGroup = new EnergyChunkContainerSliceGroup( energyChunksVisibleProperty, {
-      tandem: tandem.createTandem( 'energyChunkSliceGroup' )
-    } );
-
     // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
     this.beaker = new Beaker(
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
       BEAKER_HEIGHT,
       energyChunksVisibleProperty,
-      energyChunkGroup,
-      energyChunkSliceGroup, {
+      energyChunkGroup, {
         tandem: this.waterBeakerTandem,
         phetioDocumentation: 'beaker that contains water',
         userControllable: false

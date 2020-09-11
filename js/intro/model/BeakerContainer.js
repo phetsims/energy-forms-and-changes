@@ -25,7 +25,6 @@ class BeakerContainer extends Beaker {
    * @param {Array.<Block>} potentiallyContainedElements
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkContainerSliceGroup} energyChunkSliceGroup
    * @param {Object} [options]
    */
   constructor(
@@ -35,11 +34,9 @@ class BeakerContainer extends Beaker {
     potentiallyContainedElements,
     energyChunksVisibleProperty,
     energyChunkGroup,
-    energyChunkSliceGroup,
     options
   ) {
-    super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, energyChunkSliceGroup,
-      options );
+    super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options );
 
     // @public (read-only) {string} - id of this beaker
     this.id = `beaker-container-${idCounter++}`;

@@ -18,10 +18,10 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
-import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyType from './EnergyType.js';
@@ -42,11 +42,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @param {number} specificHeat - in J/kg-K
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkContainerSliceGroup} energyChunkSliceGroup
    * @param {Object} [options]
    */
-  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup,
-               energyChunkSliceGroup, options ) {
+  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
 
@@ -83,9 +81,6 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
-
-    // @private - {PhetioGroup}
-    this.energyChunkSliceGroup = energyChunkSliceGroup;
 
     // @private - {PhetioGroup}
     this.energyChunkGroup = energyChunkGroup;
@@ -171,7 +166,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // chunks in the view
     this.slices = new ObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkContainerSlice.EnergyChunkContainerSliceIO ) )
+      phetioType: ObservableArrayIO( ReferenceIO( ObjectIO ) )
     } );
 
     // add the slices

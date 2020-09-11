@@ -14,6 +14,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
@@ -53,10 +54,9 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {Property} energyChunksVisibleProperty
    * @param {BlockType} blockType
    * @param {PhetioGroup} energyChunkGroup
-   * @param {PhetioGroup} energyChunkSliceGroup
    * @param options
    */
-  constructor( initialPosition, energyChunksVisibleProperty, blockType, energyChunkGroup, energyChunkSliceGroup, options ) {
+  constructor( initialPosition, energyChunksVisibleProperty, blockType, energyChunkGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -73,7 +73,6 @@ class Block extends RectangularThermalMovableModelElement {
       BLOCK_COMPOSITION[ blockType ].specificHeat,
       energyChunksVisibleProperty,
       energyChunkGroup,
-      energyChunkSliceGroup,
       options
     );
 
@@ -157,10 +156,12 @@ class Block extends RectangularThermalMovableModelElement {
         projectionToFront.y + projectionOffsetVector.y
       );
 
-      this.slices.push( this.energyChunkSliceGroup.createNextElement(
+      this.slices.push( new EnergyChunkContainerSlice(
         sliceBounds,
         -i * sliceWidth,
-        this.positionProperty
+        this.positionProperty, {
+          tandem: this.tandem.createTandem( `energyChunkContainerSlice${i}` )
+        }
       ) );
     }
   }
