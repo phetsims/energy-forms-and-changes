@@ -52,6 +52,7 @@ class EnergyUser extends EnergySystemElement {
   clearEnergyChunks() {
     super.clearEnergyChunks();
     this.incomingEnergyChunks.clear();
+    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
   }
 }
 

@@ -478,6 +478,7 @@ class Biker extends EnergySource {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.energyChunkMovers.clear();
   }
 

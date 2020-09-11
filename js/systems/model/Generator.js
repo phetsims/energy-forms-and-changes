@@ -403,8 +403,11 @@ class Generator extends EnergyConverter {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.electricalEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.electricalEnergyChunks.clear();
+    this.hiddenEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.hiddenEnergyChunks.clear();
+    this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.energyChunkMovers.clear();
   }
 

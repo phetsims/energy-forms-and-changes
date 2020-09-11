@@ -413,7 +413,9 @@ class SolarPanel extends EnergyConverter {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
+    this.lightEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.lightEnergyChunkMovers.clear();
     this.latestChunkArrivalTime = 0;
   }

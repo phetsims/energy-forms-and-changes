@@ -359,7 +359,8 @@ class TeaKettle extends EnergySource {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
-    this.exemptFromTransferEnergyChunks.clear();
+    this.exemptFromTransferEnergyChunks.clear(); // Disposal is done when energyChunkList is cleared
+    this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.energyChunkMovers.clear();
   }
 }
