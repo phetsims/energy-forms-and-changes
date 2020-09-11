@@ -160,11 +160,14 @@ class Biker extends EnergySource {
             // remove this energy chunk
             this.energyChunkMovers.remove( mover );
             this.energyChunkList.remove( energyChunk );
+            this.energyChunkGroup.disposeElement( energyChunk );
+            this.energyChunkPathMoverGroup.disposeElement( mover );
           }
           else {
 
             // make sure that this energy chunk turns into thermal energy
             this.energyChunkMovers.remove( mover );
+            this.energyChunkPathMoverGroup.disposeElement( mover );
 
             this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
               energyChunk,
@@ -296,6 +299,7 @@ class Biker extends EnergySource {
         // turn this into mechanical energy
         chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
         this.energyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
 
         // add new mover for the mechanical energy chunk
         if ( this.mechanicalChunksSinceLastThermal >= MECHANICAL_TO_THERMAL_CHUNK_RATIO ||
@@ -331,6 +335,8 @@ class Biker extends EnergySource {
 
         // this is a mechanical energy chunk that has traveled to the hub and should now become thermal energy
         this.energyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
+
         chunk.energyTypeProperty.set( EnergyType.THERMAL );
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createRadiatedPath( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
@@ -344,6 +350,8 @@ class Biker extends EnergySource {
         // this is a radiating thermal energy chunk that has reached the end of its route - delete it
         this.energyChunkMovers.remove( mover );
         this.energyChunkList.remove( chunk );
+        this.energyChunkGroup.disposeElement( chunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
 
       // MECHANICAL
@@ -352,6 +360,7 @@ class Biker extends EnergySource {
         // must be mechanical energy that is being passed to the next energy system element
         this.outgoingEnergyChunks.push( chunk );
         this.energyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }

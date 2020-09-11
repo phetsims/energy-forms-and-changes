@@ -191,6 +191,8 @@ class LightBulb extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
         this.energyChunkList.remove( mover.energyChunk );
         this.radiatedEnergyChunkMovers.remove( mover );
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
@@ -211,6 +213,9 @@ class LightBulb extends EnergyUser {
       if ( mover.pathFullyTraversed ) {
         this.filamentEnergyChunkMovers.remove( mover );
         this.radiateEnergyChunk( mover.energyChunk );
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
+
       }
     } );
   }
@@ -229,6 +234,7 @@ class LightBulb extends EnergyUser {
 
       if ( mover.pathFullyTraversed ) {
         this.electricalEnergyChunkMovers.remove( mover );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
 
         // turn this energy chunk into thermal energy on the filament
         if ( this.hasFilament ) {

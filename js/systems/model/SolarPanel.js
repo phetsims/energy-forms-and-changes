@@ -234,6 +234,7 @@ class SolarPanel extends EnergyConverter {
           this.outgoingEnergyChunks.push( mover.energyChunk );
           this.energyChunkList.remove( mover.energyChunk );
         }
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
@@ -255,6 +256,8 @@ class SolarPanel extends EnergyConverter {
       if ( mover.pathFullyTraversed ) {
         this.lightEnergyChunkMovers.remove( mover );
         this.energyChunkList.remove( mover.energyChunk );
+        this.energyChunkGroup.disposeElement( mover.energyChunk );
+        this.energyChunkPathMoverGroup.disposeElement( mover );
       }
     } );
   }
