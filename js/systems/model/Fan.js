@@ -328,9 +328,13 @@ class Fan extends EnergyUser {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
+    this.radiatedEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.radiatedEnergyChunkMovers.clear();
+    this.mechanicalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.mechanicalEnergyChunkMovers.clear();
+    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
   }
 

@@ -53,6 +53,7 @@ class EnergySource extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }
 }

@@ -78,6 +78,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
    * @protected
    */
   clearEnergyChunks() {
+    this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
   }
 }

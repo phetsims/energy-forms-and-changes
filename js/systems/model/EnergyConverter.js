@@ -67,7 +67,9 @@ class EnergyConverter extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
+    this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }
 }
