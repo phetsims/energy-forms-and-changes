@@ -321,9 +321,16 @@ class SunEnergySource extends EnergySource {
   deactivate() {
     super.deactivate();
     this.cloudinessProportionProperty.reset();
-    this.energyChunksPassingThroughClouds.clear();
   }
 
+  /**
+   * @public
+   * @override
+   */
+  clearEnergyChunks() {
+    super.clearEnergyChunks();
+    this.energyChunksPassingThroughClouds.clear();
+  }
 }
 
 // statics
