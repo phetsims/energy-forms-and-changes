@@ -567,14 +567,11 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * Initialization method that add the "slices" where the energy chunks reside. Should be called only once at
    * initialization.
    * @protected
+   * @abstract
    */
   addEnergyChunkSlices() {
     assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
-
-    const sliceBounds = Bounds2.rect( this.rect.x, this.rect.y.this.rect.width, this.rect.height );
-
-    // defaults to a single slice matching the outline rectangle, override for more sophisticated behavior
-    this.slices.push( new EnergyChunkContainerSlice( sliceBounds, 0, this.positionProperty.value ) );
+    assert && assert( false, 'subtypes should implement their chunk slice creation' );
   }
 
   /**
