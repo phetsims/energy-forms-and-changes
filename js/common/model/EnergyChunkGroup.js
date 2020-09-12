@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+// Copyright 2020, University of Colorado Boulder
 
 /**
  * PhetioGroup for creating EnergyChunks
