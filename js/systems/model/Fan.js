@@ -110,7 +110,10 @@ class Fan extends EnergyUser {
 
     // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
     // incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
-    this.internalEnergyFromEnergyChunks = 0;
+    this.internalEnergyFromEnergyChunksProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'internalEnergyFromEnergyChunksProperty' ),
+      phetioReadOnly: true
+    } );
 
     // @private {number} - a temperature value used to decide when to release thermal energy chunks, very roughly in
     // degrees Celsius
@@ -168,14 +171,14 @@ class Fan extends EnergyUser {
     if ( this.energyChunksVisibleProperty.get() ) {
 
       // cap the internal energy
-      this.internalEnergyFromEnergyChunks = Math.min( this.internalEnergyFromEnergyChunks, MAX_INTERNAL_ENERGY );
+      this.internalEnergyFromEnergyChunksProperty.value = Math.min( this.internalEnergyFromEnergyChunksProperty.value, MAX_INTERNAL_ENERGY );
 
       // when chunks are on, use internal energy of the fan to determine the target velocity
-      this.targetVelocityProperty.value = this.internalEnergyFromEnergyChunks * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
+      this.targetVelocityProperty.value = this.internalEnergyFromEnergyChunksProperty.value * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
 
       // lose a proportion of the energy
-      this.internalEnergyFromEnergyChunks = Math.max(
-        this.internalEnergyFromEnergyChunks - this.internalEnergyFromEnergyChunks * ENERGY_LOST_PROPORTION * dt,
+      this.internalEnergyFromEnergyChunksProperty.value = Math.max(
+        this.internalEnergyFromEnergyChunksProperty.value - this.internalEnergyFromEnergyChunksProperty.value * ENERGY_LOST_PROPORTION * dt,
         0
       );
     }
@@ -187,7 +190,7 @@ class Fan extends EnergyUser {
     this.targetVelocityProperty.value = this.targetVelocityProperty.value < MINIMUM_TARGET_VELOCITY ? 0 : this.targetVelocityProperty.value;
 
     // dump any internal energy that was left around from when chunks were on
-    this.internalEnergyFromEnergyChunks = this.targetVelocityProperty.value === 0 ? 0 : this.internalEnergyFromEnergyChunks;
+    this.internalEnergyFromEnergyChunksProperty.value = this.targetVelocityProperty.value === 0 ? 0 : this.internalEnergyFromEnergyChunksProperty.value;
 
     const dOmega = this.targetVelocityProperty.value - this.angularVelocityProperty.value;
     if ( dOmega !== 0 ) {
@@ -238,7 +241,7 @@ class Fan extends EnergyUser {
           this.internalTemperature += TEMPERATURE_GAIN_PER_ENERGY_CHUNK;
 
           // add the energy from this chunk to the fan's internal energy
-          this.internalEnergyFromEnergyChunks += EFACConstants.ENERGY_PER_CHUNK;
+          this.internalEnergyFromEnergyChunksProperty.value += EFACConstants.ENERGY_PER_CHUNK;
 
           chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
@@ -246,7 +249,6 @@ class Fan extends EnergyUser {
           this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createBlownEnergyChunkPath( chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
-
         }
         else {
           chunk.energyTypeProperty.set( EnergyType.THERMAL );
@@ -321,7 +323,7 @@ class Fan extends EnergyUser {
     this.bladePositionProperty.reset();
     this.angularVelocityProperty.reset();
     this.targetVelocityProperty.reset();
-    this.internalEnergyFromEnergyChunks = 0;
+    this.internalEnergyFromEnergyChunksProperty.reset();
     this.internalTemperature = ROOM_TEMPERATURE;
   }
 

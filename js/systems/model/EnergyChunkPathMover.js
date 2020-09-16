@@ -214,7 +214,6 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 }
 
-// Strategy A
 class EnergyChunkPathMoverIO extends ObjectIO {
 
   // @public @override
@@ -229,7 +228,7 @@ class EnergyChunkPathMoverIO extends ObjectIO {
   }
 
   // @public @override
-  static applyState( energyChunk, stateObject ) { energyChunk.applyState( stateObject ); }
+  static applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
 }
 
 EnergyChunkPathMoverIO.documentation = 'My Documentation';

@@ -140,28 +140,34 @@ class SystemsModel {
       energyUsersTandem.createTandem( 'beakerHeater' ) );
 
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
+    const sourceEnum = Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] );
     this.energySourcesCarousel = new EnergySystemElementCarousel(
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
-      Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
+      sourceEnum,
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energySourcesCarousel' )
     );
+    const convertEnum = Enumeration.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
       [ this.generator, this.solarPanel ],
-      Enumeration.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
+      convertEnum,
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyConvertersCarousel' )
     );
+    const userEnum = Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+      userEnum,
 
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyUsersCarousel' )
     );
+    this.energySourcesCarousel.targetElementNameProperty.value = sourceEnum.SUN;
+    this.energyConvertersCarousel.targetElementNameProperty.value = convertEnum.SOLAR_PANEL;
+    this.energyUsersCarousel.targetElementNameProperty.value = userEnum.FAN;
 
     // @private {EnergySystemElementCarousel[]}
     this.carousels = [
