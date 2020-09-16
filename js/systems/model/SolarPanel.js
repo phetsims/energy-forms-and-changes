@@ -231,8 +231,8 @@ class SolarPanel extends EnergyConverter {
           // the energy chunk has traveled across the panel and through the converter, so pass it off to the next
         // element in the system
         else {
-          this.outgoingEnergyChunks.push( mover.energyChunk );
           this.energyChunkList.remove( mover.energyChunk );
+          this.outgoingEnergyChunks.push( mover.energyChunk );
         }
         this.energyChunkPathMoverGroup.disposeElement( mover );
       }

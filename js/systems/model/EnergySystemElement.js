@@ -54,6 +54,8 @@ class EnergySystemElement extends PositionableFadableModelElement {
         chunk.translate( deltaPosition.x, deltaPosition.y );
       } );
     } );
+
+    this.activeProperty.lazyLink( active => !active && this.clearEnergyChunks() );
   }
 
   /**
@@ -70,7 +72,6 @@ class EnergySystemElement extends PositionableFadableModelElement {
    */
   deactivate() {
     this.activeProperty.set( false );
-    this.clearEnergyChunks();
   }
 
   /**

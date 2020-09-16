@@ -358,6 +358,7 @@ class Biker extends EnergySource {
       else {
 
         // must be mechanical energy that is being passed to the next energy system element
+        this.energyChunkList.remove( chunk );
         this.outgoingEnergyChunks.push( chunk );
         this.energyChunkMovers.remove( mover );
         this.energyChunkPathMoverGroup.disposeElement( mover );

@@ -84,6 +84,10 @@ class FaucetAndWater extends EnergySource {
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
+    assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {
+      assert && assert( !this.exemptFromTransferEnergyChunks.includes( chunk ), 'Exempt means it should not go onto outgoing list' );
+    } );
+
     // @private {Energy[]} - list of Energy to be sent after a delay has passed
     this.flowEnergyDelay = [];
 
@@ -172,6 +176,7 @@ class FaucetAndWater extends EnergySource {
         if ( this.transferNextAvailableChunk ) {
 
           // send this chunk to the next energy system
+          this.energyChunkList.remove( chunk );
           this.outgoingEnergyChunks.push( chunk );
 
           // alternate sending or keeping chunks
@@ -193,7 +198,7 @@ class FaucetAndWater extends EnergySource {
       if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
         this.energyChunkList.remove( chunk );
         this.exemptFromTransferEnergyChunks.remove( chunk );
-        this.energyChunkGroup.disposeElement( chunk);
+        this.energyChunkGroup.disposeElement( chunk );
       }
     } );
 
