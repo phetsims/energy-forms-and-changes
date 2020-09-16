@@ -93,6 +93,11 @@ class TeaKettle extends EnergySource {
       tandem: tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
+
+    assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {
+      assert && assert( !this.exemptFromTransferEnergyChunks.includes( chunk ), 'Exempt means it should not go onto outgoing list' );
+    } );
+
     // Flag for whether next chunk should be transferred or kept, used to
     // alternate transfer with non-transfer.
     this.transferNextAvailableChunk = true;
@@ -226,6 +231,7 @@ class TeaKettle extends EnergySource {
 
           // Send this chunk to the next energy system.
           if ( this.transferNextAvailableChunk ) {
+            this.energyChunkList.remove( chunk );
             this.outgoingEnergyChunks.push( chunk );
 
             this.energyChunkMovers.remove( mover );

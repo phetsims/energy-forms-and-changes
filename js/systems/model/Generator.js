@@ -197,7 +197,6 @@ class Generator extends EnergyConverter {
 
           // transfer chunk from incoming list to current list
           this.energyChunkList.push( chunk );
-          this.incomingEnergyChunks.remove( chunk );
 
           // add a "mover" that will move this energy chunk to the center of the wheel
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
@@ -206,10 +205,7 @@ class Generator extends EnergyConverter {
           );
         } );
 
-        assert && assert(
-          this.incomingEnergyChunks.length === 0,
-          `this.incomingEnergyChunks should be empty: ${this.incomingEnergyChunks}`
-        );
+        this.incomingEnergyChunks.clear();
       }
 
       // move the energy chunks and update their state
@@ -288,6 +284,7 @@ class Generator extends EnergyConverter {
           // This electrical energy chunk has traveled to the end of its path, so transfer it to the next energy
           // system.
           this.energyChunkMovers.remove( mover );
+          this.electricalEnergyChunks.remove( chunk );
           this.outgoingEnergyChunks.push( chunk );
           this.energyChunkPathMoverGroup.disposeElement( mover );
 

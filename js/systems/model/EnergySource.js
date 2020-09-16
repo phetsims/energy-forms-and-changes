@@ -28,6 +28,10 @@ class EnergySource extends EnergySystemElement {
       tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
+
+    assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {
+      assert && assert( !this.energyChunkList.includes( chunk ), 'cannot be included in energyChunkList and outgoing list' );
+    } );
   }
 
   /**
