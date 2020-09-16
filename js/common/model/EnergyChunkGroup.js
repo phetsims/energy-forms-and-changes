@@ -1,9 +1,10 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * PhetioGroup for creating EnergyChunks
+ * PhetioGroup for creating EnergyChunks. This type adds support for dynamically created and destroyed, instrumented
+ * PhET-iO elements.
  *
- * @author John Blanco
+ * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

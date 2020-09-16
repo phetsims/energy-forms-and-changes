@@ -59,12 +59,12 @@ class SystemsModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    // @private
+    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
     this.energyChunkGroup = new EnergyChunkGroup( {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    // @private
+    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
     this.energyChunkPathMoverGroup = new EnergyChunkPathMoverGroup( this.energyChunkGroup, {
       tandem: tandem.createTandem( 'energyChunkPathMoverGroup' )
     } );
