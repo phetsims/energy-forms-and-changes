@@ -131,7 +131,7 @@ class EFACIntroModel {
 
 
     // @private
-    this.energyChunkGroup = new EnergyChunkGroup( {
+    this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 

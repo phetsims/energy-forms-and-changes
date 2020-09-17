@@ -60,7 +60,7 @@ class SystemsModel {
     } );
 
     // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
-    this.energyChunkGroup = new EnergyChunkGroup( {
+    this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
