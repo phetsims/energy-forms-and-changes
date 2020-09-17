@@ -95,7 +95,7 @@ class EFACIntroModel {
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
-    this.air = new Air( this.energyChunksVisibleProperty );
+    this.air = new Air( this.energyChunksVisibleProperty, { tandem: tandem.createTandem( 'air' ) } );
 
     // @private {number} - calculate space in between the center points of the snap-to spots on the ground
     this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /

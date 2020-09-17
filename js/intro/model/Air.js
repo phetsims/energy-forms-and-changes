@@ -7,10 +7,14 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkWanderController from '../../common/model/EnergyChunkWanderController.js';
@@ -47,14 +51,22 @@ class Air {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty ) {
+  constructor( energyChunksVisibleProperty, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
 
     // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     // @public (read-only) - list of energy chunks owned by this model element
-    this.energyChunkList = new ObservableArray();
+    this.energyChunkList = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkList' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // @public (read-only) {string} - unique ID
     this.id = `air-${instanceCounter++}`;
