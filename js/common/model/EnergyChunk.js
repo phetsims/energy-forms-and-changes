@@ -10,6 +10,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PropertyIO from '../../../../axon/js/PropertyIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -80,7 +81,7 @@ class EnergyChunk extends PhetioObject {
   toStateObject() {
     return {
       id: this.id,
-      velocity: this.velocity,
+      velocity: Vector2IO.toStateObject( this.velocity ),
       visiblePropertyPhetioID: this.visibleProperty.tandem.phetioID,
       phetioID: this.tandem.phetioID
     };
@@ -89,7 +90,7 @@ class EnergyChunk extends PhetioObject {
   // @public
   static stateToArgsForConstructor( stateObject ) {
     const visibleProperty = ReferenceIO( PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
-    return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
+    return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2IO.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
   }
 
   /**
