@@ -54,8 +54,6 @@ class EnergySystemElement extends PositionableFadableModelElement {
         chunk.translate( deltaPosition.x, deltaPosition.y );
       } );
     } );
-
-    this.activeProperty.lazyLink( active => !active && this.clearEnergyChunks() );
   }
 
   /**
@@ -72,6 +70,9 @@ class EnergySystemElement extends PositionableFadableModelElement {
    */
   deactivate() {
     this.activeProperty.set( false );
+
+    // Don't do this as a listener to activeProperty because we don't want it done during PhET-iO state set
+    this.clearEnergyChunks();
   }
 
   /**
