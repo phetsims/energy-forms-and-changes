@@ -33,7 +33,7 @@ class EnergyChunkPathMover extends PhetioObject {
     options = merge( {
 
       // phet-io
-      tandem: Tandem.OPTIONAL, // TODO: should this become REQUIRED? // TODO: bring these back, https://github.com/phetsims/energy-forms-and-changes/issues/350
+      tandem: Tandem.REQUIRED,
       phetioType: EnergyChunkPathMoverIO,
       phetioDynamicElement: true
     }, options );
@@ -57,7 +57,7 @@ class EnergyChunkPathMover extends PhetioObject {
     this.nextPoint = path[ 0 ];
   }
 
-  // @private
+  // @public (EnergyChunkPathMoverIO)
   toStateObject() {
     return {
       path: ArrayIO( Vector2IO ).toStateObject( this.path ),
@@ -69,14 +69,14 @@ class EnergyChunkPathMover extends PhetioObject {
     };
   }
 
-  // @private
+  // @public (EnergyChunkPathMoverIO)
   static stateToArgsForConstructor( stateObject ) {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
     const path = ArrayIO( Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
 
-  // @private
+  // @public (EnergyChunkPathMoverIO)
   applyState( stateObject ) {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
 
@@ -233,19 +233,14 @@ class EnergyChunkPathMoverIO extends ObjectIO {
   // @public @override
   static stateToArgsForConstructor( state ) { return EnergyChunkPathMover.stateToArgsForConstructor( state ); }
 
-  // @public - use refence serialization when a member of another data structure like ObservableArray
-  static fromStateObject( stateObject ) {
-    return ReferenceIO( EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID );
-  }
-
   // @public @override
   static applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
 }
-
 EnergyChunkPathMoverIO.documentation = 'My Documentation';
 EnergyChunkPathMoverIO.typeName = 'EnergyChunkPathMoverIO';
 EnergyChunkPathMoverIO.validator = { valueType: EnergyChunkPathMover };
 
+// @public
 EnergyChunkPathMover.EnergyChunkPathMoverIO = EnergyChunkPathMoverIO;
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
