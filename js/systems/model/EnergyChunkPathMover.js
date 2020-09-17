@@ -54,14 +54,7 @@ class EnergyChunkPathMover extends PhetioObject {
     this.path = path;
     this.speed = speed;
     this.pathFullyTraversed = false;
-
-    // This was added for PhET-iO support. this.moveAlongPath makes assumptions about being able to use reference equality
-    // and `Array.indexOf` comparison between nextPoint and members of this.path. As a result, two different instances
-    // of Vector2 that have the same value will not work equally. An alternative to this solution is to update checks on
-    // nextPoint to support different instances when they are the same value. Zepumph's implementation was not fast enough
-    // to make this work. See https://github.com/phetsims/energy-forms-and-changes/issues/357 for details.
-    this.nextPointIndex = 0;
-    this.nextPoint = path[ this.nextPointIndex ];
+    this.nextPoint = path[ 0 ];
   }
 
   // @private
@@ -70,7 +63,7 @@ class EnergyChunkPathMover extends PhetioObject {
       path: ArrayIO( Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
-      nextPointIndex: this.nextPointIndex,
+      nextPoint: this.nextPoint,
       energyChunkPhetioID: this.energyChunk.tandem.phetioID,
       phetioID: this.tandem.phetioID
     };
@@ -86,9 +79,14 @@ class EnergyChunkPathMover extends PhetioObject {
   // @private
   applyState( stateObject ) {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
-    this.nextPointIndex = stateObject.nextPointIndex;
-    this.nextPoint = this.path[ this.nextPointIndex ];
-    assert && assert( this.nextPoint instanceof Vector2 );
+
+    // Find the actual reference to the current nextPoint, not just a new instance of Vector2 with the same value, see https://github.com/phetsims/energy-forms-and-changes/issues/357
+    for ( let i = 0; i < this.path.length; i++ ) {
+      const pathElement = this.path[ i ];
+      if ( stateObject.nextPoint.x === pathElement.x && stateObject.nextPoint.y === pathElement.y ) {
+        this.nextPoint = pathElement;
+      }
+    }
   }
 
   /**
@@ -122,17 +120,19 @@ class EnergyChunkPathMover extends PhetioObject {
         distanceToTravel -= this.energyChunk.positionProperty.get().distance( this.nextPoint );
         this.energyChunk.positionProperty.set( this.nextPoint );
 
-        if ( this.nextPointIndex === this.path.length - 1 ) {
+        if ( this.nextPoint === this.path[ this.path.length - 1 ] ) {
 
           // the end of the path has been reached
           this.pathFullyTraversed = true;
         }
         else {
-          this.nextPointIndex++; // increment the index
-          assert && assert( this.path[ this.nextPointIndex ] instanceof Vector2 );
+          const indexOfCurrentNextPoint = this.path.indexOf( this.nextPoint );
+          assert && assert( indexOfCurrentNextPoint !== -1,
+            'This is likely a bug where nextPoint is a different Vector2 reference than on in this.path' );
+          assert && assert( indexOfCurrentNextPoint < this.path.length - 1, 'should not be the last point yet' );
 
           // set the next destination point
-          this.nextPoint = this.path[ this.nextPointIndex ];
+          this.nextPoint = this.path[ indexOfCurrentNextPoint + 1 ];
         }
       }
     }
