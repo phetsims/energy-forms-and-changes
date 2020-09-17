@@ -39,7 +39,8 @@ class EnergyChunkGroup extends PhetioGroup {
 
   // @public
   static createEnergyChunk( tandem, energyType, position, velocity, visibleProperty, options ) {
-    return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( {}, options, { tandem: tandem } ) );
+    assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkGroup supplies its own tandem' );
+    return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( { tandem: tandem }, options ) );
   }
 }
 

@@ -27,7 +27,6 @@ let instanceCount = 0; // counter for creating unique IDs
 class EnergyChunk extends PhetioObject {
 
   /**
-   * TODO: better way to handle defaults for initial values for instrumented sub-Properties https://github.com/phetsims/energy-forms-and-changes/issues/350
    * @param {EnergyType} initialEnergyType
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
@@ -37,13 +36,12 @@ class EnergyChunk extends PhetioObject {
   constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty, options ) {
 
     options = merge( {
+      id: null, // to support recreating the same energyChunk through PhET-iO state
 
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioType: EnergyChunkIO,
-      phetioDynamicElement: true,
-
-      id: null // to support recreating the same energyChunk through PhET-iO state
+      phetioDynamicElement: true
     }, options );
 
     super( options );
@@ -77,7 +75,7 @@ class EnergyChunk extends PhetioObject {
     this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
   }
 
-  // @public
+  // @public (EnergyChunkIO)
   toStateObject() {
     return {
       id: this.id,
@@ -87,18 +85,10 @@ class EnergyChunk extends PhetioObject {
     };
   }
 
-  // @public
+  // @public (EnergyChunkIO)
   static stateToArgsForConstructor( stateObject ) {
     const visibleProperty = ReferenceIO( PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
     return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2IO.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
-  }
-
-  /**
-   * @public
-   * @param stateObject
-   */
-  applyState( stateObject ) {
-    this.visibleProperty = ReferenceIO( PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
   }
 
   /**
@@ -177,22 +167,13 @@ class EnergyChunkIO extends ObjectIO {
   static toStateObject( energyChunk ) { return energyChunk.toStateObject(); }
 
   // @public @override
-  static applyState( energyChunk, stateObject ) { energyChunk.applyState( stateObject ); }
-
-  // @public @override
   static stateToArgsForConstructor( state ) { return EnergyChunk.stateToArgsForConstructor( state ); }
-
-  // @public - use refence serialization when a member of another data structure like ObservableArray
-  // TODO: get rid of this, it isn't needed https://github.com/phetsims/energy-forms-and-changes/issues/350
-  static fromStateObject( stateObject ) {
-    return ReferenceIO( EnergyChunkIO ).fromStateObject( stateObject.phetioID );
-  }
 }
-
 EnergyChunkIO.documentation = 'My Documentation';
 EnergyChunkIO.typeName = 'EnergyChunkIO';
 EnergyChunkIO.validator = { valueType: EnergyChunk };
 
+// @public
 EnergyChunk.EnergyChunkIO = EnergyChunkIO;
 
 energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );

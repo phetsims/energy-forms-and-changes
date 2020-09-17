@@ -35,7 +35,8 @@ class EnergyChunkPathMoverGroup extends PhetioGroup {
 
   // @public
   static createEnergyChunkPathMover( tandem, energyChunk, path, speed, options ) {
-    return new EnergyChunkPathMover( energyChunk, path, speed, merge( {}, options, { tandem: tandem } ) );
+    assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkPathMoverGroup supplies its own tandem' );
+    return new EnergyChunkPathMover( energyChunk, path, speed, merge( { tandem: tandem }, options ) );
   }
 }
 
