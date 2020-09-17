@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Thu Sep 03 2020 16:19:58 GMT-0800 (Alaska Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Thu Sep 17 2020 14:12:02 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -14,14 +14,14 @@
   },
   "chipper": {
     "sha": "a7011e29b2e410b25c376812157d694d963e82eb",
-    "branch": "energy-forms-and-changes-1.4"
+    "branch": "HEAD"
   },
   "dot": {
     "sha": "9800d977587820cb2fcc90e7a6dd2a1b9025b208",
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "75f1ae341cb95510458f64fe518c658be7e5fa22",
+    "sha": "08dfb8cec1b1dfb8231b38e0ba57bd3470809063",
     "branch": "1.4"
   },
   "joist": {
@@ -85,8 +85,8 @@
     "branch": "HEAD"
   },
   "tandem": {
-    "sha": "e1cbf5a05a62a4f3a01f94c065c1f63450bf4f57",
-    "branch": "HEAD"
+    "sha": "41621cb43135cc958f998e17d46ab1b67c42ee04",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "twixt": {
     "sha": "79368c017a1cc9c18d29f1e09b9504d73d40829c",
