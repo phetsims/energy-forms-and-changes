@@ -227,14 +227,12 @@ class EnergyChunkPathMover extends PhetioObject {
 
 EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverIO', {
   valueType: EnergyChunkPathMover,
-  toStateObject( energyChunkPathMover ) { return energyChunkPathMover.toStateObject(); },
-  stateToArgsForConstructor( state ) { return EnergyChunkPathMover.stateToArgsForConstructor( state ); },
+  toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
+  stateToArgsForConstructor: EnergyChunkPathMover.stateToArgsForConstructor,
 
   // use reference serialization when a member of another data structure like ObservableArray
-  fromStateObject( stateObject ) {
-    return ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID );
-  },
-  applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
+  fromStateObject: stateObject => ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID ),
+  applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject )
 } );
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );

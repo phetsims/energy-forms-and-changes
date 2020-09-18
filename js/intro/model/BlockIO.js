@@ -18,11 +18,7 @@ const BlockTypeEnumerationIO = EnumerationIO( BlockType );
 
 const BlockIO = new IOType( 'BlockIO', {
   isValidValue: v => v instanceof phet.energyFormsAndChanges.Block,
-  toStateObject( o ) {
-    return {
-      blockType: BlockTypeEnumerationIO.toStateObject( o.blockType )
-    };
-  }
+  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } )
 } );
 
 energyFormsAndChanges.register( 'BlockIO', BlockIO );

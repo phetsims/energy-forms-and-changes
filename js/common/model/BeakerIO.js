@@ -16,11 +16,7 @@ const BeakerTypeEnumerationIO = EnumerationIO( BeakerType );
 
 const BeakerIO = new IOType( 'BeakerIO', {
   isValidValue: v => v instanceof phet.energyFormsAndChanges.Beaker,
-  toStateObject( o ) {
-    return {
-      beakerType: BeakerTypeEnumerationIO.toStateObject( o.beakerType )
-    };
-  }
+  toStateObject: beaker => ( { beakerType: BeakerTypeEnumerationIO.toStateObject( beaker.beakerType ) } )
 } );
 
 energyFormsAndChanges.register( 'BeakerIO', BeakerIO );
