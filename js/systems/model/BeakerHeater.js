@@ -416,6 +416,9 @@ class BeakerHeater extends EnergyUser {
     this.beaker.reset();
     this.beaker.positionProperty.value = this.positionProperty.value.plus( BEAKER_OFFSET );
     this.heatProportionProperty.set( 0 );
+
+    // step the thermometer so that any temperature changes resulting from the reset are immediately reflected
+    this.thermometer.step();
   }
 
   /**

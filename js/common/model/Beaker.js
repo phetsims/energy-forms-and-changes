@@ -7,6 +7,7 @@
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
@@ -125,6 +126,9 @@ class Beaker extends RectangularThermalMovableModelElement {
     // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
     // steam, 1 is the max amount (full boil)
     this.steamingProportion = 0;
+
+    // @public (read-only) - indicates when a reset starts and finished
+    this.resetInProgressProperty = new BooleanProperty( false );
 
     // @private {number} - max height above water where steam still affects the measured temperature
     this.maxSteamHeight = 2 * height;
@@ -481,8 +485,10 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @public
    */
   reset() {
+    this.resetInProgressProperty.set( true );
     this.fluidProportionProperty.reset();
     super.reset();
+    this.resetInProgressProperty.set( false );
   }
 }
 
