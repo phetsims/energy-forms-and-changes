@@ -57,10 +57,15 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
     // at initialization, oldPosition is null, so skip that case with lazyLink
     this.positionProperty.lazyLink( ( newPosition, oldPosition ) => {
-      const deltaPosition = newPosition.minus( oldPosition );
-      this.energyChunkList.forEach( chunk => {
-        chunk.translate( deltaPosition.x, deltaPosition.y );
-      } );
+
+      // When setting PhET-iO state, the EnergyChunk is already in its correct spot, so don't alter that based on Property
+      // listeners, see https://github.com/phetsims/energy-forms-and-changes/issues/362
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        const deltaPosition = newPosition.minus( oldPosition );
+        this.energyChunkList.forEach( chunk => {
+          chunk.translate( deltaPosition.x, deltaPosition.y );
+        } );
+      }
     } );
   }
 
