@@ -81,7 +81,7 @@ class EnergyChunk extends PhetioObject {
       id: this.id,
       velocity: Vector2IO.toStateObject( this.velocity ),
       visiblePropertyPhetioID: this.visibleProperty.tandem.phetioID,
-      phetioID: this.tandem.phetioID
+      phetioID: this.tandem.phetioID // TODO: do I need this? https://github.com/phetsims/energy-forms-and-changes/issues/350
     };
   }
 

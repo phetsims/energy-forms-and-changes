@@ -53,7 +53,7 @@ class Air {
    * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, options ) {
+  constructor( energyChunksVisibleProperty, energyChunkWanderControllerGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -71,9 +71,15 @@ class Air {
     // @public (read-only) {string} - unique ID
     this.id = `air-${instanceCounter++}`;
 
-    // @private {Array<EnergyChunkWanderController>} - wander controolers for energy chunks that are owned by this model
+    // @private
+    this.energyChunkWanderControllerGroup = energyChunkWanderControllerGroup;
+
+    // @private {ObservableArray<EnergyChunkWanderController>} - wander controllers for energy chunks that are owned by this model
     // element but are wandering outside of it
-    this.energyChunkWanderControllers = [];
+    this.energyChunkWanderControllers = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+    } );
 
     // @private {number} - total energy of the air, accessible through getters/setters defined below
     this.energy = INITIAL_ENERGY;
@@ -85,7 +91,7 @@ class Air {
    * @public
    */
   step( dt ) {
-    const wanderControllers = this.energyChunkWanderControllers.slice();
+    const wanderControllers = this.energyChunkWanderControllers.getArrayCopy();
 
     wanderControllers.forEach( wanderController => {
       wanderController.updatePosition( dt );
@@ -94,7 +100,7 @@ class Air {
         // The energy chuck has reached its destination, which for the air means it has risen out of view, so remove
         // it from the model.
         this.energyChunkList.remove( wanderController.energyChunk );
-        _.pull( this.energyChunkWanderControllers, wanderController );
+        this.energyChunkWanderControllers.remove( wanderController );
       }
     } );
   }
@@ -171,7 +177,7 @@ class Air {
   addEnergyChunk( energyChunk, horizontalWanderConstraint ) {
     energyChunk.zPositionProperty.value = 0;
     this.energyChunkList.push( energyChunk );
-    this.energyChunkWanderControllers.push( new EnergyChunkWanderController(
+    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
       energyChunk,
       new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
       { horizontalWanderConstraint: horizontalWanderConstraint }

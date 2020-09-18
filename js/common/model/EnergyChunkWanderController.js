@@ -7,10 +7,20 @@
  * @author John Blanco
  */
 
+import PropertyIO from '../../../../axon/js/PropertyIO.js';
 import Range from '../../../../dot/js/Range.js';
+import RangeIO from '../../../../dot/js/RangeIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2IO from '../../../../dot/js/Vector2IO.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergyChunk from './EnergyChunk.js';
 
 // constants
 const DEFAULT_MIN_SPEED = 0.06; // In m/s.
@@ -21,7 +31,7 @@ const DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chos
 const DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
 const GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if destination changes, speed increases
 
-class EnergyChunkWanderController {
+class EnergyChunkWanderController extends PhetioObject {
 
   /**
    * @param {EnergyChunk} energyChunk
@@ -42,8 +52,12 @@ class EnergyChunkWanderController {
       // {boolean} - Translate the EC position and wander constraints horizontally if the destination changes.  This
       // was found to be useful to help prevent "chase scenes" when an energy was heading towards an object and the
       // user started dragging that object.
-      translateXWithDestination: true
+      translateXWithDestination: true,
 
+      // phet-io
+      tandem: Tandem.REQUIRED,
+      phetioType: EnergyChunkWanderControllerIO,
+      phetioDynamicElement: true
     }, options );
 
     // parameter checking
@@ -60,6 +74,10 @@ class EnergyChunkWanderController {
       'wander angle must be from zero to PI (inclusive)'
     );
 
+    super( options );
+
+    assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( energyChunk.isPhetioInstrumented() );
+
     // @public (read-only) {EnergyChunk)
     this.energyChunk = energyChunk;
 
@@ -71,6 +89,12 @@ class EnergyChunkWanderController {
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, DEFAULT_MAX_SPEED );
     this.wandering = true;
+
+    // @private - Store this on the instance so that it can be set by PhET-iO state
+    this.translateXWithDestination = options.translateXWithDestination;
+
+    // @private - countdown to when the EnergyChunk will change direction
+    this.countdownTimer = 0;
     this.resetCountdownTimer();
     this.changeVelocityVector();
 
@@ -92,7 +116,7 @@ class EnergyChunkWanderController {
       }
       this.changeVelocityVector();
 
-      if ( options.translateXWithDestination ) {
+      if ( this.translateXWithDestination ) {
 
         const translation = newDestination.minus( oldDestination );
 
@@ -118,12 +142,65 @@ class EnergyChunkWanderController {
     };
   }
 
+  // @public (EnergyChunkWanderControllerIO)
+  toStateObject() {
+
+    const stateObject = {
+      minSpeed: this.minSpeed,
+      maxSpeed: this.maxSpeed,
+      wanderAngleVariation: this.wanderAngleVariation,
+      translateXWithDestination: this.translateXWithDestination,
+      countdownTimer: this.countdownTimer,
+      wandering: this.wandering,
+      horizontalWanderConstraint: NullableIO( RangeIO ).toStateObject( this.horizontalWanderConstraint ),
+      energyChunkPhetioID: this.energyChunk.tandem.phetioID
+    };
+
+    // NOTE: destinationProperty does not need to be instrumented to support this, as some Properties just wrap single
+    // values that don't change. TODO: this doesn't feel like it would pass code review, https://github.com/phetsims/energy-forms-and-changes/issues/361
+    if ( this.destinationProperty.isPhetioInstrumented() ) {
+      stateObject.destinationPropertyPhetioID = this.destinationProperty.tandem.phetioID;
+    }
+    else {
+      stateObject.destinationVector2 = Vector2IO.toStateObject( this.destinationProperty.value );
+    }
+    return stateObject;
+  }
+
+  // @public (EnergyChunkWanderControllerIO)
+  static stateToArgsForConstructor( stateObject ) {
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
+
+    let destinationProperty = null;
+    if ( stateObject.destinationPropertyPhetioID ) {
+
+      destinationProperty = ReferenceIO( PropertyIO( Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
+    }
+    else if ( stateObject.destinationVector2 ) {
+      destinationProperty = new Vector2Property( Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
+    }
+    return [ energyChunk, destinationProperty, {} ];
+  }
+
+  // @public (EnergyChunkWanderControllerIO)
+  applyState( stateObject ) {
+    this.minSpeed = stateObject.minSpeed;
+    this.maxSpeed = stateObject.maxSpeed;
+    this.wanderAngleVariation = stateObject.wanderAngleVariation;
+    this.translateXWithDestination = stateObject.translateXWithDestination;
+    this.countdownTimer = stateObject.countdownTimer;
+    this.wandering = stateObject.wandering;
+    this.horizontalWanderConstraint = NullableIO( RangeIO ).fromStateObject( stateObject.horizontalWanderConstraint );
+  }
+
+
   /**
    * dispose function
    * @public
    */
   dispose() {
     this.disposeEnergyChunkWanderController();
+    super.dispose();
   }
 
   /**
@@ -219,6 +296,26 @@ class EnergyChunkWanderController {
     this.horizontalWanderConstraint = horizontalWanderConstraint;
   }
 }
+
+
+class EnergyChunkWanderControllerIO extends ObjectIO {
+
+  // @public @override
+  static toStateObject( energyChunkWanderController ) { return energyChunkWanderController.toStateObject(); }
+
+  // @public @override
+  static stateToArgsForConstructor( state ) { return EnergyChunkWanderController.stateToArgsForConstructor( state ); }
+
+  // @public @override
+  static applyState( energyChunkWanderController, stateObject ) { energyChunkWanderController.applyState( stateObject ); }
+}
+
+EnergyChunkWanderControllerIO.documentation = 'My Documentation';
+EnergyChunkWanderControllerIO.typeName = 'EnergyChunkWanderControllerIO';
+EnergyChunkWanderControllerIO.validator = { valueType: EnergyChunkWanderController };
+
+// @public
+EnergyChunkWanderController.EnergyChunkWanderControllerIO = EnergyChunkWanderControllerIO;
 
 energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
 export default EnergyChunkWanderController;

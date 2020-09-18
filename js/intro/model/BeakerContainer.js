@@ -8,9 +8,9 @@
 
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
+import merge from '../../../../phet-core/js/merge.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
-import EnergyChunkWanderController from '../../common/model/EnergyChunkWanderController.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // counter used by constructor to create unique IDs
@@ -25,6 +25,7 @@ class BeakerContainer extends Beaker {
    * @param {Array.<Block>} potentiallyContainedElements
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though optional for the parent
    * @param {Object} [options]
    */
   constructor(
@@ -34,8 +35,14 @@ class BeakerContainer extends Beaker {
     potentiallyContainedElements,
     energyChunksVisibleProperty,
     energyChunkGroup,
+    energyChunkWanderControllerGroup,
     options
   ) {
+
+    options = merge( {
+      energyChunkWanderControllerGroup: energyChunkWanderControllerGroup
+    }, options );
+
     super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options );
 
     // @public (read-only) {string} - id of this beaker
@@ -98,7 +105,7 @@ class BeakerContainer extends Beaker {
    * @private
    */
   animateNonContainedEnergyChunks( dt ) {
-    const controllers = this.energyChunkWanderControllers.slice( 0 );
+    const controllers = this.energyChunkWanderControllers.getArrayCopy();
 
     controllers.forEach( controller => {
       const ec = controller.energyChunk;
@@ -133,7 +140,7 @@ class BeakerContainer extends Beaker {
       energyChunk.zPositionProperty.set( 0 );
       this.approachingEnergyChunks.push( energyChunk );
       this.energyChunkWanderControllers.push(
-        new EnergyChunkWanderController( energyChunk, this.positionProperty )
+        this.energyChunkWanderControllerGroup.createNextElement( energyChunk, this.positionProperty )
       );
     }
     else {

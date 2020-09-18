@@ -47,6 +47,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
+      energyChunkWanderControllerGroup: null,
 
       // phet-io
       tandem: Tandem.REQUIRED
@@ -77,13 +78,19 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     this.approachingEnergyChunks = new ObservableArray();
 
     // @private - motion controllers for the energy chunks that are approaching this model element
-    this.energyChunkWanderControllers = [];
+    this.energyChunkWanderControllers = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+    } );
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
 
-    // @private - {PhetioGroup}
+    // @private - {EnergyChunkPhetioGroup}
     this.energyChunkGroup = energyChunkGroup;
+
+    // @private - {EnergyChunkWanderControllerGroup}
+    this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup;
 
     // @protected {ThermalContactArea} - the 2D area for this element where it can be in contact with another thermal
     // elements and thus exchange heat, generally set by descendant classes
@@ -146,17 +153,23 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // when an approaching energy chunk is removed from the list, make sure its wander controller goes away too
     this.approachingEnergyChunks.addItemRemovedListener( removedEC => {
 
-      // find the wander controller that is controlling the motion of this energy chunk
-      const wanderController = _.find( this.energyChunkWanderControllers, wanderController => {
-        return wanderController.energyChunk === removedEC;
-      } );
+      // When setting PhET-iO state, the wander controllers will already be created to be the right values, so don't
+      // mutate them in this listener.
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
-      assert && assert( wanderController, 'there should always be a wander controller for each approaching EC' );
 
-      this.energyChunkWanderControllers = _.without( this.energyChunkWanderControllers, wanderController );
+        // find the wander controller that is controlling the motion of this energy chunk
+        const wanderController = this.energyChunkWanderControllers.find( wanderController => {
+          return wanderController.energyChunk === removedEC;
+        } );
 
-      // dispose the wander controller
-      wanderController.dispose();
+        assert && assert( wanderController, 'there should always be a wander controller for each approaching EC' );
+
+        this.energyChunkWanderControllers.remove( wanderController );
+
+        // dispose the wander controller
+        this.energyChunkWanderControllerGroup.disposeElement( wanderController );
+      }
     } );
 
     // @private {number} - minimum amount of energy that this is allowed to have
@@ -323,7 +336,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   animateNonContainedEnergyChunks( dt ) {
 
     // work from a copy of the list of wander controllers in case the list ends up changing
-    const ecWanderControllers = this.energyChunkWanderControllers.slice();
+    const ecWanderControllers = this.energyChunkWanderControllers.getArrayCopy();
 
     ecWanderControllers.forEach( ecWanderController => {
       ecWanderController.updatePosition( dt );
@@ -352,8 +365,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     else {
       energyChunk.zPosition = 0;
       this.approachingEnergyChunks.push( energyChunk );
+
+      assert && assert( this.energyChunkWanderControllerGroup, 'should not be null if creating a wanderer' );
       this.energyChunkWanderControllers.push(
-        new EnergyChunkWanderController( energyChunk, this.positionProperty )
+        this.energyChunkWanderControllerGroup.createNextElement( energyChunk, this.positionProperty )
       );
     }
   }

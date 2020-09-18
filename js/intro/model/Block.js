@@ -54,11 +54,18 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {Property} energyChunksVisibleProperty
    * @param {BlockType} blockType
    * @param {PhetioGroup} energyChunkGroup
+   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though optional for the parent
    * @param options
    */
-  constructor( initialPosition, energyChunksVisibleProperty, blockType, energyChunkGroup, options ) {
+  constructor( initialPosition,
+               energyChunksVisibleProperty,
+               blockType,
+               energyChunkGroup,
+               energyChunkWanderControllerGroup,
+               options ) {
 
     options = merge( {
+      energyChunkWanderControllerGroup: energyChunkWanderControllerGroup,
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
       phetioType: BlockIO,
