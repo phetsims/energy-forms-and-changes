@@ -51,9 +51,11 @@ class Air {
 
   /**
    * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup
    * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkWanderControllerGroup, options ) {
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkWanderControllerGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -72,6 +74,7 @@ class Air {
     this.id = `air-${instanceCounter++}`;
 
     // @private
+    this.energyChunkGroup = energyChunkGroup;
     this.energyChunkWanderControllerGroup = energyChunkWanderControllerGroup;
 
     // @private {ObservableArray<EnergyChunkWanderController>} - wander controllers for energy chunks that are owned by this model
@@ -101,6 +104,8 @@ class Air {
         // it from the model.
         this.energyChunkList.remove( wanderController.energyChunk );
         this.energyChunkWanderControllers.remove( wanderController );
+        this.energyChunkGroup.disposeElement( wanderController.energyChunk );
+        this.energyChunkWanderControllerGroup.disposeElement( wanderController );
       }
     } );
   }

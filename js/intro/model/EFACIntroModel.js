@@ -106,7 +106,7 @@ class EFACIntroModel {
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
-    this.air = new Air( this.energyChunksVisibleProperty, this.energyChunkWanderControllerGroup, {
+    this.air = new Air( this.energyChunksVisibleProperty, this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
       tandem: tandem.createTandem( 'air' )
     } );
 
