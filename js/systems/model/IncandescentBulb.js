@@ -7,7 +7,9 @@
  * @author Andrew Adare
  */
 
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
@@ -19,10 +21,15 @@ class IncandescentBulb extends LightBulb {
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
-    super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem );
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.incandescentLightBulb;

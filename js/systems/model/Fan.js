@@ -12,7 +12,9 @@ import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import FAN_ICON from '../../../images/fan_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -65,16 +67,21 @@ class Fan extends EnergyUser {
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
-    super( new Image( FAN_ICON ), tandem );
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( FAN_ICON ), options );
 
     // @public (read-only) {NumberProperty}
     this.bladePositionProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
-      tandem: tandem.createTandem( 'bladePositionProperty' ),
+      tandem: options.tandem.createTandem( 'bladePositionProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'the angle of the blade'
@@ -82,22 +89,22 @@ class Fan extends EnergyUser {
 
     // @private - movers that control how the energy chunks move towards and through the fan
     this.electricalEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.mechanicalEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'mechanicalEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'mechanicalEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @private
     this.angularVelocityProperty = new NumberProperty( 0, {
       units: 'radians/second',
-      tandem: tandem.createTandem( 'angularVelocityProperty' ),
+      tandem: options.tandem.createTandem( 'angularVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'the angular velocity of the blade'
@@ -111,7 +118,7 @@ class Fan extends EnergyUser {
     // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
     // incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
     this.internalEnergyFromEnergyChunksProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'internalEnergyFromEnergyChunksProperty' ),
+      tandem: options.tandem.createTandem( 'internalEnergyFromEnergyChunksProperty' ),
       phetioReadOnly: true
     } );
 
@@ -121,7 +128,7 @@ class Fan extends EnergyUser {
 
     this.targetVelocityProperty = new NumberProperty( 0, {
       units: 'radians/second',
-      tandem: tandem.createTandem( 'targetVelocityProperty' ),
+      tandem: options.tandem.createTandem( 'targetVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'the target velocity of the blade'
@@ -402,6 +409,24 @@ class Fan extends EnergyUser {
         preloadComplete = true;
       }
     }
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return { internalTemperature: this.internalTemperature };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.internalTemperature = stateObject.internalTemperature;
   }
 }
 

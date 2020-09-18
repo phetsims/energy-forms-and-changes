@@ -13,6 +13,8 @@ import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
@@ -53,15 +55,20 @@ class LightBulb extends EnergyUser {
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( iconImage, hasFilament, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
-    super( iconImage, tandem );
+  constructor( iconImage, hasFilament, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( iconImage, options );
 
     // @public (read-only) {NumberProperty}
     this.litProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'litProportionProperty' ),
+      tandem: options.tandem.createTandem( 'litProportionProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of brightness from the bulb'
@@ -78,15 +85,15 @@ class LightBulb extends EnergyUser {
 
     // @private - movers and flags that control how the energy chunks move through the light bulb
     this.electricalEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.filamentEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'filamentEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'filamentEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.goRightNextTime = true;
@@ -368,6 +375,30 @@ class LightBulb extends EnergyUser {
     this.filamentEnergyChunkMovers.clear();
     this.radiatedEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.radiatedEnergyChunkMovers.clear();
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      goRightNextTime: this.goRightNextTime,
+      hasFilament: this.hasFilament,
+      proportionOfThermalChunksRadiated: this.proportionOfThermalChunksRadiated
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.goRightNextTime = stateObject.goRightNextTime;
+    this.hasFilament = stateObject.hasFilament;
+    this.proportionOfThermalChunksRadiated = stateObject.proportionOfThermalChunksRadiated;
   }
 }
 

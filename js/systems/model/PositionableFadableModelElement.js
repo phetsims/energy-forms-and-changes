@@ -19,10 +19,10 @@ class PositionableFadableModelElement extends PositionableModelElement {
   /**
    * @param {Vector2} initialPosition
    * @param {number} initialOpacity
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( initialPosition, initialOpacity, tandem ) {
-    super( initialPosition, tandem );
+  constructor( initialPosition, initialOpacity, options ) {
+    super( initialPosition, options );
 
     // @public {NumberProperty}
     this.opacityProperty = new NumberProperty( initialOpacity, {

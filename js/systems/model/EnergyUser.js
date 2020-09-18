@@ -10,6 +10,8 @@
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -19,14 +21,19 @@ class EnergyUser extends EnergySystemElement {
 
   /**
    * @param {Image} iconImage
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( iconImage, tandem ) {
-    super( iconImage, tandem );
+  constructor( iconImage, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( iconImage, options );
 
     // @private {EnergyChunk[]}
     this.incomingEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'incomingEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }

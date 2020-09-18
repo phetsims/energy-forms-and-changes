@@ -15,7 +15,9 @@ import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import SUN_ICON from '../../../images/sun_icon_png.js';
@@ -49,10 +51,15 @@ class SunEnergySource extends EnergySource {
    * @param {SolarPanel} solarPanel
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( solarPanel, energyChunksVisibleProperty, energyChunkGroup, tandem ) {
-    super( new Image( SUN_ICON ), tandem );
+  constructor( solarPanel, energyChunksVisibleProperty, energyChunkGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( SUN_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.sun;
@@ -74,7 +81,7 @@ class SunEnergySource extends EnergySource {
     // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
     this.cloudinessProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'cloudinessProportionProperty' ),
+      tandem: options.tandem.createTandem( 'cloudinessProportionProperty' ),
       phetioDocumentation: 'proportion of clouds blocking the sun'
     } );
 
@@ -83,7 +90,7 @@ class SunEnergySource extends EnergySource {
       return 1 - cloudinessProportion;
     }, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'sunProportionProperty' ),
+      tandem: options.tandem.createTandem( 'sunProportionProperty' ),
       phetioDocumentation: 'proportion of sun reaching the solar panel',
       phetioType: DerivedPropertyIO( NumberIO )
     } );
@@ -98,7 +105,7 @@ class SunEnergySource extends EnergySource {
     // @private - list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
     // reflected)
     this.energyChunksPassingThroughClouds = new ObservableArray( {
-      tandem: tandem.createTandem( 'energyChunksPassingThroughClouds' ),
+      tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -331,6 +338,34 @@ class SunEnergySource extends EnergySource {
   clearEnergyChunks() {
     super.clearEnergyChunks();
     this.energyChunksPassingThroughClouds.clear();
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      sectorList: this.sectorList,
+      currentSectorIndex: this.currentSectorIndex,
+      radius: this.radius,
+      sunPosition: this.sunPosition,
+      energyChunkEmissionCountdownTimer: this.energyChunkEmissionCountdownTimer
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.sectorList = stateObject.sectorList;
+    this.currentSectorIndex = stateObject.currentSectorIndex;
+    this.radius = stateObject.radius;
+    this.sunPosition = stateObject.sunPosition;
+    this.energyChunkEmissionCountdownTimer = stateObject.energyChunkEmissionCountdownTimer;
   }
 }
 
