@@ -288,6 +288,15 @@ class BeakerView extends PhetioObject {
       const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
       this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
     } );
+
+    // reset this node if the beaker it represents gets reset
+    beaker.resetInProgressProperty.lazyLink( resetInProgress => {
+
+      // reset this view node at the end of the beaker's reset, since it should be in a reasonable state at that point
+      if ( !resetInProgress ) {
+        this.reset();
+      }
+    } );
   }
 
   /**
