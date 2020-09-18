@@ -234,7 +234,7 @@ class Burner extends ModelElement {
       this.energyChunkWanderControllers.forEach( energyChunkWanderController => {
         if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
           this.energyChunkWanderControllers.remove( energyChunkWanderController );
-          // TODO: likely we should dispose here, https://github.com/phetsims/energy-forms-and-changes/issues/361
+          this.energyChunkWanderControllerGroup.disposeElement( energyChunkWanderController );
         }
       } );
     }
@@ -330,7 +330,8 @@ class Burner extends ModelElement {
       if ( controller.isDestinationReached() ) {
         this.energyChunkList.remove( controller.energyChunk );
         this.energyChunkWanderControllers.remove( controller );
-        // TODO: likely we should dispose here, https://github.com/phetsims/energy-forms-and-changes/issues/361
+        this.energyChunkGroup.disposeElement( controller.energyChunk );
+        this.energyChunkWanderControllerGroup.disposeElement( controller );
       }
     } );
   }
