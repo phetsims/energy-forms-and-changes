@@ -17,9 +17,11 @@
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import Bounds2IO from '../../../../dot/js/Bounds2IO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -36,7 +38,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
     options = merge( {
       tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
-      phetioState: false
+      phetioType: EnergyChunkContainerSliceIO
     }, options );
 
     super( options );
@@ -93,6 +95,24 @@ class EnergyChunkContainerSlice extends PhetioObject {
   }
 
   /**
+   * @public (EnergyChunkContainerSliceIO)
+   * @returns {{bounds: Bounds2}}
+   */
+  toStateObject() {
+    return {
+      bounds: Bounds2IO.toStateObject( this.bounds )
+    };
+  }
+
+  /**
+   * @public (EnergyChunkContainerSliceIO)
+   * @param {Object} stateObject
+   */
+  applyState( stateObject ) {
+    this.bounds = Bounds2IO.fromStateObject( stateObject.bounds );
+  }
+
+  /**
    * @param {EnergyChunk} energyChunk
    * @public
    */
@@ -126,6 +146,23 @@ class EnergyChunkContainerSlice extends PhetioObject {
     super.dispose();
   }
 }
+
+
+class EnergyChunkContainerSliceIO extends ObjectIO {
+
+  // @public @override
+  static toStateObject( energyChunkContainerSlice ) { return energyChunkContainerSlice.toStateObject(); }
+
+  // @public @override
+  static applyState( energyChunkContainerSlice, stateObject ) { energyChunkContainerSlice.applyState( stateObject ); }
+}
+
+EnergyChunkContainerSliceIO.documentation = 'My Documentation';
+EnergyChunkContainerSliceIO.typeName = 'EnergyChunkContainerSliceIO';
+EnergyChunkContainerSliceIO.validator = { valueType: EnergyChunkContainerSlice };
+
+// @public
+EnergyChunkContainerSlice.EnergyChunkContainerSliceIO = EnergyChunkContainerSliceIO;
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;
