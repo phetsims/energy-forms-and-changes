@@ -10,6 +10,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
@@ -17,8 +18,10 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
@@ -50,6 +53,10 @@ class Burner extends ModelElement {
   constructor( position, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
+
+      // This is an option because only some Burners create wanderers for their EnergyChunks. If creating one, this must
+      // be provided to support PhET-iO state
+      energyChunkWanderControllerGroup: null,
       tandem: Tandem.REQUIRED
     }, options );
 
@@ -66,13 +73,22 @@ class Burner extends ModelElement {
     } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk>}
-    this.energyChunkList = new ObservableArray();
+    this.energyChunkList = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkList' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // @private {Vector2}
     this.position = position;
 
     // @private {Object[]} - motion strategies that control the movement of the energy chunks owned by this burner
-    this.energyChunkMotionStrategies = [];
+    this.energyChunkWanderControllers = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+    } );
+
+    // @private {EnergyChunkWanderControllerGroup|null}
+    this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup;
 
     // @private {Range} - used to keep incoming energy chunks from wandering very far to the left or right
     this.incomingEnergyChunkWanderBounds = new Range( position.x - SIDE_LENGTH / 3, position.x + SIDE_LENGTH / 3 );
@@ -179,19 +195,19 @@ class Burner extends ModelElement {
 
     // make sure the chunk is at the front (which makes it fully opaque in the view)
     energyChunk.zPositionProperty.value = 0;
-
-    // create a motion strategy that will move this energy chunk
-    const motionStrategy = new EnergyChunkWanderController(
-      energyChunk,
-      new Vector2Property( this.getCenterPoint() ),
-      { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
-    );
-
     energyChunk.zPosition = 0;
 
     // add the chunk and its motion strategy to this model
     this.energyChunkList.add( energyChunk );
-    this.energyChunkMotionStrategies.push( motionStrategy );
+
+    assert && assert( this.energyChunkWanderControllerGroup,
+      'Must provided wander controller group if creating wander controllers' );
+
+    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
+      energyChunk,
+      new Vector2Property( this.getCenterPoint() ),
+      { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
+    ) );
   }
 
   /**
@@ -215,9 +231,10 @@ class Burner extends ModelElement {
       } );
 
       this.energyChunkList.remove( closestEnergyChunk );
-      this.energyChunkMotionStrategies.forEach( ( energyChunkWanderController, index ) => {
+      this.energyChunkWanderControllers.forEach( energyChunkWanderController => {
         if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
-          this.energyChunkMotionStrategies.splice( index, 1 );
+          this.energyChunkWanderControllers.remove( energyChunkWanderController );
+          // TODO: likely we should dispose here, https://github.com/phetsims/energy-forms-and-changes/issues/361
         }
       } );
     }
@@ -305,14 +322,15 @@ class Burner extends ModelElement {
    * @private
    */
   step( dt ) {
-    const controllers = this.energyChunkMotionStrategies.slice();
+    const controllers = this.energyChunkWanderControllers.getArrayCopy();
 
     controllers.forEach( controller => {
       controller.updatePosition( dt );
 
       if ( controller.isDestinationReached() ) {
         this.energyChunkList.remove( controller.energyChunk );
-        _.pull( this.energyChunkMotionStrategies, controller );
+        this.energyChunkWanderControllers.remove( controller );
+        // TODO: likely we should dispose here, https://github.com/phetsims/energy-forms-and-changes/issues/361
       }
     } );
   }

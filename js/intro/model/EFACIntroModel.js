@@ -24,6 +24,7 @@ import BeakerIO from '../../common/model/BeakerIO.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWanderControllerGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
 import BeakerContainer from './BeakerContainer.js';
@@ -89,13 +90,25 @@ class EFACIntroModel {
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
+    // @private
+    this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
+      tandem: tandem.createTandem( 'energyChunkGroup' )
+    } );
+
+    // @private
+    this.energyChunkWanderControllerGroup = new EnergyChunkWanderControllerGroup( this.energyChunkGroup, {
+      tandem: tandem.createTandem( 'energyChunkWanderControllerGroup' )
+    } );
+
     // @public {EnumerationProperty.<TimeSpeed>} - for debugging, controls play speed of the
     // simulation
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy
-    this.air = new Air( this.energyChunksVisibleProperty, { tandem: tandem.createTandem( 'air' ) } );
+    this.air = new Air( this.energyChunksVisibleProperty, this.energyChunkWanderControllerGroup, {
+      tandem: tandem.createTandem( 'air' )
+    } );
 
     // @private {number} - calculate space in between the center points of the snap-to spots on the ground
     this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
@@ -129,16 +142,11 @@ class EFACIntroModel {
       ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
     ];
 
-
-    // @private
-    this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
-      tandem: tandem.createTandem( 'energyChunkGroup' )
-    } );
-
     // @public (read-only) {Burner}
     this.leftBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
       this.energyChunksVisibleProperty, this.energyChunkGroup, {
+        energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
         tandem: tandem.createTandem( 'leftBurner' ),
         phetioDocumentation: 'always appears in the simulation, but may be the only burner'
       }
@@ -148,6 +156,7 @@ class EFACIntroModel {
     this.rightBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 1 ] || 0, 0 ),
       this.energyChunksVisibleProperty, this.energyChunkGroup, {
+        energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
         tandem: tandem.createTandem( 'rightBurner' ),
         phetioDocumentation: 'does not appear in the simulation if the query parameter value burners=1 is provided'
       } );
@@ -164,7 +173,7 @@ class EFACIntroModel {
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          this.energyChunkGroup, {
+          this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
             tandem: tandem
           } );
       },
@@ -194,7 +203,7 @@ class EFACIntroModel {
           BEAKER_HEIGHT,
           this.blockGroup,
           this.energyChunksVisibleProperty,
-          this.energyChunkGroup, {
+          this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,
