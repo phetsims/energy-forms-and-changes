@@ -117,7 +117,12 @@ class EnergyChunk extends PhetioObject {
    * @public
    */
   translateBasedOnVelocity( dt ) {
-    this.translate( this.velocity.x * dt, this.velocity.y * dt );
+
+    // When setting PhET-iO state, the EnergyChunk is already in its correct spot, so don't alter that based on Property
+    // listeners, see https://github.com/phetsims/energy-forms-and-changes/issues/362
+    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      this.translate( this.velocity.x * dt, this.velocity.y * dt );
+    }
   }
 
   /**
@@ -169,6 +174,7 @@ class EnergyChunkIO extends ObjectIO {
   // @public @override
   static stateToArgsForConstructor( state ) { return EnergyChunk.stateToArgsForConstructor( state ); }
 }
+
 EnergyChunkIO.documentation = 'My Documentation';
 EnergyChunkIO.typeName = 'EnergyChunkIO';
 EnergyChunkIO.validator = { valueType: EnergyChunk };

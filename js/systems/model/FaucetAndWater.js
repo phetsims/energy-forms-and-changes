@@ -95,7 +95,6 @@ class FaucetAndWater extends EnergySource {
     } );
 
     // @private {Energy[]} - list of Energy to be sent after a delay has passed
-    // TODO: support for PhET-iO state? https://github.com/phetsims/energy-forms-and-changes/issues/362
     this.flowEnergyDelay = [];
 
     // @private {number}
