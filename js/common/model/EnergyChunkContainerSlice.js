@@ -16,7 +16,6 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -56,7 +55,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
     // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
     this.energyChunkList = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.isPhetioInstrumented() && this.energyChunkList.addItemAddedListener( energyChunk => {

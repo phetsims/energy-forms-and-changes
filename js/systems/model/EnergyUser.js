@@ -9,7 +9,6 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -27,7 +26,7 @@ class EnergyUser extends EnergySystemElement {
     // @private {EnergyChunk[]}
     this.incomingEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'incomingEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 

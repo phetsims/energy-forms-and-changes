@@ -10,7 +10,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -95,21 +94,21 @@ class Generator extends EnergyConverter {
     } );
     this.energyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'energyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
     // support placing them on a different layer in the view.
     this.electricalEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'electricalEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
     // mainly for code clarity
     this.hiddenEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'hiddenEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 

@@ -9,7 +9,6 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
@@ -166,7 +165,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // chunks in the view
     this.slices = new ObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),
-      phetioType: ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )
     } );
 
     // add the slices

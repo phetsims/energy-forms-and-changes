@@ -9,7 +9,6 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -79,15 +78,15 @@ class LightBulb extends EnergyUser {
     // @private - movers and flags that control how the energy chunks move through the light bulb
     this.electricalEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.filamentEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'filamentEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.goRightNextTime = true;
   }

@@ -9,7 +9,6 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -115,7 +114,7 @@ class Biker extends EnergySource {
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
     this.energyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'energyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // TODO: support state with these?

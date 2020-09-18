@@ -8,7 +8,6 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -88,21 +87,21 @@ class BeakerHeater extends EnergyUser {
     // beaker
     this.electricalEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.heatingElementEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = new ObservableArray( {
       tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = new ObservableArray( {
       tandem: tandem.createTandem( 'radiatedEnergyChunkList' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty

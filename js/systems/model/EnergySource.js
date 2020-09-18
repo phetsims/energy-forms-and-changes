@@ -10,7 +10,6 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -26,7 +25,7 @@ class EnergySource extends EnergySystemElement {
     super( iconImage, tandem );
     this.outgoingEnergyChunks = new ObservableArray( {
       tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {
