@@ -16,7 +16,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyType from './EnergyType.js';
@@ -40,7 +40,7 @@ class EnergyChunk extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: EnergyChunkIO,
+      phetioType: EnergyChunk.EnergyChunkIO,
       phetioDynamicElement: true
     }, options );
 
@@ -161,20 +161,11 @@ class EnergyChunk extends PhetioObject {
   }
 }
 
-class EnergyChunkIO extends ObjectIO {
-
-  // @public @override
-  static toStateObject( energyChunk ) { return energyChunk.toStateObject(); }
-
-  // @public @override
-  static stateToArgsForConstructor( state ) { return EnergyChunk.stateToArgsForConstructor( state ); }
-}
-EnergyChunkIO.documentation = 'My Documentation';
-EnergyChunkIO.typeName = 'EnergyChunkIO';
-EnergyChunkIO.validator = { valueType: EnergyChunk };
-
-// @public
-EnergyChunk.EnergyChunkIO = EnergyChunkIO;
+EnergyChunk.EnergyChunkIO = new IOType( 'EnergyChunkIO', {
+  valueType: EnergyChunk,
+  toStateObject: energyChunk => energyChunk.toStateObject(),
+  stateToArgsForConstructor: EnergyChunk.stateToArgsForConstructor
+} );
 
 energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 export default EnergyChunk;

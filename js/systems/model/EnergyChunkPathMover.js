@@ -14,7 +14,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -34,7 +34,7 @@ class EnergyChunkPathMover extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: EnergyChunkPathMoverIO,
+      phetioType: EnergyChunkPathMover.EnergyChunkPathMoverIO,
       phetioDynamicElement: true
     }, options );
 
@@ -225,23 +225,17 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 }
 
-class EnergyChunkPathMoverIO extends ObjectIO {
+EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverIO', {
+  valueType: EnergyChunkPathMover,
+  toStateObject( energyChunkPathMover ) { return energyChunkPathMover.toStateObject(); },
+  stateToArgsForConstructor( state ) { return EnergyChunkPathMover.stateToArgsForConstructor( state ); },
 
-  // @public @override
-  static toStateObject( energyChunkPathMover ) { return energyChunkPathMover.toStateObject(); }
-
-  // @public @override
-  static stateToArgsForConstructor( state ) { return EnergyChunkPathMover.stateToArgsForConstructor( state ); }
-
-  // @public @override
-  static applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
-}
-EnergyChunkPathMoverIO.documentation = 'My Documentation';
-EnergyChunkPathMoverIO.typeName = 'EnergyChunkPathMoverIO';
-EnergyChunkPathMoverIO.validator = { valueType: EnergyChunkPathMover };
-
-// @public
-EnergyChunkPathMover.EnergyChunkPathMoverIO = EnergyChunkPathMoverIO;
+  // use reference serialization when a member of another data structure like ObservableArray
+  fromStateObject( stateObject ) {
+    return ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID );
+  },
+  applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
+} );
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
 export default EnergyChunkPathMover;

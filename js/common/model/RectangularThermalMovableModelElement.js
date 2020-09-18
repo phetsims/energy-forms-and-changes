@@ -18,7 +18,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
@@ -166,7 +166,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // chunks in the view
     this.slices = new ObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),
-      phetioType: ObservableArrayIO( ReferenceIO( ObjectIO ) )
+      phetioType: ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )
     } );
 
     // add the slices
