@@ -13,7 +13,9 @@ import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import TEAPOT_ICON from '../../../images/tea_kettle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -49,10 +51,15 @@ class TeaKettle extends EnergySource {
    * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
-    super( new Image( TEAPOT_ICON ), tandem );
+  constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( TEAPOT_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.teaKettle;
@@ -60,7 +67,7 @@ class TeaKettle extends EnergySource {
     // @public {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'heatProportionProperty' ),
+      tandem: options.tandem.createTandem( 'heatProportionProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of heat coming from the heater'
@@ -69,7 +76,7 @@ class TeaKettle extends EnergySource {
     // @public (read-only) {NumberProperty}
     this.energyProductionRateProperty = new NumberProperty( 0, {
       range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
-      tandem: tandem.createTandem( 'energyProductionRateProperty' ),
+      tandem: options.tandem.createTandem( 'energyProductionRateProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true
     } );
@@ -81,7 +88,7 @@ class TeaKettle extends EnergySource {
     this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
     this.energyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'energyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'energyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.energyChunkGroup = energyChunkGroup;
@@ -90,7 +97,7 @@ class TeaKettle extends EnergySource {
     // @private - List of chunks that are not being transferred to the next energy system
     // element.
     this.exemptFromTransferEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -368,6 +375,28 @@ class TeaKettle extends EnergySource {
     this.exemptFromTransferEnergyChunks.clear(); // Disposal is done when energyChunkList is cleared
     this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.energyChunkMovers.clear();
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      heatEnergyProducedSinceLastChunk: this.heatEnergyProducedSinceLastChunk,
+      transferNextAvailableChunk: this.transferNextAvailableChunk
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
+    this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
   }
 }
 

@@ -14,6 +14,7 @@ import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -51,10 +52,15 @@ class FaucetAndWater extends EnergySource {
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {BooleanProperty} waterPowerableElementInPlaceProperty
    * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, energyChunkGroup, tandem ) {
-    super( new Image( FAUCET_ICON ), tandem );
+  constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, energyChunkGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( FAUCET_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.waterFaucet;
@@ -69,7 +75,7 @@ class FaucetAndWater extends EnergySource {
     // @public {NumberProperty}
     this.flowProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'flowProportionProperty' ),
+      tandem: options.tandem.createTandem( 'flowProportionProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of water flowing from the faucet'
@@ -80,7 +86,7 @@ class FaucetAndWater extends EnergySource {
 
     // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
     this.exemptFromTransferEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -89,6 +95,7 @@ class FaucetAndWater extends EnergySource {
     } );
 
     // @private {Energy[]} - list of Energy to be sent after a delay has passed
+    // TODO: support for PhET-iO state? https://github.com/phetsims/energy-forms-and-changes/issues/362
     this.flowEnergyDelay = [];
 
     // @private {number}
@@ -339,6 +346,30 @@ class FaucetAndWater extends EnergySource {
   clearEnergyChunks() {
     super.clearEnergyChunks();
     this.exemptFromTransferEnergyChunks.clear(); // Disposal is done when energyChunkList is cleared
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      waterDropsPreloaded: this.waterDropsPreloaded,
+      transferNextAvailableChunk: this.transferNextAvailableChunk,
+      energySinceLastChunk: this.energySinceLastChunk
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.waterDropsPreloaded = stateObject.waterDropsPreloaded;
+    this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
+    this.energySinceLastChunk = stateObject.energySinceLastChunk;
   }
 }
 

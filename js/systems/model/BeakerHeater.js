@@ -11,7 +11,9 @@ import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import WATER_ICON from '../../../images/water_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -60,12 +62,18 @@ class BeakerHeater extends EnergyUser {
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
   constructor( energyChunksVisibleProperty, energyChunkGroup,
                energyChunkPathMoverGroup,
-               tandem ) {
-    super( new Image( WATER_ICON ), tandem );
+               options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED,
+      phetioState: false // no internal fields to convey in state
+    }, options );
+
+    super( new Image( WATER_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.beakerOfWater;
@@ -78,7 +86,7 @@ class BeakerHeater extends EnergyUser {
     // @public (read-only) {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: tandem.createTandem( 'heatProportionProperty' ),
+      tandem: options.tandem.createTandem( 'heatProportionProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of how much heat the coils have'
@@ -87,26 +95,26 @@ class BeakerHeater extends EnergyUser {
     // @private {ObservableArray.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
     // beaker
     this.electricalEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.heatingElementEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = new ObservableArray( {
-      tandem: tandem.createTandem( 'radiatedEnergyChunkList' ),
+      tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
-    this.waterBeakerTandem = tandem.createTandem( 'waterBeaker' );
+    this.waterBeakerTandem = options.tandem.createTandem( 'waterBeaker' );
 
     // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
     this.beaker = new Beaker(
@@ -126,7 +134,7 @@ class BeakerHeater extends EnergyUser {
       this,
       new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
       true, {
-        tandem: tandem.createTandem( 'thermometer' ),
+        tandem: options.tandem.createTandem( 'thermometer' ),
         userControllable: false
       }
     );

@@ -12,7 +12,9 @@ import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import BICYCLE_ICON from '../../../images/bicycle_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -53,12 +55,17 @@ class Biker extends EnergySource {
    * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
   constructor( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty,
                energyChunkGroup, energyChunkPathMoverGroup,
-               tandem ) {
-    super( new Image( BICYCLE_ICON ), tandem );
+               options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( BICYCLE_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.cyclist;
@@ -67,7 +74,7 @@ class Biker extends EnergySource {
     this.crankAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
-      tandem: tandem.createTandem( 'crankAngleProperty' ),
+      tandem: options.tandem.createTandem( 'crankAngleProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'angle of the crank arm on the bike'
@@ -77,7 +84,7 @@ class Biker extends EnergySource {
     this.rearWheelAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
-      tandem: tandem.createTandem( 'rearWheelAngleProperty' ),
+      tandem: options.tandem.createTandem( 'rearWheelAngleProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'angle of the rear wheel on the bike'
@@ -86,7 +93,7 @@ class Biker extends EnergySource {
     // @public {NumberProperty}
     this.energyChunksRemainingProperty = new NumberProperty( INITIAL_NUMBER_OF_ENERGY_CHUNKS, {
       range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS ),
-      tandem: tandem.createTandem( 'energyChunksRemainingProperty' ),
+      tandem: options.tandem.createTandem( 'energyChunksRemainingProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'number of energy chunks remaining in the biker\'s body'
@@ -96,7 +103,7 @@ class Biker extends EnergySource {
     this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
       units: 'radians/second',
-      tandem: tandem.createTandem( 'targetCrankAngularVelocityProperty' ),
+      tandem: options.tandem.createTandem( 'targetCrankAngularVelocityProperty' ),
       phetioDocumentation: 'target angular velocity of crank'
     } );
 
@@ -104,7 +111,7 @@ class Biker extends EnergySource {
     this.crankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
       units: 'radians/second',
-      tandem: tandem.createTandem( 'crankAngularVelocityProperty' ),
+      tandem: options.tandem.createTandem( 'crankAngularVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'angular velocity of crank'
@@ -114,11 +121,10 @@ class Biker extends EnergySource {
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
     this.energyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'energyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'energyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
-    // TODO: support state with these?
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
     this.mechanicalChunksSinceLastThermal = 0;
 
@@ -548,6 +554,28 @@ class Biker extends EnergySource {
       }
     } );
     return nonMovingEnergyChunk;
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      energyProducedSinceLastChunkEmitted: this.energyProducedSinceLastChunkEmitted,
+      mechanicalChunksSinceLastThermal: this.mechanicalChunksSinceLastThermal
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.energyProducedSinceLastChunkEmitted = stateObject.energyProducedSinceLastChunkEmitted;
+    this.mechanicalChunksSinceLastThermal = stateObject.mechanicalChunksSinceLastThermal;
   }
 }
 

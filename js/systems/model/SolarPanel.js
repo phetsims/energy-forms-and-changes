@@ -19,7 +19,9 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import SOLAR_PANEL_ICON from '../../../images/solar_panel_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -56,28 +58,33 @@ class SolarPanel extends EnergyConverter {
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
-    super( new Image( SOLAR_PANEL_ICON ), tandem );
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( new Image( SOLAR_PANEL_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.solarPanel;
 
     // @private
     this.electricalEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'electricalEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.lightEnergyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'lightEnergyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'lightEnergyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.latestChunkArrivalTime = 0;
     this.numberOfConvertedChunks = 0;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyOutputRateProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'energyOutputRateProperty' ),
+      tandem: options.tandem.createTandem( 'energyOutputRateProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true
     } );
@@ -427,6 +434,30 @@ class SolarPanel extends EnergyConverter {
    */
   getAbsorptionShape() {
     return this.absorptionShape;
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @returns {Object}
+   */
+  toStateObject() {
+    return {
+      numberOfConvertedChunks: this.numberOfConvertedChunks,
+      latestChunkArrivalTime: this.latestChunkArrivalTime,
+      simulationTime: this.simulationTime
+    };
+  }
+
+  /**
+   * @override
+   * @public (EnergySystemElementIO)
+   * @param {Object} stateObject - see this.toStateObject()
+   */
+  applyState( stateObject ) {
+    this.numberOfConvertedChunks = stateObject.numberOfConvertedChunks;
+    this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
+    this.simulationTime = stateObject.simulationTime;
   }
 }
 

@@ -14,7 +14,9 @@ import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import GENERATOR_ICON from '../../../images/generator_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -52,11 +54,15 @@ class Generator extends EnergyConverter {
    * @param {Property.<boolean>} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, tandem ) {
+  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+    options = merge( {
+      tandem: Tandem.REQUIRED,
+      phetioState: false // no internal fields to convey in state
+    }, options );
 
-    super( new Image( GENERATOR_ICON ), tandem );
+    super( new Image( GENERATOR_ICON ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.electricalGenerator;
@@ -70,7 +76,7 @@ class Generator extends EnergyConverter {
     this.wheelRotationalAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
-      tandem: tandem.createTandem( 'wheelRotationalAngleProperty' ),
+      tandem: options.tandem.createTandem( 'wheelRotationalAngleProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'the angle of the wheel'
@@ -78,7 +84,7 @@ class Generator extends EnergyConverter {
 
     // @public {BooleanProperty}
     this.directCouplingModeProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'directCouplingModeProperty' ),
+      tandem: options.tandem.createTandem( 'directCouplingModeProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'whether the wheel is in "direct coupling mode", meaning the generator wheel turns at a ' +
                            'rate that is directly proportional to the incoming energy, with no rotational inertia. ' +
@@ -88,27 +94,27 @@ class Generator extends EnergyConverter {
     // @private
     this.wheelRotationalVelocityProperty = new NumberProperty( 0, {
       units: 'radians/second',
-      tandem: tandem.createTandem( 'wheelRotationalVelocityProperty' ),
+      tandem: options.tandem.createTandem( 'wheelRotationalVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
       phetioDocumentation: 'the angular velocity of the wheel'
     } );
     this.energyChunkMovers = new ObservableArray( {
-      tandem: tandem.createTandem( 'energyChunkMovers' ),
+      tandem: options.tandem.createTandem( 'energyChunkMovers' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
     // support placing them on a different layer in the view.
     this.electricalEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'electricalEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'electricalEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
     // mainly for code clarity
     this.hiddenEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'hiddenEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'hiddenEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }

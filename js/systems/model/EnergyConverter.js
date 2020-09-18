@@ -10,6 +10,8 @@
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
+import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -19,16 +21,21 @@ class EnergyConverter extends EnergySystemElement {
 
   /**
    * @param {Image} iconImage Image to identify source on carousel menu
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( iconImage, tandem ) {
-    super( iconImage, tandem );
+  constructor( iconImage, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( iconImage, options );
     this.incomingEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'incomingEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
     this.outgoingEnergyChunks = new ObservableArray( {
-      tandem: tandem.createTandem( 'outgoingEnergyChunks' ),
+      tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
       phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }

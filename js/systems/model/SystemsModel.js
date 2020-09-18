@@ -73,42 +73,44 @@ class SystemsModel {
     this.generator = new Generator(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyConvertersTandem.createTandem( 'generator' ) );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyConvertersTandem.createTandem( 'generator' )
+      } );
     this.solarPanel = new SolarPanel(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyConvertersTandem.createTandem( 'solarPanel' ) );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyConvertersTandem.createTandem( 'solarPanel' )
+      } );
 
     // @public (read-only) energy sources
     this.biker = new Biker(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energySourcesTandem.createTandem( 'biker' )
-    );
+      this.energyChunkPathMoverGroup, {
+        tandem: energySourcesTandem.createTandem( 'biker' )
+      } );
 
     this.faucetAndWater = new FaucetAndWater(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
-      this.energyChunkGroup,
-      energySourcesTandem.createTandem( 'faucetAndWater' )
-    );
+      this.energyChunkGroup, {
+        tandem: energySourcesTandem.createTandem( 'faucetAndWater' )
+      } );
     this.sun = new SunEnergySource(
       this.solarPanel,
       this.energyChunksVisibleProperty,
-      this.energyChunkGroup,
-      energySourcesTandem.createTandem( 'sun' )
-    );
+      this.energyChunkGroup, {
+        tandem: energySourcesTandem.createTandem( 'sun' )
+      } );
     this.teaKettle = new TeaKettle(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energySourcesTandem.createTandem( 'teaKettle' )
-    );
+      this.energyChunkPathMoverGroup, {
+        tandem: energySourcesTandem.createTandem( 'teaKettle' )
+      } );
 
     const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
     const wheel2Center = ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Generator.WHEEL_CENTER_OFFSET );
@@ -120,24 +122,26 @@ class SystemsModel {
     this.fan = new Fan(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyUsersTandem.createTandem( 'fan' ) );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyUsersTandem.createTandem( 'fan' )
+      } );
     this.incandescentBulb = new IncandescentBulb(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyUsersTandem.createTandem( 'incandescentBulb' )
-    );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyUsersTandem.createTandem( 'incandescentBulb' )
+      } );
     this.fluorescentBulb = new FluorescentBulb(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyUsersTandem.createTandem( 'fluorescentBulb' )
-    );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyUsersTandem.createTandem( 'fluorescentBulb' )
+      } );
     this.beakerHeater = new BeakerHeater( this.energyChunksVisibleProperty,
       this.energyChunkGroup,
-      this.energyChunkPathMoverGroup,
-      energyUsersTandem.createTandem( 'beakerHeater' ) );
+      this.energyChunkPathMoverGroup, {
+        tandem: energyUsersTandem.createTandem( 'beakerHeater' )
+      } );
 
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
