@@ -210,7 +210,8 @@ class Beaker extends RectangularThermalMovableModelElement {
       );
 
       // update the bounds of the energy chunk slices
-      if ( oldFluidProportion ) {
+      // When setting PhET-iO state, the slices' height is already updated
+      if ( oldFluidProportion && !phet.joist.sim.isSettingPhetioStateProperty.value) {
         const multiplier = newFluidProportion / oldFluidProportion;
         this.slices.forEach( slice => {
           slice.updateHeight( multiplier );
