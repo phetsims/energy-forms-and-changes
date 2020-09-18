@@ -8,7 +8,6 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedPropertyIO from '../../../../axon/js/DerivedPropertyIO.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
@@ -85,7 +84,7 @@ class SunEnergySource extends EnergySource {
       range: new Range( 0, 1 ),
       tandem: tandem.createTandem( 'sunProportionProperty' ),
       phetioDocumentation: 'proportion of sun reaching the solar panel',
-      phetioType: DerivedPropertyIO( NumberIO )
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // @private - internal variables used in methods
