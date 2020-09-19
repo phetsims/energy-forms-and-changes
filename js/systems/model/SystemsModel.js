@@ -100,6 +100,7 @@ class SystemsModel {
       } );
     this.sun = new SunEnergySource(
       this.solarPanel,
+      this.isPlayingProperty,
       this.energyChunksVisibleProperty,
       this.energyChunkGroup, {
         tandem: energySourcesTandem.createTandem( 'sun' )

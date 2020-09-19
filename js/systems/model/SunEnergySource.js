@@ -49,11 +49,12 @@ class SunEnergySource extends EnergySource {
 
   /**
    * @param {SolarPanel} solarPanel
+   * @param {BooleanProperty} isPlayingProperty
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
    * @param {Object} [options]
    */
-  constructor( solarPanel, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  constructor( solarPanel, isPlayingProperty, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -97,6 +98,7 @@ class SunEnergySource extends EnergySource {
 
     // @private - internal variables used in methods
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
+    this.isPlayingProperty = isPlayingProperty;
     this.energyChunkEmissionCountdownTimer = ENERGY_CHUNK_EMISSION_PERIOD;
     this.sectorList = phet.joist.random.shuffle( _.range( NUM_EMISSION_SECTORS ) );
     this.currentSectorIndex = 0;
@@ -315,9 +317,14 @@ class SunEnergySource extends EnergySource {
   activate() {
     super.activate();
 
-    // step a few times to get some energy chunks out
-    for ( let i = 0; i < 100; i++ ) {
-      this.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+    // Don't move the EnergyChunks from their position if setting state.
+    // Don't step if not playing, this makes sure that PhET-iO state maintains exact EnergyChunk positions.
+    if ( !phet.joist.sim.isSettingPhetioStateProperty.value && this.isPlayingProperty.value ) {
+
+      // step a few times to get some energy chunks out
+      for ( let i = 0; i < 100; i++ ) {
+        this.step( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      }
     }
   }
 
