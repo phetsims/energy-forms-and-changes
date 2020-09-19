@@ -8,10 +8,8 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedPropertyIO from '../../../../axon/js/DerivedPropertyIO.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -93,7 +91,7 @@ class SunEnergySource extends EnergySource {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'sunProportionProperty' ),
       phetioDocumentation: 'proportion of sun reaching the solar panel',
-      phetioType: DerivedPropertyIO( NumberIO )
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // @private - internal variables used in methods
@@ -108,7 +106,7 @@ class SunEnergySource extends EnergySource {
     // reflected)
     this.energyChunksPassingThroughClouds = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private

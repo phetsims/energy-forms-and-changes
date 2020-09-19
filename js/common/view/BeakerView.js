@@ -28,7 +28,7 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -62,7 +62,7 @@ class BeakerView extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: ReferenceIO( ObjectIO )
+      phetioType: ReferenceIO( IOType.ObjectIO )
     }, options );
 
     super( options );
@@ -287,6 +287,15 @@ class BeakerView extends PhetioObject {
       labelNode.opacity = energyChunksVisible ? 0.5 : 1;
       const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
       this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
+    } );
+
+    // reset this node if the beaker it represents gets reset
+    beaker.resetInProgressProperty.lazyLink( resetInProgress => {
+
+      // reset this view node at the end of the beaker's reset, since it should be in a reasonable state at that point
+      if ( !resetInProgress ) {
+        this.reset();
+      }
     } );
   }
 

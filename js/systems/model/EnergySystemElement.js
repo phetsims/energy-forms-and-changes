@@ -11,11 +11,10 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -31,7 +30,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
-      phetioType: EnergySystemElementIO
+      phetioType: EnergySystemElement.EnergySystemElementIO
     }, options );
 
     super( new Vector2( 0, 0 ), 1.0, options );
@@ -42,7 +41,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
     // @public (read-only) {ObservableArray.<EnergyChunk>}
     this.energyChunkList = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @public {BooleanProperty}
@@ -114,22 +113,11 @@ class EnergySystemElement extends PositionableFadableModelElement {
   }
 }
 
-
-class EnergySystemElementIO extends ObjectIO {
-
-  // @public @override
-  static toStateObject( energySystemElement ) { return energySystemElement.toStateObject(); }
-
-  // @public @override
-  static applyState( energySystemElement, stateObject ) { energySystemElement.applyState( stateObject ); }
-}
-
-EnergySystemElementIO.documentation = 'IO Type for EnergySystemElement';
-EnergySystemElementIO.typeName = 'EnergySystemElementIO';
-EnergySystemElementIO.validator = { valueType: EnergySystemElement };
-
-// @public
-EnergySystemElement.EnergySystemElementIO = EnergySystemElementIO;
+EnergySystemElement.EnergySystemElementIO = new IOType( 'EnergySystemElementIO', {
+  valueType: EnergySystemElement,
+  toStateObject: energySystemElement => energySystemElement.toStateObject(),
+  applyState: ( energySystemElement, stateObject ) => energySystemElement.applyState()
+} );
 
 energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
 export default EnergySystemElement;
