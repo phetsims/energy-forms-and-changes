@@ -79,7 +79,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes

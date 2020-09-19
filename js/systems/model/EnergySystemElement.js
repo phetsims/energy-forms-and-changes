@@ -116,7 +116,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
 EnergySystemElement.EnergySystemElementIO = new IOType( 'EnergySystemElementIO', {
   valueType: EnergySystemElement,
   toStateObject: energySystemElement => energySystemElement.toStateObject(),
-  applyState: ( energySystemElement, stateObject ) => energySystemElement.applyState()
+  applyState: ( energySystemElement, stateObject ) => energySystemElement.applyState( stateObject )
 } );
 
 energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );

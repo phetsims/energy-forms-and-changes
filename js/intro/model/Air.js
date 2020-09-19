@@ -7,7 +7,6 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import ObservableArrayIO from '../../../../axon/js/ObservableArrayIO.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -67,7 +66,7 @@ class Air {
     // @public (read-only) - list of energy chunks owned by this model element
     this.energyChunkList = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @public (read-only) {string} - unique ID
@@ -81,7 +80,7 @@ class Air {
     // element but are wandering outside of it
     this.energyChunkWanderControllers = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
     // @private {number} - total energy of the air, accessible through getters/setters defined below

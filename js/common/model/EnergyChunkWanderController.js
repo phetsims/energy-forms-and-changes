@@ -16,8 +16,8 @@ import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -56,7 +56,7 @@ class EnergyChunkWanderController extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: EnergyChunkWanderControllerIO,
+      phetioType: EnergyChunkWanderController.EnergyChunkWanderControllerIO,
       phetioDynamicElement: true
     }, options );
 
@@ -305,25 +305,12 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 }
 
-
-class EnergyChunkWanderControllerIO extends ObjectIO {
-
-  // @public @override
-  static toStateObject( energyChunkWanderController ) { return energyChunkWanderController.toStateObject(); }
-
-  // @public @override
-  static stateToArgsForConstructor( state ) { return EnergyChunkWanderController.stateToArgsForConstructor( state ); }
-
-  // @public @override
-  static applyState( energyChunkWanderController, stateObject ) { energyChunkWanderController.applyState( stateObject ); }
-}
-
-EnergyChunkWanderControllerIO.documentation = 'My Documentation';
-EnergyChunkWanderControllerIO.typeName = 'EnergyChunkWanderControllerIO';
-EnergyChunkWanderControllerIO.validator = { valueType: EnergyChunkWanderController };
-
-// @public
-EnergyChunkWanderController.EnergyChunkWanderControllerIO = EnergyChunkWanderControllerIO;
+EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyChunkWanderControllerIO', {
+  valueType: EnergyChunkWanderController,
+  toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
+  stateToArgsForConstructor: EnergyChunkWanderController.stateToArgsForConstructor,
+  applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject )
+} );
 
 energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
 export default EnergyChunkWanderController;

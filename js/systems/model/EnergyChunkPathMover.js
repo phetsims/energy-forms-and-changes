@@ -229,9 +229,6 @@ EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverI
   valueType: EnergyChunkPathMover,
   toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
   stateToArgsForConstructor: EnergyChunkPathMover.stateToArgsForConstructor,
-
-  // use reference serialization when a member of another data structure like ObservableArray
-  fromStateObject: stateObject => ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ).fromStateObject( stateObject.phetioID ),
   applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject )
 } );
 
