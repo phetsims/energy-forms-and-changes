@@ -1,95 +1,99 @@
 {
-  "comment": "# energy-forms-and-changes 1.2.0-dev.12 Wed Mar 25 2020 13:49:00 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.5.0-dev.1 Fri Sep 18 2020 22:14:00 GMT-0800 (Alaska Daylight Time)",
   "assert": {
-    "sha": "a99a9ce9ee0774bf3ef509bf3e31ca7383f67478",
+    "sha": "49aa67d01046326d85dcd8f265db91e8753038a1",
     "branch": "master"
   },
   "axon": {
-    "sha": "80100758674420bb80385119d8f4331eb628a737",
+    "sha": "b6a5ff24817f3f8a34bef40689108587f7f3efa4",
     "branch": "master"
   },
   "brand": {
-    "sha": "a9a72bd2fd274b04251819f2816546e428dc9687",
+    "sha": "e88138434dccb5a17137015eb87eb8aa6946e894",
     "branch": "master"
   },
   "chipper": {
-    "sha": "ba9e3144023f86d10f41bc75e354773343e9c7c6",
+    "sha": "ccaf72eb93f4e4a982e71af2deb9d535814167d4",
     "branch": "master"
   },
   "dot": {
-    "sha": "0d1b35670fdaadcdef257df67085490262008616",
+    "sha": "a999b4d3e01dbff8c1c63a0240768664a39b3116",
     "branch": "master"
   },
   "energy-forms-and-changes": {
-    "sha": "d61944223aee798f985eff37de8c4fcb54230802",
+    "sha": "2dde90e06971c679f8b2d5175bd949665316bd14",
     "branch": "master"
   },
   "joist": {
-    "sha": "f820eee0cc719e8d722f6d93a9ed15d240b6acd6",
+    "sha": "2a8ddcdaa3aac8ed4572466adc60b64633c7f851",
     "branch": "master"
   },
   "kite": {
-    "sha": "54e06212e5989f90a4a41e61f8a9b60eabe5a543",
+    "sha": "d42b46f3941a4921c1b7c0a00df82ae0ad691324",
     "branch": "master"
   },
   "phet-core": {
-    "sha": "ac0c07935a2fdc7da46eb9b9c21b227291d8b4d8",
+    "sha": "ac49f78ffa3cfb645063db238b0b978864ed26ae",
     "branch": "master"
   },
   "phet-io": {
-    "sha": "d3b278b9299924933d477b66de177fc0bf2d4840",
+    "sha": "acdda3cabdc1fe2198df88888aef2d13c3d72f9e",
+    "branch": "master"
+  },
+  "phet-io-client-guides": {
+    "sha": "c371c508de45eacd32c6eb7a76dd1053fac0a87c",
     "branch": "master"
   },
   "phet-io-wrappers": {
-    "sha": "3ee4a71770086a4ce9236641b47b0289470579b8",
+    "sha": "ea89df61645bddc24586ea7e883f580e5087483b",
     "branch": "master"
   },
   "phetcommon": {
-    "sha": "721b9ddfcc2b7486c1d94649554cf0dc65045420",
+    "sha": "b99f1804dc2b3e114755daf658d4e8749a5334ae",
     "branch": "master"
   },
   "phetmarks": {
-    "sha": "88ad4ecd50957d048d0dbd121c4b955baa07ad5d",
+    "sha": "bb10ac299e0ce66faad79684cf063c6c472ceff6",
     "branch": "master"
   },
   "query-string-machine": {
-    "sha": "83d209fdd9ebbe6ded4ed4a30ba8c1380ce7b925",
+    "sha": "67e43f963cba009fe8c654937624da6a80d9c707",
     "branch": "master"
   },
   "scenery": {
-    "sha": "b9901b686eaa90cb5fbc037e33ecb77bb2332b07",
+    "sha": "37fcc3d69ddf4ca499807aa93a05071954a4867a",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "158c41648d5c7dad626f22f5f02629cddfa01527",
+    "sha": "28ccde34ce3c3f513ed3cd032f87dc9fdea98d51",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "ca8704c07c9b27bd8e67c1d2945bdb3c1e05615e",
+    "sha": "bcc993c65a5ba6abcdc42d857929036e6e5a0709",
     "branch": "master"
   },
   "studio": {
-    "sha": "c5bc7bbcd846bcba848547b86266ac56ef0c9dbf",
+    "sha": "bafd6425cdac0ce0bd5239c9ad0d74daa6279503",
     "branch": "master"
   },
   "sun": {
-    "sha": "24a53bf50989529d3c6c8ebd94a8741142967225",
+    "sha": "df954d019ee8f4eda19d04e712b9914402034237",
     "branch": "master"
   },
   "tambo": {
-    "sha": "1d0232f1277f3789bb7fb51ab3eaad7d60a3dc2a",
+    "sha": "b3c633528938a8b5406006864b72b3262e950ee5",
     "branch": "master"
   },
   "tandem": {
-    "sha": "20911a18d39616c1ccd88d1b3283baf83a796488",
+    "sha": "c7108d5e06e4100d6450f7b9299a1a05b80b0ab5",
     "branch": "master"
   },
   "twixt": {
-    "sha": "d50f4dddc613918239628cfba19b5857f194fa49",
-    "branch": "master"
+    "sha": "79368c017a1cc9c18d29f1e09b9504d73d40829c",
+    "branch": "HEAD"
   },
   "utterance-queue": {
-    "sha": "2772560db2d1a1262a3530813f37835a298a913c",
+    "sha": "b56ccc481fa1b296fd7455c8d73d8724e117ca4d",
     "branch": "master"
   }
 }
