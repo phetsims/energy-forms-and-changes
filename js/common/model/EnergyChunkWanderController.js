@@ -165,7 +165,7 @@ class EnergyChunkWanderController extends PhetioObject {
     };
 
     // NOTE: destinationProperty does not need to be instrumented to support this, as some Properties just wrap single
-    // values that don't change. TODO: this doesn't feel like it would pass code review, https://github.com/phetsims/energy-forms-and-changes/issues/361
+    // values that don't change.
     if ( this.destinationProperty.isPhetioInstrumented() ) {
       stateObject.destinationPropertyPhetioID = this.destinationProperty.tandem.phetioID;
     }

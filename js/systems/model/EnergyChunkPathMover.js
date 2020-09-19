@@ -64,8 +64,7 @@ class EnergyChunkPathMover extends PhetioObject {
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
       nextPoint: this.nextPoint,
-      energyChunkPhetioID: this.energyChunk.tandem.phetioID,
-      phetioID: this.tandem.phetioID // TODO: do I need this? https://github.com/phetsims/energy-forms-and-changes/issues/350
+      energyChunkPhetioID: this.energyChunk.tandem.phetioID
     };
   }
 

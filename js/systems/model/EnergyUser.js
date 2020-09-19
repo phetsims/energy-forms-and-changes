@@ -57,8 +57,8 @@ class EnergyUser extends EnergySystemElement {
    */
   clearEnergyChunks() {
     super.clearEnergyChunks();
+    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
-    this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) ); // TODO: this is backwards and doesn't do anything. https://github.com/phetsims/energy-forms-and-changes/issues/361
   }
 }
 
