@@ -174,7 +174,7 @@ class EnergyChunkIO extends ObjectIO {
   static stateToArgsForConstructor( state ) { return EnergyChunk.stateToArgsForConstructor( state ); }
 }
 
-EnergyChunkIO.documentation = 'My Documentation';
+EnergyChunkIO.documentation = 'IO Type for EnergyChunk';
 EnergyChunkIO.typeName = 'EnergyChunkIO';
 EnergyChunkIO.validator = { valueType: EnergyChunk };
 

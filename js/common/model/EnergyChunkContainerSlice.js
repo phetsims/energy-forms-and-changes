@@ -157,7 +157,7 @@ class EnergyChunkContainerSliceIO extends ObjectIO {
   static applyState( energyChunkContainerSlice, stateObject ) { energyChunkContainerSlice.applyState( stateObject ); }
 }
 
-EnergyChunkContainerSliceIO.documentation = 'My Documentation';
+EnergyChunkContainerSliceIO.documentation = 'IO Type for EnergyChunkContainerSlice';
 EnergyChunkContainerSliceIO.typeName = 'EnergyChunkContainerSliceIO';
 EnergyChunkContainerSliceIO.validator = { valueType: EnergyChunkContainerSlice };
 

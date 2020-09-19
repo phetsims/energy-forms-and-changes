@@ -318,7 +318,7 @@ class EnergyChunkWanderControllerIO extends ObjectIO {
   static applyState( energyChunkWanderController, stateObject ) { energyChunkWanderController.applyState( stateObject ); }
 }
 
-EnergyChunkWanderControllerIO.documentation = 'My Documentation';
+EnergyChunkWanderControllerIO.documentation = 'IO Type for EnergyChunkWanderController';
 EnergyChunkWanderControllerIO.typeName = 'EnergyChunkWanderControllerIO';
 EnergyChunkWanderControllerIO.validator = { valueType: EnergyChunkWanderController };
 

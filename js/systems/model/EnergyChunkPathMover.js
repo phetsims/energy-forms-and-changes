@@ -235,7 +235,7 @@ class EnergyChunkPathMoverIO extends ObjectIO {
   // @public @override
   static applyState( energyChunkPathMover, stateObject ) { energyChunkPathMover.applyState( stateObject ); }
 }
-EnergyChunkPathMoverIO.documentation = 'My Documentation';
+EnergyChunkPathMoverIO.documentation = 'IO Type for EnergyChunkPathMover';
 EnergyChunkPathMoverIO.typeName = 'EnergyChunkPathMoverIO';
 EnergyChunkPathMoverIO.validator = { valueType: EnergyChunkPathMover };
 
