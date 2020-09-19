@@ -12,6 +12,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -25,6 +26,7 @@ import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js'
 import Energy from './Energy.js';
 import EnergySource from './EnergySource.js';
 import WaterDrop from './WaterDrop.js';
+
 
 // constants
 const FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
@@ -97,7 +99,7 @@ class FaucetAndWater extends EnergySource {
     // non-transfer
     this.transferNextAvailableChunk = true;
 
-    // @private {boolean} - whether the water drops have been preloaded. initially set to false whenever preloadWaterDrops is called.
+    // @private {boolean} - flag for whether the water drops have been fully preloaded
     this.waterDropsPreloaded = true;
 
     // @private {EnergyChunkGroup}
@@ -276,20 +278,72 @@ class FaucetAndWater extends EnergySource {
 
     let preloadTime = 3; // In seconds, empirically determined.
 
-    const tempEnergyChunkList = [];
+    let tempEnergyChunkList = [];
 
-    // simulate energy chunks moving through the system
-    while ( preloadTime > 0 ) {
-      this.energySinceLastChunk += this.getEnergyOutputRate().amount * DT;
-      if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
-        tempEnergyChunkList.push( this.createNewChunk() );
-        this.energySinceLastChunk = this.energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+    if ( this.getEnergyOutputRate().amount > 0 ) {
+
+      // preload energy chunks into the system
+      while ( preloadTime > 0 ) {
+        this.energySinceLastChunk += this.getEnergyOutputRate().amount * DT;
+        if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
+          tempEnergyChunkList.push( this.createNewChunk() );
+          this.energySinceLastChunk = this.energySinceLastChunk - EFACConstants.ENERGY_PER_CHUNK;
+        }
+
+        // make the chunks fall
+        translateChunks( tempEnergyChunkList, DT );
+
+        preloadTime -= DT;
       }
 
-      // make the chunks fall
-      translateChunks( tempEnergyChunkList, DT );
+      // Now that the new chunks are in place, make sure that there is actually water falling where the chunks ended up
+      // and, if not, remove them.  This is a rare but possible case that can occur when preloading right after turning
+      // on the faucet.  For more on this, please see https://github.com/phetsims/energy-forms-and-changes/issues/347.
+      tempEnergyChunkList = tempEnergyChunkList.filter( ec => {
+        const yOffsetForWaterDrops = this.positionProperty.value.y + OFFSET_FROM_CENTER_TO_WATER_ORIGIN.y;
+        let verticalDistanceToNearestWaterDrop = Number.POSITIVE_INFINITY;
+        this.waterDrops.forEach( waterDrop => {
+          const verticalDistanceToWaterDrop =
+            Math.abs( ( waterDrop.position.y + yOffsetForWaterDrops ) - ec.positionProperty.value.y );
+          if ( verticalDistanceToWaterDrop < verticalDistanceToNearestWaterDrop ) {
+            verticalDistanceToNearestWaterDrop = verticalDistanceToWaterDrop;
+          }
+        } );
+        return verticalDistanceToNearestWaterDrop < 0.01; // distance threshold empirically determined
+      } );
+    }
+    else if ( this.waterDrops.length > 0 ) {
 
-      preloadTime -= DT;
+      // The faucet is off, but water is present, so we must be preloading energy chunks just after the faucet was
+      // turned off, which means we need to add energy chunks to the following water.  This is a rare but possible
+      // condition.  For more info as to why this is needed, see
+      // https://github.com/phetsims/energy-forms-and-changes/issues/347.
+
+      // the top of the water column will be where the last drop is
+      const topWaterDrop = this.waterDrops[ this.waterDrops.length - 1 ];
+
+      // the bottom drop is the first one
+      const bottomWaterDrop = this.waterDrops[ 0 ];
+
+      // Figure out how many energy chunks to add based on the size of the stream of water droplets.  This calculation
+      // was empirically determined so that the number of energy chunks roughly matches what there are when the faucet
+      // is running at full output.
+      const waterColumnDistanceSpan = topWaterDrop.position.y - bottomWaterDrop.position.y;
+      const numberOfChunksToAdd = Utils.roundSymmetric( waterColumnDistanceSpan / 0.05 );
+      const distanceBetweenChunks = waterColumnDistanceSpan / numberOfChunksToAdd;
+
+      // add the energy chunks and position them along the stream of water droplets
+      _.times( numberOfChunksToAdd, index => {
+
+        // create a new energy chunk
+        const ec = this.createNewChunk();
+        tempEnergyChunkList.push( ec );
+
+        // position the new energy chunk on the water stream
+        ec.positionProperty.set(
+          ec.positionProperty.value.plusXY( 0, topWaterDrop.position.y - distanceBetweenChunks * index )
+        );
+      } );
     }
 
     // now that they are positioned, add these to the 'real' list of energy chunks
