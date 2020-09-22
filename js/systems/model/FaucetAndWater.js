@@ -30,9 +30,11 @@ import WaterDrop from './WaterDrop.js';
 
 
 // constants
-const FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // In meters/second.
-const MAX_WATER_WIDTH = 0.014; // In meters.
-const MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // In meters.
+const FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // in meters/second
+const MAX_WATER_WIDTH = 0.014; // in meters
+const MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER = 0.5; // in meters
+const WATER_DROPS_PER_SECOND = 30;
+const WATER_DROP_CREATION_PERIOD = 1 / WATER_DROPS_PER_SECOND; // in seconds
 const ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.07, 0.08 );
 const FALLING_WATER_DELAY = 0.4; // time to pass before wheel starts turning after faucet starts, in seconds
 const DT = 1 / EFACConstants.FRAMES_PER_SECOND; // artificial time step, in seconds
@@ -101,6 +103,9 @@ class FaucetAndWater extends EnergySource {
     // @private {number}
     this.energySinceLastChunk = 0;
 
+    // @private {number}
+    this.timeSinceLastDropCreation = 0;
+
     // @private {boolean} - flag for whether next chunk should be transferred or kept, used to alternate transfer with
     // non-transfer
     this.transferNextAvailableChunk = true;
@@ -110,6 +115,14 @@ class FaucetAndWater extends EnergySource {
 
     // @private {EnergyChunkGroup}
     this.energyChunkGroup = energyChunkGroup;
+
+    this.flowProportionProperty.lazyLink( ( newFlowRate, oldFlowRate ) => {
+
+      // Prime the pump when the flow goes from zero to above zero so that water starts flowing right away.
+      if ( oldFlowRate === 0 && newFlowRate > 0 ) {
+        this.timeSinceLastDropCreation = WATER_DROP_CREATION_PERIOD;
+      }
+    } );
 
     // Preload falling water animation after state has been set
     Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
@@ -236,26 +249,44 @@ class FaucetAndWater extends EnergySource {
    */
   stepWaterDrops( dt ) {
 
-    // add water droplets as needed based on flow rate
-    if ( this.flowProportionProperty.value > 0 ) {
-      const initialPosition = new Vector2( 0, 0 );
-      const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
-                           ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
-      const initialSize = new Dimension2( initialWidth, initialWidth );
-      this.waterDrops.push( new WaterDrop( initialPosition, new Vector2( 0, 0 ), initialSize ) );
-    }
-    else {
-      this.waterDropsPreloaded = true;
-    }
-
-    // make the water droplets fall
+    // make the existing water droplets fall
     this.waterDrops.forEach( drop => {
       const v = drop.velocityProperty.value;
       drop.velocityProperty.set( v.plus( ACCELERATION_DUE_TO_GRAVITY.times( dt ) ) );
       drop.position.set( drop.position.plus( v.times( dt ) ) );
     } );
 
-    // remove drops that have run their course by iterating over a copy and checking for matches
+    // add new water droplets as needed based on flow rate
+    if ( this.flowProportionProperty.value > 0 ) {
+
+      this.timeSinceLastDropCreation += dt;
+
+      while ( this.timeSinceLastDropCreation >= WATER_DROP_CREATION_PERIOD ) {
+
+        const dropTime = this.timeSinceLastDropCreation - WATER_DROP_CREATION_PERIOD;
+
+        // Create a new water drop of somewhat random size and position it based on the time since the last one.
+        const initialPosition = new Vector2(
+          0,
+          0.5 * ACCELERATION_DUE_TO_GRAVITY.y * dropTime * dropTime
+        );
+        const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
+                             ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
+        const initialSize = new Dimension2( initialWidth, initialWidth );
+        this.waterDrops.push( new WaterDrop(
+          initialPosition,
+          new Vector2( 0, ACCELERATION_DUE_TO_GRAVITY.y * dropTime ),
+          initialSize
+        ) );
+
+        this.timeSinceLastDropCreation -= WATER_DROP_CREATION_PERIOD;
+      }
+    }
+    else {
+      this.waterDropsPreloaded = true;
+    }
+
+    // remove drops that have run their course
     const waterDropsCopy = this.waterDrops;
     waterDropsCopy.forEach( drop => {
       if ( drop.position.distance( this.positionProperty.value ) > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
