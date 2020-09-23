@@ -29,8 +29,11 @@ class EnergyChunkGroup extends PhetioGroup {
       phetioType: PhetioGroupIO( EnergyChunk.EnergyChunkIO )
     }, options );
 
-    super( EnergyChunkGroup.createEnergyChunk,
-      [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, energyChunksVisibleProperty, {} ], options );
+    super(
+      EnergyChunkGroup.createEnergyChunk,
+      [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, energyChunksVisibleProperty, {} ],
+      options
+    );
   }
 
   // @public

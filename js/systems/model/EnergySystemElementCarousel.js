@@ -127,6 +127,9 @@ class EnergySystemElementCarousel {
       }
     } );
 
+    // REVIEW-phetio: This seems fragile and, while the comment is good, it's hard to figure out why it works, and the
+    // hard-coded number seems suspect.  It would be better to have a private method like finishInProgressAnimations()
+    // or something like that.
     // Don't animate the system elements when setting state for better user experience when launching the sim.
     Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
       this.elapsedTransitionTime = 1;
