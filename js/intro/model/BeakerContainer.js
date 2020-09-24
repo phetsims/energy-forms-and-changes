@@ -28,17 +28,18 @@ class BeakerContainer extends Beaker {
    * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though optional for the parent
    * @param {Object} [options]
    */
-  constructor(
-    initialPosition,
-    width,
-    height,
-    potentiallyContainedElements,
-    energyChunksVisibleProperty,
-    energyChunkGroup,
-    energyChunkWanderControllerGroup,
-    options
-  ) {
+  constructor( initialPosition,
+               width,
+               height,
+               potentiallyContainedElements,
+               energyChunksVisibleProperty,
+               energyChunkGroup,
+               energyChunkWanderControllerGroup,
+               options ) {
 
+    // REVIEW+phetio: It seems odd to be able to provide a requisite value both through parameters or an option.  I
+    // think this may be a case where the option set rather than merged, and the code checks that it's not provided as
+    // an option too.  Or it's a config parameter.
     options = merge( {
       energyChunkWanderControllerGroup: energyChunkWanderControllerGroup
     }, options );

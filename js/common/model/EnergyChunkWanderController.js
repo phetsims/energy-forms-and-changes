@@ -79,11 +79,11 @@ class EnergyChunkWanderController extends PhetioObject {
     assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( energyChunk.isPhetioInstrumented() );
 
     // Instead of asserting that the destinationProperty is instrumented, assert that it must be instrumented if it
-    // changes. This was the simplest solution zepumph and samreid came up with for dealing with supporting PhET-iO state
-    // when there are usages that just wrap a single value in a Property and never change it.
+    // changes. This was the simplest solution zepumph and samreid came up with for dealing with supporting PhET-iO
+    // state when there are usages that just wrap a single value in a Property and never change it.
     assert && Tandem.VALIDATION && destinationProperty.lazyLink( () => {
       assert( this.destinationProperty.isPhetioInstrumented(),
-        'If the destinationPropety every changes, then it must be instrumented to support PhET-iO state' );
+        'If the destinationProperty ever changes, then it must be instrumented to support PhET-iO state.' );
     } );
 
     // @public (read-only) {EnergyChunk)

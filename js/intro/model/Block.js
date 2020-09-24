@@ -54,7 +54,8 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {Property} energyChunksVisibleProperty
    * @param {BlockType} blockType
    * @param {PhetioGroup} energyChunkGroup
-   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though optional for the parent
+   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though
+   * optional for the parent
    * @param options
    */
   constructor( initialPosition,
@@ -64,6 +65,7 @@ class Block extends RectangularThermalMovableModelElement {
                energyChunkWanderControllerGroup,
                options ) {
 
+    // REVIEW-phetio: Here again a required parameter is being merged into options, which doesn't seem quite right.
     options = merge( {
       energyChunkWanderControllerGroup: energyChunkWanderControllerGroup,
       tandem: Tandem.REQUIRED,
@@ -180,8 +182,8 @@ class Block extends RectangularThermalMovableModelElement {
    * (unless we're talking about the boiling point of iron I suppose).  However, it turns out to be useful to the sim
    * to set a max temperature beyond which the block will exchange energy with the air more quickly thus limiting how
    * hot it will get, because this effectively limits the number of energy chunks that can end up in the block.  So,
-   * this method does return a positive value when the block is above a certain temperature, bit this behavior is what
-   * we often call "Hollywooding", since it doesn't do this for physical reason.  The max temperature values is
+   * this method does return a positive value when the block is above a certain temperature, but this behavior is what
+   * we often call "Hollywooding", since it doesn't do this for a real physical reason.  The max temperature values are
    * empirically determined to be higher than the value that maxes out the thermometers, and enough above that value
    * that two stacked blocks can both reach the max value shown on the thermometer if heated long enough.
    * @returns {number}

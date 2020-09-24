@@ -29,10 +29,13 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup {
     }, options );
 
     // If other archetypes don't exist, then we won't create ours, so these values can be null.
-    const defaultArguments = [ energyChunkGroup.archetype, energyChunkGroup.archetype ? energyChunkGroup.archetype.positionProperty : null, {} ];
+    const defaultArguments = [
+      energyChunkGroup.archetype,
+      energyChunkGroup.archetype ? energyChunkGroup.archetype.positionProperty : null,
+      {}
+    ];
 
-    super( EnergyChunkWanderControllerGroup.createEnergyChunkWanderController,
-      defaultArguments, options );
+    super( EnergyChunkWanderControllerGroup.createEnergyChunkWanderController, defaultArguments, options );
   }
 
   // @public

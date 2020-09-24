@@ -145,7 +145,9 @@ class EFACIntroModel {
     // @public (read-only) {Burner}
     this.leftBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
-      this.energyChunksVisibleProperty, this.energyChunkGroup, {
+      this.energyChunksVisibleProperty,
+      this.energyChunkGroup,
+      {
         energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
         tandem: tandem.createTandem( 'leftBurner' ),
         phetioDocumentation: 'always appears in the simulation, but may be the only burner'
@@ -155,11 +157,14 @@ class EFACIntroModel {
     // @public (read-only) {Burner}
     this.rightBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 1 ] || 0, 0 ),
-      this.energyChunksVisibleProperty, this.energyChunkGroup, {
+      this.energyChunksVisibleProperty,
+      this.energyChunkGroup,
+      {
         energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
         tandem: tandem.createTandem( 'rightBurner' ),
         phetioDocumentation: 'does not appear in the simulation if the query parameter value burners=1 is provided'
-      } );
+      }
+    );
 
     // @private {Burner[]} - put burners into a list for easy iteration
     this.burners = [ this.leftBurner ];
@@ -168,21 +173,25 @@ class EFACIntroModel {
     }
 
     // @public {PhetioGroup.<Block>}
-    this.blockGroup = new PhetioGroup( ( tandem, blockType, initialXPosition ) => {
+    this.blockGroup = new PhetioGroup(
+      ( tandem, blockType, initialXPosition ) => {
         return new Block(
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
-            tandem: tandem
-          } );
+          this.energyChunkGroup,
+          this.energyChunkWanderControllerGroup,
+          { tandem: tandem }
+        );
       },
-      [ BlockType.IRON, 0 ], {
+      [ BlockType.IRON, 0 ],
+      {
         tandem: tandem.createTandem( 'blockGroup' ),
         phetioType: PhetioGroupIO( BlockIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS + ' blocks'
-      } );
+      }
+    );
 
     blocksToCreate.forEach( blockType => {
       this.blockGroup.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
@@ -192,30 +201,35 @@ class EFACIntroModel {
     movableElementGroundSpotXPositions =
       movableElementGroundSpotXPositions.slice( movableElementGroundSpotXPositions.length -
                                                 EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
-                                                ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners )
-      );
+                                                ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners ) );
 
     // @public {PhetioGroup.<BeakerContainer>}
-    this.beakerGroup = new PhetioGroup( ( tandem, beakerType, initialXPosition ) => {
+    this.beakerGroup = new PhetioGroup(
+      ( tandem, beakerType, initialXPosition ) => {
         return new BeakerContainer(
           new Vector2( initialXPosition, 0 ),
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
           this.blockGroup,
           this.energyChunksVisibleProperty,
-          this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
+          this.energyChunkGroup,
+          this.energyChunkWanderControllerGroup,
+          {
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,
             phetioDynamicElement: true
-          } );
+          }
+        );
       },
-      [ BeakerType.WATER, 0 ], {
+      [ BeakerType.WATER, 0 ],
+      {
         tandem: tandem.createTandem( 'beakerGroup' ),
         phetioType: PhetioGroupIO( BeakerIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS + ' beakers'
-      } );
+      }
+    );
 
     // create any specified beakers
     beakersToCreate.forEach( beakerType => {
@@ -713,10 +727,10 @@ class EFACIntroModel {
           return;
         }
 
-        // this if statement is checking each potentialRestingModelElement to see which ones are already in the spot
+        // This if statement is checking each potentialRestingModelElement to see which ones are already in the spot
         // that modelElement is falling to.
         //
-        // the following first condition usually just needs to check if potentialRestingModelElement's center x
+        // The following first condition usually just needs to check if potentialRestingModelElement's center x
         // coordinate matches the current ground spot x coordinate, but instead it considers any
         // potentialRestingModelElement's to be in this spot if its center x coordinate is within half a spot's
         // width of the ground spot x coordinate. this handles the multitouch case where modelElement is falling and
@@ -725,9 +739,9 @@ class EFACIntroModel {
         // (and therefore falling through it and overlapping), it does detect it, and then falls to the model
         // elements surface instead of all the way down to the ground spot.
         //
-        // the second condition checks that potentialRestingModelElement is below modelElement
-        // because, for example, in the case where a beaker with a block inside is being dropped, we don't want the
-        // beaker to think that its block is in the spot below it.
+        // The second condition checks that potentialRestingModelElement is below modelElement because, for example, in
+        // the case where a beaker with a block inside is being dropped, we don't want the beaker to think that its
+        // block is in the spot below it.
         if ( Math.abs( potentialRestingModelElement.positionProperty.value.x - groundSpotXPositionsCopy[ i ] ) <=
              this.spaceBetweenGroundSpotCenters / 2 &&
              potentialRestingModelElement.positionProperty.value.y <= modelElement.positionProperty.value.y ) {
@@ -820,6 +834,7 @@ class EFACIntroModel {
    * @param {Vector2} position - position to be sensed
    * @param {Property.<number>} sensedTemperatureProperty
    * @param {Property.<Color>} sensedElementColorProperty
+   * @param {StringProperty} sensedElementNameProperty
    * @public
    */
   updateTemperatureAndColorAndNameAtPosition(

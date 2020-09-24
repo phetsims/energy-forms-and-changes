@@ -63,8 +63,8 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @param {Vector2} initialPosition - position where center bottom of beaker will be in model space
    * @param {number} width
    * @param {number} height
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {PhetioGroup} energyChunkGroup
+   * @param {BooleanProperty} energyChunksVisibleProperty
+   * @param {EnergyChunkGroup} energyChunkGroup
    * @param {Object} [options]
    */
   constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup,  options ) {

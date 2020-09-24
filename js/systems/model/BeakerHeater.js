@@ -63,7 +63,8 @@ class BeakerHeater extends EnergyUser {
    * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
    * @param {Object} [options]
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup,
+  constructor( energyChunksVisibleProperty,
+               energyChunkGroup,
                energyChunkPathMoverGroup,
                options ) {
 

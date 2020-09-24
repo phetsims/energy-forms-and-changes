@@ -76,8 +76,8 @@ class Air {
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkWanderControllerGroup = energyChunkWanderControllerGroup;
 
-    // @private {ObservableArray<EnergyChunkWanderController>} - wander controllers for energy chunks that are owned by this model
-    // element but are wandering outside of it
+    // @private {ObservableArray<EnergyChunkWanderController>} - wander controllers for energy chunks that are owned by
+    // this model element but are wandering outside of it.
     this.energyChunkWanderControllers = new ObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
       phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )

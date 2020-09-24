@@ -1,8 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * base type for a movable model element that contains thermal energy and that, at least in the model, has an overall
- * shape that can be represented as a rectangle
+ * RectangularThermalMovableModelElement is a base class for a movable model element that contains thermal energy and
+ * that, at least in the model, has an overall shape that can be represented as a rectangle.
  *
  * @author John Blanco
  */
@@ -45,6 +45,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    */
   constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
+    // REVIEW-phetio: The code below, particularly the call to dispose, makes it seem like
+    // energyChunkWanderControllerGroup isn't really optional.
     options = merge( {
       energyChunkWanderControllerGroup: null,
 
