@@ -1,12 +1,12 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Thu Sep 17 2020 14:12:02 GMT-0800 (Alaska Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.4.0-rc.1 Wed Sep 23 2020 16:59:17 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
   },
   "axon": {
-    "sha": "d96cb126b896fa92103943367c9f154918efe627",
-    "branch": "HEAD"
+    "sha": "05c6652631a4432278c522857b03a7e5630fb8fe",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "brand": {
     "sha": "83c51961edf5b255206c82de7d6f4df6b4ea41bc",
@@ -21,12 +21,12 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "08dfb8cec1b1dfb8231b38e0ba57bd3470809063",
+    "sha": "42605829bf2ae8e10f97824d83838c0ac5197063",
     "branch": "1.4"
   },
   "joist": {
-    "sha": "44bc0d38ee737e2049cd7da9c6586008c504bac9",
-    "branch": "HEAD"
+    "sha": "e05c80dbbaa25a934a06ed2710081dc94d171caf",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "kite": {
     "sha": "4029303a5a0ccae2db68b13bff9aaccbe691172c",
@@ -37,8 +37,8 @@
     "branch": "HEAD"
   },
   "phet-io": {
-    "sha": "f20aff6cf43e07856bb78ad27b5f31fad521b0d3",
-    "branch": "HEAD"
+    "sha": "ba600ad64ff5fc5b57567d884c11713377880b0f",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "phet-io-client-guides": {
     "sha": "0c79e04defca4396587f2c2392977e6be0d5b9e9",
@@ -85,7 +85,7 @@
     "branch": "HEAD"
   },
   "tandem": {
-    "sha": "41621cb43135cc958f998e17d46ab1b67c42ee04",
+    "sha": "315a37ad4ab8c1b457d1e44c321ef4ebd0a8a317",
     "branch": "energy-forms-and-changes-1.4"
   },
   "twixt": {
