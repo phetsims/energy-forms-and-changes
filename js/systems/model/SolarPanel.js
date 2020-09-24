@@ -46,7 +46,6 @@ const WIRE_CURVE_POINT_3_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.008, -0.0355 
 const WIRE_CURVE_POINT_4_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.012, -0.038 );
 const WIRE_CURVE_POINT_5_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.0165, -0.040 );
 const OUTGOING_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 );
-const REFLECTION_ANGLE = 1.012; // when a chunk gets reflected, send it away from the panel at this angle, in radians.
 
 // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
 // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
@@ -162,7 +161,10 @@ class SolarPanel extends EnergyConverter {
               // add a "mover" that will reflect this energy chunk up and away from the panel
               this.lightEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
                 incomingChunk,
-                EnergyChunkPathMover.createStraightPath( incomingChunk.positionProperty.get(), REFLECTION_ANGLE ),
+                EnergyChunkPathMover.createStraightPath(
+                  incomingChunk.positionProperty.get(),
+                  -incomingChunk.velocity.angle
+                ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY )
               );
 
