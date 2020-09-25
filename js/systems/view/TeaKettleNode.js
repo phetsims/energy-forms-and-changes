@@ -148,10 +148,11 @@ class TeaKettleNode extends MoveFadeModelElementNode {
       kettleAndStand.setOpacity( chunksVisible ? 0.7 : 1 );
     } );
 
-    // reset the heater slider when the tea kettle is deactivated
+    // reset the heater slider and clear the steam node when the tea kettle is deactivated
     teaKettle.activeProperty.link( active => {
       if ( !active ) {
         this.heaterSettingProperty.reset();
+        this.steamCanvasNode.reset();
       }
     } );
   }
