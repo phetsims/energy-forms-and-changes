@@ -9,7 +9,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -60,7 +59,7 @@ class EnergyChunkPathMover extends PhetioObject {
   // @public (EnergyChunkPathMoverIO)
   toStateObject() {
     return {
-      path: ArrayIO( Vector2IO ).toStateObject( this.path ),
+      path: ArrayIO( Vector2.Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
       nextPoint: this.nextPoint,
@@ -71,7 +70,7 @@ class EnergyChunkPathMover extends PhetioObject {
   // @public (EnergyChunkPathMoverIO)
   static stateToArgsForConstructor( stateObject ) {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
-    const path = ArrayIO( Vector2IO ).fromStateObject( stateObject.path );
+    const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
 

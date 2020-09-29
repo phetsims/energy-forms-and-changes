@@ -10,7 +10,6 @@
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -169,7 +168,7 @@ class EnergyChunkWanderController extends PhetioObject {
       stateObject.destinationPropertyPhetioID = this.destinationProperty.tandem.phetioID;
     }
     else {
-      stateObject.destinationVector2 = Vector2IO.toStateObject( this.destinationProperty.value );
+      stateObject.destinationVector2 = Vector2.Vector2IO.toStateObject( this.destinationProperty.value );
     }
     return stateObject;
   }
@@ -181,10 +180,10 @@ class EnergyChunkWanderController extends PhetioObject {
     let destinationProperty = null;
     if ( stateObject.destinationPropertyPhetioID ) {
 
-      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
+      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
     }
     else if ( stateObject.destinationVector2 ) {
-      destinationProperty = new Vector2Property( Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
+      destinationProperty = new Vector2Property( Vector2.Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
     }
     return [ energyChunk, destinationProperty, {} ];
   }
