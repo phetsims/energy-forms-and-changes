@@ -117,8 +117,12 @@ class EnergySystemElementCarousel {
       }
       if ( animationInProgress ) {
 
-        // deactivate all elements while things are moving
-        this.managedElements.forEach( element => element.deactivate() );
+        // deactivate elements while things are moving
+        this.managedElements.forEach( element => {
+          if ( element.activeProperty.value ) {
+            element.deactivate();
+          }
+        } );
       }
       else {
 
