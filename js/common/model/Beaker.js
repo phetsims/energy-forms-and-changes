@@ -253,6 +253,7 @@ class Beaker extends RectangularThermalMovableModelElement {
 
     // remove the current set of energy chunks, calculate total area of the slices
     this.slices.forEach( slice => {
+      slice.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
       slice.energyChunkList.clear();
       totalSliceArea += slice.bounds.width * slice.bounds.height;
     } );

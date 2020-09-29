@@ -294,9 +294,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     super.reset();
     this.energyProperty.reset();
     this.temperatureProperty.reset();
-    this.addInitialEnergyChunks();
+    this.addInitialEnergyChunks(); // This clears out and disposes old energy chunks in the slices too
     this.approachingEnergyChunks.reset();
     this.clearECDistributionCountdown();
+
+    this.energyChunkWanderControllers.forEach( wanderController => this.energyChunkWanderControllerGroup.disposeElement( wanderController ) );
+    this.energyChunkWanderControllers.clear();
   }
 
   /**
@@ -592,6 +595,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // clear out the current energy chunks
     this.slices.forEach( slice => {
+      slice.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
       slice.energyChunkList.clear();
     } );
 
