@@ -133,7 +133,11 @@ class Air {
    */
   reset() {
     this.energy = INITIAL_ENERGY;
+    this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
+
+    this.energyChunkWanderControllers.forEach( wanderController => this.energyChunkWanderControllerGroup.disposeElement( wanderController ) );
+    this.energyChunkWanderControllers.clear();
   }
 
   /**
