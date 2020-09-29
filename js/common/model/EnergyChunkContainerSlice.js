@@ -16,7 +16,7 @@
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import Bounds2IO from '../../../../dot/js/Bounds2IO.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -99,7 +99,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
    */
   toStateObject() {
     return {
-      bounds: Bounds2IO.toStateObject( this.bounds )
+      bounds: Bounds2.Bounds2IO.toStateObject( this.bounds )
     };
   }
 
@@ -108,7 +108,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
    * @param {Object} stateObject
    */
   applyState( stateObject ) {
-    this.bounds = Bounds2IO.fromStateObject( stateObject.bounds );
+    this.bounds = Bounds2.Bounds2IO.fromStateObject( stateObject.bounds );
   }
 
   /**
