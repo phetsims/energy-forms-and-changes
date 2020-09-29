@@ -8,7 +8,7 @@
 
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import PropertyIO from '../../../../axon/js/PropertyIO.js';
+import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -86,7 +86,7 @@ class EnergyChunk extends PhetioObject {
 
   // @public (EnergyChunkIO)
   static stateToArgsForConstructor( stateObject ) {
-    const visibleProperty = ReferenceIO( PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
+    const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
     return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2IO.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
   }
 

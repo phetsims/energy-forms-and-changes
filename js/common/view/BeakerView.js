@@ -12,7 +12,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import PropertyIO from '../../../../axon/js/PropertyIO.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
 import Transform3 from '../../../../dot/js/Transform3.js';
@@ -83,7 +82,7 @@ class BeakerView extends PhetioObject {
       tandem: options.tandem.createTandem( 'opacityProperty' )
     } );
     const pickableProperty = new Property( null, {
-      phetioType: PropertyIO( NullableIO( BooleanIO ) ),
+      phetioType: Property.PropertyIO( NullableIO( BooleanIO ) ),
       tandem: options.tandem.createTandem( 'pickableProperty' )
     } );
     const visibleProperty = new BooleanProperty( true, {

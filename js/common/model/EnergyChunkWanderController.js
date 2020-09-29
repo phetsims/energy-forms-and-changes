@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import PropertyIO from '../../../../axon/js/PropertyIO.js';
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import RangeIO from '../../../../dot/js/RangeIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -182,7 +182,7 @@ class EnergyChunkWanderController extends PhetioObject {
     let destinationProperty = null;
     if ( stateObject.destinationPropertyPhetioID ) {
 
-      destinationProperty = ReferenceIO( PropertyIO( Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
+      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
     }
     else if ( stateObject.destinationVector2 ) {
       destinationProperty = new Vector2Property( Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
