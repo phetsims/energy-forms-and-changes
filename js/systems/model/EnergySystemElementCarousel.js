@@ -116,7 +116,11 @@ class EnergySystemElementCarousel {
         return;
       }
       if ( animationInProgress ) {
-        this.managedElements.forEach( element => element.deactivate() );
+        this.managedElements.forEach( element => {
+          if ( element.activeProperty.value ) {
+            element.deactivate();
+          }
+        } );
       }
       else {
         this.getElement( this.targetIndexProperty.value ).activate();
