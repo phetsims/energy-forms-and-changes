@@ -15,12 +15,13 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
-import BeakerIO from './BeakerIO.js';
 import BeakerType from './BeakerType.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
@@ -35,6 +36,7 @@ const MATERIAL_THICKNESS = 0.001; // In meters.
 const NUM_SLICES = 6;
 const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
 const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
+const BeakerTypeEnumerationIO = EnumerationIO( BeakerType );
 
 const BEAKER_COMPOSITION = {};
 BEAKER_COMPOSITION[ BeakerType.WATER ] = {
@@ -75,7 +77,7 @@ class Beaker extends RectangularThermalMovableModelElement {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: BeakerIO,
+      phetioType: Beaker.BeakerIO,
       phetioDocumentation: 'beaker that contains either water or olive oil, and may also contain blocks'
     }, options );
 
@@ -492,6 +494,11 @@ class Beaker extends RectangularThermalMovableModelElement {
     this.resetInProgressProperty.set( false );
   }
 }
+
+Beaker.BeakerIO = new IOType( 'BeakerIO', {
+  valueType: Beaker,
+  toStateObject: beaker => ( { beakerType: BeakerTypeEnumerationIO.toStateObject( beaker.beakerType ) } )
+} );
 
 energyFormsAndChanges.register( 'Beaker', Beaker );
 export default Beaker;

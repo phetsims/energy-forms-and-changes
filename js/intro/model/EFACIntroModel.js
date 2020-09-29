@@ -20,7 +20,6 @@ import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
-import BeakerIO from '../../common/model/BeakerIO.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
@@ -29,7 +28,6 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
-import BlockIO from './BlockIO.js';
 import BlockType from './BlockType.js';
 import EnergyBalanceTracker from './EnergyBalanceTracker.js';
 import StickyTemperatureAndColorSensor from './StickyTemperatureAndColorSensor.js';
@@ -187,7 +185,7 @@ class EFACIntroModel {
       [ BlockType.IRON, 0 ],
       {
         tandem: tandem.createTandem( 'blockGroup' ),
-        phetioType: PhetioGroupIO( BlockIO ),
+        phetioType: PhetioGroupIO( Block.BlockIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS + ' blocks'
       }
@@ -225,7 +223,7 @@ class EFACIntroModel {
       [ BeakerType.WATER, 0 ],
       {
         tandem: tandem.createTandem( 'beakerGroup' ),
-        phetioType: PhetioGroupIO( BeakerIO ),
+        phetioType: PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS + ' beakers'
       }

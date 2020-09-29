@@ -10,16 +10,17 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import BlockIO from './BlockIO.js';
 import BlockType from './BlockType.js';
 
 // constants
@@ -28,6 +29,8 @@ const MAX_TEMPERATURE = 620; // in degrees Kelvin, see usage below for where the
 const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
+
+const BlockTypeEnumerationIO = EnumerationIO( BlockType );
 
 // TODO: use constants from EFAConstants
 const BLOCK_COMPOSITION = {};
@@ -70,7 +73,7 @@ class Block extends RectangularThermalMovableModelElement {
       energyChunkWanderControllerGroup: energyChunkWanderControllerGroup,
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
-      phetioType: BlockIO,
+      phetioType: Block.BlockIO,
       phetioDocumentation: 'block that can be of type iron or brick'
     }, options );
 
@@ -193,6 +196,11 @@ class Block extends RectangularThermalMovableModelElement {
     return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
   }
 }
+
+Block.BlockIO = new IOType( 'BlockIO', {
+  valueType: Block,
+  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } )
+} );
 
 energyFormsAndChanges.register( 'Block', Block );
 export default Block;
