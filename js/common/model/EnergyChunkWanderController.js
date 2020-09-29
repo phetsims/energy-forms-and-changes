@@ -9,7 +9,6 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
-import RangeIO from '../../../../dot/js/RangeIO.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -160,7 +159,7 @@ class EnergyChunkWanderController extends PhetioObject {
       translateXWithDestination: this.translateXWithDestination,
       countdownTimer: this.countdownTimer,
       wandering: this.wandering,
-      horizontalWanderConstraint: NullableIO( RangeIO ).toStateObject( this.horizontalWanderConstraint ),
+      horizontalWanderConstraint: NullableIO( Range.RangeIO ).toStateObject( this.horizontalWanderConstraint ),
       energyChunkPhetioID: this.energyChunk.tandem.phetioID
     };
 
@@ -198,7 +197,7 @@ class EnergyChunkWanderController extends PhetioObject {
     this.translateXWithDestination = stateObject.translateXWithDestination;
     this.countdownTimer = stateObject.countdownTimer;
     this.wandering = stateObject.wandering;
-    this.horizontalWanderConstraint = NullableIO( RangeIO ).fromStateObject( stateObject.horizontalWanderConstraint );
+    this.horizontalWanderConstraint = NullableIO( Range.RangeIO ).fromStateObject( stateObject.horizontalWanderConstraint );
   }
 
 
