@@ -29,7 +29,6 @@ import DownUpListener from '../../../../scenery/js/input/DownUpListener.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import NodeIO from '../../../../scenery/js/nodes/NodeIO.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
@@ -410,7 +409,7 @@ class EFACIntroScreenView extends ScreenView {
       },
       [ model.blockGroup.archetype ], {
         tandem: tandem.createTandem( 'blockNodeGroup' ),
-        phetioType: PhetioGroupIO( NodeIO ),
+        phetioType: PhetioGroupIO( Node.NodeIO ),
         supportsDynamicState: false
       } );
 

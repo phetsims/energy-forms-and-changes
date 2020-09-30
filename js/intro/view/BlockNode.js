@@ -17,7 +17,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import NodeIO from '../../../../scenery/js/nodes/NodeIO.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -78,7 +77,7 @@ class BlockNode extends Node {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-      phetioType: NodeIO
+      phetioType: Node.NodeIO
     }, options );
 
     super( options );
