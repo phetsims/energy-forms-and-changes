@@ -13,6 +13,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
+import EventType from '../../../../tandem/js/EventType.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -49,7 +50,8 @@ class EnergyChunk extends PhetioObject {
     // @public
     this.positionProperty = new Vector2Property( initialPosition, {
       useDeepEquality: true,
-      tandem: options.tandem.createTandem( 'positionProperty' )
+      tandem: options.tandem.createTandem( 'positionProperty' ),
+      phetioEventType: EventType.OPT_OUT
     } );
 
     // @public - for simple 3D layering effects
