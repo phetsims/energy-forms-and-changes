@@ -50,6 +50,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     options = merge( {
       energyChunkWanderControllerGroup: null,
 
+      // {Object[]} - pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
+      // set up the model element with reasonably distributed energy chunks.
+      predistributedEnergyChunkConfigurations: [],
+
       // phet-io
       tandem: Tandem.REQUIRED
     }, options );
@@ -83,6 +87,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
       phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
+
+    // @private {Object[]} - pre-distributed energy chunk configuration,used for fast initialization, see usages for format
+    this.predistributedEnergyChunkConfigurations = options.predistributedEnergyChunkConfigurations;
 
     // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
@@ -593,17 +600,60 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    */
   addInitialEnergyChunks() {
 
-    // clear out the current energy chunks
+    let totalSliceArea = 0;
+
+    // remove the current set of energy chunks, calculate total area of the slices
     this.slices.forEach( slice => {
       slice.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
       slice.energyChunkList.clear();
+      totalSliceArea += slice.bounds.width * slice.bounds.height;
     } );
 
-    // calculate how many energy chunks should be present based on the amount of energy in this container
+    // calculate the number of energy chunks to add based on the amount of energy
     const targetNumberOfEnergyChunks = EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
+
+    // see if there is preset data that matches this configuration
+    const presetData = this.predistributedEnergyChunkConfigurations.find( presetDataEntry => {
+      return targetNumberOfEnergyChunks === presetDataEntry.numberOfEnergyChunks &&
+             this.slices.length === presetDataEntry.numberOfSlices &&
+             Math.abs( totalSliceArea - presetDataEntry.totalSliceArea ) / totalSliceArea < 0.001; // tolerance empirically determined
+    } );
+
+    // As of late September 2020 there should be preset data for the initial energy chunk configuration for all thermal
+    // model elements used in the sim, so the following assertion should only be hit if a new element has been added or
+    // something has been changed about one of the existing ones.  In that case, new preset data should be added.  See
+    // https://github.com/phetsims/energy-forms-and-changes/issues/375.
+    assert( presetData, 'No preset data found, has something changed about one of the thermal model elements?' );
+
+    if ( presetData ) {
+      this.slices.forEach( ( slice, sliceIndex ) => {
+        const energyChunkPositions = presetData.energyChunkPositionsBySlice[ sliceIndex ];
+        energyChunkPositions.forEach( energyChunkPosition => {
+          slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
+            EnergyType.THERMAL,
+            new Vector2( energyChunkPosition.positionX, energyChunkPosition.positionY ),
+            Vector2.ZERO,
+            this.energyChunksVisibleProperty
+          ) );
+        } );
+      } );
+    }
+    else {
+      this.addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks );
+    }
+  }
+
+  /**
+   * Add and distribute energy chunks within this model element algorithmically.  This version works well for simple
+   * rectangular model elements, but may need to be overridden for more complex geometries.
+   * @param {number} targetNumberOfEnergyChunks
+   * @protected
+   */
+  addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks ) {
+
     const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
 
-    // start with the middle slice and cycle through in order, added chunks evenly to each
+    // start with the middle slice and cycle through in order, adding chunks evenly to each
     let slideIndex = Math.floor( this.slices.length / 2 ) - 1;
     let numberOfEnergyChunksAdded = 0;
     while ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
@@ -624,11 +674,52 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // distribute the initial energy chunks within the container using the repulsive algorithm
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
-      const distributed = energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      const distributed = energyChunkDistributor.updatePositions(
+        this.slices.getArrayCopy(),
+        EFACConstants.SIM_TIME_PER_TICK_NORMAL
+      );
       if ( !distributed ) {
         break;
       }
     }
+  }
+
+  /**
+   * This method is used to output a JSON data structure containing the number of energy chunk slices, the total
+   * volume, and the number and position of each energy chunk on each slice.  In the production version of the
+   * simulation, this is generally not used.  It is only used to gather data that can be used for initial energy chunk
+   * positions that can be used to make initialization faster.  See
+   * https://github.com/phetsims/energy-forms-and-changes/issues/375
+   * @public
+   */
+  dumpEnergyChunkData() {
+
+    let totalSliceArea = 0;
+    let numberOfEnergyChunks = 0;
+    this.slices.forEach( slice => {
+      totalSliceArea += slice.bounds.width * slice.bounds.height;
+      numberOfEnergyChunks += slice.energyChunkList.length;
+    } );
+
+    const energyChunkInfo = {
+      numberOfSlices: this.slices.length,
+      totalSliceArea: totalSliceArea,
+      numberOfEnergyChunks: numberOfEnergyChunks,
+      energyChunkPositionsBySlice: []
+    };
+
+    this.slices.forEach( ( slice, sliceIndex ) => {
+      energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ] = [];
+      slice.energyChunkList.forEach( energyChunk => {
+        energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ].push( {
+          positionX: energyChunk.positionProperty.value.x,
+          positionY: energyChunk.positionProperty.value.y
+        } );
+      } );
+    } );
+
+    console.log( JSON.stringify( energyChunkInfo, null, 2 ) );
+
   }
 
   /**
