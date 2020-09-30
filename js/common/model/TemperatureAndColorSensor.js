@@ -12,7 +12,7 @@ import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
-import ColorIO from '../../../../scenery/js/util/ColorIO.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
@@ -53,7 +53,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
 
     // @public (read-only) {Property.<Color>}
     this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
-      phetioType: Property.PropertyIO( ColorIO ),
+      phetioType: Property.PropertyIO( Color.ColorIO ),
       tandem: options.tandem.createTandem( 'sensedElementColorProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'the color of the sensed element'
