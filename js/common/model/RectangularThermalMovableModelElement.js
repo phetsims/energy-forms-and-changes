@@ -622,7 +622,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // model elements used in the sim, so the following assertion should only be hit if a new element has been added or
     // something has been changed about one of the existing ones.  In that case, new preset data should be added.  See
     // https://github.com/phetsims/energy-forms-and-changes/issues/375.
-    assert( presetData, 'No preset data found, has something changed about one of the thermal model elements?' );
+    assert && assert( presetData, 'No preset data found, has something changed about one of the thermal model elements?' );
 
     if ( presetData ) {
       this.slices.forEach( ( slice, sliceIndex ) => {
