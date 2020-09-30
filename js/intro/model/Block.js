@@ -69,7 +69,8 @@ class Block extends RectangularThermalMovableModelElement {
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
       phetioType: BlockIO,
-      phetioDocumentation: 'block that can be of type iron or brick'
+      phetioDocumentation: 'block that can be of type iron or brick',
+      predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS
     }, options );
 
     super(
@@ -191,6 +192,83 @@ class Block extends RectangularThermalMovableModelElement {
     return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
   }
 }
+
+// Preset data used for fast addition and positioning of energy chunks during reset.  The data contains information
+// about the energy chunk slices and energy chunks that are contained within a block of a specific size with a specific
+// number of energy chunks.  If a match can be found, this data is used to quickly configure the block rather than
+// using the much more expensive process of inserting and then distributing the energy chunks.  See
+// https://github.com/phetsims/energy-forms-and-changes/issues/375.
+const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
+
+  // iron block
+  {
+    'numberOfSlices': 4,
+    'totalSliceArea': 0.008100000000000001,
+    'numberOfEnergyChunks': 6,
+    'energyChunkPositionsBySlice': [
+      [
+        {
+          'positionX': -0.25640756950670235,
+          'positionY': 0.006850135040548302
+        }
+      ],
+      [
+        {
+          'positionX': -0.2537531660345353,
+          'positionY': 0.02393321792569457
+        },
+        {
+          'positionX': -0.23829971427184846,
+          'positionY': 0.009582482706072211
+        }
+      ],
+      [
+        {
+          'positionX': -0.24358344197642037,
+          'positionY': 0.035369522321921996
+        },
+        {
+          'positionX': -0.2282683630416627,
+          'positionY': 0.02098996529690959
+        }
+      ],
+      [
+        {
+          'positionX': -0.22579080380196173,
+          'positionY': 0.038104769283249865
+        }
+      ]
+    ]
+  },
+
+  // brick
+  {
+    'numberOfSlices': 4,
+    'totalSliceArea': 0.008099999999999998,
+    'numberOfEnergyChunks': 2,
+    'energyChunkPositionsBySlice': [
+      [],
+      [
+        {
+          'positionX': -0.15231883878415728,
+          'positionY': 0.015189399553646257
+        }
+      ],
+      [
+        {
+          'positionX': -0.13768266639921758,
+          'positionY': 0.029811817909006666
+        }
+      ],
+      []
+    ]
+  }
+];
+
+Block.BlockIO = new IOType( 'BlockIO', {
+  valueType: Block,
+  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } )
+} );
 
 energyFormsAndChanges.register( 'Block', Block );
 export default Block;
