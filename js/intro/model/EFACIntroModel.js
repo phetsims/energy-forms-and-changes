@@ -17,7 +17,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import BeakerType from '../../common/model/BeakerType.js';
@@ -185,7 +184,7 @@ class EFACIntroModel {
       [ BlockType.IRON, 0 ],
       {
         tandem: tandem.createTandem( 'blockGroup' ),
-        phetioType: PhetioGroupIO( Block.BlockIO ),
+        phetioType: PhetioGroup.PhetioGroupIO( Block.BlockIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS + ' blocks'
       }
@@ -223,7 +222,7 @@ class EFACIntroModel {
       [ BeakerType.WATER, 0 ],
       {
         tandem: tandem.createTandem( 'beakerGroup' ),
-        phetioType: PhetioGroupIO( Beaker.BeakerIO ),
+        phetioType: PhetioGroup.PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,
         phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS + ' beakers'
       }

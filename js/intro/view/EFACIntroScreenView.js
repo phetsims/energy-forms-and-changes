@@ -35,7 +35,6 @@ import VBox from '../../../../scenery/js/nodes/VBox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -409,7 +408,7 @@ class EFACIntroScreenView extends ScreenView {
       },
       [ model.blockGroup.archetype ], {
         tandem: tandem.createTandem( 'blockNodeGroup' ),
-        phetioType: PhetioGroupIO( Node.NodeIO ),
+        phetioType: PhetioGroup.PhetioGroupIO( Node.NodeIO ),
         supportsDynamicState: false
       } );
 
@@ -446,7 +445,7 @@ class EFACIntroScreenView extends ScreenView {
       },
       [ model.beakerGroup.archetype ], {
         tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
-        phetioType: PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
+        phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
         supportsDynamicState: false
       } );
 

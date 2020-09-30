@@ -9,7 +9,6 @@
 
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
@@ -25,7 +24,7 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
-      phetioType: PhetioGroupIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO )
+      phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO )
     }, options );
 
     // If other archetypes don't exist, then we won't create ours, so these values can be null.

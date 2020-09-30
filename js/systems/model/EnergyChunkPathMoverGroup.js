@@ -10,7 +10,6 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import PhetioGroupIO from '../../../../tandem/js/PhetioGroupIO.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -26,7 +25,7 @@ class EnergyChunkPathMoverGroup extends PhetioGroup {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
-      phetioType: PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
+      phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
     }, options );
 
     super( EnergyChunkPathMoverGroup.createEnergyChunkPathMover,
