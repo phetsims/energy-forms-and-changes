@@ -37,7 +37,7 @@
     "branch": "HEAD"
   },
   "phet-io": {
-    "sha": "ba600ad64ff5fc5b57567d884c11713377880b0f",
+    "sha": "8736477108a09a6c76589cd306893e8ea00d0d33",
     "branch": "HEAD"
   },
   "phet-io-client-guides": {
@@ -85,7 +85,7 @@
     "branch": "HEAD"
   },
   "tandem": {
-    "sha": "315a37ad4ab8c1b457d1e44c321ef4ebd0a8a317",
+    "sha": "4fe9f97dcbf53ccbd135401f8d23fd4564a3c94e",
     "branch": "HEAD"
   },
   "twixt": {
