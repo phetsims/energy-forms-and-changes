@@ -8,7 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -119,9 +119,9 @@ class Biker extends EnergySource {
     // @private - internal variables
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
-    this.energyChunkMovers = new ObservableArray( {
+    this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;

@@ -8,7 +8,7 @@
  * @author Andrew Adare
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -29,13 +29,13 @@ class EnergyConverter extends EnergySystemElement {
     }, options );
 
     super( iconImage, options );
-    this.incomingEnergyChunks = new ObservableArray( {
+    this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
-    this.outgoingEnergyChunks = new ObservableArray( {
+    this.outgoingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 

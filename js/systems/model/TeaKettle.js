@@ -9,7 +9,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -86,18 +86,18 @@ class TeaKettle extends EnergySource {
     // @private
     this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
-    this.energyChunkMovers = new ObservableArray( {
+    this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
     // @private - List of chunks that are not being transferred to the next energy system
     // element.
-    this.exemptFromTransferEnergyChunks = new ObservableArray( {
+    this.exemptFromTransferEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {

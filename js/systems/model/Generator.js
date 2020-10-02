@@ -9,7 +9,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -98,23 +98,23 @@ class Generator extends EnergyConverter {
       phetioHighFrequency: true,
       phetioDocumentation: 'the angular velocity of the wheel'
     } );
-    this.energyChunkMovers = new ObservableArray( {
+    this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
     // support placing them on a different layer in the view.
-    this.electricalEnergyChunks = new ObservableArray( {
+    this.electricalEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
     // mainly for code clarity
-    this.hiddenEnergyChunks = new ObservableArray( {
+    this.hiddenEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'hiddenEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 

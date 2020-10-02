@@ -15,7 +15,7 @@
  * @author Martin Veillette
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -55,9 +55,9 @@ class EnergyChunkContainerSlice extends PhetioObject {
     this.zPosition = zPosition;
 
     // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
-    this.energyChunkList = new ObservableArray( {
+    this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.isPhetioInstrumented() && this.energyChunkList.addItemAddedListener( energyChunk => {

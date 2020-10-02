@@ -7,7 +7,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -94,23 +94,23 @@ class BeakerHeater extends EnergyUser {
 
     // @private {ObservableArray.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
     // beaker
-    this.electricalEnergyChunkMovers = new ObservableArray( {
+    this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-    this.heatingElementEnergyChunkMovers = new ObservableArray( {
+    this.heatingElementEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-    this.radiatedEnergyChunkMovers = new ObservableArray( {
+    this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
-    this.radiatedEnergyChunkList = new ObservableArray( {
+    this.radiatedEnergyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty

@@ -9,7 +9,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
@@ -72,18 +72,18 @@ class Burner extends ModelElement {
     } );
 
     // @public (read-only) {ObservableArray.<EnergyChunk>}
-    this.energyChunkList = new ObservableArray( {
+    this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private {Vector2}
     this.position = position;
 
     // @private {Object[]} - motion strategies that control the movement of the energy chunks owned by this burner
-    this.energyChunkWanderControllers = new ObservableArray( {
+    this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
     // @private {EnergyChunkWanderControllerGroup|null}

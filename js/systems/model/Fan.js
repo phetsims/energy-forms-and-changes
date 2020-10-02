@@ -8,7 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -87,17 +87,17 @@ class Fan extends EnergyUser {
     } );
 
     // @private - movers that control how the energy chunks move towards and through the fan
-    this.electricalEnergyChunkMovers = new ObservableArray( {
+    this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-    this.mechanicalEnergyChunkMovers = new ObservableArray( {
+    this.mechanicalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'mechanicalEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-    this.radiatedEnergyChunkMovers = new ObservableArray( {
+    this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     // @private

@@ -10,7 +10,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -39,9 +39,9 @@ class EnergySystemElement extends PositionableFadableModelElement {
     this.iconImage = iconImage;
 
     // @public (read-only) {ObservableArray.<EnergyChunk>}
-    this.energyChunkList = new ObservableArray( {
+    this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @public {BooleanProperty}

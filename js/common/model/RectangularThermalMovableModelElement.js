@@ -8,7 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
@@ -80,12 +80,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
 
     // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
-    this.approachingEnergyChunks = new ObservableArray();
+    this.approachingEnergyChunks = createObservableArray();
 
     // @private - motion controllers for the energy chunks that are approaching this model element
-    this.energyChunkWanderControllers = new ObservableArray( {
+    this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
     // @private {Object[]} - pre-distributed energy chunk configuration,used for fast initialization, see usages for format
@@ -185,9 +185,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // @public (read-only) {ObservableArray.<EnergyChunkContainerSlice>} 2D "slices" of the container, used for 3D layering of energy
     // chunks in the view
-    this.slices = new ObservableArray( {
+    this.slices = createObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )
     } );
 
     // add the slices

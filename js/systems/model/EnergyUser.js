@@ -8,7 +8,7 @@
  * @author Andrew Adare
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -31,9 +31,9 @@ class EnergyUser extends EnergySystemElement {
     super( iconImage, options );
 
     // @private {EnergyChunk[]}
-    this.incomingEnergyChunks = new ObservableArray( {
+    this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
 

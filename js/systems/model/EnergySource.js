@@ -9,7 +9,7 @@
  * @author Jesse Greenberg
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -30,9 +30,9 @@ class EnergySource extends EnergySystemElement {
     }, options );
 
     super( iconImage, options );
-    this.outgoingEnergyChunks = new ObservableArray( {
+    this.outgoingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {

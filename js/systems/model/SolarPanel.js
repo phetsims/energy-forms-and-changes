@@ -11,7 +11,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
@@ -70,13 +70,13 @@ class SolarPanel extends EnergyConverter {
     this.a11yName = energyFormsAndChangesStrings.a11y.solarPanel;
 
     // @private
-    this.electricalEnergyChunkMovers = new ObservableArray( {
+    this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-    this.lightEnergyChunkMovers = new ObservableArray( {
+    this.lightEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'lightEnergyChunkMovers' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.latestChunkArrivalTime = 0;
     this.numberOfConvertedChunks = 0;

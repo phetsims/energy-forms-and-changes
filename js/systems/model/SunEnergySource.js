@@ -9,7 +9,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -104,9 +104,9 @@ class SunEnergySource extends EnergySource {
 
     // @private - list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
     // reflected)
-    this.energyChunksPassingThroughClouds = new ObservableArray( {
+    this.energyChunksPassingThroughClouds = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private

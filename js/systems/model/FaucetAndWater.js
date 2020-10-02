@@ -9,7 +9,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -88,9 +88,9 @@ class FaucetAndWater extends EnergySource {
     this.waterDrops = [];
 
     // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
-    this.exemptFromTransferEnergyChunks = new ObservableArray( {
+    this.exemptFromTransferEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
-      phetioType: ObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.outgoingEnergyChunks.addItemAddedListener( chunk => {

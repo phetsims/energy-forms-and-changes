@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -58,7 +58,7 @@ class ModelElement extends PhetioObject {
     // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
     // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the
     // element's position, which by convention in this sim is at the center bottom of the model element.
-    this.relativePositionTestingBoundsList = new ObservableArray();
+    this.relativePositionTestingBoundsList = createObservableArray();
 
     // @public (read-only) {Bounds2[]} - The bounds from relativePositionTestingBoundsList translated to this element's
     // current position.  These are maintained so that they don't have to be recalculated every time we need to test if
