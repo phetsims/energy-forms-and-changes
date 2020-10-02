@@ -38,10 +38,6 @@ class HorizontalSurface {
     assert && this.elementOnSurfaceProperty.link( ( elementOnSurface, previousElementOnSurface ) => {
       assert( elementOnSurface === null || elementOnSurface instanceof ModelElement );
       assert( elementOnSurface !== this, 'can\'t sit on top of ourself' );
-      assert(
-        elementOnSurface === null || previousElementOnSurface === null,
-        'one element should be removed before another is added'
-      );
     } );
 
     // @public (read-only) {number}
