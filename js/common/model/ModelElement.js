@@ -53,7 +53,7 @@ class ModelElement extends PhetioObject {
     // this model element can't rest on another surface.
     this.bottomSurface = null;
 
-    // @public (read-only) {ObservableArray.<Bounds2>} - A list of bounds that are used for determining if this model
+    // @public (read-only) {ObservableArrayDef.<Bounds2>} - A list of bounds that are used for determining if this model
     // element is in a valid position, i.e. whether it is within the play area and is not overlapping other model
     // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
     // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the

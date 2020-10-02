@@ -103,14 +103,14 @@ class Generator extends EnergyConverter {
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
-    // @public (read-only) {ObservableArray.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
+    // @public (read-only) {ObservableArrayDef.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
     // support placing them on a different layer in the view.
     this.electricalEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // // @public (read-only) {ObservableArray.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
+    // // @public (read-only) {ObservableArrayDef.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
     // mainly for code clarity
     this.hiddenEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'hiddenEnergyChunks' ),

@@ -54,7 +54,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
     // @private {number}
     this.zPosition = zPosition;
 
-    // @private {ObservableArray.<EnergyChunk>} - list of energy chunks owned by this slice
+    // @private {ObservableArrayDef.<EnergyChunk>} - list of energy chunks owned by this slice
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )

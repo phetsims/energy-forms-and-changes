@@ -19,7 +19,7 @@ import EnergyChunkNode from './EnergyChunkNode.js';
 class EnergyChunkLayer extends Node {
 
   /**
-   * @param {ObservableArray} energyChunkList
+   * @param {ObservableArrayDef} energyChunkList
    * @param {ModelViewTransform2} modelViewTransform
    * @param {Object} [options]
    */
@@ -53,7 +53,7 @@ class EnergyChunkLayer extends Node {
         }
       };
 
-      // link itemRemovedListener to the provided ObservableArray
+      // link itemRemovedListener
       energyChunkList.addItemRemovedListener( itemRemovedListener );
     };
 

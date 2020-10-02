@@ -71,7 +71,7 @@ class Burner extends ModelElement {
       phetioDocumentation: 'the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating'
     } );
 
-    // @public (read-only) {ObservableArray.<EnergyChunk>}
+    // @public (read-only) {ObservableArrayDef.<EnergyChunk>}
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )

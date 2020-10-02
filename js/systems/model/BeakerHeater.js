@@ -92,7 +92,7 @@ class BeakerHeater extends EnergyUser {
       phetioDocumentation: 'proportion of how much heat the coils have'
     } );
 
-    // @private {ObservableArray.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
+    // @private {ObservableArrayDef.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
     // beaker
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
@@ -107,7 +107,7 @@ class BeakerHeater extends EnergyUser {
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
-    // @public (read-only) {ObservableArray} - energy chunks that are radiated by this beaker
+    // @public (read-only) {ObservableArrayDef} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )

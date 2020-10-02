@@ -79,7 +79,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
     assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
 
-    // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
+    // @public (read-only) {ObservableArrayDef} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = createObservableArray();
 
     // @private - motion controllers for the energy chunks that are approaching this model element
@@ -183,7 +183,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // @private {number} - minimum amount of energy that this is allowed to have
     this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
 
-    // @public (read-only) {ObservableArray.<EnergyChunkContainerSlice>} 2D "slices" of the container, used for 3D layering of energy
+    // @public (read-only) {ObservableArrayDef.<EnergyChunkContainerSlice>} 2D "slices" of the container, used for 3D layering of energy
     // chunks in the view
     this.slices = createObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),

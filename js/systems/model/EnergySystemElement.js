@@ -38,7 +38,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
     // @public (read-only) {image}
     this.iconImage = iconImage;
 
-    // @public (read-only) {ObservableArray.<EnergyChunk>}
+    // @public (read-only) {ObservableArrayDef.<EnergyChunk>}
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
