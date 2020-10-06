@@ -7,7 +7,6 @@
  * @author Jesse Greenberg
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -26,7 +25,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
     // @private
     this.elementFollower = new ElementFollower( this.positionProperty );
 
-    // if this senor is over a block or beaker, stick to it
+    // closure to test whether this is over a thermal model element and, if so, attach to it
     const followElements = () => {
 
       // sort blocks by zIndex so sensors stick to the highest one that the sensor is over
@@ -79,9 +78,26 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
       }
     } );
 
-    // Check if any sensors should start following an element after being set by state
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
-      followElements();
+    // Make sure that the following state is set properly when state is set via phet-io.
+    phet.joist.sim.isSettingPhetioStateProperty.lazyLink( settingPhetIoState => {
+
+      if ( settingPhetIoState ) {
+
+        if ( this.elementFollower.isFollowing() ) {
+
+          // If this is following a model element at the beginning of state setting, unfollow so that it doesn't prevent
+          // the model element from moving.  The conditions will be reevaluated at the end of state setting, and the
+          // follower will be turned back on if appropriate.
+          this.elementFollower.stopFollowing();
+        }
+      }
+      else {
+
+        // Figure out if this should be following another element.
+        if ( this.activeProperty.value && !this.userControlledProperty.value ) {
+          followElements();
+        }
+      }
     } );
   }
 
