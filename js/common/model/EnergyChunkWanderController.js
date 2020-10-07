@@ -110,6 +110,12 @@ class EnergyChunkWanderController extends PhetioObject {
 
     const handleDestinationChanged = ( newDestination, oldDestination ) => {
 
+      // Short circuit this if state is being set - otherwise approaching energy chunks that are part of the state can
+      // get moved around, messing up their state.
+      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        return;
+      }
+
       const distanceToDestination = newDestination.distance( this.energyChunk.positionProperty.value );
 
       // if the destination changes, speed up and go directly to the destination
