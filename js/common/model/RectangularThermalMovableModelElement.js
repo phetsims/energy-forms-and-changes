@@ -22,6 +22,7 @@ import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import EnergyChunk from './EnergyChunk.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyType from './EnergyType.js';
@@ -79,7 +80,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
 
     // @public (read-only) {ObservableArray} - energy chunks that are approaching this model element
-    this.approachingEnergyChunks = new ObservableArray();
+    this.approachingEnergyChunks = new ObservableArray( {
+      tandem: options.tandem.createTandem( 'approachingEnergyChunks' ),
+      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+    } );
 
     // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = new ObservableArray( {
