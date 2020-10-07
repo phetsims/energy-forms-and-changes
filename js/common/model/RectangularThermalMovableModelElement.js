@@ -7,8 +7,8 @@
  * @author John Blanco
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
@@ -83,7 +83,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // @public (read-only) {ObservableArrayDef} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'approachingEnergyChunks' ),
-      phetioType: ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
+      phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     // @private - motion controllers for the energy chunks that are approaching this model element
