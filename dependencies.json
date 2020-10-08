@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.0-rc.3 Thu Oct 01 2020 17:35:23 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.4.0-rc.4 Thu Oct 08 2020 14:35:53 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "b1d85344f758b0df73f3d80396a822cb7ac7bca4",
+    "sha": "371708891d8c4a7ea1d03a206b5c7b55fe0edd80",
     "branch": "1.4"
   },
   "joist": {
