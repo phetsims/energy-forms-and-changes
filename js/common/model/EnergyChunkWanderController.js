@@ -165,13 +165,13 @@ class EnergyChunkWanderController extends PhetioObject {
       countdownTimer: this.countdownTimer,
       wandering: this.wandering,
       horizontalWanderConstraint: NullableIO( Range.RangeIO ).toStateObject( this.horizontalWanderConstraint ),
-      energyChunkPhetioID: this.energyChunk.tandem.phetioID
+      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
 
     // NOTE: destinationProperty does not need to be instrumented to support this, as some Properties just wrap single
     // values that don't change.
     if ( this.destinationProperty.isPhetioInstrumented() ) {
-      stateObject.destinationPropertyPhetioID = this.destinationProperty.tandem.phetioID;
+      stateObject.destinationPropertyReference = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).toStateObject( this.destinationProperty );
     }
     else {
       stateObject.destinationVector2 = Vector2.Vector2IO.toStateObject( this.destinationProperty.value );
@@ -181,12 +181,12 @@ class EnergyChunkWanderController extends PhetioObject {
 
   // @public (EnergyChunkWanderControllerIO)
   static stateToArgsForConstructor( stateObject ) {
-    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
-    if ( stateObject.destinationPropertyPhetioID ) {
+    if ( stateObject.destinationPropertyReference ) {
 
-      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyPhetioID );
+      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyReference );
     }
     else if ( stateObject.destinationVector2 ) {
       destinationProperty = new Vector2Property( Vector2.Vector2IO.fromStateObject( stateObject.destinationVector2 ) );

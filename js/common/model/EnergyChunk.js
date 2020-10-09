@@ -81,13 +81,13 @@ class EnergyChunk extends PhetioObject {
     return {
       id: this.id,
       velocity: Vector2.Vector2IO.toStateObject( this.velocity ),
-      visiblePropertyPhetioID: this.visibleProperty.tandem.phetioID
+      visiblePropertyReference: ReferenceIO( Property.PropertyIO( BooleanIO ) ).toStateObject( this.visibleProperty )
     };
   }
 
   // @public (EnergyChunkIO)
   static stateToArgsForConstructor( stateObject ) {
-    const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyPhetioID );
+    const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyReference );
     return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2.Vector2IO.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
   }
 

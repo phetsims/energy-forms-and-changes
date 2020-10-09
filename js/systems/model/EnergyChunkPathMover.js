@@ -63,13 +63,13 @@ class EnergyChunkPathMover extends PhetioObject {
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
       nextPoint: this.nextPoint,
-      energyChunkPhetioID: this.energyChunk.tandem.phetioID
+      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
   }
 
   // @public (EnergyChunkPathMoverIO)
   static stateToArgsForConstructor( stateObject ) {
-    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkPhetioID );
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
