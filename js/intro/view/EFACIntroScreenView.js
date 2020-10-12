@@ -765,6 +765,7 @@ class EFACIntroScreenView extends ScreenView {
     // create and add the "Reset All" button in the bottom right
     const resetAllButton = new ResetAllButton( {
       listener: () => {
+        this.interruptSubtreeInput();
         model.reset();
         returnAllThermometersToStorageArea();
         this.beakerProxyNodeGroup.forEach( beakerProxyNode => {
