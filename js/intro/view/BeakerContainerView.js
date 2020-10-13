@@ -50,7 +50,7 @@ class BeakerContainerView extends BeakerView {
     // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
     // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
     // go between the beaker and the heater/cooler.
-    this.untransformedBeakerClipShape = new Shape.rect(
+    this.untransformedBeakerClipShape = Shape.rect(
       -beakerRectangleWidthInView / 2,
       -beakerRectangleHeightInView * 9,
       beakerRectangleWidthInView,
