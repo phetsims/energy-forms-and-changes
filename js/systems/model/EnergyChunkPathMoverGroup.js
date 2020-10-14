@@ -1,8 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * PhetioGroup for creating EnergyChunkPathMovers. This type adds support for dynamically created and destroyed, instrumented
- * PhET-iO elements.
+ * PhetioGroup for creating EnergyChunkPathMovers. This type adds support for dynamically created and destroyed,
+ * instrumented PhET-iO elements.
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */

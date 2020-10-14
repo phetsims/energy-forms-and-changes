@@ -156,7 +156,7 @@ class Fan extends EnergyUser {
         // add the energy chunk to the list of those under management
         this.energyChunkList.push( chunk );
 
-        // add a "mover" that will move this energy chunk through the wire to the heating element
+        // add a "mover" that will move this energy chunk through the wire to the motor
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -165,6 +165,8 @@ class Fan extends EnergyUser {
       // clear incoming chunks array
       this.incomingEnergyChunks.clear();
     }
+
+    // move all energy chunks that are currently owned by this element
     this.moveElectricalEnergyChunks( dt );
     this.moveRadiatedEnergyChunks( dt );
     this.moveBlownEnergyChunks( dt );
@@ -177,10 +179,12 @@ class Fan extends EnergyUser {
     if ( this.energyChunksVisibleProperty.get() ) {
 
       // cap the internal energy
-      this.internalEnergyFromEnergyChunksProperty.value = Math.min( this.internalEnergyFromEnergyChunksProperty.value, MAX_INTERNAL_ENERGY );
+      this.internalEnergyFromEnergyChunksProperty.value =
+        Math.min( this.internalEnergyFromEnergyChunksProperty.value, MAX_INTERNAL_ENERGY );
 
       // when chunks are on, use internal energy of the fan to determine the target velocity
-      this.targetVelocityProperty.value = this.internalEnergyFromEnergyChunksProperty.value * INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
+      this.targetVelocityProperty.value = this.internalEnergyFromEnergyChunksProperty.value *
+                                          INTERNAL_ENERGY_VELOCITY_COEFFICIENT;
 
       // lose a proportion of the energy
       this.internalEnergyFromEnergyChunksProperty.value = Math.max(
@@ -196,7 +200,9 @@ class Fan extends EnergyUser {
     this.targetVelocityProperty.value = this.targetVelocityProperty.value < MINIMUM_TARGET_VELOCITY ? 0 : this.targetVelocityProperty.value;
 
     // dump any internal energy that was left around from when chunks were on
-    this.internalEnergyFromEnergyChunksProperty.value = this.targetVelocityProperty.value === 0 ? 0 : this.internalEnergyFromEnergyChunksProperty.value;
+    this.internalEnergyFromEnergyChunksProperty.value = this.targetVelocityProperty.value === 0 ?
+                                                        0 :
+                                                        this.internalEnergyFromEnergyChunksProperty.value;
 
     const dOmega = this.targetVelocityProperty.value - this.angularVelocityProperty.value;
     if ( dOmega !== 0 ) {
@@ -430,7 +436,7 @@ class Fan extends EnergyUser {
 }
 
 /**
- * create a path for chunks to follow when blown out of the fan.
+ * Create a path for chunks to follow when blown out of the fan.
  * @param  {Vector2} startingPoint
  * @returns {Vector2[]}
  * @private

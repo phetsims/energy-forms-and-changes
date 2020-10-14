@@ -36,6 +36,9 @@ class EnergyChunk extends PhetioObject {
   constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty, options ) {
 
     options = merge( {
+
+      // REVIEW-phetio: The comment here doesn't quite make sense to me (jbphet).  The id itself doesn't support
+      // recreating the same energy chunk, just the fact that it's now an option, right?  Can this be clarified?
       id: null, // to support recreating the same energyChunk through PhET-iO state
 
       // phet-io
@@ -87,8 +90,16 @@ class EnergyChunk extends PhetioObject {
 
   // @public (EnergyChunkIO)
   static stateToArgsForConstructor( stateObject ) {
-    const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject( stateObject.visiblePropertyReference );
-    return [ EnergyType.HIDDEN, Vector2.ZERO, Vector2.Vector2IO.fromStateObject( stateObject.velocity ), visibleProperty, { id: stateObject.id } ];
+    const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
+      stateObject.visiblePropertyReference
+    );
+    return [
+      EnergyType.HIDDEN,
+      Vector2.ZERO,
+      Vector2.Vector2IO.fromStateObject( stateObject.velocity ),
+      visibleProperty,
+      { id: stateObject.id }
+    ];
   }
 
   /**

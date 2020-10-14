@@ -64,7 +64,8 @@ class SystemsModel {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
+    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunkPathMover
+    // instances in this model.
     this.energyChunkPathMoverGroup = new EnergyChunkPathMoverGroup( this.energyChunkGroup, {
       tandem: tandem.createTandem( 'energyChunkPathMoverGroup' )
     } );
