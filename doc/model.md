@@ -1,6 +1,8 @@
 The primary mathematical model on which this simulation is based is the equation for heat transfer between two objects.  This equation is (essentially):
 
+```
 dQ/dt = -kAT
+```
 
 where Q is the amount of energy transferred, k is the heat transfer constant, A is the area of contact, and T is the temperature difference.
 
