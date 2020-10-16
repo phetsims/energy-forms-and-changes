@@ -68,7 +68,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     this.specificHeat = specificHeat;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @public (read-only) {NumberProperty}
+    // @public (read-only) {NumberProperty} - the amount of energy in this model element, in joules
     this.energyProperty = new NumberProperty( this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE, {
       units: 'joules',
       tandem: options.tandem.createTandem( 'energyProperty' ),
@@ -766,8 +766,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       // exchange energy between this and the other energy container
       if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
 
-        const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor( this.energyContainerCategory,
-          otherEnergyContainer.energyContainerCategory );
+        const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
+          this.energyContainerCategory,
+          otherEnergyContainer.energyContainerCategory
+        );
 
         const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
 
