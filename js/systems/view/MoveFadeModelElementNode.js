@@ -23,9 +23,6 @@ class MoveFadeModelElementNode extends Node {
       tandem: tandem,
       visiblePropertyOptions: {
         phetioReadOnly: true
-      },
-      phetioComponentOptions: {
-        opacityProperty: { phetioReadOnly: true }
       }
     } );
 
