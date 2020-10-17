@@ -73,16 +73,10 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelNode.visibleProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.pickableProperty": {
-      "phetioFeatured": true
-    },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.textProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.pickableProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
