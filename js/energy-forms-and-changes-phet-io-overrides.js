@@ -88,25 +88,13 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.thermometer1Node.pickableProperty": {
-      "phetioFeatured": true
-    },
     "energyFormsAndChanges.introScreen.view.thermometer1Node.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.introScreen.view.thermometer2Node.pickableProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.thermometer2Node.visibleProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.thermometer3Node.pickableProperty": {
-      "phetioFeatured": true
-    },
     "energyFormsAndChanges.introScreen.view.thermometer3Node.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.introScreen.view.thermometer4Node.pickableProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.thermometer4Node.visibleProperty": {

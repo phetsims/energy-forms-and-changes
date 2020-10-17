@@ -439,7 +439,8 @@ class EFACIntroScreenView extends ScreenView {
           constrainMovableElementMotion, {
             label: label,
             tandem: tandem,
-            phetioDynamicElement: true
+            phetioDynamicElement: true,
+            pickablePropertyInstrumented: true
           }
         );
       },
