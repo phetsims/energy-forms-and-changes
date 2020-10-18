@@ -190,7 +190,7 @@ class FaucetAndWater extends EnergySource {
       const yPosition = this.positionProperty.get().plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y -
                         chunk.positionProperty.value.y;
       const chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( yPosition );
-      const chunkExempt = this.exemptFromTransferEnergyChunks.getArray().indexOf( chunk ) >= 0;
+      const chunkExempt = this.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
 
       if ( this.waterPowerableElementInPlaceProperty.value && chunkInRange && !chunkExempt ) {
         if ( this.transferNextAvailableChunk ) {
