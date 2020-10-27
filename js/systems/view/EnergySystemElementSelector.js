@@ -12,7 +12,7 @@
 
 import merge from '../../../../phet-core/js/merge.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -61,7 +61,7 @@ class EnergySystemElementSelector extends Panel {
       } );
     }
 
-    const buttonGroup = new RadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
+    const buttonGroup = new RectangularRadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
       baseColor: Color.WHITE,
       orientation: 'horizontal',
       spacing: 15,
