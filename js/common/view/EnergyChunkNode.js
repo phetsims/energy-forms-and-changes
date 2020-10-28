@@ -54,7 +54,7 @@ class EnergyChunkNode extends Node {
 
     // control the overall visibility of this node
     const handleVisibilityChanged = visible => {
-      this.setVisible( visible );
+      !this.isDisposed && this.setVisible( visible );
     };
     energyChunk.visibleProperty.link( handleVisibilityChanged );
 
