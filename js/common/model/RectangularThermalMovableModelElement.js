@@ -46,9 +46,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    */
   constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
 
-    // REVIEW-phetio: The code below, particularly the call to dispose, makes it seem like
-    // energyChunkWanderControllerGroup isn't really optional.
     options = merge( {
+
+      // {null|EnergyChunkWanderController} - This must be supplied to add EnergyChunks outside of the slices in this
+      // element. Usages of this largely correspond to approachingEnergyChunks. See addEnergyChunk() for details.
       energyChunkWanderControllerGroup: null,
 
       // {Object[]} - pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
@@ -178,6 +179,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
         assert && assert( wanderController, 'there should always be a wander controller for each approaching EC' );
 
         this.energyChunkWanderControllers.remove( wanderController );
+
+        assert && assert( this.energyChunkWanderControllerGroup, 'use of approachingEnergyChunks requires an energyChunkWanderControllerGroup' );
 
         // dispose the wander controller
         this.energyChunkWanderControllerGroup.disposeElement( wanderController );
@@ -379,9 +382,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // chunk is out of the bounds of this element, so make it wander towards it
     else {
       energyChunk.zPosition = 0;
+      assert && assert( this.energyChunkWanderControllerGroup, 'The use of approachingEnergyChunks requires an energyChunkWanderControllerGroup' );
       this.approachingEnergyChunks.push( energyChunk );
 
-      assert && assert( this.energyChunkWanderControllerGroup, 'should not be null if creating a wanderer' );
       this.energyChunkWanderControllers.push(
         this.energyChunkWanderControllerGroup.createNextElement( energyChunk, this.positionProperty )
       );

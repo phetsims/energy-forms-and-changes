@@ -37,9 +37,9 @@ class EnergyChunk extends PhetioObject {
 
     options = merge( {
 
-      // REVIEW-phetio: The comment here doesn't quite make sense to me (jbphet).  The id itself doesn't support
-      // recreating the same energy chunk, just the fact that it's now an option, right?  Can this be clarified?
-      id: null, // to support recreating the same energyChunk through PhET-iO state
+      // {number} - The unique id of the chunk. Most often EnergyChunk set's it own. This should only be specified by
+      // PhET-iO, to support PhET-iO state recreating exact instances.
+      id: null,
 
       // phet-io
       tandem: Tandem.REQUIRED,
