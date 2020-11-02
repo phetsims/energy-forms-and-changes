@@ -176,10 +176,10 @@ class EFACIntroModel {
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
-          this.energyChunkGroup,
-          this.energyChunkWanderControllerGroup,
-          { tandem: tandem }
-        );
+          this.energyChunkGroup, {
+            energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
+            tandem: tandem
+          } );
       },
       [ BlockType.IRON, 0 ],
       {
@@ -209,9 +209,8 @@ class EFACIntroModel {
           BEAKER_HEIGHT,
           this.blockGroup,
           this.energyChunksVisibleProperty,
-          this.energyChunkGroup,
-          this.energyChunkWanderControllerGroup,
-          {
+          this.energyChunkGroup, {
+            energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             beakerType: beakerType,
             majorTickMarkDistance: BEAKER_MAJOR_TICK_MARK_DISTANCE,
             tandem: tandem,

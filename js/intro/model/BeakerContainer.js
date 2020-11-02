@@ -8,7 +8,7 @@
 
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
-import merge from '../../../../phet-core/js/merge.js';
+import required from '../../../../phet-core/js/required.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -25,8 +25,7 @@ class BeakerContainer extends Beaker {
    * @param {Array.<Block>} potentiallyContainedElements
    * @param {BooleanProperty} energyChunksVisibleProperty
    * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though optional for the parent
-   * @param {Object} [options]
+   * @param {Object} config
    */
   constructor( initialPosition,
                width,
@@ -34,17 +33,11 @@ class BeakerContainer extends Beaker {
                potentiallyContainedElements,
                energyChunksVisibleProperty,
                energyChunkGroup,
-               energyChunkWanderControllerGroup,
-               options ) {
+               config ) {
 
-    // REVIEW-phetio: It seems odd to be able to provide a requisite value both through parameters or an option.  I
-    // think this may be a case where the option set rather than merged, and the code checks that it's not provided as
-    // an option too.  Or it's a config parameter.
-    options = merge( {
-      energyChunkWanderControllerGroup: energyChunkWanderControllerGroup
-    }, options );
+    required( config.energyChunkWanderControllerGroup );
 
-    super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options );
+    super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, config );
 
     // @public (read-only) {string} - id of this beaker
     this.id = `beaker-container-${idCounter++}`;

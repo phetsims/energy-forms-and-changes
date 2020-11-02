@@ -12,6 +12,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
+import required from '../../../../phet-core/js/required.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -57,26 +58,25 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {Property} energyChunksVisibleProperty
    * @param {BlockType} blockType
    * @param {PhetioGroup} energyChunkGroup
-   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup - required for this type, though
    * optional for the parent
-   * @param options
+   * @param {Object} config
    */
   constructor( initialPosition,
                energyChunksVisibleProperty,
                blockType,
                energyChunkGroup,
-               energyChunkWanderControllerGroup,
-               options ) {
+               config ) {
 
-    // REVIEW-phetio: Here again a required parameter is being merged into options, which doesn't seem quite right.
-    options = merge( {
-      energyChunkWanderControllerGroup: energyChunkWanderControllerGroup,
+    config = merge( {
+      energyChunkWanderControllerGroup: required( config.energyChunkWanderControllerGroup ),
+      predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
+
+      // phet-io
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
       phetioType: Block.BlockIO,
-      phetioDocumentation: 'block that can be of type iron or brick',
-      predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS
-    }, options );
+      phetioDocumentation: 'block that can be of type iron or brick'
+    }, config );
 
     super(
       initialPosition,
@@ -86,7 +86,7 @@ class Block extends RectangularThermalMovableModelElement {
       BLOCK_COMPOSITION[ blockType ].specificHeat,
       energyChunksVisibleProperty,
       energyChunkGroup,
-      options
+      config
     );
 
     // @public (read-only) {String} - unique ID for this block
