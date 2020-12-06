@@ -189,7 +189,9 @@ class SunEnergySource extends EnergySource {
                 chunk.positionProperty.value.y > EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
       ) {
         this.energyChunkList.remove( chunk );
-        this.energyChunksPassingThroughClouds.remove( chunk );
+        if (this.energyChunksPassingThroughClouds.includes( chunk )) {
+          this.energyChunksPassingThroughClouds.remove( chunk );
+        }
         this.energyChunkGroup.disposeElement( chunk );
       }
 
