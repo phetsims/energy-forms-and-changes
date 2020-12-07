@@ -420,8 +420,10 @@ class Generator extends EnergyConverter {
   extractOutgoingEnergyChunks() {
     const chunks = this.outgoingEnergyChunks.getArrayCopy();
 
+    const chunksToRemove = chunks.filter( energyChunk => this.electricalEnergyChunks.includes( energyChunk ) );
+
     // Remove outgoing chunks from electrical energy chunks list
-    this.electricalEnergyChunks.removeAll( chunks );
+    this.electricalEnergyChunks.removeAll( chunksToRemove );
     this.outgoingEnergyChunks.clear();
 
     return chunks;
