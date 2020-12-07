@@ -49,7 +49,8 @@ class EnergySource extends EnergySystemElement {
   extractOutgoingEnergyChunks() {
 
     // remove all outgoing chunks from this.energyChunkList
-    this.energyChunkList.removeAll( this.outgoingEnergyChunks );
+    const energyChunksToRemove = this.outgoingEnergyChunks.filter( energyChunk => this.energyChunkList.includes( energyChunk ) );
+    this.energyChunkList.removeAll( energyChunksToRemove );
 
     const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.getArrayCopy();
     this.outgoingEnergyChunks.clear();
