@@ -179,7 +179,10 @@ class SunEnergySource extends EnergySource {
       // this energy chunk was absorbed by the solar panel, so put it on the list of outgoing chunks
       if ( this.solarPanel.activeProperty.value && this.solarPanel.getAbsorptionShape().containsPoint( chunk.positionProperty.value ) ) {
         this.energyChunkList.remove( chunk );
-        this.energyChunksPassingThroughClouds.remove( chunk );
+
+        if ( this.energyChunksPassingThroughClouds.includes( chunk ) ) {
+          this.energyChunksPassingThroughClouds.remove( chunk );
+        }
         this.outgoingEnergyChunks.push( chunk );
       }
 
@@ -189,7 +192,7 @@ class SunEnergySource extends EnergySource {
                 chunk.positionProperty.value.y > EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT
       ) {
         this.energyChunkList.remove( chunk );
-        if (this.energyChunksPassingThroughClouds.includes( chunk )) {
+        if ( this.energyChunksPassingThroughClouds.includes( chunk ) ) {
           this.energyChunksPassingThroughClouds.remove( chunk );
         }
         this.energyChunkGroup.disposeElement( chunk );
