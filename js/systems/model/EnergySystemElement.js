@@ -101,7 +101,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
    * @public (EnergySystemElementIO)
    */
   toStateObject() {
-    assert && assert( false, 'subtype should implement state methods' );
+    return null; // can be overridden
   }
 
   /**
@@ -109,7 +109,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
    * @public (EnergySystemElementIO)
    */
   applyState() {
-    assert && assert( false, 'subtype should implement state methods' );
+    return null; // can be overridden
   }
 }
 
