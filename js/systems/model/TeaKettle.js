@@ -10,6 +10,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -150,7 +151,7 @@ class TeaKettle extends EnergySource {
 
         // Emit a new thermal energy chunk.
         const xRange = THERMAL_ENERGY_CHUNK_X_ORIGIN_RANGE;
-        const x0 = this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength();
+        const x0 = this.positionProperty.value.x + xRange.min + dotRandom.nextDouble() * xRange.getLength();
         const y0 = this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN;
         const initialPosition = new Vector2( x0, y0 );
 
@@ -195,7 +196,7 @@ class TeaKettle extends EnergySource {
         // This is a thermal chunk that is coming out of the water.
         if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
              chunk.positionProperty.get().y === this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
-          if ( phet.joist.random.nextDouble() > 0.2 ) {
+          if ( dotRandom.nextDouble() > 0.2 ) {
 
             // Turn the chunk into mechanical energy.
             chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
@@ -305,7 +306,7 @@ class TeaKettle extends EnergySource {
 
           // Create a thermal chunk inside the burner.
           initialPosition = new Vector2(
-            this.positionProperty.value.x + xRange.min + phet.joist.random.nextDouble() * xRange.getLength(),
+            this.positionProperty.value.x + xRange.min + dotRandom.nextDouble() * xRange.getLength(),
             this.positionProperty.value.y + THERMAL_ENERGY_CHUNK_Y_ORIGIN
           );
         }

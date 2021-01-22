@@ -8,6 +8,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -181,7 +182,7 @@ class EnergyChunkPathMover extends PhetioObject {
 
     // add segments at random angles until the path gets close to the max height
     while ( currentPosition.plus( verticalSegment ).y < EFACConstants.SYSTEMS_SCREEN_ENERGY_CHUNK_MAX_TRAVEL_HEIGHT ) {
-      currentPosition = currentPosition.plus( verticalSegment.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 ) );
+      currentPosition = currentPosition.plus( verticalSegment.rotated( ( dotRandom.nextDouble() - 0.5 ) * Math.PI / 4 ) );
       path.push( currentPosition );
     }
 
@@ -201,7 +202,7 @@ class EnergyChunkPathMover extends PhetioObject {
    * @public
    */
   static createRandomStraightPath( position, validAngles ) {
-    const validRandomAngle = phet.joist.random.nextDouble() * ( validAngles.max - validAngles.min ) + validAngles.min;
+    const validRandomAngle = dotRandom.nextDouble() * ( validAngles.max - validAngles.min ) + validAngles.min;
     return this.createStraightPath( position, validRandomAngle );
   }
 

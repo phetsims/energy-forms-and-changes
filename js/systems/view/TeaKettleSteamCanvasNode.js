@@ -6,6 +6,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -103,7 +104,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
       }
 
       // allow for a small variation from the previous angle, as long as it's within the valid angle range
-      let bubbleAngle = this.lastSteamAngle * ( phet.joist.random.nextDouble() * ( 1.015 - 0.985 ) + 0.985 );
+      let bubbleAngle = this.lastSteamAngle * ( dotRandom.nextDouble() * ( 1.015 - 0.985 ) + 0.985 );
       bubbleAngle = Utils.clamp( bubbleAngle, this.steamAngleRange.min, this.steamAngleRange.max );
       this.lastSteamAngle = bubbleAngle;
 

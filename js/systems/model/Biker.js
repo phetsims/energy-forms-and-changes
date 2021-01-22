@@ -9,6 +9,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -507,7 +508,7 @@ class Biker extends EnergySource {
    */
   addEnergyChunkToBiker() {
     const nominalInitialOffset = new Vector2( 0.019, 0.055 );
-    const displacement = new Vector2( ( phet.joist.random.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
+    const displacement = new Vector2( ( dotRandom.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
     const position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
     const newEnergyChunk = this.energyChunkGroup.createNextElement(

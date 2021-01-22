@@ -14,6 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -313,7 +314,7 @@ class SolarPanel extends EnergyConverter {
 
           // choose a random position along the center portion of the cross line
           initialPosition = lowerLeftOfPanel.plus(
-            new Vector2( crossLineLength * ( 0.5 * phet.joist.random.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle )
+            new Vector2( crossLineLength * ( 0.5 * dotRandom.nextDouble() + 0.25 ), 0 ).rotated( crossLineAngle )
           );
         }
 

@@ -9,6 +9,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -453,7 +454,7 @@ const createBlownEnergyChunkPath = startingPoint => {
 
   // add the remaining points in the path
   for ( let i = 0; i < numberOfDirectionChanges - 1; i++ ) {
-    const movement = nominalTravelVector.rotated( ( phet.joist.random.nextDouble() - 0.5 ) * Math.PI / 4 );
+    const movement = nominalTravelVector.rotated( ( dotRandom.nextDouble() - 0.5 ) * Math.PI / 4 );
     currentPosition = currentPosition.plus( movement );
     path.push( currentPosition );
   }

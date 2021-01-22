@@ -11,6 +11,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -138,7 +139,7 @@ class FaucetAndWater extends EnergySource {
   createNewChunk() {
 
     // random x value within water column for "watery" appearance
-    const x = ( phet.joist.random.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2;
+    const x = ( dotRandom.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2;
 
     const initialPosition = this.positionProperty.value
       .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN )
@@ -271,7 +272,7 @@ class FaucetAndWater extends EnergySource {
           0.5 * ACCELERATION_DUE_TO_GRAVITY.y * dropTime * dropTime
         );
         const initialWidth = this.flowProportionProperty.value * MAX_WATER_WIDTH *
-                             ( 1 + ( phet.joist.random.nextDouble() - 0.5 ) * 0.2 );
+                             ( 1 + ( dotRandom.nextDouble() - 0.5 ) * 0.2 );
         const initialSize = new Dimension2( initialWidth, initialWidth );
         this.waterDrops.push( new WaterDrop(
           initialPosition,

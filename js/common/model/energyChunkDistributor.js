@@ -14,6 +14,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
@@ -305,7 +306,7 @@ const energyChunkDistributor = {
           if ( vectorFromOther.setMagnitude( 0 ) ) {
 
             // create a random vector of min distance
-            const randomAngle = phet.joist.random.nextDouble() * Math.PI * 2;
+            const randomAngle = dotRandom.nextDouble() * Math.PI * 2;
             vectorFromOther.setXY(
               minDistance * Math.cos( randomAngle ),
               minDistance * Math.sin( randomAngle )

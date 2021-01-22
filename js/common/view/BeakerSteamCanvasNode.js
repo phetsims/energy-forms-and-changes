@@ -7,6 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
@@ -110,9 +111,9 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
       for ( let i = 0; i < bubblesToProduce; i++ ) {
         const steamBubbleDiameter = STEAM_BUBBLE_DIAMETER_RANGE.min +
-                                    phet.joist.random.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
+                                    dotRandom.nextDouble() * STEAM_BUBBLE_DIAMETER_RANGE.getLength();
         const steamBubbleCenterXPos = this.containerOutlineRect.centerX +
-                                      ( phet.joist.random.nextDouble() - 0.5 ) *
+                                      ( dotRandom.nextDouble() - 0.5 ) *
                                       ( this.containerOutlineRect.width - steamBubbleDiameter );
 
         // bubbles are invisible to start; they will fade in

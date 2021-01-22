@@ -8,6 +8,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -275,9 +276,9 @@ class EnergyChunkWanderController extends PhetioObject {
     if ( vectorToDestination.magnitude > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
 
       // add some randomness to the direction of travel
-      angle = angle + ( ( phet.joist.random.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;
+      angle = angle + ( ( dotRandom.nextDouble() - 0.5 ) * 2 ) * this.wanderAngleVariation;
     }
-    const speed = this.minSpeed + ( this.maxSpeed - this.minSpeed ) * phet.joist.random.nextDouble();
+    const speed = this.minSpeed + ( this.maxSpeed - this.minSpeed ) * dotRandom.nextDouble();
     this.velocity.setXY( speed * Math.cos( angle ), speed * Math.sin( angle ) );
   }
 
@@ -287,7 +288,7 @@ class EnergyChunkWanderController extends PhetioObject {
    */
   resetCountdownTimer() {
     this.countdownTimer = MIN_TIME_IN_ONE_DIRECTION + ( MAX_TIME_IN_ONE_DIRECTION - MIN_TIME_IN_ONE_DIRECTION ) *
-                          phet.joist.random.nextDouble();
+                          dotRandom.nextDouble();
   }
 
   /**

@@ -8,6 +8,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -140,7 +141,7 @@ class BeakerHeater extends EnergyUser {
     );
 
     // @private, for convenience
-    this.random = phet.joist.random;
+    this.random = dotRandom;
 
     // move the beaker as the overall position changes
     this.positionProperty.link( position => {
@@ -243,7 +244,7 @@ class BeakerHeater extends EnergyUser {
 
       // remove an energy chunk from the beaker and start it floating away, a.k.a. make it "radiate"
       const bounds = this.beaker.getBounds();
-      const extractionPoint = new Vector2( bounds.minX + phet.joist.random.nextDouble() * bounds.width, bounds.maxY );
+      const extractionPoint = new Vector2( bounds.minX + dotRandom.nextDouble() * bounds.width, bounds.maxY );
       const ec = this.beaker.extractEnergyChunkClosestToPoint( extractionPoint );
 
       if ( ec ) {

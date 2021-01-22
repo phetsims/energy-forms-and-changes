@@ -10,6 +10,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -98,7 +99,7 @@ class SunEnergySource extends EnergySource {
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.isPlayingProperty = isPlayingProperty;
     this.energyChunkEmissionCountdownTimer = ENERGY_CHUNK_EMISSION_PERIOD;
-    this.sectorList = phet.joist.random.shuffle( _.range( NUM_EMISSION_SECTORS ) );
+    this.sectorList = dotRandom.shuffle( _.range( NUM_EMISSION_SECTORS ) );
     this.currentSectorIndex = 0;
     this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 
@@ -209,7 +210,7 @@ class SunEnergySource extends EnergySource {
           if ( inClouds && !inList && Math.abs( deltaPhi ) < Math.PI / 10 ) {
 
             // decide whether this energy chunk should pass through the clouds or be reflected
-            if ( phet.joist.random.nextDouble() < cloud.existenceStrengthProperty.get() ) {
+            if ( dotRandom.nextDouble() < cloud.existenceStrengthProperty.get() ) {
 
               // Reflect the energy chunk.  It looks a little weird if they go back to the sun, so the code below
               // tries to avoid that.
@@ -218,12 +219,12 @@ class SunEnergySource extends EnergySource {
 
               if ( reflectionAngle < angleTowardsSun ) {
                 chunk.setVelocity( chunk.velocity.rotated(
-                  0.7 * Math.PI + phet.joist.random.nextDouble() * Math.PI / 8 )
+                  0.7 * Math.PI + dotRandom.nextDouble() * Math.PI / 8 )
                 );
               }
               else {
                 chunk.setVelocity(
-                  chunk.velocity.rotated( -0.7 * Math.PI - phet.joist.random.nextDouble() * Math.PI / 8 )
+                  chunk.velocity.rotated( -0.7 * Math.PI - dotRandom.nextDouble() * Math.PI / 8 )
                 );
               }
 
@@ -307,7 +308,7 @@ class SunEnergySource extends EnergySource {
 
     // angle is a function of the selected sector and a random offset within the sector
     return sector * EMISSION_SECTOR_SPAN +
-           ( phet.joist.random.nextDouble() * EMISSION_SECTOR_SPAN ) +
+           ( dotRandom.nextDouble() * EMISSION_SECTOR_SPAN ) +
            EMISSION_SECTOR_OFFSET;
   }
 

@@ -9,6 +9,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -320,7 +321,7 @@ class LightBulb extends EnergyUser {
    * @private
    */
   radiateEnergyChunk( energyChunk ) {
-    if ( phet.joist.random.nextDouble() > this.proportionOfThermalChunksRadiated ) {
+    if ( dotRandom.nextDouble() > this.proportionOfThermalChunksRadiated ) {
       energyChunk.energyTypeProperty.set( EnergyType.LIGHT );
     }
     else {
@@ -344,7 +345,7 @@ class LightBulb extends EnergyUser {
   createPathOnFilament( startingPoint ) {
     const path = [];
     const filamentWidth = 0.03;
-    const x = ( 0.5 + phet.joist.random.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
+    const x = ( 0.5 + dotRandom.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
 
     path.push( startingPoint.plus( new Vector2( x, 0 ) ) );
     this.goRightNextTime = !this.goRightNextTime;
@@ -407,7 +408,7 @@ class LightBulb extends EnergyUser {
  */
 const generateThermalChunkTimeOnFilament = () => {
   return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
-         phet.joist.random.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
+         dotRandom.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
 };
 
 /**
