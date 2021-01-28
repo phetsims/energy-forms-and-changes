@@ -75,7 +75,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
         const xTranslation = newPosition.x - oldPosition.x;
         const yTranslation = newPosition.y - oldPosition.y;
 
-        this.bounds.shift( xTranslation, yTranslation );
+        this.bounds.shiftXY( xTranslation, yTranslation );
 
         // c-style loop for best performance
         for ( let i = 0; i < this.energyChunkList.length; i++ ) {

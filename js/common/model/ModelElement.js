@@ -70,7 +70,7 @@ class ModelElement extends PhetioObject {
     // that.
     this.relativePositionTestingBoundsList.addItemAddedListener( positionTestingBounds => {
       this.translatedPositionTestingBoundsList.push(
-        positionTestingBounds.shifted( this.positionProperty.get().x, this.positionProperty.get().y )
+        positionTestingBounds.shiftedXY( this.positionProperty.get().x, this.positionProperty.get().y )
       );
     } );
 

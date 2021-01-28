@@ -165,7 +165,7 @@ class Block extends RectangularThermalMovableModelElement {
     for ( let i = 0; i < NUM_ENERGY_CHUNK_SLICES; i++ ) {
       const projectionOffsetVector = EFACConstants.MAP_Z_TO_XY_OFFSET( -i * sliceWidth );
       const sliceBounds = Bounds2.rect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
-      sliceBounds.shift(
+      sliceBounds.shiftXY(
         projectionToFront.x + projectionOffsetVector.x,
         projectionToFront.y + projectionOffsetVector.y
       );
