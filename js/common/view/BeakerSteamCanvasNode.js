@@ -28,8 +28,8 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * @param {Rectangle} containerOutlineRect - the outline of the container
-   * @param {Property<number>} fluidProportionProperty - the proportion of fluid in its container
-   * @param {Property<number>} temperatureProperty - the temperature of the liquid
+   * @param {Property.<number>} fluidProportionProperty - the proportion of fluid in its container
+   * @param {Property.<number>} temperatureProperty - the temperature of the liquid
    * @param {number} fluidBoilingPoint
    * @param {Color} steamColor
    * @param {Object} [options]

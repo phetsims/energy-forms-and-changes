@@ -15,14 +15,14 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 class ElementFollower {
 
   /**
-   * @param {Property<Vector2>} trackedPositionProperty
+   * @param {Property.<Vector2>} trackedPositionProperty
    */
   constructor( trackedPositionProperty ) {
 
-    // @private {Property<Vector2>} - position Property of element that will follow another
+    // @private {Property.<Vector2>} - position Property of element that will follow another
     this.followerProperty = trackedPositionProperty;
 
-    // @private {Property<Vector2>|null} - position of the thing being followed, null if not following anything
+    // @private {Property.<Vector2>|null} - position of the thing being followed, null if not following anything
     this.positionBeingFollowedProperty = null;
 
     // @private {Vector2} - offset from following position
@@ -36,7 +36,7 @@ class ElementFollower {
 
   /**
    * start following the provided Property
-   * @param {Property<Vector2>} positionToFollowProperty - position Property to follow
+   * @param {Property.<Vector2>} positionToFollowProperty - position Property to follow
    * @public
    */
   startFollowing( positionToFollowProperty ) {
