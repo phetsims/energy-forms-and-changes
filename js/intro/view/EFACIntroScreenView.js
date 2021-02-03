@@ -298,12 +298,12 @@ class EFACIntroScreenView extends ScreenView {
       // listen to keyboard events on the left heater-cooler
       leftHeaterCoolerFront.addInputListener( {
         keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
             leftHeaterCoolerDownInputAction();
           }
         },
         keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
             leftHeaterCoolerUpInputAction();
           }
         }
@@ -330,12 +330,12 @@ class EFACIntroScreenView extends ScreenView {
       // listen to keyboard events on the right heater-cooler
       rightHeaterCoolerFront.addInputListener( {
         keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
             rightHeaterCoolerDownInputAction();
           }
         },
         keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.keyCode ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
             rightHeaterCoolerUpInputAction();
           }
         }
@@ -448,7 +448,7 @@ class EFACIntroScreenView extends ScreenView {
       [ model.beakerGroup.archetype ], {
         tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
-        pickablePropertyPhetioInstrumented:true,
+        pickablePropertyPhetioInstrumented: true,
         supportsDynamicState: false
       } );
 
