@@ -298,12 +298,12 @@ class EFACIntroScreenView extends ScreenView {
       // listen to keyboard events on the left heater-cooler
       leftHeaterCoolerFront.addInputListener( {
         keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
             leftHeaterCoolerDownInputAction();
           }
         },
         keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
             leftHeaterCoolerUpInputAction();
           }
         }
@@ -330,12 +330,12 @@ class EFACIntroScreenView extends ScreenView {
       // listen to keyboard events on the right heater-cooler
       rightHeaterCoolerFront.addInputListener( {
         keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
             rightHeaterCoolerDownInputAction();
           }
         },
         keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent.key ) ) {
+          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
             rightHeaterCoolerUpInputAction();
           }
         }
