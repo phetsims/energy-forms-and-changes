@@ -499,156 +499,156 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
   // 1st screen water beaker
   {
-    'numberOfSlices': 6,
-    'totalSliceArea': 0.01816571428571429,
-    'numberOfEnergyChunks': 34,
-    'energyChunkPositionsBySlice': [
+    numberOfSlices: 6,
+    totalSliceArea: 0.01816571428571429,
+    numberOfEnergyChunks: 34,
+    energyChunkPositionsBySlice: [
       [
         {
-          'positionX': 0.15411244536972682,
-          'positionY': -0.001596201157690377
+          positionX: 0.15411244536972682,
+          positionY: -0.001596201157690377
         },
         {
-          'positionX': 0.14383921119659832,
-          'positionY': -0.001260263233759202
+          positionX: 0.14383921119659832,
+          positionY: -0.001260263233759202
         },
         {
-          'positionX': 0.14854763957990652,
-          'positionY': 0.00830833687007631
+          positionX: 0.14854763957990652,
+          positionY: 0.00830833687007631
         },
         {
-          'positionX': 0.13444169054767263,
-          'positionY': -0.0014006625270237634
+          positionX: 0.13444169054767263,
+          positionY: -0.0014006625270237634
         }
       ],
       [
         {
-          'positionX': 0.12733747364166348,
-          'positionY': 0.006307322179373496
+          positionX: 0.12733747364166348,
+          positionY: 0.006307322179373496
         },
         {
-          'positionX': 0.13653098112389703,
-          'positionY': 0.014627798547737368
+          positionX: 0.13653098112389703,
+          positionY: 0.014627798547737368
         },
         {
-          'positionX': 0.16435162341152953,
-          'positionY': 0.014168538445584971
+          positionX: 0.16435162341152953,
+          positionY: 0.014168538445584971
         },
         {
-          'positionX': 0.11931466505878618,
-          'positionY': 0.0015598813704961255
+          positionX: 0.11931466505878618,
+          positionY: 0.0015598813704961255
         },
         {
-          'positionX': 0.17196699261601722,
-          'positionY': 0.0018462484323476214
+          positionX: 0.17196699261601722,
+          positionY: 0.0018462484323476214
         },
         {
-          'positionX': 0.16328922522986383,
-          'positionY': 0.0029840248926661967
+          positionX: 0.16328922522986383,
+          positionY: 0.0029840248926661967
         }
       ],
       [
         {
-          'positionX': 0.10967530710697385,
-          'positionY': 0.004946701691473413
+          positionX: 0.10967530710697385,
+          positionY: 0.004946701691473413
         },
         {
-          'positionX': 0.18066731295854274,
-          'positionY': 0.030151905887197336
+          positionX: 0.18066731295854274,
+          positionY: 0.030151905887197336
         },
         {
-          'positionX': 0.1513998312348499,
-          'positionY': 0.02065394173079762
+          positionX: 0.1513998312348499,
+          positionY: 0.02065394173079762
         },
         {
-          'positionX': 0.12049376099872919,
-          'positionY': 0.017005245718346496
+          positionX: 0.12049376099872919,
+          positionY: 0.017005245718346496
         },
         {
-          'positionX': 0.18054717913731186,
-          'positionY': 0.00606404190954684
+          positionX: 0.18054717913731186,
+          positionY: 0.00606404190954684
         },
         {
-          'positionX': 0.17422624544607515,
-          'positionY': 0.022189193678943488
+          positionX: 0.17422624544607515,
+          positionY: 0.022189193678943488
         },
         {
-          'positionX': 0.10969304238460234,
-          'positionY': 0.013620569422127976
+          positionX: 0.10969304238460234,
+          positionY: 0.013620569422127976
         }
       ],
       [
         {
-          'positionX': 0.15876462365506805,
-          'positionY': 0.030152565271325076
+          positionX: 0.15876462365506805,
+          positionY: 0.030152565271325076
         },
         {
-          'positionX': 0.1806506161072284,
-          'positionY': 0.01572085721843787
+          positionX: 0.1806506161072284,
+          positionY: 0.01572085721843787
         },
         {
-          'positionX': 0.10949017095160922,
-          'positionY': 0.0335189501208214
+          positionX: 0.10949017095160922,
+          positionY: 0.0335189501208214
         },
         {
-          'positionX': 0.11986679968757023,
-          'positionY': 0.03067241737522126
+          positionX: 0.11986679968757023,
+          positionY: 0.03067241737522126
         },
         {
-          'positionX': 0.10968480231000388,
-          'positionY': 0.0235661580930112
+          positionX: 0.10968480231000388,
+          positionY: 0.0235661580930112
         },
         {
-          'positionX': 0.18061385874563657,
-          'positionY': 0.04070591137030983
+          positionX: 0.18061385874563657,
+          positionY: 0.04070591137030983
         },
         {
-          'positionX': 0.10980600913960631,
-          'positionY': 0.0419806312520849
+          positionX: 0.10980600913960631,
+          positionY: 0.0419806312520849
         }
       ],
       [
         {
-          'positionX': 0.13441043657486784,
-          'positionY': 0.028011604802213583
+          positionX: 0.13441043657486784,
+          positionY: 0.028011604802213583
         },
         {
-          'positionX': 0.16200868135223284,
-          'positionY': 0.0438323010350111
+          positionX: 0.16200868135223284,
+          positionY: 0.0438323010350111
         },
         {
-          'positionX': 0.1690829264258634,
-          'positionY': 0.03467489643617197
+          positionX: 0.1690829264258634,
+          positionY: 0.03467489643617197
         },
         {
-          'positionX': 0.1198432440386997,
-          'positionY': 0.04508455550774215
+          positionX: 0.1198432440386997,
+          positionY: 0.04508455550774215
         },
         {
-          'positionX': 0.1284915053227731,
-          'positionY': 0.03977233053947086
+          positionX: 0.1284915053227731,
+          positionY: 0.03977233053947086
         },
         {
-          'positionX': 0.17155107466312466,
-          'positionY': 0.04536442546358017
+          positionX: 0.17155107466312466,
+          positionY: 0.04536442546358017
         }
       ],
       [
         {
-          'positionX': 0.14365448174766773,
-          'positionY': 0.04778775887478084
+          positionX: 0.14365448174766773,
+          positionY: 0.04778775887478084
         },
         {
-          'positionX': 0.15313800764973542,
-          'positionY': 0.04802268075219778
+          positionX: 0.15313800764973542,
+          positionY: 0.04802268075219778
         },
         {
-          'positionX': 0.13432587784523026,
-          'positionY': 0.0482263520067694
+          positionX: 0.13432587784523026,
+          positionY: 0.0482263520067694
         },
         {
-          'positionX': 0.14536229693684377,
-          'positionY': 0.03636622814513492
+          positionX: 0.14536229693684377,
+          positionY: 0.03636622814513492
         }
       ]
     ]
@@ -656,52 +656,52 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
   // 1st screen olive oil beaker
   {
-    'numberOfSlices': 6,
-    'totalSliceArea': 0.018165714285714278,
-    'numberOfEnergyChunks': 8,
-    'energyChunkPositionsBySlice': [
+    numberOfSlices: 6,
+    totalSliceArea: 0.018165714285714278,
+    numberOfEnergyChunks: 8,
+    energyChunkPositionsBySlice: [
       [
         {
-          'positionX': 0.24605627438471658,
-          'positionY': 0.004483938783700345
+          positionX: 0.24605627438471658,
+          positionY: 0.004483938783700345
         }
       ],
       [
         {
-          'positionX': 0.22948250965347144,
-          'positionY': 0.01135266074270837
+          positionX: 0.22948250965347144,
+          positionY: 0.01135266074270837
         }
       ],
       [
         {
-          'positionX': 0.21287205931111658,
-          'positionY': 0.014944657983227735
+          positionX: 0.21287205931111658,
+          positionY: 0.014944657983227735
         },
         {
-          'positionX': 0.27050267597978056,
-          'positionY': 0.01540356272815047
+          positionX: 0.27050267597978056,
+          positionY: 0.01540356272815047
         }
       ],
       [
         {
-          'positionX': 0.25193778046895826,
-          'positionY': 0.024124778617726085
+          positionX: 0.25193778046895826,
+          positionY: 0.024124778617726085
         },
         {
-          'positionX': 0.21609798058400687,
-          'positionY': 0.034060410093368784
+          positionX: 0.21609798058400687,
+          positionY: 0.034060410093368784
         }
       ],
       [
         {
-          'positionX': 0.26250244472631645,
-          'positionY': 0.038454844170679035
+          positionX: 0.26250244472631645,
+          positionY: 0.038454844170679035
         }
       ],
       [
         {
-          'positionX': 0.2391457632103207,
-          'positionY': 0.041265717223805336
+          positionX: 0.2391457632103207,
+          positionY: 0.041265717223805336
         }
       ]
     ]
@@ -709,100 +709,100 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
   // 2nd screen water beaker
   {
-    'numberOfSlices': 6,
-    'totalSliceArea': 0.014142857142857143,
-    'numberOfEnergyChunks': 20,
-    'energyChunkPositionsBySlice': [
+    numberOfSlices: 6,
+    totalSliceArea: 0.014142857142857143,
+    numberOfEnergyChunks: 20,
+    energyChunkPositionsBySlice: [
       [
         {
-          'positionX': -0.005327962195427578,
-          'positionY': 0.016452296137918262
+          positionX: -0.005327962195427578,
+          positionY: 0.016452296137918262
         },
         {
-          'positionX': 0.005878792977895683,
-          'positionY': 0.016824467858642923
+          positionX: 0.005878792977895683,
+          positionY: 0.016824467858642923
         }
       ],
       [
         {
-          'positionX': -0.01824245083371954,
-          'positionY': 0.0194380377241472
+          positionX: -0.01824245083371954,
+          positionY: 0.0194380377241472
         },
         {
-          'positionX': -0.005036590973103385,
-          'positionY': 0.028944973171205295
+          positionX: -0.005036590973103385,
+          positionY: 0.028944973171205295
         },
         {
-          'positionX': 0.019741565168300078,
-          'positionY': 0.019279241596617504
+          positionX: 0.019741565168300078,
+          positionY: 0.019279241596617504
         },
         {
-          'positionX': 0.012671290746065678,
-          'positionY': 0.028710872516212307
+          positionX: 0.012671290746065678,
+          positionY: 0.028710872516212307
         }
       ],
       [
         {
-          'positionX': -0.02069178450187043,
-          'positionY': 0.031736978154630904
+          positionX: -0.02069178450187043,
+          positionY: 0.031736978154630904
         },
         {
-          'positionX': -0.029717716348298683,
-          'positionY': 0.023487196795997735
+          positionX: -0.029717716348298683,
+          positionY: 0.023487196795997735
         },
         {
-          'positionX': 0.02956885660028978,
-          'positionY': 0.024563582772174585
+          positionX: 0.02956885660028978,
+          positionY: 0.024563582772174585
         },
         {
-          'positionX': -0.029712791921195827,
-          'positionY': 0.037947716659928035
+          positionX: -0.029712791921195827,
+          positionY: 0.037947716659928035
         }
       ],
       [
         {
-          'positionX': -0.029417182256097307,
-          'positionY': 0.04959850547981442
+          positionX: -0.029417182256097307,
+          positionY: 0.04959850547981442
         },
         {
-          'positionX': 0.028983244342911652,
-          'positionY': 0.0367018653042737
+          positionX: 0.028983244342911652,
+          positionY: 0.0367018653042737
         },
         {
-          'positionX': 0.0025201526950114975,
-          'positionY': 0.04204248884226837
+          positionX: 0.0025201526950114975,
+          positionY: 0.04204248884226837
         },
         {
-          'positionX': 0.029634091878329008,
-          'positionY': 0.04910958127835711
+          positionX: 0.029634091878329008,
+          positionY: 0.04910958127835711
         }
       ],
       [
         {
-          'positionX': -0.01228742259426627,
-          'positionY': 0.04419195535993875
+          positionX: -0.01228742259426627,
+          positionY: 0.04419195535993875
         },
         {
-          'positionX': -0.019066861676811125,
-          'positionY': 0.05395731390665523
+          positionX: -0.019066861676811125,
+          positionY: 0.05395731390665523
         },
         {
-          'positionX': 0.016355533191846593,
-          'positionY': 0.04268223621783737
+          positionX: 0.016355533191846593,
+          positionY: 0.04268223621783737
         },
         {
-          'positionX': 0.019084554783501864,
-          'positionY': 0.05413406883802284
+          positionX: 0.019084554783501864,
+          positionY: 0.05413406883802284
         }
       ],
       [
         {
-          'positionX': -0.005392624572061245,
-          'positionY': 0.0565126251872509
+          positionX: -0.005392624572061245,
+          positionY: 0.0565126251872509
         },
         {
-          'positionX': 0.005826167710765314,
-          'positionY': 0.056391565199538224
+          positionX: 0.005826167710765314,
+          positionY: 0.056391565199538224
         }
       ]
     ]

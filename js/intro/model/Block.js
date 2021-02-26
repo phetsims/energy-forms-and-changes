@@ -207,40 +207,40 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
   // iron block
   {
-    'numberOfSlices': 4,
-    'totalSliceArea': 0.008100000000000001,
-    'numberOfEnergyChunks': 6,
-    'energyChunkPositionsBySlice': [
+    numberOfSlices: 4,
+    totalSliceArea: 0.008100000000000001,
+    numberOfEnergyChunks: 6,
+    energyChunkPositionsBySlice: [
       [
         {
-          'positionX': -0.25640756950670235,
-          'positionY': 0.006850135040548302
+          positionX: -0.25640756950670235,
+          positionY: 0.006850135040548302
         }
       ],
       [
         {
-          'positionX': -0.2537531660345353,
-          'positionY': 0.02393321792569457
+          positionX: -0.2537531660345353,
+          positionY: 0.02393321792569457
         },
         {
-          'positionX': -0.23829971427184846,
-          'positionY': 0.009582482706072211
+          positionX: -0.23829971427184846,
+          positionY: 0.009582482706072211
         }
       ],
       [
         {
-          'positionX': -0.24358344197642037,
-          'positionY': 0.035369522321921996
+          positionX: -0.24358344197642037,
+          positionY: 0.035369522321921996
         },
         {
-          'positionX': -0.2282683630416627,
-          'positionY': 0.02098996529690959
+          positionX: -0.2282683630416627,
+          positionY: 0.02098996529690959
         }
       ],
       [
         {
-          'positionX': -0.22579080380196173,
-          'positionY': 0.038104769283249865
+          positionX: -0.22579080380196173,
+          positionY: 0.038104769283249865
         }
       ]
     ]
@@ -248,21 +248,21 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
   // brick
   {
-    'numberOfSlices': 4,
-    'totalSliceArea': 0.008099999999999998,
-    'numberOfEnergyChunks': 2,
-    'energyChunkPositionsBySlice': [
+    numberOfSlices: 4,
+    totalSliceArea: 0.008099999999999998,
+    numberOfEnergyChunks: 2,
+    energyChunkPositionsBySlice: [
       [],
       [
         {
-          'positionX': -0.15231883878415728,
-          'positionY': 0.015189399553646257
+          positionX: -0.15231883878415728,
+          positionY: 0.015189399553646257
         }
       ],
       [
         {
-          'positionX': -0.13768266639921758,
-          'positionY': 0.029811817909006666
+          positionX: -0.13768266639921758,
+          positionY: 0.029811817909006666
         }
       ],
       []
