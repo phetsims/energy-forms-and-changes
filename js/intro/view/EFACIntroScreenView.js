@@ -77,7 +77,9 @@ class EFACIntroScreenView extends ScreenView {
    * @param {Tandem} tandem
    */
   constructor( model, tandem ) {
-    super();
+    super( {
+      tandem: tandem
+    } );
 
     // @private {EFACIntroModel}
     this.model = model;

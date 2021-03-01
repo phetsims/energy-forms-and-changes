@@ -62,7 +62,9 @@ class SystemsScreenView extends ScreenView {
    * @param {Tandem} tandem
    */
   constructor( model, tandem ) {
-    super();
+    super( {
+      tandem: tandem
+    } );
 
     // tandems to nest energy systems in Studio
     const energySourcesTandem = tandem.createTandem( 'energySources' );
