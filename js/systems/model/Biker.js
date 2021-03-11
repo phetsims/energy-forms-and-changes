@@ -102,7 +102,7 @@ class Biker extends EnergySource {
     // @public (read-only) {NumberProperty}
     this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
-      units: 'radians/second',
+      units: 'radians/s',
       tandem: options.tandem.createTandem( 'targetCrankAngularVelocityProperty' ),
       phetioDocumentation: 'target angular velocity of crank'
     } );
@@ -110,7 +110,7 @@ class Biker extends EnergySource {
     // @public (read-only) {NumberProperty}
     this.crankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
-      units: 'radians/second',
+      units: 'radians/s',
       tandem: options.tandem.createTandem( 'crankAngularVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,

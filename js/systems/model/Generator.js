@@ -92,7 +92,7 @@ class Generator extends EnergyConverter {
 
     // @private
     this.wheelRotationalVelocityProperty = new NumberProperty( 0, {
-      units: 'radians/second',
+      units: 'radians/s',
       tandem: options.tandem.createTandem( 'wheelRotationalVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,

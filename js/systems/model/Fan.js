@@ -103,7 +103,7 @@ class Fan extends EnergyUser {
 
     // @private
     this.angularVelocityProperty = new NumberProperty( 0, {
-      units: 'radians/second',
+      units: 'radians/s',
       tandem: options.tandem.createTandem( 'angularVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
@@ -127,7 +127,7 @@ class Fan extends EnergyUser {
     this.internalTemperature = ROOM_TEMPERATURE;
 
     this.targetVelocityProperty = new NumberProperty( 0, {
-      units: 'radians/second',
+      units: 'radians/s',
       tandem: options.tandem.createTandem( 'targetVelocityProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,

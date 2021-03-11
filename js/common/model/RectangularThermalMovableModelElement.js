@@ -71,7 +71,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // @public (read-only) {NumberProperty} - the amount of energy in this model element, in joules
     this.energyProperty = new NumberProperty( this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE, {
-      units: 'joules',
+      units: 'J',
       tandem: options.tandem.createTandem( 'energyProperty' ),
       phetioReadOnly: true,
       phetioHighFrequency: true,
