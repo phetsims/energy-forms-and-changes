@@ -13,7 +13,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 const BeakerType = Enumeration.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
   beforeFreeze: BeakerType => {
     BeakerType.getTandemName = beakerType => {
-      return _.camelCase( beakerType.toString() ) + 'Beaker';
+      return `${_.camelCase( beakerType.toString() )}Beaker`;
     };
   }
 } );

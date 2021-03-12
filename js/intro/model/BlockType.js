@@ -13,7 +13,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 const BlockType = Enumeration.byKeys( [ 'IRON', 'BRICK' ], {
   beforeFreeze: BlockType => {
     BlockType.getTandemName = blockType => {
-      return blockType.toString().toLowerCase() + 'Block';
+      return `${blockType.toString().toLowerCase()}Block`;
     };
   }
 } );

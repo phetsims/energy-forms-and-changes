@@ -57,7 +57,7 @@ class EnergySystemElementSelector extends Panel {
       buttonElementList.push( {
         value: elementName,
         node: iconImage,
-        tandemName: _.camelCase( elementName.name + 'RadioButton' )
+        tandemName: _.camelCase( `${elementName.name}RadioButton` )
       } );
     }
 

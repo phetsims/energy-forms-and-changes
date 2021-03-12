@@ -161,7 +161,7 @@ class BeakerHeater extends EnergyUser {
     }
 
     // this isn't designed to take in anything other than electrical energy, so make sure that's what we've got
-    assert && assert( incomingEnergy.type === EnergyType.ELECTRICAL, 'unexpected energy type: ' + incomingEnergy.type );
+    assert && assert( incomingEnergy.type === EnergyType.ELECTRICAL, `unexpected energy type: ${incomingEnergy.type}` );
 
     // handle any incoming energy chunks
     if ( this.incomingEnergyChunks.length > 0 ) {

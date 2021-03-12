@@ -186,7 +186,7 @@ class EFACIntroModel {
         tandem: tandem.createTandem( 'blockGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Block.BlockIO ),
         supportsDynamicState: false,
-        phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS + ' blocks'
+        phetioDocumentation: `group that contains 0-${EFACConstants.MAX_NUMBER_OF_INTRO_ELEMENTS} blocks`
       }
     );
 
@@ -223,7 +223,7 @@ class EFACIntroModel {
         tandem: tandem.createTandem( 'beakerGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,
-        phetioDocumentation: 'group that contains 0-' + EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS + ' beakers'
+        phetioDocumentation: `group that contains 0-${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers`
       }
     );
 

@@ -541,7 +541,7 @@ const energyChunkDistributor = {
       this.updatePositions = this.updatePositionsSimple;
     }
     else {
-      assert && assert( false, 'unknown distribution algorithm specified: ' + algorithmName );
+      assert && assert( false, `unknown distribution algorithm specified: ${algorithmName}` );
     }
   }
 };

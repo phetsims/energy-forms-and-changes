@@ -677,7 +677,7 @@ class EFACIntroScreenView extends ScreenView {
       // this particular listener could be generalized to support more than 2 beakers (see the block listener above),
       // but since other code in this sim limits the number of beakers to 2, i (@chrisklus) think it's better to
       // leave this listener as simple as it is, since a general version could only worsen performance.
-      assert && assert( model.beakerGroup.count <= 2, 'Only 2 beakers are allowed: ' + model.beakerGroup.count );
+      assert && assert( model.beakerGroup.count <= 2, `Only 2 beakers are allowed: ${model.beakerGroup.count}` );
 
       const beakerOneIndex = 0;
       const beakerTwoIndex = 1;
