@@ -74,10 +74,10 @@ const energyChunks = new Array( MAX_SLICES );
 const energyChunkForces = new Array( MAX_SLICES );
 
 // initialize the reusable arrays
-_.times( MAX_SLICES, function( sliceIndex ) {
+_.times( MAX_SLICES, sliceIndex => {
   energyChunks[ sliceIndex ] = new Array( MAX_ENERGY_CHUNKS_PER_SLICE );
   energyChunkForces[ sliceIndex ] = new Array( MAX_ENERGY_CHUNKS_PER_SLICE );
-  _.times( MAX_ENERGY_CHUNKS_PER_SLICE, function( ecIndex ) {
+  _.times( MAX_ENERGY_CHUNKS_PER_SLICE, ecIndex => {
     energyChunkForces[ sliceIndex ][ ecIndex ] = new Vector2( 0, 0 );
   } );
 } );
@@ -381,8 +381,8 @@ const energyChunkDistributor = {
    * @public
    */
   updateEnergyChunkPositions: function( slices, dt ) {
-    slices.forEach( function( slice ) {
-      slice.energyChunkList.forEach( function( ec ) {
+    slices.forEach( slice => {
+      slice.energyChunkList.forEach( ec => {
         const v = ec.velocity;
         const position = ec.positionProperty.value;
         ec.setPositionXY( position.x + v.x * dt, position.y + v.y * dt );
