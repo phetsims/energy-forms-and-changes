@@ -32,7 +32,7 @@ class EFACTemperatureAndColorSensorNode extends Node {
       draggable: false,
       dragBounds: Bounds2.EVERYTHING,
       cursor: 'pointer',
-      pickablePropertyPhetioInstrumented: true,
+      inputEnabledPropertyPhetioInstrumented: true,
 
       // phet-io
       tandem: Tandem.REQUIRED

@@ -410,7 +410,7 @@ class EFACIntroScreenView extends ScreenView {
       },
       [ model.blockGroup.archetype ], {
         tandem: tandem.createTandem( 'blockNodeGroup' ),
-        pickablePropertyPhetioInstrumented: true,
+        inputEnabledPropertyPhetioInstrumented: true,
         phetioType: PhetioGroup.PhetioGroupIO( Node.NodeIO ),
         supportsDynamicState: false
       } );
@@ -443,14 +443,14 @@ class EFACIntroScreenView extends ScreenView {
             label: label,
             tandem: tandem,
             phetioDynamicElement: true,
-            pickablePropertyPhetioInstrumented: true
+            inputEnabledPropertyPhetioInstrumented: true
           }
         );
       },
       [ model.beakerGroup.archetype ], {
         tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
-        pickablePropertyPhetioInstrumented: true,
+        inputEnabledPropertyPhetioInstrumented: true,
         supportsDynamicState: false
       } );
 

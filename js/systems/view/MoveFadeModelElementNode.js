@@ -21,8 +21,8 @@ class MoveFadeModelElementNode extends Node {
   constructor( modelElement, modelViewTransform, tandem ) {
     super( {
       tandem: tandem,
-      pickablePropertyPhetioInstrumented: true,
-      pickablePropertyOptions: {
+      inputEnabledPropertyPhetioInstrumented: true,
+      inputEnabledPropertyOptions: {
         phetioFeatured: false // see exceptions in the overrides
       },
       visiblePropertyOptions: {

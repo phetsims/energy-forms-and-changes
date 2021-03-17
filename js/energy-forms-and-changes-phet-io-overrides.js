@@ -178,7 +178,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.faucetSettingProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.pickableProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energySources.faucetAndWaterNode.inputEnabledProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.systemsScreen.view.energySources.sunNode.cloudsPanel.visibleProperty": {
