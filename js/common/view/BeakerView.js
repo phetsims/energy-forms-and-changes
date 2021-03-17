@@ -10,10 +10,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
-import Range from '../../../../dot/js/Range.js';
 import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -25,12 +22,10 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainerSliceNode.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
@@ -77,26 +72,8 @@ class BeakerView extends PhetioObject {
     this.grabNode = new Node( { cursor: 'pointer' } );
 
     // control the Node properties of all three layers at once
-    const opacityProperty = new NumberProperty( 1, {
-      range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'opacityProperty' )
-    } );
-    const pickableProperty = new Property( null, {
-      phetioType: Property.PropertyIO( NullableIO( BooleanIO ) ),
-      tandem: options.tandem.createTandem( 'pickableProperty' )
-    } );
     const visibleProperty = new BooleanProperty( true, {
       tandem: options.tandem.createTandem( 'visibleProperty' )
-    } );
-    opacityProperty.link( opacity => {
-      this.frontNode.opacity = opacity;
-      this.backNode.opacity = opacity;
-      this.grabNode.opacity = opacity;
-    } );
-    pickableProperty.link( pickable => {
-      this.frontNode.pickable = pickable;
-      this.backNode.pickable = pickable;
-      this.grabNode.pickable = pickable;
     } );
     visibleProperty.link( visible => {
       this.frontNode.visible = visible;
