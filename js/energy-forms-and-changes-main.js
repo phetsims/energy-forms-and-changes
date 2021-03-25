@@ -26,7 +26,7 @@ const simOptions = {
     softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
     team: 'Trish Loeblein, Emily B. Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
     qualityAssurance: 'Logan Bray, Steele Dalton, Megan Lai, Brooklyn Lash, Liam Mulhall, Devon Quispe,<br>' +
-                      'Laura Rea, Jacob Romero, Katie Woessner, Kelly Wurtz, Bryan Yoelin',
+                      'Laura Rea, Jacob Romero, Kathryn Woessner, Kelly Wurtz, Bryan Yoelin',
     graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
     thanks: ''
   }
