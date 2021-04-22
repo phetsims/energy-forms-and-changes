@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.0 Mon Mar 08 2021 13:12:43 GMT-0500 (Eastern Standard Time)",
+  "comment": "# energy-forms-and-changes 1.4.0 Thu Apr 22 2021 12:05:32 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "c8f48dac066802b9faa141182b29ee0f83002ed7",
+    "sha": "532de4cab78bba36e6d797415ff45b4412d60b0d",
     "branch": "1.4"
   },
   "joist": {
@@ -54,15 +54,15 @@
   },
   "phetmarks": {
     "sha": "5960ce73eaa3cf0c6cb81c009ebff48aae5b8458",
-    "branch": "energy-forms-and-changes-1.4"
+    "branch": "HEAD"
   },
   "query-string-machine": {
     "sha": "7f3ccebb4232a2e3eccdb68b1ea051cff3b5fa45",
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "db13fe9b703d3b0c021fd44c767ba7a2af9d600b",
-    "branch": "HEAD"
+    "sha": "b96772a1d0846ceb7e70f7f23b2cdd7dac0f3326",
+    "branch": "energy-forms-and-changes-1.4"
   },
   "scenery-phet": {
     "sha": "bc505a0f31aa12df936041d68858cefa99fdbe8d",
