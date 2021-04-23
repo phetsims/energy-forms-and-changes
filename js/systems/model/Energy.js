@@ -18,6 +18,7 @@ class Energy {
    * @param {number} amount - amount of energy, in joules
    * @param {number} direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
    * to the right, PI/2 is up, and so forth.
+   * @param {Object} [options]
    */
   constructor( type, amount, direction, options ) {
 
