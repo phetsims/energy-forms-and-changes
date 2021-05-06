@@ -131,12 +131,9 @@ class EnergySystemElementCarousel {
       }
     } );
 
-    // TODO: (from jbphet) This seems fragile and, while the comment is good, it's hard to figure out why it works, and the
-    // TODO: hard-coded number seems suspect.  It would be better to have a private method like finishInProgressAnimations()
-    // TODO: or something like that. See https://github.com/phetsims/energy-forms-and-changes/issues/401
     // Don't animate the system elements when setting state for better user experience when launching the sim.
     Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
-      this.elapsedTransitionTime = 1;
+      this.finishInProgressAnimation();
     } );
   }
 
@@ -188,6 +185,20 @@ class EnergySystemElementCarousel {
   }
 
   /**
+   * sets the carousel to its target destination
+   * @private
+   */
+  finishInProgressAnimation() {
+    const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
+    this.currentCarouselOffset = targetCarouselOffset;
+
+    this.updateManagedElementPositions();
+    this.updateManagedElementOpacities();
+
+    this.animationInProgressProperty.set( false );
+  }
+
+  /**
    * step this model element
    * @param {number} dt - time step, in seconds
    * @public
@@ -200,16 +211,14 @@ class EnergySystemElementCarousel {
       const transitionProportion = Utils.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
       this.currentCarouselOffset =
         this.initialCarouselOffset.plus( totalTravelVector.times( Easing.CUBIC_IN_OUT.value( transitionProportion ) ) );
-      this.updateManagedElementPositions();
 
       if ( transitionProportion === 1 ) {
-        this.currentCarouselOffset = targetCarouselOffset;
+        this.finishInProgressAnimation();
       }
-
-      if ( this.currentCarouselOffset === targetCarouselOffset ) {
-        this.animationInProgressProperty.set( false );
+      else {
+        this.updateManagedElementPositions();
+        this.updateManagedElementOpacities();
       }
-      this.updateManagedElementOpacities();
     }
   }
 
