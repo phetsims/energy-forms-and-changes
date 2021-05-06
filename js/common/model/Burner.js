@@ -325,7 +325,7 @@ class Burner extends ModelElement {
    * @private
    */
   step( dt ) {
-    const controllers = this.energyChunkWanderControllers.getArrayCopy();
+    const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {
       controller.updatePosition( dt );

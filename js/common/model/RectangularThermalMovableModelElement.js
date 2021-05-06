@@ -327,7 +327,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 
       // distribute the energy chunks contained within this model element
-      const redistributed = energyChunkDistributor.updatePositions( this.slices.getArrayCopy(), dt );
+      const redistributed = energyChunkDistributor.updatePositions( this.slices.slice(), dt );
 
       if ( !redistributed ) {
 
@@ -354,7 +354,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   animateNonContainedEnergyChunks( dt ) {
 
     // work from a copy of the list of wander controllers in case the list ends up changing
-    const ecWanderControllers = this.energyChunkWanderControllers.getArrayCopy();
+    const ecWanderControllers = this.energyChunkWanderControllers.slice();
 
     ecWanderControllers.forEach( ecWanderController => {
       ecWanderController.updatePosition( dt );
@@ -682,7 +682,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     // distribute the initial energy chunks within the container using the repulsive algorithm
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
       const distributed = energyChunkDistributor.updatePositions(
-        this.slices.getArrayCopy(),
+        this.slices.slice(),
         EFACConstants.SIM_TIME_PER_TICK_NORMAL
       );
       if ( !distributed ) {

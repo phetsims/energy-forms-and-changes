@@ -191,9 +191,7 @@ class Generator extends EnergyConverter {
 
       // handle any incoming energy chunks
       if ( this.incomingEnergyChunks.length > 0 ) {
-
-        const incomingChunks = this.incomingEnergyChunks.getArrayCopy();
-        incomingChunks.forEach( chunk => {
+        this.incomingEnergyChunks.forEach( chunk => {
 
           // validate energy type
           assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
@@ -230,7 +228,7 @@ class Generator extends EnergyConverter {
    * @private
    */
   updateEnergyChunkPositions( dt ) {
-    const chunkMovers = this.energyChunkMovers.getArrayCopy();
+    const chunkMovers = this.energyChunkMovers.slice();
 
     chunkMovers.forEach( mover => {
 
@@ -418,7 +416,7 @@ class Generator extends EnergyConverter {
    * @override
    */
   extractOutgoingEnergyChunks() {
-    const chunks = this.outgoingEnergyChunks.getArrayCopy();
+    const chunks = this.outgoingEnergyChunks.slice();
 
     const chunksToRemove = chunks.filter( energyChunk => this.electricalEnergyChunks.includes( energyChunk ) );
 

@@ -99,7 +99,7 @@ class BeakerContainer extends Beaker {
    * @private
    */
   animateNonContainedEnergyChunks( dt ) {
-    const controllers = this.energyChunkWanderControllers.getArrayCopy();
+    const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {
       const ec = controller.energyChunk;

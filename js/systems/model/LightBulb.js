@@ -110,9 +110,7 @@ class LightBulb extends EnergyUser {
       // handle any incoming energy chunks
       if ( this.incomingEnergyChunks.length > 0 ) {
 
-        const incomingChunks = this.incomingEnergyChunks.getArrayCopy();
-
-        incomingChunks.forEach( incomingChunk => {
+        this.incomingEnergyChunks.forEach( incomingChunk => {
 
           if ( incomingChunk.energyTypeProperty.get() === EnergyType.ELECTRICAL ) {
 
@@ -189,7 +187,7 @@ class LightBulb extends EnergyUser {
   moveRadiatedEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = this.radiatedEnergyChunkMovers.getArrayCopy();
+    const movers = this.radiatedEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -211,7 +209,7 @@ class LightBulb extends EnergyUser {
   moveFilamentEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = this.filamentEnergyChunkMovers.getArrayCopy();
+    const movers = this.filamentEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -233,7 +231,7 @@ class LightBulb extends EnergyUser {
   moveElectricalEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
+    const movers = this.electricalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );

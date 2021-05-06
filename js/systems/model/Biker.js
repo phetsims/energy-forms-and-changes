@@ -153,7 +153,7 @@ class Biker extends EnergySource {
         return;
       }
 
-      const movers = this.energyChunkMovers.getArrayCopy();
+      const movers = this.energyChunkMovers.slice();
       const hubPosition = this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET );
 
       movers.forEach( mover => {
@@ -287,7 +287,7 @@ class Biker extends EnergySource {
   moveEnergyChunks( dt ) {
 
     // iterate through this copy while the original is mutated
-    const movers = this.energyChunkMovers.getArrayCopy();
+    const movers = this.energyChunkMovers.slice();
 
     movers.forEach( mover => {
 

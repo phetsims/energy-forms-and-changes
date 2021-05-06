@@ -49,7 +49,7 @@ class EnergyConverter extends EnergySystemElement {
     const energyChunksToRemove = this.outgoingEnergyChunks.filter( energyChunk => this.energyChunkList.includes( energyChunk ) );
     this.energyChunkList.removeAll( energyChunksToRemove );
 
-    const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.getArrayCopy();
+    const outgoingEnergyChunksCopy = this.outgoingEnergyChunks.slice();
     this.outgoingEnergyChunks.clear();
     return outgoingEnergyChunksCopy;
   }

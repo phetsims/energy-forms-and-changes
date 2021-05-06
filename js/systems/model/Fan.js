@@ -233,7 +233,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveElectricalEnergyChunks( dt ) {
-    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
+    const movers = this.electricalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -287,7 +287,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveRadiatedEnergyChunks( dt ) {
-    const movers = this.radiatedEnergyChunkMovers.getArrayCopy();
+    const movers = this.radiatedEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
@@ -310,7 +310,7 @@ class Fan extends EnergyUser {
    * @private
    */
   moveBlownEnergyChunks( dt ) {
-    const movers = this.mechanicalEnergyChunkMovers.getArrayCopy();
+    const movers = this.mechanicalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );

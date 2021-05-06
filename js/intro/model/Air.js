@@ -93,7 +93,7 @@ class Air {
    * @public
    */
   step( dt ) {
-    const wanderControllers = this.energyChunkWanderControllers.getArrayCopy();
+    const wanderControllers = this.energyChunkWanderControllers.slice();
 
     wanderControllers.forEach( wanderController => {
       wanderController.updatePosition( dt );

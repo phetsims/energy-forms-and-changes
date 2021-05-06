@@ -182,7 +182,7 @@ class TeaKettle extends EnergySource {
    * @private
    */
   moveEnergyChunks( dt ) {
-    const chunkMovers = this.energyChunkMovers.getArrayCopy();
+    const chunkMovers = this.energyChunkMovers.slice();
 
     chunkMovers.forEach( mover => {
       mover.moveAlongPath( dt );

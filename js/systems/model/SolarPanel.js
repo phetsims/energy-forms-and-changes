@@ -212,7 +212,7 @@ class SolarPanel extends EnergyConverter {
   moveElectricalEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = this.electricalEnergyChunkMovers.getArrayCopy();
+    const movers = this.electricalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
 
@@ -256,7 +256,7 @@ class SolarPanel extends EnergyConverter {
   moveReflectedEnergyChunks( dt ) {
 
     // iterate over a copy to mutate original without problems
-    const movers = this.lightEnergyChunkMovers.getArrayCopy();
+    const movers = this.lightEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
       mover.moveAlongPath( dt );
