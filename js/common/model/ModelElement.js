@@ -28,6 +28,7 @@ class ModelElement extends PhetioObject {
     options = merge( {
       tandem: Tandem.REQUIRED,
       phetioType: ReferenceIO( IOType.ObjectIO ),
+      phetioState: false,
       positionPropertyOptions: {
         units: 'm',
         phetioHighFrequency: true,
