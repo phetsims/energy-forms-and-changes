@@ -272,7 +272,10 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
 Block.BlockIO = new IOType( 'BlockIO', {
   valueType: Block,
-  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } )
+  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } ),
+  stateSchema: {
+    blockType: BlockTypeEnumerationIO
+  }
 } );
 
 energyFormsAndChanges.register( 'Block', Block );

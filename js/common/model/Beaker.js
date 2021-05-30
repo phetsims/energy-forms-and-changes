@@ -811,7 +811,10 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 
 Beaker.BeakerIO = new IOType( 'BeakerIO', {
   valueType: Beaker,
-  toStateObject: beaker => ( { beakerType: BeakerTypeEnumerationIO.toStateObject( beaker.beakerType ) } )
+  toStateObject: beaker => ( { beakerType: BeakerTypeEnumerationIO.toStateObject( beaker.beakerType ) } ),
+  stateSchema: {
+    beakerType: BeakerTypeEnumerationIO
+  }
 } );
 
 energyFormsAndChanges.register( 'Beaker', Beaker );

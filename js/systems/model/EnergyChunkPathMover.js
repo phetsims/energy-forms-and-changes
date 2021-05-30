@@ -14,7 +14,9 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -228,7 +230,14 @@ EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverI
   valueType: EnergyChunkPathMover,
   toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
   stateToArgsForConstructor: EnergyChunkPathMover.stateToArgsForConstructor,
-  applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject )
+  applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
+  stateSchema: {
+    path: ArrayIO( Vector2.Vector2IO ),
+    speed: NumberIO,
+    pathFullyTraversed: BooleanIO,
+    nextPoint: Vector2.Vector2IO,
+    energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO )
+  }
 } );
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );

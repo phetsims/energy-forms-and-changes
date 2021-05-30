@@ -149,7 +149,10 @@ class EnergyChunkContainerSlice extends PhetioObject {
 EnergyChunkContainerSlice.EnergyChunkContainerSliceIO = new IOType( 'EnergyChunkContainerSliceIO', {
   valueType: EnergyChunkContainerSlice,
   toStateObject: energyChunkContainerSlice => energyChunkContainerSlice.toStateObject(),
-  applyState: ( energyChunkContainerSlice, stateObject ) => energyChunkContainerSlice.applyState( stateObject )
+  applyState: ( energyChunkContainerSlice, stateObject ) => energyChunkContainerSlice.applyState( stateObject ),
+  stateSchema: {
+    bounds: Bounds2.Bounds2IO
+  }
 } );
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );

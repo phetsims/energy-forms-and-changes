@@ -17,6 +17,7 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyType from './EnergyType.js';
@@ -180,7 +181,12 @@ class EnergyChunk extends PhetioObject {
 EnergyChunk.EnergyChunkIO = new IOType( 'EnergyChunkIO', {
   valueType: EnergyChunk,
   toStateObject: energyChunk => energyChunk.toStateObject(),
-  stateToArgsForConstructor: EnergyChunk.stateToArgsForConstructor
+  stateToArgsForConstructor: EnergyChunk.stateToArgsForConstructor,
+  stateSchema: {
+    id: NumberIO,
+    velocity: Vector2.Vector2IO,
+    visiblePropertyReference: ReferenceIO( Property.PropertyIO( BooleanIO ) )
+  }
 } );
 
 energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );

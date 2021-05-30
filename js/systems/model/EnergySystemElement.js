@@ -14,7 +14,6 @@ import createObservableArray from '../../../../axon/js/createObservableArray.js'
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -29,8 +28,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
   constructor( iconImage, options ) {
 
     options = merge( {
-      tandem: Tandem.REQUIRED,
-      phetioType: EnergySystemElement.EnergySystemElementIO
+      tandem: Tandem.REQUIRED
     }, options );
 
     super( new Vector2( 0, 0 ), 1.0, options );
@@ -112,12 +110,6 @@ class EnergySystemElement extends PositionableFadableModelElement {
     return null; // can be overridden
   }
 }
-
-EnergySystemElement.EnergySystemElementIO = new IOType( 'EnergySystemElementIO', {
-  valueType: EnergySystemElement,
-  toStateObject: energySystemElement => energySystemElement.toStateObject(),
-  applyState: ( energySystemElement, stateObject ) => energySystemElement.applyState( stateObject )
-} );
 
 energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
 export default EnergySystemElement;

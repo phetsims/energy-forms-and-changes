@@ -22,6 +22,8 @@ import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import SOLAR_PANEL_ICON from '../../../images/solar_panel_icon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -62,7 +64,8 @@ class SolarPanel extends EnergyConverter {
   constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
 
     options = merge( {
-      tandem: Tandem.REQUIRED
+      tandem: Tandem.REQUIRED,
+      phetioType: SolarPanel.SolarPanelIO
     }, options );
 
     super( new Image( SOLAR_PANEL_ICON ), options );
@@ -465,6 +468,17 @@ class SolarPanel extends EnergyConverter {
 
 // statics
 SolarPanel.PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
+
+SolarPanel.SolarPanelIO = new IOType( 'SolarPanelIO', {
+  valueType: SolarPanel,
+  toStateObject: solarPanel => solarPanel.toStateObject(),
+  applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),
+  stateSchema: {
+    numberOfConvertedChunks: NumberIO,
+    latestChunkArrivalTime: NumberIO,
+    simulationTime: NumberIO
+  }
+} );
 
 energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
 export default SolarPanel;

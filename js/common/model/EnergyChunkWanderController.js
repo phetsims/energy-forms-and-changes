@@ -15,8 +15,10 @@ import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -173,8 +175,10 @@ class EnergyChunkWanderController extends PhetioObject {
     // values that don't change.
     if ( this.destinationProperty.isPhetioInstrumented() ) {
       stateObject.destinationPropertyReference = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).toStateObject( this.destinationProperty );
+      stateObject.destinationVector2 = null;
     }
     else {
+      stateObject.destinationPropertyReference = null;
       stateObject.destinationVector2 = Vector2.Vector2IO.toStateObject( this.destinationProperty.value );
     }
     return stateObject;
@@ -314,7 +318,19 @@ EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyC
   valueType: EnergyChunkWanderController,
   toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
   stateToArgsForConstructor: EnergyChunkWanderController.stateToArgsForConstructor,
-  applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject )
+  applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
+  stateSchema: {
+    minSpeed: NumberIO,
+    maxSpeed: NumberIO,
+    wanderAngleVariation: NumberIO,
+    translateXWithDestination: BooleanIO,
+    countdownTimer: NumberIO,
+    wandering: BooleanIO,
+    horizontalWanderConstraint: NullableIO( Range.RangeIO ),
+    energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ),
+    destinationPropertyReference: NullableIO( ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ) ),
+    destinationVector2: NullableIO( Vector2.Vector2IO )
+  }
 } );
 
 energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
