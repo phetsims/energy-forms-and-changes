@@ -28,7 +28,8 @@ class EnergySystemElement extends PositionableFadableModelElement {
   constructor( iconImage, options ) {
 
     options = merge( {
-      tandem: Tandem.REQUIRED
+      tandem: Tandem.REQUIRED,
+      phetioState: false
     }, options );
 
     super( new Vector2( 0, 0 ), 1.0, options );

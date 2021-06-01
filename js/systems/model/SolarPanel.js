@@ -65,7 +65,8 @@ class SolarPanel extends EnergyConverter {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
-      phetioType: SolarPanel.SolarPanelIO
+      phetioType: SolarPanel.SolarPanelIO,
+      phetioState: true
     }, options );
 
     super( new Image( SOLAR_PANEL_ICON ), options );
