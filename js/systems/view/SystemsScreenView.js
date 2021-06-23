@@ -389,15 +389,17 @@ class SystemsScreenView extends ScreenView {
   /**
    * Custom layout function for this view so that it floats to the bottom of the window.
    *
-   * @param {number} width
-   * @param {number} height
+   * @param {Bounds2} viewBounds
    * @override
    * @public
    */
-  layout( width, height ) {
+  layout( viewBounds ) {
     this.resetTransform();
 
-    const scale = this.getLayoutScale( width, height );
+    const scale = this.getLayoutScale( viewBounds );
+    const width = viewBounds.width;
+    const height = viewBounds.height;
+
     this.setScaleMagnitude( scale );
 
     let dx = 0;
@@ -412,7 +414,7 @@ class SystemsScreenView extends ScreenView {
     else if ( scale === height / this.layoutBounds.height ) {
       dx = ( width - this.layoutBounds.width * scale ) / 2 / scale;
     }
-    this.translate( dx, offsetY );
+    this.translate( dx + viewBounds.left / scale, offsetY + viewBounds.top / scale );
 
     // update the visible bounds of the screen view
     this.visibleBoundsProperty.set( new Bounds2( -dx, -offsetY, width / scale - dx, height / scale - offsetY ) );
