@@ -469,7 +469,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @public
    */
   removeEnergyChunk( energyChunk ) {
-    this.slices.forEach( slice => {
+    this.slices.forEach( slice => { // eslint-disable-line consistent-return
       if ( slice.energyChunkList.indexOf( energyChunk ) >= 0 ) {
         slice.energyChunkList.remove( energyChunk );
         this.resetECDistributionCountdown();
