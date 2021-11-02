@@ -104,10 +104,10 @@ const EFACConstants = {
   SIGNIFICANT_TEMPERATURE_DIFFERENCE: 1E-3, // in degrees Kelvin
 
   ENERGY_TO_NUM_CHUNKS_MAPPER: energy => {
-    return Math.max( Utils.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS( energy ) ), 0 );
+    return Math.max( Utils.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS.evaluate( energy ) ), 0 );
   },
 
-  ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY( 1 ),
+  ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY.evaluate( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY.evaluate( 1 ),
 
   // threshold for deciding when two temperatures can be considered equal
   TEMPERATURES_EQUAL_THRESHOLD: 1E-6, // in degrees Kelvin
