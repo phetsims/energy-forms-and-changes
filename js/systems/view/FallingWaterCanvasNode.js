@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2021, University of Colorado Boulder
 
 /**
  * A node for water droplets falling out of the faucet. This canvas node exists because the water drops can be rendered

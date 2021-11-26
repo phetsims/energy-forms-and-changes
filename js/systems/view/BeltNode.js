@@ -1,4 +1,4 @@
-// Copyright 2016-2020, University of Colorado Boulder
+// Copyright 2016-2021, University of Colorado Boulder
 
 /**
  * a Scenery Node representing a belt that connects two circular items, like a fan belt in an automobile
