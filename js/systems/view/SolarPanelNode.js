@@ -11,8 +11,8 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Image from '../../../../scenery/js/nodes/Image.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import { Path } from '../../../../scenery/js/imports.js';
 import connectorImage from '../../../images/connector_png.js';
 import solarPanelGenImage from '../../../images/solar_panel_gen_png.js';
 import solarPanelImage from '../../../images/solar_panel_png.js';

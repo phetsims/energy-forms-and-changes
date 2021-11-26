@@ -8,7 +8,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import Image from '../../../../scenery/js/nodes/Image.js';
+import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';

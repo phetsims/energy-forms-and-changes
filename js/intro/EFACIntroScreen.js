@@ -10,7 +10,7 @@
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Image from '../../../scenery/js/nodes/Image.js';
+import { Image } from '../../../scenery/js/imports.js';
 import introScreenIcon from '../../images/intro_screen_icon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';

@@ -5,7 +5,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import { Node } from '../../../../scenery/js/imports.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightRayNode from './LightRayNode.js';
 

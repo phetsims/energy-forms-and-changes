@@ -10,7 +10,7 @@ import LinearFunction from '../../../dot/js/LinearFunction.js';
 import Utils from '../../../dot/js/Utils.js';
 import Vector2 from '../../../dot/js/Vector2.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
-import Color from '../../../scenery/js/util/Color.js';
+import { Color } from '../../../scenery/js/imports.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
 
 // constants used for creating projections that have a 3D-ish look.

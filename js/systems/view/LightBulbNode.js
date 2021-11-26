@@ -11,8 +11,8 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import Image from '../../../../scenery/js/nodes/Image.js';
-import Color from '../../../../scenery/js/util/Color.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import elementBaseBackImage from '../../../images/element_base_back_png.js';
 import elementBaseFrontImage from '../../../images/element_base_front_png.js';

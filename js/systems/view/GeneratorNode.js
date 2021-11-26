@@ -10,8 +10,8 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import Image from '../../../../scenery/js/nodes/Image.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import connectorImage from '../../../images/connector_png.js';
 import generatorImage from '../../../images/generator_png.js';

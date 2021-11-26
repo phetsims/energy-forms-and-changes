@@ -12,7 +12,7 @@
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Image from '../../../scenery/js/nodes/Image.js';
+import { Image } from '../../../scenery/js/imports.js';
 import systemsScreenIcon from '../../images/systems_screen_icon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';

@@ -10,7 +10,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Image from '../../../../scenery/js/nodes/Image.js';
+import { Image } from '../../../../scenery/js/imports.js';
 import elementBaseBackImage from '../../../images/element_base_back_png.js';
 import elementBaseFrontImage from '../../../images/element_base_front_png.js';
 import heaterElementOffImage from '../../../images/heater_element_dark_png.js';
