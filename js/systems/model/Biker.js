@@ -16,7 +16,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import BICYCLE_ICON from '../../../images/bicycle_icon_png.js';
+import bicycleIcon_png from '../../../images/bicycleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -65,7 +65,7 @@ class Biker extends EnergySource {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( new Image( BICYCLE_ICON ), options );
+    super( new Image( bicycleIcon_png ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.cyclist;

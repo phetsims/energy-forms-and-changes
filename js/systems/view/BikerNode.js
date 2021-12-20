@@ -17,49 +17,49 @@ import { Text } from '../../../../scenery/js/imports.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel from '../../../../sun/js/Panel.js';
-import bicycleFrameImage from '../../../images/bicycle_frame_png.js';
-import bicycleGearImage from '../../../images/bicycle_gear_png.js';
-import bicycleSpokesImage from '../../../images/bicycle_spokes_png.js';
-import cyclistLegBack1 from '../../../images/cyclist_leg_back_01_png.js';
-import cyclistLegBack2 from '../../../images/cyclist_leg_back_02_png.js';
-import cyclistLegBack3 from '../../../images/cyclist_leg_back_03_png.js';
-import cyclistLegBack4 from '../../../images/cyclist_leg_back_04_png.js';
-import cyclistLegBack5 from '../../../images/cyclist_leg_back_05_png.js';
-import cyclistLegBack6 from '../../../images/cyclist_leg_back_06_png.js';
-import cyclistLegBack7 from '../../../images/cyclist_leg_back_07_png.js';
-import cyclistLegBack8 from '../../../images/cyclist_leg_back_08_png.js';
-import cyclistLegBack9 from '../../../images/cyclist_leg_back_09_png.js';
-import cyclistLegBack10 from '../../../images/cyclist_leg_back_10_png.js';
-import cyclistLegBack11 from '../../../images/cyclist_leg_back_11_png.js';
-import cyclistLegBack12 from '../../../images/cyclist_leg_back_12_png.js';
-import cyclistLegBack13 from '../../../images/cyclist_leg_back_13_png.js';
-import cyclistLegBack14 from '../../../images/cyclist_leg_back_14_png.js';
-import cyclistLegBack15 from '../../../images/cyclist_leg_back_15_png.js';
-import cyclistLegBack16 from '../../../images/cyclist_leg_back_16_png.js';
-import cyclistLegBack17 from '../../../images/cyclist_leg_back_17_png.js';
-import cyclistLegBack18 from '../../../images/cyclist_leg_back_18_png.js';
-import cyclistLegFront1 from '../../../images/cyclist_leg_front_01_png.js';
-import cyclistLegFront2 from '../../../images/cyclist_leg_front_02_png.js';
-import cyclistLegFront3 from '../../../images/cyclist_leg_front_03_png.js';
-import cyclistLegFront4 from '../../../images/cyclist_leg_front_04_png.js';
-import cyclistLegFront5 from '../../../images/cyclist_leg_front_05_png.js';
-import cyclistLegFront6 from '../../../images/cyclist_leg_front_06_png.js';
-import cyclistLegFront7 from '../../../images/cyclist_leg_front_07_png.js';
-import cyclistLegFront8 from '../../../images/cyclist_leg_front_08_png.js';
-import cyclistLegFront9 from '../../../images/cyclist_leg_front_09_png.js';
-import cyclistLegFront10 from '../../../images/cyclist_leg_front_10_png.js';
-import cyclistLegFront11 from '../../../images/cyclist_leg_front_11_png.js';
-import cyclistLegFront12 from '../../../images/cyclist_leg_front_12_png.js';
-import cyclistLegFront13 from '../../../images/cyclist_leg_front_13_png.js';
-import cyclistLegFront14 from '../../../images/cyclist_leg_front_14_png.js';
-import cyclistLegFront15 from '../../../images/cyclist_leg_front_15_png.js';
-import cyclistLegFront16 from '../../../images/cyclist_leg_front_16_png.js';
-import cyclistLegFront17 from '../../../images/cyclist_leg_front_17_png.js';
-import cyclistLegFront18 from '../../../images/cyclist_leg_front_18_png.js';
-import cyclistTorso from '../../../images/cyclist_torso_png.js';
-import cyclistTorsoTired1 from '../../../images/cyclist_torso_tired_1_png.js';
-import cyclistTorsoTired2 from '../../../images/cyclist_torso_tired_2_png.js';
-import cyclistTorsoTired3 from '../../../images/cyclist_torso_tired_3_png.js';
+import bicycleFrame_png from '../../../images/bicycleFrame_png.js';
+import bicycleGear_png from '../../../images/bicycleGear_png.js';
+import bicycleSpokes_png from '../../../images/bicycleSpokes_png.js';
+import cyclistLegBack01_png from '../../../images/cyclistLegBack01_png.js';
+import cyclistLegBack02_png from '../../../images/cyclistLegBack02_png.js';
+import cyclistLegBack03_png from '../../../images/cyclistLegBack03_png.js';
+import cyclistLegBack04_png from '../../../images/cyclistLegBack04_png.js';
+import cyclistLegBack05_png from '../../../images/cyclistLegBack05_png.js';
+import cyclistLegBack06_png from '../../../images/cyclistLegBack06_png.js';
+import cyclistLegBack07_png from '../../../images/cyclistLegBack07_png.js';
+import cyclistLegBack08_png from '../../../images/cyclistLegBack08_png.js';
+import cyclistLegBack09_png from '../../../images/cyclistLegBack09_png.js';
+import cyclistLegBack10_png from '../../../images/cyclistLegBack10_png.js';
+import cyclistLegBack11_png from '../../../images/cyclistLegBack11_png.js';
+import cyclistLegBack12_png from '../../../images/cyclistLegBack12_png.js';
+import cyclistLegBack13_png from '../../../images/cyclistLegBack13_png.js';
+import cyclistLegBack14_png from '../../../images/cyclistLegBack14_png.js';
+import cyclistLegBack15_png from '../../../images/cyclistLegBack15_png.js';
+import cyclistLegBack16_png from '../../../images/cyclistLegBack16_png.js';
+import cyclistLegBack17_png from '../../../images/cyclistLegBack17_png.js';
+import cyclistLegBack18_png from '../../../images/cyclistLegBack18_png.js';
+import cyclistLegFront01_png from '../../../images/cyclistLegFront01_png.js';
+import cyclistLegFront02_png from '../../../images/cyclistLegFront02_png.js';
+import cyclistLegFront03_png from '../../../images/cyclistLegFront03_png.js';
+import cyclistLegFront04_png from '../../../images/cyclistLegFront04_png.js';
+import cyclistLegFront05_png from '../../../images/cyclistLegFront05_png.js';
+import cyclistLegFront06_png from '../../../images/cyclistLegFront06_png.js';
+import cyclistLegFront07_png from '../../../images/cyclistLegFront07_png.js';
+import cyclistLegFront08_png from '../../../images/cyclistLegFront08_png.js';
+import cyclistLegFront09_png from '../../../images/cyclistLegFront09_png.js';
+import cyclistLegFront10_png from '../../../images/cyclistLegFront10_png.js';
+import cyclistLegFront11_png from '../../../images/cyclistLegFront11_png.js';
+import cyclistLegFront12_png from '../../../images/cyclistLegFront12_png.js';
+import cyclistLegFront13_png from '../../../images/cyclistLegFront13_png.js';
+import cyclistLegFront14_png from '../../../images/cyclistLegFront14_png.js';
+import cyclistLegFront15_png from '../../../images/cyclistLegFront15_png.js';
+import cyclistLegFront16_png from '../../../images/cyclistLegFront16_png.js';
+import cyclistLegFront17_png from '../../../images/cyclistLegFront17_png.js';
+import cyclistLegFront18_png from '../../../images/cyclistLegFront18_png.js';
+import cyclistTorso_png from '../../../images/cyclistTorso_png.js';
+import cyclistTorsoTired1_png from '../../../images/cyclistTorsoTired1_png.js';
+import cyclistTorsoTired2_png from '../../../images/cyclistTorsoTired2_png.js';
+import cyclistTorsoTired3_png from '../../../images/cyclistTorsoTired3_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
@@ -68,52 +68,52 @@ import Biker from '../model/Biker.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 const cyclistBackLegImages = [
-  cyclistLegBack1,
-  cyclistLegBack2,
-  cyclistLegBack3,
-  cyclistLegBack4,
-  cyclistLegBack5,
-  cyclistLegBack6,
-  cyclistLegBack7,
-  cyclistLegBack8,
-  cyclistLegBack9,
-  cyclistLegBack10,
-  cyclistLegBack11,
-  cyclistLegBack12,
-  cyclistLegBack13,
-  cyclistLegBack14,
-  cyclistLegBack15,
-  cyclistLegBack16,
-  cyclistLegBack17,
-  cyclistLegBack18
+  cyclistLegBack01_png,
+  cyclistLegBack02_png,
+  cyclistLegBack03_png,
+  cyclistLegBack04_png,
+  cyclistLegBack05_png,
+  cyclistLegBack06_png,
+  cyclistLegBack07_png,
+  cyclistLegBack08_png,
+  cyclistLegBack09_png,
+  cyclistLegBack10_png,
+  cyclistLegBack11_png,
+  cyclistLegBack12_png,
+  cyclistLegBack13_png,
+  cyclistLegBack14_png,
+  cyclistLegBack15_png,
+  cyclistLegBack16_png,
+  cyclistLegBack17_png,
+  cyclistLegBack18_png
 ];
 
 const cyclistFrontLegImages = [
-  cyclistLegFront1,
-  cyclistLegFront2,
-  cyclistLegFront3,
-  cyclistLegFront4,
-  cyclistLegFront5,
-  cyclistLegFront6,
-  cyclistLegFront7,
-  cyclistLegFront8,
-  cyclistLegFront9,
-  cyclistLegFront10,
-  cyclistLegFront11,
-  cyclistLegFront12,
-  cyclistLegFront13,
-  cyclistLegFront14,
-  cyclistLegFront15,
-  cyclistLegFront16,
-  cyclistLegFront17,
-  cyclistLegFront18
+  cyclistLegFront01_png,
+  cyclistLegFront02_png,
+  cyclistLegFront03_png,
+  cyclistLegFront04_png,
+  cyclistLegFront05_png,
+  cyclistLegFront06_png,
+  cyclistLegFront07_png,
+  cyclistLegFront08_png,
+  cyclistLegFront09_png,
+  cyclistLegFront10_png,
+  cyclistLegFront11_png,
+  cyclistLegFront12_png,
+  cyclistLegFront13_png,
+  cyclistLegFront14_png,
+  cyclistLegFront15_png,
+  cyclistLegFront16_png,
+  cyclistLegFront17_png,
+  cyclistLegFront18_png
 ];
 
 const cyclistTorsoImages = [
-  cyclistTorso,
-  cyclistTorsoTired1,
-  cyclistTorsoTired2,
-  cyclistTorsoTired3
+ cyclistTorso_png,
+ cyclistTorsoTired1_png,
+ cyclistTorsoTired2_png,
+ cyclistTorsoTired3_png
 ];
 assert && assert( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
   'NUMBER_OF_LEG_IMAGES in Biker.js must match the number of images used for the legs in BikerNode.js'
@@ -140,16 +140,16 @@ class BikerNode extends MoveFadeModelElementNode {
     super( biker, modelViewTransform, tandem );
 
     // bike part image nodes
-    const bicycleFrameNode = new Image( bicycleFrameImage, {
+    const bicycleFrameNode = new Image( bicycleFrame_png, {
       right: BICYCLE_SYSTEM_RIGHT_OFFSET,
       top: BICYCLE_SYSTEM_TOP_OFFSET,
       scale: IMAGE_SCALE
     } );
-    const bicycleGearNode = new Image( bicycleGearImage, {
+    const bicycleGearNode = new Image( bicycleGear_png, {
       center: modelViewTransform.modelToViewDelta( Biker.CENTER_OF_GEAR_OFFSET ),
       scale: IMAGE_SCALE
     } );
-    const bicycleSpokesNode = new Image( bicycleSpokesImage, {
+    const bicycleSpokesNode = new Image( bicycleSpokes_png, {
       center: modelViewTransform.modelToViewDelta( Biker.CENTER_OF_BACK_WHEEL_OFFSET ),
       scale: IMAGE_SCALE
     } );

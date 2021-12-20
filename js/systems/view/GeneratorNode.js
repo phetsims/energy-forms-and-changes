@@ -13,12 +13,12 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import connectorImage from '../../../images/connector_png.js';
-import generatorImage from '../../../images/generator_png.js';
-import generatorWheelHubImage from '../../../images/generator_wheel_hub_png.js';
-import generatorWheelPaddlesImage from '../../../images/generator_wheel_paddles_short_png.js';
-import generatorWheelSpokesImage from '../../../images/generator_wheel_spokes_png.js';
-import wireBottomLeftImage from '../../../images/wire_bottom_left_png.js';
+import connector_png from '../../../images/connector_png.js';
+import generator_png from '../../../images/generator_png.js';
+import generatorWheelHub_png from '../../../images/generatorWheelHub_png.js';
+import generatorWheelPaddlesShort_png from '../../../images/generatorWheelPaddlesShort_png.js';
+import generatorWheelSpokes_png from '../../../images/generatorWheelSpokes_png.js';
+import wireBottomLeft_png from '../../../images/wireBottomLeft_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
@@ -51,7 +51,7 @@ class GeneratorNode extends MoveFadeModelElementNode {
 
     super( generator, modelViewTransform, options.tandem );
 
-    const generatorNode = new Image( generatorImage, { left: -107, top: -165 } );
+    const generatorNode = new Image( generator_png, { left: -107, top: -165 } );
     const labelNode = new Text( generatorString, {
       font: new PhetFont( 19 ),
       centerX: generatorNode.centerX,
@@ -59,25 +59,25 @@ class GeneratorNode extends MoveFadeModelElementNode {
       tandem: options.tandem.createTandem( 'labelNode' ),
       maxWidth: 160 // empirially determined
     } );
-    const spokesNode = new Image( generatorWheelSpokesImage, {
+    const spokesNode = new Image( generatorWheelSpokes_png, {
       centerX: generatorNode.centerX,
       centerY: generatorNode.centerY + SPOKES_AND_PADDLES_CENTER_Y_OFFSET
     } );
-    const paddlesNode = new Image( generatorWheelPaddlesImage, {
+    const paddlesNode = new Image( generatorWheelPaddlesShort_png, {
       centerX: generatorNode.centerX,
       centerY: generatorNode.centerY + SPOKES_AND_PADDLES_CENTER_Y_OFFSET
     } );
-    const generatorWheelHubNode = new Image( generatorWheelHubImage, {
+    const generatorWheelHubNode = new Image( generatorWheelHub_png, {
       centerX: paddlesNode.centerX,
       centerY: paddlesNode.centerY,
       maxWidth: modelViewTransform.modelToViewDeltaX( Generator.WHEEL_RADIUS * 2 )
     } );
-    const wireBottomLeftNode = new Image( wireBottomLeftImage, {
+    const wireBottomLeftNode = new Image( wireBottomLeft_png, {
       right: generatorNode.right - 29,
       top: generatorNode.centerY - 30,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const connectorNode = new Image( connectorImage, {
+    const connectorNode = new Image( connector_png, {
       left: generatorNode.right - 2,
       centerY: generatorNode.centerY + 90
     } );

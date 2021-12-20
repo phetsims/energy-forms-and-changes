@@ -16,7 +16,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import FAN_ICON from '../../../images/fan_icon_png.js';
+import fanIcon_png from '../../../images/fanIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -75,7 +75,7 @@ class Fan extends EnergyUser {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( new Image( FAN_ICON ), options );
+    super( new Image( fanIcon_png ), options );
 
     // @public (read-only) {NumberProperty}
     this.bladePositionProperty = new NumberProperty( 0, {

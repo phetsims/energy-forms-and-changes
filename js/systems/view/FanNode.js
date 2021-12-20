@@ -8,18 +8,18 @@
 
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
-import connectorImage from '../../../images/connector_png.js';
-import fan01Image from '../../../images/fan_01_png.js';
-import fan02Image from '../../../images/fan_02_png.js';
-import fan03Image from '../../../images/fan_03_png.js';
-import fan04Image from '../../../images/fan_04_png.js';
-import fan05Image from '../../../images/fan_05_png.js';
-import fan06Image from '../../../images/fan_06_png.js';
-import fan07Image from '../../../images/fan_07_png.js';
-import fan08Image from '../../../images/fan_08_png.js';
-import fan09Image from '../../../images/fan_09_png.js';
-import fan10Image from '../../../images/fan_10_png.js';
-import wireBottomRightShortImage from '../../../images/wire_bottom_right_short_png.js';
+import connector_png from '../../../images/connector_png.js';
+import fan01_png from '../../../images/fan01_png.js';
+import fan02_png from '../../../images/fan02_png.js';
+import fan03_png from '../../../images/fan03_png.js';
+import fan04_png from '../../../images/fan04_png.js';
+import fan05_png from '../../../images/fan05_png.js';
+import fan06_png from '../../../images/fan06_png.js';
+import fan07_png from '../../../images/fan07_png.js';
+import fan08_png from '../../../images/fan08_png.js';
+import fan09_png from '../../../images/fan09_png.js';
+import fan10_png from '../../../images/fan10_png.js';
+import wireBottomRightShort_png from '../../../images/wireBottomRightShort_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -27,8 +27,8 @@ import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 // constants
 const FAN_IMAGES = [
-  fan01Image, fan02Image, fan03Image, fan04Image, fan05Image,
-  fan06Image, fan07Image, fan08Image, fan09Image, fan10Image
+  fan01_png, fan02_png, fan03_png, fan04_png, fan05_png,
+  fan06_png, fan07_png, fan08_png, fan09_png, fan10_png
 ];
 const NUMBER_OF_FAN_IMAGES = FAN_IMAGES.length;
 
@@ -44,12 +44,12 @@ class FanNode extends MoveFadeModelElementNode {
     super( fan, modelViewTransform, tandem );
 
     // add the images and the layer that will contain the energy chunks
-    const wireBottomRightNode = new Image( wireBottomRightShortImage, {
+    const wireBottomRightNode = new Image( wireBottomRightShort_png, {
       left: -109.5,
       bottom: 105,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const connectorNode = new Image( connectorImage, {
+    const connectorNode = new Image( connector_png, {
       right: wireBottomRightNode.right + 10,
       bottom: wireBottomRightNode.top + 3
     } );

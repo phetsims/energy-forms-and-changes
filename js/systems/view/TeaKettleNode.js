@@ -14,9 +14,9 @@ import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
-import gasPipeSystemsLongImage from '../../../images/gas_pipe_systems_long_png.js';
-import gasPipeSystemsShortImage from '../../../images/gas_pipe_systems_short_png.js';
-import teaKettleImage from '../../../images/tea_kettle_png.js';
+import gasPipeSystemsLong_png from '../../../images/gasPipeSystemsLong_png.js';
+import gasPipeSystemsShort_png from '../../../images/gasPipeSystemsShort_png.js';
+import teaKettle_png from '../../../images/teaKettle_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
@@ -40,7 +40,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
   constructor( teaKettle, energyChunksVisibleProperty, modelViewTransform, tandem ) {
     super( teaKettle, modelViewTransform, tandem );
 
-    const teaKettleNode = new Image( teaKettleImage, { right: 114, bottom: 53 } );
+    const teaKettleNode = new Image( teaKettle_png, { right: 114, bottom: 53 } );
 
     // create a mapping between the slider position and the steam proportion, which prevents very small values
     this.heaterSettingProperty = new NumberProperty( 0, {
@@ -79,7 +79,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     // it's created as two separate nodes so that once part is behind the burner stand and one part is in front of the
     // the burner stand (to avoid splitting the burner stand into even more pieces). this is the part that's behind the
     // front of the burner stand. See https://github.com/phetsims/energy-forms-and-changes/issues/311
-    const leftGasPipe = new Image( gasPipeSystemsLongImage, {
+    const leftGasPipe = new Image( gasPipeSystemsLong_png, {
       right: heaterCoolerFront.left - 30, // empirically determined
       bottom: heaterCoolerFront.bottom - 20, // empirically determined
       scale: gasPipeScale
@@ -87,7 +87,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
     // create the right part of the gas pipe that connects to the heater cooler node. this is a shorter segment that
     // goes in front of the burner stand but behind the heater cooler node.
-    const rightGasPipe = new Image( gasPipeSystemsShortImage, {
+    const rightGasPipe = new Image( gasPipeSystemsShort_png, {
       left: leftGasPipe.right - 1,
       centerY: leftGasPipe.centerY,
       scale: gasPipeScale

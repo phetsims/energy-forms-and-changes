@@ -25,7 +25,7 @@ import { Color } from '../../../../scenery/js/imports.js';
 import { RadialGradient } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import VSlider from '../../../../sun/js/VSlider.js';
-import cloudImage from '../../../images/cloud_png.js';
+import cloud_png from '../../../images/cloud_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
@@ -147,7 +147,7 @@ class SunNode extends MoveFadeModelElementNode {
       maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
     } );
 
-    const iconNode = new Image( cloudImage, { scale: 0.25 } );
+    const iconNode = new Image( cloud_png, { scale: 0.25 } );
 
     const titleBox = new HBox( {
       children: [ titleText, iconNode ],
@@ -245,7 +245,7 @@ class CloudNode extends Node {
   constructor( cloud, modelViewTransform ) {
     super();
 
-    const cloudNode = new Image( cloudImage );
+    const cloudNode = new Image( cloud_png );
     cloudNode.scale(
       modelViewTransform.modelToViewDeltaX( Cloud.WIDTH ) / cloudNode.width,
       -modelViewTransform.modelToViewDeltaY( Cloud.HEIGHT ) / cloudNode.height

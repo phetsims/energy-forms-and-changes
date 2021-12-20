@@ -14,16 +14,16 @@ import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Color } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import elementBaseBackImage from '../../../images/element_base_back_png.js';
-import elementBaseFrontImage from '../../../images/element_base_front_png.js';
-import fluorescentOffBackImage from '../../../images/fluorescent_back_png.js';
-import fluorescentOffFrontImage from '../../../images/fluorescent_front_png.js';
-import fluorescentOnBackImage from '../../../images/fluorescent_on_back_png.js';
-import fluorescentOnFrontImage from '../../../images/fluorescent_on_front_png.js';
-import incandescentOnImage from '../../../images/incandescent_on_png.js';
-import incandescentOffImage from '../../../images/incandescent_png.js';
-import wireBottomRightImage from '../../../images/wire_bottom_right_png.js';
-import wireStraightImage from '../../../images/wire_straight_png.js';
+import elementBaseBack_png from '../../../images/elementBaseBack_png.js';
+import elementBaseFront_png from '../../../images/elementBaseFront_png.js';
+import fluorescentBack_png from '../../../images/fluorescentBack_png.js';
+import fluorescentFront_png from '../../../images/fluorescentFront_png.js';
+import fluorescentOnBack_png from '../../../images/fluorescentOnBack_png.js';
+import fluorescentOnFront_png from '../../../images/fluorescentOnFront_png.js';
+import incandescentOn_png from '../../../images/incandescentOn_png.js';
+import incandescent_png from '../../../images/incandescent_png.js';
+import wireBottomRight_png from '../../../images/wireBottomRight_png.js';
+import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -69,22 +69,22 @@ class LightBulbNode extends MoveFadeModelElementNode {
     } );
 
     // add the images and the layer that will contain the energy chunks
-    const wireStraightNode = new Image( wireStraightImage, {
+    const wireStraightNode = new Image( wireStraight_png, {
       left: -110.5,
       top: 78,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const wireBottomRightNode = new Image( wireBottomRightImage, {
+    const wireBottomRightNode = new Image( wireBottomRight_png, {
       left: wireStraightNode.right - 4,
       bottom: wireStraightNode.bottom + 2.3,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const elementBaseBackNode = new Image( elementBaseBackImage, {
+    const elementBaseBackNode = new Image( elementBaseBack_png, {
       maxWidth: EFACConstants.ELEMENT_BASE_WIDTH,
       right: wireBottomRightNode.right + 22,
       top: wireBottomRightNode.top - 2.5
     } );
-    const elementBaseFrontNode = new Image( elementBaseFrontImage, {
+    const elementBaseFrontNode = new Image( elementBaseFront_png, {
       maxWidth: elementBaseBackNode.width,
       centerX: elementBaseBackNode.centerX,
       top: wireBottomRightNode.top - 3
@@ -99,19 +99,19 @@ class LightBulbNode extends MoveFadeModelElementNode {
     this.addChild( elementBaseFrontNode );
 
     if ( options.bulbType === 'fluorescent' ) {
-      const fluorescentOffBackNode = new Image( fluorescentOffBackImage, {
+      const fluorescentOffBackNode = new Image( fluorescentBack_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
-      const fluorescentOnBackNode = new Image( fluorescentOnBackImage, {
+      const fluorescentOnBackNode = new Image( fluorescentOnBack_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
-      const fluorescentOffFrontNode = new Image( fluorescentOffFrontImage, {
+      const fluorescentOffFrontNode = new Image( fluorescentFront_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
-      const fluorescentOnFrontNode = new Image( fluorescentOnFrontImage, {
+      const fluorescentOnFrontNode = new Image( fluorescentOnFront_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + FLUORESCENT_BULB_TOP_OFFSET
       } );
@@ -140,11 +140,11 @@ class LightBulbNode extends MoveFadeModelElementNode {
       } );
     }
     else {
-      const incandescentOffNode = new Image( incandescentOffImage, {
+      const incandescentOffNode = new Image( incandescent_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + INCANDESCENT_BULB_TOP_OFFSET
       } );
-      const incandescentOnNode = new Image( incandescentOnImage, {
+      const incandescentOnNode = new Image( incandescentOn_png, {
         centerX: elementBaseFrontNode.centerX,
         bottom: elementBaseFrontNode.top + INCANDESCENT_BULB_TOP_OFFSET
       } );

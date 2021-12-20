@@ -25,7 +25,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import SOLAR_PANEL_ICON from '../../../images/solar_panel_icon_png.js';
+import solarPanelIcon_png from '../../../images/solarPanelIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -69,7 +69,7 @@ class SolarPanel extends EnergyConverter {
       phetioState: true
     }, options );
 
-    super( new Image( SOLAR_PANEL_ICON ), options );
+    super( new Image( solarPanelIcon_png ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.solarPanel;

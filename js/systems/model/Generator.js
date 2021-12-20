@@ -17,7 +17,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import GENERATOR_ICON from '../../../images/generator_icon_png.js';
+import generatorIcon_png from '../../../images/generatorIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
@@ -61,7 +61,7 @@ class Generator extends EnergyConverter {
       phetioState: false // no internal fields to convey in state
     }, options );
 
-    super( new Image( GENERATOR_ICON ), options );
+    super( new Image( generatorIcon_png ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.electricalGenerator;

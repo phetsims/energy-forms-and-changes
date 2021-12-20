@@ -19,7 +19,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import FAUCET_ICON from '../../../images/faucet_icon_png.js';
+import faucetIcon_png from '../../../images/faucetIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
@@ -64,7 +64,7 @@ class FaucetAndWater extends EnergySource {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( new Image( FAUCET_ICON ), options );
+    super( new Image( faucetIcon_png ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.waterFaucet;

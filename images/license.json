@@ -1,5 +1,5 @@
 {
-  "energy_chemical.png": {
+  "energyChemical.png": {
     "text": [
       "Copyright 2012-2018 University of Colorado Boulder"
     ],
@@ -7,7 +7,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky and Amy Rouinfar"
   },
-  "energy_hidden.png": {
+  "energyHidden.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -15,7 +15,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "energy_electrical.png": {
+  "energyElectrical.png": {
     "text": [
       "Copyright 2012-2018 University of Colorado Boulder"
     ],
@@ -23,7 +23,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky and Amy Rouinfar"
   },
-  "energy_light.png": {
+  "energyLight.png": {
     "text": [
       "Copyright 2012-2018 University of Colorado Boulder"
     ],
@@ -31,7 +31,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky and Amy Rouinfar"
   },
-  "energy_mechanical.png": {
+  "energyMechanical.png": {
     "text": [
       "Copyright 2012-2018 University of Colorado Boulder"
     ],
@@ -39,7 +39,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky and Amy Rouinfar"
   },
-  "energy_thermal.png": {
+  "energyThermal.png": {
     "text": [
       "Copyright 2012-2018 University of Colorado Boulder"
     ],
@@ -47,7 +47,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky and Amy Rouinfar"
   },
-  "bicycle_gear.png": {
+  "bicycleGear.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -55,7 +55,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Megan Lai"
   },
-  "cyclist_leg_back_01.png": {
+  "cyclistLegBack01.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -63,7 +63,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_02.png": {
+  "cyclistLegBack02.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -71,7 +71,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_03.png": {
+  "cyclistLegBack03.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -79,7 +79,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_04.png": {
+  "cyclistLegBack04.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -87,7 +87,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_05.png": {
+  "cyclistLegBack05.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -95,7 +95,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_06.png": {
+  "cyclistLegBack06.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -103,7 +103,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_07.png": {
+  "cyclistLegBack07.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -111,7 +111,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_08.png": {
+  "cyclistLegBack08.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -119,7 +119,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_09.png": {
+  "cyclistLegBack09.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -127,7 +127,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_10.png": {
+  "cyclistLegBack10.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -135,7 +135,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_11.png": {
+  "cyclistLegBack11.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -143,7 +143,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_12.png": {
+  "cyclistLegBack12.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -151,7 +151,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_13.png": {
+  "cyclistLegBack13.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -159,7 +159,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_14.png": {
+  "cyclistLegBack14.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -167,7 +167,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_15.png": {
+  "cyclistLegBack15.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -175,7 +175,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_16.png": {
+  "cyclistLegBack16.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -183,7 +183,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_17.png": {
+  "cyclistLegBack17.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -191,7 +191,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_back_18.png": {
+  "cyclistLegBack18.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -199,7 +199,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_torso.png": {
+  "cyclistTorso.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -207,7 +207,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_torso_tired_1.png": {
+  "cyclistTorsoTired1.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -215,7 +215,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_torso_tired_2.png": {
+  "cyclistTorsoTired2.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -223,7 +223,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_torso_tired_3.png": {
+  "cyclistTorsoTired3.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -231,7 +231,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "bicycle_frame.png": {
+  "bicycleFrame.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -239,7 +239,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "bicycle_icon.png": {
+  "bicycleIcon.png": {
     "text": [
       "Copyright 2018-2019 University of Colorado Boulder"
     ],
@@ -247,7 +247,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "bicycle_spokes.png": {
+  "bicycleSpokes.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -255,7 +255,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "brick_texture_front.png": {
+  "brickTextureFront.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -263,7 +263,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "brick_texture_right.png": {
+  "brickTextureRight.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -271,7 +271,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "brick_texture_top.png": {
+  "brickTextureTop.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -295,7 +295,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "element_base_back.png": {
+  "elementBaseBack.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -303,7 +303,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "element_base_front.png": {
+  "elementBaseFront.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -311,7 +311,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "fan_01.png": {
+  "fan01.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -319,7 +319,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_02.png": {
+  "fan02.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -327,7 +327,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_03.png": {
+  "fan03.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -335,7 +335,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_04.png": {
+  "fan04.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -343,7 +343,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_05.png": {
+  "fan05.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -351,7 +351,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_06.png": {
+  "fan06.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -359,7 +359,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_07.png": {
+  "fan07.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -367,7 +367,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_08.png": {
+  "fan08.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -375,7 +375,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_09.png": {
+  "fan09.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -383,7 +383,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_10.png": {
+  "fan10.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -391,7 +391,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "fan_icon.png": {
+  "fanIcon.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -399,7 +399,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Cheryl McCutchan"
   },
-  "faucet_icon.png": {
+  "faucetIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -407,7 +407,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "fluorescent_back.png": {
+  "fluorescentBack.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -415,7 +415,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "fluorescent_front.png": {
+  "fluorescentFront.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -423,7 +423,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "fluorescent_icon.png": {
+  "fluorescentIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -431,7 +431,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "fluorescent_on_back.png": {
+  "fluorescentOnBack.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -439,7 +439,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "fluorescent_on_front.png": {
+  "fluorescentOnFront.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -447,7 +447,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "cyclist_leg_front_01.png": {
+  "cyclistLegFront01.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -455,7 +455,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_02.png": {
+  "cyclistLegFront02.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -463,7 +463,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_03.png": {
+  "cyclistLegFront03.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -471,7 +471,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_04.png": {
+  "cyclistLegFront04.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -479,7 +479,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_05.png": {
+  "cyclistLegFront05.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -487,7 +487,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_06.png": {
+  "cyclistLegFront06.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -495,7 +495,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_07.png": {
+  "cyclistLegFront07.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -503,7 +503,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_08.png": {
+  "cyclistLegFront08.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -511,7 +511,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_09.png": {
+  "cyclistLegFront09.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -519,7 +519,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_10.png": {
+  "cyclistLegFront10.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -527,7 +527,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_11.png": {
+  "cyclistLegFront11.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -535,7 +535,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_12.png": {
+  "cyclistLegFront12.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -543,7 +543,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_13.png": {
+  "cyclistLegFront13.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -551,7 +551,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_14.png": {
+  "cyclistLegFront14.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -559,7 +559,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_15.png": {
+  "cyclistLegFront15.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -567,7 +567,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_16.png": {
+  "cyclistLegFront16.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -575,7 +575,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_17.png": {
+  "cyclistLegFront17.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -583,7 +583,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mariah Hermsmeyer and Megan Lai"
   },
-  "cyclist_leg_front_18.png": {
+  "cyclistLegFront18.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -599,7 +599,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "generator_icon.png": {
+  "generatorIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -607,7 +607,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "generator_wheel_hub.png": {
+  "generatorWheelHub.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -615,7 +615,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "generator_wheel_paddles_short.png": {
+  "generatorWheelPaddlesShort.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -623,7 +623,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "generator_wheel_spokes.png": {
+  "generatorWheelSpokes.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -631,7 +631,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "heater_element.png": {
+  "heaterElement.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -639,7 +639,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "heater_element_dark.png": {
+  "heaterElementDark.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -655,7 +655,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "incandescent_icon.png": {
+  "incandescentIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -663,7 +663,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "incandescent_on.png": {
+  "incandescentOn.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -671,7 +671,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "intro_screen_icon.png": {
+  "introScreenIcon.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -679,7 +679,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "iron_texture_front.png": {
+  "ironTextureFront.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -687,7 +687,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "iron_texture_right.png": {
+  "ironTextureRight.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -695,7 +695,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "iron_texture_top.png": {
+  "ironTextureTop.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -711,7 +711,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "solar_panel.png": {
+  "solarPanel.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -719,7 +719,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "solar_panel_gen.png": {
+  "solarPanelGen.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -727,7 +727,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "solar_panel_icon.png": {
+  "solarPanelIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -735,7 +735,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "solar_panel_post.png": {
+  "solarPanelPost.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -743,7 +743,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "sun_icon.png": {
+  "sunIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -751,7 +751,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "systems_screen_icon.png": {
+  "systemsScreenIcon.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -759,7 +759,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "tea_kettle_icon.png": {
+  "teaKettleIcon.png": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -767,7 +767,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "tea_kettle.png": {
+  "teaKettle.png": {
     "text": [
       "Copyright 2012 University of Colorado Boulder"
     ],
@@ -775,7 +775,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Noah Podolefsky"
   },
-  "water_icon.png": {
+  "waterIcon.png": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
     ],
@@ -783,7 +783,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "wire_straight.png": {
+  "wireStraight.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -791,7 +791,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "wire_bottom_left.png": {
+  "wireBottomLeft.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -799,7 +799,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "wire_bottom_right.png": {
+  "wireBottomRight.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -807,7 +807,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "wire_bottom_right_short.png": {
+  "wireBottomRightShort.png": {
     "text": [
       "Copyright 2018 University of Colorado Boulder"
     ],
@@ -815,7 +815,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "gas_pipe_intro.png": {
+  "gasPipeIntro.png": {
     "text": [
       "Copyright 2020 University of Colorado Boulder"
     ],
@@ -823,7 +823,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "gas_pipe_systems_long.png": {
+  "gasPipeSystemsLong.png": {
     "text": [
       "Copyright 2020 University of Colorado Boulder"
     ],
@@ -831,7 +831,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Amy Rouinfar"
   },
-  "gas_pipe_systems_short.png": {
+  "gasPipeSystemsShort.png": {
     "text": [
       "Copyright 2020 University of Colorado Boulder"
     ],

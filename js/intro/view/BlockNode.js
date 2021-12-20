@@ -21,12 +21,12 @@ import { Path } from '../../../../scenery/js/imports.js';
 import { Rectangle } from '../../../../scenery/js/imports.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import brickTextureFrontImage from '../../../images/brick_texture_front_png.js';
-import brickTextureRightImage from '../../../images/brick_texture_right_png.js';
-import brickTextureTopImage from '../../../images/brick_texture_top_png.js';
-import ironTextureFrontImage from '../../../images/iron_texture_front_png.js';
-import ironTextureRightImage from '../../../images/iron_texture_right_png.js';
-import ironTextureTopImage from '../../../images/iron_texture_top_png.js';
+import brickTextureFront_png from '../../../images/brickTextureFront_png.js';
+import brickTextureRight_png from '../../../images/brickTextureRight_png.js';
+import brickTextureTop_png from '../../../images/brickTextureTop_png.js';
+import ironTextureFront_png from '../../../images/ironTextureFront_png.js';
+import ironTextureRight_png from '../../../images/ironTextureRight_png.js';
+import ironTextureTop_png from '../../../images/ironTextureTop_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
@@ -42,14 +42,14 @@ const ironString = energyFormsAndChangesStrings.iron;
 // constants
 const BLOCK_IMAGES = {};
 BLOCK_IMAGES[ BlockType.BRICK ] = {
-  front: brickTextureFrontImage,
-  side: brickTextureRightImage,
-  top: brickTextureTopImage
+  front: brickTextureFront_png,
+  side: brickTextureRight_png,
+  top: brickTextureTop_png
 };
 BLOCK_IMAGES[ BlockType.IRON ] = {
-  front: ironTextureFrontImage,
-  side: ironTextureRightImage,
-  top: ironTextureTopImage
+  front: ironTextureFront_png,
+  side: ironTextureRight_png,
+  top: ironTextureTop_png
 };
 const LABEL_FONT = new PhetFont( 26 );
 const OUTLINE_LINE_WIDTH = 3;

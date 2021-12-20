@@ -13,11 +13,11 @@ import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Path } from '../../../../scenery/js/imports.js';
-import connectorImage from '../../../images/connector_png.js';
-import solarPanelGenImage from '../../../images/solar_panel_gen_png.js';
-import solarPanelImage from '../../../images/solar_panel_png.js';
-import solarPanelPostImage from '../../../images/solar_panel_post_png.js';
-import wireBottomLeftImage from '../../../images/wire_bottom_left_png.js';
+import connector_png from '../../../images/connector_png.js';
+import solarPanelGen_png from '../../../images/solarPanelGen_png.js';
+import solarPanel_png from '../../../images/solarPanel_png.js';
+import solarPanelPost_png from '../../../images/solarPanelPost_png.js';
+import wireBottomLeft_png from '../../../images/wireBottomLeft_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
@@ -44,7 +44,7 @@ class SolarPanelNode extends MoveFadeModelElementNode {
 
     // Add an image for the actual panel portion, i.e. the part that collects the solar energy.  The aspect ratio of
     // the image should be reasonably close to the shape described by the model to avoid visual distortion.
-    const panelNode = new Image( solarPanelImage );
+    const panelNode = new Image( solarPanel_png );
     panelNode.scale(
       modelViewTransform.modelToViewDeltaX( solarPanel.untranslatedPanelBounds.width ) / panelNode.width,
       -modelViewTransform.modelToViewDeltaY( solarPanel.untranslatedPanelBounds.height ) / panelNode.height
@@ -52,20 +52,20 @@ class SolarPanelNode extends MoveFadeModelElementNode {
     panelNode.center = scaleOnlyMVT.modelToViewPosition( solarPanel.untranslatedPanelBounds.center );
 
     // add the other portions of the solar panel assembly
-    const postNode = new Image( solarPanelPostImage, {
+    const postNode = new Image( solarPanelPost_png, {
       centerX: modelViewTransform.modelToViewDeltaX( SolarPanel.PANEL_CONNECTOR_OFFSET.x ),
       top: panelNode.bottom - 5
     } );
-    const windowNode = new Image( solarPanelGenImage, {
+    const windowNode = new Image( solarPanelGen_png, {
       centerX: postNode.centerX,
       top: postNode.centerY
     } );
-    const wireBottomLeftNode = new Image( wireBottomLeftImage, {
+    const wireBottomLeftNode = new Image( wireBottomLeft_png, {
       right: windowNode.right - 20,
       bottom: windowNode.centerY + 13,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const connectorNode = new Image( connectorImage, { left: windowNode.right - 2, centerY: windowNode.centerY } );
+    const connectorNode = new Image( connector_png, { left: windowNode.right - 2, centerY: windowNode.centerY } );
 
     // add in correct order for layering effect
     this.addChild( wireBottomLeftNode );

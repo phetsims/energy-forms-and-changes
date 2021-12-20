@@ -19,7 +19,7 @@ import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import SUN_ICON from '../../../images/sun_icon_png.js';
+import sunIcon_png from '../../../images/sunIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
@@ -59,7 +59,7 @@ class SunEnergySource extends EnergySource {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( new Image( SUN_ICON ), options );
+    super( new Image( sunIcon_png ), options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.sun;

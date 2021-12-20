@@ -11,7 +11,7 @@ import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import { Image } from '../../../scenery/js/imports.js';
-import introScreenIcon from '../../images/intro_screen_icon_png.js';
+import introScreenIcon_png from '../../images/introScreenIcon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';
 import BeakerType from '../common/model/BeakerType.js';
@@ -34,7 +34,7 @@ class EFACIntroScreen extends Screen {
     const options = {
       name: introString,
       backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
-      homeScreenIcon: new ScreenIcon( new Image( introScreenIcon ), {
+      homeScreenIcon: new ScreenIcon( new Image( introScreenIcon_png ), {
         maxIconWidthProportion: 1,
         maxIconHeightProportion: 1
       } ),

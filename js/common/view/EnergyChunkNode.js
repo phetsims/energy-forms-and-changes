@@ -14,12 +14,12 @@ import { Circle } from '../../../../scenery/js/imports.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
 import { Text } from '../../../../scenery/js/imports.js';
-import chemicalEnergyImage from '../../../images/energy_chemical_png.js';
-import electricalEnergyImage from '../../../images/energy_electrical_png.js';
-import hiddenEnergyImage from '../../../images/energy_hidden_png.js';
-import lightEnergyImage from '../../../images/energy_light_png.js';
-import mechanicalEnergyImage from '../../../images/energy_mechanical_png.js';
-import thermalEnergyImage from '../../../images/energy_thermal_png.js';
+import energyChemical_png from '../../../images/energyChemical_png.js';
+import energyElectrical_png from '../../../images/energyElectrical_png.js';
+import energyHidden_png from '../../../images/energyHidden_png.js';
+import energyLight_png from '../../../images/energyLight_png.js';
+import energyMechanical_png from '../../../images/energyMechanical_png.js';
+import energyThermal_png from '../../../images/energyThermal_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import EFACConstants from '../EFACConstants.js';
@@ -33,12 +33,12 @@ const Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
 
 // convenience map that links energy types to their representing images
 const mapEnergyTypeToImage = {};
-mapEnergyTypeToImage[ EnergyType.THERMAL ] = thermalEnergyImage;
-mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = electricalEnergyImage;
-mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = mechanicalEnergyImage;
-mapEnergyTypeToImage[ EnergyType.LIGHT ] = lightEnergyImage;
-mapEnergyTypeToImage[ EnergyType.CHEMICAL ] = chemicalEnergyImage;
-mapEnergyTypeToImage[ EnergyType.HIDDEN ] = hiddenEnergyImage;
+mapEnergyTypeToImage[ EnergyType.THERMAL ] = energyThermal_png;
+mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = energyElectrical_png;
+mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = energyMechanical_png;
+mapEnergyTypeToImage[ EnergyType.LIGHT ] = energyLight_png;
+mapEnergyTypeToImage[ EnergyType.CHEMICAL ] = energyChemical_png;
+mapEnergyTypeToImage[ EnergyType.HIDDEN ] = energyHidden_png;
 
 // array that holds the created energy chunk image nodes
 const energyChunkImageNodes = {};

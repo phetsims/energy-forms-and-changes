@@ -10,7 +10,7 @@
 
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import KiteLine from '../../../../kite/js/segments/Line.js'; // eslint-disable-line require-statement-match
+import KiteLine from '../../../../kite/js/segments/Line.js'; // eslint-disable-line default-import-match-filename
 import Shape from '../../../../kite/js/Shape.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';

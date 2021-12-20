@@ -17,7 +17,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import flameImage from '../../../../scenery-phet/images/flame_png.js';
+import flame_png from '../../../../scenery-phet/images/flame_png.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
@@ -40,8 +40,8 @@ import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import gasPipeIntroImage from '../../../images/gas_pipe_intro_png.js';
-import shelfImage from '../../../images/shelf_png.js';
+import gasPipeIntro_png from '../../../images/gasPipeIntro_png.js';
+import shelf_png from '../../../images/shelf_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import BeakerType from '../../common/model/BeakerType.js';
@@ -117,7 +117,7 @@ class EFACIntroScreenView extends ScreenView {
     this.addChild( beakerFrontLayer );
 
     // create the lab bench surface image
-    const labBenchSurfaceImage = new Image( shelfImage, {
+    const labBenchSurfaceImage = new Image( shelf_png, {
       centerX: modelViewTransform.modelToViewX( 0 ),
       centerY: modelViewTransform.modelToViewY( 0 ) + 10 // slight tweak required due to nature of the image
     } );
@@ -178,7 +178,7 @@ class EFACIntroScreenView extends ScreenView {
      * @returns {Node}
      */
     const createAndLinkPipeImageNode = node => {
-      const gasPipeNode = new Image( gasPipeIntroImage, {
+      const gasPipeNode = new Image( gasPipeIntro_png, {
         right: node.left + 15,
         bottom: node.bottom - 6,
         scale: 0.4
@@ -726,7 +726,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // variables needed if the right burner exists
     let controlPanelCheckboxes = null;
-    const flameNode = new Image( flameImage, {
+    const flameNode = new Image( flame_png, {
       maxWidth: EFACConstants.ENERGY_CHUNK_WIDTH,
       maxHeight: EFACConstants.ENERGY_CHUNK_WIDTH
     } );

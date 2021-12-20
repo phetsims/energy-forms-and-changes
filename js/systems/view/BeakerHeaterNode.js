@@ -11,12 +11,12 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { Image } from '../../../../scenery/js/imports.js';
-import elementBaseBackImage from '../../../images/element_base_back_png.js';
-import elementBaseFrontImage from '../../../images/element_base_front_png.js';
-import heaterElementOffImage from '../../../images/heater_element_dark_png.js';
-import heaterElementOnImage from '../../../images/heater_element_png.js';
-import wireBottomRightShortImage from '../../../images/wire_bottom_right_short_png.js';
-import wireStraightImage from '../../../images/wire_straight_png.js';
+import elementBaseBack_png from '../../../images/elementBaseBack_png.js';
+import elementBaseFront_png from '../../../images/elementBaseFront_png.js';
+import heaterElementDark_png from '../../../images/heaterElementDark_png.js';
+import heaterElement_png from '../../../images/heaterElement_png.js';
+import wireBottomRightShort_png from '../../../images/wireBottomRightShort_png.js';
+import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import BeakerView from '../../common/view/BeakerView.js';
 import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperatureAndColorSensorNode.js';
@@ -40,32 +40,32 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
   constructor( beakerHeater, energyChunksVisibleProperty, modelViewTransform, tandem ) {
     super( beakerHeater, modelViewTransform, tandem );
 
-    const wireStraightNode = new Image( wireStraightImage, {
+    const wireStraightNode = new Image( wireStraight_png, {
       left: -111,
       top: 78,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const wireBottomRightNode = new Image( wireBottomRightShortImage, {
+    const wireBottomRightNode = new Image( wireBottomRightShort_png, {
       left: wireStraightNode.right - 4,
       bottom: wireStraightNode.bottom + 2.1,
       scale: EFACConstants.WIRE_IMAGE_SCALE
     } );
-    const elementBaseBackNode = new Image( elementBaseBackImage, {
+    const elementBaseBackNode = new Image( elementBaseBack_png, {
       maxWidth: EFACConstants.ELEMENT_BASE_WIDTH,
       right: wireBottomRightNode.right + 22,
       top: wireBottomRightNode.top - 2.5
     } );
-    const elementBaseFrontNode = new Image( elementBaseFrontImage, {
+    const elementBaseFrontNode = new Image( elementBaseFront_png, {
       maxWidth: elementBaseBackNode.width,
       centerX: elementBaseBackNode.centerX,
       top: wireBottomRightNode.top - 3
     } );
-    const energizedCoilNode = new Image( heaterElementOnImage, {
+    const energizedCoilNode = new Image( heaterElement_png, {
       maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
       centerX: elementBaseFrontNode.centerX + COIL_CENTER_X_OFFSET,
       bottom: elementBaseFrontNode.top + COIL_TOP_OFFSET
     } );
-    const nonEnergizedCoilNode = new Image( heaterElementOffImage, {
+    const nonEnergizedCoilNode = new Image( heaterElementDark_png, {
       maxHeight: modelViewTransform.modelToViewDeltaX( BeakerHeater.HEATER_ELEMENT_2D_HEIGHT ),
       centerX: elementBaseFrontNode.centerX + COIL_CENTER_X_OFFSET,
       bottom: elementBaseFrontNode.top + COIL_TOP_OFFSET

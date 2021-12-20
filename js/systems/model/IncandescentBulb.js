@@ -10,7 +10,7 @@
 import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import INCANDESCENT_ICON from '../../../images/incandescent_icon_png.js';
+import incandescentIcon_png from '../../../images/incandescentIcon_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
 import LightBulb from './LightBulb.js';
@@ -29,7 +29,7 @@ class IncandescentBulb extends LightBulb {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( new Image( INCANDESCENT_ICON ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
+    super( new Image( incandescentIcon_png ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
 
     // @public {string} - a11y name
     this.a11yName = energyFormsAndChangesStrings.a11y.incandescentLightBulb;
