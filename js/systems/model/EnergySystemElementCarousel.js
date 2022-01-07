@@ -30,7 +30,7 @@ class EnergySystemElementCarousel {
 
   /**
    * @param {EnergySystemElement[]} elements - array of elements to add to this carousel
-   * @param {Enumeration} elementNames - the names of the elements being added
+   * @param {EnumerationDeprecated} elementNames - the names of the elements being added
    * @param {Vector2} selectedElementPosition - position where the selected model element should be
    * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
    * @param {Tandem} tandem
@@ -46,7 +46,7 @@ class EnergySystemElementCarousel {
     // @public (read-only) {EnergySystemElement[]} - list of the elements whose position is managed by this carousel
     this.managedElements = [];
 
-    // @public (read-only) {Enumeration} - names that correspond to each element
+    // @public (read-only) {EnumerationDeprecated} - names that correspond to each element
     this.elementNames = elementNames;
 
     // add each element to the array of managed elements

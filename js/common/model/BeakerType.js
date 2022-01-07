@@ -6,11 +6,11 @@
  * @author Chris Klusendorf
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // @public
-const BeakerType = Enumeration.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
+const BeakerType = EnumerationDeprecated.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
   beforeFreeze: BeakerType => {
     BeakerType.getTandemName = beakerType => {
       return `${_.camelCase( beakerType.toString() )}Beaker`;

@@ -8,10 +8,10 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-const EnergyContainerCategory = Enumeration.byKeys( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] );
+const EnergyContainerCategory = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] );
 
 energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
 export default EnergyContainerCategory;

@@ -6,11 +6,11 @@
  * @author Chris Klusendorf
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // @public
-const BlockType = Enumeration.byKeys( [ 'IRON', 'BRICK' ], {
+const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
   beforeFreeze: BlockType => {
     BlockType.getTandemName = blockType => {
       return `${blockType.toString().toLowerCase()}Block`;

@@ -12,7 +12,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -148,21 +148,21 @@ class SystemsModel {
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
-      Enumeration.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
+      EnumerationDeprecated.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energySourcesCarousel' )
     );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
       [ this.generator, this.solarPanel ],
-      Enumeration.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
+      EnumerationDeprecated.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      Enumeration.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+      EnumerationDeprecated.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
 
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
