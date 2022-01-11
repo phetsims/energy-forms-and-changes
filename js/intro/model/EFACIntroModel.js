@@ -10,7 +10,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -97,9 +97,9 @@ class EFACIntroModel {
       tandem: tandem.createTandem( 'energyChunkWanderControllerGroup' )
     } );
 
-    // @public {EnumerationProperty.<TimeSpeed>} - for debugging, controls play speed of the
+    // @public {EnumerationDeprecatedProperty.<TimeSpeed>} - for debugging, controls play speed of the
     // simulation
-    this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL );
+    this.timeSpeedProperty = new EnumerationDeprecatedProperty( TimeSpeed, TimeSpeed.NORMAL );
 
     // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
     // energy

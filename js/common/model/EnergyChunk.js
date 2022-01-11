@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -63,7 +63,7 @@ class EnergyChunk extends PhetioObject {
     } );
 
     // @public
-    this.energyTypeProperty = new EnumerationProperty( EnergyType, initialEnergyType, {
+    this.energyTypeProperty = new EnumerationDeprecatedProperty( EnergyType, initialEnergyType, {
       tandem: options.tandem.createTandem( 'energyTypeProperty' )
     } );
 

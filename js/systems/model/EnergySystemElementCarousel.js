@@ -15,7 +15,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -76,9 +76,9 @@ class EnergySystemElementCarousel {
       validValues: getValidTargetIndices( this.managedElements.length )
     } );
 
-    // @public (read-only) {EnumerationProperty} - this is for phet-io Studio so that Clients can select an element
+    // @public (read-only) {EnumerationDeprecatedProperty} - this is for phet-io Studio so that Clients can select an element
     // by name instead of index
-    this.targetElementNameProperty = new EnumerationProperty( elementNames, elementNames.VALUES[ 0 ], {
+    this.targetElementNameProperty = new EnumerationDeprecatedProperty( elementNames, elementNames.VALUES[ 0 ], {
       tandem: tandem.createTandem( 'targetElementNameProperty' ),
       phetioDocumentation: 'indicates which element on the carousel is currently selected by name'
     } );
