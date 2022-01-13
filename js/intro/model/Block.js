@@ -10,7 +10,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
+import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import required from '../../../../phet-core/js/required.js';
 import { Color } from '../../../../scenery/js/imports.js';
