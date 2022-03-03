@@ -280,8 +280,8 @@ const energyChunkDistributor = {
   updateEnergyChunkForces: function( ec, ecForce, energyChunks, slices ) {
 
     // allocate reusable vectors to improve performance
-    let vectorFromOther = Vector2.dirtyFromPool();
-    const forceFromOther = Vector2.dirtyFromPool();
+    let vectorFromOther = Vector2.pool.fetch();
+    const forceFromOther = Vector2.pool.fetch();
 
     // the minimum distance between two chunks is 2 times the radius of each, or 1x the diameter
     const minDistance = ENERGY_CHUNK_DIAMETER / 2;

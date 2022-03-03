@@ -47,7 +47,7 @@ const efacPositionConstrainer = {
     const modelElementPosition = modelElement.positionProperty.get();
 
     // calculate the proposed motion
-    let allowedTranslation = Vector2.createFromPool(
+    let allowedTranslation = Vector2.pool.create(
       proposedPosition.x - modelElementPosition.x,
       proposedPosition.y - modelElementPosition.y
     );
