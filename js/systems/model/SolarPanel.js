@@ -1,4 +1,4 @@
-// Copyright 2016-2021, University of Colorado Boulder
+// Copyright 2016-2022, University of Colorado Boulder
 
 /**
  * A type that represents a model of a solar panel that converts light energy to electrical energy.  The panel actually

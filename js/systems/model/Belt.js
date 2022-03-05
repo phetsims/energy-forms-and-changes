@@ -1,4 +1,4 @@
-// Copyright 2016-2020, University of Colorado Boulder
+// Copyright 2016-2022, University of Colorado Boulder
 
 /**
  * A model element that represents a belt that connects two rotating wheels together, like a fan belt in an automobile
