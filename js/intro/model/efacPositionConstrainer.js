@@ -59,7 +59,7 @@ const efacPositionConstrainer = {
     );
 
     // create bounds that use the perspective compensation that is necessary for evaluating burner interaction
-    const modelElementBoundsWithSidePerspective = Bounds2.createFromPool(
+    const modelElementBoundsWithSidePerspective = Bounds2.pool.create(
       modelElementBounds.minX - modelElement.perspectiveCompensation.x,
       modelElementBounds.minY,
       modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -89,7 +89,7 @@ const efacPositionConstrainer = {
       const beakerBoundsList = beaker.translatedPositionTestingBoundsList;
 
       // if the modelElement is a block, it has x and y perspective comp that need to be used
-      const modelElementBoundsWithTopAndSidePerspective = Bounds2.createFromPool(
+      const modelElementBoundsWithTopAndSidePerspective = Bounds2.pool.create(
         modelElementBounds.minX - modelElement.perspectiveCompensation.x,
         modelElementBounds.minY - modelElement.perspectiveCompensation.y,
         modelElementBounds.maxX + modelElement.perspectiveCompensation.x,
@@ -213,7 +213,7 @@ const efacPositionConstrainer = {
 
           // Use the perspective-compensated edge of the block instead of the model edge in order to simplify z-order
           // handling.
-          const perspectiveBlockBounds = Bounds2.createFromPool(
+          const perspectiveBlockBounds = Bounds2.pool.create(
             blockBounds.minX - blockGroup.getElement( 0 ).perspectiveCompensation.x,
             blockBounds.minY,
             blockBounds.maxX + blockGroup.getElement( 0 ).perspectiveCompensation.x,
@@ -311,7 +311,7 @@ function determineAllowedTranslation( movingElementBounds, stationaryElementBoun
 
   let xTranslation = proposedTranslationX;
   let yTranslation = proposedTranslationY;
-  const motionTestBounds = Bounds2.dirtyFromPool();
+  const motionTestBounds = Bounds2.pool.fetch();
 
   // X direction
   if ( proposedTranslationX > 0 ) {
