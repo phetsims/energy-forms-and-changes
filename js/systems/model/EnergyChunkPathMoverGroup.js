@@ -29,7 +29,7 @@ class EnergyChunkPathMoverGroup extends PhetioGroup {
     }, options );
 
     super( EnergyChunkPathMoverGroup.createEnergyChunkPathMover,
-      [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
+      () => [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
   }
 
   // @public

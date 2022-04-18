@@ -397,23 +397,22 @@ class EFACIntroScreenView extends ScreenView {
     };
 
     const blockNodeGroup = new PhetioGroup( ( tandem, block ) => {
-        return new BlockNode(
-          block,
-          modelViewTransform,
-          constrainMovableElementMotion,
-          model.isPlayingProperty, {
-            setApproachingEnergyChunkParentNode: airLayer,
-            tandem: tandem,
-            phetioDynamicElement: true
-          }
-        );
-      },
-      [ model.blockGroup.archetype ], {
-        tandem: tandem.createTandem( 'blockNodeGroup' ),
-        phetioInputEnabledPropertyInstrumented: true,
-        phetioType: PhetioGroup.PhetioGroupIO( Node.NodeIO ),
-        supportsDynamicState: false
-      } );
+      return new BlockNode(
+        block,
+        modelViewTransform,
+        constrainMovableElementMotion,
+        model.isPlayingProperty, {
+          setApproachingEnergyChunkParentNode: airLayer,
+          tandem: tandem,
+          phetioDynamicElement: true
+        }
+      );
+    }, () => [ model.blockGroup.archetype ], {
+      tandem: tandem.createTandem( 'blockNodeGroup' ),
+      phetioInputEnabledPropertyInstrumented: true,
+      phetioType: PhetioGroup.PhetioGroupIO( Node.NodeIO ),
+      supportsDynamicState: false
+    } );
 
     const blockListener = addedBlock => {
       const blockNode = blockNodeGroup.createCorrespondingGroupElement( addedBlock.tandem.name, addedBlock );
@@ -434,25 +433,24 @@ class EFACIntroScreenView extends ScreenView {
 
     // @private {PhetioGroup.<BeakerContainerView>}
     this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
-        const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
-        return new BeakerContainerView(
-          beaker,
-          model,
-          modelViewTransform,
-          constrainMovableElementMotion, {
-            label: label,
-            tandem: tandem,
-            phetioDynamicElement: true,
-            phetioInputEnabledPropertyInstrumented: true
-          }
-        );
-      },
-      [ model.beakerGroup.archetype ], {
-        tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
-        phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
-        phetioInputEnabledPropertyInstrumented: true,
-        supportsDynamicState: false
-      } );
+      const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+      return new BeakerContainerView(
+        beaker,
+        model,
+        modelViewTransform,
+        constrainMovableElementMotion, {
+          label: label,
+          tandem: tandem,
+          phetioDynamicElement: true,
+          phetioInputEnabledPropertyInstrumented: true
+        }
+      );
+    }, () => [ model.beakerGroup.archetype ], {
+      tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
+      phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
+      phetioInputEnabledPropertyInstrumented: true,
+      supportsDynamicState: false
+    } );
 
     const beakerListener = addedBeaker => {
       const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker.tandem.name, addedBeaker );
