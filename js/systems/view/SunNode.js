@@ -8,7 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -177,7 +177,7 @@ class SunNode extends MoveFadeModelElementNode {
     // visible absorption shape used for debugging
     let helperAbsorptionNode = null;
 
-    Property.multilink(
+    Multilink.multilink(
       [ sun.activeProperty, sun.solarPanel.activeProperty ],
       ( sunActive, solarPanelActive ) => {
 

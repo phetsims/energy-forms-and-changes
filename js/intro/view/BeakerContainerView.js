@@ -12,7 +12,7 @@
  * @author Andrew Adare
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -83,7 +83,7 @@ class BeakerContainerView extends BeakerView {
     } );
     propertiesThatInfluenceClipArea.push( beaker.positionProperty );
     propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
-    Property.multilink( propertiesThatInfluenceClipArea, () => {
+    Multilink.multilink( propertiesThatInfluenceClipArea, () => {
       this.updateEnergyChunkClipArea( beaker, model.blockGroup, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
 
