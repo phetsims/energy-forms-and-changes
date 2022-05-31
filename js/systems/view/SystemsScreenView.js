@@ -21,10 +21,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
-import { LayoutBox } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -41,8 +38,8 @@ import BikerNode from './BikerNode.js';
 import EnergyChunkLegend from './EnergyChunkLegend.js';
 import EnergySystemElementSelector from './EnergySystemElementSelector.js';
 import FanNode from './FanNode.js';
-import GeneratorNode from './GeneratorNode.js';
 import FaucetAndWaterNode from './FaucetAndWaterNode.js';
+import GeneratorNode from './GeneratorNode.js';
 import LightBulbNode from './LightBulbNode.js';
 import SolarPanelNode from './SolarPanelNode.js';
 import SunNode from './SunNode.js';
@@ -234,7 +231,7 @@ class SystemsScreenView extends ScreenView {
     // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
     // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
     const showEnergyChunksCheckbox = new Checkbox(
-      new LayoutBox( {
+      new HBox( {
         children: [
           new Text( energySymbolsString, {
             font: new PhetFont( 20 ),
@@ -245,7 +242,6 @@ class SystemsScreenView extends ScreenView {
             modelViewTransform
           )
         ],
-        orientation: 'horizontal',
         spacing: 5
       } ),
       model.energyChunksVisibleProperty, {
