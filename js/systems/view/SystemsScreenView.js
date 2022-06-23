@@ -230,25 +230,22 @@ class SystemsScreenView extends ScreenView {
     // create the checkbox that controls the visibility of the energy chunks
     // The EnergyChunk that is created in here is not going to be used in the simulation, it is only needed in the
     // EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
-    const showEnergyChunksCheckbox = new Checkbox(
-      new HBox( {
-        children: [
-          new Text( energySymbolsString, {
-            font: new PhetFont( 20 ),
-            maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
-          } ),
-          new EnergyChunkNode(
-            new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
-            modelViewTransform
-          )
-        ],
-        spacing: 5
-      } ),
-      model.energyChunksVisibleProperty, {
-        tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
-        phetioDocumentation: 'checkbox that shows the energy symbols'
-      }
-    );
+    const showEnergyChunksCheckbox = new Checkbox( model.energyChunksVisibleProperty, new HBox( {
+      children: [
+        new Text( energySymbolsString, {
+          font: new PhetFont( 20 ),
+          maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
+        } ),
+        new EnergyChunkNode(
+          new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
+          modelViewTransform
+        )
+      ],
+      spacing: 5
+    } ), {
+      tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
+      phetioDocumentation: 'checkbox that shows the energy symbols'
+    } );
     showEnergyChunksCheckbox.touchArea =
       showEnergyChunksCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 

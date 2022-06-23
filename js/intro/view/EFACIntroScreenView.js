@@ -710,15 +710,13 @@ class EFACIntroScreenView extends ScreenView {
       font: new PhetFont( 20 ),
       maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
     } );
-    const showEnergyCheckbox = new Checkbox( new HBox( {
-        children: [ energySymbolsText, energyChunkNode ],
-        spacing: 5
-      } ),
-      model.energyChunksVisibleProperty, {
-        tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
-        phetioDocumentation: 'checkbox that shows the energy symbols'
-      }
-    );
+    const showEnergyCheckbox = new Checkbox( model.energyChunksVisibleProperty, new HBox( {
+      children: [ energySymbolsText, energyChunkNode ],
+      spacing: 5
+    } ), {
+      tandem: controlPanelTandem.createTandem( 'showEnergySymbolsCheckbox' ),
+      phetioDocumentation: 'checkbox that shows the energy symbols'
+    } );
     showEnergyCheckbox.touchArea =
       showEnergyCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
@@ -732,14 +730,13 @@ class EFACIntroScreenView extends ScreenView {
       font: new PhetFont( 20 ),
       maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
     } );
-    const linkHeatersCheckbox = new Checkbox( new HBox( {
-        children: [ linkHeatersText, flameNode ],
-        spacing: 5
-      } ),
-      model.linkedHeatersProperty, {
-        tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' ),
-        phetioDocumentation: 'checkbox that links the heaters together. only appears in the simulation when two burners exist'
-      } );
+    const linkHeatersCheckbox = new Checkbox( model.linkedHeatersProperty, new HBox( {
+      children: [ linkHeatersText, flameNode ],
+      spacing: 5
+    } ), {
+      tandem: controlPanelTandem.createTandem( 'linkHeatersCheckbox' ),
+      phetioDocumentation: 'checkbox that links the heaters together. only appears in the simulation when two burners exist'
+    } );
     linkHeatersCheckbox.touchArea =
       linkHeatersCheckbox.localBounds.dilatedY( EFACConstants.ENERGY_SYMBOLS_PANEL_CHECKBOX_Y_DILATION );
 
