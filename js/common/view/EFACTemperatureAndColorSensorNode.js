@@ -42,13 +42,9 @@ class EFACTemperatureAndColorSensorNode extends Node {
 
     // @public (read-only) {TemperatureAndColorSensorNode} - public so getBounds functions can be called
     this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode(
-      new Range(
-        EFACConstants.WATER_FREEZING_POINT_TEMPERATURE,
-        EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE
-      ),
       temperatureAndColorSensor.sensedTemperatureProperty,
-      temperatureAndColorSensor.sensedElementColorProperty
-    );
+      new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),
+      temperatureAndColorSensor.sensedElementColorProperty );
     this.addChild( this.temperatureAndColorSensorNode );
 
     // move this node when the model element moves
