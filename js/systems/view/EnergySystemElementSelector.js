@@ -62,9 +62,11 @@ class EnergySystemElementSelector extends Panel {
     }
 
     const buttonGroup = new RectangularRadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
-      baseColor: Color.WHITE,
       orientation: 'horizontal',
       spacing: 15,
+      radioButtonOptions: {
+        baseColor: Color.WHITE
+      },
       tandem: options.tandem.createTandem( 'radioButtonGroup' )
     } );
 
