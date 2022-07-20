@@ -8,9 +8,8 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape, LineStyles } from '../../../../kite/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
+import { LineStyles, Shape } from '../../../../kite/js/imports.js';
+import { Node, Path } from '../../../../scenery/js/imports.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants

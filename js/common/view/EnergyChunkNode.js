@@ -10,10 +10,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle } from '../../../../scenery/js/imports.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Circle, Image, Node, Text } from '../../../../scenery/js/imports.js';
 import energyChemical_png from '../../../images/energyChemical_png.js';
 import energyElectrical_png from '../../../images/energyElectrical_png.js';
 import energyHidden_png from '../../../images/energyHidden_png.js';

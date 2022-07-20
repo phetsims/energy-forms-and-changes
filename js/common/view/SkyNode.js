@@ -6,9 +6,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import { Node } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { LinearGradient } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants

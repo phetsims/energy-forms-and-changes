@@ -13,8 +13,8 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import { Image } from '../../../../scenery/js/imports.js';
 import elementBaseBack_png from '../../../images/elementBaseBack_png.js';
 import elementBaseFront_png from '../../../images/elementBaseFront_png.js';
-import heaterElementDark_png from '../../../images/heaterElementDark_png.js';
 import heaterElement_png from '../../../images/heaterElement_png.js';
+import heaterElementDark_png from '../../../images/heaterElementDark_png.js';
 import wireBottomRightShort_png from '../../../images/wireBottomRightShort_png.js';
 import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';

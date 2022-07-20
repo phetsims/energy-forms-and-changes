@@ -11,8 +11,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import { Color, Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import elementBaseBack_png from '../../../images/elementBaseBack_png.js';
 import elementBaseFront_png from '../../../images/elementBaseFront_png.js';
@@ -20,8 +19,8 @@ import fluorescentBack_png from '../../../images/fluorescentBack_png.js';
 import fluorescentFront_png from '../../../images/fluorescentFront_png.js';
 import fluorescentOnBack_png from '../../../images/fluorescentOnBack_png.js';
 import fluorescentOnFront_png from '../../../images/fluorescentOnFront_png.js';
-import incandescentOn_png from '../../../images/incandescentOn_png.js';
 import incandescent_png from '../../../images/incandescent_png.js';
+import incandescentOn_png from '../../../images/incandescentOn_png.js';
 import wireBottomRight_png from '../../../images/wireBottomRight_png.js';
 import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
