@@ -8,13 +8,13 @@
  * @author John Blanco
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import MovableDragHandler from '../../../../scenery-phet/js/input/MovableDragHandler.js';
 import TemperatureAndColorSensorNode from '../../../../scenery-phet/js/TemperatureAndColorSensorNode.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import { DragListener, Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
@@ -54,16 +54,17 @@ class EFACTemperatureAndColorSensorNode extends Node {
 
     // add a drag handler if needed
     if ( options.draggable ) {
-      this.addInputListener( new MovableDragHandler( temperatureAndColorSensor.positionProperty, {
-        modelViewTransform: options.modelViewTransform,
-        dragBounds: options.dragBounds.withMaxX(
+      this.addInputListener( new DragListener( {
+        positionProperty: temperatureAndColorSensor.positionProperty,
+        transform: options.modelViewTransform,
+        dragBoundsProperty: new Property( options.dragBounds.withMaxX(
           options.dragBounds.right - options.modelViewTransform.viewToModelDeltaX( this.width )
-        ),
+        ) ),
         attach: true,
-        startDrag: () => {
+        start: () => {
           temperatureAndColorSensor.userControlledProperty.set( true );
         },
-        endDrag: () => {
+        end: () => {
           temperatureAndColorSensor.userControlledProperty.set( false );
         },
         tandem: options.tandem.createTandem( 'inputListener' )
