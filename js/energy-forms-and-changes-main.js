@@ -29,7 +29,8 @@ const simOptions = {
                       'Laura Rea, Jacob Romero, Kathryn Woessner, Kelly Wurtz, Bryan Yoelin',
     graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
     thanks: ''
-  }
+  },
+  phetioDesigned: true
 };
 
 simLauncher.launch( () => {
