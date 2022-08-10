@@ -53,7 +53,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
 
     // @public (read-only) {Property.<Color>}
     this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
-      phetioType: Property.PropertyIO( Color.ColorIO ),
+      phetioValueType: Color.ColorIO,
       tandem: options.tandem.createTandem( 'sensedElementColorProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'the color of the sensed element'

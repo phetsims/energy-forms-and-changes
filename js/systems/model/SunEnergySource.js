@@ -92,7 +92,7 @@ class SunEnergySource extends EnergySource {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'sunProportionProperty' ),
       phetioDocumentation: 'proportion of sun reaching the solar panel',
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
     // @private - internal variables used in methods
