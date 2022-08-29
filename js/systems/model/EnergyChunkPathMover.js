@@ -65,7 +65,7 @@ class EnergyChunkPathMover extends PhetioObject {
       path: ArrayIO( Vector2.Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
-      nextPoint: this.nextPoint,
+      nextPoint: Vector2.Vector2IO.toStateObject( this.nextPoint ),
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
   }
