@@ -15,7 +15,7 @@ import energyFormsAndChangesStrings from './energyFormsAndChangesStrings.js';
 import EFACIntroScreen from './intro/EFACIntroScreen.js';
 import SystemsScreen from './systems/SystemsScreen.js';
 
-const energyFormsAndChangesTitleString = energyFormsAndChangesStrings[ 'energy-forms-and-changes' ].title;
+const energyFormsAndChangesTitleStringProperty = energyFormsAndChangesStrings[ 'energy-forms-and-changes' ].titleStringProperty;
 
 // constants
 const tandem = Tandem.ROOT;
@@ -35,7 +35,7 @@ const simOptions = {
 
 simLauncher.launch( () => {
 
-  const sim = new Sim( energyFormsAndChangesTitleString, [
+  const sim = new Sim( energyFormsAndChangesTitleStringProperty, [
     new EFACIntroScreen( tandem.createTandem( 'introScreen' ) ),
     new SystemsScreen( tandem.createTandem( 'systemsScreen' ) )
   ], simOptions );
