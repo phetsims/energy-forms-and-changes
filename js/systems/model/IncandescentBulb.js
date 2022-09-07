@@ -12,7 +12,7 @@ import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import incandescentIcon_png from '../../../images/incandescentIcon_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import LightBulb from './LightBulb.js';
 
 class IncandescentBulb extends LightBulb {
@@ -32,7 +32,7 @@ class IncandescentBulb extends LightBulb {
     super( new Image( incandescentIcon_png ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.incandescentLightBulb;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.incandescentLightBulb;
   }
 }
 

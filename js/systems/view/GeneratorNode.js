@@ -21,14 +21,14 @@ import wireBottomLeft_png from '../../../images/wireBottomLeft_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Generator from '../model/Generator.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 // constants
 const SPOKES_AND_PADDLES_CENTER_Y_OFFSET = -65;
 
-const generatorString = energyFormsAndChangesStrings.generator;
+const generatorString = EnergyFormsAndChangesStrings.generator;
 
 class GeneratorNode extends MoveFadeModelElementNode {
 

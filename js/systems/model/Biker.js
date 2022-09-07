@@ -20,7 +20,7 @@ import bicycleIcon_png from '../../../images/bicycleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySource from './EnergySource.js';
@@ -68,7 +68,7 @@ class Biker extends EnergySource {
     super( new Image( bicycleIcon_png ), options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.cyclist;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.cyclist;
 
     // @public (read-only) {NumberProperty}
     this.crankAngleProperty = new NumberProperty( 0, {

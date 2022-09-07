@@ -16,11 +16,11 @@ import { Image } from '../../../scenery/js/imports.js';
 import systemsScreenIcon_png from '../../images/systemsScreenIcon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
 
-const systemsString = energyFormsAndChangesStrings.systems;
+const systemsString = EnergyFormsAndChangesStrings.systems;
 
 
 class SystemsScreen extends Screen {

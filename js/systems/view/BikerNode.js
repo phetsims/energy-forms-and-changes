@@ -61,7 +61,7 @@ import cyclistTorsoTired3_png from '../../../images/cyclistTorsoTired3_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Biker from '../model/Biker.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
@@ -124,7 +124,7 @@ const BICYCLE_SYSTEM_RIGHT_OFFSET = 123;
 const BICYCLE_SYSTEM_TOP_OFFSET = -249;
 const IMAGE_SCALE = 0.490; // scale factor used to size the images, empirically determined
 
-const feedMeString = energyFormsAndChangesStrings.feedMe;
+const feedMeString = EnergyFormsAndChangesStrings.feedMe;
 
 class BikerNode extends MoveFadeModelElementNode {
 

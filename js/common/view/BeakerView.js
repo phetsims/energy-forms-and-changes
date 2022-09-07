@@ -22,14 +22,14 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainerSliceNode.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import EnergyChunkNode from './EnergyChunkNode.js';
 import PerspectiveWaterNode from './PerspectiveWaterNode.js';
 
-const waterString = energyFormsAndChangesStrings.water;
+const waterString = EnergyFormsAndChangesStrings.water;
 
 // constants
 const OUTLINE_COLOR = 'rgb( 160, 160, 160 )';

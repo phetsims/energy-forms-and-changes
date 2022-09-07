@@ -23,15 +23,15 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from '../model/Cloud.js';
 import SunEnergySource from '../model/SunEnergySource.js';
 import LightRays from './LightRays.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
-const cloudsString = energyFormsAndChangesStrings.clouds;
-const lotsString = energyFormsAndChangesStrings.lots;
-const noneString = energyFormsAndChangesStrings.none;
+const cloudsString = EnergyFormsAndChangesStrings.clouds;
+const lotsString = EnergyFormsAndChangesStrings.lots;
+const noneString = EnergyFormsAndChangesStrings.none;
 
 // constants
 const CONTROL_PANEL_TITLE_FONT = new PhetFont( 16 );

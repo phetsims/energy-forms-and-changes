@@ -29,7 +29,7 @@ import solarPanelIcon_png from '../../../images/solarPanelIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyConverter from './EnergyConverter.js';
@@ -72,7 +72,7 @@ class SolarPanel extends EnergyConverter {
     super( new Image( solarPanelIcon_png ), options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.solarPanel;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.solarPanel;
 
     // @private
     this.electricalEnergyChunkMovers = createObservableArray( {

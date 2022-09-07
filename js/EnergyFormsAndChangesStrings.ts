@@ -87,8 +87,8 @@ type StringsType = {
   }
 };
 
-const energyFormsAndChangesStrings = getStringModule( 'ENERGY_FORMS_AND_CHANGES' ) as StringsType;
+const EnergyFormsAndChangesStrings = getStringModule( 'ENERGY_FORMS_AND_CHANGES' ) as StringsType;
 
-energyFormsAndChanges.register( 'energyFormsAndChangesStrings', energyFormsAndChangesStrings );
+energyFormsAndChanges.register( 'EnergyFormsAndChangesStrings', EnergyFormsAndChangesStrings );
 
-export default energyFormsAndChangesStrings;
+export default EnergyFormsAndChangesStrings;

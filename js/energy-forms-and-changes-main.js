@@ -11,11 +11,11 @@
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import energyFormsAndChangesStrings from './energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from './EnergyFormsAndChangesStrings.js';
 import EFACIntroScreen from './intro/EFACIntroScreen.js';
 import SystemsScreen from './systems/SystemsScreen.js';
 
-const energyFormsAndChangesTitleStringProperty = energyFormsAndChangesStrings[ 'energy-forms-and-changes' ].titleStringProperty;
+const energyFormsAndChangesTitleStringProperty = EnergyFormsAndChangesStrings[ 'energy-forms-and-changes' ].titleStringProperty;
 
 // constants
 const tandem = Tandem.ROOT;

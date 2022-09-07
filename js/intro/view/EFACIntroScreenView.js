@@ -46,16 +46,16 @@ import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
 import BlockNode from './BlockNode.js';
 
-const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
-const linkHeatersString = energyFormsAndChangesStrings.linkHeaters;
-const oliveOilString = energyFormsAndChangesStrings.oliveOil;
-const waterString = energyFormsAndChangesStrings.water;
+const energySymbolsString = EnergyFormsAndChangesStrings.energySymbols;
+const linkHeatersString = EnergyFormsAndChangesStrings.linkHeaters;
+const oliveOilString = EnergyFormsAndChangesStrings.oliveOil;
+const waterString = EnergyFormsAndChangesStrings.water;
 
 // constants
 const EDGE_INSET = 10; // screen edge padding, in screen coordinates

@@ -22,7 +22,7 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySource from './EnergySource.js';
@@ -62,7 +62,7 @@ class TeaKettle extends EnergySource {
     super( new Image( teaKettleIcon_png ), options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.teaKettle;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.teaKettle;
 
     // @public {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {

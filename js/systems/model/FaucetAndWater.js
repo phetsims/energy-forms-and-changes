@@ -24,7 +24,7 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergySource from './EnergySource.js';
 import WaterDrop from './WaterDrop.js';
@@ -67,7 +67,7 @@ class FaucetAndWater extends EnergySource {
     super( new Image( faucetIcon_png ), options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.waterFaucet;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.waterFaucet;
 
     // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;

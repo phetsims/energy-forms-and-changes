@@ -31,7 +31,7 @@ import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import BeakerHeaterNode from './BeakerHeaterNode.js';
 import BeltNode from './BeltNode.js';
 import BikerNode from './BikerNode.js';
@@ -45,7 +45,7 @@ import SolarPanelNode from './SolarPanelNode.js';
 import SunNode from './SunNode.js';
 import TeaKettleNode from './TeaKettleNode.js';
 
-const energySymbolsString = energyFormsAndChangesStrings.energySymbols;
+const energySymbolsString = EnergyFormsAndChangesStrings.energySymbols;
 
 // constants
 const EDGE_INSET = 10; // screen edge padding, in screen coordinates
@@ -74,15 +74,15 @@ class SystemsScreenView extends ScreenView {
     // pdom - the screen summary to be read by assistive technology
     this.addChild( new Node( {
       tagName: 'div',
-      innerContent: energyFormsAndChangesStrings.a11y.systemsScreenInteractionHint,
-      descriptionContent: energyFormsAndChangesStrings.a11y.systemsScreenSummaryDescription
+      innerContent: EnergyFormsAndChangesStrings.a11y.systemsScreenInteractionHint,
+      descriptionContent: EnergyFormsAndChangesStrings.a11y.systemsScreenSummaryDescription
     } ) );
 
     // pdom - a description of the current configuration of the energy system to be read by assistive technology
     const energySystemConfigDescription = new Node( {
       tagName: 'h3',
-      innerContent: energyFormsAndChangesStrings.a11y.energySystem,
-      descriptionContent: energyFormsAndChangesStrings.a11y.energySystemHelpText
+      innerContent: EnergyFormsAndChangesStrings.a11y.energySystem,
+      descriptionContent: EnergyFormsAndChangesStrings.a11y.energySystemHelpText
     } );
     this.addChild( energySystemConfigDescription );
 
@@ -99,7 +99,7 @@ class SystemsScreenView extends ScreenView {
         const energyUser = model.energyUsersCarousel.getSelectedElement();
         assert && assert( energySource.a11yName, 'the selected element has no accessibility name specified' );
         energySystemConfigDescription.descriptionContent = StringUtils.fillIn(
-          energyFormsAndChangesStrings.a11y.energySystemHelpText,
+          EnergyFormsAndChangesStrings.a11y.energySystemHelpText,
           {
             producer: energySource.a11yName,
             converter: energyConverter.a11yName,

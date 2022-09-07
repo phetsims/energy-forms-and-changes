@@ -27,13 +27,13 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import BlockType from '../model/BlockType.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
 
-const brickString = energyFormsAndChangesStrings.brick;
-const ironString = energyFormsAndChangesStrings.iron;
+const brickString = EnergyFormsAndChangesStrings.brick;
+const ironString = EnergyFormsAndChangesStrings.iron;
 
 // constants
 const BLOCK_IMAGES = {};

@@ -18,12 +18,12 @@ import energyLight_png from '../../../images/energyLight_png.js';
 import energyMechanical_png from '../../../images/energyMechanical_png.js';
 import energyThermal_png from '../../../images/energyThermal_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import EnergyType from '../model/EnergyType.js';
 
-const energyChunkLabelString = energyFormsAndChangesStrings.energyChunkLabel;
+const energyChunkLabelString = EnergyFormsAndChangesStrings.energyChunkLabel;
 
 // constants
 const Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters

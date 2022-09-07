@@ -20,14 +20,14 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 
-const chemicalString = energyFormsAndChangesStrings.chemical;
-const electricalString = energyFormsAndChangesStrings.electrical;
-const formsOfEnergyString = energyFormsAndChangesStrings.formsOfEnergy;
-const lightString = energyFormsAndChangesStrings.light;
-const mechanicalString = energyFormsAndChangesStrings.mechanical;
-const thermalString = energyFormsAndChangesStrings.thermal;
+const chemicalString = EnergyFormsAndChangesStrings.chemical;
+const electricalString = EnergyFormsAndChangesStrings.electrical;
+const formsOfEnergyString = EnergyFormsAndChangesStrings.formsOfEnergy;
+const lightString = EnergyFormsAndChangesStrings.light;
+const mechanicalString = EnergyFormsAndChangesStrings.mechanical;
+const thermalString = EnergyFormsAndChangesStrings.thermal;
 
 // constants
 const LEGEND_ENTRY_FONT = new PhetFont( 14 );

@@ -23,7 +23,7 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyConverter from './EnergyConverter.js';
@@ -64,7 +64,7 @@ class Generator extends EnergyConverter {
     super( new Image( generatorIcon_png ), options );
 
     // @public {string} - a11y name
-    this.a11yName = energyFormsAndChangesStrings.a11y.electricalGenerator;
+    this.a11yName = EnergyFormsAndChangesStrings.a11y.electricalGenerator;
 
     // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;

@@ -16,12 +16,12 @@ import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';
 import BeakerType from '../common/model/BeakerType.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
-import energyFormsAndChangesStrings from '../energyFormsAndChangesStrings.js';
+import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';
 import EFACIntroScreenView from './view/EFACIntroScreenView.js';
 
-const introString = energyFormsAndChangesStrings.intro;
+const introString = EnergyFormsAndChangesStrings.intro;
 
 
 class EFACIntroScreen extends Screen {
