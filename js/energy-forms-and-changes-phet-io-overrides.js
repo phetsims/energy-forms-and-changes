@@ -70,13 +70,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelNode.textProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelNode.visibleProperty": {
-      "phetioFeatured": true
-    },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.textProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.visibleProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
@@ -160,9 +154,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelNode.textProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelNode.visibleProperty": {
-      "phetioFeatured": true
-    },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.visibleProperty": {
       "phetioFeatured": true
     },
@@ -191,9 +182,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
       "phetioFeatured": true
     },
     "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelNode.textProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelNode.visibleProperty": {
       "phetioFeatured": true
     }
   };
