@@ -51,11 +51,11 @@ class GeneratorNode extends MoveFadeModelElementNode {
     super( generator, modelViewTransform, options.tandem );
 
     const generatorNode = new Image( generator_png, { left: -107, top: -165 } );
-    const labelNode = new Text( generatorString, {
+    const labelText = new Text( generatorString, {
       font: new PhetFont( 19 ),
       centerX: generatorNode.centerX,
       bottom: generatorNode.bottom - 6,
-      tandem: options.tandem.createTandem( 'labelNode' ),
+      tandem: options.tandem.createTandem( 'labelText' ),
       maxWidth: 160 // empirially determined
     } );
     const spokesNode = new Image( generatorWheelSpokes_png, {
@@ -86,7 +86,7 @@ class GeneratorNode extends MoveFadeModelElementNode {
       parentPositionProperty: generator.positionProperty
     } ) );
     this.addChild( generatorNode );
-    this.addChild( labelNode );
+    this.addChild( labelText );
     this.addChild( connectorNode );
     this.addChild( spokesNode );
     this.addChild( paddlesNode );

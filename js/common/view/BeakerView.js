@@ -185,18 +185,18 @@ class BeakerView extends PhetioObject {
     this.backNode.pickable = false;
 
     // add the label, positioning it just below the front, top water line
-    const labelNode = new RichText( options.label, {
+    const labelText = new RichText( options.label, {
       font: LABEL_FONT,
       maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
-      tandem: options.tandem.createTandem( 'labelNode' )
+      tandem: options.tandem.createTandem( 'labelText' )
     } );
 
-    labelNode.translation = new Vector2(
-      beakerBounds.centerX - labelNode.bounds.width / 2,
+    labelText.translation = new Vector2(
+      beakerBounds.centerX - labelText.bounds.width / 2,
       beakerBounds.maxY - beakerBounds.height * beaker.fluidProportionProperty.value + topEllipse.bounds.height * 1.1
     );
-    labelNode.pickable = false;
-    this.frontNode.addChild( labelNode );
+    labelText.pickable = false;
+    this.frontNode.addChild( labelText );
 
     // @protected {Node} - the layer where the contained energy chunk nodes will be placed
     this.energyChunkRootNode = new Node();
@@ -258,7 +258,7 @@ class BeakerView extends PhetioObject {
 
     // adjust the transparency of the water and label based on energy chunk visibility
     energyChunksVisibleProperty.link( energyChunksVisible => {
-      labelNode.opacity = energyChunksVisible ? 0.5 : 1;
+      labelText.opacity = energyChunksVisible ? 0.5 : 1;
       const opacity = EFACConstants.NOMINAL_WATER_OPACITY;
       this.fluid.opacity = energyChunksVisible ? opacity * 0.75 : opacity;
     } );

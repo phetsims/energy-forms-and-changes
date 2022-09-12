@@ -216,14 +216,14 @@ class BlockNode extends Node {
     }
 
     // position and add the label
-    const labelNode = new Text( BLOCK_ATTRIBUTES[ block.blockType ].label, {
+    const labelText = new Text( BLOCK_ATTRIBUTES[ block.blockType ].label, {
       font: LABEL_FONT,
       maxWidth: modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ),
       centerX: ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2,
       centerY: ( upperLeftFrontCorner.y + lowerLeftFrontCorner.y ) / 2,
-      tandem: options.tandem.createTandem( 'labelNode' )
+      tandem: options.tandem.createTandem( 'labelText' )
     } );
-    this.addChild( labelNode );
+    this.addChild( labelText );
 
     // watch for coming and going of energy chunks that are approaching this model element and add/remove them as needed
     block.approachingEnergyChunks.addItemAddedListener( addedEnergyChunk => {
@@ -250,7 +250,7 @@ class BlockNode extends Node {
       blockTop.opacity = opacity;
       blockSide.opacity = opacity;
       blockBack.opacity = opacity / 2; // make back less opaque to create a look of distance
-      labelNode.opacity = opacity;
+      labelText.opacity = opacity;
       frontOutline.opacity = opacity;
 
       // don't bother displaying the back if the block is not in see-through mode
