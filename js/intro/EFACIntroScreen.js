@@ -21,8 +21,6 @@ import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';
 import EFACIntroScreenView from './view/EFACIntroScreenView.js';
 
-const introString = EnergyFormsAndChangesStrings.intro;
-
 
 class EFACIntroScreen extends Screen {
 
@@ -32,7 +30,7 @@ class EFACIntroScreen extends Screen {
   constructor( tandem ) {
 
     const options = {
-      name: introString,
+      name: EnergyFormsAndChangesStrings.introStringProperty,
       backgroundColorProperty: new Property( EFACConstants.FIRST_SCREEN_BACKGROUND_COLOR ),
       homeScreenIcon: new ScreenIcon( new Image( introScreenIcon_png ), {
         maxIconWidthProportion: 1,

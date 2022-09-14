@@ -20,8 +20,6 @@ import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
 
-const systemsString = EnergyFormsAndChangesStrings.systems;
-
 
 class SystemsScreen extends Screen {
 
@@ -31,7 +29,7 @@ class SystemsScreen extends Screen {
   constructor( tandem ) {
 
     const options = {
-      name: systemsString,
+      name: EnergyFormsAndChangesStrings.systemsStringProperty,
       backgroundColorProperty: new Property( EFACConstants.SECOND_SCREEN_BACKGROUND_COLOR ),
       homeScreenIcon: new ScreenIcon( new Image( systemsScreenIcon_png ), {
         maxIconWidthProportion: 1,
