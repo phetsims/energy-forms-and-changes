@@ -67,10 +67,10 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.introScreen.model.thermometer4.sensedTemperatureProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelText.textProperty": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelText.stringProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelText.textProperty": {
+    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelText.stringProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
@@ -151,7 +151,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energyConverterSelectorPanel.visibleProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelText.textProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelText.stringProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.visibleProperty": {
@@ -181,7 +181,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energyUserSelectorPanel.visibleProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelText.textProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelText.stringProperty": {
       "phetioFeatured": true
     }
   };
