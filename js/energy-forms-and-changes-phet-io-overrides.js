@@ -74,6 +74,8 @@ window.phet.preloads.phetio.phetioElementsOverrides =
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.textProperty": {
+      "phetioFeatured": true
+    },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelText.stringProperty": {
       "phetioFeatured": true
     },
