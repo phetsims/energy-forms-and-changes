@@ -221,7 +221,8 @@ class BlockNode extends Node {
       maxWidth: modelViewTransform.modelToViewDeltaX( EFACConstants.BLOCK_SURFACE_WIDTH * 0.9 ),
       centerX: ( upperLeftFrontCorner.x + upperRightFrontCorner.x ) / 2,
       centerY: ( upperLeftFrontCorner.y + lowerLeftFrontCorner.y ) / 2,
-      tandem: options.tandem.createTandem( 'labelText' )
+      tandem: options.tandem.createTandem( 'labelText' ),
+      phetioVisiblePropertyInstrumented: true
     } );
     this.addChild( labelText );
 

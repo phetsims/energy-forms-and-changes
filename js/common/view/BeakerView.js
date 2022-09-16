@@ -188,7 +188,8 @@ class BeakerView extends PhetioObject {
     const labelText = new RichText( options.label, {
       font: LABEL_FONT,
       maxWidth: beakerBounds.width * 0.7, // empirically determined to look nice
-      tandem: options.tandem.createTandem( 'labelText' )
+      tandem: options.tandem.createTandem( 'labelText' ),
+      phetioVisiblePropertyInstrumented: true
     } );
 
     labelText.translation = new Vector2(

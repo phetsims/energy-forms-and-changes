@@ -70,16 +70,13 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelText.stringProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelNode.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.textProperty": {
+    "energyFormsAndChanges.introScreen.view.beakerProxyNodeGroup.archetype.labelText.visibleProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelText.stringProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelNode.visibleProperty": {
+    "energyFormsAndChanges.introScreen.view.blockNodeGroup.archetype.labelText.visibleProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.introScreen.view.controlPanel.visibleProperty": {
@@ -163,7 +160,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelText.stringProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelNode.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energyConverters.generatorNode.labelText.visibleProperty": {
       "phetioFeatured": true
     },
     "energyFormsAndChanges.systemsScreen.view.energySourceSelectorPanel.visibleProperty": {
@@ -196,7 +193,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelText.stringProperty": {
       "phetioFeatured": true
     },
-    "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelNode.visibleProperty": {
+    "energyFormsAndChanges.systemsScreen.view.energyUsers.beakerHeaterNode.beakerProxyNode.labelText.visibleProperty": {
       "phetioFeatured": true
     }
   };
