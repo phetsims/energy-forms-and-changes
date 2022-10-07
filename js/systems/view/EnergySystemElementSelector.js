@@ -56,7 +56,7 @@ class EnergySystemElementSelector extends Panel {
       iconImage.setScaleMagnitude( BUTTON_IMAGE_HEIGHT_AND_WIDTH / denominator );
       buttonElementList.push( {
         value: elementName,
-        node: iconImage,
+        createNode: tandem => iconImage,
         tandemName: _.camelCase( `${elementName.name}RadioButton` )
       } );
     }
