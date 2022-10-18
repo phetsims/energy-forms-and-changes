@@ -10,7 +10,7 @@
 
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Line as KiteLine, Shape } from '../../../../kite/js/imports.js'; // eslint-disable-line default-import-match-filename
+import { Line as KiteLine, Shape } from '../../../../kite/js/imports.js';
 import { Line, LinearGradient, Node, Path } from '../../../../scenery/js/imports.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
