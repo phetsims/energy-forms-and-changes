@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import Property from '../../../../axon/js/Property.js';
+import { PropertyIO } from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -174,7 +174,7 @@ class EnergyChunkWanderController extends PhetioObject {
     // NOTE: destinationProperty does not need to be instrumented to support this, as some Properties just wrap single
     // values that don't change.
     if ( this.destinationProperty.isPhetioInstrumented() ) {
-      stateObject.destinationPropertyReference = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).toStateObject( this.destinationProperty );
+      stateObject.destinationPropertyReference = ReferenceIO( PropertyIO( Vector2.Vector2IO ) ).toStateObject( this.destinationProperty );
       stateObject.destinationVector2 = null;
     }
     else {
@@ -191,7 +191,7 @@ class EnergyChunkWanderController extends PhetioObject {
     let destinationProperty = null;
     if ( stateObject.destinationPropertyReference ) {
 
-      destinationProperty = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyReference );
+      destinationProperty = ReferenceIO( PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyReference );
     }
     else if ( stateObject.destinationVector2 ) {
       destinationProperty = new Vector2Property( Vector2.Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
@@ -328,7 +328,7 @@ EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyC
     wandering: BooleanIO,
     horizontalWanderConstraint: NullableIO( Range.RangeIO ),
     energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ),
-    destinationPropertyReference: NullableIO( ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ) ),
+    destinationPropertyReference: NullableIO( ReferenceIO( PropertyIO( Vector2.Vector2IO ) ) ),
     destinationVector2: NullableIO( Vector2.Vector2IO )
   }
 } );
