@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import { PropertyIO } from '../../../../axon/js/Property.js';
+import { PropertyIO } from '../../../../axon/js/ReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';

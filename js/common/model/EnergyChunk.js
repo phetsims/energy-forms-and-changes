@@ -8,7 +8,7 @@
 
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import { PropertyIO } from '../../../../axon/js/Property.js';
+import { PropertyIO } from '../../../../axon/js/ReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
