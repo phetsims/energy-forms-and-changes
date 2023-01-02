@@ -71,7 +71,7 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 
   // @public (EnergyChunkPathMoverIO)
-  static stateToArgsForConstructor( stateObject ) {
+  static stateObjectToCreateElementArguments( stateObject ) {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
@@ -229,7 +229,7 @@ class EnergyChunkPathMover extends PhetioObject {
 EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverIO', {
   valueType: EnergyChunkPathMover,
   toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
-  stateToArgsForConstructor: EnergyChunkPathMover.stateToArgsForConstructor,
+  stateObjectToCreateElementArguments: EnergyChunkPathMover.stateObjectToCreateElementArguments,
   applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
   stateSchema: {
     path: ArrayIO( Vector2.Vector2IO ),

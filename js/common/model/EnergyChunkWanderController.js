@@ -185,7 +185,7 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   // @public (EnergyChunkWanderControllerIO)
-  static stateToArgsForConstructor( stateObject ) {
+  static stateObjectToCreateElementArguments( stateObject ) {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -317,7 +317,7 @@ class EnergyChunkWanderController extends PhetioObject {
 EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyChunkWanderControllerIO', {
   valueType: EnergyChunkWanderController,
   toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
-  stateToArgsForConstructor: EnergyChunkWanderController.stateToArgsForConstructor,
+  stateObjectToCreateElementArguments: EnergyChunkWanderController.stateObjectToCreateElementArguments,
   applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
   stateSchema: {
     minSpeed: NumberIO,

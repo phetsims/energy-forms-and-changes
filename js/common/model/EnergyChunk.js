@@ -90,7 +90,7 @@ class EnergyChunk extends PhetioObject {
   }
 
   // @public (EnergyChunkIO)
-  static stateToArgsForConstructor( stateObject ) {
+  static stateObjectToCreateElementArguments( stateObject ) {
     const visibleProperty = ReferenceIO( PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
     );
@@ -181,7 +181,7 @@ class EnergyChunk extends PhetioObject {
 EnergyChunk.EnergyChunkIO = new IOType( 'EnergyChunkIO', {
   valueType: EnergyChunk,
   toStateObject: energyChunk => energyChunk.toStateObject(),
-  stateToArgsForConstructor: EnergyChunk.stateToArgsForConstructor,
+  stateObjectToCreateElementArguments: EnergyChunk.stateObjectToCreateElementArguments,
   stateSchema: {
     id: NumberIO,
     velocity: Vector2.Vector2IO,
