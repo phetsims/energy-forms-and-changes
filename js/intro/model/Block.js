@@ -33,7 +33,7 @@ const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
 
 const BlockTypeEnumerationIO = EnumerationIO( BlockType );
 
-// TODO: use constants from EFAConstants
+// TODO: use constants from EFAConstants, https://github.com/phetsims/energy-forms-and-changes/issues/420
 const BLOCK_COMPOSITION = {};
 BLOCK_COMPOSITION[ BlockType.IRON ] = {
   color: new Color( 150, 150, 150 ),
