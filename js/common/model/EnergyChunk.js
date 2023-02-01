@@ -52,7 +52,7 @@ class EnergyChunk extends PhetioObject {
 
     // @public
     this.positionProperty = new Vector2Property( initialPosition, {
-      useDeepEquality: true,
+      valueComparisonStrategy: 'equalsFunction',
       tandem: options.tandem.createTandem( 'positionProperty' ),
       phetioEventType: EventType.OPT_OUT
     } );
