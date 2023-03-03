@@ -94,7 +94,7 @@ class BeakerContainerView extends BeakerView {
       modelViewTransform,
       constrainPosition,
       model.isPlayingProperty,
-      options.tandem.createTandem( 'inputListener' )
+      options.tandem.createTandem( 'dragListener' )
     ) );
   }
 

@@ -67,7 +67,7 @@ class EFACTemperatureAndColorSensorNode extends Node {
         end: () => {
           temperatureAndColorSensor.userControlledProperty.set( false );
         },
-        tandem: options.tandem.createTandem( 'inputListener' )
+        tandem: options.tandem.createTandem( 'dragListener' )
       } ) );
     }
   }

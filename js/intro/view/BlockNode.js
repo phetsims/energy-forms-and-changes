@@ -275,7 +275,7 @@ class BlockNode extends Node {
       modelViewTransform,
       constrainPosition,
       simIsPlayingProperty,
-      options.tandem.createTandem( 'inputListener' )
+      options.tandem.createTandem( 'dragListener' )
     ) );
   }
 
