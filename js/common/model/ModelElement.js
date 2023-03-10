@@ -40,6 +40,7 @@ class ModelElement extends PhetioObject {
 
     // @public
     this.positionProperty = new Vector2Property( initialPosition, merge( {
+      hasListenerOrderDependencies: true,
       tandem: options.tandem.createTandem( 'positionProperty' )
     }, options.positionPropertyOptions ) );
 
