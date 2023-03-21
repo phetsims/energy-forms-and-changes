@@ -40,7 +40,7 @@ class ModelElement extends PhetioObject {
 
     // @public
     this.positionProperty = new Vector2Property( initialPosition, merge( {
-      hasListenerOrderDependencies: true,
+      hasListenerOrderDependencies: true, // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/421
       tandem: options.tandem.createTandem( 'positionProperty' )
     }, options.positionPropertyOptions ) );
 
