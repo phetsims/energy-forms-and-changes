@@ -13,6 +13,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -58,7 +59,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
       // When setting PhET-iO state, the EnergyChunk is already in its correct spot, so don't alter that based on Property
       // listeners, see https://github.com/phetsims/energy-forms-and-changes/issues/362
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !isSettingPhetioStateProperty.value ) {
         const deltaPosition = newPosition.minus( oldPosition );
         this.energyChunkList.forEach( chunk => {
           chunk.translate( deltaPosition.x, deltaPosition.y );

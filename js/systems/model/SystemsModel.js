@@ -13,6 +13,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -199,7 +200,7 @@ class SystemsModel {
     this.energyChunksVisibleProperty.link( energyChunksVisible => {
 
       // When setting PhET-iO state, energy chunks are positioned based on the state.
-      if ( energyChunksVisible && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( energyChunksVisible && !isSettingPhetioStateProperty.value ) {
         this.preloadEnergyChunks();
       }
     } );

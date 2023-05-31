@@ -18,6 +18,7 @@
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -70,7 +71,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
       // Don't let the PhET-iO state engine call this (as the second time) when the anchorPointProperty changes. This line of
       // code could be replaced with altering the for-loop below to be based on each EnergyChunk's position, but that
       // would be too slow, and performance is important here. See https://github.com/phetsims/energy-forms-and-changes/issues/353
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !isSettingPhetioStateProperty.value ) {
 
         const xTranslation = newPosition.x - oldPosition.x;
         const yTranslation = newPosition.y - oldPosition.y;

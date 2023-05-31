@@ -16,6 +16,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -323,7 +324,7 @@ class SunEnergySource extends EnergySource {
 
     // Don't move the EnergyChunks from their position if setting state.
     // Don't step if not playing, this makes sure that PhET-iO state maintains exact EnergyChunk positions.
-    if ( !phet.joist.sim.isSettingPhetioStateProperty.value && this.isPlayingProperty.value ) {
+    if ( !isSettingPhetioStateProperty.value && this.isPlayingProperty.value ) {
 
       // step a few times to get some energy chunks out
       for ( let i = 0; i < 100; i++ ) {

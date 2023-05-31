@@ -16,6 +16,7 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -168,7 +169,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
       // When setting PhET-iO state, the wander controllers will already be created to be the right values, so don't
       // mutate them in this listener.
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !isSettingPhetioStateProperty.value ) {
 
 
         // find the wander controller that is controlling the motion of this energy chunk

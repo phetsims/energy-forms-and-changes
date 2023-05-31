@@ -13,6 +13,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -115,7 +116,7 @@ class EnergyChunkWanderController extends PhetioObject {
 
       // Short circuit this if state is being set - otherwise approaching energy chunks that are part of the state can
       // get moved around, messing up their state.
-      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( isSettingPhetioStateProperty.value ) {
         return;
       }
 

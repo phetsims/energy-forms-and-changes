@@ -13,6 +13,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import EventType from '../../../../tandem/js/EventType.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -132,7 +133,7 @@ class EnergyChunk extends PhetioObject {
 
     // When setting PhET-iO state, the EnergyChunk is already in its correct spot, so don't alter that based on Property
     // listeners, see https://github.com/phetsims/energy-forms-and-changes/issues/362
-    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+    if ( !isSettingPhetioStateProperty.value ) {
       this.translate( this.velocity.x * dt, this.velocity.y * dt );
     }
   }

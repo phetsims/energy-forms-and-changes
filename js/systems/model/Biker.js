@@ -14,6 +14,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import { Image } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import bicycleIcon_png from '../../../images/bicycleIcon_png.js';
@@ -149,7 +150,7 @@ class Biker extends EnergySource {
 
       // While setting PhET-iO state, make sure that if this Property changed, it doesn't cascade to changing the
       // placement of energyChunks/Movers.
-      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( isSettingPhetioStateProperty.value ) {
         return;
       }
 

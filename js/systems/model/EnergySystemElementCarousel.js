@@ -19,6 +19,7 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -112,7 +113,7 @@ class EnergySystemElementCarousel {
 
       // prevent deactivation from overwriting state values, see https://github.com/phetsims/energy-forms-and-changes/issues/337
       // activation can create extra EnergyChunks or clear them (which are instrumented since https://github.com/phetsims/energy-forms-and-changes/issues/350)
-      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( isSettingPhetioStateProperty.value ) {
         return;
       }
       if ( animationInProgress ) {

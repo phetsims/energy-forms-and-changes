@@ -7,6 +7,7 @@
  * @author Jesse Greenberg
  */
 
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -79,7 +80,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
     } );
 
     // Make sure that the following state is set properly when state is set via phet-io.
-    phet.joist.sim.isSettingPhetioStateProperty.lazyLink( settingPhetIoState => {
+    isSettingPhetioStateProperty.lazyLink( settingPhetIoState => {
 
       if ( settingPhetIoState ) {
 

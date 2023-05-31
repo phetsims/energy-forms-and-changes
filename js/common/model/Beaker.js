@@ -16,6 +16,7 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -214,7 +215,7 @@ class Beaker extends RectangularThermalMovableModelElement {
 
       // update the bounds of the energy chunk slices
       // When setting PhET-iO state, the slices' height is already updated
-      if ( oldFluidProportion && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( oldFluidProportion && !isSettingPhetioStateProperty.value ) {
         const multiplier = newFluidProportion / oldFluidProportion;
         this.slices.forEach( slice => {
           slice.updateHeight( multiplier );
