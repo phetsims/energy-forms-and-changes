@@ -1,4 +1,4 @@
-// Copyright 2016-2021, University of Colorado Boulder
+// Copyright 2016-2023, University of Colorado Boulder
 
 /**
  * base class for energy sources, converters, and users, that can be connected together to create what is referred to
