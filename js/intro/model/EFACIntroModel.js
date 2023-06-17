@@ -182,6 +182,7 @@ class EFACIntroModel {
       },
       [ BlockType.IRON, 0 ],
       {
+        groupElementStartingIndex: 0,
         tandem: tandem.createTandem( 'blockGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Block.BlockIO ),
         supportsDynamicState: false,
@@ -219,6 +220,7 @@ class EFACIntroModel {
       },
       [ BeakerType.WATER, 0 ],
       {
+        groupElementStartingIndex: 0,
         tandem: tandem.createTandem( 'beakerGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,
