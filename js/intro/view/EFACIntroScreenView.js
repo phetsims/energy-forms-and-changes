@@ -24,7 +24,7 @@ import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js'
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
-import { DownUpListener, HBox, Image, KeyboardUtils, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { DownUpListener, HBox, Image, KeyboardListener, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
@@ -62,6 +62,9 @@ const EDGE_INSET = 10; // screen edge padding, in screen coordinates
 const THERMOMETER_JUMP_ON_EXTRACTION = new Vector2( 5, 5 ); // in screen coordinates
 const THERMOMETER_ANIMATION_SPEED = 0.2; // in meters per second
 const MAX_THERMOMETER_ANIMATION_TIME = 1; // max time for thermometer return animation to complete, in seconds
+
+// TODO: Replace this with a constant when available, see https://github.com/phetsims/tasks/issues/1126.
+const RANGE_KEYS = [ 'arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown', 'page_up', 'page_down', 'home', 'end' ];
 
 class EFACIntroScreenView extends ScreenView {
 
@@ -167,7 +170,7 @@ class EFACIntroScreenView extends ScreenView {
      * so the gas pipe follows any changes that occur to the provided Node. It also uses the provided node to correctly
      * position itself.
      *
-     * @param (Node} node
+     * @param {Node} node
      * @returns {Node}
      */
     const createAndLinkPipeImageNode = node => {
@@ -274,7 +277,7 @@ class EFACIntroScreenView extends ScreenView {
 
       const leftHeaterCoolerDownInputAction = () => {
 
-        // make the right heater-cooler un-pickable if the heaters are linked
+        // Make the right heater-cooler un-pickable if the heaters are linked.
         if ( model.linkedHeatersProperty.value ) {
           rightHeaterCoolerFront.interruptSubtreeInput();
           rightHeaterCoolerFront.pickable = false;
@@ -290,23 +293,17 @@ class EFACIntroScreenView extends ScreenView {
         up: leftHeaterCoolerUpInputAction
       } ) );
 
-      // listen to keyboard events on the left heater-cooler
-      leftHeaterCoolerFront.addInputListener( {
-        keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
-            leftHeaterCoolerDownInputAction();
-          }
-        },
-        keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
-            leftHeaterCoolerUpInputAction();
-          }
-        }
-      } );
+      leftHeaterCoolerFront.addInputListener( new KeyboardListener( {
+        keys: RANGE_KEYS,
+        listenerFireTrigger: 'both',
+        callback: event => event.type === 'keydown' ?
+                           leftHeaterCoolerDownInputAction() :
+                           leftHeaterCoolerUpInputAction()
+      } ) );
 
       const rightHeaterCoolerDownInputAction = () => {
 
-        // make the left heater-cooler un-pickable if the heaters are linked
+        // Make the right heater-cooler un-pickable if the heaters are linked.
         if ( model.linkedHeatersProperty.value ) {
           leftHeaterCoolerFront.interruptSubtreeInput();
           leftHeaterCoolerFront.pickable = false;
@@ -323,18 +320,13 @@ class EFACIntroScreenView extends ScreenView {
       } ) );
 
       // listen to keyboard events on the right heater-cooler
-      rightHeaterCoolerFront.addInputListener( {
-        keydown: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
-            rightHeaterCoolerDownInputAction();
-          }
-        },
-        keyup: event => {
-          if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
-            rightHeaterCoolerUpInputAction();
-          }
-        }
-      } );
+      rightHeaterCoolerFront.addInputListener( new KeyboardListener( {
+        keys: RANGE_KEYS,
+        listenerFireTrigger: 'both',
+        callback: event => event.type === 'keydown' ?
+                           rightHeaterCoolerDownInputAction() :
+                           rightHeaterCoolerUpInputAction()
+      } ) );
 
       rightBurnerBounds = model.rightBurner.getBounds();
     }
