@@ -64,7 +64,7 @@ const THERMOMETER_ANIMATION_SPEED = 0.2; // in meters per second
 const MAX_THERMOMETER_ANIMATION_TIME = 1; // max time for thermometer return animation to complete, in seconds
 
 // TODO: Replace this with a constant when available, see https://github.com/phetsims/tasks/issues/1126.
-const RANGE_KEYS = [ 'arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown', 'page_up', 'page_down', 'home', 'end' ];
+const RANGE_KEYS = [ 'arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown', 'pageUp', 'pageDown', 'home', 'end' ];
 
 class EFACIntroScreenView extends ScreenView {
 
