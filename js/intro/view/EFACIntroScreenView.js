@@ -199,7 +199,7 @@ class EFACIntroScreenView extends ScreenView {
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5
     } );
-    const leftHeaterCoolerFront = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
+    const leftHeaterCoolerNode = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5,
@@ -209,9 +209,9 @@ class EFACIntroScreenView extends ScreenView {
       tandem: tandem.createTandem( 'leftHeaterCoolerNode' ),
       phetioDocumentation: 'the heater/cooler on the left'
     } );
-    const leftGasPipe = createAndLinkPipeImageNode( leftHeaterCoolerFront );
+    const leftGasPipe = createAndLinkPipeImageNode( leftHeaterCoolerNode );
 
-    heaterCoolerFrontLayer.addChild( leftHeaterCoolerFront );
+    heaterCoolerFrontLayer.addChild( leftHeaterCoolerNode );
     backLayer.addChild( leftHeaterCoolerBack );
     backLayer.addChild( leftBurnerStand );
     backLayer.addChild( leftGasPipe );
@@ -234,7 +234,7 @@ class EFACIntroScreenView extends ScreenView {
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5
       } );
-      const rightHeaterCoolerFront = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
+      const rightHeaterCoolerNode = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
         leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5,
@@ -244,9 +244,9 @@ class EFACIntroScreenView extends ScreenView {
         tandem: tandem.createTandem( 'rightHeaterCoolerNode' ),
         phetioDocumentation: 'the heater/cooler on the right, which may not exist in the simulation'
       } );
-      const rightGasPipe = createAndLinkPipeImageNode( rightHeaterCoolerFront );
+      const rightGasPipe = createAndLinkPipeImageNode( rightHeaterCoolerNode );
 
-      heaterCoolerFrontLayer.addChild( rightHeaterCoolerFront );
+      heaterCoolerFrontLayer.addChild( rightHeaterCoolerNode );
       backLayer.addChild( rightHeaterCoolerBack );
       backLayer.addChild( rightBurnerStand );
       backLayer.addChild( rightGasPipe );
@@ -276,21 +276,21 @@ class EFACIntroScreenView extends ScreenView {
 
         // Make the right heater-cooler un-pickable if the heaters are linked.
         if ( model.linkedHeatersProperty.value ) {
-          rightHeaterCoolerFront.interruptSubtreeInput();
-          rightHeaterCoolerFront.pickable = false;
+          rightHeaterCoolerNode.interruptSubtreeInput();
+          rightHeaterCoolerNode.pickable = false;
         }
       };
       const leftHeaterCoolerUpInputAction = () => {
-        rightHeaterCoolerFront.pickable = true;
+        rightHeaterCoolerNode.pickable = true;
       };
 
       // listen to pointer events on the left heater-cooler
-      leftHeaterCoolerFront.addInputListener( new DownUpListener( {
+      leftHeaterCoolerNode.addInputListener( new DownUpListener( {
         down: leftHeaterCoolerDownInputAction,
         up: leftHeaterCoolerUpInputAction
       } ) );
 
-      leftHeaterCoolerFront.addInputListener( new KeyboardListener( {
+      leftHeaterCoolerNode.addInputListener( new KeyboardListener( {
         keys: EnglishStringKeyUtils.RANGE_KEYS,
         listenerFireTrigger: 'both',
         callback: event => event.type === 'keydown' ?
@@ -302,22 +302,22 @@ class EFACIntroScreenView extends ScreenView {
 
         // Make the right heater-cooler un-pickable if the heaters are linked.
         if ( model.linkedHeatersProperty.value ) {
-          leftHeaterCoolerFront.interruptSubtreeInput();
-          leftHeaterCoolerFront.pickable = false;
+          leftHeaterCoolerNode.interruptSubtreeInput();
+          leftHeaterCoolerNode.pickable = false;
         }
       };
       const rightHeaterCoolerUpInputAction = () => {
-        leftHeaterCoolerFront.pickable = true;
+        leftHeaterCoolerNode.pickable = true;
       };
 
       // listen to pointer events on the right heater-cooler
-      rightHeaterCoolerFront.addInputListener( new DownUpListener( {
+      rightHeaterCoolerNode.addInputListener( new DownUpListener( {
         down: rightHeaterCoolerDownInputAction,
         up: rightHeaterCoolerUpInputAction
       } ) );
 
       // listen to keyboard events on the right heater-cooler
-      rightHeaterCoolerFront.addInputListener( new KeyboardListener( {
+      rightHeaterCoolerNode.addInputListener( new KeyboardListener( {
         keys: EnglishStringKeyUtils.RANGE_KEYS,
         listenerFireTrigger: 'both',
         callback: event => event.type === 'keydown' ?
