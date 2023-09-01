@@ -53,7 +53,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
     // node for heater-cooler bucket - front and back are added separately to support layering of energy chunks
     const heaterCoolerBack = new HeaterCoolerBack( this.heaterSettingProperty, { scale: HEATER_COOLER_NODE_SCALE } );
-    const heaterCoolerFront = new HeaterCoolerFront( this.heaterSettingProperty, {
+    const heaterCoolerNode = new HeaterCoolerFront( this.heaterSettingProperty, {
       snapToZero: false,
       coolEnabled: false,
       scale: HEATER_COOLER_NODE_SCALE,
@@ -70,7 +70,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     burnerStandNode.centerTop = teaKettleNode.centerBottom.plus( new Vector2( 0, -teaKettleNode.height / 4 ) );
     heaterCoolerBack.centerX = burnerStandNode.centerX;
     heaterCoolerBack.bottom = burnerStandNode.bottom - burnerProjection / 2;
-    heaterCoolerFront.leftTop = heaterCoolerBack.getHeaterFrontPosition();
+    heaterCoolerNode.leftTop = heaterCoolerBack.getHeaterFrontPosition();
 
     const gasPipeScale = 0.9;
 
@@ -79,8 +79,8 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     // the burner stand (to avoid splitting the burner stand into even more pieces). this is the part that's behind the
     // front of the burner stand. See https://github.com/phetsims/energy-forms-and-changes/issues/311
     const leftGasPipe = new Image( gasPipeSystemsLong_png, {
-      right: heaterCoolerFront.left - 30, // empirically determined
-      bottom: heaterCoolerFront.bottom - 20, // empirically determined
+      right: heaterCoolerNode.left - 30, // empirically determined
+      bottom: heaterCoolerNode.bottom - 20, // empirically determined
       scale: gasPipeScale
     } );
 
@@ -94,17 +94,17 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
     // since the gas pipes are part of the heater/coolers, link their NodeIO Properties to listen to the heater/cooler's
     // NodeIO Properties
-    heaterCoolerFront.opacityProperty.lazyLink( () => {
-      leftGasPipe.opacity = heaterCoolerFront.opacity;
-      rightGasPipe.opacity = heaterCoolerFront.opacity;
+    heaterCoolerNode.opacityProperty.lazyLink( () => {
+      leftGasPipe.opacity = heaterCoolerNode.opacity;
+      rightGasPipe.opacity = heaterCoolerNode.opacity;
     } );
-    heaterCoolerFront.pickableProperty.lazyLink( () => {
-      leftGasPipe.pickable = heaterCoolerFront.pickable;
-      rightGasPipe.pickable = heaterCoolerFront.pickable;
+    heaterCoolerNode.pickableProperty.lazyLink( () => {
+      leftGasPipe.pickable = heaterCoolerNode.pickable;
+      rightGasPipe.pickable = heaterCoolerNode.pickable;
     } );
-    heaterCoolerFront.visibleProperty.lazyLink( () => {
-      leftGasPipe.visible = heaterCoolerFront.visible;
-      rightGasPipe.visible = heaterCoolerFront.visible;
+    heaterCoolerNode.visibleProperty.lazyLink( () => {
+      leftGasPipe.visible = heaterCoolerNode.visible;
+      rightGasPipe.visible = heaterCoolerNode.visible;
     } );
 
     const energyChunkLayer = new EnergyChunkLayer(
@@ -140,7 +140,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     kettleAndStand.addChild( teaKettleNode );
     this.addChild( kettleAndStand );
     this.addChild( rightGasPipe );
-    this.addChild( heaterCoolerFront );
+    this.addChild( heaterCoolerNode );
 
     // make the tea kettle, stand, and steam transparent when energy chunks are visible
     energyChunksVisibleProperty.link( chunksVisible => {

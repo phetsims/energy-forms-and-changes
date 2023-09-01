@@ -316,24 +316,24 @@ class SystemsScreenView extends ScreenView {
     timeControlNode.center = new Vector2( layoutBounds.centerX, resetAllButton.centerY );
 
     // add the energy system element selectors, which are sets of radio buttons
-    const energySourceSelector = new EnergySystemElementSelector( model.energySourcesCarousel, {
+    const energySourceSelectorPanel = new EnergySystemElementSelector( model.energySourcesCarousel, {
       left: EDGE_INSET,
       bottom: bottomPanel.top - EDGE_INSET,
       tandem: tandem.createTandem( 'energySourceSelectorPanel' )
     } );
-    const energyConverterSelector = new EnergySystemElementSelector( model.energyConvertersCarousel, {
-      left: energySourceSelector.right + SELECTOR_SPACING,
+    const energyConverterSelectorPanel = new EnergySystemElementSelector( model.energyConvertersCarousel, {
+      left: energySourceSelectorPanel.right + SELECTOR_SPACING,
       bottom: bottomPanel.top - EDGE_INSET,
       tandem: tandem.createTandem( 'energyConverterSelectorPanel' )
     } );
-    const energyUserSelector = new EnergySystemElementSelector( model.energyUsersCarousel, {
-      left: energyConverterSelector.right + SELECTOR_SPACING,
+    const energyUserSelectorPanel = new EnergySystemElementSelector( model.energyUsersCarousel, {
+      left: energyConverterSelectorPanel.right + SELECTOR_SPACING,
       bottom: bottomPanel.top - EDGE_INSET,
       tandem: tandem.createTandem( 'energyUserSelectorPanel' )
     } );
-    this.addChild( energySourceSelector );
-    this.addChild( energyConverterSelector );
-    this.addChild( energyUserSelector );
+    this.addChild( energySourceSelectorPanel );
+    this.addChild( energyConverterSelectorPanel );
+    this.addChild( energyUserSelectorPanel );
 
     // add a floating sky high above the sim
     const skyNode = new SkyNode(
