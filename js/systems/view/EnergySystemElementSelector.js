@@ -61,7 +61,7 @@ class EnergySystemElementSelector extends Panel {
       } );
     }
 
-    const buttonGroup = new RectangularRadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
+    const radioButtonGroup = new RectangularRadioButtonGroup( carousel.targetElementNameProperty, buttonElementList, {
       orientation: 'horizontal',
       spacing: 15,
       radioButtonOptions: {
@@ -71,13 +71,13 @@ class EnergySystemElementSelector extends Panel {
     } );
 
     // link the visibility of the buttons to their corresponding system elements, see https://github.com/phetsims/energy-forms-and-changes/issues/305
-    buttonGroup.children.forEach( ( button, index ) => {
+    radioButtonGroup.children.forEach( ( button, index ) => {
       button.visibleProperty.lazyLink( () => {
         carousel.managedElements[ index ].visibleProperty.value = button.visible;
       } );
     } );
 
-    super( buttonGroup, options );
+    super( radioButtonGroup, options );
   }
 }
 
