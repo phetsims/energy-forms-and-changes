@@ -91,7 +91,7 @@ class EnergyChunk extends PhetioObject {
   }
 
   // @public (EnergyChunkIO)
-  static stateToArgsForConstructor( stateObject ) {
+  static stateObjectToCreateElementArguments( stateObject ) {
     const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
     );
