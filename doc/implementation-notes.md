@@ -25,17 +25,17 @@ will help to navigate it all.
 - Energy Chunks: Energy chunks appear in the simulation as small rectangles with the letter E on them (assuming you're
   using the English version) and different colors depending on the type of energy depicted. They are meant to convey the
   movement and transformation of different types of energy. In the code, the term "energy chunk" is sometimes
-  abbreviated
-  as "ec" for brevity. In the user interface for the sim, the term "Energy Chunks" was replaced with "Energy Symbols"
+  abbreviated as "ec" for brevity. In the user interface for the sim, the term "Energy Chunks" was replaced with "Energy
+  Symbols"
   shortly before publication of the original Java sim, but we elected to keep the term "Energy Chunks" in the codebase.
 - Energy Chunk Distributor: A static object that is used to distribute the energy chunks within a model element that
   contains them.
-- Energy Chunk Slice: A 2D shape that is used to hold energy chunks and is projected into 3D in the view. Energy
-  chunks are distributed within each energy chunk slice by repelling each other and being repelled by the walls.
+- Energy Chunk Slice: A 2D shape that is used to hold energy chunks and is projected into 3D in the view. Energy chunks
+  are distributed within each energy chunk slice by repelling each other and being repelled by the walls.
 - Energy System Element: A portion of a system where energy is being produced, converted, and/or used.
-- Thermal Model Element: A thermal model element is something in the sim that can absorb or release thermal energy.
-  This is more relevant on the first screen than the second, and the blocks and beakers are all thermal model elements.
-  There is no `ThermalElement` base class, so it is more of a contract that exists between various elements.
+- Thermal Model Element: A thermal model element is something in the sim that can absorb or release thermal energy. This
+  is more relevant on the first screen than the second, and the blocks and beakers are all thermal model elements. There
+  is no `ThermalElement` base class, so it is more of a contract that exists between various elements.
 - Surface: In the first screen, the terms "surface" and "horizontal surface" come up a lot because any beaker or block
   that is not being moved by the user will fall to and then rest on a surface. The bench is a surface, the burners have
   surfaces, and the blocks and beakers all have surfaces, and this is what allows them to be stacked upon one another.
@@ -48,12 +48,12 @@ allocated and deallocated, such as EnergyChunks and ElementFollowers, those memo
 
 ## Intro Screen
 
-The first screen is all about heat transfer, and the only type of energy chunks that appear are thermal. The model
-keeps track of the amount of energy in each thermal model element (i.e. the bricks and the beakers) in joules. Each
-element also has a temperature that can change and a specific heat which is fixed. Energy can be added to or removed
-from the model elements, which leads to a change in temperature. Energy is transferred into or out of a thermal model
-element by the burner or by coming into contact with another model element that is at a different temperature. Heat
-transfer is done at each model step based on the heat transfer equation:
+The first screen is all about heat transfer, and the only type of energy chunks that appear are thermal. The model keeps
+track of the amount of energy in each thermal model element (i.e. the bricks and the beakers) in joules. Each element
+also has a temperature that can change and a specific heat which is fixed. Energy can be added to or removed from the
+model elements, which leads to a change in temperature. Energy is transferred into or out of a thermal model element by
+the burner or by coming into contact with another model element that is at a different temperature. Heat transfer is
+done at each model step based on the heat transfer equation:
 
 ```
 dQ/dt = -kAT
@@ -63,8 +63,8 @@ where `Q` is the amount of heat transferred, dt is the time, k is the heat trans
 and T is the temperature difference.
 
 When the "Energy Symbols" checkbox is checked, the energy symbols become visible. These are meant to give the user a
-much clearer means of seeing energy moving around. The number of energy chunks in any given element is a function of
-its energy content, which in turn is a function of its temperature and specific heat. When the simulated energy level
+much clearer means of seeing energy moving around. The number of energy chunks in any given element is a function of its
+energy content, which in turn is a function of its temperature and specific heat. When the simulated energy level
 (the one that is measured in joules) in an element gets out of balance with the number of energy chunks it contains, the
 model tries to transfer an energy chunk in or out of the unbalanced element. This code gets a bit tricky because there
 is often a direction that we want the energy chunks to go. For instance, if a model element is on the burner and the
@@ -114,18 +114,18 @@ solar panel).
 Each of the system elements that can be interconnected are subclasses of `EnergySystemElement`, and there are subclasses
 for `EnergySource`, `EnergyConverter`, and `EnergyUser`, which are further subclassed into the specific elements, such
 as `SolarPanel`. Each of these track the amount of energy being produced, converted, or used both in terms of a
-continuous numerical quantity in joules and in terms of energy chunks. The latter is much trickier. At each model
-step, energy and possibly energy chunks are transferred between the various active elements.
+continuous numerical quantity in joules and in terms of energy chunks. The latter is much trickier. At each model step,
+energy and possibly energy chunks are transferred between the various active elements.
 
-Energy chunks move through the system and occasionally get converted as they go. Their motion in controlled by
-instances of `EnergyChunkPathMover`, which are essentially a series of points that the energy chunks travel to in
-sequence as they flow through the system.
+Energy chunks move through the system and occasionally get converted as they go. Their motion in controlled by instances
+of `EnergyChunkPathMover`, which are essentially a series of points that the energy chunks travel to in sequence as they
+flow through the system.
 
-One of the most challenging parts of the implementation of this screen was adding the ability to switch between
-having the energy chunks visible and invisible. The reason this is tricky is because if the energy chunks are
-invisible, energy should flow through the system pretty much instantly, since that's how we experience it. For
-instance, in a faucet-generator-lightbulb configuration, the light bulb should start glowing as soon as the wheel starts
-turning. However, if the energy chunks are visible, the light bulb shouldn't start glowing until the energy chunks have
+One of the most challenging parts of the implementation of this screen was adding the ability to switch between having
+the energy chunks visible and invisible. The reason this is tricky is because if the energy chunks are invisible, energy
+should flow through the system pretty much instantly, since that's how we experience it. For instance, in a
+faucet-generator-lightbulb configuration, the light bulb should start glowing as soon as the wheel starts turning.
+However, if the energy chunks are visible, the light bulb shouldn't start glowing until the energy chunks have
 propagated all the way to the filament, which and take several seconds. But what if the user starts with the energy
 chunks off, then turns them on? In that case, the code needs to pre-populate all of the system elements with energy
 chunks already fully distributed through them. For that reason, there is a fair bit of code that is dedicated to pre-
