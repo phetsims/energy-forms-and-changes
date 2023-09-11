@@ -1,8 +1,8 @@
 # Energy Forms and Changes - Model Description
 
-This document contains a high-level description of the model used in PhET's _Energy Forms and Changes_ simulation.
-This simulation portrays the flow and transformation of energy. The first screen is primarily about heat transfer,
-and the second is about how energy moves through and is transformed in an energy system.
+This document contains a high-level description of the model used in PhET's _Energy Forms and Changes_ simulation. This
+simulation portrays the flow and transformation of energy. The first screen is primarily about heat transfer, and the
+second is about how energy moves through and is transformed in an energy system.
 
 ## Intro Screen
 
@@ -17,9 +17,9 @@ The heat transfer equation is used to calculate the amount of heat transferred p
 dQ/dt = -kAT
 ```
 
-where `Q` is the amount of energy transferred, `k` is the heat transfer constant, `A` is the area of contact, `T` is
-the temperature difference, and `t` is time. This equation is evaluated at a nominal rate of 60 times per second (which
-is the animation frame rate of a web browser) to determine the amount of energy that is transferred between all objects
+where `Q` is the amount of energy transferred, `k` is the heat transfer constant, `A` is the area of contact, `T` is the
+temperature difference, and `t` is time. This equation is evaluated at a nominal rate of 60 times per second (which is
+the animation frame rate of a web browser) to determine the amount of energy that is transferred between all objects
 that are in contact with another. Internally, the amount of energy in each object is calculated and maintained in
 joules, though this is never visible to the user.
 
