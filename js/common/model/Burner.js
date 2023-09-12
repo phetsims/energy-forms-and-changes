@@ -204,7 +204,7 @@ class Burner extends ModelElement {
 
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
       energyChunk,
-      new Vector2Property( this.getCenterPoint() ),
+      new Vector2Property( this.getCenterPoint(), { valueComparisonStrategy: 'equalsFunction' } ),
       { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
     ) );
   }

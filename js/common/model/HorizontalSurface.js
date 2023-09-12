@@ -26,7 +26,7 @@ class HorizontalSurface {
   constructor( initialPosition, width, owner, initialElementOnSurface ) {
 
     // @public (read-write)
-    this.positionProperty = new Vector2Property( initialPosition );
+    this.positionProperty = new Vector2Property( initialPosition, { valueComparisonStrategy: 'equalsFunction' } );
 
     // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
     // one, null if nothing there, use the API below to update

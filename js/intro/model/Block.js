@@ -21,6 +21,7 @@ import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSl
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
+import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType from './BlockType.js';
 
@@ -271,6 +272,7 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 ];
 
 Block.BlockIO = new IOType( 'BlockIO', {
+  supertype: UserMovableModelElement.UserMovableModelElementIO,
   valueType: Block,
   toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } ),
   stateSchema: {

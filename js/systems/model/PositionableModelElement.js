@@ -30,6 +30,7 @@ class PositionableModelElement extends PhetioObject {
 
     // @public {Vector2Property}
     this.positionProperty = new Vector2Property( initialPosition, {
+      valueComparisonStrategy: 'equalsFunction',
       units: 'm',
       tandem: options.tandem.createTandem( 'positionProperty' ),
       phetioReadOnly: true,

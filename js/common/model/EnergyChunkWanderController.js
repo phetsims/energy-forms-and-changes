@@ -195,7 +195,9 @@ class EnergyChunkWanderController extends PhetioObject {
       destinationProperty = ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ).fromStateObject( stateObject.destinationPropertyReference );
     }
     else if ( stateObject.destinationVector2 ) {
-      destinationProperty = new Vector2Property( Vector2.Vector2IO.fromStateObject( stateObject.destinationVector2 ) );
+      destinationProperty = new Vector2Property( Vector2.Vector2IO.fromStateObject( stateObject.destinationVector2 ), {
+        valueComparisonStrategy: 'equalsFunction'
+      } );
     }
     return [ energyChunk, destinationProperty, {} ];
   }

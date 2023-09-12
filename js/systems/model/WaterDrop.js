@@ -28,7 +28,7 @@ class WaterDrop {
     this.position = initialPosition;
 
     // @public
-    this.velocityProperty = new Vector2Property( initialVelocity );
+    this.velocityProperty = new Vector2Property( initialVelocity, { valueComparisonStrategy: 'equalsFunction' } );
 
     // @public (read-only) {Dimension2}
     this.size = size;

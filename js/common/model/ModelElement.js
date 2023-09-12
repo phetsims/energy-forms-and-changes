@@ -40,6 +40,7 @@ class ModelElement extends PhetioObject {
 
     // @public
     this.positionProperty = new Vector2Property( initialPosition, merge( {
+      valueComparisonStrategy: 'equalsFunction',
       hasListenerOrderDependencies: true, // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/421
       tandem: options.tandem.createTandem( 'positionProperty' )
     }, options.positionPropertyOptions ) );
@@ -47,12 +48,14 @@ class ModelElement extends PhetioObject {
     // @public (read-only)
     this.tandemName = options.tandem.name;
 
-    // @public {HorizontalSurface|null} - The top surface of this model element, the value will be
-    // null if other elements can't rest upon the surface.  Its position is updated when the model element is moved.
+    // @public {HorizontalSurface|null} - The top surface of this model element, the value will be null if other
+    // elements can't rest upon the surface.  Its position is updated when the model element is moved.  Does not to be
+    // part of PhET-iO state because it's set in subclass constructor and never changed thereafter.
     this.topSurface = null;
 
-    // @protected {HorizontalSurface|null} - The bottom surface of this model element, the value will be null if
-    // this model element can't rest on another surface.
+    // @protected {HorizontalSurface|null} - The bottom surface of this model element, the value will be null if this
+    // model element can't rest on another surface.  Does not to be part of PhET-iO state because it's set in subclass
+    // constructor and never changed thereafter.
     this.bottomSurface = null;
 
     // @public (read-only) {ObservableArrayDef.<Bounds2>} - A list of bounds that are used for determining if this model

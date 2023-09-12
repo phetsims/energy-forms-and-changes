@@ -409,6 +409,9 @@ class EFACIntroModel {
     this.thermalContainers.forEach( movableModelElement => {
       const userControlled = movableModelElement.userControlledProperty.value;
       const unsupported = movableModelElement.supportingSurface === null;
+      if ( phet.preloads.phetio.queryParameters.frameTitle === 'destination' && !unsupported ) {
+        console.log( `element ${movableModelElement.id} supported by ${movableModelElement.supportingSurface.owner.id}` );
+      }
       const raised = movableModelElement.positionProperty.value.y !== 0;
       const atXSpot = _.includes( this.groundSpotXPositions, movableModelElement.positionProperty.value.x );
       if ( !userControlled && unsupported && ( raised || !atXSpot ) ) {

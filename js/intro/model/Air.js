@@ -187,7 +187,7 @@ class Air {
     this.energyChunkList.push( energyChunk );
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
       energyChunk,
-      new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ) ),
+      new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ), { valueComparisonStrategy: 'equalsFunction' } ),
       { horizontalWanderConstraint: horizontalWanderConstraint }
     ) );
   }
