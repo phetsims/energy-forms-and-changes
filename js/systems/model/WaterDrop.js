@@ -1,4 +1,4 @@
-// Copyright 2016-2020, University of Colorado Boulder
+// Copyright 2016-2023, University of Colorado Boulder
 
 /**
  * a model of a drop of water, generally used to create a stream of water coming from, say, a faucet

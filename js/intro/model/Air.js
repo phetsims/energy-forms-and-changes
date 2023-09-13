@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2023, University of Colorado Boulder
 
 /**
  * A type that represents the air in the model. Air can hold heat and exchange thermal energy with other model objects.
