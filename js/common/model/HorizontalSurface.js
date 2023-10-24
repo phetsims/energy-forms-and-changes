@@ -12,26 +12,40 @@
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import ModelElement from './ModelElement.js';
 
-class HorizontalSurface {
+class HorizontalSurface extends PhetioObject {
 
   /**
    * @param {Vector2} initialPosition
    * @param {number} width
    * @param {ModelElement} owner
+   * @param {Tandem} tandem
    * @param {ModelElement} [initialElementOnSurface] - model element that is already on this surface
    */
-  constructor( initialPosition, width, owner, initialElementOnSurface ) {
+  constructor( initialPosition, width, owner, tandem, initialElementOnSurface ) {
+    super( {
+      tandem: tandem,
+      phetioState: false
+    } );
 
     // @public (read-write)
-    this.positionProperty = new Vector2Property( initialPosition, { valueComparisonStrategy: 'equalsFunction' } );
+    this.positionProperty = new Vector2Property( initialPosition, {
+      valueComparisonStrategy: 'equalsFunction',
+      tandem: tandem.createTandem( 'positionProperty' )
+    } );
 
     // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
     // one, null if nothing there, use the API below to update
     this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null, {
-      valueType: [ ModelElement, null ]
+      valueType: [ ModelElement, null ],
+      tandem: tandem.createTandem( 'elementOnSurfaceProperty' ),
+      phetioValueType: NullableIO( ReferenceIO( IOType.ObjectIO ) )
     } );
 
     // monitor the element on the surface for legitimate settings

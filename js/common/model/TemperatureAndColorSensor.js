@@ -30,6 +30,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
+      phetioState: false,
       positionPropertyOptions: {
         phetioDocumentation: 'the position of the tip of the thermometer\'s color sensor'
       },

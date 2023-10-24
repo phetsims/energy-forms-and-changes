@@ -11,6 +11,9 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import ModelElement from './ModelElement.js';
 
@@ -24,6 +27,8 @@ class UserMovableModelElement extends ModelElement {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
+      phetioType: UserMovableModelElement.UserMovableModelElementIO,
+      phetioState: true,
       userControllable: true
     }, options );
 
@@ -35,7 +40,8 @@ class UserMovableModelElement extends ModelElement {
 
     // @public {NumberProperty} - in meters/second
     this.verticalVelocityProperty = new NumberProperty( 0, {
-      range: new Range( -4, 0 ) // empirically determined
+      range: new Range( -4, 0 ), // empirically determined
+      tandem: options.tandem.createTandem( 'verticalVelocityProperty' )
     } );
 
     // @public (read-only) - for phet-io: assign tandem in the model so the corresponding names can be leveraged in
@@ -97,7 +103,10 @@ class UserMovableModelElement extends ModelElement {
       'a supporting surface was already set'
     );
 
-    supportingSurface.positionProperty.link( this.surfaceMotionObserver );
+    // TODO: likely this check should not be graceful and should actually be right, https://github.com/phetsims/energy-forms-and-changes/issues/424
+    if ( supportingSurface.positionProperty.hasListener( this.surfaceMotionObserver ) ) {
+      supportingSurface.positionProperty.link( this.surfaceMotionObserver );
+    }
     this.supportingSurface = supportingSurface;
   }
 
@@ -109,7 +118,11 @@ class UserMovableModelElement extends ModelElement {
 
     // only do something if the supporting surface was set
     if ( this.supportingSurface !== null ) {
-      this.supportingSurface.positionProperty.unlink( this.surfaceMotionObserver );
+
+      // TODO: likely this check should not be graceful and should actually be right, https://github.com/phetsims/energy-forms-and-changes/issues/424
+      if ( this.supportingSurface.positionProperty.hasListener( this.surfaceMotionObserver ) ) {
+        this.supportingSurface.positionProperty.unlink( this.surfaceMotionObserver );
+      }
       this.supportingSurface.elementOnSurfaceProperty.set( null );
       this.supportingSurface = null;
     }
@@ -128,6 +141,29 @@ class UserMovableModelElement extends ModelElement {
     return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
   }
 }
+
+UserMovableModelElement.UserMovableModelElementIO = new IOType( 'UserMovableModelElementIO', {
+  valueType: UserMovableModelElement,
+  stateSchema: {
+    supportingSurface: NullableIO( ReferenceIO( IOType.ObjectIO ) )
+  },
+  applyState: ( userMovableModelElement, stateObject ) => {
+    const supportingSurface = NullableIO( ReferenceIO( IOType.ObjectIO ) ).fromStateObject(
+      stateObject.supportingSurface
+    );
+    if ( supportingSurface ) {
+
+      if ( userMovableModelElement.supportingSurface ) {
+        userMovableModelElement.clearSupportingSurface();
+      }
+
+      userMovableModelElement.setSupportingSurface( supportingSurface );
+    }
+    else {
+      userMovableModelElement.clearSupportingSurface();
+    }
+  }
+} );
 
 energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
 export default UserMovableModelElement;

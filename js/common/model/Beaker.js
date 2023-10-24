@@ -31,6 +31,7 @@ import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
 import ThermalContactArea from './ThermalContactArea.js';
+import UserMovableModelElement from './UserMovableModelElement.js';
 
 // constants
 const MATERIAL_THICKNESS = 0.001; // In meters.
@@ -173,14 +174,16 @@ class Beaker extends RectangularThermalMovableModelElement {
     this.topSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, bounds.minY + MATERIAL_THICKNESS ),
       width,
-      this
+      this,
+      options.tandem.createTandem( 'topSurface' )
     );
 
     // @public - see base class for description
     this.bottomSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, bounds.minY ),
       width,
-      this
+      this,
+      options.tandem.createTandem( 'bottomSurface' )
     );
 
     // update internal state when the position changes
@@ -811,8 +814,8 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 ];
 
 Beaker.BeakerIO = new IOType( 'BeakerIO', {
+  supertype: UserMovableModelElement.UserMovableModelElementIO,
   valueType: Beaker,
-  toStateObject: beaker => ( { beakerType: BeakerTypeEnumerationIO.toStateObject( beaker.beakerType ) } ),
   stateSchema: {
     beakerType: BeakerTypeEnumerationIO
   }

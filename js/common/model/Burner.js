@@ -118,7 +118,8 @@ class Burner extends ModelElement {
     this.topSurface = new HorizontalSurface(
       new Vector2( this.position.x, this.bounds.maxY ),
       this.bounds.maxX + perspectiveCompensation - ( this.bounds.minX - perspectiveCompensation ),
-      this
+      this,
+      options.tandem.createTandem( 'topSurface' )
     );
   }
 

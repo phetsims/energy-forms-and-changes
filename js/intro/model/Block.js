@@ -21,6 +21,7 @@ import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSl
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
+import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType from './BlockType.js';
 
@@ -59,24 +60,25 @@ class Block extends RectangularThermalMovableModelElement {
    * @param {BlockType} blockType
    * @param {PhetioGroup} energyChunkGroup
    * optional for the parent
-   * @param {Object} config
+   * @param {Object} [options]
    */
   constructor( initialPosition,
                energyChunksVisibleProperty,
                blockType,
                energyChunkGroup,
-               config ) {
+               options ) {
 
-    config = merge( {
-      energyChunkWanderControllerGroup: required( config.energyChunkWanderControllerGroup ),
+    options = merge( {
+      energyChunkWanderControllerGroup: required( options.energyChunkWanderControllerGroup ),
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
 
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
+      phetioState: true,
       phetioType: Block.BlockIO,
       phetioDocumentation: 'block that can be of type iron or brick'
-    }, config );
+    }, options );
 
     super(
       initialPosition,
@@ -86,7 +88,7 @@ class Block extends RectangularThermalMovableModelElement {
       BLOCK_COMPOSITION[ blockType ].specificHeat,
       energyChunksVisibleProperty,
       energyChunkGroup,
-      config
+      options
     );
 
     // @public (read-only) {String} - unique ID for this block
@@ -112,14 +114,16 @@ class Block extends RectangularThermalMovableModelElement {
     this.topSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, rectangle.maxY ),
       EFACConstants.BLOCK_SURFACE_WIDTH,
-      this
+      this,
+      options.tandem.createTandem( 'topSurface' )
     );
 
     // @public - see base class for description
     this.bottomSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, rectangle.minY ),
       EFACConstants.BLOCK_SURFACE_WIDTH,
-      this
+      this,
+      options.tandem.createTandem( 'bottomSurface' )
     );
 
     // update the top and bottom surfaces whenever the position changes
@@ -271,8 +275,8 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
 ];
 
 Block.BlockIO = new IOType( 'BlockIO', {
+  supertype: UserMovableModelElement.UserMovableModelElementIO,
   valueType: Block,
-  toStateObject: block => ( { blockType: BlockTypeEnumerationIO.toStateObject( block.blockType ) } ),
   stateSchema: {
     blockType: BlockTypeEnumerationIO
   }
