@@ -104,7 +104,7 @@ class UserMovableModelElement extends ModelElement {
     );
 
     // TODO: likely this check should not be graceful and should actually be right, https://github.com/phetsims/energy-forms-and-changes/issues/424
-    if ( supportingSurface.positionProperty.hasListener( this.surfaceMotionObserver ) ) {
+    if ( !supportingSurface.positionProperty.hasListener( this.surfaceMotionObserver ) ) {
       supportingSurface.positionProperty.link( this.surfaceMotionObserver );
     }
     this.supportingSurface = supportingSurface;
