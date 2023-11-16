@@ -2,7 +2,7 @@
 
 /**
  * PhetioGroup for creating EnergyChunkPathMovers. This type adds support for dynamically created and destroyed,
- * instrumented PhET-iO elements.
+ * instrumented PhET-iO Elements.
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
