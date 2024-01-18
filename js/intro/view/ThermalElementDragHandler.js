@@ -3,6 +3,8 @@
 /**
  * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
  * them from being dragged through one another
+ *
+ * @author Martin Veillette (Berea College)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
