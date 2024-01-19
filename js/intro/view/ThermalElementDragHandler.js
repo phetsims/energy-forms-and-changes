@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2024, University of Colorado Boulder
 
 /**
  * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
