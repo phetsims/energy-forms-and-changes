@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2024, University of Colorado Boulder
 
 /**
  * view representation of the air, which is basically just a parent node through which energy chunks can move
