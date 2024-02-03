@@ -1,7 +1,7 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
 /**
- * Scenery node that represents a beaker in the view. This representation is split between a front node and a back
+ * Scenery node that represents a beaker in the view. This snackType is split between a front node and a back
  * node, which must be separately added to the scene graph. This is done to allow a layering effect. Hence, this cannot
  * be added directly to the scene graph, and the client must add each layer separately.
  *

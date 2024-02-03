@@ -85,7 +85,7 @@ class BlockNode extends Node {
     const scaleVector = modelViewTransform.matrix.getScaleVector();
     const scaleTransform = new Transform3( Matrix3.scaling( scaleVector.x, -scaleVector.y ) );
 
-    // get a view representation of the block without perspective
+    // get a view snackType of the block without perspective
     const blockRect = scaleTransform.transformShape( block.getUntransformedBounds() );
 
     // create the shape for the front of the block
@@ -205,7 +205,7 @@ class BlockNode extends Node {
     if ( EFACQueryParameters.show2DBlockBounds ) {
       const blockBounds = scaleTransform.transformBounds2( block.getUntransformedBounds() );
 
-      // compensate for inverted Y axis when creating view representation
+      // compensate for inverted Y axis when creating view snackType
       this.addChild( new Rectangle(
         blockBounds.minX,
         blockBounds.minY - blockBounds.height,
