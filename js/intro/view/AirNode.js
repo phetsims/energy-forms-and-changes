@@ -1,7 +1,7 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
 /**
- * view snackType of the air, which is basically just a parent node through which energy chunks can move
+ * view representation of the air, which is basically just a parent node through which energy chunks can move
  *
  * @author John Blanco
  */
