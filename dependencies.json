@@ -1,5 +1,5 @@
 {
-  "comment": "# energy-forms-and-changes 1.4.15 Mon Dec 11 2023 17:22:11 GMT-0700 (Mountain Standard Time)",
+  "comment": "# energy-forms-and-changes 1.4.16-rc.1 Thu Feb 29 2024 12:36:00 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "7101632f5c41d7886bdc8fa5bde5c621a0595270",
+    "sha": "355d649d872a8422451d8a6648c395837954f540",
     "branch": "1.4"
   },
   "joist": {
