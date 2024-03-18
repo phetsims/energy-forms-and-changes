@@ -13,7 +13,7 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "0cbb279be32f382ce98e316701ad1669206b815c",
+    "sha": "12e7b8bb0275bad9968ea4a4fd1c441237c4a08d",
     "branch": "HEAD"
   },
   "dot": {
@@ -21,11 +21,11 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "ea627f5385070560737a69ff01bb8858ea7c71e5",
+    "sha": "d53e3ca625ba9c7cdcf52b64d6a1ce588326f033",
     "branch": "1.4"
   },
   "joist": {
-    "sha": "5217ff4cda4234db6d5eac409f4bd71d7d1dd780",
+    "sha": "9ffe5141fe7a0dbd00e6f36abfd5dff6283dd3aa",
     "branch": "HEAD"
   },
   "kite": {
