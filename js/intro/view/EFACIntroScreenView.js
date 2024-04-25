@@ -290,13 +290,12 @@ class EFACIntroScreenView extends ScreenView {
         up: leftHeaterCoolerUpInputAction
       } ) );
 
-      leftHeaterCoolerNode.addInputListener( new KeyboardListener( {
-        keys: EnglishStringKeyUtils.RANGE_KEYS,
-        listenerFireTrigger: 'both',
-        callback: event => event.type === 'keydown' ?
-                           leftHeaterCoolerDownInputAction() :
-                           leftHeaterCoolerUpInputAction()
-      } ) );
+
+      const leftKeyboardListener = new KeyboardListener( { keys: EnglishStringKeyUtils.RANGE_KEYS } );
+      leftHeaterCoolerNode.addInputListener( leftKeyboardListener );
+      leftKeyboardListener.isPressedProperty.link( pressed => {
+        pressed ? leftHeaterCoolerDownInputAction() : leftHeaterCoolerUpInputAction();
+      } );
 
       const rightHeaterCoolerDownInputAction = () => {
 
@@ -316,14 +315,11 @@ class EFACIntroScreenView extends ScreenView {
         up: rightHeaterCoolerUpInputAction
       } ) );
 
-      // listen to keyboard events on the right heater-cooler
-      rightHeaterCoolerNode.addInputListener( new KeyboardListener( {
-        keys: EnglishStringKeyUtils.RANGE_KEYS,
-        listenerFireTrigger: 'both',
-        callback: event => event.type === 'keydown' ?
-                           rightHeaterCoolerDownInputAction() :
-                           rightHeaterCoolerUpInputAction()
-      } ) );
+      const rightKeyboardListener = new KeyboardListener( { keys: EnglishStringKeyUtils.RANGE_KEYS } );
+      rightHeaterCoolerNode.addInputListener( rightKeyboardListener );
+      rightKeyboardListener.isPressedProperty.link( pressed => {
+        pressed ? rightHeaterCoolerDownInputAction() : rightHeaterCoolerUpInputAction();
+      } );
 
       rightBurnerBounds = model.rightBurner.getBounds();
     }
