@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "energy-forms-and-changes": {
-    "sha": "cd665c1d43fb09f529414c4d4e3e9a305198db78",
+    "sha": "15b9f2a5bcee3d3293c1088d672444fbfbda5f28",
     "branch": "1.4"
   },
   "joist": {
@@ -61,7 +61,7 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "98ba0478039131f810bd2a338aa0c990c7a9bb45",
+    "sha": "98dd27b0f4844c39155e069f41083da6823eccd4",
     "branch": "HEAD"
   },
   "scenery-phet": {
