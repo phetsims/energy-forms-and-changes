@@ -11,7 +11,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import { CanvasNode } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import TeaKettle from '../model/TeaKettle.js';
@@ -77,7 +77,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
     this.mutate( options );
 
     // Preload steam animation after state has been set
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    phetioStateSetEmitter.addListener( () => {
       this.preloadSteam();
     } );
   }

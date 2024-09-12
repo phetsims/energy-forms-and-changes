@@ -11,7 +11,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import { CanvasNode } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 
@@ -78,7 +78,7 @@ class BeakerSteamCanvasNode extends CanvasNode {
     this.mutate( options );
 
     // Preload steam animation after state has been set
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    phetioStateSetEmitter.addListener( () => {
       this.preloadSteam();
     } );
   }

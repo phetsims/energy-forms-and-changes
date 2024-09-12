@@ -20,7 +20,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
@@ -133,7 +133,7 @@ class EnergySystemElementCarousel {
     } );
 
     // Don't animate the system elements when setting state for better user experience when launching the sim.
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    phetioStateSetEmitter.addListener( () => {
       this.finishInProgressAnimation();
     } );
   }
