@@ -182,7 +182,7 @@ class EnergyChunk extends PhetioObject {
 EnergyChunk.EnergyChunkIO = new IOType( 'EnergyChunkIO', {
   valueType: EnergyChunk,
   toStateObject: energyChunk => energyChunk.toStateObject(),
-  stateObjectToCreateElementArguments: EnergyChunk.stateObjectToCreateElementArguments,
+  stateObjectToCreateElementArguments: stateObject => EnergyChunk.stateObjectToCreateElementArguments( stateObject ),
   stateSchema: {
     id: NumberIO,
     velocity: Vector2.Vector2IO,

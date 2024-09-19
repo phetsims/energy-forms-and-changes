@@ -320,7 +320,7 @@ class EnergyChunkWanderController extends PhetioObject {
 EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyChunkWanderControllerIO', {
   valueType: EnergyChunkWanderController,
   toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
-  stateObjectToCreateElementArguments: EnergyChunkWanderController.stateObjectToCreateElementArguments,
+  stateObjectToCreateElementArguments: stateObject => EnergyChunkWanderController.stateObjectToCreateElementArguments( stateObject ),
   applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
   stateSchema: {
     minSpeed: NumberIO,

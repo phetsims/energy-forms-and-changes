@@ -229,7 +229,7 @@ class EnergyChunkPathMover extends PhetioObject {
 EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverIO', {
   valueType: EnergyChunkPathMover,
   toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
-  stateObjectToCreateElementArguments: EnergyChunkPathMover.stateObjectToCreateElementArguments,
+  stateObjectToCreateElementArguments: stateObject => EnergyChunkPathMover.stateObjectToCreateElementArguments( stateObject ),
   applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
   stateSchema: {
     path: ArrayIO( Vector2.Vector2IO ),
