@@ -40,7 +40,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../energy-forms-and-changes/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
