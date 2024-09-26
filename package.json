@@ -27,11 +27,5 @@
       "ENERGY_FORMS_AND_CHANGES/intro",
       "ENERGY_FORMS_AND_CHANGES/systems"
     ]
-  },
-  "eslintConfig": {
-    "extends": "../chipper/eslint/sim_eslintrc.js",
-    "rules": {
-      "no-view-imported-from-model": "off"
-    }
   }
 }
