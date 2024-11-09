@@ -178,7 +178,8 @@ class EFACIntroModel {
           this.energyChunkGroup, {
             energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             tandem: tandem
-          } );
+          }
+        );
       },
       [ BlockType.IRON, 0 ],
       {
