@@ -208,34 +208,34 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
     'energyChunkPositionsBySlice': [
       [
         {
-          'positionX': -0.25640756950670235,
-          'positionY': 0.006850135040548302
+          positionX: -0.015407569506702357,
+          positionY: 0.006850135040548302
         }
       ],
       [
         {
-          'positionX': -0.2537531660345353,
-          'positionY': 0.02393321792569457
+          positionX: -0.012753166034535302,
+          positionY: 0.02393321792569457
         },
         {
-          'positionX': -0.23829971427184846,
-          'positionY': 0.009582482706072211
+          positionX: 0.0027002857281515358,
+          positionY: 0.009582482706072211
         }
       ],
       [
         {
-          'positionX': -0.24358344197642037,
-          'positionY': 0.035369522321921996
+          positionX: -0.002583441976420381,
+          positionY: 0.035369522321921996
         },
         {
-          'positionX': -0.2282683630416627,
-          'positionY': 0.02098996529690959
+          positionX: 0.012731636958337289,
+          positionY: 0.02098996529690959
         }
       ],
       [
         {
-          'positionX': -0.22579080380196173,
-          'positionY': 0.038104769283249865
+          positionX: 0.01520919619803826,
+          positionY: 0.038104769283249865
         }
       ]
     ]
@@ -250,14 +250,14 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
       [],
       [
         {
-          'positionX': -0.15231883878415728,
-          'positionY': 0.015189399553646257
+          positionX: -0.007318838784157289,
+          positionY: 0.015189399553646257
         }
       ],
       [
         {
-          'positionX': -0.13768266639921758,
-          'positionY': 0.029811817909006666
+          positionX: 0.007317333600782405,
+          positionY: 0.029811817909006666
         }
       ],
       []
