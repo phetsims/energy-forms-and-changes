@@ -640,11 +640,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
         energyChunkPositions.forEach( relativeEnergyChunkPosition => {
 
           // Determine the absolute position of the energy chunk in model space.  The preset position is relative to
-          // the model element, so we need to add the model element's position to it.
-          const energyChunkPosition = new Vector2(
-            relativeEnergyChunkPosition.positionX + this.positionProperty.value.x,
-            relativeEnergyChunkPosition.positionY + this.positionProperty.value.y
-          );
+          // this model element, so we need to add the two positions together to get the absolute position.
+          const energyChunkPosition = relativeEnergyChunkPosition.plus( this.positionProperty.value );
 
           // Create the energy chunk and add it to the slice.
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(

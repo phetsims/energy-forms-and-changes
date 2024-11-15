@@ -216,36 +216,18 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
     numberOfEnergyChunks: 6,
     energyChunkPositionsBySlice: [
       [
-        {
-          positionX: -0.015407569506702357,
-          positionY: 0.006850135040548302
-        }
+        new Vector2( -0.015407569506702357, 0.006850135040548302 )
       ],
       [
-        {
-          positionX: -0.012753166034535302,
-          positionY: 0.02393321792569457
-        },
-        {
-          positionX: 0.0027002857281515358,
-          positionY: 0.009582482706072211
-        }
+        new Vector2( -0.012753166034535302, 0.02393321792569457 ),
+        new Vector2( 0.0027002857281515358, 0.009582482706072211 )
       ],
       [
-        {
-          positionX: -0.002583441976420381,
-          positionY: 0.035369522321921996
-        },
-        {
-          positionX: 0.012731636958337289,
-          positionY: 0.02098996529690959
-        }
+        new Vector2( -0.002583441976420381, 0.035369522321921996 ),
+        new Vector2( 0.012731636958337289, 0.02098996529690959 )
       ],
       [
-        {
-          positionX: 0.01520919619803826,
-          positionY: 0.038104769283249865
-        }
+        new Vector2( 0.01520919619803826, 0.038104769283249865 )
       ]
     ]
   },
@@ -258,16 +240,10 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
     energyChunkPositionsBySlice: [
       [],
       [
-        {
-          positionX: -0.007318838784157289,
-          positionY: 0.015189399553646257
-        }
+        new Vector2( -0.007318838784157289, 0.015189399553646257 )
       ],
       [
-        {
-          positionX: 0.007317333600782405,
-          positionY: 0.029811817909006666
-        }
+        new Vector2( 0.007317333600782405, 0.029811817909006666 )
       ],
       []
     ]
