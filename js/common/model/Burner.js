@@ -230,13 +230,15 @@ class Burner extends ModelElement {
         }
       } );
 
-      this.energyChunkList.remove( closestEnergyChunk );
-      this.energyChunkWanderControllers.forEach( energyChunkWanderController => {
-        if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
-          this.energyChunkWanderControllers.remove( energyChunkWanderController );
-          this.energyChunkWanderControllerGroup.disposeElement( energyChunkWanderController );
-        }
-      } );
+      if ( closestEnergyChunk ) {
+        this.energyChunkList.remove( closestEnergyChunk );
+        this.energyChunkWanderControllers.forEach( energyChunkWanderController => {
+          if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
+            this.energyChunkWanderControllers.remove( energyChunkWanderController );
+            this.energyChunkWanderControllerGroup.disposeElement( energyChunkWanderController );
+          }
+        } );
+      }
     }
 
     if ( closestEnergyChunk === null && this.heatCoolLevelProperty.value > 0 ) {
