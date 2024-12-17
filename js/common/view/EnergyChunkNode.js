@@ -26,7 +26,6 @@ import EnergyType from '../model/EnergyType.js';
 const energyChunkLabelString = EnergyFormsAndChangesStrings.energyChunkLabel;
 
 // constants
-const Z_DISTANCE_WHERE_FULLY_FADED = 0.1; // In meters
 
 // convenience map that links energy types to their representing images
 const mapEnergyTypeToImage = {};
@@ -89,14 +88,14 @@ class EnergyChunkNode extends Node {
   }
 
   /**
-   * update the transparency, which is a function of several factors
+   * Update the transparency, which is mostly a function of how far the energy chunk is from the front.
    * @private
    * @param {number} zPosition
    */
   updateTransparency( zPosition ) {
     let zFadeValue = 1;
     if ( zPosition < 0 ) {
-      zFadeValue = Math.max( ( Z_DISTANCE_WHERE_FULLY_FADED + zPosition ) / Z_DISTANCE_WHERE_FULLY_FADED, 0 );
+      zFadeValue = Math.max( 1 + zPosition / EFACConstants.Z_DISTANCE_WHERE_FULLY_FADED, 0 );
     }
     this.setOpacity( zFadeValue );
   }
@@ -138,9 +137,6 @@ const getEnergyChunkNode = energyType => {
   }
   return energyChunkImageNodes[ energyType ];
 };
-
-// statics
-EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED = Z_DISTANCE_WHERE_FULLY_FADED;
 
 energyFormsAndChanges.register( 'EnergyChunkNode', EnergyChunkNode );
 export default EnergyChunkNode;

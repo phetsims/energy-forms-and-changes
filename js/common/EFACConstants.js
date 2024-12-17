@@ -190,6 +190,10 @@ const EFACConstants = {
   Z_TO_X_OFFSET_MULTIPLIER: Z_TO_X_OFFSET_MULTIPLIER,
   Z_TO_Y_OFFSET_MULTIPLIER: Z_TO_Y_OFFSET_MULTIPLIER,
 
+  // The Z distance where the energy chunks are fully faded out and therefore invisible to users.  This is mostly used
+  // to set the opacity of the energy chunks.
+  Z_DISTANCE_WHERE_FULLY_FADED: 0.1, // In meters
+
   // use the default layout bounds
   SCREEN_LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS
 

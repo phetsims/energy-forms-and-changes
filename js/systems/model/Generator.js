@@ -21,7 +21,6 @@ import generatorIcon_png from '../../../images/generatorIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
@@ -270,7 +269,7 @@ class Generator extends EnergyConverter {
             Vector2.ZERO,
             this.energyChunksVisibleProperty
           );
-          hiddenChunk.zPositionProperty.set( -EnergyChunkNode.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
+          hiddenChunk.zPositionProperty.set( -EFACConstants.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
           this.hiddenEnergyChunks.push( hiddenChunk );
           const hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( hiddenChunk,

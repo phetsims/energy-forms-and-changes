@@ -10,10 +10,5 @@
 import simEslintConfig from '../perennial-alias/js/eslint/config/sim.eslint.config.mjs';
 
 export default [
-  ...simEslintConfig,
-  {
-    rules: {
-      'phet/no-view-imported-from-model': 'off'
-    }
-  }
+  ...simEslintConfig
 ];
