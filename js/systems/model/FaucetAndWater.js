@@ -219,7 +219,7 @@ class FaucetAndWater extends EnergySource {
         .plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).distance( chunk.positionProperty.value );
       if ( chunkDistance > MAX_DISTANCE_FROM_FAUCET_TO_BOTTOM_OF_WATER ) {
         this.energyChunkList.remove( chunk );
-        this.exemptFromTransferEnergyChunks.remove( chunk );
+        this.exemptFromTransferEnergyChunks.includes( chunk ) && this.exemptFromTransferEnergyChunks.remove( chunk );
         this.energyChunkGroup.disposeElement( chunk );
       }
     } );
