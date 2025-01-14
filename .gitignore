@@ -7,3 +7,4 @@ node_modules/
 *.sublime-project
 *.sublime-workspace
 .eslintcache
+.aider.tags.cache.v3/cache.db
