@@ -256,7 +256,7 @@ class Beaker extends RectangularThermalMovableModelElement {
   addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks ) {
 
     // make a copy of the slice array sorted such that the smallest is first
-    let sortedSliceArray = _.sortBy( this.slices.getArray(), slice => {
+    let sortedSliceArray = _.sortBy( this.slices, slice => {
       return slice.bounds.width * slice.bounds.height;
     } );
 

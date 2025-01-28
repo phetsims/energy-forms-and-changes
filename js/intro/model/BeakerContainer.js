@@ -148,7 +148,7 @@ class BeakerContainer extends Beaker {
            ecPosition.x > beakerBounds.minX &&
            ecPosition.x < beakerBounds.maxX ) {
 
-        const wanderController = _.find( this.energyChunkWanderControllers.getArray(), controller => {
+        const wanderController = _.find( this.energyChunkWanderControllers, controller => {
           return controller.energyChunk === energyChunk;
         } );
 
