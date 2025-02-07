@@ -9,9 +9,10 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Image, Path } from '../../../../scenery/js/imports.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import connector_png from '../../../images/connector_png.js';
 import solarPanel_png from '../../../images/solarPanel_png.js';
 import solarPanelGen_png from '../../../images/solarPanelGen_png.js';

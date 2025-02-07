@@ -12,7 +12,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkNode from './EnergyChunkNode.js';
 

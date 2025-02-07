@@ -6,7 +6,8 @@
  * @author Chris Klusendorf
  */
 
-import { Image, Node } from '../../../../scenery/js/imports.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import connector_png from '../../../images/connector_png.js';
 import fan01_png from '../../../images/fan01_png.js';
 import fan02_png from '../../../images/fan02_png.js';

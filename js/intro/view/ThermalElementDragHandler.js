@@ -8,7 +8,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { DragListener } from '../../../../scenery/js/imports.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ThermalElementDragHandler extends DragListener {

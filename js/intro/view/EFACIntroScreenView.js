@@ -24,7 +24,15 @@ import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js'
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
-import { DownUpListener, EnglishStringKeyUtils, HBox, Image, KeyboardListener, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import EnglishStringKeyUtils from '../../../../scenery/js/accessibility/EnglishStringKeyUtils.js';
+import DownUpListener from '../../../../scenery/js/input/DownUpListener.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import KeyboardListener from '../../../../scenery/js/listeners/KeyboardListener.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
