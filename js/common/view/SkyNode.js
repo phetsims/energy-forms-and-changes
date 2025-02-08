@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2025, University of Colorado Boulder
 
 /**
  * A scenery node that represents a floating "sky" layer that fades in and out

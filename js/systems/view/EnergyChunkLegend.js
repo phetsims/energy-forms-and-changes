@@ -1,4 +1,4 @@
-// Copyright 2016-2022, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * a Scenery Node that represent a legend that describes the different types of energy chunks

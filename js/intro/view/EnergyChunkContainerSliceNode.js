@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * A node that represents a 2D surface on which energy chunks reside. The surface contains z-dimension information,

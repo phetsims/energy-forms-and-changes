@@ -1,4 +1,4 @@
-// Copyright 2016-2024, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * a type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements

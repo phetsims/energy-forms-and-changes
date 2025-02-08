@@ -1,4 +1,4 @@
-// Copyright 2016-2023, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * a type representing a model of the sun as an energy source - includes the clouds that can block the sun's rays

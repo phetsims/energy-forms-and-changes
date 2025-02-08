@@ -1,4 +1,4 @@
-// Copyright 2016-2022, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * a type that models a fluorescent light bulb in an energy system

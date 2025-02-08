@@ -1,4 +1,4 @@
-// Copyright 2016-2024, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * a Scenery Node that represents a collection of light rays emanating from a circular or point source
