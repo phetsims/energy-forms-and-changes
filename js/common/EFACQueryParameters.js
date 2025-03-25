@@ -7,6 +7,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import EFACConstants from './EFACConstants.js';
 
