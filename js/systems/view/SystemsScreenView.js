@@ -83,8 +83,7 @@ class SystemsScreenView extends ScreenView {
 
     // pdom - a description of the current configuration of the energy system to be read by assistive technology
     const energySystemConfigDescription = new Node( {
-      tagName: 'h3',
-      innerContent: EnergyFormsAndChangesStrings.a11y.energySystem,
+      accessibleHeading: EnergyFormsAndChangesStrings.a11y.energySystem,
       descriptionContent: EnergyFormsAndChangesStrings.a11y.energySystemHelpText
     } );
     this.addChild( energySystemConfigDescription );
