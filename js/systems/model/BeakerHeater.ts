@@ -9,19 +9,25 @@
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import Color from '../../../../scenery/js/Color.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import waterIcon_png from '../../../images/waterIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
+import Energy from '../../common/model/Energy.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import EnergyChunkPathMoverGroup from '../../common/model/EnergyChunkPathMoverGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
@@ -61,16 +67,10 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class BeakerHeater extends EnergyUser {
 
-  /**
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty,
-               energyChunkGroup,
-               energyChunkPathMoverGroup,
-               options ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty,
+                      energyChunkGroup: EnergyChunkGroup,
+                      energyChunkPathMoverGroup: EnergyChunkPathMoverGroup,
+                      options?: object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -153,12 +153,9 @@ class BeakerHeater extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @param  {Energy} incomingEnergy
-   * @public
-   * @override
+   * @param dt - time step, in seconds
    */
-  step( dt, incomingEnergy ) {
+  public override step( dt: number, incomingEnergy: Energy ): void {
     if ( !this.activeProperty.value ) {
       return;
     }
@@ -272,17 +269,14 @@ class BeakerHeater extends EnergyUser {
   /**
    * update the temperature and color at the specified position within the beaker
    *
-   * @param {Vector2} position - position to be sensed
-   * @param {Property.<number>} sensedTemperatureProperty
-   * @param {Property.<Color>} sensedElementColorProperty
-   * @public
+   * @param position - position to be sensed
    */
-  updateTemperatureAndColorAndNameAtPosition(
-    position,
-    sensedTemperatureProperty,
-    sensedElementColorProperty,
-    sensedElementNameProperty
-  ) {
+  public updateTemperatureAndColorAndNameAtPosition(
+    position: Vector2,
+    sensedTemperatureProperty: Property<number>,
+    sensedElementColorProperty: Property<Color>,
+    sensedElementNameProperty: Property<string>
+  ): void {
 
     // validate that the specified position is inside the beaker, since that's the only supported position
     assert && assert(
@@ -300,10 +294,9 @@ class BeakerHeater extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveRadiatedEnergyChunks( dt ) {
+  private moveRadiatedEnergyChunks( dt: number ): void {
     const movers = this.radiatedEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -321,10 +314,9 @@ class BeakerHeater extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveThermalEnergyChunks( dt ) {
+  private moveThermalEnergyChunks( dt: number ): void {
     const movers = this.heatingElementEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -343,10 +335,9 @@ class BeakerHeater extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveElectricalEnergyChunks( dt ) {
+  private moveElectricalEnergyChunks( dt: number ): void {
     const movers = this.electricalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -367,12 +358,7 @@ class BeakerHeater extends EnergyUser {
     } );
   }
 
-  /**
-   * @param  {Energy} incomingEnergyRate
-   * @public
-   * @override
-   */
-  preloadEnergyChunks( incomingEnergyRate ) {
+  public override preloadEnergyChunks( incomingEnergyRate: Energy ): void {
     this.clearEnergyChunks();
 
     if ( incomingEnergyRate.amount === 0 || incomingEnergyRate.type !== EnergyType.ELECTRICAL ) {
@@ -420,11 +406,7 @@ class BeakerHeater extends EnergyUser {
     }
   }
 
-  /**
-   * @public
-   * @override
-   */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.beaker.reset();
     this.beaker.positionProperty.value = this.positionProperty.value.plus( BEAKER_OFFSET );
@@ -436,10 +418,8 @@ class BeakerHeater extends EnergyUser {
 
   /**
    * remove all energy chunks
-   * @public
-   * @override
    */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
 
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
@@ -452,12 +432,7 @@ class BeakerHeater extends EnergyUser {
     this.radiatedEnergyChunkList.clear();
   }
 
-  /**
-   * @param  {Vector2} startingPoint
-   * @returns {Vector2[]}
-   * @private
-   */
-  createHeaterElementEnergyChunkPath( startingPoint ) {
+  private createHeaterElementEnergyChunkPath( startingPoint: Vector2 ): Vector2[] {
     const path = [];
 
     // The path for the thermal energy chunks is meant to look like it is moving on the burner element.  This must be
