@@ -55,12 +55,15 @@ const CHEMICAL_ENERGY_CHUNK_OFFSETS = [ BIKER_BUTTOCKS_OFFSET, TOP_TUBE_ABOVE_CR
 class Biker extends EnergySource {
 
   /**
-   * @param energyChunksVisibleProperty
-   * @param mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
+   * @param {Property.<boolean>} energyChunksVisibleProperty
+   * @param {Property.<boolean>} mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
+   * @param {EnergyChunkGroup} energyChunkGroup
+   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
+   * @param {Object} [options]
    */
-  public constructor( energyChunksVisibleProperty: Property<boolean>, mechanicalPoweredSystemIsNextProperty: Property<boolean>,
-               energyChunkGroup: any, energyChunkPathMoverGroup: any,
-               options?: any ) {
+  constructor( energyChunksVisibleProperty, mechanicalPoweredSystemIsNextProperty,
+               energyChunkGroup, energyChunkPathMoverGroup,
+               options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -189,9 +192,11 @@ class Biker extends EnergySource {
 
   /**
    * step this energy producer forward in time
-   * @param dt - time step in seconds
+   * @param  {number} dt - time step in seconds
+   * @returns {Energy}
+   * @public
    */
-  public step( dt: number ): Energy {
+  step( dt ) {
 
     if ( !this.activeProperty.value ) {
       return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
@@ -280,10 +285,10 @@ class Biker extends EnergySource {
   /**
    * moves energy chunks throughout the biker system and converts them to other energy types as needed
    *
-   * @param dt
+   * @param {number} dt
    * @private
    */
-  private moveEnergyChunks( dt: number ): void {
+  moveEnergyChunks( dt ) {
 
     // iterate through this copy while the original is mutated
     const movers = this.energyChunkMovers.slice();
@@ -372,9 +377,10 @@ class Biker extends EnergySource {
   }
 
   /**
+   * @public
    * @override
    */
-  public override preloadEnergyChunks(): void {
+  preloadEnergyChunks() {
 
     // if we're not supposed to have any chunks, clear any existing ones out of the biker. this is needed for stateSet,
     // see https://github.com/phetsims/energy-forms-and-changes/issues/335
@@ -432,9 +438,10 @@ class Biker extends EnergySource {
 
   /**
    * @returns {Energy}
+   * @public
    * @override
    */
-  public override getEnergyOutputRate(): Energy {
+  getEnergyOutputRate() {
     const amount = Math.abs(
       this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
     );
@@ -446,7 +453,7 @@ class Biker extends EnergySource {
    * generally done when the biker stops so that the animation starts right away the next time the motion starts.
    * @private
    */
-  private setCrankToPoisedPosition(): void {
+  setCrankToPoisedPosition() {
     const currentIndex = this.mapAngleToImageIndex( this.crankAngleProperty.value );
     const radiansPerImage = 2 * Math.PI / NUMBER_OF_LEG_IMAGES;
     this.crankAngleProperty.set( ( currentIndex % NUMBER_OF_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
@@ -456,17 +463,19 @@ class Biker extends EnergySource {
   /**
    * The biker is replenished each time she is reactivated. This was a fairly arbitrary decision, and can be changed
    * if desired.
+   * @public
    * @override
    */
-  public override activate(): void {
+  activate() {
     super.activate();
     this.replenishBikerEnergyChunks();
   }
 
   /**
+   * @public
    * @override
    */
-  public override deactivate(): void {
+  deactivate() {
     super.deactivate();
     this.targetCrankAngularVelocityProperty.reset();
     this.energyChunksRemainingProperty.reset();
@@ -475,9 +484,10 @@ class Biker extends EnergySource {
   }
 
   /**
+   * @public
    * @override
    */
-  public override clearEnergyChunks(): void {
+  clearEnergyChunks() {
     super.clearEnergyChunks();
     this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.energyChunkMovers.clear();
@@ -485,10 +495,11 @@ class Biker extends EnergySource {
 
   /**
    * adds the current number of energy chunks remaining to the biker
-   * @param clearEnergyChunks - whether to clear the existing chunks out of the biker before adding them
+   * @param {boolean} [clearEnergyChunks] - whether to clear the existing chunks out of the biker before adding them
    * back.
+   * @public
    */
-  public replenishBikerEnergyChunks( clearEnergyChunks = true ): void {
+  replenishBikerEnergyChunks( clearEnergyChunks = true ) {
     clearEnergyChunks && this.clearEnergyChunks();
     for ( let i = 0; i < this.energyChunksRemainingProperty.value; i++ ) {
       this.addEnergyChunkToBiker();
@@ -497,8 +508,9 @@ class Biker extends EnergySource {
 
   /**
    * add one energy chunk to biker
+   * @public
    */
-  public addEnergyChunkToBiker(): void {
+  addEnergyChunkToBiker() {
     const nominalInitialOffset = new Vector2( 0.019, 0.055 );
     const displacement = new Vector2( ( dotRandom.nextDouble() - 0.5 ) * 0.02, 0 ).rotated( Math.PI * 0.7 );
     const position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
@@ -515,10 +527,11 @@ class Biker extends EnergySource {
 
   /**
    * find the image index corresponding to this angle in radians
-   * @param angle - image index
-   * @returns number
+   * @param  {number} angle
+   * @returns {number} - image index
+   * @public
    */
-  public mapAngleToImageIndex( angle: number ): number {
+  mapAngleToImageIndex( angle ) {
     const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_LEG_IMAGES ) );
     assert && assert( i >= 0 && i < NUMBER_OF_LEG_IMAGES );
     return i;
@@ -529,7 +542,7 @@ class Biker extends EnergySource {
    * @returns {EnergyChunk}
    * @private
    */
-  private findNonMovingEnergyChunk(): any {
+  findNonMovingEnergyChunk() {
     const movingEnergyChunks = [];
     let nonMovingEnergyChunk = null;
 
@@ -552,7 +565,7 @@ class Biker extends EnergySource {
    * @public (EnergySystemElementIO)
    * @returns {Object}
    */
-  public override toStateObject(): any {
+  toStateObject() {
     return {
       energyProducedSinceLastChunkEmitted: this.energyProducedSinceLastChunkEmitted,
       mechanicalChunksSinceLastThermal: this.mechanicalChunksSinceLastThermal
@@ -562,9 +575,9 @@ class Biker extends EnergySource {
   /**
    * @override
    * @public (EnergySystemElementIO)
-   * @param stateObject - see this.toStateObject()
+   * @param {Object} stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: any ): void {
+  applyState( stateObject ) {
     this.energyProducedSinceLastChunkEmitted = stateObject.energyProducedSinceLastChunkEmitted;
     this.mechanicalChunksSinceLastThermal = stateObject.mechanicalChunksSinceLastThermal;
   }
@@ -573,12 +586,12 @@ class Biker extends EnergySource {
 /**
  * creates a path for an energy chunk that will travel to the hub and then become thermal
  *
- * @param centerPosition
- * @param currentPosition
+ * @param  {Vector2} centerPosition
+ * @param  {Vector2} currentPosition
  * @returns {Vector2[]}
  * @private
  */
-const createMechanicalToThermalEnergyChunkPath = ( centerPosition: Vector2, currentPosition: Vector2 ): Vector2[] => {
+const createMechanicalToThermalEnergyChunkPath = ( centerPosition, currentPosition ) => {
   const path = [];
   const crankPosition = centerPosition.plus( BIKE_CRANK_OFFSET );
   if ( currentPosition.y > crankPosition.y ) {
