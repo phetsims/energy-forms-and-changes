@@ -12,6 +12,7 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -23,7 +24,10 @@ import fanIcon_png from '../../../images/fanIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Energy from './Energy.js';
+import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyUser from './EnergyUser.js';
 
 // constants
@@ -66,13 +70,7 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class Fan extends EnergyUser {
 
-  /**
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -139,11 +137,10 @@ class Fan extends EnergyUser {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
-   * @param {Energy} incomingEnergy
-   * @public
+   * @param dt - time step, in seconds
+   * @param incomingEnergy
    */
-  step( dt, incomingEnergy ) {
+  public step( dt: number, incomingEnergy: Energy ): void {
     if ( !this.activeProperty.value ) {
       return;
     }
@@ -232,10 +229,9 @@ class Fan extends EnergyUser {
   /**
    * move electrical energy chunks through the fan's wire
    *
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveElectricalEnergyChunks( dt ) {
+  private moveElectricalEnergyChunks( dt: number ): void {
     const movers = this.electricalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -286,10 +282,9 @@ class Fan extends EnergyUser {
   /**
    * move thermal energy chunks up and away from the fan
    *
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveRadiatedEnergyChunks( dt ) {
+  private moveRadiatedEnergyChunks( dt: number ): void {
     const movers = this.radiatedEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -309,10 +304,9 @@ class Fan extends EnergyUser {
   /**
    * move mechanical energy chunks out of the motor and away from the blades as wind
    *
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveBlownEnergyChunks( dt ) {
+  private moveBlownEnergyChunks( dt: number ): void {
     const movers = this.mechanicalEnergyChunkMovers.slice();
 
     movers.forEach( mover => {
@@ -331,10 +325,8 @@ class Fan extends EnergyUser {
 
   /**
    * deactivate this energy system element
-   * @public
-   * @override
    */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.bladePositionProperty.reset();
     this.angularVelocityProperty.reset();
@@ -343,11 +335,7 @@ class Fan extends EnergyUser {
     this.internalTemperature = ROOM_TEMPERATURE;
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
@@ -358,11 +346,9 @@ class Fan extends EnergyUser {
   }
 
   /**
-   * @param {Energy} incomingEnergy
-   * @public
-   * @override
+   * @param incomingEnergy
    */
-  preloadEnergyChunks( incomingEnergy ) {
+  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
 
     this.clearEnergyChunks();
 
@@ -420,32 +406,20 @@ class Fan extends EnergyUser {
     }
   }
 
-  /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @returns {Object}
-   */
-  toStateObject() {
+  public override toStateObject(): Object {
     return { internalTemperature: this.internalTemperature };
   }
 
-  /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
-   */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.internalTemperature = stateObject.internalTemperature;
   }
 }
 
 /**
  * Create a path for chunks to follow when blown out of the fan.
- * @param  {Vector2} startingPoint
- * @returns {Vector2[]}
- * @private
+ * @param startingPoint
  */
-const createBlownEnergyChunkPath = startingPoint => {
+const createBlownEnergyChunkPath = ( startingPoint: Vector2 ): Vector2[] => {
   const path = [];
   const numberOfDirectionChanges = 20; // empirically determined
   const nominalTravelVector = new Vector2( BLOWN_ENERGY_CHUNK_TRAVEL_DISTANCE / numberOfDirectionChanges, 0 );
