@@ -9,3 +9,4 @@ node_modules/
 .eslintcache
 .aider.tags.cache.v3/cache.db
 test-results/
+.aider*
