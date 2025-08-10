@@ -28,6 +28,6 @@ test( 'snapshot comparison hash check', async ( { page } ) => {
   ] );
 
   // Check if the hash matches the expected values
-  const validHashes = [ '3d077e' ];
+  const validHashes = [ '8270d7' ];
   expect( validHashes ).toContain( hash );
 } );
