@@ -17,19 +17,15 @@ import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import EFACIntroModel from '../../intro/model/EFACIntroModel.js';
 import UserMovableModelElement from './UserMovableModelElement.js';
 
 class TemperatureAndColorSensor extends UserMovableModelElement {
 
-  /**
-   * @param {EFACIntroModel} model
-   * @param {Vector2} initialPosition
-   * @param {boolean} initiallyActive
-   * @param {Object} [options]
-   */
-  constructor( model, initialPosition, initiallyActive, options ) {
+  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -78,10 +74,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
     } );
   }
 
-  /**
-   * @public
-   */
-  step() {
+  public step(): void {
     if ( this.activeProperty.value ) {
       this.model.updateTemperatureAndColorAndNameAtPosition(
         this.positionProperty.value,
@@ -97,10 +90,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
     }
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.sensedTemperatureProperty.reset();
     this.sensedElementColorProperty.reset();
     this.sensedElementNameProperty.reset();

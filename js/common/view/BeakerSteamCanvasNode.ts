@@ -12,8 +12,11 @@
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
+import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Property from '../../../../axon/js/Property.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
@@ -30,14 +33,14 @@ const MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
 class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
-   * @param {Rectangle} containerOutlineRect - the outline of the container
-   * @param {Property.<number>} fluidProportionProperty - the proportion of fluid in its container
-   * @param {Property.<number>} temperatureProperty - the temperature of the liquid
-   * @param {number} fluidBoilingPoint
-   * @param {Color} steamColor
-   * @param {Object} [options]
+   * @param containerOutlineRect - the outline of the container
+   * @param fluidProportionProperty - the proportion of fluid in its container
+   * @param temperatureProperty - the temperature of the liquid
+   * @param fluidBoilingPoint
+   * @param steamColor
+   * @param [options]
    */
-  constructor( containerOutlineRect, fluidProportionProperty, temperatureProperty, fluidBoilingPoint, steamColor, options ) {
+  public constructor( containerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, steamColor: Color, options?: Object ) {
     super( options );
 
     // @private
@@ -88,10 +91,9 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * Updates the number of steam bubbles and the position, size, and opacity of each one.
-   * @param {number} dt
-   * @public
+   * @param dt
    */
-  step( dt ) {
+  public step( dt: number ): void {
     let steamingProportion = 0;
 
     // add any new steam bubbles
@@ -178,11 +180,10 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * Draws a steam bubble.
-   * @param {CanvasRenderingContext2D} context
-   * @param {Object} steamBubble
-   * @private
+   * @param context
+   * @param steamBubble
    */
-  drawSteamBubble( context, steamBubble ) {
+  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: Object ): void {
     context.globalAlpha = steamBubble.opacity;
     context.drawImage(
       this.steamBubbleImageCanvas,
@@ -195,28 +196,23 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * Paints the steam on the canvas node.
-   * @param {CanvasRenderingContext2D} context
-   * @public
+   * @param context
    */
-  paintCanvas( context ) {
+  public paintCanvas( context: CanvasRenderingContext2D ): void {
     for ( let i = 0; i < this.steamBubbles.length; i++ ) {
       this.drawSteamBubble( context, this.steamBubbles[ i ] );
     }
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.steamBubbles.length = 0;
     this.invalidatePaint();
   }
 
   /**
    * Preloads the steam animation.
-   * @private
    */
-  preloadSteam() {
+  private preloadSteam(): void {
     this.preloadComplete = false;
     const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
 

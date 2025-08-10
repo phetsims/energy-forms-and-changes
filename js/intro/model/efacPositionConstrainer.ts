@@ -15,6 +15,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
 
@@ -34,15 +35,14 @@ const efacPositionConstrainer = {
    * solid model elements. If overlap would occur, adjust the position to one that works. Note that this is not
    * very general due to a number of special requirements for the Energy Forms and Changes sim, so it would likely not
    * be easy to reuse.
-   * @param {RectangularThermalMovableModelElement} modelElement - element whose position is being checked
-   * @param {Vector2} proposedPosition - the position where the model element would like to go
-   * @param {PhetioGroup.<BeakerContainer>} beakerGroup - the beakers that are present in the model
-   * @param {PhetioGroup.<Block>} blockGroup - the blocks that are present in the model
-   * @param {Bounds2} burnerBlockingRect - the space occupied by the burners in the model
-   * @returns {Vector2} the original proposed position if valid, or alternative position if not
-   * @public
+   * @param modelElement - element whose position is being checked
+   * @param proposedPosition - the position where the model element would like to go
+   * @param beakerGroup - the beakers that are present in the model
+   * @param blockGroup - the blocks that are present in the model
+   * @param burnerBlockingRect - the space occupied by the burners in the model
+   * @returns the original proposed position if valid, or alternative position if not
    */
-  constrainPosition: ( modelElement, proposedPosition, beakerGroup, blockGroup, burnerBlockingRect ) => {
+  constrainPosition: ( modelElement: RectangularThermalMovableModelElement, proposedPosition: Vector2, beakerGroup: PhetioGroup<BeakerContainer>, blockGroup: PhetioGroup<Block>, burnerBlockingRect: Bounds2 ): Vector2 => {
 
     assert && assert( beakerGroup instanceof PhetioGroup, 'invalid beakerGroup' );
     assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
@@ -254,18 +254,13 @@ const efacPositionConstrainer = {
 /**
  * Helper function to determine the portion of a proposed translation that may occur given a moving rectangle and a
  * stationary rectangle that can block the moving one.
- * @param {Bounds2} movingElementBounds
- * @param {Bounds2} stationaryElementBounds
- * @param {number} proposedTranslationX
- * @param {number} proposedTranslationY
- * @param {boolean} restrictPosY        Flag that controls whether the positive Y direction is restricted.  This
- *                                      is often set false if there is another model element on top of the one
- *                                      being tested.
- * @param {Vector2} [result] - optional vector to be reused
- * @returns {Vector2}
+ * @param restrictPosY - Flag that controls whether the positive Y direction is restricted.  This
+ *                       is often set false if there is another model element on top of the one
+ *                       being tested.
+ * @param result - optional vector to be reused
  */
-function determineAllowedTranslation( movingElementBounds, stationaryElementBounds, proposedTranslationX,
-                                      proposedTranslationY, restrictPosY, result ) {
+function determineAllowedTranslation( movingElementBounds: Bounds2, stationaryElementBounds: Bounds2, proposedTranslationX: number,
+                                      proposedTranslationY: number, restrictPosY: boolean, result?: Vector2 ): Vector2 {
 
   result = result || new Vector2();
 
@@ -389,12 +384,8 @@ function determineAllowedTranslation( movingElementBounds, stationaryElementBoun
 
 /**
  * a version of Bounds2.intersectsBounds that doesn't count equal edges as intersection
- * @param {Bounds2} bounds1
- * @param {Bounds2} bounds2
- * @returns {boolean}
- * @public
  */
-function exclusiveIntersectsBounds( bounds1, bounds2 ) {
+function exclusiveIntersectsBounds( bounds1: Bounds2, bounds2: Bounds2 ): boolean {
   const minX = Math.max( bounds1.minX, bounds2.minX );
   const minY = Math.max( bounds1.minY, bounds2.minY );
   const maxX = Math.min( bounds1.maxX, bounds2.maxX );

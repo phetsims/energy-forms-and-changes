@@ -23,14 +23,12 @@ import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';
 import EFACIntroScreenView from './view/EFACIntroScreenView.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 
 
 class EFACIntroScreen extends Screen {
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem ) {
+  public constructor( tandem: Tandem ) {
 
     const options = {
       name: EnergyFormsAndChangesStrings.introStringProperty,

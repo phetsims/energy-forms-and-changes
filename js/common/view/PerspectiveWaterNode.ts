@@ -8,10 +8,13 @@
  * @author John Blanco
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import BeakerSteamCanvasNode from './BeakerSteamCanvasNode.js';
@@ -24,15 +27,7 @@ const FLUID_LINE_WIDTH = 2;
 
 class PerspectiveWaterNode extends Node {
 
-  /**
-   * @param {Rectangle} beakerOutlineRect
-   * @param {Property.<number>} fluidProportionProperty
-   * @param {Property.<number>} temperatureProperty
-   * @param {number} fluidBoilingPoint
-   * @param {Color} fluidColor
-   * @param {Color} steamColor
-   */
-  constructor( beakerOutlineRect, fluidProportionProperty, temperatureProperty, fluidBoilingPoint, fluidColor, steamColor ) {
+  public constructor( beakerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, fluidColor: Color, steamColor: Color ) {
     super();
 
     // @private
@@ -89,27 +84,22 @@ class PerspectiveWaterNode extends Node {
     } );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.steamCanvasNode.reset();
   }
 
   /**
    * time step function for the water
-   * @param {number} dt - the change in time
-   * @public
+   * @param dt - the change in time
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.steamCanvasNode.step( dt );
   }
 
   /**
    * update the appearance of the water
-   * @private
    */
-  updateWaterAppearance() {
+  private updateWaterAppearance(): void {
     const ellipseWidth = this.fluidBounds.width;
     const ellipseHeight = PERSPECTIVE_PROPORTION * ellipseWidth;
     const liquidWaterTopEllipse = Shape.ellipse(

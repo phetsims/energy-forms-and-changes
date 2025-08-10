@@ -75,12 +75,10 @@ const HeatTransferConstants = {
 
   /**
    * get the heat transfer constants for two model elements that can contain heat
-   * @param {Object} element1 - a value from EnergyContainerCategory
-   * @param {Object} element2 - a value from EnergyContainerCategory
-   * @returns {number}
-   * @public
+   * @param category1 - a value from EnergyContainerCategory
+   * @param category2 - a value from EnergyContainerCategory
    */
-  getHeatTransferFactor( category1, category2 ) {
+  getHeatTransferFactor( category1: EnergyContainerCategory, category2: EnergyContainerCategory ): number {
     assert && assert( EnergyContainerCategory.includes( category1 ), `invalid category1: ${category1}` );
     assert && assert( EnergyContainerCategory.includes( category2 ), `invalid category2: ${category2}` );
 
@@ -89,10 +87,8 @@ const HeatTransferConstants = {
 
   /**
    * get the heat transfer constant for air to air
-   * @returns {number}
-   * @public
    */
-  getAirToSurroundingAirHeatTransferFactor() {
+  getAirToSurroundingAirHeatTransferFactor(): number {
     return AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
   }
 };

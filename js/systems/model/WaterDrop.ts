@@ -12,6 +12,7 @@
  */
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
@@ -21,11 +22,11 @@ const WIDTH_CHANGE_TWEAK_FACTOR = 0.05;
 class WaterDrop {
 
   /**
-   * @param {Vector2} initialPosition - (x,y) position in model space
-   * @param {Vector2} initialVelocity - 2D velocity at initialization
-   * @param {Dimension2} size - droplet dimensions
+   * @param initialPosition - (x,y) position in model space
+   * @param initialVelocity - 2D velocity at initialization
+   * @param size - droplet dimensions
    */
-  constructor( initialPosition, initialVelocity, size ) {
+  public constructor( initialPosition: Vector2, initialVelocity: Vector2, size: Dimension2 ) {
 
     // @public {Vector2} - after being transformed to view coordinates, this position is the distance from the faucet head
     this.position = initialPosition;

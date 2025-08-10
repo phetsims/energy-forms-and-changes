@@ -22,10 +22,13 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergySystemElement from './EnergySystemElement.js';
 
 // constants
 const TRANSITION_DURATION = 0.75; // in seconds
@@ -33,13 +36,13 @@ const TRANSITION_DURATION = 0.75; // in seconds
 class EnergySystemElementCarousel {
 
   /**
-   * @param {EnergySystemElement[]} elements - array of elements to add to this carousel
-   * @param {EnumerationDeprecated} elementNames - the names of the elements being added
-   * @param {Vector2} selectedElementPosition - position where the selected model element should be
-   * @param {Vector2} offsetBetweenElements - offset between elements in the carousel
-   * @param {Tandem} tandem
+   * @param elements - array of elements to add to this carousel
+   * @param elementNames - the names of the elements being added
+   * @param selectedElementPosition - position where the selected model element should be
+   * @param offsetBetweenElements - offset between elements in the carousel
+   * @param tandem
    */
-  constructor( elements, elementNames, selectedElementPosition, offsetBetweenElements, tandem ) {
+  public constructor( elements: EnergySystemElement[], elementNames: EnumerationDeprecated, selectedElementPosition: Vector2, offsetBetweenElements: Vector2, tandem: Tandem ) {
 
     // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
     this.selectedElementPosition = selectedElementPosition;
@@ -143,10 +146,9 @@ class EnergySystemElementCarousel {
 
   /**
    * add element to list of managed elements
-   * @param {EnergySystemElement} element - energy system element to be added to carousel
-   * @private
+   * @param element - energy system element to be added to carousel
    */
-  add( element ) {
+  private add( element: EnergySystemElement ): void {
 
     // set the element's position to be at the end of the carousel
     if ( this.managedElements.length === 0 ) {
@@ -166,21 +168,17 @@ class EnergySystemElementCarousel {
 
   /**
    * get an element from carousel by index
-   * @param  {number} index Requested position in array of EnergySystemElements
-   * @returns {EnergySystemElement}
-   * @public
+   * @param index Requested position in array of EnergySystemElements
    */
-  getElement( index ) {
+  public getElement( index: number ): EnergySystemElement {
     assert && assert( index < this.managedElements.length, `carousel index out of range: ${index}` );
     return this.managedElements[ index ];
   }
 
   /**
    * get the currently selected element from carousel
-   * @returns {EnergySystemElement|null}
-   * @public
    */
-  getSelectedElement() {
+  public getSelectedElement(): EnergySystemElement | null {
     const i = this.targetIndexProperty.get();
     if ( i < this.managedElements.length ) {
       return this.managedElements[ i ];
@@ -190,9 +188,8 @@ class EnergySystemElementCarousel {
 
   /**
    * sets the carousel to its target destination
-   * @private
    */
-  finishInProgressAnimation() {
+  private finishInProgressAnimation(): void {
     const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
     this.currentCarouselOffset = targetCarouselOffset;
 
@@ -204,10 +201,9 @@ class EnergySystemElementCarousel {
 
   /**
    * step this model element
-   * @param {number} dt - time step, in seconds
-   * @public
+   * @param dt - time step, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( !this.atTargetPosition() ) {
       this.elapsedTransitionTime += dt;
       const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
@@ -228,9 +224,8 @@ class EnergySystemElementCarousel {
 
   /**
    * sets the position in model space of each element based on the state of the carousel
-   * @private
    */
-  updateManagedElementPositions() {
+  private updateManagedElementPositions(): void {
     for ( let i = 0; i < this.managedElements.length; i++ ) {
       let position = this.selectedElementPosition.plus( this.offsetBetweenElements.times( i ) );
       position = position.plus( this.currentCarouselOffset );
@@ -241,9 +236,8 @@ class EnergySystemElementCarousel {
   /**
    * sets the opacity of each element based on the state of the carousel. elements fade out as they get farther from
    * the active, selected position
-   * @private
    */
-  updateManagedElementOpacities() {
+  private updateManagedElementOpacities(): void {
     this.managedElements.forEach( managedElement => {
       const distanceToSelection = managedElement.positionProperty.value.distance( this.selectedElementPosition );
       const opacity = Utils.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
@@ -253,10 +247,8 @@ class EnergySystemElementCarousel {
 
   /**
    * whether the current selected element is in its destination spot
-   * @private
-   * @returns {boolean}
    */
-  atTargetPosition() {
+  private atTargetPosition(): boolean {
     const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.value );
     return this.currentCarouselOffset.equals( targetCarouselOffset );
   }

@@ -10,20 +10,19 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import Property from '../../../../axon/js/Property.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergyChunk from './EnergyChunk.js';
+import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 
 class EnergyChunkWanderControllerGroup extends PhetioGroup {
 
-  /**
-   *
-   * @param energyChunkGroup
-   * @param options
-   */
-  constructor( energyChunkGroup, options ) {
+  public constructor( energyChunkGroup: EnergyChunkGroup, options?: any ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -42,8 +41,7 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup {
     super( EnergyChunkWanderControllerGroup.createEnergyChunkWanderController, defaultArguments, options );
   }
 
-  // @public
-  static createEnergyChunkWanderController( tandem, energyChunk, destinationProperty, options ) {
+  public static createEnergyChunkWanderController( tandem: Tandem, energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: any ): EnergyChunkWanderController {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkWanderControllerGroup supplies its own tandem' );
     return new EnergyChunkWanderController( energyChunk, destinationProperty, merge( { tandem: tandem }, options ) );
   }

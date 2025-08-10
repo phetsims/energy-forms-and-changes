@@ -15,11 +15,9 @@ class EnergyBalanceRecord {
 
   /**
    * inner type which defines the structure where energy exchanges are tracked
-   * @param {string} fromID
-   * @param {string} toID
-   * @param {number} energyAmount - in joules
+   * @param energyAmount - in joules
    */
-  constructor( fromID, toID, energyAmount ) {
+  public constructor( fromID: string, toID: string, energyAmount: number ) {
 
     // objects can't exchange energy with themselves
     assert && assert( fromID !== toID );
@@ -43,11 +41,8 @@ class EnergyBalanceRecord {
 
   /**
    * get the other ID in this record
-   * @param {string} id
-   * @returns {string}
-   * @public
    */
-  getOtherID( id ) {
+  public getOtherID( id: string ): string {
     assert && assert( id === this.fromID || id === this.toID, 'provided ID not in record' );
     return id === this.fromID ? this.toID : this.fromID;
   }

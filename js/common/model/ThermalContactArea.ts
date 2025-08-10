@@ -18,12 +18,7 @@ const TOUCH_DISTANCE_THRESHOLD = 0.001; // in meters
 
 class ThermalContactArea extends Bounds2 {
 
-  /**
-   * @param {Bounds2} bounds
-   * @param {boolean} supportsImmersion
-   * @public
-   */
-  constructor( bounds, supportsImmersion ) {
+  public constructor( bounds: Bounds2, supportsImmersion: boolean ) {
     super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );
     this.supportsImmersion = supportsImmersion;
   }
@@ -32,11 +27,10 @@ class ThermalContactArea extends Bounds2 {
    * Get the amount of thermal contact that exists between this and another thermal area.  Since thermal contact
    * areas are 2D, the amount of contact is a 1D quantity.  For example, when a rectangle is sitting on top of
    * another that is the same width, the contact length is the width of the shared edge.
-   * @param {ThermalContactArea} that -  other thermal contact area
-   * @returns {number} - length of contact
-   * @public
+   * @param that - other thermal contact area
+   * @returns length of contact
    */
-  getThermalContactLength( that ) {
+  public getThermalContactLength( that: ThermalContactArea ): number {
 
     const xOverlap = getHorizontalOverlap( this, that );
     const yOverlap = getVerticalOverlap( this, that );
@@ -92,11 +86,8 @@ class ThermalContactArea extends Bounds2 {
 
 /**
  * convenience method for determining overlap of rectangles in X dimension
- * @param {Rectangle} rectangle1
- * @param {Rectangle} rectangle2
- * @returns {number}
  */
-const getHorizontalOverlap = ( rectangle1, rectangle2 ) => {
+const getHorizontalOverlap = ( rectangle1: Bounds2, rectangle2: Bounds2 ): number => {
   const lowestMax = Math.min( rectangle1.maxX, rectangle2.maxX );
   const highestMin = Math.max( rectangle1.minX, rectangle2.minX );
   return Math.max( lowestMax - highestMin, 0 );
@@ -104,11 +95,8 @@ const getHorizontalOverlap = ( rectangle1, rectangle2 ) => {
 
 /**
  * convenience method for determining overlap of rectangles in Y dimension
- * @param {Rectangle} rectangle1
- * @param {Rectangle} rectangle2
- * @returns {number}
  */
-const getVerticalOverlap = ( rectangle1, rectangle2 ) => {
+const getVerticalOverlap = ( rectangle1: Bounds2, rectangle2: Bounds2 ): number => {
   const lowestMax = Math.min( rectangle1.maxY, rectangle2.maxY );
   const highestMin = Math.max( rectangle1.minY, rectangle2.minY );
   return Math.max( lowestMax - highestMin, 0 );

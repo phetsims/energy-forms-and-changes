@@ -28,7 +28,10 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyConverter from './EnergyConverter.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 
@@ -51,13 +54,7 @@ const CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
 class Generator extends EnergyConverter {
 
-  /**
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
     options = merge( {
       tandem: Tandem.REQUIRED,
       phetioState: false // no internal fields to convey in state
@@ -122,11 +119,9 @@ class Generator extends EnergyConverter {
 
   /**
    * Factored from this.step
-   * @param {number} dt time step in seconds
-   * @param {Energy} incomingEnergy
-   * @private
+   * @param dt - time step in seconds
    */
-  spinGeneratorWheel( dt, incomingEnergy ) {
+  private spinGeneratorWheel( dt: number, incomingEnergy: Energy ): void {
     if ( !this.activeProperty.value ) {
       return;
     }
@@ -181,12 +176,9 @@ class Generator extends EnergyConverter {
 
   /**
    * step this model element in time
-   * @param {number} dt time step
-   * @param {Energy} incomingEnergy
-   * @returns {Energy}
-   * @public
+   * @param dt - time step
    */
-  step( dt, incomingEnergy ) {
+  public step( dt: number, incomingEnergy: Energy ): Energy {
     if ( this.activeProperty.value ) {
 
       this.spinGeneratorWheel( dt, incomingEnergy );
@@ -225,11 +217,9 @@ class Generator extends EnergyConverter {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
-   * @returns {Energy}
-   * @private
+   * @param dt - time step, in seconds
    */
-  updateEnergyChunkPositions( dt ) {
+  private updateEnergyChunkPositions( dt: number ): void {
     const chunkMovers = this.energyChunkMovers.slice();
 
     chunkMovers.forEach( mover => {
@@ -310,12 +300,7 @@ class Generator extends EnergyConverter {
     } );
   }
 
-  /**
-   * @param {Energy} incomingEnergy
-   * @public
-   * @override
-   */
-  preloadEnergyChunks( incomingEnergy ) {
+  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
 
     // in most system elements, we clear energy chunks before checking if incomingEnergy.amount === 0, but since the
     // generator wheel has rotational inertia, we leave the remaining chunks on their way, which looks more accurate.
@@ -377,12 +362,7 @@ class Generator extends EnergyConverter {
     }
   }
 
-  /**
-   * @returns {Energy}
-   * @public
-   * @override
-   */
-  getEnergyOutputRate() {
+  public override getEnergyOutputRate(): Energy {
     const speedFraction = this.wheelRotationalVelocityProperty.value / MAX_ROTATIONAL_VELOCITY;
     const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
     return new Energy( EnergyType.ELECTRICAL, energy, 0 );
@@ -390,20 +370,14 @@ class Generator extends EnergyConverter {
 
   /**
    * deactivate the generator
-   * @public
-   * @override
    */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.wheelRotationalVelocityProperty.reset();
     this.wheelRotationalAngleProperty.reset();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.electricalEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.electricalEnergyChunks.clear();
@@ -413,11 +387,7 @@ class Generator extends EnergyConverter {
     this.energyChunkMovers.clear();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  extractOutgoingEnergyChunks() {
+  public override extractOutgoingEnergyChunks(): EnergyChunk[] {
     const chunks = this.outgoingEnergyChunks.slice();
 
     const chunksToRemove = chunks.filter( energyChunk => this.electricalEnergyChunks.includes( energyChunk ) );
@@ -433,13 +403,8 @@ class Generator extends EnergyConverter {
 /**
  * calculates the angle of the wheel for the current time step. this supports both positive and negative velocity, so
  * that regardless of which direction the wheel is spinning, its angle values are constrained between 0 and 2pi.
- *
- * @param wheelRotationalAngle
- * @param wheelRotationalVelocity
- * @param dt
- * @returns {number}
  */
-const calculateWheelAngle = ( wheelRotationalAngle, wheelRotationalVelocity, dt ) => {
+const calculateWheelAngle = ( wheelRotationalAngle: number, wheelRotationalVelocity: number, dt: number ): number => {
   const twoPi = 2 * Math.PI;
   const newAngle = ( wheelRotationalAngle + wheelRotationalVelocity * dt ) % twoPi;
   return newAngle < 0 ? twoPi + newAngle : newAngle;

@@ -9,9 +9,11 @@
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -19,12 +21,15 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkWanderController from '../../common/model/EnergyChunkWanderController.js';
+import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWanderControllerGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import ThermalContactArea from '../../common/model/ThermalContactArea.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
 
 // constants
 
@@ -52,12 +57,9 @@ let instanceCounter = 0;
 class Air {
 
   /**
-   * @param {BooleanProperty} energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkWanderControllerGroup} energyChunkWanderControllerGroup
-   * @param {Object} [options]
+   * @param energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkWanderControllerGroup, options ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -92,10 +94,9 @@ class Air {
 
   /**
    * step function for this model element
-   * @param {number} dt - delta time, in seconds
-   * @public
+   * @param dt - delta time, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     const wanderControllers = this.energyChunkWanderControllers.slice();
 
     wanderControllers.forEach( wanderController => {
@@ -112,28 +113,17 @@ class Air {
     } );
   }
 
-  /**
-   * @param {number} deltaEnergy
-   * @public
-   */
-  changeEnergy( deltaEnergy ) {
+  public changeEnergy( deltaEnergy: number ): void {
     // Do nothing - the air is considered to be a heat sink that can take or supply energy without changing
     // temperature.This was changed in Dec 2019 such that the air never gains or loses energy.  The motives for this
     // change are explained in https://github.com/phetsims/energy-forms-and-changes/issues/301.
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getEnergy() {
+  public getEnergy(): number {
     return this.energy;
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.energy = INITIAL_ENERGY;
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
@@ -144,12 +134,11 @@ class Air {
 
   /**
    * exchange thermal energy with the provided energy container
-   * @param {RectangularThermalMovableModelElement} energyContainer
-   * @param {number} dt - time in seconds
-   * @returns {number} - energy, in joules, that is transferred from air to the object, negative if energy was absosrbed
-   * @public
+   * @param energyContainer
+   * @param dt - time in seconds
+   * @returns energy, in joules, that is transferred from air to the object, negative if energy was absosrbed
    */
-  exchangeEnergyWith( energyContainer, dt ) {
+  public exchangeEnergyWith( energyContainer: RectangularThermalMovableModelElement, dt: number ): number {
     let energyToExchange = 0;
     const thermalContactLength = this.thermalContactArea.getThermalContactLength( energyContainer.thermalContactArea );
     if ( thermalContactLength > 0 ) {
@@ -180,12 +169,7 @@ class Air {
     return -energyToExchange;
   }
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @param {Range} horizontalWanderConstraint
-   * @public
-   */
-  addEnergyChunk( energyChunk, horizontalWanderConstraint ) {
+  public addEnergyChunk( energyChunk: EnergyChunk, horizontalWanderConstraint: Range ): void {
     energyChunk.zPositionProperty.value = 0;
     this.energyChunkList.push( energyChunk );
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
@@ -195,21 +179,14 @@ class Air {
     ) );
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getCenterPoint() {
+  public getCenterPoint(): Vector2 {
     return new Vector2( 0, SIZE.height / 2 );
   }
 
   /**
    * create a new energy chunk at the top of the air above the specified point
-   * @param {Vector2} point
-   * @returns {EnergyChunk}
-   * @public
    */
-  requestEnergyChunk( point ) {
+  public requestEnergyChunk( point: Vector2 ): EnergyChunk {
 
     // create a new chunk at the top of the air above the specified point
     return this.energyChunkGroup.createNextElement(
@@ -222,35 +199,23 @@ class Air {
 
   /**
    * get the thermal contact area for air, where thermal energy may be exchanged with other objects
-   * @returns {ThermalContactArea}
-   * @public
    */
-  get thermalContactArea() {
+  public get thermalContactArea(): ThermalContactArea {
     return THERMAL_CONTACT_AREA;
   }
 
   /**
    * get the air temperature
-   * @returns {number}
-   * @public
    */
-  getTemperature() {
+  public getTemperature(): number {
     return this.energy / ( MASS * SPECIFIC_HEAT );
   }
 
-  /**
-   * @returns {EnergyContainerCategory}
-   * @public
-   */
-  get energyContainerCategory() {
+  public get energyContainerCategory(): EnergyContainerCategory {
     return EnergyContainerCategory.AIR;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getEnergyBeyondMaxTemperature() {
+  public getEnergyBeyondMaxTemperature(): number {
 
     // air temperature is unlimited
     return 0;

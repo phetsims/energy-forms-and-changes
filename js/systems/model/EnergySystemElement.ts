@@ -25,11 +25,7 @@ import PositionableFadableModelElement from './PositionableFadableModelElement.j
 
 class EnergySystemElement extends PositionableFadableModelElement {
 
-  /**
-   * @param {Image} iconImage
-   * @param {Object} [options]
-   */
-  constructor( iconImage, options ) {
+  public constructor( iconImage: HTMLImageElement, options?: object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -73,17 +69,15 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
   /**
    * activate this element
-   * @public
    */
-  activate() {
+  public activate(): void {
     this.activeProperty.set( true );
   }
 
   /**
    * deactivate this element - this causes all energy chunks to be removed
-   * @public
    */
-  deactivate() {
+  public deactivate(): void {
     this.activeProperty.set( false );
 
     // Don't do this as a listener to activeProperty because we don't want it done during PhET-iO state set
@@ -92,26 +86,25 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
   /**
    * clear daughter energy chunks
-   * @protected
    */
-  clearEnergyChunks() {
+  protected clearEnergyChunks(): void {
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
   }
 
   /**
    * @abstract
-   * @public (EnergySystemElementIO)
+   * (EnergySystemElementIO)
    */
-  toStateObject() {
+  public toStateObject(): null {
     return null; // can be overridden
   }
 
   /**
    * @abstract
-   * @public (EnergySystemElementIO)
+   * (EnergySystemElementIO)
    */
-  applyState() {
+  public applyState(): null {
     return null; // can be overridden
   }
 }

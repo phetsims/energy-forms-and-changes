@@ -25,6 +25,8 @@ import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import EnergyChunk from './EnergyChunk.js';
+import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import BeakerType from './BeakerType.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
@@ -67,14 +69,14 @@ let performanceMeasurementTaken = false;
 class Beaker extends RectangularThermalMovableModelElement {
 
   /**
-   * @param {Vector2} initialPosition - position where center bottom of beaker will be in model space
-   * @param {number} width
-   * @param {number} height
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} [options]
+   * @param initialPosition - position where center bottom of beaker will be in model space
+   * @param width
+   * @param height
+   * @param energyChunksVisibleProperty
+   * @param energyChunkGroup
+   * @param [options]
    */
-  constructor( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  public constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
 
     options = merge( {
       beakerType: BeakerType.WATER,
@@ -235,10 +237,9 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * step the beaker in time
-   * @param {number} dt - delta time (in seconds)
-   * @public
+   * @param dt - delta time (in seconds)
    */
-  step( dt ) {
+  public step( dt: number ): void {
     const temperature = this.temperatureProperty.get();
     if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
@@ -253,10 +254,8 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * override for adding energy chunks to the beaker
-   * @override
-   * @protected
    */
-  addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks ) {
+  protected override addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks: number ): void {
 
     // make a copy of the slice array sorted such that the smallest is first
     let sortedSliceArray = _.sortBy( this.slices, slice => {
@@ -342,10 +341,8 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * get the area where the temperature of the steam can be sensed
-   * @returns {Rectangle}
-   * @public
    */
-  getSteamArea() {
+  public getSteamArea(): Rectangle {
 
     // height of steam rectangle is based on beaker height and steamingProportion
     const liquidWaterHeight = this.height * this.fluidProportionProperty.value;
@@ -358,11 +355,9 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * get the temperature value above the beaker at the given height
-   * @param {number} heightAboveWater
-   * @returns {number}
-   * @public
+   * @param heightAboveWater
    */
-  getSteamTemperature( heightAboveWater ) {
+  public getSteamTemperature( heightAboveWater: number ): number {
     const mappingFunction = new LinearFunction(
       0,
       this.maxSteamHeight * this.steamingProportion,
@@ -374,10 +369,8 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * add the initial energy chunk slices, called in super constructor
-   * @protected
-   * @override
    */
-  addEnergyChunkSlices() {
+  protected override addEnergyChunkSlices(): void {
     assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
 
     const fluidRect = new Rectangle(
@@ -407,28 +400,22 @@ class Beaker extends RectangularThermalMovableModelElement {
 
   /**
    * get the energy container category, which is an enum that is used to determine heat transfer rates
-   * @returns {EnergyContainerCategory}
    */
-  get energyContainerCategory() {
+  get energyContainerCategory(): EnergyContainerCategory {
     return this._energyContainerCategory;
   }
 
   /**
    * get the beaker energy beyond the max temperature (the boiling point)
-   * @public
-   * @returns {number}
    */
-  getEnergyBeyondMaxTemperature() {
+  public getEnergyBeyondMaxTemperature(): number {
     return Math.max( this.energyProperty.value - ( this.fluidBoilingPoint * this.mass * this.specificHeat ), 0 );
   }
 
   /**
    * get the temperature, but limit it to the boiling point for water (for reaslistic behavior)
-   * @returns {number}
-   * @override
-   * @public
    */
-  getTemperature() {
+  public override getTemperature(): number {
     const temperature = super.getTemperature();
     return Math.min( temperature, this.fluidBoilingPoint );
   }
@@ -437,11 +424,9 @@ class Beaker extends RectangularThermalMovableModelElement {
    * This override handles the case where the point is above the beaker.  In this case, we want to pull from all
    * slices evenly, and not favor the slices that bump up at the top in order to match the 3D look of the water
    * surface.
-   * @param {Vector2} point
-   * @override
-   * @public
+   * @param point
    */
-  extractEnergyChunkClosestToPoint( point ) {
+  public override extractEnergyChunkClosestToPoint( point: Vector2 ): EnergyChunk | null {
     let pointIsAboveWaterSurface = true;
     for ( let i = 0; i < this.slices.length; i++ ) {
       if ( point.y < this.slices.get( i ).bounds.maxY ) {
@@ -485,11 +470,7 @@ class Beaker extends RectangularThermalMovableModelElement {
     return highestEnergyChunk;
   }
 
-  /**
-   * @override
-   * @public
-   */
-  reset() {
+  public override reset(): void {
     this.resetInProgressProperty.set( true );
     this.fluidProportionProperty.reset();
     super.reset();

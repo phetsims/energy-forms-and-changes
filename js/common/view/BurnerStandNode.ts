@@ -10,6 +10,7 @@
  * @author John Blanco
  */
 
+import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import LineStyles from '../../../../kite/js/util/LineStyles.js';
@@ -24,11 +25,7 @@ const PERSPECTIVE_ANGLE = Math.PI / 4; // positive is counterclockwise, a value 
 
 class BurnerStandNode extends Node {
 
-  /**
-   * @param {Rectangle} rect
-   * @param {number} projectedEdgeLength
-   */
-  constructor( rect, projectedEdgeLength ) {
+  public constructor( rect: Rectangle, projectedEdgeLength: number ) {
     super();
 
     // add the left and right sides of the stand
@@ -41,13 +38,8 @@ class BurnerStandNode extends Node {
 
   /**
    * factory function for creating the sides of the stand
-   * @param {number} topCenter
-   * @param {number} height
-   * @param {number} edgeLength
-   * @returns {Path}
-   * @private
    */
-  createBurnerStandSide( topCenter, height, edgeLength ) {
+  private createBurnerStandSide( topCenter: Vector2, height: number, edgeLength: number ): Path {
 
     // draw the side as a parallelogram
     const upperLeftCorner = topCenter.plus( new Vector2( -edgeLength / 2, 0 ).rotate( -PERSPECTIVE_ANGLE ) );
@@ -78,13 +70,8 @@ class BurnerStandNode extends Node {
 
   /**
    * factory function for creating the top of the stand
-   * @param {number} leftCenter
-   * @param {number} width
-   * @param {number} edgeLength
-   * @returns {Path}
-   * @private
    */
-  createBurnerStandTop( leftCenter, width, edgeLength ) {
+  private createBurnerStandTop( leftCenter: Vector2, width: number, edgeLength: number ): Path {
 
     // create the points for the outline of the perspective rectangle
     const upperLeftCorner = leftCenter.plus( new Vector2( edgeLength / 2, 0 ).rotated( -PERSPECTIVE_ANGLE ) );

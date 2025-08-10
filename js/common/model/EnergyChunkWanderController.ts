@@ -38,12 +38,7 @@ const GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if desti
 
 class EnergyChunkWanderController extends PhetioObject {
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @param {Property.<Vector2>} destinationProperty
-   * @param {Object} [options]
-   */
-  constructor( energyChunk, destinationProperty, options ) {
+  public constructor( energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: any ) {
 
     options = merge( {
 
@@ -162,7 +157,7 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   // @public (EnergyChunkWanderControllerIO)
-  toStateObject() {
+  public toStateObject(): any {
 
     const stateObject = {
       minSpeed: this.minSpeed,
@@ -189,7 +184,7 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   // @public (EnergyChunkWanderControllerIO)
-  static stateObjectToCreateElementArguments( stateObject ) {
+  public static stateObjectToCreateElementArguments( stateObject: any ): any[] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -206,7 +201,7 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   // @public (EnergyChunkWanderControllerIO)
-  applyState( stateObject ) {
+  public applyState( stateObject: any ): void {
     this.minSpeed = stateObject.minSpeed;
     this.maxSpeed = stateObject.maxSpeed;
     this.wanderAngleVariation = stateObject.wanderAngleVariation;
@@ -219,19 +214,17 @@ class EnergyChunkWanderController extends PhetioObject {
 
   /**
    * dispose function
-   * @public
    */
-  dispose() {
+  public dispose(): void {
     this.disposeEnergyChunkWanderController();
     super.dispose();
   }
 
   /**
    * Update the position of this energy chunk for a given change in time.
-   * @param {number} dt
-   * @public
+   * @param dt
    */
-  updatePosition( dt ) {
+  public updatePosition( dt: number ): void {
 
     const currentPosition = this.energyChunk.positionProperty.get();
     const destination = this.destinationProperty.get();
@@ -278,9 +271,8 @@ class EnergyChunkWanderController extends PhetioObject {
 
   /**
    * randomly change the velocity vector of the energy chunk
-   * @private
    */
-  changeVelocityVector() {
+  private changeVelocityVector(): void {
     const vectorToDestination = this.destinationProperty.value.minus( this.energyChunk.positionProperty.value );
     let angle = vectorToDestination.angle;
     if ( vectorToDestination.magnitude > DISTANCE_AT_WHICH_TO_STOP_WANDERING && this.wandering ) {
@@ -294,28 +286,24 @@ class EnergyChunkWanderController extends PhetioObject {
 
   /**
    * reset the countdown timer that is used to decide when to change direction
-   * @private
    */
-  resetCountdownTimer() {
+  private resetCountdownTimer(): void {
     this.countdownTimer = MIN_TIME_IN_ONE_DIRECTION + ( MAX_TIME_IN_ONE_DIRECTION - MIN_TIME_IN_ONE_DIRECTION ) *
                           dotRandom.nextDouble();
   }
 
   /**
    * returns true if the energy chunk has reached its destination, false if not
-   * @returns {boolean}
-   * @public
    */
-  isDestinationReached() {
+  public isDestinationReached(): boolean {
     return this.energyChunk.positionProperty.value.equals( this.destinationProperty.value );
   }
 
   /**
    * set a new constraint on the wandering
-   * @param {Range|null} horizontalWanderConstraint
-   * @public
+   * @param horizontalWanderConstraint
    */
-  setHorizontalWanderConstraint( horizontalWanderConstraint ) {
+  public setHorizontalWanderConstraint( horizontalWanderConstraint: Range | null ): void {
     this.horizontalWanderConstraint = horizontalWanderConstraint;
   }
 }

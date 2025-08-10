@@ -14,6 +14,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyType from './EnergyType.js';
@@ -21,10 +22,9 @@ import EnergyType from './EnergyType.js';
 class EnergyChunkGroup extends PhetioGroup {
 
   /**
-   * @param {BooleanProperty} energyChunksVisibleProperty - used to create the archetype
-   * @param {Object} [options]
+   * @param energyChunksVisibleProperty - used to create the archetype
    */
-  constructor( energyChunksVisibleProperty, options ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -38,8 +38,7 @@ class EnergyChunkGroup extends PhetioGroup {
     );
   }
 
-  // @public
-  static createEnergyChunk( tandem, energyType, position, velocity, visibleProperty, options ) {
+  public static createEnergyChunk( tandem: Tandem, energyType: EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options: Object ): EnergyChunk {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkGroup supplies its own tandem' );
     return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( { tandem: tandem }, options ) );
   }

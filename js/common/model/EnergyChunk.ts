@@ -11,6 +11,7 @@
 
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -31,14 +32,7 @@ let instanceCount = 0; // counter for creating unique IDs
 
 class EnergyChunk extends PhetioObject {
 
-  /**
-   * @param {EnergyType} initialEnergyType
-   * @param {Vector2} initialPosition
-   * @param {Vector2} initialVelocity
-   * @param {BooleanProperty} visibleProperty
-   * @param {Object} [options]
-   */
-  constructor( initialEnergyType, initialPosition, initialVelocity, visibleProperty, options ) {
+  public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, options?: any ) {
 
     options = merge( {
 
@@ -85,7 +79,7 @@ class EnergyChunk extends PhetioObject {
   }
 
   // @public (EnergyChunkIO)
-  toStateObject() {
+  public toStateObject(): any {
     return {
       id: this.id,
       velocity: Vector2.Vector2IO.toStateObject( this.velocity ),
@@ -94,7 +88,7 @@ class EnergyChunk extends PhetioObject {
   }
 
   // @public (EnergyChunkIO)
-  static stateObjectToCreateElementArguments( stateObject ) {
+  public static stateObjectToCreateElementArguments( stateObject: any ): any[] {
     const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
     );
@@ -109,30 +103,23 @@ class EnergyChunk extends PhetioObject {
 
   /**
    * set the position
-   * @param {number} x
-   * @param {number} y
-   * @public
    */
-  setPositionXY( x, y ) {
+  public setPositionXY( x: number, y: number ): void {
     this.positionProperty.set( new Vector2( x, y ) );
   }
 
   /**
    * translate the energy chunk by amount specified
-   * @param {number} x
-   * @param {number} y
-   * @public
    */
-  translate( x, y ) {
+  public translate( x: number, y: number ): void {
     this.positionProperty.set( this.positionProperty.get().plusXY( x, y ) );
   }
 
   /**
    * translate the energy chunk based on its velocity
-   * @param {number} dt - delta time
-   * @public
+   * @param dt - delta time
    */
-  translateBasedOnVelocity( dt ) {
+  public translateBasedOnVelocity( dt: number ): void {
 
     // When setting PhET-iO state, the EnergyChunk is already in its correct spot, so don't alter that based on Property
     // listeners, see https://github.com/phetsims/energy-forms-and-changes/issues/362
@@ -143,38 +130,26 @@ class EnergyChunk extends PhetioObject {
 
   /**
    * set the X and Y velocity of the energy chunk
-   * @param {number} x
-   * @param {number} y
-   * @public
    */
-  setVelocityXY( x, y ) {
+  public setVelocityXY( x: number, y: number ): void {
     this.velocity.setXY( x, y );
   }
 
   /**
    * set the velocity of the energy chunk (using a vector)
-   * @param {Vector2} newVelocity
-   * @public
    */
-  setVelocity( newVelocity ) {
+  public setVelocity( newVelocity: Vector2 ): void {
     this.velocity.set( newVelocity );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.positionProperty.reset();
     this.zPositionProperty.reset();
     this.energyTypeProperty.reset();
     this.visibleProperty.reset();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  dispose() {
+  public override dispose(): void {
     this.positionProperty.dispose();
     this.zPositionProperty.dispose();
     this.energyTypeProperty.dispose();

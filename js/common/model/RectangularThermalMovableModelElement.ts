@@ -10,6 +10,7 @@
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
@@ -26,8 +27,10 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
+import EnergyChunkGroup from './EnergyChunkGroup.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
+import EnergyChunkWanderControllerGroup from './EnergyChunkWanderControllerGroup.js';
 import EnergyType from './EnergyType.js';
 import HeatTransferConstants from './HeatTransferConstants.js';
 import ThermalContactArea from './ThermalContactArea.js';
@@ -39,16 +42,10 @@ const MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME = 2; // in seconds, empirically deter
 class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
-   * @param {Vector2} initialPosition
-   * @param {number} width
-   * @param {number} height
-   * @param {number} mass - in kg
-   * @param {number} specificHeat - in J/kg-K
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} [options]
+   * @param mass - in kg
+   * @param specificHeat - in J/kg-K
    */
-  constructor( initialPosition, width, height, mass, specificHeat, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  public constructor( initialPosition: Vector2, width: number, height: number, mass: number, specificHeat: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: any ) {
 
     options = merge( {
 
@@ -212,11 +209,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * Get the composite bounds, meaning the total rectangular bounds occupied by this model element, for the provided
    * position, which may well not be the model element's current position.  This is essentially asking, "what would
    * your 2D bounds be if you were at this position?"
-   * @param {Vector2} position
-   * @param {Bounds2} [bounds] - an optional pre-allocated bounds instance, saves memory allocations
-   * @public
+   * @param bounds - an optional pre-allocated bounds instance, saves memory allocations
    */
-  getCompositeBoundsForPosition( position, bounds ) {
+  public getCompositeBoundsForPosition( position: Vector2, bounds?: Bounds2 ): Bounds2 {
 
     // if the relative composite bounds have not yet been calculated do it now - should only be necessary once
     if ( !this.relativeCompositeBounds ) {
@@ -246,56 +241,44 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * get the untranslated rectangle
-   * @returns {Dot.Rectangle}
-   * @public
    */
-  getUntransformedBounds() {
+  public getUntransformedBounds(): Rectangle {
     return this.untransformedBounds;
   }
 
   /**
    * get the bounds for this model element, meaning the full rectangular space that it occupies
-   * @returns {Bounds2}
-   * @public
    */
-  getBounds() {
+  public getBounds(): Bounds2 {
     return this.bounds;
   }
 
   /**
    * change the energy of this element by the desired value
-   * @param {number} deltaEnergy
-   * @public
    */
-  changeEnergy( deltaEnergy ) {
+  public changeEnergy( deltaEnergy: number ): void {
     assert && assert( !_.isNaN( deltaEnergy ), `invalided deltaEnergy, value = ${deltaEnergy}` );
     this.energyProperty.value += deltaEnergy;
   }
 
   /**
    * get the current energy content
-   * @returns {number}
-   * @public
    */
-  getEnergy() {
+  public getEnergy(): number {
     return this.energyProperty.value;
   }
 
   /**
    * get the amount of energy above the minimum allowed
-   * @returns {number}
-   * @public
    */
-  getEnergyAboveMinimum() {
+  public getEnergyAboveMinimum(): number {
     return this.energyProperty.value - this.minEnergy;
   }
 
   /**
    * get the temperature of this element as a function of energy, mass, and specific heat
-   * @returns {number}
-   * @public
    */
-  getTemperature() {
+  public getTemperature(): number {
     assert && assert( this.energyProperty.value >= 0, `Invalid energy: ${this.energyProperty.value}` );
     return this.energyProperty.value / ( this.mass * this.specificHeat );
   }
@@ -306,9 +289,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset(): void {
     super.reset();
     this.energyProperty.reset();
     this.temperatureProperty.reset();
@@ -322,10 +304,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * step function to move this model element forward in time
-   * @param {number} dt - time step in seconds
-   * @public
+   * @param dt - time step in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.temperatureProperty.set( this.getTemperature() );
 
     if ( this.energyChunkDistributionCountdownTimer > 0 ) {
@@ -352,10 +333,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * This function is called to animate energy chunks that are drifting towards the container, e.g. from the burner.
    * It is NOT called during "evaporation", even though the chunks are "non-contained".
-   * @param {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  animateNonContainedEnergyChunks( dt ) {
+  private animateNonContainedEnergyChunks( dt: number ): void {
 
     // work from a copy of the list of wander controllers in case the list ends up changing
     const ecWanderControllers = this.energyChunkWanderControllers.slice();
@@ -372,10 +352,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * Add an energy chunk to this model element.  The energy chunk can be outside of the element's rectangular bounds,
    * in which case it is added to the list of chunks that are moving towards the element, or it can be positioned
    * already inside, in which case it is immediately added to one of the energy chunk "slices".
-   * @param {EnergyChunk} energyChunk
-   * @public
    */
-  addEnergyChunk( energyChunk ) {
+  public addEnergyChunk( energyChunk: EnergyChunk ): void {
     const bounds = this.getSliceBounds();
 
     // energy chunk is positioned within container bounds, so add it directly to a slice
@@ -397,10 +375,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * add an energy chunk to one of the energy chunk container slices owned by this model element
-   * @param {EnergyChunk} energyChunk
-   * @protected
    */
-  addEnergyChunkToSlice( energyChunk ) {
+  protected addEnergyChunkToSlice( energyChunk: EnergyChunk ): void {
 
     // start with a slice at or near the middle of the order
     let sliceIndex = Math.floor( ( this.slices.length - 1 ) / 2 );
@@ -427,10 +403,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * get the composite bounds of all the slices that are used to hold the energy chunks
-   * @returns {Bounds2}
-   * @public
    */
-  getSliceBounds() {
+  public getSliceBounds(): Bounds2 {
     let minX = Number.POSITIVE_INFINITY;
     let minY = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;
@@ -457,10 +431,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * Transfer an EnergyChunk from the approachingEnergyChunks list to a slice in this model element. Find the
    * corresponding wander controller and remove it. A new wander controller is then associated with the transferred
    * chunk via a call to addEnergyChunk.
-   * @param {EnergyChunk} energyChunk
-   * @protected
    */
-  moveEnergyChunkToSlices( energyChunk ) {
+  protected moveEnergyChunkToSlices( energyChunk: EnergyChunk ): void {
     this.approachingEnergyChunks.remove( energyChunk );
     this.addEnergyChunkToSlice( energyChunk );
   }
@@ -468,11 +440,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * Remove an energy chunk from whatever energy chunk list it belongs to. If the chunk does not belong to a specific
    * energy chunk list, return false.
-   * @param {EnergyChunk} energyChunk
-   * @returns {boolean}
-   * @public
    */
-  removeEnergyChunk( energyChunk ) {
+  public removeEnergyChunk( energyChunk: EnergyChunk ): boolean {
     this.slices.forEach( slice => {
       if ( slice.energyChunkList.indexOf( energyChunk ) >= 0 ) {
         slice.energyChunkList.remove( energyChunk );
@@ -487,11 +456,10 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * Locate, remove, and return the energy chunk that is closed to the provided point.  Compensate distances for the
    * z-offset so that z-positioning doesn't skew the results, since the provided point is 2D.
-   * @param {Vector2} point - comparison point
-   * @returns {EnergyChunk||null} closestEnergyChunk, null if there are none available
-   * @public
+   * @param point - comparison point
+   * @returns closestEnergyChunk, null if there are none available
    */
-  extractEnergyChunkClosestToPoint( point ) {
+  public extractEnergyChunkClosestToPoint( point: Vector2 ): EnergyChunk | null {
 
     // make sure this element doesn't give up all its energy chunks
     if ( this.getNumberOfEnergyChunksInElement() <= 1 ) {
@@ -524,11 +492,9 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * extract an energy chunk that is a good choice for being transferred to the provided rectangular bounds
-   * @param {Bounds2} destinationBounds
-   * @returns {EnergyChunk|null} - a suitable energy chunk or null if no energy chunks are available
-   * @public
+   * @returns a suitable energy chunk or null if no energy chunks are available
    */
-  extractEnergyChunkClosestToBounds( destinationBounds ) {
+  public extractEnergyChunkClosestToBounds( destinationBounds: Bounds2 ): EnergyChunk | null {
 
     // make sure this element doesn't give up all its energy chunks
     if ( this.getNumberOfEnergyChunksInElement() <= 1 ) {
@@ -599,18 +565,16 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * Initialization method that add the "slices" where the energy chunks reside. Should be called only once at
    * initialization.
-   * @protected
    * @abstract
    */
-  addEnergyChunkSlices() {
+  protected addEnergyChunkSlices(): void {
     assert && assert( false, 'subtypes should implement their chunk slice creation' );
   }
 
   /**
    *  add initial energy chunks to this model element
-   *  @protected
    */
-  addInitialEnergyChunks() {
+  protected addInitialEnergyChunks(): void {
 
     let totalSliceArea = 0;
 
@@ -664,10 +628,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * Add and distribute energy chunks within this model element algorithmically.  This version works well for simple
    * rectangular model elements, but may need to be overridden for more complex geometries.
-   * @param {number} targetNumberOfEnergyChunks
-   * @protected
    */
-  addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks ) {
+  protected addAndDistributeInitialEnergyChunks( targetNumberOfEnergyChunks: number ): void {
 
     const smallOffset = 0.00001; // used so that the ECs don't start on top of each other
 
@@ -708,9 +670,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * simulation, this is generally not used.  It is only used to gather data that can be used for initial energy chunk
    * positions that can be used to make initialization faster.  See
    * https://github.com/phetsims/energy-forms-and-changes/issues/375
-   * @public
    */
-  dumpEnergyChunkData() {
+  public dumpEnergyChunkData(): void {
 
     let totalSliceArea = 0;
     let numberOfEnergyChunks = 0;
@@ -742,10 +703,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   /**
    * get the number of energy chunks that are actually in the element, excluding any that are on the way
-   * @returns {number}
-   * @private
    */
-  getNumberOfEnergyChunksInElement() {
+  private getNumberOfEnergyChunksInElement(): number {
     let numberOfChunks = 0;
     this.slices.forEach( slice => {
       numberOfChunks += slice.getNumberOfEnergyChunks();
@@ -753,21 +712,15 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     return numberOfChunks;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getNumberOfEnergyChunks() {
+  public getNumberOfEnergyChunks(): number {
     return this.getNumberOfEnergyChunksInElement() + this.approachingEnergyChunks.length;
   }
 
   /**
-   * @param {RectangularThermalMovableModelElement} otherEnergyContainer
-   * @param {number} dt - time of contact, in seconds
-   * @returns {number} - amount of energy exchanged, in joules
-   * @public
+   * @param dt - time of contact, in seconds
+   * @returns amount of energy exchanged, in joules
    */
-  exchangeEnergyWith( otherEnergyContainer, dt ) {
+  public exchangeEnergyWith( otherEnergyContainer: RectangularThermalMovableModelElement, dt: number ): number {
 
     let amountOfEnergyExchanged = 0; // direction is from this to the other
     const thermalContactLength = this
@@ -805,10 +758,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   /**
    * Get the shape as is is projected into 3D in the view.  Ideally, this wouldn't even be in the model, because it
    * would be purely handled in the view, but it proved necessary.
-   * @returns {Shape}
-   * @public
    */
-  getProjectedShape() {
+  public getProjectedShape(): Shape {
 
     const currentPosition = this.positionProperty.get();
 
@@ -821,20 +772,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     return this.latestProjectedShape;
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getCenterPoint() {
+  public getCenterPoint(): Vector2 {
     const position = this.positionProperty.value;
     return new Vector2( position.x, position.y + this.height / 2 );
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getCenterTopPoint() {
+  public getCenterTopPoint(): Vector2 {
     const position = this.positionProperty.value;
     return new Vector2( position.x, position.y + this.height );
   }
@@ -843,27 +786,23 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * Get a number indicating the balance between the energy level and the number of energy chunks owned by this model
    * element.  Returns 0 if the number of energy chunks matches the energy level, a negative value if there is a
    * deficit, and a positive value if there is a surplus.
-   * @returns {number}
-   * @public
    */
-  getEnergyChunkBalance() {
+  public getEnergyChunkBalance(): number {
     return this.getNumberOfEnergyChunks() - EFACConstants.ENERGY_TO_NUM_CHUNKS_MAPPER( this.energyProperty.value );
   }
 
   /**
    * Reset the energy chunk distribution countdown timer, which will cause EC distribution to start and continue
    * until the countdown reaches zero or no more distribution is needed.
-   * @protected
    */
-  resetECDistributionCountdown() {
+  protected resetECDistributionCountdown(): void {
     this.energyChunkDistributionCountdownTimer = MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME;
   }
 
   /**
    * clear the redistribution countdown timer, which will stop any further redistribution
-   * @protected
    */
-  clearECDistributionCountdown() {
+  protected clearECDistributionCountdown(): void {
     this.energyChunkDistributionCountdownTimer = 0;
   }
 }

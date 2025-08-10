@@ -14,23 +14,30 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import Burner from '../../common/model/Burner.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWanderControllerGroup.js';
+import ModelElement from '../../common/model/ModelElement.js';
+import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
+import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
 import BlockType from './BlockType.js';
+import EnergyBalanceRecord from './EnergyBalanceRecord.js';
 import EnergyBalanceTracker from './EnergyBalanceTracker.js';
 import StickyTemperatureAndColorSensor from './StickyTemperatureAndColorSensor.js';
 
@@ -64,13 +71,7 @@ const ICE_BLUE = new Color( '#87CEFA' );
 
 class EFACIntroModel {
 
-  /**
-   * @param {BlockType[]} blocksToCreate
-   * @param {BeakerType[]} beakersToCreate
-   * @param {number} numberOfBurners
-   * @param {Tandem} tandem
-   */
-  constructor( blocksToCreate, beakersToCreate, numberOfBurners, tandem ) {
+  public constructor( blocksToCreate: BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
     // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
@@ -311,12 +312,7 @@ class EFACIntroModel {
     this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
   }
 
-  /**
-   * @param {number} heatCoolLevel
-   * @returns {string}
-   * @private
-   */
-  static mapHeatCoolLevelToColor( heatCoolLevel ) {
+  private static mapHeatCoolLevelToColor( heatCoolLevel: number ): string {
     let color;
     if ( heatCoolLevel > 0 ) {
       color = FLAME_ORANGE;
@@ -337,12 +333,8 @@ class EFACIntroModel {
 
   /**
    * determines if the first thermal model element is immersed in the second
-   * @param {RectangularThermalMovableModelElement} thermalModelElement1
-   * @param {RectangularThermalMovableModelElement} thermalModelElement2
-   * @returns {boolean}
-   * @private
    */
-  isImmersedIn( thermalModelElement1, thermalModelElement2 ) {
+  private isImmersedIn( thermalModelElement1: RectangularThermalMovableModelElement, thermalModelElement2: RectangularThermalMovableModelElement ): boolean {
     return thermalModelElement1 !== thermalModelElement2 &&
            thermalModelElement1.blockType !== undefined &&
            thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
@@ -350,9 +342,8 @@ class EFACIntroModel {
 
   /**
    * restore the initial conditions of the model
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.energyChunksVisibleProperty.reset();
     this.linkedHeatersProperty.reset();
     this.isPlayingProperty.reset();
@@ -375,19 +366,17 @@ class EFACIntroModel {
 
   /**
    * step the sim forward by one fixed nominal frame time
-   * @public
    */
-  manualStep() {
+  public manualStep(): void {
     this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
     this.manualStepEmitter.emit( EFACConstants.SIM_TIME_PER_TICK_NORMAL ); // notify the view
   }
 
   /**
    * step function for this model, automatically called by joist
-   * @param {number} dt - delta time, in seconds
-   * @public
+   * @param dt - delta time, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
 
     // only step the model if not paused
     if ( this.isPlayingProperty.get() ) {
@@ -403,10 +392,9 @@ class EFACIntroModel {
 
   /**
    * update the state of the model for a given time amount
-   * @param {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  stepModel( dt ) {
+  private stepModel( dt: number ): void {
 
     // Cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
     // towards the nearest supporting surface.
@@ -625,12 +613,8 @@ class EFACIntroModel {
 
   /**
    * exchanges an energy chunk between the provided model elements
-   * @param {ModelElement} energyChunkSupplier
-   * @param {ModelElement} energyChunkConsumer
-   * @param {EnergyBalanceRecord} energyBalanceRecord
-   * @private
    */
-  transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord ) {
+  private transferEnergyChunk( energyChunkSupplier: ModelElement, energyChunkConsumer: ModelElement, energyBalanceRecord: EnergyBalanceRecord ): void {
 
     // attempt to extract an energy chunk from the supplier
     let energyChunk;
@@ -695,11 +679,10 @@ class EFACIntroModel {
 
   /**
    * make a user-movable model element fall to the nearest supporting surface
-   * @param {UserMovableModelElement} modelElement - the falling object
-   * @param {number} dt - time step in seconds
-   * @private
+   * @param modelElement - the falling object
+   * @param dt - time step in seconds
    */
-  fallToSurface( modelElement, dt ) {
+  private fallToSurface( modelElement: UserMovableModelElement, dt: number ): void {
     let minYPos = 0;
     const acceleration = -9.8; // meters/s/s
 
@@ -830,18 +813,14 @@ class EFACIntroModel {
    * Updates the temperature and color that would be sensed by a thermometer at the provided position.  This is done
    * as a single operation instead of having separate methods for getting temperature and color because it is more
    * efficient to do it like this.
-   * @param {Vector2} position - position to be sensed
-   * @param {Property.<number>} sensedTemperatureProperty
-   * @param {Property.<Color>} sensedElementColorProperty
-   * @param {StringProperty} sensedElementNameProperty
-   * @public
+   * @param position - position to be sensed
    */
-  updateTemperatureAndColorAndNameAtPosition(
-    position,
-    sensedTemperatureProperty,
-    sensedElementColorProperty,
-    sensedElementNameProperty
-  ) {
+  public updateTemperatureAndColorAndNameAtPosition(
+    position: Vector2,
+    sensedTemperatureProperty: Property<number>,
+    sensedElementColorProperty: Property<Color>,
+    sensedElementNameProperty: StringProperty
+  ): void {
 
     let temperatureAndColorAndNameUpdated = false;
 
@@ -904,11 +883,10 @@ class EFACIntroModel {
 
   /**
    * get the thermal model element that has the provided ID
-   * @param {string} id
-   * @returns {Object} - one of the elements in the model that can provide and absorb energy
-   * @private
+   * @param id
+   * @returns one of the elements in the model that can provide and absorb energy
    */
-  getThermalElementByID( id ) {
+  private getThermalElementByID( id: string ): Object {
     let element = null;
     if ( id === this.air.id ) {
       element = this.air;

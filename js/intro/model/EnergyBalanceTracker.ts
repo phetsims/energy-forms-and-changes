@@ -14,7 +14,7 @@ import EnergyBalanceRecord from './EnergyBalanceRecord.js';
 
 class EnergyBalanceTracker {
 
-  constructor() {
+  public constructor() {
 
     // @private - array where the energy exchange records are kept
     this.energyBalanceRecords = [];
@@ -22,12 +22,8 @@ class EnergyBalanceTracker {
 
   /**
    * log an amount of energy that was exchanged between to entities with the provided IDs
-   * @param {string} fromID
-   * @param {string} toID
-   * @param {number} energyAmount
-   * @public
    */
-  logEnergyExchange( fromID, toID, energyAmount ) {
+  public logEnergyExchange( fromID: string, toID: string, energyAmount: number ): void {
 
     // for efficiency, bail out right away if the energy amount is zero, since it won't have any effect
     if ( energyAmount === 0 ) {
@@ -76,13 +72,11 @@ class EnergyBalanceTracker {
 
   /**
    * get all records whose energy balance magnitude exceeds the provided threshold
-   * @param {number} threshold - amount of energy
-   * @param {boolean} recentlyUpdatedOnly - indicates whether only recently updated records should be included
-   * @param {Array} resultsArray - array where results are returned, this is done to reduce memory allocations
-   * @returns {EnergyBalanceRecord[]}
-   * @public
+   * @param threshold - amount of energy
+   * @param recentlyUpdatedOnly - indicates whether only recently updated records should be included
+   * @param resultsArray - array where results are returned, this is done to reduce memory allocations
    */
-  getBalancesOverThreshold( threshold, recentlyUpdatedOnly, resultsArray ) {
+  public getBalancesOverThreshold( threshold: number, recentlyUpdatedOnly: boolean, resultsArray: EnergyBalanceRecord[] ): EnergyBalanceRecord[] {
 
     let currentRecord;
 
@@ -98,12 +92,10 @@ class EnergyBalanceTracker {
 
   /**
    * get the balances between the provided ID and all other entities with whom balances are being tracked
-   * @param {string} id - ID of the entity whose balances are requested
-   * @param {boolean} recentlyUpdateOnly
-   * @returns {EnergyBalanceRecord[]}
-   * @public
+   * @param id - ID of the entity whose balances are requested
+   * @param recentlyUpdateOnly
    */
-  getBalancesForID( id, recentlyUpdateOnly ) {
+  public getBalancesForID( id: string, recentlyUpdateOnly: boolean ): EnergyBalanceRecord[] {
 
     const resultsArray = [];
 
@@ -120,9 +112,8 @@ class EnergyBalanceTracker {
 
   /**
    * clear the energy balance for all records
-   * @public
    */
-  clearAllBalances() {
+  public clearAllBalances(): void {
     this.energyBalanceRecords.forEach( energyBalanceRecord => {
       energyBalanceRecord.energyBalance = 0;
     } );
@@ -130,9 +121,8 @@ class EnergyBalanceTracker {
 
   /**
    * clear the flags that are used to determine whether energy was recently transferred
-   * @public
    */
-  clearRecentlyUpdatedFlags() {
+  public clearRecentlyUpdatedFlags(): void {
     this.energyBalanceRecords.forEach( energyBalanceRecord => {
       energyBalanceRecord.recentlyUpdated = false;
     } );

@@ -28,6 +28,10 @@ import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement from './ModelElement.js';
+import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
+import Air from '../../intro/model/Air.js';
+import { PhetioGroup } from '../../../../tandem/js/PhetioGroup.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const SIDE_LENGTH = 0.075; // in meters
@@ -47,12 +51,11 @@ let idCounter = 0;
 class Burner extends ModelElement {
 
   /**
-   * @param {Vector2} position - the position in model space where this burner exists
-   * @param {Property.<boolean>} energyChunksVisibleProperty - controls whether the energy chunks are visible
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} [options]
+   * @param position - the position in model space where this burner exists
+   * @param energyChunksVisibleProperty - controls whether the energy chunks are visible
+   * @param energyChunkGroup
    */
-  constructor( position, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: PhetioGroup<EnergyChunk>, options?: any ) {
 
     options = merge( {
 
@@ -128,22 +131,20 @@ class Burner extends ModelElement {
 
   /**
    * Get a rectangle that defines the outline of the burner.  In the model the burner is essentially a 2D rectangle.
-   * @returns {Rectangle} - rectangle that defines the outline in model space.
-   * @public
+   * @returns rectangle that defines the outline in model space.
    */
-  getBounds() {
+  public getBounds(): Rectangle {
     return this.bounds;
   }
 
   /**
    * Interact with a thermal container, adding or removing energy based on the current heat/cool setting.
    * NOTE: this shouldn't be used for air - there is a specific method for that
-   * @param {RectangularThermalMovableModelElement} thermalContainer - model object that will get or give energy
-   * @param {number} dt - amount of time (delta time)
-   * @returns {number} - amount of energy transferred in joules, can be negative if energy was drawn from object
-   * @public
+   * @param thermalContainer - model object that will get or give energy
+   * @param dt - amount of time (delta time)
+   * @returns amount of energy transferred in joules, can be negative if energy was drawn from object
    */
-  addOrRemoveEnergyToFromObject( thermalContainer, dt ) {
+  public addOrRemoveEnergyToFromObject( thermalContainer: RectangularThermalMovableModelElement, dt: number ): number {
     let deltaEnergy = 0;
 
     if ( this.inContactWith( thermalContainer ) ) {
@@ -165,12 +166,11 @@ class Burner extends ModelElement {
   /**
    * Exchange energy with the air.  This has specific behavior that is different from addOrRemoveEnergyToFromObject,
    * defined elsewhere in this type.
-   * @param {Air} air - air as a thermal energy container
+   * @param air - air as a thermal energy container
    * @param dt - amount of time (delta time)
-   * @returns {number} - energy, in joules, transferred to the air, negative if energy was absorbed
-   * @public
+   * @returns energy, in joules, transferred to the air, negative if energy was absorbed
    */
-  addOrRemoveEnergyToFromAir( air, dt ) {
+  public addOrRemoveEnergyToFromAir( air: Air, dt: number ): number {
     const deltaEnergy = MAX_ENERGY_GENERATION_RATE_INTO_AIR * this.heatCoolLevelProperty.value * dt;
     air.changeEnergy( deltaEnergy );
     return deltaEnergy;
@@ -178,11 +178,8 @@ class Burner extends ModelElement {
 
   /**
    * determine if the burner is in contact with a thermal energy container
-   * @param {RectangularThermalMovableModelElement} thermalContainer
-   * @returns {boolean}
-   * @public
    */
-  inContactWith( thermalContainer ) {
+  public inContactWith( thermalContainer: RectangularThermalMovableModelElement ): boolean {
     const burnerRect = this.getBounds();
     const area = thermalContainer.thermalContactArea;
     const xContact = ( area.centerX > burnerRect.minX && area.centerX < burnerRect.maxX );
@@ -190,11 +187,7 @@ class Burner extends ModelElement {
     return ( xContact && yContact );
   }
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @public
-   */
-  addEnergyChunk( energyChunk ) {
+  public addEnergyChunk( energyChunk: EnergyChunk ): void {
 
     // make sure the chunk is at the front (which makes it fully opaque in the view)
     energyChunk.zPositionProperty.value = 0;
@@ -215,11 +208,10 @@ class Burner extends ModelElement {
 
   /**
    * request an energy chunk from the burner
-   * @param {Vector2} point - point from which to search for closest chunk
-   * @returns {EnergyChunk} - closest energy chunk, null if none are contained
-   * @public
+   * @param point - point from which to search for closest chunk
+   * @returns closest energy chunk, null if none are contained
    */
-  extractEnergyChunkClosestToPoint( point ) {
+  public extractEnergyChunkClosestToPoint( point: Vector2 ): EnergyChunk | null {
     let closestEnergyChunk = null;
     if ( this.energyChunkList.length > 0 ) {
       this.energyChunkList.forEach( energyChunk => {
@@ -266,11 +258,10 @@ class Burner extends ModelElement {
 
   /**
    * request an energy chunk from the burner based on provided bounds
-   * @param {Bounds2} bounds - bounds to which the energy chunks will be heading
-   * @returns {EnergyChunk} - closest energy chunk
-   * @public
+   * @param bounds - bounds to which the energy chunks will be heading
+   * @returns closest energy chunk
    */
-  extractEnergyChunkClosestToBounds( bounds ) {
+  public extractEnergyChunkClosestToBounds( bounds: Bounds2 ): EnergyChunk | null {
 
     // verify that the bounds where the energy chunk is going are above this burner
     const burnerBounds = this.getBounds();
@@ -281,26 +272,15 @@ class Burner extends ModelElement {
     return this.extractEnergyChunkClosestToPoint( new Vector2( bounds.centerX, bounds.minY ) );
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getCenterPoint() {
+  public getCenterPoint(): Vector2 {
     return new Vector2( this.position.x, this.position.y + SIDE_LENGTH / 2 );
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getCenterTopPoint() {
+  public getCenterTopPoint(): Vector2 {
     return new Vector2( this.position.x, this.position.y + SIDE_LENGTH );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     super.reset();
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
@@ -310,12 +290,7 @@ class Burner extends ModelElement {
     this.energyChunkWanderControllers.clear();
   }
 
-  /**
-   * @param {RectangularThermalMovableModelElement[]} thermalContainers
-   * @returns {boolean}
-   * @public
-   */
-  areAnyOnTop( thermalContainers ) {
+  public areAnyOnTop( thermalContainers: RectangularThermalMovableModelElement[] ): boolean {
     let onTop = false;
     thermalContainers.forEach( thermalContainer => {
       if ( this.inContactWith( thermalContainer ) ) {
@@ -327,10 +302,9 @@ class Burner extends ModelElement {
 
   /**
    * animate the energy chunks
-   * @param {number} dt
-   * @private
+   * @param dt
    */
-  step( dt ) {
+  private step( dt: number ): void {
     const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {
@@ -347,10 +321,8 @@ class Burner extends ModelElement {
 
   /**
    * get a rectangle in model space the corresponds to where the flame and ice exist
-   * @returns {Rectangle}
-   * @public
    */
-  getFlameIceRect() {
+  public getFlameIceRect(): Rectangle {
 
     // word of warning: this needs to stay consistent with the view
     const outlineRect = this.getBounds();
@@ -361,10 +333,8 @@ class Burner extends ModelElement {
 
   /**
    * get burner temperature, clamped at minimum to the freezing point of water
-   * @returns {number}
-   * @public
    */
-  getTemperature() {
+  public getTemperature(): number {
     const temperature = EFACConstants.ROOM_TEMPERATURE + this.heatCoolLevelProperty.value * 100;
     return Math.max( temperature, EFACConstants.WATER_FREEZING_POINT_TEMPERATURE );
   }

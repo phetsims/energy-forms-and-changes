@@ -21,6 +21,8 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
+import EnergyChunk from './EnergyChunk.js';
+import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 
 // constants
 const OUTSIDE_SLICE_FORCE = 0.01; // In Newtons, empirically determined.
@@ -97,13 +99,12 @@ const energyChunkDistributor = {
    * Redistribute a set of energy chunks that are contained in energy chunk slices using an algorithm where the
    * chunks are repelled by each other and by the edges of the slice.  The distribution is done taking all nearby
    * slices into account so that the chunks can be distributed in a way that minimizes overlap.
-   * @param {EnergyChunkContainerSlice[]} slices - set of slices that contain energy chunks
-   * @param {number} dt - change in time
-   * @returns {boolean} - a value indicating whether redistribution was done, false can occur if the energy chunks are
+   * @param slices - set of slices that contain energy chunks
+   * @param dt - change in time
+   * @returns a value indicating whether redistribution was done, false can occur if the energy chunks are
    * already well distributed
-   * @private
    */
-  updatePositionsRepulsive( slices, dt ) {
+  updatePositionsRepulsive( slices: EnergyChunkContainerSlice[], dt: number ): boolean {
 
     // determine a rectangle that bounds all of the slices
     let minX = Number.POSITIVE_INFINITY;
@@ -211,12 +212,8 @@ const energyChunkDistributor = {
 
   /**
    * compute the force on an energy chunk based on the edges of the container in which it resides
-   * @param {Vector2} position
-   * @param {Vector2} ecForce
-   * @param {Bounds2} containerBounds
-   * @private
    */
-  updateEdgeForces: function( position, ecForce, containerBounds ) {
+  updateEdgeForces: function( position: Vector2, ecForce: Vector2, containerBounds: Bounds2 ): void {
 
     // this should only be called for chunks that are inside a container
     assert && assert( containerBounds.containsPoint( position ) );
@@ -239,12 +236,11 @@ const energyChunkDistributor = {
 
   /**
    * compute the force on an energy chunk based on the drag that it is experiencing
-   * @param {Vector2} velocity
-   * @param {Vector2} ecForce
-   * @param {number} timeStep - length of time step, in seconds
-   * @private
+   * @param velocity
+   * @param ecForce
+   * @param timeStep - length of time step, in seconds
    */
-  updateDragForce: function( velocity, ecForce, timeStep ) {
+  updateDragForce: function( velocity: Vector2, ecForce: Vector2, timeStep: number ): void {
 
     const velocityMagnitude = velocity.magnitude;
     const velocityMagnitudeSquared = Math.pow( velocityMagnitude, 2 );
@@ -274,13 +270,12 @@ const energyChunkDistributor = {
 
   /**
    * update the forces acting on the provided energy chunk due to all the other energy chunks
-   * @param {EnergyChunk} ec
-   * @param {Vector2} ecForce - the force vector acting on the energy chunk being evaluated
-   * @param {EnergyChunk[]} energyChunks
-   * @param {EnergyChunkContainerSlice[]} slices
-   * @private
+   * @param ec
+   * @param ecForce - the force vector acting on the energy chunk being evaluated
+   * @param energyChunks
+   * @param slices
    */
-  updateEnergyChunkForces: function( ec, ecForce, energyChunks, slices ) {
+  updateEnergyChunkForces: function( ec: EnergyChunk, ecForce: Vector2, energyChunks: EnergyChunk[][], slices: EnergyChunkContainerSlice[] ): void {
 
     // allocate reusable vectors to improve performance
     let vectorFromOther = Vector2.pool.fetch();
@@ -335,14 +330,13 @@ const energyChunkDistributor = {
 
   /**
    * update energy chunk velocities, returning max energy found
-   * @param  {EnergyChunkContainerSlice[]} slices
-   * @param  {EnergyChunk[][]} energyChunks
-   * @param  {Vector2[][]} energyChunkForces
-   * @param {number} dt - time step
-   * @returns {number} - the energy in the most energetic energy chunk
-   * @private
+   * @param slices
+   * @param energyChunks
+   * @param energyChunkForces
+   * @param dt - time step
+   * @returns the energy in the most energetic energy chunk
    */
-  updateVelocities: function( slices, energyChunks, energyChunkForces, dt ) {
+  updateVelocities: function( slices: EnergyChunkContainerSlice[], energyChunks: EnergyChunk[][], energyChunkForces: Vector2[][], dt: number ): number {
 
     let energyInMostEnergeticEC = 0;
 
@@ -379,11 +373,10 @@ const energyChunkDistributor = {
 
   /**
    * update the energy chunk positions based on their velocity and a time step
-   * @param  {EnergyChunkContainerSlice[]} slices
-   * @param  {number} dt - time step in seconds
-   * @public
+   * @param slices
+   * @param dt - time step in seconds
    */
-  updateEnergyChunkPositions: function( slices, dt ) {
+  updateEnergyChunkPositions: function( slices: EnergyChunkContainerSlice[], dt: number ): void {
     slices.forEach( slice => {
       slice.energyChunkList.forEach( ec => {
         const v = ec.velocity;
@@ -397,12 +390,11 @@ const energyChunkDistributor = {
    * An order-N algorithm for distributing the energy chunks based on an Archimedean spiral.  This was created from
    * first thinking about using concentric circles, then figuring that a spiral is perhaps and easier way to get a
    * similar effect.  Many of the values used were arrived at through trial and error.
-   * @param {EnergyChunkContainerSlice[]} slices
-   * @param {number} dt - time step
-   * @returns {boolean} - true if any energy chunks needed to be moved, false if not
-   * @private
+   * @param slices
+   * @param dt - time step
+   * @returns true if any energy chunks needed to be moved, false if not
    */
-  updatePositionsSpiral( slices, dt ) {
+  updatePositionsSpiral( slices: EnergyChunkContainerSlice[], dt: number ): boolean {
 
     let ecMoved = false;
     const ecDestination = new Vector2( 0, 0 ); // reusable vector to minimize garbage collection
@@ -500,12 +492,11 @@ const energyChunkDistributor = {
   /**
    * Super simple alternative energy chunk distribution algorithm - just puts all energy chunks in center of slice.
    * This is useful for debugging since it positions the chunks as quickly as possible.
-   * @param {EnergyChunkContainerSlice[]} slices
-   * @param {number} dt - time step
-   * @returns {boolean} - true if any energy chunks needed to be moved, false if not
-   * @private
+   * @param slices
+   * @param dt - time step
+   * @returns true if any energy chunks needed to be moved, false if not
    */
-  updatePositionsSimple( slices, dt ) {
+  updatePositionsSimple( slices: EnergyChunkContainerSlice[], dt: number ): boolean {
 
     let ecMoved = false;
     const ecDestination = new Vector2( 0, 0 ); // reusable vector to minimze garbage collection
@@ -530,10 +521,9 @@ const energyChunkDistributor = {
    * Set the algorithm to use in the "updatePositions" method.  This is generally done only during initialization so
    * that users don't see noticeable changes in the energy chunk motion.  The tradeoffs between the different
    * algorithms are generally based on how good it looks and how much computational power it requires.
-   * @param {string} algorithmName
-   * @public
+   * @param algorithmName
    */
-  setDistributionAlgorithm( algorithmName ) {
+  setDistributionAlgorithm( algorithmName: string ): void {
     if ( algorithmName === 'repulsive' ) {
       this.updatePositions = this.updatePositionsRepulsive;
     }
@@ -562,11 +552,11 @@ else {
 
 /**
  * helper function for moving an energy chunk towards a destination, sets the EC's velocity value
- * @param {EnergyChunk} ec
- * @param {Vector2} destination
- * @param {number} dt - delta time, in seconds
+ * @param ec
+ * @param destination
+ * @param dt - delta time, in seconds
  */
-const moveECTowardsDestination = ( ec, destination, dt ) => {
+const moveECTowardsDestination = ( ec: EnergyChunk, destination: Vector2, dt: number ): void => {
   const ecPosition = ec.positionProperty.value;
   if ( !ecPosition.equals( destination ) ) {
     if ( ecPosition.distance( destination ) <= EC_SPEED_DETERMINISTIC * dt ) {
@@ -585,11 +575,10 @@ const moveECTowardsDestination = ( ec, destination, dt ) => {
 
 /**
  * helper function for getting the distance from the center of the provided bounds to the edge at the given angle
- * @param {Bounds2} bounds
- * @param {number} angle in radians
- * @returns {number}
+ * @param bounds
+ * @param angle - in radians
  */
-const getCenterToEdgeDistance = ( bounds, angle ) => {
+const getCenterToEdgeDistance = ( bounds: Bounds2, angle: number ): number => {
   const halfWidth = bounds.width / 2;
   const halfHeight = bounds.height / 2;
   const tangentOfAngle = Math.tan( angle );

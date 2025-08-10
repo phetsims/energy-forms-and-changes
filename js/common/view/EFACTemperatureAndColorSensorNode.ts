@@ -22,15 +22,16 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import TemperatureAndColorSensor from '../model/TemperatureAndColorSensor.js';
 
 class EFACTemperatureAndColorSensorNode extends Node {
 
   /**
-   * @param {TemperatureAndColorSensor} temperatureAndColorSensor - model element that measures temperature and color
+   * @param temperatureAndColorSensor - model element that measures temperature and color
    * at a position in model space
-   * @param {Object} [options]
+   * @param options
    */
-  constructor( temperatureAndColorSensor, options ) {
+  public constructor( temperatureAndColorSensor: TemperatureAndColorSensor, options?: Object ) {
     options = merge( {
       modelViewTransform: ModelViewTransform2.createIdentity(),
       draggable: false,

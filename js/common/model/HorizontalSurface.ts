@@ -14,8 +14,10 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -25,13 +27,9 @@ import ModelElement from './ModelElement.js';
 class HorizontalSurface extends PhetioObject {
 
   /**
-   * @param {Vector2} initialPosition
-   * @param {number} width
-   * @param {ModelElement} owner
-   * @param {Tandem} tandem
-   * @param {ModelElement} [initialElementOnSurface] - model element that is already on this surface
+   * @param initialElementOnSurface - model element that is already on this surface
    */
-  constructor( initialPosition, width, owner, tandem, initialElementOnSurface ) {
+  public constructor( initialPosition: Vector2, width: number, owner: ModelElement, tandem: Tandem, initialElementOnSurface?: ModelElement ) {
     super( {
       tandem: tandem,
       phetioState: false

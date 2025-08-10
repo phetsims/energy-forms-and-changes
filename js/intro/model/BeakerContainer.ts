@@ -11,9 +11,14 @@
 
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import required from '../../../../phet-core/js/required.js';
+import { BooleanProperty } from '../../../../axon/js/axon.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import Block from './Block.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // counter used by constructor to create unique IDs
@@ -21,22 +26,13 @@ let idCounter = 0;
 
 class BeakerContainer extends Beaker {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {number} width
-   * @param {number} height
-   * @param {Array.<Block>} potentiallyContainedElements
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} config
-   */
-  constructor( initialPosition,
-               width,
-               height,
-               potentiallyContainedElements,
-               energyChunksVisibleProperty,
-               energyChunkGroup,
-               config ) {
+  public constructor( initialPosition: Vector2,
+               width: number,
+               height: number,
+               potentiallyContainedElements: Block[],
+               energyChunksVisibleProperty: BooleanProperty,
+               energyChunkGroup: EnergyChunkGroup,
+               config: Object ) {
 
     required( config.energyChunkWanderControllerGroup );
 
@@ -52,10 +48,8 @@ class BeakerContainer extends Beaker {
   /**
    * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
    * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
-   * @param {Rectangle[]} potentiallyDisplacingRectangles
-   * @public
    */
-  updateFluidDisplacement( potentiallyDisplacingRectangles ) {
+  public updateFluidDisplacement( potentiallyDisplacingRectangles: Rectangle[] ): void {
 
     // calculate the amount of overlap between the rectangle that represents the fluid and the displacing rectangles
     const fluidRectangle = new Rectangle(
@@ -78,12 +72,7 @@ class BeakerContainer extends Beaker {
     this.fluidProportionProperty.set( newFluidProportion );
   }
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @returns {boolean}
-   * @private
-   */
-  isEnergyChunkObscured( energyChunk ) {
+  private isEnergyChunkObscured( energyChunk: EnergyChunk ): boolean {
     let isObscured = false;
 
     this.potentiallyContainedElements.forEach( element => {
@@ -96,12 +85,7 @@ class BeakerContainer extends Beaker {
     return isObscured;
   }
 
-  /**
-   * @param {number} dt
-   * @override
-   * @private
-   */
-  animateNonContainedEnergyChunks( dt ) {
+  private override animateNonContainedEnergyChunks( dt: number ): void {
     const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {
@@ -125,12 +109,7 @@ class BeakerContainer extends Beaker {
     } );
   }
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @override
-   * @public
-   */
-  addEnergyChunk( energyChunk ) {
+  public override addEnergyChunk( energyChunk: EnergyChunk ): void {
     if ( this.isEnergyChunkObscured( energyChunk ) ) {
 
       // the chunk is obscured by a model element in the beaker, so move it to the front of the z-order

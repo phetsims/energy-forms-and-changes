@@ -10,27 +10,27 @@
  * @author Martin Veillette (Berea College)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import { Node } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import UserMovableModelElement from '../model/UserMovableModelElement.js';
 
 class ThermalElementDragHandler extends DragListener {
 
   /**
-   * @param {UserMovableModelElement} modelElement
-   * @param {Node} screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {function} constrainPosition
-   * @param {BooleanProperty} simIsPlayingProperty
-   * @param {Tandem} tandem
+   * @param screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
    */
-  constructor(
-    modelElement,
-    screenViewChildNode,
-    modelViewTransform,
-    constrainPosition,
-    simIsPlayingProperty,
-    tandem
+  public constructor(
+    modelElement: UserMovableModelElement,
+    screenViewChildNode: Node,
+    modelViewTransform: ModelViewTransform2,
+    constrainPosition: ( modelElement: UserMovableModelElement, position: Vector2 ) => Vector2,
+    simIsPlayingProperty: BooleanProperty,
+    tandem: Tandem
   ) {
 
     const dragStartOffset = new Vector2( 0, 0 );

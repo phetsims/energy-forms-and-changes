@@ -9,6 +9,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
@@ -24,11 +25,10 @@ const OPAQUE_FILL = 'white';
 class SkyNode extends Node {
 
   /**
-   * @param {Bounds2} layoutBounds - the layout bounds of the parent screen
-   * @param {number} fullOpaqueYPosition - the y position at which this node should become completely opaque, in view coordinates
-   * @param {Object} [options]
+   * @param layoutBounds - the layout bounds of the parent screen
+   * @param fullOpaqueYPosition - the y position at which this node should become completely opaque, in view coordinates
    */
-  constructor( layoutBounds, fullOpaqueYPosition, options ) {
+  public constructor( layoutBounds: Bounds2, fullOpaqueYPosition: number, options?: object ) {
     super( options );
 
     const transparentToOpaque = new LinearGradient( 0, 0, 0, FADE_HEIGHT )

@@ -13,6 +13,7 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -29,6 +30,8 @@ import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js'
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergySource from './EnergySource.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 
 // constants
 
@@ -49,14 +52,7 @@ const ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spac
 
 class TeaKettle extends EnergySource {
 
-  /**
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {Property.<boolean>} steamPowerableElementInPlaceProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty, steamPowerableElementInPlaceProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, steamPowerableElementInPlaceProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -115,12 +111,8 @@ class TeaKettle extends EnergySource {
 
   /**
    * Animation for tea kettle and energy chunks
-   *
-   * @param {number} dt
-   * @returns {Energy}
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): Energy {
 
     if ( this.activeProperty.value ) {
 
@@ -181,10 +173,9 @@ class TeaKettle extends EnergySource {
   }
 
   /**
-   * @param  {number} dt time step
-   * @private
+   * @param dt - time step
    */
-  moveEnergyChunks( dt ) {
+  private moveEnergyChunks( dt: number ): void {
     const chunkMovers = this.energyChunkMovers.slice();
 
     chunkMovers.forEach( mover => {
@@ -274,11 +265,7 @@ class TeaKettle extends EnergySource {
     } );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  preloadEnergyChunks() {
+  public override preloadEnergyChunks(): void {
     this.clearEnergyChunks();
 
     // Return if no chunks to add.
@@ -349,31 +336,20 @@ class TeaKettle extends EnergySource {
     }
   }
 
-  /**
-   * @returns {Energy}
-   * @public
-   * @override
-   */
-  getEnergyOutputRate() {
+  public override getEnergyOutputRate(): Energy {
     return new Energy( EnergyType.MECHANICAL, this.energyProductionRateProperty.value, Math.PI / 2 );
   }
 
   /**
    * Deactivate the tea kettle
-   * @public
-   * @override
    */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.heatProportionProperty.reset();
     this.energyProductionRateProperty.reset();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.exemptFromTransferEnergyChunks.clear(); // Disposal is done when energyChunkList is cleared
     this.energyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
@@ -381,11 +357,9 @@ class TeaKettle extends EnergySource {
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @returns {Object}
+   * (EnergySystemElementIO)
    */
-  toStateObject() {
+  public override toStateObject(): Object {
     return {
       heatEnergyProducedSinceLastChunk: this.heatEnergyProducedSinceLastChunk,
       transferNextAvailableChunk: this.transferNextAvailableChunk
@@ -393,23 +367,16 @@ class TeaKettle extends EnergySource {
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
+   * (EnergySystemElementIO)
+   * @param stateObject - see this.toStateObject()
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
   }
 }
 
-/**
- * @param {Vector2} startPosition
- * @param {Vector2} teaKettlePosition
- * @returns {Vector2[]}
- * @private
- */
-const createThermalEnergyChunkPath = ( startPosition, teaKettlePosition ) => {
+const createThermalEnergyChunkPath = ( startPosition: Vector2, teaKettlePosition: Vector2 ): Vector2[] => {
   const path = [];
 
   path.push( new Vector2( startPosition.x, teaKettlePosition.y + WATER_SURFACE_HEIGHT_OFFSET ) );

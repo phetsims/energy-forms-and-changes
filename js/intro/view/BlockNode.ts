@@ -12,17 +12,20 @@
  * @author Jesse Greenberg
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import brickTextureFront_png from '../../../images/brickTextureFront_png.js';
 import brickTextureRight_png from '../../../images/brickTextureRight_png.js';
@@ -35,6 +38,7 @@ import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import Block from '../model/Block.js';
 import BlockType from '../model/BlockType.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
@@ -63,14 +67,7 @@ BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
 
 class BlockNode extends Node {
 
-  /**
-   * @param {Block} block
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {function} constrainPosition
-   * @param {BooleanProperty} simIsPlayingProperty
-   * @param {Object} [options]
-   */
-  constructor( block, modelViewTransform, constrainPosition, simIsPlayingProperty, options ) {
+  public constructor( block: Block, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, simIsPlayingProperty: BooleanProperty, options?: any ) {
     options = merge( {
 
       // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
@@ -288,13 +285,8 @@ class BlockNode extends Node {
 
   /**
    * convenience method to avoid code duplication - adds a node of the given shape, color, and texture (if specified)
-   * @param {Shape} shape
-   * @param {Color} fillColor
-   * @param {Image} textureImage
-   * @returns {Node}
-   * @private
    */
-  createSurface( shape, fillColor, textureImage ) {
+  private createSurface( shape: Shape, fillColor: Color, textureImage: HTMLImageElement | null ): Node {
 
     let surfaceNode = null;
 

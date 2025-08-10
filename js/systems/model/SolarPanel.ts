@@ -13,6 +13,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
@@ -33,8 +34,11 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyConverter from './EnergyConverter.js';
 
 // constants
@@ -58,13 +62,7 @@ const MIN_INTER_CHUNK_TIME = 0.6;
 
 class SolarPanel extends EnergyConverter {
 
-  /**
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -130,12 +128,10 @@ class SolarPanel extends EnergyConverter {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @param  {Energy} incomingEnergy - type, amount, direction of energy
-   * @returns {Energy}
-   * @public
+   * @param dt - time step, in seconds
+   * @param incomingEnergy - type, amount, direction of energy
    */
-  step( dt, incomingEnergy ) {
+  public step( dt: number, incomingEnergy: Energy ): Energy {
     if ( this.activeProperty.value ) {
 
       // handle any incoming energy chunks
@@ -213,10 +209,9 @@ class SolarPanel extends EnergyConverter {
 
   /**
    * update electrical energy chunk positions
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveElectricalEnergyChunks( dt ) {
+  private moveElectricalEnergyChunks( dt: number ): void {
 
     // iterate over a copy to mutate original without problems
     const movers = this.electricalEnergyChunkMovers.slice();
@@ -257,10 +252,9 @@ class SolarPanel extends EnergyConverter {
 
   /**
    * update light energy chunk positions
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveReflectedEnergyChunks( dt ) {
+  private moveReflectedEnergyChunks( dt: number ): void {
 
     // iterate over a copy to mutate original without problems
     const movers = this.lightEnergyChunkMovers.slice();
@@ -278,12 +272,7 @@ class SolarPanel extends EnergyConverter {
     } );
   }
 
-  /**
-   * @param {Energy} incomingEnergy
-   * @public
-   * @override
-   */
-  preloadEnergyChunks( incomingEnergy ) {
+  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
     this.clearEnergyChunks();
 
     if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.LIGHT ) {
@@ -356,20 +345,18 @@ class SolarPanel extends EnergyConverter {
   }
 
   /**
-   * @returns {Energy} type, amount, direction of emitted energy
-   * @public
+   * @returns type, amount, direction of emitted energy
    */
-  getEnergyOutputRate() {
+  public getEnergyOutputRate(): Energy {
     return new Energy( EnergyType.ELECTRICAL, this.energyOutputRateProperty.value, 0 );
   }
 
   /**
    * choose speed of chunk on panel such that it won't clump up with other chunks
-   * @param  {EnergyChunk} incomingEnergyChunk
-   * @returns {number} speed
-   * @private
+   * @param incomingEnergyChunk
+   * @returns speed
    */
-  chooseChunkSpeedOnPanel( incomingEnergyChunk ) {
+  private chooseChunkSpeedOnPanel( incomingEnergyChunk: EnergyChunk ): number {
 
     // start with default speed
     const chunkSpeed = EFACConstants.ENERGY_CHUNK_VELOCITY;
@@ -405,12 +392,7 @@ class SolarPanel extends EnergyConverter {
     return distanceToConvergencePoint / ( projectedArrivalTime - this.simulationTime );
   }
 
-  /**
-   * @param {EnergyChunk[]} energyChunks
-   * @public
-   * @override
-   */
-  injectEnergyChunks( energyChunks ) {
+  public override injectEnergyChunks( energyChunks: EnergyChunk[] ): void {
 
     // before adding all injected chunks into the solar panel's incoming energy chunks array, make sure that they are
     // all light energy. if not, pull out the bad ones and pass the rest through.
@@ -423,11 +405,7 @@ class SolarPanel extends EnergyConverter {
     super.injectEnergyChunks( energyChunks );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
@@ -438,19 +416,15 @@ class SolarPanel extends EnergyConverter {
 
   /**
    * get the shape of the area where light can be absorbed
-   * @returns {Shape}
-   * @public
    */
-  getAbsorptionShape() {
+  public getAbsorptionShape(): Shape {
     return this.absorptionShape;
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @returns {Object}
+   * (EnergySystemElementIO)
    */
-  toStateObject() {
+  public override toStateObject(): Object {
     return {
       numberOfConvertedChunks: this.numberOfConvertedChunks,
       latestChunkArrivalTime: this.latestChunkArrivalTime,
@@ -459,11 +433,10 @@ class SolarPanel extends EnergyConverter {
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
+   * (EnergySystemElementIO)
+   * @param stateObject - see this.toStateObject()
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.numberOfConvertedChunks = stateObject.numberOfConvertedChunks;
     this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
     this.simulationTime = stateObject.simulationTime;

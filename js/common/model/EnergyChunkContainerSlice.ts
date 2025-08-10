@@ -19,7 +19,9 @@
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -32,12 +34,12 @@ import EnergyChunk from './EnergyChunk.js';
 class EnergyChunkContainerSlice extends PhetioObject {
 
   /**
-   * @param {Bounds2} bounds
-   * @param {number} zPosition - used to give appearance of depth
-   * @param {Property.<Vector2>} anchorPointProperty
-   * @param {Object} [options]
+   * @param bounds
+   * @param zPosition - used to give appearance of depth
+   * @param anchorPointProperty
+   * @param options
    */
-  constructor( bounds, zPosition, anchorPointProperty, options ) {
+  public constructor( bounds: Bounds2, zPosition: number, anchorPointProperty: Property<Vector2>, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
@@ -99,9 +101,8 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
   /**
    * @public (EnergyChunkContainerSliceIO)
-   * @returns {{bounds: Bounds2}}
    */
-  toStateObject() {
+  public toStateObject(): { bounds: Bounds2 } {
     return {
       bounds: Bounds2.Bounds2IO.toStateObject( this.bounds )
     };
@@ -109,42 +110,30 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
   /**
    * @public (EnergyChunkContainerSliceIO)
-   * @param {Object} stateObject
+   * @param stateObject
    */
-  applyState( stateObject ) {
+  public applyState( stateObject: Object ): void {
     this.bounds = Bounds2.Bounds2IO.fromStateObject( stateObject.bounds );
   }
 
-  /**
-   * @param {EnergyChunk} energyChunk
-   * @public
-   */
-  addEnergyChunk( energyChunk ) {
+  public addEnergyChunk( energyChunk: EnergyChunk ): void {
     energyChunk.zPositionProperty.set( this.zPosition );
     this.energyChunkList.push( energyChunk );
   }
 
   /**
    * expand or contract the bounds of this slice in the y-direction based on the provided multiplier value
-   * @param {number} multiplier
-   * @public
+   * @param multiplier
    */
-  updateHeight( multiplier ) {
+  public updateHeight( multiplier: number ): void {
     this.bounds.maxY = this.bounds.minY + this.bounds.height * multiplier;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getNumberOfEnergyChunks() {
+  public getNumberOfEnergyChunks(): number {
     return this.energyChunkList.length;
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose(): void {
     this.disposeEnergyChunkContainerSlice();
     super.dispose();
   }

@@ -12,21 +12,19 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement from './ModelElement.js';
 
 class UserMovableModelElement extends ModelElement {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {Object} [options]
-   */
-  constructor( initialPosition, options ) {
+  public constructor( initialPosition: Vector2, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -79,9 +77,8 @@ class UserMovableModelElement extends ModelElement {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.clearSupportingSurface();
     this.userControlledProperty && this.userControlledProperty.reset();
     this.verticalVelocityProperty.reset();
@@ -90,11 +87,8 @@ class UserMovableModelElement extends ModelElement {
 
   /**
    * Set the supporting surface of this model element
-   * @param {HorizontalSurface} supportingSurface
-   * @override
-   * @public
    */
-  setSupportingSurface( supportingSurface ) {
+  public override setSupportingSurface( supportingSurface: HorizontalSurface ): void {
 
     // state and parameter checking
     assert && assert(
@@ -115,9 +109,8 @@ class UserMovableModelElement extends ModelElement {
 
   /**
    * clear the supporting surface so that this model element is no longer sitting on a surface
-   * @private
    */
-  clearSupportingSurface() {
+  private clearSupportingSurface(): void {
 
     // only do something if the supporting surface was set
     if ( this.supportingSurface !== null ) {
@@ -133,13 +126,11 @@ class UserMovableModelElement extends ModelElement {
 
   /**
    * get a value that indicates whether this element is stacked upon the given model element
-   * @param {ModelElement} element - model element to be checked
-   * @returns {boolean} - true if this model element is stacked anywhere on top of the provided element, which
+   * @param element - model element to be checked
+   * @returns true if this model element is stacked anywhere on top of the provided element, which
    * includes cases where one or more elements are in between.
-   * @public
-   * @override
    */
-  isStackedUpon( element ) {
+  public override isStackedUpon( element: ModelElement ): boolean {
     const surface = this.supportingSurface ? this.supportingSurface : null;
     return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
   }

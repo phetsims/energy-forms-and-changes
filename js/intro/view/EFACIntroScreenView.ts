@@ -59,6 +59,9 @@ import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
+import EFACIntroModel from '../model/EFACIntroModel.js';
+import ModelElement from '../../common/model/ModelElement.js';
+import StickyTemperatureAndColorSensor from '../model/StickyTemperatureAndColorSensor.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
 import BlockNode from './BlockNode.js';
@@ -76,11 +79,7 @@ const MAX_THERMOMETER_ANIMATION_TIME = 1; // max time for thermometer return ani
 
 class EFACIntroScreenView extends ScreenView {
 
-  /**
-   * @param {EFACIntroModel} model
-   * @param {Tandem} tandem
-   */
-  constructor( model, tandem ) {
+  public constructor( model: EFACIntroModel, tandem: Tandem ) {
     super( {
       tandem: tandem
     } );
@@ -177,11 +176,8 @@ class EFACIntroScreenView extends ScreenView {
      * Creates a gas pipe image used as part of the HeaterCoolerNodes for this screen and links its NodeIO Properties
      * so the gas pipe follows any changes that occur to the provided Node. It also uses the provided node to correctly
      * position itself.
-     *
-     * @param {Node} node
-     * @returns {Node}
      */
-    const createAndLinkPipeImageNode = node => {
+    const createAndLinkPipeImageNode = ( node: Node ): Node => {
       const gasPipeNode = new Image( gasPipeIntro_png, {
         right: node.left + 15,
         bottom: node.bottom - 6,
@@ -357,11 +353,8 @@ class EFACIntroScreenView extends ScreenView {
 
     /**
      * limits the model element motion based on both view and model constraints
-     * @param {ModelElement} modelElement
-     * @param {Vector2} proposedPosition
-     * @returns {Vector2}
      */
-    const constrainMovableElementMotion = ( modelElement, proposedPosition ) => {
+    const constrainMovableElementMotion = ( modelElement: ModelElement, proposedPosition: Vector2 ): Vector2 => {
 
       // constrain the model element to stay within the play area
       const viewConstrainedPosition = constrainToPlayArea(
@@ -567,11 +560,11 @@ class EFACIntroScreenView extends ScreenView {
 
     /**
      * return a thermometer to its initial position in the storage area
-     * @param {StickyTemperatureAndColorSensor} thermometer
-     * @param {Boolean} doAnimation - whether the thermometer animates back to the storage area
-     * @param {EFACTemperatureAndColorSensorNode} [thermometerNode]
+     * @param thermometer
+     * @param doAnimation - whether the thermometer animates back to the storage area
+     * @param thermometerNode
      */
-    const returnThermometerToStorageArea = ( thermometer, doAnimation, thermometerNode ) => {
+    const returnThermometerToStorageArea = ( thermometer: StickyTemperatureAndColorSensor, doAnimation: boolean, thermometerNode?: EFACTemperatureAndColorSensorNode ): void => {
       const currentPosition = thermometer.positionProperty.get();
       if ( !currentPosition.equals( thermometerPositionInStorageArea ) && doAnimation ) {
 
@@ -605,7 +598,7 @@ class EFACIntroScreenView extends ScreenView {
     };
 
     // returns all thermometers to the storage area
-    const returnAllThermometersToStorageArea = () => {
+    const returnAllThermometersToStorageArea = (): void => {
       model.thermometers.forEach( thermometer => {
         returnThermometerToStorageArea( thermometer, false );
       } );
@@ -615,7 +608,7 @@ class EFACIntroScreenView extends ScreenView {
     returnAllThermometersToStorageArea();
 
     // updates the Z-order of the blocks when their position changes
-    const blockChangeListener = position => {
+    const blockChangeListener = ( position: Vector2 ): void => {
       const blocks = [ ...model.blockGroup.getArray() ];
 
       blocks.sort( ( a, b ) => {
@@ -670,7 +663,7 @@ class EFACIntroScreenView extends ScreenView {
       const beakerTwoIndex = 1;
 
       // updates the Z-order of the beakers whenever their position changes
-      const beakerChangeListener = () => {
+      const beakerChangeListener = (): void => {
         if ( model.beakerGroup.getElement( beakerOneIndex ).getBounds().centerY >
              model.beakerGroup.getElement( beakerTwoIndex ).getBounds().centerY ) {
           this.beakerProxyNodeGroup.getElement( beakerOneIndex ).moveToFront();
@@ -781,14 +774,8 @@ class EFACIntroScreenView extends ScreenView {
 
     /**
      * constrains the provided model element's position to the play area
-     * @param {ModelElement} modelElement
-     * @param {Vector2} proposedPosition
-     * @param {Bounds2} playAreaBounds
-     * @param {ModelViewTransform2} modelViewTransform
-     * @param {Bounds2} reusuableBounds
-     * @returns {Vector2}
      */
-    const constrainToPlayArea = ( modelElement, proposedPosition, playAreaBounds, modelViewTransform, reusuableBounds ) => {
+    const constrainToPlayArea = ( modelElement: ModelElement, proposedPosition: Vector2, playAreaBounds: Bounds2, modelViewTransform: ModelViewTransform2, reusuableBounds: Bounds2 ): Vector2 => {
       const viewConstrainedPosition = proposedPosition.copy();
 
       const elementViewBounds = modelViewTransform.modelToViewBounds(
@@ -820,9 +807,8 @@ class EFACIntroScreenView extends ScreenView {
   /**
    * step this view element, called by the framework
    * @param dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( this.model.isPlayingProperty.get() ) {
       this.stepView( dt );
     }
@@ -831,18 +817,16 @@ class EFACIntroScreenView extends ScreenView {
   /**
    * step forward by one fixed nominal frame time
    * @param dt - time step, in seconds
-   * @public
    */
-  manualStep( dt ) {
+  public manualStep( dt: number ): void {
     this.stepView( dt );
   }
 
   /**
    * update the state of the non-model associated view elements for a given time amount
    * @param dt - time step, in seconds
-   * @public
    */
-  stepView( dt ) {
+  public stepView( dt: number ): void {
     this.beakerProxyNodeGroup.forEach( beakerProxyNode => {
       beakerProxyNode.step( dt );
     } );
@@ -850,12 +834,8 @@ class EFACIntroScreenView extends ScreenView {
 
   /**
    * Custom layout function for this view so that it floats to the bottom of the window.
-   *
-   * @param {Bounds2} viewBounds
-   * @override
-   * @public
    */
-  layout( viewBounds ) {
+  public override layout( viewBounds: Bounds2 ): void {
     this.resetTransform();
 
     const scale = this.getLayoutScale( viewBounds );

@@ -12,15 +12,13 @@
  * @author Andrew Adare
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ElementFollower {
 
-  /**
-   * @param {Property.<Vector2>} trackedPositionProperty
-   */
-  constructor( trackedPositionProperty ) {
+  public constructor( trackedPositionProperty: Property<Vector2> ) {
 
     // @private {Property.<Vector2>} - position Property of element that will follow another
     this.followerProperty = trackedPositionProperty;
@@ -39,10 +37,9 @@ class ElementFollower {
 
   /**
    * start following the provided Property
-   * @param {Property.<Vector2>} positionToFollowProperty - position Property to follow
-   * @public
+   * @param positionToFollowProperty - position Property to follow
    */
-  startFollowing( positionToFollowProperty ) {
+  public startFollowing( positionToFollowProperty: Property<Vector2> ): void {
 
     // if this was previously following something else, un-follow it
     if ( this.positionBeingFollowedProperty ) {
@@ -57,28 +54,18 @@ class ElementFollower {
     this.positionBeingFollowedProperty = positionToFollowProperty;
   }
 
-  /**
-   * @public
-   */
-  stopFollowing() {
+  public stopFollowing(): void {
     if ( this.positionBeingFollowedProperty ) {
       this.positionBeingFollowedProperty.unlink( this.followerFunction );
       this.positionBeingFollowedProperty = null;
     }
   }
 
-  /**
-   * @public
-   * @returns {boolean}
-   */
-  isFollowing() {
+  public isFollowing(): boolean {
     return this.positionBeingFollowedProperty !== null;
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.followerProperty.reset();
     this.positionBeingFollowedProperty.reset();
   }

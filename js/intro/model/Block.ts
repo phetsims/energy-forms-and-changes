@@ -13,10 +13,12 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import required from '../../../../phet-core/js/required.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -58,18 +60,18 @@ let instanceCount = 0; // counter for creating unique IDs
 class Block extends RectangularThermalMovableModelElement {
 
   /**
-   * @param {Vector2} initialPosition
-   * @param {Property} energyChunksVisibleProperty
-   * @param {BlockType} blockType
-   * @param {PhetioGroup} energyChunkGroup
+   * @param initialPosition
+   * @param energyChunksVisibleProperty
+   * @param blockType
+   * @param energyChunkGroup
    * optional for the parent
-   * @param {Object} [options]
+   * @param options
    */
-  constructor( initialPosition,
-               energyChunksVisibleProperty,
-               blockType,
-               energyChunkGroup,
-               options ) {
+  public constructor( initialPosition: Vector2,
+               energyChunksVisibleProperty: Property<boolean>,
+               blockType: BlockType,
+               energyChunkGroup: PhetioGroup<any>,
+               options?: Object ) {
 
     options = merge( {
       energyChunkWanderControllerGroup: required( options.energyChunkWanderControllerGroup ),
@@ -141,27 +143,15 @@ class Block extends RectangularThermalMovableModelElement {
     this.perspectiveCompensation.setXY( BLOCK_PERSPECTIVE_EXTENSION, BLOCK_PERSPECTIVE_EXTENSION );
   }
 
-  /**
-   * @returns {Color}
-   * @public
-   */
-  get color() {
+  public get color(): Color {
     return BLOCK_COMPOSITION[ this.blockType ].color;
   }
 
-  /**
-   * @public
-   * @returns {EnergyContainerCategory}
-   */
-  get energyContainerCategory() {
+  public get energyContainerCategory(): EnergyContainerCategory {
     return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
   }
 
-  /**
-   * @override
-   * @public
-   */
-  addEnergyChunkSlices() {
+  public override addEnergyChunkSlices(): void {
     assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
 
     // the slices for the block are intended to match the projection used in the view
@@ -197,10 +187,8 @@ class Block extends RectangularThermalMovableModelElement {
    * we often call "Hollywooding", since it doesn't do this for a real physical reason.  The max temperature values are
    * empirically determined to be higher than the value that maxes out the thermometers, and enough above that value
    * that two stacked blocks can both reach the max value shown on the thermometer if heated long enough.
-   * @returns {number}
-   * @public
    */
-  getEnergyBeyondMaxTemperature() {
+  public getEnergyBeyondMaxTemperature(): number {
     return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
   }
 }

@@ -12,17 +12,23 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyUser from './EnergyUser.js';
 
 // constants
@@ -52,15 +58,7 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class LightBulb extends EnergyUser {
 
-  /**
-   * @param {Image} iconImage
-   * @param {boolean} hasFilament
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {EnergyChunkPathMoverGroup} energyChunkPathMoverGroup
-   * @param {Object} [options]
-   */
-  constructor( iconImage, hasFilament, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options ) {
+  public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -103,11 +101,10 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @param  {Energy} incomingEnergy
-   * @public
+   * @param dt - time step, in seconds
+   * @param incomingEnergy
    */
-  step( dt, incomingEnergy ) {
+  public step( dt: number, incomingEnergy: Energy ): void {
     if ( this.activeProperty.value ) {
 
       // handle any incoming energy chunks
@@ -184,10 +181,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveRadiatedEnergyChunks( dt ) {
+  private moveRadiatedEnergyChunks( dt: number ): void {
 
     // iterate over a copy to mutate original without problems
     const movers = this.radiatedEnergyChunkMovers.slice();
@@ -206,10 +202,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveFilamentEnergyChunks( dt ) {
+  private moveFilamentEnergyChunks( dt: number ): void {
 
     // iterate over a copy to mutate original without problems
     const movers = this.filamentEnergyChunkMovers.slice();
@@ -228,10 +223,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  moveElectricalEnergyChunks( dt ) {
+  private moveElectricalEnergyChunks( dt: number ): void {
 
     // iterate over a copy to mutate original without problems
     const movers = this.electricalEnergyChunkMovers.slice();
@@ -261,11 +255,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {Energy} incomingEnergy
-   * @public
-   * @override
+   * @param incomingEnergy
    */
-  preloadEnergyChunks( incomingEnergy ) {
+  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
 
     this.clearEnergyChunks();
 
@@ -318,10 +310,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {EnergyChunk} energyChunk
-   * @private
+   * @param energyChunk
    */
-  radiateEnergyChunk( energyChunk ) {
+  private radiateEnergyChunk( energyChunk: EnergyChunk ): void {
     if ( dotRandom.nextDouble() > this.proportionOfThermalChunksRadiated ) {
       energyChunk.energyTypeProperty.set( EnergyType.LIGHT );
     }
@@ -339,11 +330,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @param  {Vector2} startingPoint
-   * @returns {Vector2[]}
-   * @private
+   * @param startingPoint
    */
-  createPathOnFilament( startingPoint ) {
+  private createPathOnFilament( startingPoint: Vector2 ): Vector2[] {
     const path = [];
     const filamentWidth = 0.03;
     const x = ( 0.5 + dotRandom.nextDouble() / 2 ) * filamentWidth / 2 * ( this.goRightNextTime ? 1 : -1 );
@@ -356,19 +345,13 @@ class LightBulb extends EnergyUser {
 
   /**
    * deactivate the light bulb
-   * @public
-   * @override
    */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.litProportionProperty.set( 0 );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
@@ -379,11 +362,9 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @override
    * @public (EnergySystemElementIO)
-   * @returns {Object}
    */
-  toStateObject() {
+  public override toStateObject(): Object {
     return {
       goRightNextTime: this.goRightNextTime,
       hasFilament: this.hasFilament,
@@ -392,11 +373,10 @@ class LightBulb extends EnergyUser {
   }
 
   /**
-   * @override
    * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
+   * @param stateObject - see this.toStateObject()
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.goRightNextTime = stateObject.goRightNextTime;
     this.hasFilament = stateObject.hasFilament;
     this.proportionOfThermalChunksRadiated = stateObject.proportionOfThermalChunksRadiated;
@@ -404,21 +384,18 @@ class LightBulb extends EnergyUser {
 }
 
 /**
- * @returns {number} time
- * @private
+ * @returns time
  */
-const generateThermalChunkTimeOnFilament = () => {
+const generateThermalChunkTimeOnFilament = (): number => {
   return THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.min +
          dotRandom.nextDouble() * THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT.getLength();
 };
 
 /**
- * @param {Vector2} startingPosition
- * @param {Vector2[]} pathPoints
- * @returns {number}
- * @private
+ * @param startingPosition
+ * @param pathPoints
  */
-const getTotalPathLength = ( startingPosition, pathPoints ) => {
+const getTotalPathLength = ( startingPosition: Vector2, pathPoints: Vector2[] ): number => {
   if ( pathPoints.length === 0 ) {
     return 0;
   }

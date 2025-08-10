@@ -19,12 +19,16 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import BeakerView from '../../common/view/BeakerView.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import BeakerContainer from '../model/BeakerContainer.js';
+import Block from '../model/Block.js';
+import EFACIntroModel from '../model/EFACIntroModel.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
 
 // constants
@@ -33,14 +37,7 @@ const BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_P
 
 class BeakerContainerView extends BeakerView {
 
-  /**
-   * @param {Beaker} beaker
-   * @param {EFACIntroModel} model
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {function} constrainPosition
-   * @param {Object} [options]
-   */
-  constructor( beaker, model, modelViewTransform, constrainPosition, options ) {
+  public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, options?: Object ) {
     super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
     // @private
@@ -104,13 +101,12 @@ class BeakerContainerView extends BeakerView {
   /**
    * Update the clipping area that is used to hide energy chunks that are in the beaker but occluded by blocks that
    * are ALSO in the beaker.
-   * @param {Beaker} beaker
-   * @param {Block[]} blocks
-   * @param {boolean} energyChunksVisible
-   * @param {ModelViewTransform2} modelViewTransform
-   * @private
+   * @param beaker
+   * @param blocks
+   * @param energyChunksVisible
+   * @param modelViewTransform
    */
-  updateEnergyChunkClipArea( beaker, blocks, energyChunksVisible, modelViewTransform ) {
+  private updateEnergyChunkClipArea( beaker: BeakerContainer, blocks: PhetioGroup<Block>, energyChunksVisible: boolean, modelViewTransform: ModelViewTransform2 ): void {
 
     if ( energyChunksVisible ) {
 
@@ -148,12 +144,11 @@ class BeakerContainerView extends BeakerView {
    * (generally energy chunks) from being rendered in the same place as the blocks. This method can handle any number
    * of blocks stacked in the beaker, but only clips for the bottom two, since the beaker can only fit two blocks,
    * plus a tiny bit of a third.
-   * @param {PhetioGroup.<Block>} blockGroup
-   * @param {Shape} clipAreaShape
-   * @param {ModelViewTransform2} modelViewTransform
-   * @private
+   * @param blockGroup
+   * @param clipAreaShape
+   * @param modelViewTransform
    */
-  addProjectedBlocksToClipArea( blockGroup, clipAreaShape, modelViewTransform ) {
+  private addProjectedBlocksToClipArea( blockGroup: PhetioGroup<Block>, clipAreaShape: Shape, modelViewTransform: ModelViewTransform2 ): void {
     assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
 
     // hoisted block variable

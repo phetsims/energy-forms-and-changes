@@ -12,6 +12,7 @@
  */
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
@@ -28,12 +29,11 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 class EnergyChunkPathMover extends PhetioObject {
 
   /**
-   * @param {EnergyChunk} energyChunk - energy chunk to be moved
-   * @param {Vector2[]} path - points along energy chunk path
-   * @param {number} speed - in meters per second
-   * @param {Object} [options]
+   * @param energyChunk - energy chunk to be moved
+   * @param path - points along energy chunk path
+   * @param speed - in meters per second
    */
-  constructor( energyChunk, path, speed, options ) {
+  public constructor( energyChunk: EnergyChunk, path: Vector2[], speed: number, options?: object ) {
 
     options = merge( {
 
@@ -63,7 +63,7 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 
   // @public (EnergyChunkPathMoverIO)
-  toStateObject() {
+  public toStateObject(): object {
     return {
       path: ArrayIO( Vector2.Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
@@ -74,14 +74,14 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 
   // @public (EnergyChunkPathMoverIO)
-  static stateObjectToCreateElementArguments( stateObject ) {
+  public static stateObjectToCreateElementArguments( stateObject: any ): [ EnergyChunk, Vector2[], number ] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
 
   // @public (EnergyChunkPathMoverIO)
-  applyState( stateObject ) {
+  public applyState( stateObject: any ): void {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
 
     // Find the actual reference to the current nextPoint, not just a new instance of Vector2 with the same value, see https://github.com/phetsims/energy-forms-and-changes/issues/357
@@ -95,10 +95,9 @@ class EnergyChunkPathMover extends PhetioObject {
 
   /**
    * advance chunk position along the path
-   * @param  {number} dt - time step in seconds
-   * @public
+   * @param dt - time step in seconds
    */
-  moveAlongPath( dt ) {
+  public moveAlongPath( dt: number ): void {
 
     let distanceToTravel = dt * this.speed;
 
@@ -144,21 +143,17 @@ class EnergyChunkPathMover extends PhetioObject {
 
   /**
    * get the last point in the path that the energy chunk will follow
-   * @returns {Vector2}
-   * @public
    */
-  getFinalDestination() {
+  public getFinalDestination(): Vector2 {
     return this.path[ this.path.length - 1 ];
   }
 
   /**
    * Create an energy chunk path entirely from offsets
-   * @param parentPosition {Vector2} the position of the parent element that is creating the path
-   * @param offsets {Vector2[]} offsets from the element position
-   * @returns {Vector[]}
-   * @public
+   * @param parentPosition - the position of the parent element that is creating the path
+   * @param offsets - offsets from the element position
    */
-  static createPathFromOffsets( parentPosition, offsets ) {
+  public static createPathFromOffsets( parentPosition: Vector2, offsets: Vector2[] ): Vector2[] {
     const path = [];
 
     for ( let i = 0; i < offsets.length; i++ ) {
@@ -170,12 +165,10 @@ class EnergyChunkPathMover extends PhetioObject {
 
   /**
    * Create an energy chunk path for radiated energy chunks
-   * @param startingPosition {Vector2} the starting position of the energy chunk
-   * @param startingAngle {number} the angle (away from vertical) of the first segment in the path
-   * @returns {Vector[]}
-   * @public
+   * @param startingPosition - the starting position of the energy chunk
+   * @param startingAngle - the angle (away from vertical) of the first segment in the path
    */
-  static createRadiatedPath( startingPosition, startingAngle ) {
+  public static createRadiatedPath( startingPosition: Vector2, startingAngle: number ): Vector2[] {
     const path = [];
     const segmentLength = 0.06; // in meters. empirically determined to look nice and make it past the top of the beaker
     const verticalSegment = new Vector2( 0, segmentLength );
@@ -201,23 +194,20 @@ class EnergyChunkPathMover extends PhetioObject {
 
   /**
    * Create a straight-line energy chunk path at a valid random angle
-   * @param position {Vector2}
-   * @param validAngles {Range} the range of possible angles to be randomly chosen
-   * @returns {Vector[]}
-   * @public
+   * @param position
+   * @param validAngles - the range of possible angles to be randomly chosen
    */
-  static createRandomStraightPath( position, validAngles ) {
+  public static createRandomStraightPath( position: Vector2, validAngles: Range ): Vector2[] {
     const validRandomAngle = dotRandom.nextDouble() * ( validAngles.max - validAngles.min ) + validAngles.min;
     return this.createStraightPath( position, validRandomAngle );
   }
 
-  /** Create a straight-line energy chunk path
-   * @param position {Vector2} the position that the path is created from
-   * @param angle {number} the angle of the path
-   * @returns {Vector[]}
-   * @public
+  /**
+   * Create a straight-line energy chunk path
+   * @param position - the position that the path is created from
+   * @param angle - the angle of the path
    */
-  static createStraightPath( position, angle ) {
+  public static createStraightPath( position: Vector2, angle: number ): Vector2[] {
     const path = [];
 
     // calculate the travel segment based on how high the chunk should go

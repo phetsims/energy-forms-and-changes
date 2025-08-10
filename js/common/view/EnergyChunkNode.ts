@@ -12,6 +12,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -26,6 +27,7 @@ import energyThermal_png from '../../../images/energyThermal_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EFACConstants from '../EFACConstants.js';
+import EnergyChunk from '../model/EnergyChunk.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import EnergyType from '../model/EnergyType.js';
 
@@ -48,10 +50,10 @@ const energyChunkImageNodes = {};
 class EnergyChunkNode extends Node {
 
   /**
-   * @param {EnergyChunk} energyChunk - model of an energy chunk
-   * @param {ModelViewTransform2} modelViewTransform
+   * @param energyChunk - model of an energy chunk
+   * @param modelViewTransform
    */
-  constructor( energyChunk, modelViewTransform ) {
+  public constructor( energyChunk: EnergyChunk, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // control the overall visibility of this node
@@ -95,10 +97,9 @@ class EnergyChunkNode extends Node {
 
   /**
    * Update the transparency, which is mostly a function of how far the energy chunk is from the front.
-   * @private
-   * @param {number} zPosition
+   * @param zPosition
    */
-  updateTransparency( zPosition ) {
+  private updateTransparency( zPosition: number ): void {
     let zFadeValue = 1;
     if ( zPosition < 0 ) {
       zFadeValue = Math.max( 1 + zPosition / EFACConstants.Z_DISTANCE_WHERE_FULLY_FADED, 0 );
@@ -106,8 +107,7 @@ class EnergyChunkNode extends Node {
     this.setOpacity( zFadeValue );
   }
 
-  // @public
-  dispose() {
+  public dispose(): void {
     this.disposeEnergyChunkNode();
     super.dispose();
   }
@@ -115,10 +115,9 @@ class EnergyChunkNode extends Node {
 
 /**
  * Helper function that creates the image for an EnergyChunkNode.
- * @param {EnergyType} energyType
- * @returns {Image}
+ * @param energyType
  */
-const createEnergyChunkImageNode = energyType => {
+const createEnergyChunkImageNode = ( energyType: EnergyType ): Image => {
   const background = new Image( mapEnergyTypeToImage[ energyType ] );
   const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
   energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
@@ -131,10 +130,9 @@ const createEnergyChunkImageNode = energyType => {
 
 /**
  * Helper function that returns the correct image for an EnergyChunkNode.
- * @param {EnergyType} energyType
- * @returns {Image}
+ * @param energyType
  */
-const getEnergyChunkNode = energyType => {
+const getEnergyChunkNode = ( energyType: EnergyType ): Image => {
 
   // these need to be lazily created because the images are not decoded fast enough in the built version to be
   // available right away

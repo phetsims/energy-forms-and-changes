@@ -21,11 +21,7 @@ import EnergySystemElement from './EnergySystemElement.js';
 
 class EnergyUser extends EnergySystemElement {
 
-  /**
-   * @param {Image} iconImage
-   * @param {Object} [options]
-   */
-  constructor( iconImage, options ) {
+  public constructor( iconImage: HTMLImageElement, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -43,10 +39,9 @@ class EnergyUser extends EnergySystemElement {
   /**
    * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
    * to move, convert, and otherwise manage them.
-   * @param {Array.<EnergyChunk>} energyChunks - list of energy chunks to inject
-   * @public
+   * @param energyChunks - list of energy chunks to inject
    */
-  injectEnergyChunks( energyChunks ) {
+  public injectEnergyChunks( energyChunks: EnergyChunk[] ): void {
     energyChunks.forEach( energyChunk => {
       if ( !this.incomingEnergyChunks.includes( energyChunk ) ) {
         this.incomingEnergyChunks.push( energyChunk );
@@ -54,11 +49,7 @@ class EnergyUser extends EnergySystemElement {
     } );
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  clearEnergyChunks() {
+  protected override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();

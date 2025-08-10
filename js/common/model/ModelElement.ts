@@ -11,6 +11,7 @@
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -22,11 +23,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ModelElement extends PhetioObject {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {Object} [options]
-   */
-  constructor( initialPosition, options ) {
+  public constructor( initialPosition: Vector2, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -97,22 +94,19 @@ class ModelElement extends PhetioObject {
   /**
    * method to test whether this element is stacked upon another, always false for non-movable model elements,
    * override as needed in descendant types
-   * @param {ModelElement} element - model element to be checked
-   * @returns {boolean}
-   * @public
+   * @param element - model element to be checked
    */
-  isStackedUpon( element ) {
+  public isStackedUpon( element: ModelElement ): boolean {
     return false;
   }
 
   /**
    * get the bounds list, which represents the model space occupied by this model element, translated to the supplied
    * position
-   * @param {Vector2} position
-   * @param {Bounds2[]} [boundsList] - can be provided to reduce memory allocations
-   * @private
+   * @param position
+   * @param boundsList - can be provided to reduce memory allocations
    */
-  getBoundsListForPosition( position, boundsList ) {
+  private getBoundsListForPosition( position: Vector2, boundsList?: Bounds2[] ): Bounds2[] {
 
     // allocate a bounds list if not provided
     if ( !boundsList ) {
@@ -144,9 +138,8 @@ class ModelElement extends PhetioObject {
   /**
    * Reset the model element to its original state. Subclasses must add reset functionality for any state that they
    * add.
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.positionProperty.reset();
 
     // note - the top and bottom surface Properties are NOT reset here since they are managed by sub-types

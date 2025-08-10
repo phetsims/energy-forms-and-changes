@@ -17,14 +17,12 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 class EnergyChunkContainerSliceNode extends Node {
 
-  /**
-   * @param {EnergyChunkContainerSlice} slice
-   * @param {ModelViewTransform2} modelViewTransform
-   */
-  constructor( slice, modelViewTransform ) {
+  public constructor( slice: EnergyChunkContainerSlice, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     this.modelViewTransform = modelViewTransform;

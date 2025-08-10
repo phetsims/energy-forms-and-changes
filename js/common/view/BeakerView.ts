@@ -13,6 +13,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -27,8 +28,10 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import Beaker from '../model/Beaker.js';
 import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainerSliceNode.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
@@ -47,12 +50,12 @@ const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between
 class BeakerView extends PhetioObject {
 
   /**
-   * @param {Beaker} beaker - model of a beaker
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
+   * @param beaker - model of a beaker
+   * @param energyChunksVisibleProperty
+   * @param modelViewTransform
+   * @param [options]
    */
-  constructor( beaker, energyChunksVisibleProperty, modelViewTransform, options ) {
+  public constructor( beaker: Beaker, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       label: waterString,
@@ -280,37 +283,31 @@ class BeakerView extends PhetioObject {
     } );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.fluid.reset();
   }
 
   /**
    * step this view element
    * @param dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.fluid.step( dt );
   }
 
   /**
    * set whether this node should follow its beaker position. this is useful for the case where its parent node is
    * handling its position
-   * @param {boolean} followPosition
-   * @public
+   * @param followPosition
    */
-  setFollowPosition( followPosition ) {
+  public setFollowPosition( followPosition: boolean ): void {
     this.followPosition = followPosition;
   }
 
   /**
    * moves all layers to the front of their respective node layers
-   * @public
    */
-  moveToFront() {
+  public moveToFront(): void {
     this.backNode.moveToFront();
     this.frontNode.moveToFront();
     this.grabNode.moveToFront();

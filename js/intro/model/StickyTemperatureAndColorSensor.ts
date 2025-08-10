@@ -10,20 +10,16 @@
  * @author Jesse Greenberg
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EFACIntroModel from './EFACIntroModel.js';
 
 class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
-  /**
-   * @param {EFACIntroModel} model
-   * @param {Vector2} initialPosition
-   * @param {boolean} initiallyActive
-   * @param {Object} [options]
-   */
-  constructor( model, initialPosition, initiallyActive, options ) {
+  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, options?: Object ) {
     super( model, initialPosition, initiallyActive, options );
 
     // @private
@@ -107,9 +103,8 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.elementFollower.stopFollowing();
     super.reset();
   }
