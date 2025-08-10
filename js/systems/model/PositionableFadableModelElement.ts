@@ -14,17 +14,14 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableModelElement from './PositionableModelElement.js';
 
 class PositionableFadableModelElement extends PositionableModelElement {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {number} initialOpacity
-   * @param {Object} [options]
-   */
-  constructor( initialPosition, initialOpacity, options ) {
+  public constructor( initialPosition: Vector2, initialOpacity: number, options?: IntentionalAny ) {
     super( initialPosition, options );
 
     // @public {NumberProperty}

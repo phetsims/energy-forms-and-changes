@@ -14,23 +14,21 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import EnergySystemElementCarousel from '../model/EnergySystemElementCarousel.js';
 
 // constants
 const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
 class EnergySystemElementSelector extends Panel {
 
-  /**
-   * @param {EnergySystemElementCarousel} carousel
-   * @param {Object} [options]
-   */
-  constructor( carousel, options ) {
+  public constructor( carousel: EnergySystemElementCarousel, options?: IntentionalAny ) {
 
     options = merge( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,

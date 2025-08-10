@@ -12,8 +12,11 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -30,6 +33,7 @@ import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import FluorescentBulb from '../model/FluorescentBulb.js';
 import LightRays from './LightRays.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
@@ -39,13 +43,7 @@ const INCANDESCENT_BULB_TOP_OFFSET = 31;
 
 class LightBulbNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {FluorescentBulb} lightBulb
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
-   */
-  constructor( lightBulb, energyChunksVisibleProperty, modelViewTransform, options ) {
+  public constructor( lightBulb: FluorescentBulb, energyChunksVisibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
 
     options = merge( {
 

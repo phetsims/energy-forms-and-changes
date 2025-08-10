@@ -13,10 +13,12 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import HeaterCoolerBack from '../../../../scenery-phet/js/HeaterCoolerBack.js';
 import HeaterCoolerFront from '../../../../scenery-phet/js/HeaterCoolerFront.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import gasPipeSystemsLong_png from '../../../images/gasPipeSystemsLong_png.js';
 import gasPipeSystemsShort_png from '../../../images/gasPipeSystemsShort_png.js';
 import teaKettle_png from '../../../images/teaKettle_png.js';
@@ -24,6 +26,7 @@ import EFACConstants from '../../common/EFACConstants.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import TeaKettle from '../model/TeaKettle.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 import TeaKettleSteamCanvasNode from './TeaKettleSteamCanvasNode.js';
 
@@ -34,13 +37,7 @@ const HEATER_COOLER_NODE_SCALE = 0.85; // empirically determined for best look
 
 class TeaKettleNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {TeaKettle} teaKettle
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( teaKettle, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( teaKettle: TeaKettle, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( teaKettle, modelViewTransform, tandem );
 
     const teaKettleNode = new Image( teaKettle_png, { right: 114, bottom: 53 } );
@@ -162,17 +159,12 @@ class TeaKettleNode extends MoveFadeModelElementNode {
 
   /**
    * step function for the steam
-   * @param {number} dt
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.steamCanvasNode.step( dt );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.steamCanvasNode.reset();
   }
 }

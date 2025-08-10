@@ -16,18 +16,13 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class Belt {
 
-  /**
-   * @param {number} wheel1Radius
-   * @param {Vector2} wheel1Center
-   * @param {number} wheel2Radius
-   * @param {Vector2} wheel2Center
-   */
-  constructor( wheel1Radius, wheel1Center, wheel2Radius, wheel2Center ) {
+  public constructor( wheel1Radius: number, wheel1Center: Vector2, wheel2Radius: number, wheel2Center: Vector2 ) {
 
     // Calculate the angle needed to make the belt look like it contacts the wheels at the right places, see
     // https://github.com/phetsims/energy-forms-and-changes/issues/98.

@@ -11,17 +11,15 @@
  * @author Andrew Adare
  */
 
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import PositionableFadableModelElement from '../model/PositionableFadableModelElement.js';
 
 class MoveFadeModelElementNode extends Node {
 
-  /**
-   * @param {PositionableFadableModelElement} modelElement
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( modelElement, modelViewTransform, tandem ) {
+  public constructor( modelElement: PositionableFadableModelElement, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( {
       tandem: tandem,
       phetioInputEnabledPropertyInstrumented: true,

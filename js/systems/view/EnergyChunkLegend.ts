@@ -14,6 +14,8 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -39,11 +41,7 @@ const LEGEND_ENTRY_FONT = new PhetFont( 14 );
 
 class EnergyChunkLegend extends Panel {
 
-  /**
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
-   */
-  constructor( modelViewTransform, options ) {
+  public constructor( modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
 
     options = merge( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
@@ -83,9 +81,8 @@ class EnergyChunkLegend extends Panel {
    * @param labelString - the label for this legend entry
    * @param energyType - the type of energy for this legend entry
    * @param modelViewTransform - needs to be passed in to create an EnergyChunk
-   * @public
    */
-  static createEnergyChunkSymbol( labelString, energyType, modelViewTransform ) {
+  public static createEnergyChunkSymbol( labelString: string, energyType: IntentionalAny, modelViewTransform: ModelViewTransform2 ) {
     const labelText = new Text( labelString, {
       font: LEGEND_ENTRY_FONT,
       maxWidth: 100

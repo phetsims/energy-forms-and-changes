@@ -9,8 +9,11 @@
  * @author Chris Klusendorf
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import connector_png from '../../../images/connector_png.js';
 import fan01_png from '../../../images/fan01_png.js';
 import fan02_png from '../../../images/fan02_png.js';
@@ -37,13 +40,7 @@ const NUMBER_OF_FAN_IMAGES = FAN_IMAGES.length;
 
 class FanNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {Fan} fan
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( fan, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( fan: Fan, energyChunksVisibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( fan, modelViewTransform, tandem );
 
     // add the images and the layer that will contain the energy chunks
@@ -93,10 +90,9 @@ class FanNode extends MoveFadeModelElementNode {
 
 /**
  * find the image index corresponding to this angle in radians
- * @param {number} angle
- * @returns {number} - image index
+ * @returns image index
  */
-const mapAngleToImageIndex = angle => {
+const mapAngleToImageIndex = ( angle: number ): number => {
   const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_FAN_IMAGES ) );
   assert && assert( i >= 0 && i < NUMBER_OF_FAN_IMAGES );
   return i;

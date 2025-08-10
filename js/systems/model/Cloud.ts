@@ -12,6 +12,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
@@ -21,11 +22,7 @@ const HEIGHT = WIDTH * 0.55; // determined from the approximate aspect ratio of 
 
 class Cloud {
 
-  /**
-   * @param {Vector2} offsetFromParent
-   * @param {Property.<Vector2>} parentPositionProperty
-   */
-  constructor( offsetFromParent, parentPositionProperty ) {
+  public constructor( offsetFromParent: Vector2, parentPositionProperty: Property<Vector2> ) {
 
     // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
     this.existenceStrengthProperty = new NumberProperty( 1, {
@@ -50,18 +47,16 @@ class Cloud {
 
   /**
    * return ellipse with size of this cloud
-   * @returns {Shape.ellipse} - ellipse with axes sized to width and height of cloud
-   * @public
+   * @returns ellipse with axes sized to width and height of cloud
    */
-  getCloudAbsorptionReflectionShape() {
+  public getCloudAbsorptionReflectionShape(): Shape {
     return this.cloudEllipse;
   }
 
   /**
-   * @returns {Vector2} Center position of cloud
-   * @public
+   * @returns Center position of cloud
    */
-  getCenterPosition() {
+  public getCenterPosition(): Vector2 {
     return this.parentPositionProperty.get().plus( this.offsetFromParent );
   }
 

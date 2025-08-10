@@ -12,7 +12,6 @@
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-// @public
 const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
   beforeFreeze: BlockType => {
     BlockType.getTandemName = blockType => {

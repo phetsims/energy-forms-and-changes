@@ -12,6 +12,8 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -36,12 +38,7 @@ const generatorString = EnergyFormsAndChangesStrings.generator;
 
 class GeneratorNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {Generator} generator EnergyConverter
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
-   */
-  constructor( generator, modelViewTransform, options ) {
+  public constructor( generator: Generator, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
 
     options = merge( {
 
@@ -133,10 +130,8 @@ class GeneratorNode extends MoveFadeModelElementNode {
   /**
    * Return the mechanical energy chunk layer. This supports adding the energy chunk layer from
    * outside of this node to alter the layering order.
-   * @returns {EnergyChunkLayer}
-   * @public
    */
-  getMechanicalEnergyChunkLayer() {
+  public getMechanicalEnergyChunkLayer(): EnergyChunkLayer {
     assert && assert(
       !this.hasChild( this.mechanicalEnergyChunkLayer ),
       'this.mechanicalEnergyChunkLayer is already a child of GeneratorNode'

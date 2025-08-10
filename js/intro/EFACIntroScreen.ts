@@ -14,6 +14,7 @@ import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Image from '../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import introScreenIcon_png from '../../images/introScreenIcon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';
@@ -23,10 +24,9 @@ import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';
 import EFACIntroScreenView from './view/EFACIntroScreenView.js';
-import Tandem from '../../../tandem/js/Tandem.js';
 
 
-class EFACIntroScreen extends Screen {
+class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
 
   public constructor( tandem: Tandem ) {
 

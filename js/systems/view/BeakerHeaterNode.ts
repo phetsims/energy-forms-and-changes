@@ -14,6 +14,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import elementBaseBack_png from '../../../images/elementBaseBack_png.js';
 import elementBaseFront_png from '../../../images/elementBaseFront_png.js';
 import heaterElement_png from '../../../images/heaterElement_png.js';
@@ -34,13 +35,7 @@ const COIL_TOP_OFFSET = 15;
 
 class BeakerHeaterNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {BeakerHeater} beakerHeater
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( beakerHeater, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( beakerHeater: BeakerHeater, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( beakerHeater, modelViewTransform, tandem );
 
     const wireStraightNode = new Image( wireStraight_png, {
@@ -142,16 +137,12 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
   /**
    * step this view element, called by the framework
    * @param dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.beakerProxyNode.step( dt );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.beakerProxyNode.reset();
   }
 }

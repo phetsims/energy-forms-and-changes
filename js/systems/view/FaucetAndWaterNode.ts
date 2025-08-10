@@ -13,7 +13,9 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import FaucetNode from '../../../../scenery-phet/js/FaucetNode.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -26,13 +28,7 @@ const FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long
 
 class FaucetAndWaterNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {FaucetAndWater} faucet EnergySource
-   * @param {Property.<boolean>} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( faucet, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( faucet: FaucetAndWater, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( faucet, modelViewTransform, tandem );
 
     const fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
@@ -99,10 +95,9 @@ class FaucetAndWaterNode extends MoveFadeModelElementNode {
   }
 
   /**
-   * @public
-   * @param {number} dt - the change in time
+   * @param dt - the change in time
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.fallingWaterCanvasNode.step( dt );
   }
 }

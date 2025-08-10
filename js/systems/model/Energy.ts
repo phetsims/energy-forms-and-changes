@@ -12,18 +12,19 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class Energy {
 
   /**
-   * @param {EnergyType} type - energy type
-   * @param {number} amount - amount of energy, in joules
-   * @param {number} direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
+   * @param type - energy type
+   * @param amount - amount of energy, in joules
+   * @param direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
    * to the right, PI/2 is up, and so forth.
-   * @param {Object} [options]
+   * @param [options]
    */
-  constructor( type, amount, direction, options ) {
+  public constructor( type: EnergyType, amount: number, direction: number, options: IntentionalAny ) {
 
     options = merge( {
       creationTime: null

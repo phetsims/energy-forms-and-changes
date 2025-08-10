@@ -16,6 +16,7 @@ import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import connector_png from '../../../images/connector_png.js';
 import solarPanel_png from '../../../images/solarPanel_png.js';
 import solarPanelGen_png from '../../../images/solarPanelGen_png.js';
@@ -30,12 +31,7 @@ import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 class SolarPanelNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {SolarPanel} solarPanel - model of a solar panel
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( solarPanel, modelViewTransform, tandem ) {
+  public constructor( solarPanel: SolarPanel, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( solarPanel, modelViewTransform, tandem );
 
     // create a scale-only MVT since the absorption shape is relatively positioned

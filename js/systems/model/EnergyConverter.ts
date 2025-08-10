@@ -13,6 +13,8 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -22,10 +24,10 @@ import EnergySystemElement from './EnergySystemElement.js';
 class EnergyConverter extends EnergySystemElement {
 
   /**
-   * @param {Image} iconImage Image to identify source on carousel menu
-   * @param {Object} [options]
+   * @param iconImage Image to identify source on carousel menu
+   * @param [options]
    */
-  constructor( iconImage, options ) {
+  public constructor( iconImage: Image, options: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -45,10 +47,8 @@ class EnergyConverter extends EnergySystemElement {
   /**
    * get the energy chunks that this source wants to transfer to the next energy system element, reading clears the
    * list
-   * @returns {EnergyChunk[]}
-   * @public
    */
-  extractOutgoingEnergyChunks() {
+  public extractOutgoingEnergyChunks(): EnergyChunk[] {
     const energyChunksToRemove = this.outgoingEnergyChunks.filter( energyChunk => this.energyChunkList.includes( energyChunk ) );
     this.energyChunkList.removeAll( energyChunksToRemove );
 
@@ -60,10 +60,8 @@ class EnergyConverter extends EnergySystemElement {
   /**
    * Inject a list of energy chunks into this energy system element.  Once injected, it is the system's responsibility
    * to move, convert, and otherwise manage them.
-   * @param {EnergyChunk[]} energyChunks
-   * @public
    */
-  injectEnergyChunks( energyChunks ) {
+  public injectEnergyChunks( energyChunks: EnergyChunk[] ): void {
     energyChunks.forEach( energyChunk => {
       if ( !this.incomingEnergyChunks.includes( energyChunk ) ) {
         this.incomingEnergyChunks.push( energyChunk );
@@ -73,9 +71,8 @@ class EnergyConverter extends EnergySystemElement {
 
   /**
    * clear internal list of energy chunks and outgoing energy chunks
-   * @public
    */
-  clearEnergyChunks() {
+  public clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();

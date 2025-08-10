@@ -14,6 +14,7 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -23,10 +24,10 @@ import EnergySystemElement from './EnergySystemElement.js';
 class EnergySource extends EnergySystemElement {
 
   /**
-   * @param {Image} iconImage Image to identify source on carousel menu
-   * @param {Object} [options]
+   * @param iconImage Image to identify source on carousel menu
+   * @param [options]
    */
-  constructor( iconImage, options ) {
+  public constructor( iconImage: Image, options: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -46,10 +47,9 @@ class EnergySource extends EnergySystemElement {
   /**
    * Get the energy chunks that this source wants to transfer to the next energy system element. This is a mutating
    * operation: it removes all outgoing chunks from both this.energyChunkList and this.outgoingEnergyChunks.
-   * @returns {EnergyChunk[]} List of energy chunks to transfer
-   * @public
+   * @returns List of energy chunks to transfer
    */
-  extractOutgoingEnergyChunks() {
+  public extractOutgoingEnergyChunks(): EnergyChunk[] {
 
     // remove all outgoing chunks from this.energyChunkList
     const energyChunksToRemove = this.outgoingEnergyChunks.filter( energyChunk => this.energyChunkList.includes( energyChunk ) );
@@ -62,10 +62,8 @@ class EnergySource extends EnergySystemElement {
 
   /**
    * clear internal list of energy chunks and outgoing energy chunks
-   * @protected
-   * @override
    */
-  clearEnergyChunks() {
+  protected override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();

@@ -11,8 +11,10 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -20,6 +22,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import bicycleFrame_png from '../../../images/bicycleFrame_png.js';
 import bicycleGear_png from '../../../images/bicycleGear_png.js';
 import bicycleSpokes_png from '../../../images/bicycleSpokes_png.js';
@@ -113,10 +116,10 @@ const cyclistFrontLegImages = [
 ];
 
 const cyclistTorsoImages = [
- cyclistTorso_png,
- cyclistTorsoTired1_png,
- cyclistTorsoTired2_png,
- cyclistTorsoTired3_png
+  cyclistTorso_png,
+  cyclistTorsoTired1_png,
+  cyclistTorsoTired2_png,
+  cyclistTorsoTired3_png
 ];
 assert && assert( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
   'NUMBER_OF_LEG_IMAGES in Biker.js must match the number of images used for the legs in BikerNode.js'
@@ -133,13 +136,7 @@ const feedMeString = EnergyFormsAndChangesStrings.feedMe;
 
 class BikerNode extends MoveFadeModelElementNode {
 
-  /**
-   * @param {Biker} biker EnergySource
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
-   */
-  constructor( biker, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( biker: Biker, energyChunksVisibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( biker, modelViewTransform, tandem );
 
     // bike part image nodes

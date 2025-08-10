@@ -1,8 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Main entry point for the 'Energy Forms and Changes' sim.
  *
@@ -23,24 +20,22 @@ const energyFormsAndChangesTitleStringProperty = EnergyFormsAndChangesStrings[ '
 // constants
 const tandem = Tandem.ROOT;
 
-const simOptions = {
-  credits: {
-    leadDesign: 'Noah Podolefsky, Amy Rouinfar',
-    softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
-    team: 'Trish Loeblein, Emily B. Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
-    qualityAssurance: 'Logan Bray, Steele Dalton, Megan Lai, Brooklyn Lash, Liam Mulhall, Devon Quispe,<br>' +
-                      'Laura Rea, Jacob Romero, Kathryn Woessner, Kelly Wurtz, Bryan Yoelin',
-    graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
-    thanks: ''
-  }
-};
-
 simLauncher.launch( () => {
 
   const sim = new Sim( energyFormsAndChangesTitleStringProperty, [
     new EFACIntroScreen( tandem.createTandem( 'introScreen' ) ),
     new SystemsScreen( tandem.createTandem( 'systemsScreen' ) )
-  ], simOptions );
+  ], {
+    credits: {
+      leadDesign: 'Noah Podolefsky, Amy Rouinfar',
+      softwareDevelopment: 'Andrew Adare, John Blanco, Chris Klusendorf',
+      team: 'Trish Loeblein, Emily B. Moore, Ariel Paul, Kathy Perkins, and in cooperation with the Next-Lab project',
+      qualityAssurance: 'Logan Bray, Steele Dalton, Megan Lai, Brooklyn Lash, Liam Mulhall, Devon Quispe,<br>' +
+                        'Laura Rea, Jacob Romero, Kathryn Woessner, Kelly Wurtz, Bryan Yoelin',
+      graphicArts: 'Cheryl McCutchan, Mariah Hermsmeyer, Megan Lai',
+      thanks: ''
+    }
+  } );
 
   sim.start();
 } );

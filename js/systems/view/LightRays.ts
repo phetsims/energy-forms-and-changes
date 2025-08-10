@@ -9,20 +9,22 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightRayNode from './LightRayNode.js';
 
 class LightRays extends Node {
 
   /**
-   * @param {Vector2} center - Center position of radial rays
-   * @param {number} innerRadius - Start point
-   * @param {number} outerRadius - End point
-   * @param {number} numberOfRays - How many rays around the sun
-   * @param {Color} color - Ray color
+   * @param center - Center position of radial rays
+   * @param innerRadius - Start point
+   * @param outerRadius - End point
+   * @param numberOfRays - How many rays around the sun
+   * @param color - Ray color
    */
-  constructor( center, innerRadius, outerRadius, numberOfRays, color ) {
+  public constructor( center: Vector2, innerRadius: number, outerRadius: number, numberOfRays: number, color: Color ) {
     super();
 
     this.lightRayNodes = [];
@@ -42,11 +44,8 @@ class LightRays extends Node {
 
   /**
    * adds a light absorbing shape to this set of rays that they may or may not intersect with
-   *
-   * @param {LightAbsorbingShape} lightAbsorbingShape
-   * @public
    */
-  addLightAbsorbingShape( lightAbsorbingShape ) {
+  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ) {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.addLightAbsorbingShape( lightAbsorbingShape );
     } );
@@ -54,11 +53,8 @@ class LightRays extends Node {
 
   /**
    * removes a light absorbing shape from this set of rays
-   *
-   * @param {LightAbsorbingShape} lightAbsorbingShape
-   * @public
    */
-  removeLightAbsorbingShape( lightAbsorbingShape ) {
+  removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.removeLightAbsorbingShape( lightAbsorbingShape );
     } );

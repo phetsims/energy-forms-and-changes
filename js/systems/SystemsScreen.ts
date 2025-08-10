@@ -25,7 +25,7 @@ import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
 
 
-class SystemsScreen extends Screen {
+class SystemsScreen extends Screen<SystemsModel, SystemsScreenView> {
 
   public constructor( tandem: Tandem ) {
 

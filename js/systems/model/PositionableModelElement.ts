@@ -11,19 +11,17 @@
  * @author Andrew Adare
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class PositionableModelElement extends PhetioObject {
 
-  /**
-   * @param {Vector2} initialPosition
-   * @param {Object} [options]
-   */
-  constructor( initialPosition, options ) {
+  public constructor( initialPosition: Vector2, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
