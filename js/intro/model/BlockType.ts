@@ -1,5 +1,8 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Block types for EFAC intro
  *

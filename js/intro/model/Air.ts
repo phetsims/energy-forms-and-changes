@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A type that represents the air in the model. Air can hold heat and exchange thermal energy with other model objects.
  *

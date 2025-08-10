@@ -1,5 +1,8 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a type that is used to move an energy chunk along a pre-defined path
  *

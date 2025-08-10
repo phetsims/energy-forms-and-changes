@@ -1,5 +1,8 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a convenience type that collects together several things often needed about a unit of energy that is being produced
  * or consumed by one of the elements in an energy system

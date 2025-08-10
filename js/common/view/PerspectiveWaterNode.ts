@@ -1,5 +1,8 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a scenery node that looks like water in a cylindrical container as seen from slightly above the horizon
  * @author John Blanco

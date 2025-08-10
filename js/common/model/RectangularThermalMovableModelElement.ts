@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * RectangularThermalMovableModelElement is a base class for a movable model element that contains thermal energy and
  * that, at least in the model, has an overall shape that can be represented as a rectangle.

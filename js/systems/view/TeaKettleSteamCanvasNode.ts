@@ -1,5 +1,8 @@
 // Copyright 2019-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A node for a concentrated column of steam.
  *

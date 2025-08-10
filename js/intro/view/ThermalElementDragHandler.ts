@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
  * them from being dragged through one another

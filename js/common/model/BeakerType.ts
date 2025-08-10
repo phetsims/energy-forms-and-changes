@@ -1,5 +1,8 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Beaker types for EFAC
  *

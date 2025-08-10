@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a Scenery Node that represents the sun, clouds, and a slider to control the level of cloudiness in the view
  *

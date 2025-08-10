@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Block that contains and exchanges thermal energy.  In the model, a block is two-dimensional, so its shape is
  * represented by a rectangle.

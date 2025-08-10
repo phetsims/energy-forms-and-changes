@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class represents a "slice" within a 2D container that can contain a set of energy chunks, and can be used to add
  * some limited 3D capabilities by having some z-dimension information.  The slice consists of a 2D shape and a Z value

@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A node that represents a 2D surface on which energy chunks reside. The surface contains z-dimension information,
  * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance when used in

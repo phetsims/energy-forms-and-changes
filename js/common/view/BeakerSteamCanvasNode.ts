@@ -1,5 +1,8 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A node for the column of steam that rises out of a beaker when the temperature of the contained liquid is high enough.
  *

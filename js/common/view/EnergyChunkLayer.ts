@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This node monitors the comings and goings of energy chunks on a observable list and adds/removes nodes that
  * correspond to each.  This is intended to be used in other view nodes that represent model elements that contain

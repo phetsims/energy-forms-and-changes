@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A type that represents a model of a solar panel that converts light energy to electrical energy.  The panel actually
  * consists of an actual panel but also is meant to have a lower assembly through which energy chunks move.  The

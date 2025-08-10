@@ -1,5 +1,8 @@
 // Copyright 2015-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Static object containing the constants that control the rate of heat transfer between the various model elements that
  * can contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are

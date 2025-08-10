@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Model element that represents a beaker which contains a fluid. The fluid contains energy, which includes energy
  * chunks, and has a temperature.

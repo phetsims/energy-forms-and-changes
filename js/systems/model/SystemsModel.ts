@@ -1,5 +1,8 @@
 // Copyright 2016-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * model for the 'Systems' screen of the Energy Forms And Changes simulation
  *

@@ -1,5 +1,8 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 // Note: This file is a mashup of two ported Java files: Carousel and
 // EnergySystemElementCarousel. Carousel.java was not ported to avoid confusion
 // with the PhET Sun Carousel.js UI component.

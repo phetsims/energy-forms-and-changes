@@ -1,5 +1,8 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This type is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
  * destination.

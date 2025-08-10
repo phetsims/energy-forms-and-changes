@@ -1,5 +1,8 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A static object that contains methods for redistributing a set of energy chunks within a shape in order to make them
  * spread out fairly evenly in a way that looks dynamic and realistic.  The basic approach is to simulate a set of

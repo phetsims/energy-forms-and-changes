@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Scenery node that represents a burner stand in the view.  A burner stand is a faux-3D representation of an object
  * upon which other objects may be placed in order to be heated or cooled.  The burner is not included.

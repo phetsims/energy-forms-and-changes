@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
  * which other objects can be placed, which generally displaces the fluid.

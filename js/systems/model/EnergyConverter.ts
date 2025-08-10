@@ -1,5 +1,8 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * base type for energy converters, i.e. model elements that take energy from a source and convert it to something else
  * (such as mechanical to electrical) and then supply it to an energy user

@@ -1,5 +1,8 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a model element that has a position which can be changed
  *

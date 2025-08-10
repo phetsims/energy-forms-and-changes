@@ -1,5 +1,8 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * base type for energy users, i.e. model elements that take energy from an energy converter and do something with it,
  * such as producing light or heat

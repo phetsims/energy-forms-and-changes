@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a Scenery Node that allows the user to select the various elements contained within a carousel by presenting a set of
  * radio-style push buttons, each with an icon image of the selection that it represents

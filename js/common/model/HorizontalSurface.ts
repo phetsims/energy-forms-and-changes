@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A simple, level horizontal surface in a 2D model space.  This is represented by a range of x values and a single y
  * value.  The best way to thing of this is that it is much like a Vector2 in that it represents a small piece of

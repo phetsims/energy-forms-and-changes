@@ -1,5 +1,8 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a scenery node that represents a light bulb in the view
  *

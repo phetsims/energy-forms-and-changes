@@ -1,5 +1,8 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A singleton that encapsulates the information and algorithms necessary to constrain the motion of model elements such
  * that they can't be dragged through one another.

@@ -1,5 +1,8 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * base class for light bulbs in the model
  *

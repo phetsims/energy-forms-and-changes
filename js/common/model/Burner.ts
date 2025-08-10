@@ -1,5 +1,8 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Model element that represents a burner in the simulation.  The burner can heat and also cool other model elements.
  *

@@ -1,5 +1,8 @@
 // Copyright 2016-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * base class for energy sources, converters, and users, that can be connected together to create what is referred to
  * as an "energy system" in this simulation

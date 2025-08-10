@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Scenery node that represents a beaker in the view. This representation is split between a front node and a back
  * node, which must be separately added to the scene graph. This is done to allow a layering effect. Hence, this cannot

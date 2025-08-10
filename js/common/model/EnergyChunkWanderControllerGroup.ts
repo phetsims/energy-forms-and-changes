@@ -1,5 +1,8 @@
 // Copyright 2020-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * PhetioGroup for creating EnergyChunkWanderControllers. This type adds support for dynamically created and destroyed,
  * instrumented PhET-iO Elements.

@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Node that represents a block in the view.  The blocks in the model are 2D, and this node gives them some perspective
  * in order to make them appear to be 3D.

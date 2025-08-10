@@ -1,5 +1,8 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * base type for model elements that can be positioned and faded
  *

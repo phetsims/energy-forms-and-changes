@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * a type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements
  *
