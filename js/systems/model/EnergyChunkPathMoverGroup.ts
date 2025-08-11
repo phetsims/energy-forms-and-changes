@@ -25,7 +25,6 @@ class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover> {
     options = merge( {
       tandem: Tandem.REQUIRED,
 
-      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
     }, options );
 

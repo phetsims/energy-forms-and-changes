@@ -1,8 +1,5 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a type that is used to move an energy chunk along a pre-defined path
  *
@@ -14,9 +11,9 @@
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -26,6 +23,9 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+
+type SelfOptions = EmptySelfOptions;
+export type EnergyChunkPathMoverOptions = SelfOptions & PhetioObjectOptions;
 
 class EnergyChunkPathMover extends PhetioObject {
 
@@ -39,19 +39,21 @@ class EnergyChunkPathMover extends PhetioObject {
    * @param energyChunk - energy chunk to be moved
    * @param path - points along energy chunk path
    * @param speed - in meters per second
+   * @param providedOptions
    */
-  public constructor( energyChunk: EnergyChunk, path: Vector2[], speed: number, options?: object ) {
+  public constructor( energyChunk: EnergyChunk, path: Vector2[], speed: number, providedOptions?: EnergyChunkPathMoverOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyChunkPathMoverOptions, SelfOptions, PhetioObjectOptions>()( {
 
       // phet-io
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: EnergyChunkPathMover.EnergyChunkPathMoverIO,
       phetioDynamicElement: true
-    }, options );
+    }, providedOptions );
 
     // validate args
-    assert && assert( energyChunk instanceof EnergyChunk, `energyChunk is not of correct type: ${energyChunk}` );
     assert && assert( path.length > 0, 'Path must have at least one point' );
     assert && assert( speed >= 0, `speed must be a non-negative scalar. Received: ${speed}` );
 
@@ -66,25 +68,28 @@ class EnergyChunkPathMover extends PhetioObject {
     this.nextPoint = path[ 0 ];
   }
 
-  // @public (EnergyChunkPathMoverIO)
-  public toStateObject(): object {
+  public toStateObject(): IntentionalAny {
     return {
       path: ArrayIO( Vector2.Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
       nextPoint: Vector2.Vector2IO.toStateObject( this.nextPoint ),
+
+      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
   }
 
-  // @public (EnergyChunkPathMoverIO)
   public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): [ EnergyChunk, Vector2[], number ] {
+
+    // @ts-expect-error
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
+
+    // @ts-expect-error
     return [ energyChunk, path, stateObject.speed ];
   }
 
-  // @public (EnergyChunkPathMoverIO)
   public applyState( stateObject: IntentionalAny ): void {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
 
@@ -108,8 +113,6 @@ class EnergyChunkPathMover extends PhetioObject {
     while ( distanceToTravel > 0 && !this.pathFullyTraversed ) {
 
       const chunkPosition = this.energyChunk.positionProperty.get();
-
-      assert && assert( chunkPosition instanceof Vector2, `Expected a Vector2, got this: ${chunkPosition}` );
 
       const distanceToNextPoint = chunkPosition.distance( this.nextPoint );
 
@@ -221,21 +224,27 @@ class EnergyChunkPathMover extends PhetioObject {
 
     return path;
   }
-}
 
-EnergyChunkPathMover.EnergyChunkPathMoverIO = new IOType( 'EnergyChunkPathMoverIO', {
-  valueType: EnergyChunkPathMover,
-  toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
-  stateObjectToCreateElementArguments: stateObject => EnergyChunkPathMover.stateObjectToCreateElementArguments( stateObject ),
-  applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
-  stateSchema: {
-    path: ArrayIO( Vector2.Vector2IO ),
-    speed: NumberIO,
-    pathFullyTraversed: BooleanIO,
-    nextPoint: Vector2.Vector2IO,
-    energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO )
-  }
-} );
+  public static readonly EnergyChunkPathMoverIO = new IOType<EnergyChunkPathMover>( 'EnergyChunkPathMoverIO', {
+    valueType: EnergyChunkPathMover,
+
+    // @ts-expect-error
+    toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
+    stateObjectToCreateElementArguments: stateObject => EnergyChunkPathMover.stateObjectToCreateElementArguments( stateObject ),
+
+    applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
+    stateSchema: {
+      // @ts-expect-error
+      path: ArrayIO( Vector2.Vector2IO ),
+      speed: NumberIO,
+      pathFullyTraversed: BooleanIO,
+      nextPoint: Vector2.Vector2IO,
+
+      // @ts-expect-error
+      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO )
+    }
+  } );
+}
 
 energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
 export default EnergyChunkPathMover;
