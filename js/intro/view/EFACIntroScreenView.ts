@@ -79,12 +79,19 @@ const MAX_THERMOMETER_ANIMATION_TIME = 1; // max time for thermometer return ani
 
 class EFACIntroScreenView extends ScreenView {
 
+  private readonly model: EFACIntroModel;
+
+  // Pre-calculated space occupied by the burners for validating positions
+  private readonly burnerBlockingRect: Bounds2;
+
+  // Group for managing beaker proxy nodes
+  private readonly beakerProxyNodeGroup: PhetioGroup<BeakerContainerView>;
+
   public constructor( model: EFACIntroModel, tandem: Tandem ) {
     super( {
       tandem: tandem
     } );
 
-    // @private {EFACIntroModel}
     this.model = model;
 
     // Create the model-view transform. The primary units used in the model are meters, so significant zoom is used.
@@ -337,7 +344,6 @@ class EFACIntroScreenView extends ScreenView {
     const leftBurnerBounds = model.leftBurner.getBounds();
     const burnerPerspectiveExtension = leftBurnerBounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                        Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
-    // @private {Bounds2}
     this.burnerBlockingRect = new Bounds2(
       leftBurnerBounds.minX - burnerPerspectiveExtension,
       leftBurnerBounds.minY,
@@ -413,7 +419,6 @@ class EFACIntroScreenView extends ScreenView {
     model.blockGroup.forEach( blockListener );
     model.blockGroup.elementCreatedEmitter.addListener( blockListener );
 
-    // @private {PhetioGroup.<BeakerContainerView>}
     this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
       const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
       return new BeakerContainerView(

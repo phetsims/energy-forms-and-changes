@@ -22,6 +22,12 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class Belt {
 
+  // The shape of the belt
+  public readonly beltShape: Shape;
+
+  // Visibility property for the belt
+  public readonly isVisibleProperty: BooleanProperty;
+
   public constructor( wheel1Radius: number, wheel1Center: Vector2, wheel2Radius: number, wheel2Center: Vector2 ) {
 
     // Calculate the angle needed to make the belt look like it contacts the wheels at the right places, see
@@ -57,10 +63,8 @@ class Belt {
     beltShape.lineToPoint( wheel1Center.plus( wheel1CenterToArcStart ) );
     beltShape.close();
 
-    // @public (read-only) {Shape}
     this.beltShape = beltShape;
 
-    // @public {BooleanProperty}
     this.isVisibleProperty = new BooleanProperty( false );
   }
 }

@@ -33,6 +33,19 @@ import EnergyChunk from './EnergyChunk.js';
 
 class EnergyChunkContainerSlice extends PhetioObject {
 
+  // Position of this slice in model space
+  public readonly anchorPointProperty: Property<Vector2>;
+
+  // 2D bounds of this slice in model space, translates with the anchor point
+  public readonly bounds: Bounds2;
+
+  private readonly zPosition: number;
+
+  // List of energy chunks owned by this slice
+  private readonly energyChunkList: ObservableArray<EnergyChunk>;
+
+  private readonly disposeEnergyChunkContainerSlice: () => void;
+
   /**
    * @param bounds
    * @param zPosition - used to give appearance of depth
@@ -51,16 +64,12 @@ class EnergyChunkContainerSlice extends PhetioObject {
     assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( anchorPointProperty.isPhetioInstrumented(),
       'provided Property should be instrumented if I am.' );
 
-    // @public {Property.<Vector2>} - position of this slice in model space
     this.anchorPointProperty = anchorPointProperty;
 
-    // @public (read-only) {Bounds2} - 2D bounds of this slice in model space, translates with the anchor point
     this.bounds = bounds;
 
-    // @private {number}
     this.zPosition = zPosition;
 
-    // @private {ObservableArrayDef.<EnergyChunk>} - list of energy chunks owned by this slice
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
@@ -91,7 +100,6 @@ class EnergyChunkContainerSlice extends PhetioObject {
     };
     this.anchorPointProperty.lazyLink( anchorPointListener );
 
-    // @private
     this.disposeEnergyChunkContainerSlice = () => {
       this.energyChunkList.clear();
       this.energyChunkList.dispose();

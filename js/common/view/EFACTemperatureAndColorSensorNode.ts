@@ -26,6 +26,9 @@ import TemperatureAndColorSensor from '../model/TemperatureAndColorSensor.js';
 
 class EFACTemperatureAndColorSensorNode extends Node {
 
+  // Public so getBounds functions can be called
+  public readonly temperatureAndColorSensorNode: TemperatureAndColorSensorNode;
+
   /**
    * @param temperatureAndColorSensor - model element that measures temperature and color
    * at a position in model space
@@ -45,7 +48,6 @@ class EFACTemperatureAndColorSensorNode extends Node {
 
     super( options );
 
-    // @public (read-only) {TemperatureAndColorSensorNode} - public so getBounds functions can be called
     this.temperatureAndColorSensorNode = new TemperatureAndColorSensorNode(
       temperatureAndColorSensor.sensedTemperatureProperty,
       new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE ),

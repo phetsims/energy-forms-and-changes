@@ -50,6 +50,37 @@ let idCounter = 0;
 
 class Burner extends ModelElement {
 
+  // Unique ID, used for debug
+  public readonly id: string;
+
+  // Heat/cool level control property
+  public readonly heatCoolLevelProperty: NumberProperty;
+
+  // Observable array of energy chunks
+  public readonly energyChunkList: ObservableArray<EnergyChunk>;
+
+  // Position in model space
+  private readonly position: Vector2;
+
+  // Motion strategies that control the movement of the energy chunks owned by this burner
+  private readonly energyChunkWanderControllers: ObservableArray<EnergyChunkWanderController>;
+
+  private readonly energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup | null;
+
+  // Used to keep incoming energy chunks from wandering very far to the left or right
+  private readonly incomingEnergyChunkWanderBounds: Range;
+
+  // Controls whether the energy chunks are visible
+  private readonly energyChunksVisibleProperty: Property<boolean>;
+
+  // Bounds of the burner in model space
+  private readonly bounds: Bounds2;
+
+  private readonly energyChunkGroup: PhetioGroup<EnergyChunk>;
+
+  // See base class for description
+  public readonly topSurface: HorizontalSurface;
+
   /**
    * @param position - the position in model space where this burner exists
    * @param energyChunksVisibleProperty - controls whether the energy chunks are visible
@@ -67,41 +98,32 @@ class Burner extends ModelElement {
 
     super( position, options );
 
-    // @public (read-only) {string} - unique ID, used for debug
     this.id = `burner-${idCounter++}`;
 
-    // @public {NumberProperty}
     this.heatCoolLevelProperty = new NumberProperty( 0, {
       range: new Range( -1, 1 ),
       tandem: options.tandem.createTandem( 'heatCoolLevelProperty' ),
       phetioDocumentation: 'the level of heating or cooling from the burner. -1 is maximum cooling, +1 is maximum heating'
     } );
 
-    // @public (read-only) {ObservableArrayDef.<EnergyChunk>}
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // @private {Vector2}
     this.position = position;
 
-    // @private {Object[]} - motion strategies that control the movement of the energy chunks owned by this burner
     this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
-    // @private {EnergyChunkWanderControllerGroup|null}
     this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup;
 
-    // @private {Range} - used to keep incoming energy chunks from wandering very far to the left or right
     this.incomingEnergyChunkWanderBounds = new Range( position.x - SIDE_LENGTH / 3, position.x + SIDE_LENGTH / 3 );
 
-    // @private {Property.<boolean>}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @private {Bounds2} - bounds of the burner in model space
     this.bounds = new Bounds2(
       position.x - SIDE_LENGTH / 2,
       position.y,
@@ -109,7 +131,6 @@ class Burner extends ModelElement {
       position.y + SIDE_LENGTH
     );
 
-    // @private
     this.energyChunkGroup = energyChunkGroup;
 
     // add position test bounds (see definition in base class for more info)
@@ -120,7 +141,6 @@ class Burner extends ModelElement {
     const perspectiveCompensation = this.bounds.height * EFACConstants.BURNER_EDGE_TO_HEIGHT_RATIO *
                                     Math.cos( EFACConstants.BURNER_PERSPECTIVE_ANGLE ) / 2;
 
-    // @public - see base class for description
     this.topSurface = new HorizontalSurface(
       new Vector2( this.position.x, this.bounds.maxY ),
       this.bounds.maxX + perspectiveCompensation - ( this.bounds.minX - perspectiveCompensation ),

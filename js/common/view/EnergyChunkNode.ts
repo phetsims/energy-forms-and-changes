@@ -49,6 +49,9 @@ const energyChunkImageNodes = {};
 
 class EnergyChunkNode extends Node {
 
+  // Function to dispose this node
+  private readonly disposeEnergyChunkNode: () => void;
+
   /**
    * @param energyChunk - model of an energy chunk
    * @param modelViewTransform

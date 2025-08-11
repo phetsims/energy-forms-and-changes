@@ -17,6 +17,18 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class Energy {
 
+  // Energy type
+  public readonly type: EnergyType;
+
+  // Amount of energy, in joules
+  public readonly amount: number;
+
+  // Direction of energy, in radians. Not meaningful for all energy types. Zero indicates to the right, PI/2 is up, and so forth.
+  public readonly direction: number;
+
+  // Creation time
+  public readonly creationTime: number | null;
+
   /**
    * @param type - energy type
    * @param amount - amount of energy, in joules
@@ -30,16 +42,12 @@ class Energy {
       creationTime: null
     }, options );
 
-    // @public (read-only) {EnergyType}
     this.type = type;
 
-    // @public (read-only) {number}
     this.amount = amount;
 
-    // @public (read-only) {number}
     this.direction = direction;
 
-    // @public (read-only) {number}
     this.creationTime = options.creationTime;
   }
 }

@@ -14,9 +14,11 @@ import EnergyBalanceRecord from './EnergyBalanceRecord.js';
 
 class EnergyBalanceTracker {
 
+  // Array where the energy exchange records are kept
+  private readonly energyBalanceRecords: EnergyBalanceRecord[];
+
   public constructor() {
 
-    // @private - array where the energy exchange records are kept
     this.energyBalanceRecords = [];
   }
 

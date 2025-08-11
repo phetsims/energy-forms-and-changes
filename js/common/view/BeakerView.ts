@@ -49,6 +49,21 @@ const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between
 
 class BeakerView extends PhetioObject {
 
+  private readonly modelViewTransform: ModelViewTransform2;
+  private followPosition: boolean;
+
+  // Layer nodes, public so that they can be layered correctly by the screen view, see
+  // the header comment for info about how these are used.
+  public readonly frontNode: Node;
+  public readonly backNode: Node;
+  public readonly grabNode: Node;
+
+  // The fluid representation
+  private readonly fluid: PerspectiveWaterNode;
+
+  // The layer where the contained energy chunk nodes will be placed
+  protected readonly energyChunkRootNode: Node;
+
   /**
    * @param beaker - model of a beaker
    * @param energyChunksVisibleProperty
@@ -68,12 +83,9 @@ class BeakerView extends PhetioObject {
 
     super( options );
 
-    // @private
     this.modelViewTransform = modelViewTransform;
     this.followPosition = true;
 
-    // @public (read-only) {Node} - layer nodes, public so that they can be layered correctly by the screen view, see
-    // the header comment for info about how these are used.
     this.frontNode = new Node();
     this.backNode = new Node();
     this.grabNode = new Node( { cursor: 'pointer' } );
@@ -103,7 +115,7 @@ class BeakerView extends PhetioObject {
     const topEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.minY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
     const bottomEllipse = new Shape().ellipse( beakerBounds.centerX, beakerBounds.maxY, beakerHalfWidth, beakerEllipseHalfHeight, 0 );
 
-    // @private - Add the fluid.  It will adjust its size based on the fluid level.
+    // Add the fluid.  It will adjust its size based on the fluid level.
     this.fluid = new PerspectiveWaterNode(
       beakerBounds,
       beaker.fluidProportionProperty,
@@ -208,7 +220,7 @@ class BeakerView extends PhetioObject {
     labelText.pickable = false;
     this.frontNode.addChild( labelText );
 
-    // @protected {Node} - the layer where the contained energy chunk nodes will be placed
+    // the layer where the contained energy chunk nodes will be placed
     this.energyChunkRootNode = new Node();
     this.backNode.addChild( this.energyChunkRootNode );
 

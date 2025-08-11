@@ -18,18 +18,26 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ElementFollower {
 
+  // Position Property of element that will follow another
+  private readonly followerProperty: Property<Vector2>;
+
+  // Position of the thing being followed, null if not following anything
+  private positionBeingFollowedProperty: Property<Vector2> | null;
+
+  // Offset from following position
+  private offset: Vector2;
+
+  // Function that gets linked/unlinked when the thermometer is following/unfollowing
+  private readonly followerFunction: ( position: Vector2 ) => void;
+
   public constructor( trackedPositionProperty: Property<Vector2> ) {
 
-    // @private {Property.<Vector2>} - position Property of element that will follow another
     this.followerProperty = trackedPositionProperty;
 
-    // @private {Property.<Vector2>|null} - position of the thing being followed, null if not following anything
     this.positionBeingFollowedProperty = null;
 
-    // @private {Vector2} - offset from following position
     this.offset = Vector2.ZERO;
 
-    // @private {function} - function that gets linked/unlinked when the thermometer is following/unfollowing.
     this.followerFunction = position => {
       this.followerProperty.set( position.plus( this.offset ) );
     };

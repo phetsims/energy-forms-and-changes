@@ -32,6 +32,29 @@ const MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
 
 class BeakerSteamCanvasNode extends CanvasNode {
 
+  // The outline of the container
+  private readonly containerOutlineRect: Rectangle;
+
+  // The proportion of fluid in its container
+  private readonly fluidProportionProperty: Property<number>;
+
+  // The temperature of the liquid
+  private readonly temperatureProperty: Property<number>;
+
+  // The boiling point of the fluid
+  private readonly fluidBoilingPoint: number;
+
+  // The color of the steam
+  private readonly steamColor: Color;
+
+  private preloadComplete: boolean;
+  private bubbleProductionRemainder: number;
+  private steamOrigin: number;
+  private steamBubbles: Object[];
+
+  // Canvas where the steam bubble image resides
+  private readonly steamBubbleImageCanvas: HTMLCanvasElement;
+
   /**
    * @param containerOutlineRect - the outline of the container
    * @param fluidProportionProperty - the proportion of fluid in its container
@@ -43,7 +66,6 @@ class BeakerSteamCanvasNode extends CanvasNode {
   public constructor( containerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, steamColor: Color, options?: Object ) {
     super( options );
 
-    // @private
     this.containerOutlineRect = containerOutlineRect;
     this.fluidProportionProperty = fluidProportionProperty;
     this.temperatureProperty = temperatureProperty;
@@ -51,13 +73,10 @@ class BeakerSteamCanvasNode extends CanvasNode {
     this.steamColor = steamColor;
     this.preloadComplete = true;
 
-    // @private
     this.bubbleProductionRemainder = 0;
     this.steamOrigin = 0;
     this.steamBubbles = [];
 
-    // @private
-    // canvas where the steam bubble image resides
     this.steamBubbleImageCanvas = document.createElement( 'canvas' );
     this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
     this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;

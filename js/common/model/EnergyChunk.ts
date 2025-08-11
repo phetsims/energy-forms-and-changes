@@ -32,6 +32,27 @@ let instanceCount = 0; // counter for creating unique IDs
 
 class EnergyChunk extends PhetioObject {
 
+  // Position property of the energy chunk
+  public readonly positionProperty: Vector2Property;
+
+  // For simple 3D layering effects
+  public readonly zPositionProperty: NumberProperty;
+
+  // Energy type property
+  public readonly energyTypeProperty: EnumerationDeprecatedProperty<EnergyType>;
+
+  // Visibility property
+  public readonly visibleProperty: BooleanProperty;
+
+  // An ID that will be used to track this energy chunk
+  public readonly id: number;
+
+  // For performance reasons, this is allocated once and should never be overwritten
+  public readonly velocity: Vector2;
+
+  // Z position for layering (convenience property)
+  public zPosition: number;
+
   public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, options?: any ) {
 
     options = merge( {
@@ -48,34 +69,31 @@ class EnergyChunk extends PhetioObject {
 
     super( options );
 
-    // @public
     this.positionProperty = new Vector2Property( initialPosition, {
       valueComparisonStrategy: 'equalsFunction',
       tandem: options.tandem.createTandem( 'positionProperty' ),
       phetioEventType: EventType.OPT_OUT
     } );
 
-    // @public - for simple 3D layering effects
     this.zPositionProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zPositionProperty' )
     } );
 
-    // @public
     this.energyTypeProperty = new EnumerationDeprecatedProperty( EnergyType, initialEnergyType, {
       tandem: options.tandem.createTandem( 'energyTypeProperty' )
     } );
 
-    // @public
     this.visibleProperty = visibleProperty;
 
     assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( this.visibleProperty.isPhetioInstrumented(),
       'if this EnergyChunk is instrumented, then the visibleProperty should be too' );
 
-    // @public (read-only) {number} - an ID that will be used to track this energy chunk
     this.id = options.id || instanceCount++;
 
-    // @public (read-only) {Vector2} - for performance reasons, this is allocated once and should never be overwritten
     this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
+    
+    // Initialize z position
+    this.zPosition = 0;
   }
 
   // @public (EnergyChunkIO)

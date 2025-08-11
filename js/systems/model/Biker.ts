@@ -58,6 +58,33 @@ const CHEMICAL_ENERGY_CHUNK_OFFSETS = [ BIKER_BUTTOCKS_OFFSET, TOP_TUBE_ABOVE_CR
 
 class Biker extends EnergySource {
 
+  // A11y name
+  public readonly a11yName: string;
+
+  // Angle of the crank arm
+  public readonly crankAngleProperty: NumberProperty;
+
+  // Angle of the rear wheel
+  public readonly rearWheelAngleProperty: NumberProperty;
+
+  // Number of energy chunks remaining in the biker's body
+  public readonly energyChunksRemainingProperty: NumberProperty;
+
+  // Target angular velocity of crank
+  public readonly targetCrankAngularVelocityProperty: NumberProperty;
+
+  // Angular velocity of crank
+  public readonly crankAngularVelocityProperty: NumberProperty;
+
+  // Internal variables
+  private readonly energyChunksVisibleProperty: Property<boolean>;
+  private readonly mechanicalPoweredSystemIsNextProperty: Property<boolean>;
+  private readonly energyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private energyProducedSinceLastChunkEmitted: number;
+  private mechanicalChunksSinceLastThermal: number;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
   /**
    * @param energyChunksVisibleProperty
    * @param mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
@@ -75,10 +102,8 @@ class Biker extends EnergySource {
 
     super( new Image( bicycleIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.cyclist;
 
-    // @public (read-only) {NumberProperty}
     this.crankAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
@@ -88,7 +113,6 @@ class Biker extends EnergySource {
       phetioDocumentation: 'angle of the crank arm on the bike'
     } );
 
-    // @public (read-only) {NumberProperty}
     this.rearWheelAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
@@ -98,7 +122,6 @@ class Biker extends EnergySource {
       phetioDocumentation: 'angle of the rear wheel on the bike'
     } );
 
-    // @public {NumberProperty}
     this.energyChunksRemainingProperty = new NumberProperty( INITIAL_NUMBER_OF_ENERGY_CHUNKS, {
       range: new Range( 0, INITIAL_NUMBER_OF_ENERGY_CHUNKS ),
       tandem: options.tandem.createTandem( 'energyChunksRemainingProperty' ),
@@ -107,7 +130,6 @@ class Biker extends EnergySource {
       phetioDocumentation: 'number of energy chunks remaining in the biker\'s body'
     } );
 
-    // @public (read-only) {NumberProperty}
     this.targetCrankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
       units: 'radians/s',
@@ -115,7 +137,6 @@ class Biker extends EnergySource {
       phetioDocumentation: 'target angular velocity of crank'
     } );
 
-    // @public (read-only) {NumberProperty}
     this.crankAngularVelocityProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_ANGULAR_VELOCITY_OF_CRANK ),
       units: 'radians/s',
@@ -125,7 +146,6 @@ class Biker extends EnergySource {
       phetioDocumentation: 'angular velocity of crank'
     } );
 
-    // @private - internal variables
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
     this.energyChunkMovers = createObservableArray( {
@@ -136,7 +156,6 @@ class Biker extends EnergySource {
     this.energyProducedSinceLastChunkEmitted = EFACConstants.ENERGY_PER_CHUNK * 0.9;
     this.mechanicalChunksSinceLastThermal = 0;
 
-    // @private
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 

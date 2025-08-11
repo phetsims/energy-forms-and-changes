@@ -22,21 +22,28 @@ const HEIGHT = WIDTH * 0.55; // determined from the approximate aspect ratio of 
 
 class Cloud {
 
+  // Existence strength, which basically translates to opacity, of the cloud
+  public readonly existenceStrengthProperty: NumberProperty;
+
+  // Offset position for this cloud
+  public readonly offsetFromParent: Vector2;
+
+  // Used to calculate this cloud's position
+  private readonly parentPositionProperty: Property<Vector2>;
+
+  // The ellipse that defines the shape of this cloud. only null until the parent position is linked
+  private cloudEllipse: Shape | null;
+
   public constructor( offsetFromParent: Vector2, parentPositionProperty: Property<Vector2> ) {
 
-    // @public {NumberProperty} - existence strength, which basically translates to opacity, of the cloud
     this.existenceStrengthProperty = new NumberProperty( 1, {
       range: new Range( 0, 1 )
     } );
 
-    // @public (read-only) {number} - offset position for this cloud
     this.offsetFromParent = offsetFromParent;
 
-    // @private {number} - used to calculate this cloud's position
     this.parentPositionProperty = parentPositionProperty;
 
-    // @private {Shape|null} - the ellipse that defines the shape of this cloud. only null until the parent position
-    // is linked
     this.cloudEllipse = null;
 
     this.parentPositionProperty.link( parentPosition => {

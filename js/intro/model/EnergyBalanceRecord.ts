@@ -13,6 +13,18 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class EnergyBalanceRecord {
 
+  // ID of the entity from which the energy was transferred
+  public readonly fromID: string;
+
+  // ID of the entity to which the energy was transferred
+  public readonly toID: string;
+
+  // Amount of energy transferred, negative values indicate reverse direction
+  public energyBalance: number;
+
+  // Flag that is used to mark whether energy was recently transferred
+  public recentlyUpdated: boolean;
+
   /**
    * inner type which defines the structure where energy exchanges are tracked
    * @param energyAmount - in joules
@@ -26,16 +38,12 @@ class EnergyBalanceRecord {
     // order.  That is checked here.
     assert && assert( fromID < toID, 'fromID must precede toID in lexical order' );
 
-    // @public (read-only) {string} - id of the entity from which the energy was transferred
     this.fromID = fromID;
 
-    // @public (read-only) {string} - id of the entity to which the energy was transferred
     this.toID = toID;
 
-    // @public {number} - amount of energy transferred, negative values indicate reverse direction
     this.energyBalance = energyAmount;
 
-    // @public {boolean} - flag that is used to mark whether energy was recently transferred
     this.recentlyUpdated = true;
   }
 

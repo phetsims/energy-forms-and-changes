@@ -22,6 +22,8 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 
 class EnergyChunkContainerSliceNode extends Node {
 
+  private readonly modelViewTransform: ModelViewTransform2;
+
   public constructor( slice: EnergyChunkContainerSlice, modelViewTransform: ModelViewTransform2 ) {
     super();
 

@@ -67,6 +67,12 @@ BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
 
 class BlockNode extends Node {
 
+  // The block model element
+  public readonly block: Block;
+
+  // The layers where the energy chunks will be placed
+  private readonly energyChunkRootNode: Node;
+
   public constructor( block: Block, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, simIsPlayingProperty: BooleanProperty, options?: any ) {
     options = merge( {
 
@@ -82,7 +88,6 @@ class BlockNode extends Node {
 
     super( options );
 
-    // @public (read-only)
     this.block = block;
 
     // extract the scale transform from the MVT so that we can separate the shape from the position of the block
@@ -170,7 +175,7 @@ class BlockNode extends Node {
     } );
     this.addChild( blockBack );
 
-    // @private - create the layers where the energy chunks will be placed
+    // create the layers where the energy chunks will be placed
     this.energyChunkRootNode = new Node();
     this.addChild( this.energyChunkRootNode );
     for ( let i = block.slices.length - 1; i >= 0; i-- ) {

@@ -71,52 +71,93 @@ const ICE_BLUE = new Color( '#87CEFA' );
 
 class EFACIntroModel {
 
+  // Controls whether the energy chunks are visible in the view
+  public readonly energyChunksVisibleProperty: BooleanProperty;
+
+  // Controls whether HeaterCoolerNodes are linked together
+  public readonly linkedHeatersProperty: BooleanProperty;
+
+  // Is the sim running or paused?
+  public readonly isPlayingProperty: BooleanProperty;
+
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup;
+
+  // Controls play speed of the simulation
+  public readonly timeSpeedProperty: EnumerationProperty<TimeSpeed>;
+
+  // Model of the air that surrounds the other model elements, and can absorb or provide energy
+  public readonly air: Air;
+
+  // Calculate space in between the center points of the snap-to spots on the ground
+  private readonly spaceBetweenGroundSpotCenters: number;
+
+  // List of valid x-positions for model elements to rest
+  private readonly groundSpotXPositions: number[];
+
+  // Whether two burners exist
+  public readonly twoBurners: boolean;
+
+  // The burner instances
+  public readonly leftBurner: Burner;
+  public readonly rightBurner: Burner;
+
+  private readonly burners: Burner[];
+
+  // Groups for dynamic elements
+  public readonly blockGroup: PhetioGroup<Block>;
+  public readonly beakerGroup: PhetioGroup<BeakerContainer>;
+
+  // Tracking object for thermal contact info
+  private readonly inThermalContactInfo: Object;
+
+  // All model elements for easy iteration
+  private readonly modelElementList: ModelElement[];
+
+  // Temperature sensors
+  public readonly thermometers: StickyTemperatureAndColorSensor[];
+
+  // Energy balance tracking
+  private readonly energyBalanceTracker: EnergyBalanceTracker;
+  private readonly reusableBalanceArray: EnergyBalanceRecord[];
+
+  // Used to notify the view that a manual step was called
+  public readonly manualStepEmitter: Emitter<[number]>;
+
   public constructor( blocksToCreate: BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
-    // @public {BooleanProperty} - controls whether the energy chunks are visible in the view
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
       phetioDocumentation: 'whether the energy chunks are visible'
     } );
 
-    // @public {BooleanProperty} - controls whether HeaterCoolerNodes are linked together
     this.linkedHeatersProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'linkedHeatersProperty' ),
       phetioDocumentation: 'whether the heaters are linked together or independent of each other'
     } );
 
-    // @public {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'isPlayingProperty' ),
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    // @private
     this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    // @private
     this.energyChunkWanderControllerGroup = new EnergyChunkWanderControllerGroup( this.energyChunkGroup, {
       tandem: tandem.createTandem( 'energyChunkWanderControllerGroup' )
     } );
 
-    // @public for debugging, controls play speed of the simulation
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed.NORMAL );
 
-    // @public (read-only) {Air} - model of the air that surrounds the other model elements, and can absorb or provide
-    // energy
     this.air = new Air( this.energyChunksVisibleProperty, this.energyChunkGroup, this.energyChunkWanderControllerGroup, {
       tandem: tandem.createTandem( 'air' )
     } );
 
-    // @private {number} - calculate space in between the center points of the snap-to spots on the ground
     this.spaceBetweenGroundSpotCenters = ( RIGHT_EDGE - LEFT_EDGE - ( EDGE_PAD * 2 ) - BEAKER_WIDTH ) /
                                          ( NUMBER_OF_GROUND_SPOTS - 1 );
 
-    // @private {number[]} - list of valid x-positions for model elements to rest. this is used for the initial
-    // positions of model elements, but also for finding valid spots for the elements to fall to, so it should be
-    // modified after creation.
     this.groundSpotXPositions = [];
 
     // determine the positions of the snap-to spots, and round them to a few decimal places
@@ -127,7 +168,6 @@ class EFACIntroModel {
       );
     }
 
-    // @public (read-only) {boolean}
     this.twoBurners = numberOfBurners === 2;
 
     // after creating the burners, the rest of the elements are created starting from this index
@@ -142,7 +182,6 @@ class EFACIntroModel {
       ...this.groundSpotXPositions.slice( indexOfFirstElementAfterLastBeaker )
     ];
 
-    // @public (read-only) {Burner}
     this.leftBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 0 ], 0 ),
       this.energyChunksVisibleProperty,
@@ -154,7 +193,6 @@ class EFACIntroModel {
       }
     );
 
-    // @public (read-only) {Burner}
     this.rightBurner = new Burner(
       new Vector2( burnerGroundSpotXPositions[ 1 ] || 0, 0 ),
       this.energyChunksVisibleProperty,
@@ -166,13 +204,11 @@ class EFACIntroModel {
       }
     );
 
-    // @private {Burner[]} - put burners into a list for easy iteration
     this.burners = [ this.leftBurner ];
     if ( this.twoBurners ) {
       this.burners.push( this.rightBurner );
     }
 
-    // @public {PhetioGroup.<Block>}
     this.blockGroup = new PhetioGroup(
       ( tandem, blockType, initialXPosition ) => {
         return new Block(
@@ -204,7 +240,6 @@ class EFACIntroModel {
                                                 EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
                                                 ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners ) );
 
-    // @public {PhetioGroup.<BeakerContainer>}
     this.beakerGroup = new PhetioGroup(
       ( tandem, beakerType, initialXPosition ) => {
         return new BeakerContainer(
@@ -236,17 +271,13 @@ class EFACIntroModel {
       this.beakerGroup.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
     } );
 
-    // @private {Object} - an object that is used to track which thermal containers are in contact with one another in
-    // each model step.
     this.inThermalContactInfo = {};
     this.thermalContainers.forEach( thermalContainer => {
       this.inThermalContactInfo[ thermalContainer.id ] = [];
     } );
 
-    // @private {ModelElement} - put all of the model elements on a list for easy iteration
     this.modelElementList = [ ...this.burners, ...this.thermalContainers ];
 
-    // @public (read-only) {StickyTemperatureAndColorSensor[]}
     this.thermometers = [];
     let thermometerIndex = NUMBER_OF_THERMOMETERS + 1;
     _.times( NUMBER_OF_THERMOMETERS, () => {
@@ -300,15 +331,10 @@ class EFACIntroModel {
       }
     } );
 
-    // @private {EnergyBalanceTracker} - This is used to track energy exchanges between all of the various energy
-    // containing elements and using that information to transfer energy chunks commensurately.
     this.energyBalanceTracker = new EnergyBalanceTracker();
 
-    // @private {EnergyBalanceRecord[]} - An array used for getting energy balances from the energy balance tracker,
-    // pre-allocated and reused in an effort to reduce memory allocations.
     this.reusableBalanceArray = [];
 
-    // @public - used to notify the view that a manual step was called
     this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
   }
 

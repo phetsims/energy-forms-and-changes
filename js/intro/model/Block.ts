@@ -59,6 +59,21 @@ let instanceCount = 0; // counter for creating unique IDs
 
 class Block extends RectangularThermalMovableModelElement {
 
+  // Unique ID for this block
+  public readonly id: string;
+
+  // The type of the block (iron or brick)
+  public readonly blockType: BlockType;
+
+  // The z-index of this block in relation to other blocks. updated when a user interacts with any block.
+  public zIndex: number;
+
+  // See base class for description
+  public readonly topSurface: HorizontalSurface;
+
+  // See base class for description
+  public readonly bottomSurface: HorizontalSurface;
+
   /**
    * @param initialPosition
    * @param energyChunksVisibleProperty
@@ -96,14 +111,10 @@ class Block extends RectangularThermalMovableModelElement {
       options
     );
 
-    // @public (read-only) {String} - unique ID for this block
     this.id = `block-${instanceCount++}`;
 
-    // @public
     this.blockType = blockType;
 
-    // @public {number} - the z-index of this block in relation to other blocks. updated when a user interacts with any
-    // block.
     this.zIndex = instanceCount;
 
     // add position test bounds (see definition in base class for more info)
@@ -115,7 +126,6 @@ class Block extends RectangularThermalMovableModelElement {
     ) );
     const rectangle = this.getBounds();
 
-    // @public - see base class for description
     this.topSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, rectangle.maxY ),
       EFACConstants.BLOCK_SURFACE_WIDTH,
@@ -123,7 +133,6 @@ class Block extends RectangularThermalMovableModelElement {
       options.tandem.createTandem( 'topSurface' )
     );
 
-    // @public - see base class for description
     this.bottomSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, rectangle.minY ),
       EFACConstants.BLOCK_SURFACE_WIDTH,
