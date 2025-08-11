@@ -15,7 +15,7 @@ import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
-import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement, { ModelElementOptions } from './ModelElement.js';
@@ -44,8 +44,6 @@ class UserMovableModelElement extends ModelElement {
 
     const options = optionize<UserMovableModelElementOptions, SelfOptions, ModelElementOptions>()( {
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: UserMovableModelElement.UserMovableModelElementIO,
       phetioState: true,
       userControllable: true
@@ -147,7 +145,7 @@ class UserMovableModelElement extends ModelElement {
     return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
   }
 
-  public static readonly UserMovableModelElementIO = new IOType<UserMovableModelElement>( 'UserMovableModelElementIO', {
+  public static readonly UserMovableModelElementIO = new IOType<UserMovableModelElement, null | ReferenceIOState>( 'UserMovableModelElementIO', {
     valueType: UserMovableModelElement,
     stateSchema: {
 

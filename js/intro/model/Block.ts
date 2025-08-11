@@ -206,8 +206,6 @@ class Block extends RectangularThermalMovableModelElement {
   }
 
   public static readonly BlockIO = new IOType<Block>( 'BlockIO', {
-
-    // @ts-expect-error
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Block,
     stateSchema: {

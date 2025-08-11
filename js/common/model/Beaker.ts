@@ -517,7 +517,6 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
   }
 
   public static readonly BeakerIO = new IOType<Beaker, { beakerType: IntentionalAny }>( 'BeakerIO', {
-    // @ts-expect-error
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Beaker,
     stateSchema: {
