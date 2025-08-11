@@ -61,10 +61,19 @@ class MotionAtom {
 8. Think about the file to understand if a declaration should be readonly. If you are uncertain, err on the side of readonly.
 9. Think about the file to understand if a declaration should be public, protected, or private. If you are uncertain, err on the side of private.
 
-8. If the file has:
+10. If the file has:
 ```
 /* eslint-disable */
 // @ts-nocheck
 ```
 
 LEAVE IT INTACT. Do not change. Keep it.
+
+11. When adding imports, use the following format:
+```ts
+import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+```
+
+Do NOT use the /imports barrel files.
