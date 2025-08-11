@@ -480,14 +480,15 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the
     // energy chunk.
     let maxSliceDensity = 0;
-    let densestSlice: IntentionalAny | null = null;
-    this.slices.forEach( slice => {
+    let densestSlice: EnergyChunkContainerSlice | null = null;
+    for ( let i = 0; i < this.slices.length; i++ ) {
+      const slice = this.slices[ i ];
       const sliceDensity = slice.energyChunkList.length / ( slice.bounds.width * slice.bounds.height );
       if ( sliceDensity > maxSliceDensity ) {
         maxSliceDensity = sliceDensity;
         densestSlice = slice;
       }
-    } );
+    }
 
     if ( densestSlice === null || densestSlice.energyChunkList.length === 0 ) {
       console.log( ' - Warning: No energy chunks in the beaker, can\'t extract any.' );
@@ -498,7 +499,6 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     let highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
     assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
 
-    // @ts-expect-error
     densestSlice.energyChunkList.forEach( energyChunk => {
       if ( energyChunk.positionProperty.value.y > highestEnergyChunk.positionProperty.value.y ) {
         highestEnergyChunk = energyChunk;

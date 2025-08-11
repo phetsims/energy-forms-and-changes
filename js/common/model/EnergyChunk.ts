@@ -10,7 +10,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
@@ -21,7 +21,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyType from './EnergyType.js';
 
@@ -36,6 +36,12 @@ type SelfOptions = {
 };
 
 type EnergyChunkOptions = SelfOptions & PhetioObjectOptions;
+
+type EnergyChunkStateObject = {
+  id: number;
+  velocity: Vector2StateObject;
+  visiblePropertyReference: ReferenceIOState;
+};
 
 class EnergyChunk extends PhetioObject {
 
@@ -101,7 +107,7 @@ class EnergyChunk extends PhetioObject {
     this.zPosition = 0;
   }
 
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): EnergyChunkStateObject {
     return {
       id: this.id,
       velocity: Vector2.Vector2IO.toStateObject( this.velocity ),
@@ -109,7 +115,7 @@ class EnergyChunk extends PhetioObject {
     };
   }
 
-  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
+  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkStateObject ): IntentionalAny[] {
     const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
     );
@@ -177,7 +183,7 @@ class EnergyChunk extends PhetioObject {
     super.dispose();
   }
 
-  public static readonly EnergyChunkIO = new IOType<EnergyChunk, IntentionalAny>( 'EnergyChunkIO', {
+  public static readonly EnergyChunkIO = new IOType<EnergyChunk, EnergyChunkStateObject>( 'EnergyChunkIO', {
     valueType: EnergyChunk,
     toStateObject: energyChunk => energyChunk.toStateObject(),
     stateObjectToCreateElementArguments: stateObject => EnergyChunk.stateObjectToCreateElementArguments( stateObject ),
