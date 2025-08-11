@@ -25,7 +25,7 @@ type SelfOptions = {
   positionPropertyOptions?: IntentionalAny;
 };
 
-type ModelElementOptions = SelfOptions & PhetioObjectOptions;
+export type ModelElementOptions = SelfOptions & PhetioObjectOptions;
 
 class ModelElement extends PhetioObject {
 

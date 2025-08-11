@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base class for model elements that can be moved around by the user
  *
@@ -13,7 +10,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -21,41 +18,54 @@ import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
-import ModelElement from './ModelElement.js';
+import ModelElement, { ModelElementOptions } from './ModelElement.js';
 
-export type UserMovableModelElementOptions = IntentionalAny;
+type SelfOptions = {
+  userControllable?: boolean;
+};
+
+export type UserMovableModelElementOptions = SelfOptions & ModelElementOptions;
 
 class UserMovableModelElement extends ModelElement {
 
-  public constructor( initialPosition: Vector2, options?: IntentionalAny ) {
+  // The surface upon which this model element is resting.  This is null if the
+  // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
+  protected supportingSurface: HorizontalSurface | null;
 
-    options = merge( {
+  // In meters/second
+  public verticalVelocityProperty: NumberProperty;
+
+  public userControlledProperty?: BooleanProperty;
+
+  // Observer that moves this model element if and when the surface that is supporting it moves
+  private surfaceMotionObserver: ( position: Vector2 ) => void;
+
+  public constructor( initialPosition: Vector2, providedOptions?: UserMovableModelElementOptions ) {
+
+    const options = optionize<UserMovableModelElementOptions, SelfOptions, ModelElementOptions>()( {
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: UserMovableModelElement.UserMovableModelElementIO,
       phetioState: true,
       userControllable: true
-    }, options );
+    }, providedOptions );
 
     super( initialPosition, options );
 
-    // @protected {HorizontalSurface|null} - The surface upon which this model element is resting.  This is null if the
-    // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
     this.supportingSurface = null;
 
-    // @public {NumberProperty} - in meters/second
     this.verticalVelocityProperty = new NumberProperty( 0, {
       range: new Range( -4, 0 ), // empirically determined
       tandem: options.tandem.createTandem( 'verticalVelocityProperty' )
     } );
 
-    // @public (read-only) - for phet-io: assign tandem in the model so the corresponding names can be leveraged in
-    // the view
+    // TODO: This may be set in the super, see https://github.com/phetsims/energy-forms-and-changes/issues/430
     this.tandem = options.tandem;
 
     // create userControlledProperty unless opted out
     if ( options.userControllable ) {
 
-      // @public {BooleanProperty}
       this.userControlledProperty = new BooleanProperty( false, {
         tandem: options.tandem.createTandem( 'userControlledProperty' ),
         phetioReadOnly: true,
@@ -72,7 +82,6 @@ class UserMovableModelElement extends ModelElement {
       } );
     }
 
-    // @private - observer that moves this model element if and when the surface that is supporting it moves
     this.surfaceMotionObserver = position => {
       this.positionProperty.value = position;
     };
@@ -81,7 +90,7 @@ class UserMovableModelElement extends ModelElement {
   /**
    * restore initial state
    */
-  public reset(): void {
+  public override reset(): void {
     this.clearSupportingSurface();
     this.userControlledProperty && this.userControlledProperty.reset();
     this.verticalVelocityProperty.reset();
@@ -91,7 +100,7 @@ class UserMovableModelElement extends ModelElement {
   /**
    * Set the supporting surface of this model element
    */
-  public override setSupportingSurface( supportingSurface: HorizontalSurface ): void {
+  public setSupportingSurface( supportingSurface: HorizontalSurface ): void {
 
     // state and parameter checking
     assert && assert(
@@ -137,30 +146,33 @@ class UserMovableModelElement extends ModelElement {
     const surface = this.supportingSurface ? this.supportingSurface : null;
     return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
   }
-}
 
-UserMovableModelElement.UserMovableModelElementIO = new IOType( 'UserMovableModelElementIO', {
-  valueType: UserMovableModelElement,
-  stateSchema: {
-    supportingSurface: NullableIO( ReferenceIO( IOType.ObjectIO ) )
-  },
-  applyState: ( userMovableModelElement, stateObject ) => {
-    const supportingSurface = NullableIO( ReferenceIO( IOType.ObjectIO ) ).fromStateObject(
-      stateObject.supportingSurface
-    );
-    if ( supportingSurface ) {
+  public static readonly UserMovableModelElementIO = new IOType<UserMovableModelElement>( 'UserMovableModelElementIO', {
+    valueType: UserMovableModelElement,
+    stateSchema: {
 
-      if ( userMovableModelElement.supportingSurface ) {
+      // @ts-expect-error
+      supportingSurface: NullableIO( ReferenceIO( IOType.ObjectIO ) )
+    },
+    applyState: ( userMovableModelElement, stateObject: IntentionalAny ) => {
+      const supportingSurface = NullableIO( ReferenceIO( IOType.ObjectIO ) ).fromStateObject(
+        stateObject.supportingSurface
+      );
+      if ( supportingSurface ) {
+
+        if ( userMovableModelElement.supportingSurface ) {
+          userMovableModelElement.clearSupportingSurface();
+        }
+
+        // @ts-expect-error
+        userMovableModelElement.setSupportingSurface( supportingSurface );
+      }
+      else {
         userMovableModelElement.clearSupportingSurface();
       }
-
-      userMovableModelElement.setSupportingSurface( supportingSurface );
     }
-    else {
-      userMovableModelElement.clearSupportingSurface();
-    }
-  }
-} );
+  } );
+}
 
 energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
 export default UserMovableModelElement;
