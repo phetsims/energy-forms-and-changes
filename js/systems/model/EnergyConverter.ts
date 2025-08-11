@@ -20,7 +20,7 @@ import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemE
 type SelfOptions = EmptySelfOptions;
 export type EnergyConverterOptions = SelfOptions & EnergySystemElementOptions;
 
-class EnergyConverter extends EnergySystemElement {
+abstract class EnergyConverter extends EnergySystemElement {
 
   protected readonly incomingEnergyChunks: ObservableArray<EnergyChunk>;
   protected readonly outgoingEnergyChunks: ObservableArray<EnergyChunk>;

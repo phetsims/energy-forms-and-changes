@@ -21,7 +21,7 @@ import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemE
 type SelfOptions = EmptySelfOptions;
 export type EnergySourceOptions = SelfOptions & EnergySystemElementOptions;
 
-class EnergySource extends EnergySystemElement {
+abstract class EnergySource extends EnergySystemElement {
 
   protected readonly outgoingEnergyChunks: ObservableArray<EnergyChunk>;
 

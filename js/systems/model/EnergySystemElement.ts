@@ -24,7 +24,7 @@ import PositionableFadableModelElement, { PositionableFadableModelElementOptions
 type SelfOptions = EmptySelfOptions;
 export type EnergySystemElementOptions = SelfOptions & PositionableFadableModelElementOptions;
 
-class EnergySystemElement extends PositionableFadableModelElement {
+abstract class EnergySystemElement extends PositionableFadableModelElement {
 
   public readonly iconImage: Image;
   public readonly energyChunkList: ObservableArray<EnergyChunk>;
@@ -33,7 +33,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
   // A11y name of this energy system element, used by assistive technology, set by subtypes
   public a11yName: string;
 
-  public constructor( iconImage: Image, providedOptions?: EnergySystemElementOptions ) {
+  protected constructor( iconImage: Image, providedOptions?: EnergySystemElementOptions ) {
 
     const options = optionize<EnergySystemElementOptions, SelfOptions, PositionableFadableModelElementOptions>()( {
       tandem: Tandem.REQUIRED,
@@ -95,13 +95,7 @@ class EnergySystemElement extends PositionableFadableModelElement {
     this.energyChunkList.clear();
   }
 
-  /**
-   * @abstract
-   * (EnergySystemElementIO)
-   */
-  public toStateObject(): null {
-    return null; // can be overridden
-  }
+  public abstract toStateObject(): unknown;
 
   /**
    * @abstract

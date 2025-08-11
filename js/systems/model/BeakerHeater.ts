@@ -477,6 +477,10 @@ class BeakerHeater extends EnergyUser {
     return path;
   }
 
+  public override toStateObject(): unknown {
+    throw new Error( 'Method not implemented.' );
+  }
+
   public static readonly HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_2D_HEIGHT;
 }
 

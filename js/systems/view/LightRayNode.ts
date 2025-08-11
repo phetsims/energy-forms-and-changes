@@ -12,7 +12,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -29,7 +28,7 @@ const SEARCH_ITERATIONS = 10;
 class LightRayNode extends Node {
 
   // Data that defines this ray
-  private readonly lightAbsorbingShapes: IntentionalAny[];
+  private readonly lightAbsorbingShapes: LightAbsorbingShape[];
   private readonly pointAndFadeValues: PointAndFadeValue[];
   private readonly origin: Vector2;
   private readonly endpoint: Vector2;

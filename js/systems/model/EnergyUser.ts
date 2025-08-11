@@ -22,7 +22,7 @@ type SelfOptions = EmptySelfOptions;
 
 export type EnergyUserOptions = SelfOptions & PhetioObjectOptions;
 
-class EnergyUser extends EnergySystemElement {
+abstract class EnergyUser extends EnergySystemElement {
 
   protected readonly incomingEnergyChunks: ObservableArray<EnergyChunk>;
 

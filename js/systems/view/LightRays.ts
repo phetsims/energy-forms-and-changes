@@ -6,7 +6,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -54,7 +53,7 @@ class LightRays extends Node {
   /**
    * removes a light absorbing shape from this set of rays
    */
-  public removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
+  public removeLightAbsorbingShape( lightAbsorbingShape: LightAbsorbingShape ): void {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.removeLightAbsorbingShape( lightAbsorbingShape );
     } );

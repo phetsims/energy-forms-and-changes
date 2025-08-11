@@ -6,13 +6,12 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -34,6 +33,14 @@ type SelfOptions = {
 
 type TeaKettleSteamCanvasNodeOptions = SelfOptions & CanvasNodeOptions;
 
+type SteamBubble = {
+  x: number; // x position of the bubble
+  y: number; // y position of the bubble
+  radius: number; // radius of the bubble
+  angle: number; // angle of the bubble's trajectory
+  opacity: number; // opacity of the bubble
+};
+
 class TeaKettleSteamCanvasNode extends CanvasNode {
 
   private readonly steamOrigin: Vector2;
@@ -44,7 +51,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
   private readonly steamAngleRange: Range;
   private preloadComplete: boolean;
   private bubbleProductionRemainder: number;
-  private readonly steamBubbles: IntentionalAny[];
+  private readonly steamBubbles: SteamBubble[];
 
   // canvas where the steam bubble image resides
   private readonly steamBubbleImageCanvas: HTMLCanvasElement;
@@ -170,7 +177,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
   /**
    * Draws a steam bubble.
    */
-  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: IntentionalAny ): void {
+  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: SteamBubble ): void {
     context.globalAlpha = steamBubble.opacity;
     context.drawImage(
       this.steamBubbleImageCanvas,

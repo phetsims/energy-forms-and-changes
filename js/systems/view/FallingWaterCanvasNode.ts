@@ -8,9 +8,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FaucetAndWater from '../model/FaucetAndWater.js';
@@ -29,7 +28,7 @@ class FallingWaterCanvasNode extends CanvasNode {
    * @param modelViewTransform
    * @param options - that can be passed on to the underlying node
    */
-  public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
+  public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: CanvasNodeOptions ) {
     super( options );
 
     this.waterDrops = waterDrops;

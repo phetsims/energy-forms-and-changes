@@ -15,7 +15,6 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -50,6 +49,11 @@ const ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spac
 type SelfOptions = EmptySelfOptions;
 
 type TeaKettleOptions = SelfOptions & EnergySourceOptions;
+
+type TeaKettleStateObject = {
+  heatEnergyProducedSinceLastChunk: number;
+  transferNextAvailableChunk: boolean;
+};
 
 class TeaKettle extends EnergySource {
 
@@ -378,10 +382,7 @@ class TeaKettle extends EnergySource {
     this.energyChunkMovers.clear();
   }
 
-  /**
-   * (EnergySystemElementIO)
-   */
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): TeaKettleStateObject {
     return {
       heatEnergyProducedSinceLastChunk: this.heatEnergyProducedSinceLastChunk,
       transferNextAvailableChunk: this.transferNextAvailableChunk
@@ -393,7 +394,7 @@ class TeaKettle extends EnergySource {
    * @param stateObject - see this.toStateObject()
    */
   // @ts-expect-error
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: TeaKettleStateObject ): void {
     this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
   }

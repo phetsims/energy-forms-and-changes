@@ -404,6 +404,10 @@ class Generator extends EnergyConverter {
     return chunks;
   }
 
+  public override toStateObject(): unknown {
+    throw new Error( 'Method not implemented.' );
+  }
+
   public static readonly WHEEL_CENTER_OFFSET = WHEEL_CENTER_OFFSET;
   public static readonly WHEEL_RADIUS = WHEEL_RADIUS;
 }
