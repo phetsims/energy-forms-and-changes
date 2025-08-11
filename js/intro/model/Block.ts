@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Block that contains and exchanges thermal energy.  In the model, a block is two-dimensional, so its shape is
  * represented by a rectangle.
@@ -16,6 +13,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -42,7 +40,7 @@ const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
 const BlockTypeEnumerationIO = EnumerationIO( BlockType );
 
 // TODO: use constants from EFAConstants, https://github.com/phetsims/energy-forms-and-changes/issues/420
-const BLOCK_COMPOSITION = {};
+const BLOCK_COMPOSITION: IntentionalAny = {};
 BLOCK_COMPOSITION[ BlockType.IRON ] = {
   color: new Color( 150, 150, 150 ),
   density: EFACConstants.IRON_DENSITY,
@@ -69,16 +67,10 @@ class Block extends RectangularThermalMovableModelElement {
   public readonly id: string;
 
   // The type of the block (iron or brick)
-  public readonly blockType: BlockType;
+  public readonly blockType: typeof BlockType;
 
   // The z-index of this block in relation to other blocks. updated when a user interacts with any block.
   public zIndex: number;
-
-  // See base class for description
-  public readonly topSurface: HorizontalSurface;
-
-  // See base class for description
-  public readonly bottomSurface: HorizontalSurface;
 
   /**
    * @param initialPosition
@@ -90,11 +82,13 @@ class Block extends RectangularThermalMovableModelElement {
    */
   public constructor( initialPosition: Vector2,
                       energyChunksVisibleProperty: Property<boolean>,
-                      blockType: BlockType,
+                      blockType: typeof BlockType,
                       energyChunkGroup: PhetioGroup<EnergyChunk>,
                       providedOptions?: BlockOptions ) {
 
     const options = optionize<BlockOptions, SelfOptions, PhetioObjectOptions>()( {
+
+      // @ts-expect-error
       energyChunkWanderControllerGroup: required( providedOptions.energyChunkWanderControllerGroup ),
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
 
@@ -102,6 +96,8 @@ class Block extends RectangularThermalMovableModelElement {
       tandem: Tandem.REQUIRED,
       phetioDynamicElement: true,
       phetioState: true,
+
+      // @ts-expect-error
       phetioType: Block.BlockIO,
       phetioDocumentation: 'block that can be of type iron or brick'
     }, providedOptions );
@@ -112,6 +108,8 @@ class Block extends RectangularThermalMovableModelElement {
       EFACConstants.BLOCK_SURFACE_WIDTH,
       Math.pow( EFACConstants.BLOCK_SURFACE_WIDTH, 3 ) * BLOCK_COMPOSITION[ blockType ].density,
       BLOCK_COMPOSITION[ blockType ].specificHeat,
+
+      // @ts-expect-error
       energyChunksVisibleProperty,
       energyChunkGroup,
       options
@@ -149,8 +147,8 @@ class Block extends RectangularThermalMovableModelElement {
     // update the top and bottom surfaces whenever the position changes
     this.positionProperty.link( position => {
       const currentBounds = this.getBounds();
-      this.topSurface.positionProperty.value = new Vector2( position.x, currentBounds.maxY );
-      this.bottomSurface.positionProperty.value = new Vector2( position.x, currentBounds.minY );
+      this.topSurface!.positionProperty.value = new Vector2( position.x, currentBounds.maxY );
+      this.bottomSurface!.positionProperty.value = new Vector2( position.x, currentBounds.minY );
       this.thermalContactArea.set( currentBounds );
     } );
 
@@ -162,7 +160,7 @@ class Block extends RectangularThermalMovableModelElement {
     return BLOCK_COMPOSITION[ this.blockType ].color;
   }
 
-  public get energyContainerCategory(): EnergyContainerCategory {
+  public get energyContainerCategory(): typeof EnergyContainerCategory {
     return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
   }
 
@@ -206,6 +204,18 @@ class Block extends RectangularThermalMovableModelElement {
   public getEnergyBeyondMaxTemperature(): number {
     return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
   }
+
+  public static readonly BlockIO = new IOType<Block>( 'BlockIO', {
+
+    // @ts-expect-error
+    supertype: UserMovableModelElement.UserMovableModelElementIO,
+    valueType: Block,
+    stateSchema: {
+
+      // @ts-expect-error
+      blockType: BlockTypeEnumerationIO
+    }
+  } );
 }
 
 // Preset data used for fast addition and positioning of energy chunks during reset.  The data contains information
@@ -255,14 +265,6 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
     ]
   }
 ];
-
-Block.BlockIO = new IOType( 'BlockIO', {
-  supertype: UserMovableModelElement.UserMovableModelElementIO,
-  valueType: Block,
-  stateSchema: {
-    blockType: BlockTypeEnumerationIO
-  }
-} );
 
 energyFormsAndChanges.register( 'Block', Block );
 export default Block;

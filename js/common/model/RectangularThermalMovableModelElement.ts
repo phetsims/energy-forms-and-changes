@@ -51,7 +51,7 @@ type SelfOptions = {
 
 export type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;
 
-class RectangularThermalMovableModelElement extends UserMovableModelElement {
+abstract class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   public readonly mass: number;
   public readonly width: number;
@@ -107,9 +107,17 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   // 2D "slices" of the container, used for 3D layering of energy chunks in the view
   public readonly slices: ObservableArray<IntentionalAny>;
 
+  public abstract id: string;
+
   /**
+   * @param initialPosition
+   * @param width
+   * @param height
    * @param mass - in kg
    * @param specificHeat - in J/kg-K
+   * @param energyChunksVisibleProperty
+   * @param energyChunkGroup
+   * @param providedOptions
    */
   public constructor( initialPosition: Vector2, width: number, height: number, mass: number, specificHeat: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: RectangularThermalMovableModelElementOptions ) {
 

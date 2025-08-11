@@ -30,7 +30,7 @@ class UserMovableModelElement extends ModelElement {
 
   // The surface upon which this model element is resting.  This is null if the
   // element is not resting on a movable surface.  This should only be set through the getter/setter methods below.
-  protected supportingSurface: HorizontalSurface | null;
+  public supportingSurface: HorizontalSurface | null;
 
   // In meters/second
   public verticalVelocityProperty: NumberProperty;
@@ -38,7 +38,7 @@ class UserMovableModelElement extends ModelElement {
   public userControlledProperty?: BooleanProperty;
 
   // Observer that moves this model element if and when the surface that is supporting it moves
-  private surfaceMotionObserver: ( position: Vector2 ) => void;
+  private readonly surfaceMotionObserver: ( position: Vector2 ) => void;
 
   public constructor( initialPosition: Vector2, providedOptions?: UserMovableModelElementOptions ) {
 

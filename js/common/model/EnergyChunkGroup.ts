@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -19,7 +20,7 @@ import EnergyType from './EnergyType.js';
 
 type SelfOptions = EmptySelfOptions;
 
-type EnergyChunkGroupOptions = SelfOptions & PhetioGroupOptions;
+type EnergyChunkGroupOptions = SelfOptions & StrictOmit<PhetioGroupOptions, 'phetioType'>;
 
 class EnergyChunkGroup extends PhetioGroup<EnergyChunk> {
 
@@ -32,7 +33,6 @@ class EnergyChunkGroup extends PhetioGroup<EnergyChunk> {
     const options = optionize<EnergyChunkGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
 
-      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunk.EnergyChunkIO )
     }, providedOptions );
 

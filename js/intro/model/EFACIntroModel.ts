@@ -125,7 +125,7 @@ class EFACIntroModel {
   // Used to notify the view that a manual step was called
   public readonly manualStepEmitter: Emitter<[ number ]>;
 
-  public constructor( blocksToCreate: BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
+  public constructor( blocksToCreate: typeof BlockType[], beakersToCreate: typeof BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
@@ -210,6 +210,7 @@ class EFACIntroModel {
       this.burners.push( this.rightBurner );
     }
 
+    // @ts-expect-error
     this.blockGroup = new PhetioGroup(
       ( tandem, blockType, initialXPosition ) => {
         return new Block(
@@ -217,6 +218,8 @@ class EFACIntroModel {
           this.energyChunksVisibleProperty,
           blockType,
           this.energyChunkGroup, {
+
+            // @ts-expect-error
             energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             tandem: tandem
           }
@@ -232,6 +235,8 @@ class EFACIntroModel {
     );
 
     blocksToCreate.forEach( blockType => {
+
+      // @ts-expect-error
       this.blockGroup.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
     } );
 
@@ -241,12 +246,15 @@ class EFACIntroModel {
                                                 EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
                                                 ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners ) );
 
+    // @ts-expect-error
     this.beakerGroup = new PhetioGroup(
       ( tandem, beakerType, initialXPosition ) => {
         return new BeakerContainer(
           new Vector2( initialXPosition, 0 ),
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
+
+          // @ts-expect-error
           this.blockGroup,
           this.energyChunksVisibleProperty,
           this.energyChunkGroup, {
@@ -269,6 +277,8 @@ class EFACIntroModel {
 
     // create any specified beakers
     beakersToCreate.forEach( beakerType => {
+
+      // @ts-expect-error
       this.beakerGroup.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
     } );
 
@@ -305,7 +315,7 @@ class EFACIntroModel {
               beaker.getBounds().centerX + blockWidthIncludingPerspective / 2
             );
 
-            const checkBlocks = block => {
+            const checkBlocks = ( block: Block ) => {
 
               // see if one of the blocks is being sensed in the beaker
               return block.color === newColor && block.positionProperty.value.y > beaker.positionProperty.value.y;
@@ -315,17 +325,17 @@ class EFACIntroModel {
             // thermometer was previously stuck to the beaker and sensing its fluid, then move it to the side of the beaker
             if ( _.some( this.blockGroup.getArray(), checkBlocks ) &&
                  oldColor === beaker.fluidColor &&
-                 !thermometer.userControlledProperty.get() &&
-                 !beaker.userControlledProperty.get() &&
+                 !thermometer.userControlledProperty!.get() &&
+                 !beaker.userControlledProperty!.get() &&
                  xRange.contains( thermometer.positionProperty.value.x ) ) {
 
               // fake a movement by the user to a point in the beaker where the thermometer is not over a brick
-              thermometer.userControlledProperty.set( true ); // must toggle userControlled to enable element following
+              thermometer.userControlledProperty!.set( true ); // must toggle userControlled to enable element following
               thermometer.positionProperty.value = new Vector2(
                 beaker.getBounds().maxX - 0.01,
                 beaker.getBounds().minY + beaker.getBounds().height * 0.33
               );
-              thermometer.userControlledProperty.set( false );
+              thermometer.userControlledProperty!.set( false );
             }
           } );
         } );
@@ -339,7 +349,7 @@ class EFACIntroModel {
     this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
   }
 
-  private static mapHeatCoolLevelToColor( heatCoolLevel: number ): string {
+  private static mapHeatCoolLevelToColor( heatCoolLevel: number ): Color {
     let color;
     if ( heatCoolLevel > 0 ) {
       color = FLAME_ORANGE;
@@ -363,6 +373,8 @@ class EFACIntroModel {
    */
   private isImmersedIn( thermalModelElement1: RectangularThermalMovableModelElement, thermalModelElement2: RectangularThermalMovableModelElement ): boolean {
     return thermalModelElement1 !== thermalModelElement2 &&
+
+           // @ts-expect-error
            thermalModelElement1.blockType !== undefined &&
            thermalModelElement2.thermalContactArea.containsBounds( thermalModelElement1.getBounds() );
   }
@@ -426,7 +438,7 @@ class EFACIntroModel {
     // Cause any user-movable model elements that are not supported by a surface to fall or, in some cases, jump up
     // towards the nearest supporting surface.
     this.thermalContainers.forEach( movableModelElement => {
-      const userControlled = movableModelElement.userControlledProperty.value;
+      const userControlled = movableModelElement.userControlledProperty!.value;
       const unsupported = movableModelElement.supportingSurface === null;
       const raised = movableModelElement.positionProperty.value.y !== 0;
       const atXSpot = _.includes( this.groundSpotXPositions, movableModelElement.positionProperty.value.x );
@@ -459,6 +471,7 @@ class EFACIntroModel {
 
         // transfer energy if there is a thermal differential, keeping track of what was exchanged
         const energyTransferredFrom1to2 = container1.exchangeEnergyWith( container2, dt );
+
         this.energyBalanceTracker.logEnergyExchange( container1.id, container2.id, energyTransferredFrom1to2 );
       } );
     } );
@@ -469,6 +482,7 @@ class EFACIntroModel {
       if ( burner.areAnyOnTop( this.thermalContainers ) ) {
         this.thermalContainers.forEach( energyContainer => {
           energyTransferredFromBurner = burner.addOrRemoveEnergyToFromObject( energyContainer, dt );
+
           this.energyBalanceTracker.logEnergyExchange( burner.id, energyContainer.id, energyTransferredFromBurner );
         } );
       }
@@ -536,8 +550,11 @@ class EFACIntroModel {
       }
 
       // if the transfer is supposed to go to or from a burner, make sure the burner is in the correct state
-      if ( energyChunkSupplier.id.indexOf( 'burner' ) >= 0 && energyChunkSupplier.heatCoolLevelProperty.value < 0 ||
-           energyChunkConsumer.id.indexOf( 'burner' ) >= 0 && energyChunkConsumer.heatCoolLevelProperty.value > 0 ) {
+      // @ts-expect-error
+      if ( energyChunkSupplier.id.includes( 'burner' ) && energyChunkSupplier.heatCoolLevelProperty.value < 0 ||
+
+           // @ts-expect-error
+           energyChunkConsumer.id.includes( 'burner' ) && energyChunkConsumer.heatCoolLevelProperty.value > 0 ) {
 
         // burner isn't in correct state, bail on this transfer
         return;
@@ -841,6 +858,9 @@ class EFACIntroModel {
    * as a single operation instead of having separate methods for getting temperature and color because it is more
    * efficient to do it like this.
    * @param position - position to be sensed
+   * @param sensedTemperatureProperty
+   * @param sensedElementColorProperty
+   * @param sensedElementNameProperty
    */
   public updateTemperatureAndColorAndNameAtPosition(
     position: Vector2,
@@ -913,7 +933,7 @@ class EFACIntroModel {
    * @param id
    * @returns one of the elements in the model that can provide and absorb energy
    */
-  private getThermalElementByID( id: string ): ModelElement {
+  private getThermalElementByID( id: string ): RectangularThermalMovableModelElement {
     let element = null;
     if ( id === this.air.id ) {
       element = this.air;

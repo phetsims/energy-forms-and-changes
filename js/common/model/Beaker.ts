@@ -73,7 +73,7 @@ type SelfOptions = {
 
 type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
 
-class Beaker extends RectangularThermalMovableModelElement {
+abstract class Beaker extends RectangularThermalMovableModelElement {
 
   private readonly _energyContainerCategory: typeof EnergyContainerCategory;
 

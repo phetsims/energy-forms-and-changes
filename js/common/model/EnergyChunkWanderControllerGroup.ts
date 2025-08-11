@@ -12,6 +12,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PhetioGroup, { type PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -21,7 +22,7 @@ import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 
 type SelfOptions = EmptySelfOptions;
 
-type EnergyChunkWanderControllerGroupOptions = SelfOptions & PhetioGroupOptions;
+type EnergyChunkWanderControllerGroupOptions = SelfOptions & StrictOmit<PhetioGroupOptions, 'phetioType'>;
 
 class EnergyChunkWanderControllerGroup extends PhetioGroup<EnergyChunkWanderController> {
 
@@ -29,8 +30,6 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup<EnergyChunkWanderCont
 
     const options = optionize<EnergyChunkWanderControllerGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO )
     }, providedOptions );
 
