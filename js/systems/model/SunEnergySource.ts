@@ -365,7 +365,6 @@ class SunEnergySource extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.sectorList = stateObject.sectorList;
     this.currentSectorIndex = stateObject.currentSectorIndex;

@@ -393,7 +393,6 @@ class TeaKettle extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  // @ts-expect-error
   public override applyState( stateObject: TeaKettleStateObject ): void {
     this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;

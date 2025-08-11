@@ -178,7 +178,6 @@ class SystemsModel {
       } );
 
     this.energySourcesCarousel = new EnergySystemElementCarousel(
-      // @ts-expect-error
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
       [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ],
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
@@ -186,7 +185,6 @@ class SystemsModel {
       tandem.createTandem( 'energySourcesCarousel' )
     );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
-      // @ts-expect-error
       [ this.generator, this.solarPanel ],
       [ 'GENERATOR', 'SOLAR_PANEL' ],
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
@@ -194,7 +192,6 @@ class SystemsModel {
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
-      // @ts-expect-error
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
       [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ],
 

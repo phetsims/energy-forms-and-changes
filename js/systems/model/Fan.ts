@@ -422,7 +422,6 @@ class Fan extends EnergyUser {
     return { internalTemperature: this.internalTemperature };
   }
 
-  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.internalTemperature = stateObject.internalTemperature;
   }

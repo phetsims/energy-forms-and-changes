@@ -387,7 +387,6 @@ class LightBulb extends EnergyUser {
     };
   }
 
-  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.goRightNextTime = stateObject.goRightNextTime;
     this.hasFilament = stateObject.hasFilament;

@@ -425,7 +425,6 @@ export default class FaucetAndWater extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.waterDropsPreloaded = stateObject.waterDropsPreloaded;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;

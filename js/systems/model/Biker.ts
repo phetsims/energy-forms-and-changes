@@ -14,7 +14,6 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -55,6 +54,11 @@ const CHEMICAL_ENERGY_CHUNK_OFFSETS = [ BIKER_BUTTOCKS_OFFSET, TOP_TUBE_ABOVE_CR
 type SelfOptions = EmptySelfOptions;
 
 type BikerOptions = SelfOptions & EnergySourceOptions;
+
+type BikerStateObject = {
+  energyProducedSinceLastChunkEmitted: number;
+  mechanicalChunksSinceLastThermal: number;
+};
 
 class Biker extends EnergySource {
 
@@ -557,15 +561,14 @@ class Biker extends EnergySource {
     return nonMovingEnergyChunk!;
   }
 
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): BikerStateObject {
     return {
       energyProducedSinceLastChunkEmitted: this.energyProducedSinceLastChunkEmitted,
       mechanicalChunksSinceLastThermal: this.mechanicalChunksSinceLastThermal
     };
   }
 
-  // @ts-expect-error
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: BikerStateObject ): void {
     this.energyProducedSinceLastChunkEmitted = stateObject.energyProducedSinceLastChunkEmitted;
     this.mechanicalChunksSinceLastThermal = stateObject.mechanicalChunksSinceLastThermal;
   }

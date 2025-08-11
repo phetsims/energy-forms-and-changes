@@ -13,6 +13,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -101,8 +102,9 @@ abstract class EnergySystemElement extends PositionableFadableModelElement {
    * @abstract
    * (EnergySystemElementIO)
    */
-  public applyState(): null {
-    return null; // can be overridden
+  public applyState( state: IntentionalAny ): void {
+
+    // can be overridden by subclasses
   }
 }
 

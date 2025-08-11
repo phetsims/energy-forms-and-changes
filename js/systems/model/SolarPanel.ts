@@ -458,7 +458,6 @@ class SolarPanel extends EnergyConverter {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.numberOfConvertedChunks = stateObject.numberOfConvertedChunks;
     this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
