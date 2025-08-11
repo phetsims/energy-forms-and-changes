@@ -39,7 +39,7 @@ class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
     };
 
     const blocksToCreate: Array<typeof BlockType> = [];
-    const beakersToCreate: Array<typeof BeakerType> = [];
+    const beakersToCreate: Array<BeakerType> = [];
 
     // map query parameter string to element type and split by blocks vs beakers
     EFACQueryParameters.elements.forEach( elementKey => {
@@ -50,10 +50,10 @@ class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
         blocksToCreate.push( BlockType.BRICK );
       }
       else if ( elementKey === EFACConstants.WATER_KEY ) {
-        beakersToCreate.push( BeakerType.WATER );
+        beakersToCreate.push( 'WATER' );
       }
       else if ( elementKey === EFACConstants.OLIVE_OIL_KEY ) {
-        beakersToCreate.push( BeakerType.OLIVE_OIL );
+        beakersToCreate.push( 'OLIVE_OIL' );
       }
     } );
 

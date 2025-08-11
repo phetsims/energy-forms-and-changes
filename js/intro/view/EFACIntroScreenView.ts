@@ -46,7 +46,6 @@ import shelf_png from '../../../images/shelf_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import Beaker from '../../common/model/Beaker.js';
-import BeakerType from '../../common/model/BeakerType.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import ModelElement from '../../common/model/ModelElement.js';
@@ -435,7 +434,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // @ts-expect-error
     this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
-      const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
+      const label = beaker.beakerType === 'WATER' ? waterString : oliveOilString;
       return new BeakerContainerView(
         beaker,
         model,

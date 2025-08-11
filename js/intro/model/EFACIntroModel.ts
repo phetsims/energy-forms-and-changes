@@ -123,7 +123,7 @@ class EFACIntroModel {
   // Used to notify the view that a manual step was called
   public readonly manualStepEmitter: Emitter<[ number ]>;
 
-  public constructor( blocksToCreate: typeof BlockType[], beakersToCreate: typeof BeakerType[], numberOfBurners: number, tandem: Tandem ) {
+  public constructor( blocksToCreate: typeof BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
@@ -263,7 +263,7 @@ class EFACIntroModel {
             phetioDynamicElement: true
           }
         );
-      }, [ BeakerType.WATER, 0 ], {
+      }, [ 'WATER', 0 ], {
         tandem: tandem.createTandem( 'beakerGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,

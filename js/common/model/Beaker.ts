@@ -20,12 +20,12 @@ import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
-import BeakerType from './BeakerType.js';
+import BeakerType, { BeakerTypeValues } from './BeakerType.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
@@ -42,31 +42,31 @@ const MATERIAL_THICKNESS = 0.001; // In meters.
 const NUM_SLICES = 6;
 const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitted.
 const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
-const BeakerTypeEnumerationIO = EnumerationIO( BeakerType );
 
-const BEAKER_COMPOSITION = {} as IntentionalAny;
-BEAKER_COMPOSITION[ BeakerType.WATER ] = {
-  fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
-  steamColor: EFACConstants.WATER_STEAM_COLOR,
-  fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
-  fluidDensity: EFACConstants.WATER_DENSITY,
-  fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
-  energyContainerCategory: EnergyContainerCategory.WATER
-};
-BEAKER_COMPOSITION[ BeakerType.OLIVE_OIL ] = {
-  fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
-  steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
-  fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
-  fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
-  fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-  energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
-};
+const BEAKER_COMPOSITION = {
+  WATER: {
+    fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
+    steamColor: EFACConstants.WATER_STEAM_COLOR,
+    fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
+    fluidDensity: EFACConstants.WATER_DENSITY,
+    fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
+    energyContainerCategory: EnergyContainerCategory.WATER
+  },
+  OLIVE_OIL: {
+    fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
+    steamColor: EFACConstants.OLIVE_OIL_STEAM_COLOR,
+    fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
+    fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
+    fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
+    energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
+  }
+} as const;
 
 // file variable used for measuring performance during startup, see usage for more information
 let performanceMeasurementTaken = false;
 
 type SelfOptions = {
-  beakerType?: typeof BeakerType;
+  beakerType?: BeakerType;
   majorTickMarkDistance?: number;
   predistributedEnergyChunkConfigurations?: IntentionalAny[];
 };
@@ -78,7 +78,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
   private readonly _energyContainerCategory: typeof EnergyContainerCategory;
 
   // The type of beaker (water or olive oil)
-  public readonly beakerType: typeof BeakerType;
+  public readonly beakerType: BeakerType;
 
   // The color of the fluid in the beaker
   public readonly fluidColor: Color;
@@ -116,7 +116,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
   protected constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: BeakerOptions ) {
 
     const options = optionize<BeakerOptions, SelfOptions, RectangularThermalMovableModelElementOptions>()( {
-      beakerType: BeakerType.WATER,
+      beakerType: 'WATER',
       majorTickMarkDistance: height * 0.95 / 2, // empirically determined
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
 
@@ -516,11 +516,11 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     this.resetInProgressProperty.set( false );
   }
 
-  public static readonly BeakerIO = new IOType<Beaker, { beakerType: typeof BeakerType }>( 'BeakerIO', {
+  public static readonly BeakerIO = new IOType<Beaker, { beakerType: BeakerType }>( 'BeakerIO', {
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Beaker,
     stateSchema: {
-      beakerType: BeakerTypeEnumerationIO
+      beakerType: StringUnionIO( BeakerTypeValues )
     }
   } );
 }
