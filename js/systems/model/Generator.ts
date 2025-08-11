@@ -10,6 +10,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -20,15 +21,13 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import generatorIcon_png from '../../../images/generatorIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyConverter, { EnergyConverterOptions } from './EnergyConverter.js';
-import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import Property from '../../../../axon/js/Property.js';
 
 // constants
 
@@ -135,7 +134,7 @@ class Generator extends EnergyConverter {
     if ( this.directCouplingModeProperty.value ) {
 
       // treat the wheel as though it is directly coupled to the energy source, e.g. through a belt or drive shaft
-      if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
+      if ( incomingEnergy.type === 'MECHANICAL' ) {
         const energyFraction = ( incomingEnergy.amount / dt ) / EFACConstants.MAX_ENERGY_PRODUCTION_RATE;
         this.wheelRotationalVelocityProperty.value = energyFraction * MAX_ROTATIONAL_VELOCITY * sign;
         this.wheelRotationalAngleProperty.set(
@@ -152,7 +151,7 @@ class Generator extends EnergyConverter {
       // empirically determined to reach max energy after a second or two
       const energyToTorqueConstant = 0.5;
 
-      if ( incomingEnergy.type === EnergyType.MECHANICAL ) {
+      if ( incomingEnergy.type === 'MECHANICAL' ) {
         torqueFromIncomingEnergy = incomingEnergy.amount * WHEEL_RADIUS * energyToTorqueConstant * sign;
       }
 
@@ -190,7 +189,7 @@ class Generator extends EnergyConverter {
         this.incomingEnergyChunks.forEach( chunk => {
 
           // validate energy type
-          assert && assert( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL,
+          assert && assert( chunk.energyTypeProperty.get() === 'MECHANICAL',
             `EnergyType of incoming chunk expected to be of type MECHANICAL, but has type ${chunk.energyTypeProperty.get()}`
           );
 
@@ -216,7 +215,7 @@ class Generator extends EnergyConverter {
     // produce the appropriate amount of energy
     const speedFraction = this.wheelRotationalVelocityProperty.value / MAX_ROTATIONAL_VELOCITY;
     const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE ) * dt;
-    return new Energy( EnergyType.ELECTRICAL, energy, 0 );
+    return new Energy( 'ELECTRICAL', energy, 0 );
   }
 
   /**
@@ -235,7 +234,7 @@ class Generator extends EnergyConverter {
 
       const chunk = mover.energyChunk;
       switch( chunk.energyTypeProperty.get() ) {
-        case EnergyType.MECHANICAL: {
+        case 'MECHANICAL': {
 
           const electricalEnergyChunkOffsets = [
             START_OF_WIRE_CURVE_OFFSET,
@@ -253,7 +252,7 @@ class Generator extends EnergyConverter {
           this.energyChunkList.remove( chunk );
           this.energyChunkMovers.remove( mover );
 
-          chunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
+          chunk.energyTypeProperty.set( 'ELECTRICAL' );
           this.electricalEnergyChunks.push( chunk );
           // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
@@ -261,8 +260,7 @@ class Generator extends EnergyConverter {
             EFACConstants.ENERGY_CHUNK_VELOCITY )
           );
           const hiddenChunk = this.energyChunkGroup.createNextElement(
-            // @ts-expect-error
-            EnergyType.HIDDEN,
+            'HIDDEN',
             chunk.positionProperty.get(),
             Vector2.ZERO,
             this.energyChunksVisibleProperty
@@ -280,7 +278,7 @@ class Generator extends EnergyConverter {
 
           break;
         }
-        case EnergyType.ELECTRICAL:
+        case 'ELECTRICAL':
 
           // This electrical energy chunk has traveled to the end of its path, so transfer it to the next energy
           // system.
@@ -290,7 +288,7 @@ class Generator extends EnergyConverter {
           this.energyChunkPathMoverGroup.disposeElement( mover );
 
           break;
-        case EnergyType.HIDDEN:
+        case 'HIDDEN':
 
           // This hidden energy chunk has traveled to the end of its path, so just remove it, because the electrical
           // energy chunk to which is corresponds should now be visible to the user.
@@ -310,7 +308,7 @@ class Generator extends EnergyConverter {
 
     // in most system elements, we clear energy chunks before checking if incomingEnergy.amount === 0, but since the
     // generator wheel has rotational inertia, we leave the remaining chunks on their way, which looks more accurate.
-    if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.MECHANICAL ) {
+    if ( incomingEnergy.amount === 0 || incomingEnergy.type !== 'MECHANICAL' ) {
 
       // no energy chunk pre-loading needed
       return;
@@ -335,8 +333,7 @@ class Generator extends EnergyConverter {
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK && !skipThisChunk ) {
         const newChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.MECHANICAL,
+          'MECHANICAL',
           this.positionProperty.value.plus( LEFT_SIDE_OF_WHEEL_OFFSET ),
           Vector2.ZERO,
           this.energyChunksVisibleProperty
@@ -373,7 +370,7 @@ class Generator extends EnergyConverter {
   public getEnergyOutputRate(): Energy {
     const speedFraction = this.wheelRotationalVelocityProperty.value / MAX_ROTATIONAL_VELOCITY;
     const energy = Math.abs( speedFraction * EFACConstants.MAX_ENERGY_PRODUCTION_RATE );
-    return new Energy( EnergyType.ELECTRICAL, energy, 0 );
+    return new Energy( 'ELECTRICAL', energy, 0 );
   }
 
   /**

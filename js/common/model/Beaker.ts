@@ -31,7 +31,6 @@ import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
-import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import RectangularThermalMovableModelElement, { RectangularThermalMovableModelElementOptions } from './RectangularThermalMovableModelElement.js';
 import ThermalContactArea from './ThermalContactArea.js';
@@ -307,8 +306,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
       _.times( Utils.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
         if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
-            // @ts-expect-error
-            EnergyType.THERMAL,
+            'THERMAL',
             sliceCenter.plusXY( smallOffset * index, smallOffset * index ),
             Vector2.ZERO,
             this.energyChunksVisibleProperty )
@@ -327,8 +325,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
         const slice = sortedSliceArray[ sliceIndex ];
         const sliceCenter = slice.bounds.center;
         slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.THERMAL,
+          'THERMAL',
           sliceCenter,
           Vector2.ZERO,
           this.energyChunksVisibleProperty )

@@ -9,7 +9,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
@@ -34,13 +33,14 @@ const energyChunkLabelString = EnergyFormsAndChangesStrings.energyChunkLabel;
 // constants
 
 // convenience map that links energy types to their representing images
-const mapEnergyTypeToImage: IntentionalAny = {};
-mapEnergyTypeToImage[ EnergyType.THERMAL ] = energyThermal_png;
-mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = energyElectrical_png;
-mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = energyMechanical_png;
-mapEnergyTypeToImage[ EnergyType.LIGHT ] = energyLight_png;
-mapEnergyTypeToImage[ EnergyType.CHEMICAL ] = energyChemical_png;
-mapEnergyTypeToImage[ EnergyType.HIDDEN ] = energyHidden_png;
+const mapEnergyTypeToImage = {
+  THERMAL: energyThermal_png,
+  ELECTRICAL: energyElectrical_png,
+  MECHANICAL: energyMechanical_png,
+  LIGHT: energyLight_png,
+  CHEMICAL: energyChemical_png,
+  HIDDEN: energyHidden_png
+} as const;
 
 // array that holds the created energy chunk image nodes
 const energyChunkImageNodes = {};
@@ -70,7 +70,7 @@ class EnergyChunkNode extends Node {
     energyChunk.zPositionProperty.link( handleZPositionChanged );
 
     // monitor the energy type and update the image if a change occurs
-    const handleEnergyTypeChanged = ( energyType: typeof EnergyType ) => {
+    const handleEnergyTypeChanged = ( energyType: EnergyType ) => {
       this.removeAllChildren();
       this.addChild( getEnergyChunkNode( energyType ) );
 
@@ -118,7 +118,7 @@ class EnergyChunkNode extends Node {
  * Helper function that creates the image for an EnergyChunkNode.
  * @param energyType
  */
-const createEnergyChunkImageNode = ( energyType: typeof EnergyType ): Image => {
+const createEnergyChunkImageNode = ( energyType: EnergyType ): Image => {
   const background = new Image( mapEnergyTypeToImage[ energyType ] );
   const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
   energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
@@ -133,7 +133,7 @@ const createEnergyChunkImageNode = ( energyType: typeof EnergyType ): Image => {
  * Helper function that returns the correct image for an EnergyChunkNode.
  * @param energyType
  */
-const getEnergyChunkNode = ( energyType: typeof EnergyType ): Image => {
+const getEnergyChunkNode = ( energyType: EnergyType ): Image => {
 
   // these need to be lazily created because the images are not decoded fast enough in the built version to be
   // available right away

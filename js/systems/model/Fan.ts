@@ -21,7 +21,6 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import fanIcon_png from '../../../images/fanIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -161,7 +160,7 @@ class Fan extends EnergyUser {
       this.incomingEnergyChunks.forEach( chunk => {
 
         assert && assert(
-          chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
+          chunk.energyTypeProperty.value === 'ELECTRICAL',
           `Energy chunk type should be ELECTRICAL but is ${chunk.energyTypeProperty.value}`
         );
 
@@ -268,7 +267,7 @@ class Fan extends EnergyUser {
           // add the energy from this chunk to the fan's internal energy
           this.internalEnergyFromEnergyChunksProperty.value += EFACConstants.ENERGY_PER_CHUNK;
 
-          chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+          chunk.energyTypeProperty.set( 'MECHANICAL' );
 
           // release the energy chunk as mechanical to blow away
           // @ts-expect-error
@@ -277,7 +276,7 @@ class Fan extends EnergyUser {
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
         }
         else {
-          chunk.energyTypeProperty.set( EnergyType.THERMAL );
+          chunk.energyTypeProperty.set( 'THERMAL' );
 
           // release the energy chunk as thermal to radiate away
           this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
@@ -365,7 +364,7 @@ class Fan extends EnergyUser {
     this.clearEnergyChunks();
 
     if ( this.targetVelocityProperty.value < MINIMUM_TARGET_VELOCITY ||
-         incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+         incomingEnergy.type !== 'ELECTRICAL' ) {
 
       // no energy chunk pre-loading needed
       return;
@@ -385,8 +384,7 @@ class Fan extends EnergyUser {
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.ELECTRICAL,
+          'ELECTRICAL',
           this.positionProperty.value.plus( WIRE_START_OFFSET ),
           Vector2.ZERO,
           this.energyChunksVisibleProperty

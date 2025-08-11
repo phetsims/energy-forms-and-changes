@@ -23,7 +23,6 @@ import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkWanderController from '../../common/model/EnergyChunkWanderController.js';
 import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWanderControllerGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import ThermalContactArea from '../../common/model/ThermalContactArea.js';
@@ -212,8 +211,7 @@ class Air {
 
     // create a new chunk at the top of the air above the specified point
     return this.energyChunkGroup.createNextElement(
-      // @ts-expect-error
-      EnergyType.THERMAL,
+      'THERMAL',
       new Vector2( point.x, SIZE.height ),
       new Vector2( 0, 0 ),
       this.energyChunksVisibleProperty

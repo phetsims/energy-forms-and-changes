@@ -27,7 +27,6 @@ import sunIcon_png from '../../../images/sunIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from './Cloud.js';
@@ -177,7 +176,7 @@ class SunEnergySource extends EnergySource {
     }
 
     // produce the energy
-    return new Energy( EnergyType.LIGHT, energyProduced, 0 );
+    return new Energy( 'LIGHT', energyProduced, 0 );
   }
 
   /**
@@ -263,8 +262,7 @@ class SunEnergySource extends EnergySource {
     const velocity = new Vector2( EFACConstants.ENERGY_CHUNK_VELOCITY, 0 ).rotated( emissionAngle );
     const startPoint = this.sunPosition.plus( new Vector2( RADIUS / 2, 0 ).rotated( emissionAngle ) );
 
-    // @ts-expect-error
-    const chunk = this.energyChunkGroup.createNextElement( EnergyType.LIGHT, startPoint, velocity, this.energyChunksVisibleProperty );
+    const chunk = this.energyChunkGroup.createNextElement( 'LIGHT', startPoint, velocity, this.energyChunksVisibleProperty );
 
     this.energyChunkList.add( chunk );
   }
@@ -297,7 +295,7 @@ class SunEnergySource extends EnergySource {
 
     // @ts-expect-error
     return new Energy(
-      EnergyType.LIGHT,
+      'LIGHT',
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value )
     );
   }

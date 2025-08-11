@@ -26,7 +26,6 @@ import faucetIcon_png from '../../../images/faucetIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
@@ -146,8 +145,7 @@ export default class FaucetAndWater extends EnergySource {
 
     const velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
 
-    // @ts-expect-error
-    return this.energyChunkGroup.createNextElement( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
+    return this.energyChunkGroup.createNextElement( 'MECHANICAL', initialPosition, velocity, this.energyChunksVisibleProperty );
   }
 
   /**
@@ -168,7 +166,7 @@ export default class FaucetAndWater extends EnergySource {
   public step( dt: number ): Energy {
 
     if ( !this.activeProperty.value ) {
-      return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      return new Energy( 'MECHANICAL', 0, -Math.PI / 2 );
     }
 
     this.stepWaterDrops( dt );
@@ -225,7 +223,7 @@ export default class FaucetAndWater extends EnergySource {
 
     // add incoming energy to delay queue
     this.flowEnergyDelay.push( new Energy(
-      EnergyType.MECHANICAL,
+      'MECHANICAL',
       energyAmount,
       -Math.PI / 2,
       { creationTime: new Date().getTime() } )
@@ -239,7 +237,7 @@ export default class FaucetAndWater extends EnergySource {
       return this.flowEnergyDelay.shift();
     }
     else {
-      return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      return new Energy( 'MECHANICAL', 0, -Math.PI / 2 );
     }
   }
 
@@ -397,7 +395,7 @@ export default class FaucetAndWater extends EnergySource {
   public getEnergyOutputRate(): Energy {
     const energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
     assert && assert( energyAmount >= 0, `EnergyAmount is ${energyAmount}` );
-    return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
+    return new Energy( 'MECHANICAL', energyAmount, -Math.PI / 2 );
   }
 
   public override deactivate(): void {

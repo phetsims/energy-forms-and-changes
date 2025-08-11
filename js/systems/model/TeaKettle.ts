@@ -22,14 +22,13 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import teaKettleIcon_png from '../../../images/teaKettleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
-import EnergySource, { EnergySourceOptions } from './EnergySource.js';
-import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
+import EnergySource, { EnergySourceOptions } from './EnergySource.js';
 
 // constants
 
@@ -169,9 +168,7 @@ class TeaKettle extends EnergySource {
         const initialPosition = new Vector2( x0, y0 );
 
         const energyChunk = this.energyChunkGroup.createNextElement(
-
-          // @ts-expect-error
-          EnergyType.THERMAL,
+          'THERMAL',
           initialPosition,
           Vector2.ZERO,
           this.energyChunksVisibleProperty
@@ -190,7 +187,7 @@ class TeaKettle extends EnergySource {
       // Move all energy chunks that are under this element's control.
       this.moveEnergyChunks( dt );
     }
-    return new Energy( EnergyType.MECHANICAL, this.energyProductionRateProperty.value * dt, Math.PI / 2 );
+    return new Energy( 'MECHANICAL', this.energyProductionRateProperty.value * dt, Math.PI / 2 );
   }
 
   /**
@@ -209,12 +206,12 @@ class TeaKettle extends EnergySource {
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
         // This is a thermal chunk that is coming out of the water.
-        if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL &&
+        if ( chunk.energyTypeProperty.get() === 'THERMAL' &&
              chunk.positionProperty.get().y === this.positionProperty.value.y + WATER_SURFACE_HEIGHT_OFFSET ) {
           if ( dotRandom.nextDouble() > 0.2 ) {
 
             // Turn the chunk into mechanical energy.
-            chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+            chunk.energyTypeProperty.set( 'MECHANICAL' );
           }
 
           // Set this chunk on a path to the base of the spout.
@@ -249,7 +246,7 @@ class TeaKettle extends EnergySource {
 
         // See if this energy chunks should be transferred to the
         // next energy system.
-        if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
+        if ( chunk.energyTypeProperty.get() === 'MECHANICAL' &&
              this.steamPowerableElementInPlaceProperty.get() &&
              ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( this.positionProperty.value.distance( chunk.positionProperty.get() ) ) &&
              !this.exemptFromTransferEnergyChunks.includes( chunk ) ) {
@@ -331,8 +328,7 @@ class TeaKettle extends EnergySource {
         }
 
         const energyChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.THERMAL,
+          'THERMAL',
           initialPosition,
           Vector2.ZERO,
           this.energyChunksVisibleProperty
@@ -363,7 +359,7 @@ class TeaKettle extends EnergySource {
   }
 
   public getEnergyOutputRate(): Energy {
-    return new Energy( EnergyType.MECHANICAL, this.energyProductionRateProperty.value, Math.PI / 2 );
+    return new Energy( 'MECHANICAL', this.energyProductionRateProperty.value, Math.PI / 2 );
   }
 
   /**

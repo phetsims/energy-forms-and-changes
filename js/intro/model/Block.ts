@@ -9,6 +9,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -24,6 +25,7 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
+import EnergyType from '../../common/model/EnergyType.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
@@ -83,7 +85,7 @@ class Block extends RectangularThermalMovableModelElement {
   public constructor( initialPosition: Vector2,
                       energyChunksVisibleProperty: Property<boolean>,
                       blockType: typeof BlockType,
-                      energyChunkGroup: PhetioGroup<EnergyChunk>,
+                      energyChunkGroup: PhetioGroup<EnergyChunk, [ EnergyType, Vector2, Vector2, TReadOnlyProperty<boolean> ]>,
                       providedOptions?: BlockOptions ) {
 
     const options = optionize<BlockOptions, SelfOptions, PhetioObjectOptions>()( {

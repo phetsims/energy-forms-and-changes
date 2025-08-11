@@ -30,7 +30,6 @@ import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -241,7 +240,7 @@ class SystemsScreenView extends ScreenView {
           maxWidth: EFACConstants.ENERGY_SYMBOLS_PANEL_TEXT_MAX_WIDTH
         } ),
         new EnergyChunkNode(
-          new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
+          new EnergyChunk( 'THERMAL', Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
           modelViewTransform
         )
       ],

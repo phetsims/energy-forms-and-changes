@@ -7,11 +7,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+export const EnergyTypeValues = [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] as const;
+type EnergyType = typeof EnergyTypeValues[number];
 
-const EnergyType = EnumerationDeprecated.byKeys( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] ) as IntentionalAny;
-
-energyFormsAndChanges.register( 'EnergyType', EnergyType );
 export default EnergyType;

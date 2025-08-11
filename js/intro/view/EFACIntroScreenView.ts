@@ -47,7 +47,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import ModelElement from '../../common/model/ModelElement.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperatureAndColorSensorNode.js';
@@ -708,7 +707,7 @@ class EFACIntroScreenView extends ScreenView {
     // allow each to be independently scaled. The EnergyChunk that is created here is not going to be used in the
     // simulation, it is only needed for the EnergyChunkNode that is displayed in the show/hide energy chunks toggle.
     const energyChunkNode = new EnergyChunkNode(
-      new EnergyChunk( EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
+      new EnergyChunk( 'THERMAL', Vector2.ZERO, Vector2.ZERO, new BooleanProperty( true ), { tandem: Tandem.OPT_OUT } ),
       modelViewTransform
     );
     energyChunkNode.pickable = false;

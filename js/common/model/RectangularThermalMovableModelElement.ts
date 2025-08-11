@@ -32,7 +32,6 @@ import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyChunkWanderControllerGroup from './EnergyChunkWanderControllerGroup.js';
-import EnergyType from './EnergyType.js';
 import HeatTransferConstants from './HeatTransferConstants.js';
 import ThermalContactArea from './ThermalContactArea.js';
 import UserMovableModelElement from './UserMovableModelElement.js';
@@ -669,8 +668,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
 
           // Create the energy chunk and add it to the slice.
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
-            // @ts-expect-error
-            EnergyType.THERMAL,
+            'THERMAL',
             energyChunkPosition,
             Vector2.ZERO,
             this.energyChunksVisibleProperty
@@ -701,8 +699,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
         smallOffset * numberOfEnergyChunksAdded, smallOffset * numberOfEnergyChunksInSlice
       );
       slice.addEnergyChunk(
-        // @ts-expect-error
-        this.energyChunkGroup.createNextElement( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
+        this.energyChunkGroup.createNextElement( 'THERMAL', center, Vector2.ZERO, this.energyChunksVisibleProperty )
       );
       numberOfEnergyChunksAdded++;
       slideIndex = ( slideIndex + 1 ) % this.slices.length;

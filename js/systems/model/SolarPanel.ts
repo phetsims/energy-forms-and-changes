@@ -31,7 +31,6 @@ import solarPanelIcon_png from '../../../images/solarPanelIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
@@ -155,12 +154,12 @@ class SolarPanel extends EnergyConverter {
 
         this.incomingEnergyChunks.forEach( incomingChunk => {
 
-          if ( incomingChunk.energyTypeProperty.get() === EnergyType.LIGHT ) {
+          if ( incomingChunk.energyTypeProperty.get() === 'LIGHT' ) {
 
             if ( this.numberOfConvertedChunks < 4 ) {
 
               // convert this chunk to electrical energy and add it to the list of energy chunks being managed
-              incomingChunk.energyTypeProperty.set( EnergyType.ELECTRICAL );
+              incomingChunk.energyTypeProperty.set( 'ELECTRICAL' );
               this.energyChunkList.push( incomingChunk );
 
               // add a "mover" that will move this energy chunk to the bottom of the solar panel
@@ -212,7 +211,7 @@ class SolarPanel extends EnergyConverter {
 
     // produce the appropriate amount of energy
     let energyProduced = 0;
-    if ( this.activeProperty.value && incomingEnergy.type === EnergyType.LIGHT ) {
+    if ( this.activeProperty.value && incomingEnergy.type === 'LIGHT' ) {
 
       // 68% efficient. Empirically determined to match the rate of energy chunks that flow from the sun to the solar
       // panel (this way, the fan moves at the same speed when chunks are on or off).
@@ -222,7 +221,7 @@ class SolarPanel extends EnergyConverter {
 
     this.simulationTime += dt;
 
-    return new Energy( EnergyType.ELECTRICAL, energyProduced, 0 );
+    return new Energy( 'ELECTRICAL', energyProduced, 0 );
   }
 
   /**
@@ -294,7 +293,7 @@ class SolarPanel extends EnergyConverter {
   public preloadEnergyChunks( incomingEnergy: Energy ): void {
     this.clearEnergyChunks();
 
-    if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.LIGHT ) {
+    if ( incomingEnergy.amount === 0 || incomingEnergy.type !== 'LIGHT' ) {
 
       // no energy chunk pre-loading needed
       return;
@@ -334,8 +333,7 @@ class SolarPanel extends EnergyConverter {
         }
 
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.ELECTRICAL,
+          'ELECTRICAL',
           initialPosition,
           Vector2.ZERO,
           this.energyChunksVisibleProperty
@@ -369,7 +367,7 @@ class SolarPanel extends EnergyConverter {
    * @returns type, amount, direction of emitted energy
    */
   public getEnergyOutputRate(): Energy {
-    return new Energy( EnergyType.ELECTRICAL, this.energyOutputRateProperty.value, 0 );
+    return new Energy( 'ELECTRICAL', this.energyOutputRateProperty.value, 0 );
   }
 
   /**
@@ -421,7 +419,7 @@ class SolarPanel extends EnergyConverter {
     // all light energy. if not, pull out the bad ones and pass the rest through.
     // see https://github.com/phetsims/energy-forms-and-changes/issues/150
     energyChunks.forEach( chunk => {
-      if ( chunk.energyTypeProperty.value !== EnergyType.LIGHT ) {
+      if ( chunk.energyTypeProperty.value !== 'LIGHT' ) {
         energyChunks = _.pull( energyChunks, chunk );
       }
     } );

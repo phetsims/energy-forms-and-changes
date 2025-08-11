@@ -8,6 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -22,7 +23,7 @@ type SelfOptions = EmptySelfOptions;
 
 type EnergyChunkGroupOptions = SelfOptions & StrictOmit<PhetioGroupOptions, 'phetioType'>;
 
-class EnergyChunkGroup extends PhetioGroup<EnergyChunk> {
+class EnergyChunkGroup extends PhetioGroup<EnergyChunk, [ EnergyType, Vector2, Vector2, TReadOnlyProperty<boolean> ]> {
 
   /**
    * @param energyChunksVisibleProperty - used to create the archetype
@@ -37,14 +38,15 @@ class EnergyChunkGroup extends PhetioGroup<EnergyChunk> {
     }, providedOptions );
 
     super(
+
       // @ts-expect-error
       EnergyChunkGroup.createEnergyChunk,
-      [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, energyChunksVisibleProperty, {} ],
+      [ 'THERMAL', Vector2.ZERO, Vector2.ZERO, energyChunksVisibleProperty, {} ],
       options
     );
   }
 
-  public static createEnergyChunk( tandem: Tandem, energyType: typeof EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: EnergyChunkGroupOptions ): EnergyChunk {
+  public static createEnergyChunk( tandem: Tandem, energyType: EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: EnergyChunkGroupOptions ): EnergyChunk {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkGroup supplies its own tandem' );
     return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( { tandem: tandem }, options ) );
   }

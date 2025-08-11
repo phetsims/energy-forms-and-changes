@@ -7,9 +7,9 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import StringUnionProperty from '../../../../axon/js/StringUnionProperty.js';
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -23,7 +23,7 @@ import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergyType from './EnergyType.js';
+import EnergyType, { EnergyTypeValues } from './EnergyType.js';
 
 // static data
 let instanceCount = 0; // counter for creating unique IDs
@@ -52,7 +52,7 @@ class EnergyChunk extends PhetioObject {
   public readonly zPositionProperty: NumberProperty;
 
   // Energy type property
-  public readonly energyTypeProperty: EnumerationDeprecatedProperty;
+  public readonly energyTypeProperty: StringUnionProperty<EnergyType>;
 
   // Visibility property
   public readonly visibleProperty: BooleanProperty;
@@ -66,7 +66,7 @@ class EnergyChunk extends PhetioObject {
   // Z position for layering (convenience property)
   public zPosition: number;
 
-  public constructor( initialEnergyType: typeof EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, providedOptions?: EnergyChunkOptions ) {
+  public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, providedOptions?: EnergyChunkOptions ) {
 
     const options = optionize<EnergyChunkOptions, SelfOptions, PhetioObjectOptions>()( {
       id: null,
@@ -90,7 +90,8 @@ class EnergyChunk extends PhetioObject {
       tandem: options.tandem.createTandem( 'zPositionProperty' )
     } );
 
-    this.energyTypeProperty = new EnumerationDeprecatedProperty( EnergyType, initialEnergyType, {
+    this.energyTypeProperty = new StringUnionProperty( initialEnergyType, {
+      validValues: EnergyTypeValues,
       tandem: options.tandem.createTandem( 'energyTypeProperty' )
     } );
 
@@ -120,7 +121,7 @@ class EnergyChunk extends PhetioObject {
       stateObject.visiblePropertyReference
     );
     return [
-      EnergyType.HIDDEN,
+      'HIDDEN',
       Vector2.ZERO,
       Vector2.Vector2IO.fromStateObject( stateObject.velocity ),
       visibleProperty,

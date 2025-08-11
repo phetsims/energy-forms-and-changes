@@ -24,7 +24,6 @@ import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -187,14 +186,14 @@ class BeakerHeater extends EnergyUser {
     }
 
     // this isn't designed to take in anything other than electrical energy, so make sure that's what we've got
-    assert && assert( incomingEnergy.type === EnergyType.ELECTRICAL, `unexpected energy type: ${incomingEnergy.type}` );
+    assert && assert( incomingEnergy.type === 'ELECTRICAL', `unexpected energy type: ${incomingEnergy.type}` );
 
     // handle any incoming energy chunks
     if ( this.incomingEnergyChunks.length > 0 ) {
       this.incomingEnergyChunks.forEach( chunk => {
 
         assert && assert(
-          chunk.energyTypeProperty.value === EnergyType.ELECTRICAL,
+          chunk.energyTypeProperty.value === 'ELECTRICAL',
           `Energy chunk type should be ELECTRICAL but is ${chunk.energyTypeProperty.value}`
         );
 
@@ -378,7 +377,7 @@ class BeakerHeater extends EnergyUser {
 
         // the electrical energy chunk has reached the burner, so it needs to change into thermal energy
         this.electricalEnergyChunkMovers.remove( mover );
-        mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
+        mover.energyChunk.energyTypeProperty.set( 'THERMAL' );
 
         // have the thermal energy move a little on the element before moving into the beaker
         // @ts-expect-error
@@ -393,7 +392,7 @@ class BeakerHeater extends EnergyUser {
   public preloadEnergyChunks( incomingEnergyRate: Energy ): void {
     this.clearEnergyChunks();
 
-    if ( incomingEnergyRate.amount === 0 || incomingEnergyRate.type !== EnergyType.ELECTRICAL ) {
+    if ( incomingEnergyRate.amount === 0 || incomingEnergyRate.type !== 'ELECTRICAL' ) {
       // no energy chunk pre-loading needed
       return;
     }
@@ -411,8 +410,7 @@ class BeakerHeater extends EnergyUser {
 
         // create and add a new chunk
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.ELECTRICAL,
+          'ELECTRICAL',
           this.positionProperty.get().plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
           this.energyChunksVisibleProperty

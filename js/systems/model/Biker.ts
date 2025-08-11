@@ -23,7 +23,6 @@ import bicycleIcon_png from '../../../images/bicycleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
@@ -187,7 +186,7 @@ class Biker extends EnergySource {
 
         const energyChunk = mover.energyChunk;
 
-        if ( energyChunk.energyTypeProperty.get() === EnergyType.MECHANICAL ) {
+        if ( energyChunk.energyTypeProperty.get() === 'MECHANICAL' ) {
           if ( energyChunk.positionProperty.get().x > hubPosition.x ) {
 
             // remove this energy chunk
@@ -221,7 +220,7 @@ class Biker extends EnergySource {
   public step( dt: number ): Energy {
 
     if ( !this.activeProperty.value ) {
-      return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
+      return new Energy( 'MECHANICAL', 0, -Math.PI / 2 );
     }
 
     // if there is no energy, the target speed is 0, otherwise it is the current set point
@@ -302,7 +301,7 @@ class Biker extends EnergySource {
 
     assert && assert( energyAmount >= 0, `energyAmount is ${energyAmount}` );
 
-    return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
+    return new Energy( 'MECHANICAL', energyAmount, -Math.PI / 2 );
   }
 
   /**
@@ -324,10 +323,10 @@ class Biker extends EnergySource {
       const chunk = mover.energyChunk;
 
       // CHEMICAL --> MECHANICAL
-      if ( chunk.energyTypeProperty.get() === EnergyType.CHEMICAL ) {
+      if ( chunk.energyTypeProperty.get() === 'CHEMICAL' ) {
 
         // turn this into mechanical energy
-        chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
+        chunk.energyTypeProperty.set( 'MECHANICAL' );
         this.energyChunkMovers.remove( mover );
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
@@ -362,14 +361,14 @@ class Biker extends EnergySource {
       }
 
       // MECHANICAL --> THERMAL
-      else if ( chunk.energyTypeProperty.get() === EnergyType.MECHANICAL &&
+      else if ( chunk.energyTypeProperty.get() === 'MECHANICAL' &&
                 chunk.positionProperty.get().distance( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ) ) < 1E-6 ) {
 
         // this is a mechanical energy chunk that has traveled to the hub and should now become thermal energy
         this.energyChunkMovers.remove( mover );
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
-        chunk.energyTypeProperty.set( EnergyType.THERMAL );
+        chunk.energyTypeProperty.set( 'THERMAL' );
         // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createRadiatedPath( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
@@ -378,7 +377,7 @@ class Biker extends EnergySource {
       }
 
       // THERMAL
-      else if ( chunk.energyTypeProperty.get() === EnergyType.THERMAL ) {
+      else if ( chunk.energyTypeProperty.get() === 'THERMAL' ) {
 
         // this is a radiating thermal energy chunk that has reached the end of its route - delete it
         this.energyChunkMovers.remove( mover );
@@ -460,7 +459,7 @@ class Biker extends EnergySource {
     const amount = Math.abs(
       this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
     );
-    return new Energy( EnergyType.MECHANICAL, amount, -Math.PI / 2 );
+    return new Energy( 'MECHANICAL', amount, -Math.PI / 2 );
   }
 
   /**
@@ -517,8 +516,7 @@ class Biker extends EnergySource {
     const position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
     const newEnergyChunk = this.energyChunkGroup.createNextElement(
-      // @ts-expect-error
-      EnergyType.CHEMICAL,
+      'CHEMICAL',
       position,
       Vector2.ZERO,
       this.energyChunksVisibleProperty
@@ -552,7 +550,7 @@ class Biker extends EnergySource {
     this.energyChunkList.forEach( chunk => {
 
       // only interested in CHEMICAL energy chunks that are not moving
-      if ( chunk.energyTypeProperty.value === EnergyType.CHEMICAL && !movingEnergyChunks.includes( chunk ) ) {
+      if ( chunk.energyTypeProperty.value === 'CHEMICAL' && !movingEnergyChunks.includes( chunk ) ) {
         nonMovingEnergyChunk = chunk;
       }
     } );

@@ -21,7 +21,7 @@ export type EnergyOptions = SelfOptions;
 class Energy {
 
   // Energy type
-  public readonly type: typeof EnergyType;
+  public readonly type: EnergyType;
 
   // Amount of energy, in joules
   public readonly amount: number;
@@ -39,7 +39,7 @@ class Energy {
    * to the right, PI/2 is up, and so forth.
    * @param [providedOptions]
    */
-  public constructor( type: typeof EnergyType, amount: number, direction: number, providedOptions?: EnergyOptions ) {
+  public constructor( type: EnergyType, amount: number, direction: number, providedOptions?: EnergyOptions ) {
 
     const options = optionize<EnergyOptions, SelfOptions>()( {
       creationTime: null

@@ -216,7 +216,6 @@ class EFACIntroModel {
           this.energyChunksVisibleProperty,
           blockType,
           this.energyChunkGroup, {
-
             // @ts-expect-error
             energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             tandem: tandem

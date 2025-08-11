@@ -22,7 +22,6 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -127,7 +126,7 @@ class LightBulb extends EnergyUser {
 
         this.incomingEnergyChunks.forEach( incomingChunk => {
 
-          if ( incomingChunk.energyTypeProperty.get() === EnergyType.ELECTRICAL ) {
+          if ( incomingChunk.energyTypeProperty.get() === 'ELECTRICAL' ) {
 
             // add the energy chunk to the list of those under management
             this.energyChunkList.push( incomingChunk );
@@ -188,7 +187,7 @@ class LightBulb extends EnergyUser {
 
       // energy chunks not currently visible
       else {
-        if ( this.activeProperty.value && incomingEnergy.type === EnergyType.ELECTRICAL ) {
+        if ( this.activeProperty.value && incomingEnergy.type === 'ELECTRICAL' ) {
           this.litProportionProperty.set( Utils.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
         }
         else {
@@ -257,7 +256,7 @@ class LightBulb extends EnergyUser {
 
         // turn this energy chunk into thermal energy on the filament
         if ( this.hasFilament ) {
-          mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
+          mover.energyChunk.energyTypeProperty.set( 'THERMAL' );
           const path = this.createPathOnFilament( mover.energyChunk.positionProperty.value );
           const speed = getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
                         generateThermalChunkTimeOnFilament();
@@ -279,7 +278,7 @@ class LightBulb extends EnergyUser {
     this.clearEnergyChunks();
 
     if ( incomingEnergy.amount < EFACConstants.MAX_ENERGY_PRODUCTION_RATE / 10 ||
-         incomingEnergy.type !== EnergyType.ELECTRICAL ) {
+         incomingEnergy.type !== 'ELECTRICAL' ) {
 
       // no energy chunk pre-loading needed
       return;
@@ -296,8 +295,7 @@ class LightBulb extends EnergyUser {
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
-          // @ts-expect-error
-          EnergyType.ELECTRICAL,
+          'ELECTRICAL',
           this.positionProperty.value.plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
           this.energyChunksVisibleProperty
@@ -333,10 +331,10 @@ class LightBulb extends EnergyUser {
    */
   private radiateEnergyChunk( energyChunk: EnergyChunk ): void {
     if ( dotRandom.nextDouble() > this.proportionOfThermalChunksRadiated ) {
-      energyChunk.energyTypeProperty.set( EnergyType.LIGHT );
+      energyChunk.energyTypeProperty.set( 'LIGHT' );
     }
     else {
-      energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
+      energyChunk.energyTypeProperty.set( 'THERMAL' );
     }
 
     this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(

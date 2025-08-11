@@ -11,6 +11,7 @@
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
@@ -83,7 +84,7 @@ class Burner extends ModelElement {
   // Bounds of the burner in model space
   private readonly bounds: Bounds2;
 
-  private readonly energyChunkGroup: PhetioGroup<EnergyChunk>;
+  private readonly energyChunkGroup: PhetioGroup<EnergyChunk, [ EnergyType, Vector2, Vector2, TReadOnlyProperty<boolean> ]>;
 
   /**
    * @param position - the position in model space where this burner exists
@@ -91,7 +92,8 @@ class Burner extends ModelElement {
    * @param energyChunkGroup
    * @param providedOptions
    */
-  public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: PhetioGroup<EnergyChunk>, providedOptions?: BurnerOptions ) {
+  public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>,
+                      energyChunkGroup: PhetioGroup<EnergyChunk, [ EnergyType, Vector2, Vector2, TReadOnlyProperty<boolean> ]>, providedOptions?: BurnerOptions ) {
 
     const options = optionize<BurnerOptions, SelfOptions, ModelElementOptions>()( {
       energyChunkWanderControllerGroup: null,
@@ -265,9 +267,7 @@ class Burner extends ModelElement {
 
       // create an energy chunk
       closestEnergyChunk = this.energyChunkGroup.createNextElement(
-
-        // @ts-expect-error
-        EnergyType.THERMAL,
+        'THERMAL',
         this.getCenterPoint(), // will originate from the center of this burner
         new Vector2( 0, 0 ),
         this.energyChunksVisibleProperty

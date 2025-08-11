@@ -21,7 +21,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
@@ -65,11 +64,11 @@ class EnergyChunkLegend extends Panel {
     const content = new VBox( {
       children: [
         titleText,
-        EnergyChunkLegend.createEnergyChunkSymbol( mechanicalString, EnergyType.MECHANICAL, modelViewTransform ),
-        EnergyChunkLegend.createEnergyChunkSymbol( electricalString, EnergyType.ELECTRICAL, modelViewTransform ),
-        EnergyChunkLegend.createEnergyChunkSymbol( thermalString, EnergyType.THERMAL, modelViewTransform ),
-        EnergyChunkLegend.createEnergyChunkSymbol( lightString, EnergyType.LIGHT, modelViewTransform ),
-        EnergyChunkLegend.createEnergyChunkSymbol( chemicalString, EnergyType.CHEMICAL, modelViewTransform )
+        EnergyChunkLegend.createEnergyChunkSymbol( mechanicalString, 'MECHANICAL', modelViewTransform ),
+        EnergyChunkLegend.createEnergyChunkSymbol( electricalString, 'ELECTRICAL', modelViewTransform ),
+        EnergyChunkLegend.createEnergyChunkSymbol( thermalString, 'THERMAL', modelViewTransform ),
+        EnergyChunkLegend.createEnergyChunkSymbol( lightString, 'LIGHT', modelViewTransform ),
+        EnergyChunkLegend.createEnergyChunkSymbol( chemicalString, 'CHEMICAL', modelViewTransform )
       ],
       align: 'left',
       spacing: 6
