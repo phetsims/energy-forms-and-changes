@@ -89,6 +89,7 @@ class Burner extends ModelElement {
    * @param position - the position in model space where this burner exists
    * @param energyChunksVisibleProperty - controls whether the energy chunks are visible
    * @param energyChunkGroup
+   * @param providedOptions
    */
   public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: PhetioGroup<EnergyChunk>, providedOptions?: BurnerOptions ) {
 
@@ -110,7 +111,6 @@ class Burner extends ModelElement {
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
 
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 

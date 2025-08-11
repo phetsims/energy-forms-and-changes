@@ -36,8 +36,6 @@ class EnergyUser extends EnergySystemElement {
 
     this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }

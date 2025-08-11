@@ -74,15 +74,11 @@ class EnergyChunkPathMover extends PhetioObject {
       speed: this.speed,
       pathFullyTraversed: this.pathFullyTraversed,
       nextPoint: Vector2.Vector2IO.toStateObject( this.nextPoint ),
-
-      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
   }
 
   public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): [ EnergyChunk, Vector2[], number ] {
-
-    // @ts-expect-error
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
 
@@ -239,8 +235,6 @@ class EnergyChunkPathMover extends PhetioObject {
       speed: NumberIO,
       pathFullyTraversed: BooleanIO,
       nextPoint: Vector2.Vector2IO,
-
-      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO )
     }
   } );

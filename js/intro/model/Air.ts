@@ -92,8 +92,6 @@ class Air {
 
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem!.createTandem( 'energyChunkList' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 

@@ -38,14 +38,10 @@ class EnergyConverter extends EnergySystemElement {
     super( iconImage, options );
     this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
     this.outgoingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }

@@ -68,7 +68,6 @@ class EnergyChunk extends PhetioObject {
       // phet-io
       tandem: Tandem.REQUIRED,
 
-      // @ts-expect-error
       phetioType: EnergyChunk.EnergyChunkIO,
       phetioDynamicElement: true
     }, providedOptions );
@@ -178,15 +177,11 @@ class EnergyChunk extends PhetioObject {
     super.dispose();
   }
 
-  public static readonly EnergyChunkIO = new IOType<EnergyChunk>( 'EnergyChunkIO', {
+  public static readonly EnergyChunkIO = new IOType<EnergyChunk, IntentionalAny>( 'EnergyChunkIO', {
     valueType: EnergyChunk,
-
-    // @ts-expect-error
     toStateObject: energyChunk => energyChunk.toStateObject(),
     stateObjectToCreateElementArguments: stateObject => EnergyChunk.stateObjectToCreateElementArguments( stateObject ),
     stateSchema: {
-
-      // @ts-expect-error
       id: NumberIO,
       velocity: Vector2.Vector2IO,
       visiblePropertyReference: ReferenceIO( Property.PropertyIO( BooleanIO ) )

@@ -141,8 +141,6 @@ class BeakerHeater extends EnergyUser {
 
     this.radiatedEnergyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 

@@ -148,8 +148,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
 
     this.approachingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'approachingEnergyChunks' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 

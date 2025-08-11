@@ -124,8 +124,6 @@ class SunEnergySource extends EnergySource {
 
     this.energyChunksPassingThroughClouds = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 

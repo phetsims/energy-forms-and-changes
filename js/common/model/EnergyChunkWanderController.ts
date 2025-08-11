@@ -183,8 +183,6 @@ class EnergyChunkWanderController extends PhetioObject {
       countdownTimer: this.countdownTimer,
       wandering: this.wandering,
       horizontalWanderConstraint: NullableIO( Range.RangeIO ).toStateObject( this.horizontalWanderConstraint ),
-
-      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
 
@@ -202,8 +200,6 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
-
-    // @ts-expect-error
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -340,8 +336,6 @@ class EnergyChunkWanderController extends PhetioObject {
       countdownTimer: NumberIO,
       wandering: BooleanIO,
       horizontalWanderConstraint: NullableIO( Range.RangeIO ),
-
-      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ),
       destinationPropertyReference: NullableIO( ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ) ),
       destinationVector2: NullableIO( Vector2.Vector2IO )
