@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * the 'Intro' screen in the Energy Forms and Changes simulation
  *
@@ -41,8 +38,8 @@ class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
       tandem: tandem
     };
 
-    const blocksToCreate = [];
-    const beakersToCreate = [];
+    const blocksToCreate: Array<typeof BlockType> = [];
+    const beakersToCreate: Array<typeof BeakerType> = [];
 
     // map query parameter string to element type and split by blocks vs beakers
     EFACQueryParameters.elements.forEach( elementKey => {

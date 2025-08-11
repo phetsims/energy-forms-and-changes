@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * view representation of the air, which is basically just a parent node through which energy chunks can move
  *
@@ -13,6 +10,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from '../model/Air.js';
@@ -37,7 +35,7 @@ class AirNode extends Node {
     air.energyChunkList.addItemAddedListener( addedEnergyChunk => {
       const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       this.addChild( energyChunkNode );
-      const removalListener = removedEnergyChunk => {
+      const removalListener = ( removedEnergyChunk: EnergyChunk ) => {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           this.removeChild( energyChunkNode );
           energyChunkNode.dispose();

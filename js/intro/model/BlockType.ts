@@ -1,8 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Block types for EFAC intro
  *
@@ -14,8 +11,8 @@ import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
-  beforeFreeze: BlockType => {
-    BlockType.getTandemName = blockType => {
+  beforeFreeze: ( BlockType: IntentionalAny ) => {
+    BlockType.getTandemName = ( blockType: IntentionalAny ) => {
       return `${blockType.toString().toLowerCase()}Block`;
     };
   }

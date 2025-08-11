@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A node that represents a 2D surface on which energy chunks reside. The surface contains z-dimension information,
  * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance when used in
@@ -12,13 +9,14 @@
  * @author Andrew Adare
  */
 
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 class EnergyChunkContainerSliceNode extends Node {
 
@@ -30,10 +28,10 @@ class EnergyChunkContainerSliceNode extends Node {
     this.modelViewTransform = modelViewTransform;
 
     // define a function that will add and remove energy chunk nodes as energy come and go in the model
-    const addEnergyChunkNode = addedChunk => {
+    const addEnergyChunkNode = ( addedChunk: EnergyChunk ) => {
       const energyChunkNode = new EnergyChunkNode( addedChunk, modelViewTransform );
       this.addChild( energyChunkNode );
-      const removalListener = removedChunk => {
+      const removalListener = ( removedChunk: EnergyChunk ) => {
         if ( removedChunk === addedChunk ) {
           this.removeChild( energyChunkNode );
           energyChunkNode.dispose();

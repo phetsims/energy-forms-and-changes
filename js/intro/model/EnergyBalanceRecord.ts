@@ -1,8 +1,5 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * an object that is used to keep a record of energy that is exchanged between two model elements
  *
@@ -27,6 +24,8 @@ class EnergyBalanceRecord {
 
   /**
    * inner type which defines the structure where energy exchanges are tracked
+   * @param fromID
+   * @param toID
    * @param energyAmount - in joules
    */
   public constructor( fromID: string, toID: string, energyAmount: number ) {

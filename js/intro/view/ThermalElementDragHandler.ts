@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * drag handler for objects that can be moved by the user, used to constrain objects to the play area and to prevent
  * them from being dragged through one another
@@ -16,8 +13,8 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import UserMovableModelElement from '../model/UserMovableModelElement.js';
 
 class ThermalElementDragHandler extends DragListener {
 
@@ -39,7 +36,7 @@ class ThermalElementDragHandler extends DragListener {
   ) {
 
     const dragStartOffset = new Vector2( 0, 0 );
-    let currentTarget = null;
+    let currentTarget: Node | null = null;
 
     super( {
 
@@ -49,23 +46,23 @@ class ThermalElementDragHandler extends DragListener {
 
         // make sure the sim is playing when an element is grabbed - this will resume the sim if it is paused
         simIsPlayingProperty.value = true;
-        modelElement.userControlledProperty.set( true );
+        modelElement.userControlledProperty!.set( true );
         const modelElementViewPosition = modelViewTransform.modelToViewPosition( modelElement.positionProperty.get() );
         currentTarget = event.currentTarget;
-        const dragStartPosition = currentTarget.globalToParentPoint( event.pointer.point );
+        const dragStartPosition = currentTarget!.globalToParentPoint( event.pointer.point );
         dragStartOffset.setXY(
           dragStartPosition.x - modelElementViewPosition.x,
           dragStartPosition.y - modelElementViewPosition.y
         );
       },
       drag: event => {
-        const dragPosition = currentTarget.globalToParentPoint( event.pointer.point );
+        const dragPosition = currentTarget!.globalToParentPoint( event.pointer.point );
         const modelElementViewPosition = dragPosition.minus( dragStartOffset );
         const modelElementPosition = modelViewTransform.viewToModelPosition( modelElementViewPosition );
         modelElement.positionProperty.set( constrainPosition( modelElement, modelElementPosition ) );
       },
       end: () => {
-        modelElement.userControlledProperty.set( false );
+        modelElement.userControlledProperty!.set( false );
         currentTarget = null;
       },
       tandem: tandem
