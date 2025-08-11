@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * RectangularThermalMovableModelElement is a base class for a movable model element that contains thermal energy and
  * that, at least in the model, has an overall shape that can be represented as a rectangle.
@@ -143,11 +140,15 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     this.approachingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'approachingEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
@@ -352,6 +353,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 
       // distribute the energy chunks contained within this model element
+      // @ts-expect-error
       const redistributed = energyChunkDistributor.updatePositions( this.slices.slice(), dt );
 
       if ( !redistributed ) {
@@ -420,7 +422,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // start with a slice at or near the middle of the order
     let sliceIndex = Math.floor( ( this.slices.length - 1 ) / 2 );
-    let sliceIndexWithLowestEnergyDensity = null;
+    let sliceIndexWithLowestEnergyDensity: number | null = null;
     let lowestEnergyDensityFound = Number.NEGATIVE_INFINITY;
 
     for ( let ecSliceCount = 0; ecSliceCount < this.slices.length; ecSliceCount++ ) {
@@ -435,7 +437,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     }
 
     // add the energy chunk to the slice with the lowest density of energy chunks
-    this.slices.get( sliceIndexWithLowestEnergyDensity ).addEnergyChunk( energyChunk );
+    this.slices.get( sliceIndexWithLowestEnergyDensity! ).addEnergyChunk( energyChunk );
 
     // trigger redistribution of the energy chunks
     this.resetECDistributionCountdown();
@@ -506,11 +508,13 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       return null;
     }
 
-    let closestEnergyChunk = null;
+    let closestEnergyChunk: EnergyChunk | null = null;
     let closestCompensatedDistance = Number.POSITIVE_INFINITY;
 
     // identify the closest energy chunk
     this.slices.forEach( slice => {
+
+      // @ts-expect-error
       slice.energyChunkList.forEach( energyChunk => {
 
         // compensate for the Z offset, otherwise front chunk will almost always be chosen
@@ -526,7 +530,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       } );
     } );
 
-    this.removeEnergyChunk( closestEnergyChunk );
+    this.removeEnergyChunk( closestEnergyChunk! );
     return closestEnergyChunk;
   }
 
@@ -548,6 +552,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       // this element's shape is contained by the destination - pick a chunk near our right or left edge
       let closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
       this.slices.forEach( slice => {
+
+        // @ts-expect-error
         slice.energyChunkList.forEach( energyChunk => {
           const distanceToVerticalEdge = Math.min(
             Math.abs( myBounds.minX - energyChunk.positionProperty.value.x ),
@@ -567,6 +573,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       // the destination shape.
       let closestDistanceToDestinationEdge = Number.POSITIVE_INFINITY;
       this.slices.forEach( slice => {
+
+        // @ts-expect-error
         slice.energyChunkList.forEach( energyChunk => {
           const distanceToDestinationEdge =
             Math.min( Math.abs( destinationBounds.minX - energyChunk.positionProperty.value.x ),
@@ -620,6 +628,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // remove the current set of energy chunks, calculate total area of the slices
     this.slices.forEach( slice => {
+
+      // @ts-expect-error
       slice.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
       slice.energyChunkList.clear();
       totalSliceArea += slice.bounds.width * slice.bounds.height;
@@ -644,6 +654,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     if ( presetData ) {
       this.slices.forEach( ( slice, sliceIndex ) => {
         const energyChunkPositions = presetData.energyChunkPositionsBySlice[ sliceIndex ];
+
+        // @ts-expect-error
         energyChunkPositions.forEach( relativeEnergyChunkPosition => {
 
           // Determine the absolute position of the energy chunk in model space.  The preset position is relative to
@@ -652,6 +664,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
           // Create the energy chunk and add it to the slice.
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
+
+            // @ts-expect-error
             EnergyType.THERMAL,
             energyChunkPosition,
             Vector2.ZERO,
@@ -683,6 +697,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
         smallOffset * numberOfEnergyChunksAdded, smallOffset * numberOfEnergyChunksInSlice
       );
       slice.addEnergyChunk(
+
+        // @ts-expect-error
         this.energyChunkGroup.createNextElement( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
       );
       numberOfEnergyChunksAdded++;
@@ -694,6 +710,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     // distribute the initial energy chunks within the container using the repulsive algorithm
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
+
+      // @ts-expect-error
       const distributed = energyChunkDistributor.updatePositions(
         this.slices.slice(),
         EFACConstants.SIM_TIME_PER_TICK_NORMAL
@@ -728,8 +746,14 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     };
 
     this.slices.forEach( ( slice, sliceIndex ) => {
+
+      // @ts-expect-error
       energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ] = [];
+
+      // @ts-expect-error
       slice.energyChunkList.forEach( energyChunk => {
+
+        // @ts-expect-error
         energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ].push( {
           positionX: energyChunk.positionProperty.value.x,
           positionY: energyChunk.positionProperty.value.y
@@ -774,7 +798,11 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
 
         const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
+
+          // @ts-expect-error
           this.energyContainerCategory,
+
+          // @ts-expect-error
           otherEnergyContainer.energyContainerCategory
         );
 
