@@ -16,7 +16,6 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -64,10 +63,17 @@ const BEAKER_COMPOSITION = {
 // file variable used for measuring performance during startup, see usage for more information
 let performanceMeasurementTaken = false;
 
+export type PredistributedEnergyChunkConfiguration = {
+  numberOfEnergyChunks: number;
+  numberOfSlices: number;
+  totalSliceArea: number;
+  energyChunkPositionsBySlice: Vector2[][];
+};
+
 type SelfOptions = {
   beakerType?: BeakerType;
   majorTickMarkDistance?: number;
-  predistributedEnergyChunkConfigurations?: IntentionalAny[];
+  predistributedEnergyChunkConfigurations?: PredistributedEnergyChunkConfiguration[];
 };
 
 export type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;

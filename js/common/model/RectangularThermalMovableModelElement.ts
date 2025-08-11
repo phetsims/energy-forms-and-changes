@@ -26,6 +26,7 @@ import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
+import { PredistributedEnergyChunkConfiguration } from './Beaker.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
@@ -71,7 +72,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   protected readonly energyChunkWanderControllers: ObservableArray<EnergyChunkWanderController>;
 
   // pre-distributed energy chunk configuration,used for fast initialization, see usages for format
-  private readonly predistributedEnergyChunkConfigurations: IntentionalAny[];
+  private readonly predistributedEnergyChunkConfigurations: PredistributedEnergyChunkConfiguration[];
 
   // composite bounds for this model element, maintained as position changes
   public readonly bounds: Bounds2;
@@ -659,8 +660,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     if ( presetData ) {
       this.slices.forEach( ( slice, sliceIndex ) => {
         const energyChunkPositions = presetData.energyChunkPositionsBySlice[ sliceIndex ];
-
-        // @ts-expect-error
         energyChunkPositions.forEach( relativeEnergyChunkPosition => {
 
           // Determine the absolute position of the energy chunk in model space.  The preset position is relative to
