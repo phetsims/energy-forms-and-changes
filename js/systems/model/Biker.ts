@@ -15,7 +15,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -31,7 +31,7 @@ import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js'
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import EnergySource from './EnergySource.js';
+import EnergySource, { type EnergySourceOptions } from './EnergySource.js';
 
 // constants
 const MAX_ANGULAR_VELOCITY_OF_CRANK = 3 * Math.PI; // In radians/sec.
@@ -55,6 +55,9 @@ const TOP_TANGENT_OF_BACK_WHEEL_OFFSET = new Vector2( 0.024, 0.007 );
 const NEXT_ENERGY_SYSTEM_OFFSET = new Vector2( 0.107, 0.066 );
 const CHEMICAL_ENERGY_CHUNK_OFFSETS = [ BIKER_BUTTOCKS_OFFSET, TOP_TUBE_ABOVE_CRANK_OFFSET ];
 
+type SelfOptions = EmptySelfOptions;
+
+type BikerOptions = SelfOptions & EnergySourceOptions;
 
 class Biker extends EnergySource {
 
@@ -90,15 +93,15 @@ class Biker extends EnergySource {
    * @param mechanicalPoweredSystemIsNextProperty - is a compatible energy system currently active
    * @param energyChunkGroup
    * @param energyChunkPathMoverGroup
-   * @param options
+   * @param providedOptions
    */
   public constructor( energyChunksVisibleProperty: Property<boolean>, mechanicalPoweredSystemIsNextProperty: Property<boolean>,
                       energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup,
-                      options?: IntentionalAny ) {
+                      providedOptions?: BikerOptions ) {
 
-    options = merge( {
+    const options = optionize<BikerOptions, SelfOptions, EnergySourceOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( bicycleIcon_png ), options );
 

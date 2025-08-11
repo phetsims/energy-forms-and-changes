@@ -18,8 +18,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -34,7 +33,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from './Cloud.js';
 import Energy from './Energy.js';
-import EnergySource from './EnergySource.js';
+import EnergySource, { EnergySourceOptions } from './EnergySource.js';
 import SolarPanel from './SolarPanel.js';
 
 // constants
@@ -51,6 +50,9 @@ const EMISSION_SECTOR_SPAN = 2 * Math.PI / NUM_EMISSION_SECTORS;
 // used to tweak sector positions to make sure solar panel gets consistent flow of E's
 const EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
+type SelfOptions = EmptySelfOptions;
+
+type SunEnergySourceOptions = SelfOptions & EnergySourceOptions;
 
 class SunEnergySource extends EnergySource {
 
@@ -82,11 +84,11 @@ class SunEnergySource extends EnergySource {
   private readonly energyChunksPassingThroughClouds: ReturnType<typeof createObservableArray>;
   private readonly energyChunkGroup: EnergyChunkGroup;
 
-  public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
+  public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: SunEnergySourceOptions ) {
 
-    options = merge( {
+    const options = optionize<SunEnergySourceOptions, SelfOptions, EnergySourceOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( sunIcon_png ), options );
 

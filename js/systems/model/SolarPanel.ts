@@ -24,6 +24,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -40,7 +41,7 @@ import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import EnergyConverter from './EnergyConverter.js';
+import EnergyConverter, { EnergyConverterOptions } from './EnergyConverter.js';
 
 // constants
 const PANEL_SIZE = new Dimension2( 0.15, 0.07 ); // size of the panel-only portion (no connectors), in meters
@@ -60,6 +61,10 @@ const OUTGOING_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET.plusXY( 0.042, -0.041 )
 // Inter chunk spacing time for when the chunks reach the 'convergence point' at the bottom of the solar panel.
 // Empirically determined to create an appropriate flow of electrical chunks in an energy user wire. In seconds.
 const MIN_INTER_CHUNK_TIME = 0.6;
+
+type SelfOptions = EmptySelfOptions;
+
+type SolarPanelOptions = SelfOptions & EnergyConverterOptions;
 
 class SolarPanel extends EnergyConverter {
 
@@ -88,13 +93,13 @@ class SolarPanel extends EnergyConverter {
   // this shape is needed to draw the helper shape node in SolarPanelNode.
   private absorptionShape: Shape;
 
-  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: SolarPanelOptions ) {
 
-    options = merge( {
+    const options = optionize<SolarPanelOptions, SelfOptions, EnergyConverterOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioType: SolarPanel.SolarPanelIO,
       phetioState: true
-    }, options );
+    }, providedOptions );
 
     super( new Image( solarPanelIcon_png ), options );
 

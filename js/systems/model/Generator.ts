@@ -16,8 +16,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -30,7 +29,7 @@ import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js'
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import EnergyConverter from './EnergyConverter.js';
+import EnergyConverter, { EnergyConverterOptions } from './EnergyConverter.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import Property from '../../../../axon/js/Property.js';
 
@@ -53,6 +52,10 @@ const WIRE_CURVE_POINT_4_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.024, -0.068 );
 const WIRE_CURVE_POINT_5_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.030, -0.0705 );
 const CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
+type SelfOptions = EmptySelfOptions;
+
+type GeneratorOptions = SelfOptions & EnergyConverterOptions;
+
 class Generator extends EnergyConverter {
 
   // a11y name
@@ -71,11 +74,11 @@ class Generator extends EnergyConverter {
   // the "hidden" energy chunks are kept on a separate list mainly for code clarity
   public readonly hiddenEnergyChunks: ObservableArrayDef<EnergyChunk>;
 
-  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
-    options = merge( {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: GeneratorOptions ) {
+    const options = optionize<GeneratorOptions, SelfOptions, EnergyConverterOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioState: false // no internal fields to convey in state
-    }, options );
+    }, providedOptions );
 
     super( new Image( generatorIcon_png ), options );
 

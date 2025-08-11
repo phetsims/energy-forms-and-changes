@@ -9,24 +9,29 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+
+type SelfOptions = EmptySelfOptions;
+
+type EnergyChunkPathMoverGroupOptions = SelfOptions & PhetioGroupOptions;
 
 class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover> {
 
-  public constructor( energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
+  public constructor( energyChunkGroup: EnergyChunkGroup, providedOptions?: EnergyChunkPathMoverGroupOptions ) {
 
-    // eslint-disable-next-line phet/bad-typescript-text
-    options = merge( {
+    const options = optionize<EnergyChunkPathMoverGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
 
+      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
-    }, options );
+    }, providedOptions );
 
     // @ts-expect-error
     super( EnergyChunkPathMoverGroup.createEnergyChunkPathMover,

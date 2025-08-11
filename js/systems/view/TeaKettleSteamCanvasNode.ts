@@ -14,9 +14,8 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -30,20 +29,27 @@ const STEAM_BUBBLE_RATE_RANGE = new Range( 14, 20 ); // bubbles per second
 const STEAM_BUBBLE_GROWTH_RATE = 3; // proportion per second
 const STEAM_BUBBLE_MAX_OPACITY = 0.7; // proportion, 0 to 1
 
+type SelfOptions = {
+  steamAngle?: number; // angle of the steam
+  steamFill?: string; // color of the steam
+};
+
+type TeaKettleSteamCanvasNodeOptions = SelfOptions & CanvasNodeOptions;
+
 class TeaKettleSteamCanvasNode extends CanvasNode {
 
   /**
    * @param steamOrigin
    * @param energyOutputProperty
    * @param maxEnergyOutput
-   * @param options
+   * @param providedOptions
    */
-  public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, options?: IntentionalAny ) {
+  public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, providedOptions?: TeaKettleSteamCanvasNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<TeaKettleSteamCanvasNodeOptions, SelfOptions, CanvasNodeOptions>()( {
       steamAngle: TeaKettle.SPOUT_EXIT_ANGLE, // {number}
       steamFill: 'rgb(255,255,255)' // {string} - white
-    }, options );
+    }, providedOptions );
 
     super( options );
 

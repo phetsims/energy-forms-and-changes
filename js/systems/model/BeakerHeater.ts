@@ -16,7 +16,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -35,7 +35,7 @@ import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSen
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
-import EnergyUser from './EnergyUser.js';
+import EnergyUser, { EnergyUserOptions } from './EnergyUser.js';
 
 // position and size constants, empirically determined
 const BEAKER_WIDTH = 0.075; // In meters.
@@ -64,6 +64,10 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
   BOTTOM_OF_CONNECTOR_OFFSET,
   CONVERSION_POINT_OFFSET
 ];
+
+type SelfOptions = EmptySelfOptions;
+
+type BeakerHeaterOptions = SelfOptions & EnergyUserOptions;
 
 class BeakerHeater extends EnergyUser {
 
@@ -99,12 +103,12 @@ class BeakerHeater extends EnergyUser {
   public constructor( energyChunksVisibleProperty: BooleanProperty,
                       energyChunkGroup: EnergyChunkGroup,
                       energyChunkPathMoverGroup: EnergyChunkPathMoverGroup,
-                      options?: object ) {
+                      providedOptions?: BeakerHeaterOptions ) {
 
-    options = merge( {
+    const options = optionize<BeakerHeaterOptions, SelfOptions, EnergyUserOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioState: false // no internal fields to convey in state
-    }, options );
+    }, providedOptions );
 
     super( new Image( waterIcon_png ), options );
 

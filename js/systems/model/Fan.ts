@@ -16,8 +16,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -29,7 +28,7 @@ import Energy from './Energy.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import EnergyUser from './EnergyUser.js';
+import EnergyUser, { EnergyUserOptions } from './EnergyUser.js';
 
 // constants
 const ANGULAR_ACCELERATION = Math.PI * 4; // In radians/(sec^2).
@@ -68,6 +67,9 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
   FAN_MOTOR_INTERIOR_OFFSET
 ];
 
+type SelfOptions = EmptySelfOptions;
+
+type FanOptions = SelfOptions & EnergyUserOptions;
 
 class Fan extends EnergyUser {
 
@@ -89,11 +91,11 @@ class Fan extends EnergyUser {
   private internalTemperature: number;
   private readonly targetVelocityProperty: NumberProperty;
 
-  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: FanOptions ) {
 
-    options = merge( {
+    const options = optionize<FanOptions, SelfOptions, EnergyUserOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( fanIcon_png ), options );
 

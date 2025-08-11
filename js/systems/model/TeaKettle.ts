@@ -17,7 +17,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -30,7 +30,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
-import EnergySource from './EnergySource.js';
+import EnergySource, { EnergySourceOptions } from './EnergySource.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 
@@ -51,13 +51,17 @@ const COOL_DOWN_COMPLETE_THRESHOLD = 30; // In joules/second
 const ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE = new Range( 0.12, 0.15 );
 const ENERGY_CHUNK_WATER_TO_SPOUT_TIME = 0.7; // Used to keep chunks evenly spaced.
 
+type SelfOptions = EmptySelfOptions;
+
+type TeaKettleOptions = SelfOptions & EnergySourceOptions;
+
 class TeaKettle extends EnergySource {
 
-  public constructor( energyChunksVisibleProperty: Property<boolean>, steamPowerableElementInPlaceProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
+  public constructor( energyChunksVisibleProperty: Property<boolean>, steamPowerableElementInPlaceProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: TeaKettleOptions ) {
 
-    options = merge( {
+    const options = optionize<TeaKettleOptions, SelfOptions, EnergySourceOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( teaKettleIcon_png ), options );
 

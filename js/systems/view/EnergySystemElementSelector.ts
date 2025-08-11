@@ -13,11 +13,11 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -26,11 +26,15 @@ import EnergySystemElementCarousel from '../model/EnergySystemElementCarousel.js
 // constants
 const BUTTON_IMAGE_HEIGHT_AND_WIDTH = 44; // In screen coordinates, which is close to pixels.
 
+type SelfOptions = EmptySelfOptions;
+
+type EnergySystemElementSelectorOptions = SelfOptions & PanelOptions;
+
 class EnergySystemElementSelector extends Panel {
 
-  public constructor( carousel: EnergySystemElementCarousel, options?: IntentionalAny ) {
+  public constructor( carousel: EnergySystemElementCarousel, providedOptions?: EnergySystemElementSelectorOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergySystemElementSelectorOptions, SelfOptions, PanelOptions>()( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
@@ -40,7 +44,7 @@ class EnergySystemElementSelector extends Panel {
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     const buttonElementList = [];
 

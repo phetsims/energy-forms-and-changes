@@ -13,14 +13,14 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -39,16 +39,21 @@ const thermalString = EnergyFormsAndChangesStrings.thermal;
 // constants
 const LEGEND_ENTRY_FONT = new PhetFont( 14 );
 
+// Since this class doesn't introduce any new options beyond what Panel provides, we use EmptySelfOptions
+type SelfOptions = EmptySelfOptions;
+
+type EnergyChunkLegendOptions = SelfOptions & PanelOptions;
+
 class EnergyChunkLegend extends Panel {
 
-  public constructor( modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
+  public constructor( modelViewTransform: ModelViewTransform2, providedOptions?: EnergyChunkLegendOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyChunkLegendOptions, SelfOptions, PanelOptions>()( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
       stroke: EFACConstants.CONTROL_PANEL_OUTLINE_STROKE,
       lineWidth: EFACConstants.CONTROL_PANEL_OUTLINE_LINE_WIDTH,
       cornerRadius: EFACConstants.ENERGY_SYMBOLS_PANEL_CORNER_RADIUS
-    }, options );
+    }, providedOptions );
 
     // title that appears at the top of the legend
     const titleText = new Text( formsOfEnergyString, {

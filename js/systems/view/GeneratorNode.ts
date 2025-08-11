@@ -11,8 +11,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -29,27 +28,35 @@ import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Generator from '../model/Generator.js';
-import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
+import MoveFadeModelElementNode, { MoveFadeModelElementNodeOptions } from './MoveFadeModelElementNode.js';
 
 // constants
 const SPOKES_AND_PADDLES_CENTER_Y_OFFSET = -65;
 
 const generatorString = EnergyFormsAndChangesStrings.generator;
 
+type SelfOptions = {
+
+  // whether the mechanical energy chunk layer is added
+  addMechanicalEnergyChunkLayer?: boolean;
+};
+
+type GeneratorNodeOptions = SelfOptions & MoveFadeModelElementNodeOptions;
+
 class GeneratorNode extends MoveFadeModelElementNode {
 
   public readonly mechanicalEnergyChunkLayer: EnergyChunkLayer | null;
 
-  public constructor( generator: Generator, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
+  public constructor( generator: Generator, modelViewTransform: ModelViewTransform2, providedOptions?: GeneratorNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<GeneratorNodeOptions, SelfOptions, MoveFadeModelElementNodeOptions>()( {
 
-      // {boolean} - whether the mechanical energy chunk layer is added
+      // whether the mechanical energy chunk layer is added
       addMechanicalEnergyChunkLayer: true,
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( generator, modelViewTransform, options.tandem );
 

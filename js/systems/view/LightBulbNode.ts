@@ -14,7 +14,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -35,24 +35,30 @@ import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FluorescentBulb from '../model/FluorescentBulb.js';
 import LightRays from './LightRays.js';
-import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
+import MoveFadeModelElementNode, { MoveFadeModelElementNodeOptions } from './MoveFadeModelElementNode.js';
 
 // constants
 const FLUORESCENT_BULB_TOP_OFFSET = 28;
 const INCANDESCENT_BULB_TOP_OFFSET = 31;
 
+type SelfOptions = {
+  bulbType?: 'fluorescent' | 'incandescent';
+};
+
+type LightBulbNodeOptions = SelfOptions & MoveFadeModelElementNodeOptions;
+
 class LightBulbNode extends MoveFadeModelElementNode {
 
-  public constructor( lightBulb: FluorescentBulb, energyChunksVisibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
+  public constructor( lightBulb: FluorescentBulb, energyChunksVisibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2, providedOptions?: LightBulbNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<LightBulbNodeOptions, SelfOptions, MoveFadeModelElementNodeOptions>()( {
 
       // LightBulbNode options
       bulbType: 'fluorescent',
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     assert && assert(
       options.bulbType === 'fluorescent' || options.bulbType === 'incandescent',

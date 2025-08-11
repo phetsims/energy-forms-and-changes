@@ -17,8 +17,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -31,7 +30,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import EnergyUser from './EnergyUser.js';
+import EnergyUser, { EnergyUserOptions } from './EnergyUser.js';
 
 // constants
 const THERMAL_ENERGY_CHUNK_TIME_ON_FILAMENT = new Range( 2, 2.5 );
@@ -78,11 +77,11 @@ class LightBulb extends EnergyUser {
   private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
   private goRightNextTime: boolean;
 
-  public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: LightBulbOptions ) {
+  public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: LightBulbOptions ) {
 
-    options = merge( {
+    const options = optionize<LightBulbOptions, SelfOptions, EnergyUserOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( iconImage, options );
 

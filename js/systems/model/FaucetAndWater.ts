@@ -19,8 +19,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -33,9 +32,12 @@ import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
-import EnergySource from './EnergySource.js';
+import EnergySource, { EnergySourceOptions } from './EnergySource.js';
 import WaterDrop from './WaterDrop.js';
 
+// Type definitions for FaucetAndWater
+type SelfOptions = EmptySelfOptions;
+type FaucetAndWaterOptions = SelfOptions & EnergySourceOptions;
 
 // constants
 const FALLING_ENERGY_CHUNK_VELOCITY = 0.09; // in meters/second
@@ -57,7 +59,7 @@ const OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plu
 // not the actual value in Earth's gravitational field - it has been tweaked for optimal visual effect.
 const ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
-class FaucetAndWater extends EnergySource {
+export default class FaucetAndWater extends EnergySource {
 
   // a11y name
   public a11yName: string;
@@ -85,11 +87,11 @@ class FaucetAndWater extends EnergySource {
   private waterDropsPreloaded: boolean;
   private readonly energyChunkGroup: EnergyChunkGroup;
 
-  public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: FaucetAndWaterOptions ) {
 
-    options = merge( {
+    const options = optionize<FaucetAndWaterOptions, SelfOptions, EnergySourceOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( faucetIcon_png ), options );
 
@@ -437,4 +439,3 @@ FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_FAUCET_
 FaucetAndWater.MAX_WATER_WIDTH = MAX_WATER_WIDTH;
 
 energyFormsAndChanges.register( 'FaucetAndWater', FaucetAndWater );
-export default FaucetAndWater;
