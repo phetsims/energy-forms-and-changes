@@ -403,6 +403,9 @@ class Generator extends EnergyConverter {
 
     return chunks;
   }
+
+  public static readonly WHEEL_CENTER_OFFSET = WHEEL_CENTER_OFFSET;
+  public static readonly WHEEL_RADIUS = WHEEL_RADIUS;
 }
 
 /**
@@ -414,10 +417,6 @@ const calculateWheelAngle = ( wheelRotationalAngle: number, wheelRotationalVeloc
   const newAngle = ( wheelRotationalAngle + wheelRotationalVelocity * dt ) % twoPi;
   return newAngle < 0 ? twoPi + newAngle : newAngle;
 };
-
-// statics
-Generator.WHEEL_CENTER_OFFSET = WHEEL_CENTER_OFFSET;
-Generator.WHEEL_RADIUS = WHEEL_RADIUS;
 
 energyFormsAndChanges.register( 'Generator', Generator );
 export default Generator;

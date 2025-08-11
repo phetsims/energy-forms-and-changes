@@ -566,6 +566,13 @@ class Biker extends EnergySource {
     this.energyProducedSinceLastChunkEmitted = stateObject.energyProducedSinceLastChunkEmitted;
     this.mechanicalChunksSinceLastThermal = stateObject.mechanicalChunksSinceLastThermal;
   }
+
+  public static readonly CENTER_OF_GEAR_OFFSET = CENTER_OF_GEAR_OFFSET;
+  public static readonly CENTER_OF_BACK_WHEEL_OFFSET = CENTER_OF_BACK_WHEEL_OFFSET;
+  public static readonly INITIAL_NUMBER_OF_ENERGY_CHUNKS = INITIAL_NUMBER_OF_ENERGY_CHUNKS;
+  public static readonly MAX_ANGULAR_VELOCITY_OF_CRANK = MAX_ANGULAR_VELOCITY_OF_CRANK;
+  public static readonly NUMBER_OF_LEG_IMAGES = NUMBER_OF_LEG_IMAGES;
+  public static readonly REAR_WHEEL_RADIUS = REAR_WHEEL_RADIUS;
 }
 
 /**
@@ -582,14 +589,6 @@ const createMechanicalToThermalEnergyChunkPath = ( centerPosition: Vector2, curr
   path.push( centerPosition.plus( CENTER_OF_BACK_WHEEL_OFFSET ) );
   return path;
 };
-
-// statics
-Biker.CENTER_OF_GEAR_OFFSET = CENTER_OF_GEAR_OFFSET;
-Biker.CENTER_OF_BACK_WHEEL_OFFSET = CENTER_OF_BACK_WHEEL_OFFSET;
-Biker.INITIAL_NUMBER_OF_ENERGY_CHUNKS = INITIAL_NUMBER_OF_ENERGY_CHUNKS;
-Biker.MAX_ANGULAR_VELOCITY_OF_CRANK = MAX_ANGULAR_VELOCITY_OF_CRANK;
-Biker.NUMBER_OF_LEG_IMAGES = NUMBER_OF_LEG_IMAGES;
-Biker.REAR_WHEEL_RADIUS = REAR_WHEEL_RADIUS;
 
 energyFormsAndChanges.register( 'Biker', Biker );
 export default Biker;

@@ -1,8 +1,5 @@
 // Copyright 2016-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * model for the 'Systems' screen of the Energy Forms And Changes simulation
  *
@@ -18,6 +15,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -42,6 +40,47 @@ const ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION = new Vector2( -0.025
 
 class SystemsModel {
 
+  // See in EFACIntroModel for doc
+  public readonly energyChunksVisibleProperty: BooleanProperty;
+
+  // Is the sim running or paused?
+  public readonly isPlayingProperty: BooleanProperty;
+
+  // For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
+  private readonly energyChunkGroup: EnergyChunkGroup;
+
+  // For PhET-iO support. This type is responsible for creating and destroying all EnergyChunkPathMover instances in this model.
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // Energy converters
+  public readonly generator: Generator;
+  public readonly solarPanel: SolarPanel;
+
+  // Energy sources
+  public readonly biker: Biker;
+  public readonly faucetAndWater: FaucetAndWater;
+  public readonly sun: SunEnergySource;
+  public readonly teaKettle: TeaKettle;
+
+  // Belt that connects biker to generator, which is not on a carousel
+  public readonly belt: Belt;
+
+  // Energy users
+  public readonly fan: Fan;
+  public readonly incandescentBulb: IncandescentBulb;
+  public readonly fluorescentBulb: FluorescentBulb;
+  public readonly beakerHeater: BeakerHeater;
+
+  // Carousels that control the positions of the energy sources, converters, and users
+  public readonly energySourcesCarousel: EnergySystemElementCarousel;
+  public readonly energyConvertersCarousel: EnergySystemElementCarousel;
+  public readonly energyUsersCarousel: EnergySystemElementCarousel;
+
+  private readonly carousels: EnergySystemElementCarousel[];
+
+  // Used to notify the view that a manual step was called
+  public readonly manualStepEmitter: Emitter<[ number ]>;
+
   public constructor( tandem: Tandem ) {
 
     // tandems to nest energy systems in Studio
@@ -49,30 +88,25 @@ class SystemsModel {
     const energyConvertersTandem = tandem.createTandem( 'energyConverters' );
     const energyUsersTandem = tandem.createTandem( 'energyUsers' );
 
-    // @public {BooleanProperty} - see in EFACIntroModel for doc
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
       phetioDocumentation: 'whether the energy chunks are visible'
     } );
 
-    // @public (read-only) {BooleanProperty} - is the sim running or paused?
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'isPlayingProperty' ),
       phetioDocumentation: 'whether the screen is playing or paused'
     } );
 
-    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunks in this model.
     this.energyChunkGroup = new EnergyChunkGroup( this.energyChunksVisibleProperty, {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    // @private - For PhET-iO support. This type is responsible for creating and destroying all EnergyChunkPathMover
-    // instances in this model.
+    // @ts-expect-error
     this.energyChunkPathMoverGroup = new EnergyChunkPathMoverGroup( this.energyChunkGroup, {
       tandem: tandem.createTandem( 'energyChunkPathMoverGroup' )
     } );
 
-    // @public (read-only) energy converters
     this.generator = new Generator(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
@@ -86,7 +120,6 @@ class SystemsModel {
         tandem: energyConvertersTandem.createTandem( 'solarPanel' )
       } );
 
-    // @public (read-only) energy sources
     this.biker = new Biker(
       this.energyChunksVisibleProperty,
       this.generator.activeProperty,
@@ -119,10 +152,8 @@ class SystemsModel {
     const wheel1Center = ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Biker.CENTER_OF_BACK_WHEEL_OFFSET );
     const wheel2Center = ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION.plus( Generator.WHEEL_CENTER_OFFSET );
 
-    // @public (read-only) belt that connects biker to generator, which is not on a carousel
     this.belt = new Belt( Biker.REAR_WHEEL_RADIUS, wheel1Center, Generator.WHEEL_RADIUS, wheel2Center );
 
-    // // @public (read-only) energy users
     this.fan = new Fan(
       this.energyChunksVisibleProperty,
       this.energyChunkGroup,
@@ -147,8 +178,8 @@ class SystemsModel {
         tandem: energyUsersTandem.createTandem( 'beakerHeater' )
       } );
 
-    // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
+      // @ts-expect-error
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
       EnumerationDeprecated.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ) as IntentionalAny,
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
@@ -156,6 +187,7 @@ class SystemsModel {
       tandem.createTandem( 'energySourcesCarousel' )
     );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
+      // @ts-expect-error
       [ this.generator, this.solarPanel ],
       EnumerationDeprecated.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ) as IntentionalAny,
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
@@ -163,6 +195,7 @@ class SystemsModel {
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
+      // @ts-expect-error
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
       EnumerationDeprecated.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ) as IntentionalAny,
 
@@ -171,14 +204,12 @@ class SystemsModel {
       tandem.createTandem( 'energyUsersCarousel' )
     );
 
-    // @private {EnergySystemElementCarousel[]}
     this.carousels = [
       this.energySourcesCarousel,
       this.energyConvertersCarousel,
       this.energyUsersCarousel
     ];
 
-    // @public - used to notify the view that a manual step was called
     this.manualStepEmitter = new Emitter( { parameters: [ { valueType: 'number' } ] } );
 
     // set isActive = true for the first element in each carousel
@@ -187,7 +218,7 @@ class SystemsModel {
     } );
 
     // adds the functionality to show/hide the belt that interconnects the biker and the generator
-    const beltVisibilityUpdated = isAnimating => {
+    const beltVisibilityUpdated = ( isAnimating: boolean ) => {
       const bikerAndGeneratorSelected = ( !isAnimating && this.biker.activeProperty.value &&
                                           this.generator.activeProperty.value );
       this.belt.isVisibleProperty.set( bikerAndGeneratorSelected );
@@ -215,9 +246,9 @@ class SystemsModel {
     this.isPlayingProperty.reset();
 
     this.carousels.forEach( carousel => {
-      carousel.getSelectedElement().deactivate();
+      carousel.getSelectedElement()!.deactivate();
       carousel.targetElementNameProperty.reset();
-      carousel.getSelectedElement().activate();
+      carousel.getSelectedElement()!.activate();
     } );
   }
 
@@ -250,15 +281,20 @@ class SystemsModel {
    * @param dt - time step in seconds
    */
   public stepModel( dt: number ): void {
-    const source = this.energySourcesCarousel.getSelectedElement();
-    const converter = this.energyConvertersCarousel.getSelectedElement();
-    const user = this.energyUsersCarousel.getSelectedElement();
+    const source = this.energySourcesCarousel.getSelectedElement()!;
+    const converter = this.energyConvertersCarousel.getSelectedElement()!;
+    const user = this.energyUsersCarousel.getSelectedElement()!;
 
     // {Energy} - step the currently selected energy system elements and transfer energy chunks in between each step
+    // @ts-expect-error
     const energyFromSource = source.step( dt );
+    // @ts-expect-error
     converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
+    // @ts-expect-error
     const energyFromConverter = converter.step( dt, energyFromSource );
+    // @ts-expect-error
     user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
+    // @ts-expect-error
     user.step( dt, energyFromConverter );
   }
 
@@ -271,8 +307,11 @@ class SystemsModel {
     const converter = this.energyConvertersCarousel.getSelectedElement();
     const user = this.energyUsersCarousel.getSelectedElement();
 
+    // @ts-expect-error
     source.preloadEnergyChunks();
+    // @ts-expect-error
     converter.preloadEnergyChunks( source.getEnergyOutputRate() );
+    // @ts-expect-error
     user.preloadEnergyChunks( converter.getEnergyOutputRate() );
   }
 }

@@ -1,10 +1,5 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
-/* eslint-disable */
-
 // Note: This file is a mashup of two ported Java files: Carousel and
 // EnergySystemElementCarousel. Carousel.java was not ported to avoid confusion
 // with the PhET Sun Carousel.js UI component.
@@ -25,9 +20,9 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
@@ -80,12 +75,9 @@ class EnergySystemElementCarousel {
 
     /**
      * calculates the valid target indices for this carousel
-     *
-     * @param {number} numberOfElements
-     * @returns {number[]}
      */
-    const getValidTargetIndices = numberOfElements => {
-      const validTargetIndices = [];
+    const getValidTargetIndices = ( numberOfElements: number ): number[] => {
+      const validTargetIndices: number[] = [];
       _.times( numberOfElements, index => {
         validTargetIndices.push( index );
       } );
