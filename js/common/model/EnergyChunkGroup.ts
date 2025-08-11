@@ -12,24 +12,29 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergyChunk from './EnergyChunk.js';
+import EnergyChunk, { EnergyChunkOptions } from './EnergyChunk.js';
 import EnergyType from './EnergyType.js';
+
+type SelfOptions = EmptySelfOptions;
+
+type EnergyChunkGroupOptions = SelfOptions & PhetioGroupOptions;
 
 class EnergyChunkGroup extends PhetioGroup {
 
   /**
    * @param energyChunksVisibleProperty - used to create the archetype
    */
-  public constructor( energyChunksVisibleProperty: BooleanProperty, options?: Object ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, providedOptions?: EnergyChunkGroupOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyChunkGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunk.EnergyChunkIO )
-    }, options );
+    }, providedOptions );
 
     super(
       EnergyChunkGroup.createEnergyChunk,
@@ -38,7 +43,7 @@ class EnergyChunkGroup extends PhetioGroup {
     );
   }
 
-  public static createEnergyChunk( tandem: Tandem, energyType: EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: Object ): EnergyChunk {
+  public static createEnergyChunk( tandem: Tandem, energyType: EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: EnergyChunkGroupOptions ): EnergyChunk {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkGroup supplies its own tandem' );
     return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( { tandem: tandem }, options ) );
   }

@@ -14,7 +14,7 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -29,6 +29,7 @@ import RectangularThermalMovableModelElement from '../../common/model/Rectangula
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType from './BlockType.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 
 // constants
 const NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
@@ -57,6 +58,10 @@ BLOCK_COMPOSITION[ BlockType.BRICK ] = {
 // static data
 let instanceCount = 0; // counter for creating unique IDs
 
+type SelfOptions = EmptySelfOptions;
+
+type BlockOptions = SelfOptions & PhetioObjectOptions;
+
 class Block extends RectangularThermalMovableModelElement {
 
   // Unique ID for this block
@@ -80,16 +85,16 @@ class Block extends RectangularThermalMovableModelElement {
    * @param blockType
    * @param energyChunkGroup
    * optional for the parent
-   * @param options
+   * @param providedOptions
    */
   public constructor( initialPosition: Vector2,
                energyChunksVisibleProperty: Property<boolean>,
                blockType: BlockType,
                energyChunkGroup: PhetioGroup<any>,
-               options?: Object ) {
+               providedOptions?: BlockOptions ) {
 
-    options = merge( {
-      energyChunkWanderControllerGroup: required( options.energyChunkWanderControllerGroup ),
+    const options = optionize<BlockOptions, SelfOptions, PhetioObjectOptions>()( {
+      energyChunkWanderControllerGroup: required( providedOptions.energyChunkWanderControllerGroup ),
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
 
       // phet-io
@@ -98,7 +103,7 @@ class Block extends RectangularThermalMovableModelElement {
       phetioState: true,
       phetioType: Block.BlockIO,
       phetioDocumentation: 'block that can be of type iron or brick'
-    }, options );
+    }, providedOptions );
 
     super(
       initialPosition,

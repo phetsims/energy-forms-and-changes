@@ -18,7 +18,7 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -35,7 +35,7 @@ import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
 import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
-import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
+import RectangularThermalMovableModelElement, { RectangularThermalMovableModelElementOptions } from './RectangularThermalMovableModelElement.js';
 import ThermalContactArea from './ThermalContactArea.js';
 import UserMovableModelElement from './UserMovableModelElement.js';
 
@@ -66,6 +66,14 @@ BEAKER_COMPOSITION[ BeakerType.OLIVE_OIL ] = {
 
 // file variable used for measuring performance during startup, see usage for more information
 let performanceMeasurementTaken = false;
+
+type SelfOptions = {
+  beakerType?: BeakerType;
+  majorTickMarkDistance?: number;
+  predistributedEnergyChunkConfigurations?: any[];
+};
+
+type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
 
 class Beaker extends RectangularThermalMovableModelElement {
 
@@ -107,11 +115,11 @@ class Beaker extends RectangularThermalMovableModelElement {
    * @param height
    * @param energyChunksVisibleProperty
    * @param energyChunkGroup
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
+  public constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: BeakerOptions ) {
 
-    options = merge( {
+    const options = optionize<BeakerOptions, SelfOptions, RectangularThermalMovableModelElementOptions>()( {
       beakerType: BeakerType.WATER,
       majorTickMarkDistance: height * 0.95 / 2, // empirically determined
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
@@ -120,7 +128,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       tandem: Tandem.REQUIRED,
       phetioType: Beaker.BeakerIO,
       phetioDocumentation: 'beaker that contains either water or olive oil, and may also contain blocks'
-    }, options );
+    }, providedOptions );
 
     // calculate the mass of the beaker
     const mass = Math.PI * Math.pow( width / 2, 2 ) * height * EFACConstants.INITIAL_FLUID_PROPORTION *

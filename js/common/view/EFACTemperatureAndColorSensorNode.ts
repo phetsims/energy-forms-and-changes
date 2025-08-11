@@ -14,15 +14,23 @@
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import TemperatureAndColorSensorNode from '../../../../scenery-phet/js/TemperatureAndColorSensorNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import TemperatureAndColorSensor from '../model/TemperatureAndColorSensor.js';
+
+type SelfOptions = {
+  modelViewTransform?: ModelViewTransform2;
+  draggable?: boolean;
+  dragBounds?: Bounds2;
+};
+
+type EFACTemperatureAndColorSensorNodeOptions = SelfOptions & NodeOptions;
 
 class EFACTemperatureAndColorSensorNode extends Node {
 
@@ -32,10 +40,10 @@ class EFACTemperatureAndColorSensorNode extends Node {
   /**
    * @param temperatureAndColorSensor - model element that measures temperature and color
    * at a position in model space
-   * @param options
+   * @param providedOptions
    */
-  public constructor( temperatureAndColorSensor: TemperatureAndColorSensor, options?: Object ) {
-    options = merge( {
+  public constructor( temperatureAndColorSensor: TemperatureAndColorSensor, providedOptions?: EFACTemperatureAndColorSensorNodeOptions ) {
+    const options = optionize<EFACTemperatureAndColorSensorNodeOptions, SelfOptions, NodeOptions>()( {
       modelViewTransform: ModelViewTransform2.createIdentity(),
       draggable: false,
       dragBounds: Bounds2.EVERYTHING,
@@ -44,7 +52,7 @@ class EFACTemperatureAndColorSensorNode extends Node {
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
 

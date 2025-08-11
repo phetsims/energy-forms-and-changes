@@ -17,28 +17,30 @@
 import { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from '../model/EnergyChunk.js';
 import EnergyChunkNode from './EnergyChunkNode.js';
 
-type EnergyChunkLayerOptions = {
+type SelfOptions = {
   // Property.<Vector2> - a position Property that will be used to compensate the energy chunk layer's position
   // such that it stays in untranslated screen-view coordinates. This is often used for an energy chunk layer that
   // is the child of a node that is being placed in the view according to its position value.
   parentPositionProperty?: Property<Vector2> | null;
 };
 
+type EnergyChunkLayerOptions = SelfOptions & NodeOptions;
+
 class EnergyChunkLayer extends Node {
 
-  public constructor( energyChunkList: ObservableArrayDef<EnergyChunk>, modelViewTransform: ModelViewTransform2, options?: EnergyChunkLayerOptions ) {
+  public constructor( energyChunkList: ObservableArrayDef<EnergyChunk>, modelViewTransform: ModelViewTransform2, providedOptions?: EnergyChunkLayerOptions ) {
     super();
 
-    options = merge( {
+    const options = optionize<EnergyChunkLayerOptions, SelfOptions, NodeOptions>()( {
       parentPositionProperty: null
-    }, options );
+    }, providedOptions );
 
     // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
     // when chunks are removed from the model.

@@ -17,11 +17,11 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -65,6 +65,15 @@ const BLOCK_ATTRIBUTES = {};
 BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: ironString };
 BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
 
+type SelfOptions = {
+
+  // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
+  // the energy chunks that are outside the block don't affect the bounds of the block.
+  approachingEnergyChunksLayer?: Node | null;
+};
+
+type BlockNodeOptions = SelfOptions & NodeOptions;
+
 class BlockNode extends Node {
 
   // The block model element
@@ -73,8 +82,8 @@ class BlockNode extends Node {
   // The layers where the energy chunks will be placed
   private readonly energyChunkRootNode: Node;
 
-  public constructor( block: Block, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, simIsPlayingProperty: BooleanProperty, options?: any ) {
-    options = merge( {
+  public constructor( block: Block, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, simIsPlayingProperty: BooleanProperty, providedOptions?: BlockNodeOptions ) {
+    const options = optionize<BlockNodeOptions, SelfOptions, NodeOptions>()( {
 
       // Allow a node to be specified that will act as the parent for approaching energy chunks - this makes it so that
       // the energy chunks that are outside the block don't affect the bounds of the block.
@@ -84,7 +93,7 @@ class BlockNode extends Node {
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioType: Node.NodeIO
-    }, options );
+    }, providedOptions );
 
     super( options );
 

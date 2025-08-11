@@ -10,7 +10,8 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -22,13 +23,20 @@ const FADE_HEIGHT = 200; // height of the gradient regions of this node, in view
 const TRANSPARENT_FILL = 'rgba( 255, 255, 255, 0 )';
 const OPAQUE_FILL = 'white';
 
+type SelfOptions = EmptySelfOptions;
+
+type SkyNodeOptions = SelfOptions & NodeOptions;
+
 class SkyNode extends Node {
 
   /**
    * @param layoutBounds - the layout bounds of the parent screen
    * @param fullOpaqueYPosition - the y position at which this node should become completely opaque, in view coordinates
    */
-  public constructor( layoutBounds: Bounds2, fullOpaqueYPosition: number, options?: object ) {
+  public constructor( layoutBounds: Bounds2, fullOpaqueYPosition: number, providedOptions?: SkyNodeOptions ) {
+    
+    const options = optionize<SkyNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
+    
     super( options );
 
     const transparentToOpaque = new LinearGradient( 0, 0, 0, FADE_HEIGHT )

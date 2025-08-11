@@ -15,7 +15,8 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
-import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -29,6 +30,10 @@ const MAX_STEAM_BUBBLE_HEIGHT = 300;
 const STEAM_BUBBLE_RATE_RANGE = new Range( 20, 40 ); // bubbles per second
 const STEAM_BUBBLE_GROWTH_RATE = 0.2; // proportion per second
 const MAX_STEAM_BUBBLE_OPACITY = 0.7; // proportion, 0 to 1
+
+type SelfOptions = EmptySelfOptions;
+
+type BeakerSteamCanvasNodeOptions = SelfOptions & CanvasNodeOptions;
 
 class BeakerSteamCanvasNode extends CanvasNode {
 
@@ -61,9 +66,12 @@ class BeakerSteamCanvasNode extends CanvasNode {
    * @param temperatureProperty - the temperature of the liquid
    * @param fluidBoilingPoint
    * @param steamColor
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( containerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, steamColor: Color, options?: Object ) {
+  public constructor( containerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, steamColor: Color, providedOptions?: BeakerSteamCanvasNodeOptions ) {
+    
+    const options = optionize<BeakerSteamCanvasNodeOptions, SelfOptions, CanvasNodeOptions>()( {}, providedOptions );
+    
     super( options );
 
     this.containerOutlineRect = containerOutlineRect;

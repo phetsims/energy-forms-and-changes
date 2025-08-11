@@ -14,7 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -23,18 +23,24 @@ import EFACConstants from '../EFACConstants.js';
 import EFACIntroModel from '../../intro/model/EFACIntroModel.js';
 import UserMovableModelElement from './UserMovableModelElement.js';
 
+// Since UserMovableModelElement doesn't export options, we use the parent's parent (PhetioObject) options
+// or a general approach with Object type for the parent options
+type SelfOptions = EmptySelfOptions;
+
+type TemperatureAndColorSensorOptions = SelfOptions & Object; // Using Object since parent options are not exported
+
 class TemperatureAndColorSensor extends UserMovableModelElement {
 
-  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, options?: Object ) {
+  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, providedOptions?: TemperatureAndColorSensorOptions ) {
 
-    options = merge( {
+    const options = optionize<TemperatureAndColorSensorOptions, SelfOptions, Object>()( {
       tandem: Tandem.REQUIRED,
       phetioState: false,
       positionPropertyOptions: {
         phetioDocumentation: 'the position of the tip of the thermometer\'s color sensor'
       },
       phetioDocumentation: 'thermometer that can sense the temperature, color, and phet-io ID of an element'
-    }, options );
+    }, providedOptions );
 
     super( initialPosition, options );
 

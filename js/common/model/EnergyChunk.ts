@@ -15,10 +15,10 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import EventType from '../../../../tandem/js/EventType.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -29,6 +29,15 @@ import EnergyType from './EnergyType.js';
 
 // static data
 let instanceCount = 0; // counter for creating unique IDs
+
+type SelfOptions = {
+
+  // {number} - The unique id of the chunk. Most often EnergyChunk set's it own. This should only be specified by
+  // PhET-iO, to support PhET-iO state recreating exact instances.
+  id?: number | null;
+};
+
+type EnergyChunkOptions = SelfOptions & PhetioObjectOptions;
 
 class EnergyChunk extends PhetioObject {
 
@@ -53,19 +62,16 @@ class EnergyChunk extends PhetioObject {
   // Z position for layering (convenience property)
   public zPosition: number;
 
-  public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, options?: any ) {
+  public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, providedOptions?: EnergyChunkOptions ) {
 
-    options = merge( {
-
-      // {number} - The unique id of the chunk. Most often EnergyChunk set's it own. This should only be specified by
-      // PhET-iO, to support PhET-iO state recreating exact instances.
+    const options = optionize<EnergyChunkOptions, SelfOptions, PhetioObjectOptions>()( {
       id: null,
 
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioType: EnergyChunk.EnergyChunkIO,
       phetioDynamicElement: true
-    }, options );
+    }, providedOptions );
 
     super( options );
 

@@ -16,7 +16,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -54,6 +54,12 @@ const THERMAL_CONTACT_AREA = new ThermalContactArea( new Bounds2( -SIZE.width / 
 // instance counter used for creating unique IDs
 let instanceCounter = 0;
 
+type SelfOptions = EmptySelfOptions;
+
+type AirOptions = SelfOptions & {
+  tandem?: Tandem;
+};
+
 class Air {
 
   private readonly energyChunksVisibleProperty: BooleanProperty;
@@ -77,11 +83,11 @@ class Air {
   /**
    * @param energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    */
-  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup, options?: Object ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup, providedOptions?: AirOptions ) {
 
-    options = merge( {
+    const options = optionize<AirOptions, SelfOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 

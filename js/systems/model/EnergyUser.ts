@@ -12,22 +12,27 @@
  */
 
 import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
+type SelfOptions = EmptySelfOptions;
+
+type EnergyUserOptions = SelfOptions & PhetioObjectOptions;
+
 class EnergyUser extends EnergySystemElement {
 
   protected readonly incomingEnergyChunks: ObservableArrayDef<EnergyChunk>;
 
-  public constructor( iconImage: HTMLImageElement, options?: Object ) {
+  public constructor( iconImage: HTMLImageElement, providedOptions?: EnergyUserOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyUserOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( iconImage, options );
 

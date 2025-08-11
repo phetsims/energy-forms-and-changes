@@ -19,9 +19,11 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import BeakerView from '../../common/view/BeakerView.js';
@@ -34,6 +36,11 @@ import ThermalElementDragHandler from './ThermalElementDragHandler.js';
 // constants
 const BLOCK_PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
 const BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION;
+
+// Since BeakerView doesn't export its options type, we use PhetioObjectOptions from its parent
+type SelfOptions = EmptySelfOptions;
+
+type BeakerContainerViewOptions = SelfOptions & PhetioObjectOptions;
 
 class BeakerContainerView extends BeakerView {
 
@@ -53,7 +60,12 @@ class BeakerContainerView extends BeakerView {
 
   private readonly clipAreaHelperNode?: Path;
 
-  public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, options?: Object ) {
+  public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, providedOptions?: BeakerContainerViewOptions ) {
+    
+    const options = optionize<BeakerContainerViewOptions, SelfOptions, PhetioObjectOptions>()( {
+      // BeakerContainerView has no new options, using EmptySelfOptions
+    }, providedOptions );
+    
     super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
     this.beaker = beaker;
@@ -236,3 +248,4 @@ class BeakerContainerView extends BeakerView {
 
 energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
 export default BeakerContainerView;
+export { type BeakerContainerViewOptions };

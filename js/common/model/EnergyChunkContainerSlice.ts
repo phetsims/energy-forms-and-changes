@@ -22,14 +22,18 @@ import createObservableArray from '../../../../axon/js/createObservableArray.js'
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
+
+type SelfOptions = EmptySelfOptions;
+
+type EnergyChunkContainerSliceOptions = SelfOptions & PhetioObjectOptions;
 
 class EnergyChunkContainerSlice extends PhetioObject {
 
@@ -50,14 +54,14 @@ class EnergyChunkContainerSlice extends PhetioObject {
    * @param bounds
    * @param zPosition - used to give appearance of depth
    * @param anchorPointProperty
-   * @param options
+   * @param providedOptions
    */
-  public constructor( bounds: Bounds2, zPosition: number, anchorPointProperty: Property<Vector2>, options?: Object ) {
+  public constructor( bounds: Bounds2, zPosition: number, anchorPointProperty: Property<Vector2>, providedOptions?: EnergyChunkContainerSliceOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyChunkContainerSliceOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
       phetioType: EnergyChunkContainerSlice.EnergyChunkContainerSliceIO
-    }, options );
+    }, providedOptions );
 
     super( options );
 

@@ -15,9 +15,9 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -35,6 +35,23 @@ const MAX_TIME_IN_ONE_DIRECTION = 0.8;
 const DISTANCE_AT_WHICH_TO_STOP_WANDERING = 0.05; // in meters, empirically chosen
 const DEFAULT_ANGLE_VARIATION = Math.PI * 0.2; // deviation from angle to destination, in radians, empirically chosen.
 const GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if destination changes, speed increases
+
+type SelfOptions = {
+
+  // bounding range in the X direction within which the energy chunk's motion should be constrained.
+  // Not all energy chunks need this constraint, so null is an acceptable value
+  horizontalWanderConstraint?: Range | null;
+
+  // range of angle variations, higher means more wandering, in radians from Math.PI to zero
+  wanderAngleVariation?: number;
+
+  // Translate the EC position and wander constraints horizontally if the destination changes.  This
+  // was found to be useful to help prevent "chase scenes" when an energy was heading towards an object and the
+  // user started dragging that object.
+  translateXWithDestination?: boolean;
+};
+
+type EnergyChunkWanderControllerOptions = SelfOptions & PhetioObjectOptions;
 
 class EnergyChunkWanderController extends PhetioObject {
 
@@ -54,27 +71,18 @@ class EnergyChunkWanderController extends PhetioObject {
   private countdownTimer: number;
   private readonly disposeEnergyChunkWanderController: () => void;
 
-  public constructor( energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: any ) {
+  public constructor( energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, providedOptions?: EnergyChunkWanderControllerOptions ) {
 
-    options = merge( {
-
-      // {Range|null} - bounding range in the X direction within which the energy chunk's motion should be constrained.
-      // Not all energy chunks need this constraint, so null is an acceptable value
+    const options = optionize<EnergyChunkWanderControllerOptions, SelfOptions, PhetioObjectOptions>()( {
       horizontalWanderConstraint: null,
-
-      // {number} - range of angle variations, higher means more wandering, in radians from Math.PI to zero
       wanderAngleVariation: DEFAULT_ANGLE_VARIATION,
-
-      // {boolean} - Translate the EC position and wander constraints horizontally if the destination changes.  This
-      // was found to be useful to help prevent "chase scenes" when an energy was heading towards an object and the
-      // user started dragging that object.
       translateXWithDestination: true,
 
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioType: EnergyChunkWanderController.EnergyChunkWanderControllerIO,
       phetioDynamicElement: true
-    }, options );
+    }, providedOptions );
 
     // parameter checking
     assert && options.horizontalWanderConstraint && assert(

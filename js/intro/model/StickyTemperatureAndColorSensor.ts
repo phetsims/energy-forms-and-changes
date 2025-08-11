@@ -11,16 +11,22 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACIntroModel from './EFACIntroModel.js';
 
+type SelfOptions = EmptySelfOptions;
+
+// Since TemperatureAndColorSensor doesn't export an options type, we'll use Object for parent options
+type StickyTemperatureAndColorSensorOptions = SelfOptions & Object;
+
 class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
-  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, options?: Object ) {
-    super( model, initialPosition, initiallyActive, options );
+  public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, providedOptions?: StickyTemperatureAndColorSensorOptions ) {
+    super( model, initialPosition, initiallyActive, providedOptions );
 
     // @private
     this.elementFollower = new ElementFollower( this.positionProperty );

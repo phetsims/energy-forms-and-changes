@@ -13,21 +13,26 @@
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PhetioGroup, { type PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 
+type SelfOptions = EmptySelfOptions;
+
+type EnergyChunkWanderControllerGroupOptions = SelfOptions & PhetioGroupOptions;
+
 class EnergyChunkWanderControllerGroup extends PhetioGroup {
 
-  public constructor( energyChunkGroup: EnergyChunkGroup, options?: any ) {
+  public constructor( energyChunkGroup: EnergyChunkGroup, providedOptions?: EnergyChunkWanderControllerGroupOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyChunkWanderControllerGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO )
-    }, options );
+    }, providedOptions );
 
     // If other archetypes don't exist, then we won't create ours, so these values can be null.
     const defaultArguments = () => {

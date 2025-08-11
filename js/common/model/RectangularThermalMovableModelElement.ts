@@ -19,7 +19,8 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -38,6 +39,19 @@ import UserMovableModelElement from './UserMovableModelElement.js';
 
 // const
 const MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME = 2; // in seconds, empirically determined to allow good distributions
+
+type SelfOptions = {
+
+  // This must be supplied to add EnergyChunks outside of the slices in this
+  // element. Usages of this largely correspond to approachingEnergyChunks. See addEnergyChunk() for details.
+  energyChunkWanderControllerGroup?: EnergyChunkWanderControllerGroup | null;
+
+  // pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
+  // set up the model element with reasonably distributed energy chunks.
+  predistributedEnergyChunkConfigurations?: any[];
+};
+
+type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;
 
 class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
@@ -99,21 +113,13 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * @param mass - in kg
    * @param specificHeat - in J/kg-K
    */
-  public constructor( initialPosition: Vector2, width: number, height: number, mass: number, specificHeat: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: any ) {
+  public constructor( initialPosition: Vector2, width: number, height: number, mass: number, specificHeat: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: RectangularThermalMovableModelElementOptions ) {
 
-    options = merge( {
-
-      // {null|EnergyChunkWanderController} - This must be supplied to add EnergyChunks outside of the slices in this
-      // element. Usages of this largely correspond to approachingEnergyChunks. See addEnergyChunk() for details.
+    const options = optionize<RectangularThermalMovableModelElementOptions, SelfOptions, PhetioObjectOptions>()( {
       energyChunkWanderControllerGroup: null,
-
-      // {Object[]} - pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
-      // set up the model element with reasonably distributed energy chunks.
       predistributedEnergyChunkConfigurations: [],
-
-      // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( initialPosition, options );
 

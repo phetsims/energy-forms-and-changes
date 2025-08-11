@@ -19,12 +19,13 @@ import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -47,6 +48,12 @@ const LABEL_FONT = new PhetFont( 26 );
 const BEAKER_COLOR = 'rgba( 250, 250, 250, 0.39 )'; // alpha value chosen empirically
 const NUMBER_OF_MINOR_TICKS_PER_MAJOR_TICK = 4; // number of minor ticks between each major tick. Generalize if needed.
 
+type SelfOptions = {
+  label?: string;
+};
+
+type BeakerViewOptions = SelfOptions & PhetioObjectOptions;
+
 class BeakerView extends PhetioObject {
 
   private readonly modelViewTransform: ModelViewTransform2;
@@ -68,18 +75,18 @@ class BeakerView extends PhetioObject {
    * @param beaker - model of a beaker
    * @param energyChunksVisibleProperty
    * @param modelViewTransform
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( beaker: Beaker, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, options?: any ) {
+  public constructor( beaker: Beaker, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, providedOptions?: BeakerViewOptions ) {
 
-    options = merge( {
+    const options = optionize<BeakerViewOptions, SelfOptions, PhetioObjectOptions>()( {
       label: waterString,
 
       // phet-io
       tandem: Tandem.REQUIRED,
       phetioType: ReferenceIO( IOType.ObjectIO ),
       phetioState: false
-    }, options );
+    }, providedOptions );
 
     super( options );
 

@@ -19,7 +19,7 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -28,9 +28,10 @@ import Air from '../../intro/model/Air.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
+import EnergyChunkWanderControllerGroup from './EnergyChunkWanderControllerGroup.js';
 import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
-import ModelElement from './ModelElement.js';
+import ModelElement, { ModelElementOptions } from './ModelElement.js';
 import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
 
 // constants
@@ -47,6 +48,15 @@ const MAX_ENERGY_GENERATION_RATE_INTO_AIR = MAX_ENERGY_GENERATION_RATE * 0.3;
 
 // counter used by constructor to create unique IDs for each burner
 let idCounter = 0;
+
+type SelfOptions = {
+
+  // This is an option because only some Burners create wanderers for their EnergyChunks. If creating one, this must
+  // be provided to support PhET-iO state
+  energyChunkWanderControllerGroup?: EnergyChunkWanderControllerGroup | null;
+};
+
+type BurnerOptions = SelfOptions & ModelElementOptions;
 
 class Burner extends ModelElement {
 
@@ -86,15 +96,12 @@ class Burner extends ModelElement {
    * @param energyChunksVisibleProperty - controls whether the energy chunks are visible
    * @param energyChunkGroup
    */
-  public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: PhetioGroup<EnergyChunk>, options?: any ) {
+  public constructor( position: Vector2, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: PhetioGroup<EnergyChunk>, providedOptions?: BurnerOptions ) {
 
-    options = merge( {
-
-      // This is an option because only some Burners create wanderers for their EnergyChunks. If creating one, this must
-      // be provided to support PhET-iO state
+    const options = optionize<BurnerOptions, SelfOptions, ModelElementOptions>()( {
       energyChunkWanderControllerGroup: null,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( position, options );
 

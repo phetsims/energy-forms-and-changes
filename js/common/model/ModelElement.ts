@@ -15,12 +15,19 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
+
+type SelfOptions = {
+  positionPropertyOptions?: Object;
+};
+
+type ModelElementOptions = SelfOptions & PhetioObjectOptions;
 
 class ModelElement extends PhetioObject {
 
@@ -54,9 +61,9 @@ class ModelElement extends PhetioObject {
   // Compensation for evaluating positions of elements that have perspective in the view
   public perspectiveCompensation: Vector2;
 
-  public constructor( initialPosition: Vector2, options?: Object ) {
+  public constructor( initialPosition: Vector2, providedOptions?: ModelElementOptions ) {
 
-    options = merge( {
+    const options = optionize<ModelElementOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioType: ReferenceIO( IOType.ObjectIO ),
       phetioState: false,
@@ -65,7 +72,7 @@ class ModelElement extends PhetioObject {
         phetioHighFrequency: true,
         phetioDocumentation: 'the center-bottom position of the element'
       }
-    }, options );
+    }, providedOptions );
 
     super( options );
 
