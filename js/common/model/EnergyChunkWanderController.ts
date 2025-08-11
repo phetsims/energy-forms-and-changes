@@ -78,8 +78,6 @@ class EnergyChunkWanderController extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: EnergyChunkWanderController.EnergyChunkWanderControllerIO,
       phetioDynamicElement: true
     }, providedOptions );
@@ -320,15 +318,12 @@ class EnergyChunkWanderController extends PhetioObject {
     this.horizontalWanderConstraint = horizontalWanderConstraint;
   }
 
-  public static readonly EnergyChunkWanderControllerIO = new IOType<EnergyChunkWanderController>( 'EnergyChunkWanderControllerIO', {
+  public static readonly EnergyChunkWanderControllerIO = new IOType<EnergyChunkWanderController, IntentionalAny>( 'EnergyChunkWanderControllerIO', {
     valueType: EnergyChunkWanderController,
-
-    // @ts-expect-error
     toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
     stateObjectToCreateElementArguments: stateObject => EnergyChunkWanderController.stateObjectToCreateElementArguments( stateObject ),
     applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
     stateSchema: {
-      // @ts-expect-error
       minSpeed: NumberIO,
       maxSpeed: NumberIO,
       wanderAngleVariation: NumberIO,
