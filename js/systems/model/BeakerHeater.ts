@@ -10,15 +10,15 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import Color from '../../../../scenery/js/Color.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import waterIcon_png from '../../../images/waterIcon_png.js';
@@ -67,6 +67,35 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class BeakerHeater extends EnergyUser {
 
+  // A11y name
+  public a11yName: string;
+
+  private readonly energyChunksVisibleProperty: BooleanProperty;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // Proportion of how much heat the coils have
+  public readonly heatProportionProperty: NumberProperty;
+
+  // Arrays that move the energy chunks as they move into, within, and out of the beaker
+  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly heatingElementEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+
+  // Energy chunks that are radiated by this beaker
+  public readonly radiatedEnergyChunkList: ObservableArrayDef<EnergyChunk>;
+
+  // Used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
+  private readonly waterBeakerTandem: Tandem;
+
+  // Note that the position is absolute, not relative to the "parent" model element
+  public readonly beaker: Beaker;
+
+  public readonly thermometer: TemperatureAndColorSensor;
+
+  // For convenience
+  private readonly random: typeof dotRandom;
+
   public constructor( energyChunksVisibleProperty: BooleanProperty,
                       energyChunkGroup: EnergyChunkGroup,
                       energyChunkPathMoverGroup: EnergyChunkPathMoverGroup,
@@ -79,15 +108,12 @@ class BeakerHeater extends EnergyUser {
 
     super( new Image( waterIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.beakerOfWater;
 
-    // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
-    // @public (read-only) {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'heatProportionProperty' ),
@@ -96,8 +122,6 @@ class BeakerHeater extends EnergyUser {
       phetioDocumentation: 'proportion of how much heat the coils have'
     } );
 
-    // @private {ObservableArrayDef.<EnergyChunkPathMover>} - arrays that move the energy chunks as they move into, within, and out of the
-    // beaker
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
@@ -111,16 +135,13 @@ class BeakerHeater extends EnergyUser {
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
-    // @public (read-only) {ObservableArrayDef} - energy chunks that are radiated by this beaker
     this.radiatedEnergyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // @private {Tandem} - used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
     this.waterBeakerTandem = options.tandem.createTandem( 'waterBeaker' );
 
-    // @public {Beaker} (read-only) - note that the position is absolute, not relative to the "parent" model element
     this.beaker = new Beaker(
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
@@ -133,7 +154,6 @@ class BeakerHeater extends EnergyUser {
       }
     );
 
-    // @public {TemperatureAndColorSensor} (read-only)
     this.thermometer = new TemperatureAndColorSensor(
       this,
       new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
@@ -143,7 +163,6 @@ class BeakerHeater extends EnergyUser {
       }
     );
 
-    // @private, for convenience
     this.random = dotRandom;
 
     // move the beaker as the overall position changes

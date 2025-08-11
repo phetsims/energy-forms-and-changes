@@ -13,7 +13,7 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import required from '../../../../phet-core/js/required.js';
-import { BooleanProperty } from '../../../../axon/js/axon.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -25,6 +25,11 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 let idCounter = 0;
 
 class BeakerContainer extends Beaker {
+
+  // ID of this beaker
+  public readonly id: string;
+
+  private readonly potentiallyContainedElements: Block[];
 
   public constructor( initialPosition: Vector2,
                width: number,
@@ -38,10 +43,8 @@ class BeakerContainer extends Beaker {
 
     super( initialPosition, width, height, energyChunksVisibleProperty, energyChunkGroup, config );
 
-    // @public (read-only) {string} - id of this beaker
     this.id = `beaker-container-${idCounter++}`;
 
-    // @private
     this.potentiallyContainedElements = potentiallyContainedElements;
   }
 

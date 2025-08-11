@@ -14,7 +14,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import UserMovableModelElement from '../model/UserMovableModelElement.js';

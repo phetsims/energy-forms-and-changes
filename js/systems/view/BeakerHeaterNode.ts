@@ -11,6 +11,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -34,6 +35,8 @@ const COIL_CENTER_X_OFFSET = -4;
 const COIL_TOP_OFFSET = 15;
 
 class BeakerHeaterNode extends MoveFadeModelElementNode {
+
+  public readonly beakerProxyNode: BeakerView;
 
   public constructor( beakerHeater: BeakerHeater, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( beakerHeater, modelViewTransform, tandem );
@@ -89,7 +92,6 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
       modelViewTransform.getMatrix().getScaleVector().x
     );
 
-    // @public (read-only) {BeakerView}
     this.beakerProxyNode = new BeakerView( beakerHeater.beaker, energyChunksVisibleProperty, scaleAndTranslateMVT, {
       tandem: tandem.createTandem( 'beakerProxyNode' )
     } );

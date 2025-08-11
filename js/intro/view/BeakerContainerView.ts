@@ -37,19 +37,31 @@ const BLOCK_PERSPECTIVE_EDGE_PROPORTION = EFACConstants.BLOCK_PERSPECTIVE_EDGE_P
 
 class BeakerContainerView extends BeakerView {
 
+  private readonly beaker: BeakerContainer;
+
+  // A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
+  // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
+  // go between the beaker and the heater/cooler.
+  private readonly untransformedBeakerClipShape: Shape;
+
+  // These values are used for calculating the clipping caused by the presence of blocks in the beaker.
+  // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
+  // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
+  private readonly blockWidthInView?: number;
+  private readonly blockHeightInView?: number;
+  private readonly forwardProjectionVector?: Vector2;
+
+  private readonly clipAreaHelperNode?: Path;
+
   public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, options?: Object ) {
     super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
-    // @private
     this.beaker = beaker;
 
     // variables for creating reusable shapes for doing the updates to the clipping areas
     const beakerRectangleWidthInView = -modelViewTransform.modelToViewDeltaY( beaker.width );
     const beakerRectangleHeightInView = -modelViewTransform.modelToViewDeltaY( beaker.height );
 
-    // @private {Shape} - A shape that corresponds to the untransformed beaker content shape, used for the energy chunk
-    // clip area.  It is extended a ways up for chunks that come from the top of the air and extends down for those that
-    // go between the beaker and the heater/cooler.
     this.untransformedBeakerClipShape = Shape.rect(
       -beakerRectangleWidthInView / 2,
       -beakerRectangleHeightInView * 9,
@@ -57,9 +69,6 @@ class BeakerContainerView extends BeakerView {
       beakerRectangleHeightInView * 9.5
     );
 
-    // @private - These values are used for calculating the clipping caused by the presence of blocks in the beaker.
-    // They are computed once here so that they don't have to be recomputed every time the clipping shape is updated.
-    // This assumes the blocks are all the same size and do not change size. Only needed if any blocks exist.
     if ( model.blockGroup.count ) {
       this.blockWidthInView = modelViewTransform.modelToViewDeltaX( model.blockGroup.getElement( 0 ).width );
       this.blockHeightInView = -modelViewTransform.modelToViewDeltaY( model.blockGroup.getElement( 0 ).height );

@@ -13,15 +13,18 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Air from '../../intro/model/Air.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
@@ -29,9 +32,6 @@ import EnergyType from './EnergyType.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement from './ModelElement.js';
 import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
-import Air from '../../intro/model/Air.js';
-import { PhetioGroup } from '../../../../tandem/js/PhetioGroup.js';
-import Property from '../../../../axon/js/Property.js';
 
 // constants
 const SIDE_LENGTH = 0.075; // in meters

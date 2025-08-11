@@ -10,13 +10,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
-import Property from '../../../../axon/js/Property.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';

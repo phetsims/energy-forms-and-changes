@@ -17,7 +17,6 @@ import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import { Color } from '../../../../scenery/js/imports.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
