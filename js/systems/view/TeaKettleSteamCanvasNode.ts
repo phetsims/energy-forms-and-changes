@@ -15,6 +15,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -37,7 +38,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
    * @param maxEnergyOutput
    * @param options
    */
-  public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, options?: Object ) {
+  public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, options?: IntentionalAny ) {
 
     options = merge( {
       steamAngle: TeaKettle.SPOUT_EXIT_ANGLE, // {number}

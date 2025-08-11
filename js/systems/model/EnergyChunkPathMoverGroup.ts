@@ -12,6 +12,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -21,7 +22,7 @@ import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 
 class EnergyChunkPathMoverGroup extends PhetioGroup {
 
-  public constructor( energyChunkGroup: EnergyChunkGroup, options?: Object ) {
+  public constructor( energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -32,7 +33,7 @@ class EnergyChunkPathMoverGroup extends PhetioGroup {
       () => [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
   }
 
-  public static createEnergyChunkPathMover( tandem: Tandem, energyChunk: EnergyChunk, path: Vector2[], speed: number, options?: Object ): EnergyChunkPathMover {
+  public static createEnergyChunkPathMover( tandem: Tandem, energyChunk: EnergyChunk, path: Vector2[], speed: number, options?: IntentionalAny ): EnergyChunkPathMover {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkPathMoverGroup supplies its own tandem' );
     return new EnergyChunkPathMover( energyChunk, path, speed, merge( { tandem: tandem }, options ) );
   }

@@ -10,6 +10,7 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // @public
@@ -19,7 +20,7 @@ const BeakerType = EnumerationDeprecated.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
       return `${_.camelCase( beakerType.toString() )}Beaker`;
     };
   }
-} );
+} ) as IntentionalAny;
 
 energyFormsAndChanges.register( 'BeakerType', BeakerType );
 export default BeakerType;

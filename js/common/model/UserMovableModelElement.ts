@@ -14,6 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
@@ -24,7 +25,7 @@ import ModelElement from './ModelElement.js';
 
 class UserMovableModelElement extends ModelElement {
 
-  public constructor( initialPosition: Vector2, options?: Object ) {
+  public constructor( initialPosition: Vector2, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,

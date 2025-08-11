@@ -88,9 +88,6 @@ class Burner extends ModelElement {
 
   private readonly energyChunkGroup: PhetioGroup<EnergyChunk>;
 
-  // See base class for description
-  public readonly topSurface: HorizontalSurface;
-
   /**
    * @param position - the position in model space where this burner exists
    * @param energyChunksVisibleProperty - controls whether the energy chunks are visible
@@ -226,7 +223,7 @@ class Burner extends ModelElement {
     assert && assert( this.energyChunkWanderControllerGroup,
       'Must provided wander controller group if creating wander controllers' );
 
-    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
+    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup!.createNextElement(
       energyChunk,
       new Vector2Property( this.getCenterPoint(), { valueComparisonStrategy: 'equalsFunction' } ),
       { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
@@ -239,7 +236,7 @@ class Burner extends ModelElement {
    * @returns closest energy chunk, null if none are contained
    */
   public extractEnergyChunkClosestToPoint( point: Vector2 ): EnergyChunk | null {
-    let closestEnergyChunk = null;
+    let closestEnergyChunk: EnergyChunk | null = null;
     if ( this.energyChunkList.length > 0 ) {
       this.energyChunkList.forEach( energyChunk => {
         if ( energyChunk.positionProperty.value.distance( this.position ) > ENERGY_CHUNK_CAPTURE_DISTANCE &&
@@ -257,7 +254,7 @@ class Burner extends ModelElement {
         this.energyChunkWanderControllers.forEach( energyChunkWanderController => {
           if ( energyChunkWanderController.energyChunk === closestEnergyChunk ) {
             this.energyChunkWanderControllers.remove( energyChunkWanderController );
-            this.energyChunkWanderControllerGroup.disposeElement( energyChunkWanderController );
+            this.energyChunkWanderControllerGroup!.disposeElement( energyChunkWanderController );
           }
         } );
       }

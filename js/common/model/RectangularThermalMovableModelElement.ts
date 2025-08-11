@@ -11,7 +11,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
@@ -20,16 +20,17 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
-import EnergyChunkGroup from './EnergyChunkGroup.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
+import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyChunkWanderControllerGroup from './EnergyChunkWanderControllerGroup.js';
 import EnergyType from './EnergyType.js';
@@ -51,7 +52,7 @@ type SelfOptions = {
   predistributedEnergyChunkConfigurations?: any[];
 };
 
-type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;
+export type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;
 
 class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
@@ -65,21 +66,21 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   public readonly energyProperty: NumberProperty;
 
   // energy chunks that are approaching this model element
-  public readonly approachingEnergyChunks: ReturnType<typeof createObservableArray>;
+  public readonly approachingEnergyChunks: ObservableArray<IntentionalAny>;
 
   // motion controllers for the energy chunks that are approaching this model element
-  private readonly energyChunkWanderControllers: ReturnType<typeof createObservableArray>;
+  private readonly energyChunkWanderControllers: ObservableArray<IntentionalAny>;
 
   // pre-distributed energy chunk configuration,used for fast initialization, see usages for format
-  private readonly predistributedEnergyChunkConfigurations: any[];
+  private readonly predistributedEnergyChunkConfigurations: IntentionalAny[];
 
   // composite bounds for this model element, maintained as position changes
   private readonly bounds: Bounds2;
   private readonly energyChunkGroup: EnergyChunkGroup;
-  private readonly energyChunkWanderControllerGroup: any;
+  private readonly energyChunkWanderControllerGroup: IntentionalAny;
 
   // the 2D area for this element where it can be in contact with another thermal elements and thus exchange heat, generally set by descendant classes
-  protected readonly thermalContactArea: ThermalContactArea;
+  public thermalContactArea: ThermalContactArea;
   public readonly temperatureProperty: NumberProperty;
 
   // untranslated bounds for this model element
@@ -107,7 +108,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   private readonly minEnergy: number;
 
   // 2D "slices" of the container, used for 3D layering of energy chunks in the view
-  public readonly slices: ReturnType<typeof createObservableArray>;
+  public readonly slices: ObservableArray<IntentionalAny>;
 
   /**
    * @param mass - in kg
@@ -322,14 +323,14 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     return this.energyProperty.value / ( this.mass * this.specificHeat );
   }
 
-  get temperature() {
+  public get temperature(): number {
     return this.getTemperature();
   }
 
   /**
    * restore initial state
    */
-  public reset(): void {
+  public override reset(): void {
     super.reset();
     this.energyProperty.reset();
     this.temperatureProperty.reset();

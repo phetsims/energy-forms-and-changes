@@ -11,6 +11,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -31,7 +32,7 @@ class FallingWaterCanvasNode extends CanvasNode {
    * @param modelViewTransform
    * @param options - that can be passed on to the underlying node
    */
-  public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: Object ) {
+  public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
     super( options );
 
     this.waterDrops = waterDrops;

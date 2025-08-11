@@ -99,14 +99,14 @@ const EFACConstants = {
   SIM_TIME_PER_TICK_NORMAL: 1 / FRAMES_PER_SECOND,
   MAX_HEAT_EXCHANGE_TIME_STEP: SIM_TIME_PER_TICK_NORMAL,
 
-  MAP_Z_TO_XY_OFFSET: zValue => {
+  MAP_Z_TO_XY_OFFSET: ( zValue: number ) => {
     return new Vector2( zValue * Z_TO_X_OFFSET_MULTIPLIER, zValue * Z_TO_Y_OFFSET_MULTIPLIER );
   },
 
   // for comparing temperatures
   SIGNIFICANT_TEMPERATURE_DIFFERENCE: 1E-3, // in degrees Kelvin
 
-  ENERGY_TO_NUM_CHUNKS_MAPPER: energy => {
+  ENERGY_TO_NUM_CHUNKS_MAPPER: ( energy: number ) => {
     return Math.max( Utils.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS.evaluate( energy ) ), 0 );
   },
 

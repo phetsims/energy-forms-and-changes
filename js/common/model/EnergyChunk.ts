@@ -48,7 +48,7 @@ class EnergyChunk extends PhetioObject {
   public readonly zPositionProperty: NumberProperty;
 
   // Energy type property
-  public readonly energyTypeProperty: EnumerationDeprecatedProperty<EnergyType>;
+  public readonly energyTypeProperty: EnumerationDeprecatedProperty;
 
   // Visibility property
   public readonly visibleProperty: BooleanProperty;

@@ -10,6 +10,7 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
@@ -18,7 +19,7 @@ const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
       return `${blockType.toString().toLowerCase()}Block`;
     };
   }
-} );
+} ) as IntentionalAny;
 
 energyFormsAndChanges.register( 'BlockType', BlockType );
 export default BlockType;

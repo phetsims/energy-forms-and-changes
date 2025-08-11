@@ -16,6 +16,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
@@ -149,21 +150,21 @@ class SystemsModel {
     // @public (read-only) carousels that control the positions of the energy sources, converters, and users
     this.energySourcesCarousel = new EnergySystemElementCarousel(
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
-      EnumerationDeprecated.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ),
+      EnumerationDeprecated.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ) as IntentionalAny,
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energySourcesCarousel' )
     );
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
       [ this.generator, this.solarPanel ],
-      EnumerationDeprecated.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ),
+      EnumerationDeprecated.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ) as IntentionalAny,
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyConvertersCarousel' )
     );
     this.energyUsersCarousel = new EnergySystemElementCarousel(
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      EnumerationDeprecated.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ),
+      EnumerationDeprecated.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ) as IntentionalAny,
 
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,

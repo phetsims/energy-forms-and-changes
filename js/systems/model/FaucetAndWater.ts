@@ -20,6 +20,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -84,7 +85,7 @@ class FaucetAndWater extends EnergySource {
   private waterDropsPreloaded: boolean;
   private readonly energyChunkGroup: EnergyChunkGroup;
 
-  public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED

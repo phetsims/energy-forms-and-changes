@@ -19,6 +19,7 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -46,7 +47,7 @@ const STEAMING_RANGE = 10; // Number of degrees Kelvin over which steam is emitt
 const SWITCH_TO_FASTER_ALGORITHM_THRESHOLD = 10; // in milliseconds, empirically determined, see usage for more info
 const BeakerTypeEnumerationIO = EnumerationIO( BeakerType );
 
-const BEAKER_COMPOSITION = {};
+const BEAKER_COMPOSITION = {} as IntentionalAny;
 BEAKER_COMPOSITION[ BeakerType.WATER ] = {
   fluidColor: EFACConstants.WATER_COLOR_IN_BEAKER,
   steamColor: EFACConstants.WATER_STEAM_COLOR,
@@ -68,7 +69,7 @@ BEAKER_COMPOSITION[ BeakerType.OLIVE_OIL ] = {
 let performanceMeasurementTaken = false;
 
 type SelfOptions = {
-  beakerType?: BeakerType;
+  beakerType?: typeof BeakerType;
   majorTickMarkDistance?: number;
   predistributedEnergyChunkConfigurations?: any[];
 };
@@ -77,12 +78,10 @@ type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
 
 class Beaker extends RectangularThermalMovableModelElement {
 
-  private readonly width: number;
-  private readonly height: number;
-  private readonly _energyContainerCategory: EnergyContainerCategory;
+  private readonly _energyContainerCategory: typeof EnergyContainerCategory;
 
   // The type of beaker (water or olive oil)
-  public readonly beakerType: BeakerType;
+  public readonly beakerType: typeof BeakerType;
 
   // The color of the fluid in the beaker
   public readonly fluidColor: Color;
@@ -173,7 +172,7 @@ class Beaker extends RectangularThermalMovableModelElement {
 
     this.maxSteamHeight = 2 * height;
 
-    // @protected {ThermalContactArea} - see base class for info
+    // see base class for info
     this.thermalContactArea = new ThermalContactArea(
       new Bounds2(
         initialPosition.x - this.width / 2,
@@ -205,7 +204,7 @@ class Beaker extends RectangularThermalMovableModelElement {
     ) );
     const bounds = this.getBounds();
 
-    // @public - see base class for description
+    // see base class for description
     this.topSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, bounds.minY + MATERIAL_THICKNESS ),
       width,
@@ -213,7 +212,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       options.tandem.createTandem( 'topSurface' )
     );
 
-    // @public - see base class for description
+    // see base class for description
     this.bottomSurface = new HorizontalSurface(
       new Vector2( initialPosition.x, bounds.minY ),
       width,
@@ -227,8 +226,8 @@ class Beaker extends RectangularThermalMovableModelElement {
       const bounds = this.getBounds();
 
       // update the positions of the top and bottom surfaces
-      this.topSurface.positionProperty.set( new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS ) );
-      this.bottomSurface.positionProperty.set( new Vector2( position.x, bounds.minY ) );
+      this.topSurface!.positionProperty.set( new Vector2( position.x, bounds.minY + MATERIAL_THICKNESS ) );
+      this.bottomSurface!.positionProperty.set( new Vector2( position.x, bounds.minY ) );
 
       // update the thermal contact area
       this.thermalContactArea.setMinMax(
@@ -269,7 +268,7 @@ class Beaker extends RectangularThermalMovableModelElement {
    * step the beaker in time
    * @param dt - delta time (in seconds)
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     const temperature = this.temperatureProperty.get();
     if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 

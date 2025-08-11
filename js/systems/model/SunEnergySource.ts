@@ -19,6 +19,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -81,7 +82,7 @@ class SunEnergySource extends EnergySource {
   private readonly energyChunksPassingThroughClouds: ReturnType<typeof createObservableArray>;
   private readonly energyChunkGroup: EnergyChunkGroup;
 
-  public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
+  public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED

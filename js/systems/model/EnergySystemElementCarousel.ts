@@ -3,6 +3,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
+/* eslint-disable */
+
 // Note: This file is a mashup of two ported Java files: Carousel and
 // EnergySystemElementCarousel. Carousel.java was not ported to avoid confusion
 // with the PhET Sun Carousel.js UI component.
@@ -51,7 +53,7 @@ class EnergySystemElementCarousel {
   public readonly targetIndexProperty: NumberProperty;
 
   // This is for phet-io Studio so that Clients can select an element by name instead of index
-  public readonly targetElementNameProperty: EnumerationDeprecatedProperty<EnumerationDeprecated>;
+  public readonly targetElementNameProperty: EnumerationDeprecatedProperty;
   public readonly animationInProgressProperty: BooleanProperty;
 
   // Variables needed to manage carousel transitions

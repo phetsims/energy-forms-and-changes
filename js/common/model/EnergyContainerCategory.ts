@@ -12,9 +12,10 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-const EnergyContainerCategory = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] );
+const EnergyContainerCategory = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK', 'WATER', 'OLIVE_OIL', 'AIR' ] ) as IntentionalAny;
 
 energyFormsAndChanges.register( 'EnergyContainerCategory', EnergyContainerCategory );
 export default EnergyContainerCategory;
