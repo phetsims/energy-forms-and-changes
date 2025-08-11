@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A type that represents the air in the model. Air can hold heat and exchange thermal energy with other model objects.
  *
@@ -10,7 +7,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArray, ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -27,9 +24,9 @@ import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWand
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
+import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import ThermalContactArea from '../../common/model/ThermalContactArea.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import RectangularThermalMovableModelElement from './RectangularThermalMovableModelElement.js';
 
 // constants
 
@@ -57,6 +54,7 @@ let instanceCounter = 0;
 type SelfOptions = EmptySelfOptions;
 
 type AirOptions = SelfOptions & {
+  // eslint-disable-next-line phet/bad-sim-text
   tandem?: Tandem;
 };
 
@@ -75,13 +73,16 @@ class Air {
 
   // Wander controllers for energy chunks that are owned by
   // this model element but are wandering outside of it.
-  private readonly energyChunkWanderControllers: ObservableArrayDef<EnergyChunkWanderController>;
+  private readonly energyChunkWanderControllers: ObservableArray<EnergyChunkWanderController>;
 
   // Total energy of the air, accessible through getters/setters defined below
   private energy: number;
 
   /**
    * @param energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
+   * @param energyChunkGroup
+   * @param energyChunkWanderControllerGroup
+   * @param providedOptions
    */
   public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup, providedOptions?: AirOptions ) {
 
@@ -92,7 +93,9 @@ class Air {
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
     this.energyChunkList = createObservableArray( {
-      tandem: options.tandem.createTandem( 'energyChunkList' ),
+      tandem: options.tandem!.createTandem( 'energyChunkList' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -102,7 +105,9 @@ class Air {
     this.energyChunkWanderControllerGroup = energyChunkWanderControllerGroup;
 
     this.energyChunkWanderControllers = createObservableArray( {
-      tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+      tandem: options.tandem!.createTandem( 'energyChunkWanderControllers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
@@ -163,6 +168,8 @@ class Air {
       // calculate the amount of energy to exchange based on the thermal differential
       const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
         this.energyContainerCategory,
+
+        // @ts-expect-error
         energyContainer.energyContainerCategory
       );
       const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
@@ -177,6 +184,8 @@ class Air {
       // If the container has "excess energy", which can happen in cases such as where energy has been added to water
       // that is already at the boiling point, all of that energy should be dumped into the air.
       if ( energyToExchange >= 0 ) {
+
+        // @ts-expect-error
         energyToExchange = Math.max( energyToExchange, energyContainer.getEnergyBeyondMaxTemperature() );
       }
 
@@ -190,6 +199,8 @@ class Air {
     energyChunk.zPositionProperty.value = 0;
     this.energyChunkList.push( energyChunk );
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
+
+      // @ts-expect-error
       energyChunk,
       new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ), { valueComparisonStrategy: 'equalsFunction' } ),
       { horizontalWanderConstraint: horizontalWanderConstraint }
@@ -207,6 +218,8 @@ class Air {
 
     // create a new chunk at the top of the air above the specified point
     return this.energyChunkGroup.createNextElement(
+
+      // @ts-expect-error
       EnergyType.THERMAL,
       new Vector2( point.x, SIZE.height ),
       new Vector2( 0, 0 ),
@@ -228,7 +241,7 @@ class Air {
     return this.energy / ( MASS * SPECIFIC_HEAT );
   }
 
-  public get energyContainerCategory(): EnergyContainerCategory {
+  public get energyContainerCategory(): typeof EnergyContainerCategory {
     return EnergyContainerCategory.AIR;
   }
 

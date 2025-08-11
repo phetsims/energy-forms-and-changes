@@ -66,7 +66,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   public readonly approachingEnergyChunks: ObservableArray<IntentionalAny>;
 
   // motion controllers for the energy chunks that are approaching this model element
-  private readonly energyChunkWanderControllers: ObservableArray<IntentionalAny>;
+  protected readonly energyChunkWanderControllers: ObservableArray<IntentionalAny>;
 
   // pre-distributed energy chunk configuration,used for fast initialization, see usages for format
   private readonly predistributedEnergyChunkConfigurations: IntentionalAny[];
@@ -74,7 +74,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   // composite bounds for this model element, maintained as position changes
   private readonly bounds: Bounds2;
   protected readonly energyChunkGroup: EnergyChunkGroup;
-  private readonly energyChunkWanderControllerGroup: IntentionalAny;
+  protected readonly energyChunkWanderControllerGroup: IntentionalAny;
 
   // the 2D area for this element where it can be in contact with another thermal elements and thus exchange heat, generally set by descendant classes
   public thermalContactArea: ThermalContactArea;
@@ -377,7 +377,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
    * It is NOT called during "evaporation", even though the chunks are "non-contained".
    * @param dt - time step, in seconds
    */
-  private animateNonContainedEnergyChunks( dt: number ): void {
+  protected animateNonContainedEnergyChunks( dt: number ): void {
 
     // work from a copy of the list of wander controllers in case the list ends up changing
     const ecWanderControllers = this.energyChunkWanderControllers.slice();

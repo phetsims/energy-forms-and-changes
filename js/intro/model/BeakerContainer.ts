@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Model element that represents a beaker that can contain other thermal model elements.
  *
@@ -51,7 +48,7 @@ class BeakerContainer extends Beaker {
 
   /**
    * Update the fluid level in the beaker based upon any displacement that could be caused by the given rectangles.
-   * This algorithm is strictly two dimensional, even though displacement is more of the 3D concept.
+   * This algorithm is strictly two-dimensional, even though displacement is more of the 3D concept.
    */
   public updateFluidDisplacement( potentiallyDisplacingRectangles: Rectangle[] ): void {
 
@@ -89,7 +86,7 @@ class BeakerContainer extends Beaker {
     return isObscured;
   }
 
-  private override animateNonContainedEnergyChunks( dt: number ): void {
+  protected override animateNonContainedEnergyChunks( dt: number ): void {
     const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {
