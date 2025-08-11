@@ -17,7 +17,7 @@
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Bounds2, { Bounds2StateObject } from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
@@ -58,8 +58,6 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
     const options = optionize<EnergyChunkContainerSliceOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
-
-      // @ts-expect-error
       phetioType: EnergyChunkContainerSlice.EnergyChunkContainerSliceIO
     }, providedOptions );
 
@@ -147,15 +145,11 @@ class EnergyChunkContainerSlice extends PhetioObject {
     super.dispose();
   }
 
-  public static readonly EnergyChunkContainerSliceIO = new IOType<EnergyChunkContainerSlice>( 'EnergyChunkContainerSliceIO', {
+  public static readonly EnergyChunkContainerSliceIO = new IOType<EnergyChunkContainerSlice, { bounds: Bounds2StateObject }>( 'EnergyChunkContainerSliceIO', {
     valueType: EnergyChunkContainerSlice,
-
-    // @ts-expect-error
     toStateObject: energyChunkContainerSlice => energyChunkContainerSlice.toStateObject(),
     applyState: ( energyChunkContainerSlice, stateObject ) => energyChunkContainerSlice.applyState( stateObject ),
     stateSchema: {
-
-      // @ts-expect-error
       bounds: Bounds2.Bounds2IO
     }
   } );

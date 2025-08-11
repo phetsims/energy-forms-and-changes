@@ -123,7 +123,6 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
       // phet-io
       tandem: Tandem.REQUIRED,
 
-      // @ts-expect-error
       phetioType: Beaker.BeakerIO,
       phetioDocumentation: 'beaker that contains either water or olive oil, and may also contain blocks'
     }, providedOptions );
@@ -517,12 +516,11 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     this.resetInProgressProperty.set( false );
   }
 
-  public static readonly BeakerIO = new IOType<Beaker>( 'BeakerIO', {
+  public static readonly BeakerIO = new IOType<Beaker, { beakerType: IntentionalAny }>( 'BeakerIO', {
     // @ts-expect-error
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Beaker,
     stateSchema: {
-      // @ts-expect-error
       beakerType: BeakerTypeEnumerationIO
     }
   } );

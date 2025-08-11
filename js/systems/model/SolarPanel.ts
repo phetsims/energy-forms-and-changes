@@ -92,8 +92,6 @@ class SolarPanel extends EnergyConverter {
 
     const options = optionize<SolarPanelOptions, SelfOptions, EnergyConverterOptions>()( {
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: SolarPanel.SolarPanelIO,
       phetioState: true
     }, providedOptions );
@@ -471,14 +469,15 @@ class SolarPanel extends EnergyConverter {
 
   public static readonly PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
 
-  public static readonly SolarPanelIO = new IOType<SolarPanel>( 'SolarPanelIO', {
+  public static readonly SolarPanelIO = new IOType<SolarPanel, {
+    numberOfConvertedChunks: number;
+    latestChunkArrivalTime: number;
+    simulationTime: number;
+  }>( 'SolarPanelIO', {
     valueType: SolarPanel,
-    // @ts-expect-error
     toStateObject: solarPanel => solarPanel.toStateObject(),
     applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),
     stateSchema: {
-
-      // @ts-expect-error
       numberOfConvertedChunks: NumberIO,
       latestChunkArrivalTime: NumberIO,
       simulationTime: NumberIO

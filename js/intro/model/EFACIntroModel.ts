@@ -267,6 +267,8 @@ class EFACIntroModel {
       [ BeakerType.WATER, 0 ],
       {
         tandem: tandem.createTandem( 'beakerGroup' ),
+
+        // @ts-expect-error
         phetioType: PhetioGroup.PhetioGroupIO( Beaker.BeakerIO ),
         supportsDynamicState: false,
         phetioDocumentation: `group that contains 0-${EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS} beakers`
