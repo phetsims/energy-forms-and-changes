@@ -1,8 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Model element that represents a burner in the simulation.  The burner can heat and also cool other model elements.
  *
@@ -112,6 +109,8 @@ class Burner extends ModelElement {
 
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -119,6 +118,8 @@ class Burner extends ModelElement {
 
     this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
@@ -224,6 +225,7 @@ class Burner extends ModelElement {
       'Must provided wander controller group if creating wander controllers' );
 
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup!.createNextElement(
+      // @ts-expect-error
       energyChunk,
       new Vector2Property( this.getCenterPoint(), { valueComparisonStrategy: 'equalsFunction' } ),
       { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
@@ -264,6 +266,8 @@ class Burner extends ModelElement {
 
       // create an energy chunk
       closestEnergyChunk = this.energyChunkGroup.createNextElement(
+
+        // @ts-expect-error
         EnergyType.THERMAL,
         this.getCenterPoint(), // will originate from the center of this burner
         new Vector2( 0, 0 ),
@@ -304,13 +308,13 @@ class Burner extends ModelElement {
     return new Vector2( this.position.x, this.position.y + SIDE_LENGTH );
   }
 
-  public reset(): void {
+  public override reset(): void {
     super.reset();
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
     this.heatCoolLevelProperty.reset();
 
-    this.energyChunkWanderControllers.forEach( wanderController => this.energyChunkWanderControllerGroup.disposeElement( wanderController ) );
+    this.energyChunkWanderControllers.forEach( wanderController => this.energyChunkWanderControllerGroup!.disposeElement( wanderController ) );
     this.energyChunkWanderControllers.clear();
   }
 
@@ -338,7 +342,7 @@ class Burner extends ModelElement {
         this.energyChunkList.remove( controller.energyChunk );
         this.energyChunkWanderControllers.remove( controller );
         this.energyChunkGroup.disposeElement( controller.energyChunk );
-        this.energyChunkWanderControllerGroup.disposeElement( controller );
+        this.energyChunkWanderControllerGroup!.disposeElement( controller );
       }
     } );
   }
