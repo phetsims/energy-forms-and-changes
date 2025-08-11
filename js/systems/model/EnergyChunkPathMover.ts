@@ -32,7 +32,7 @@ class EnergyChunkPathMover extends PhetioObject {
   public readonly energyChunk: EnergyChunk;
   private readonly path: Vector2[];
   private readonly speed: number;
-  private pathFullyTraversed: boolean;
+  public pathFullyTraversed: boolean;
   private nextPoint: Vector2;
 
   /**

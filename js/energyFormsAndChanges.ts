@@ -1,8 +1,5 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Create energyFormsAndChanges namespace
  *

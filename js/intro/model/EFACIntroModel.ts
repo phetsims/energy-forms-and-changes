@@ -423,7 +423,7 @@ class EFACIntroModel {
 
     // step the thermometers regardless of whether the sim is paused, and fast forward makes no difference
     this.thermometers.forEach( thermometer => {
-      thermometer.step( dt );
+      thermometer.step();
     } );
   }
 

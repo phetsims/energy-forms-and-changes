@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * model of a heating element with a beaker on it
  *
@@ -10,7 +7,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -24,17 +21,17 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import waterIcon_png from '../../../images/waterIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
-import Energy from '../../common/model/Energy.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyChunkPathMoverGroup from '../../common/model/EnergyChunkPathMoverGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
+import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyUser, { EnergyUserOptions } from './EnergyUser.js';
 
 // position and size constants, empirically determined
@@ -71,9 +68,6 @@ type BeakerHeaterOptions = SelfOptions & EnergyUserOptions;
 
 class BeakerHeater extends EnergyUser {
 
-  // A11y name
-  public a11yName: string;
-
   private readonly energyChunksVisibleProperty: BooleanProperty;
   private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
@@ -82,12 +76,12 @@ class BeakerHeater extends EnergyUser {
   public readonly heatProportionProperty: NumberProperty;
 
   // Arrays that move the energy chunks as they move into, within, and out of the beaker
-  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly heatingElementEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly electricalEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly heatingElementEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
 
   // Energy chunks that are radiated by this beaker
-  public readonly radiatedEnergyChunkList: ObservableArrayDef<EnergyChunk>;
+  public readonly radiatedEnergyChunkList: ObservableArray<EnergyChunk>;
 
   // Used for instrumenting the water beaker and the thermometer's sensedElementNameProperty
   private readonly waterBeakerTandem: Tandem;
@@ -128,24 +122,33 @@ class BeakerHeater extends EnergyUser {
 
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.heatingElementEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'heatingElementEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
     this.radiatedEnergyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkList' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     this.waterBeakerTandem = options.tandem.createTandem( 'waterBeaker' );
 
+    // @ts-expect-error
     this.beaker = new Beaker(
       this.positionProperty.value.plus( BEAKER_OFFSET ),
       BEAKER_WIDTH,
@@ -159,6 +162,7 @@ class BeakerHeater extends EnergyUser {
     );
 
     this.thermometer = new TemperatureAndColorSensor(
+      // @ts-expect-error
       this,
       new Vector2( BEAKER_WIDTH * 0.45, BEAKER_HEIGHT * 0.6 ), // position is relative, not absolute
       true, {
@@ -177,8 +181,9 @@ class BeakerHeater extends EnergyUser {
 
   /**
    * @param dt - time step, in seconds
+   * @param incomingEnergy
    */
-  public override step( dt: number, incomingEnergy: Energy ): void {
+  public step( dt: number, incomingEnergy: Energy ): void {
     if ( !this.activeProperty.value ) {
       return;
     }
@@ -199,6 +204,7 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
+        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -275,6 +281,7 @@ class BeakerHeater extends EnergyUser {
         this.radiatedEnergyChunkList.push( ec );
         this.radiatedEnergyChunkMovers.push(
           this.energyChunkPathMoverGroup.createNextElement(
+            // @ts-expect-error
             ec,
             EnergyChunkPathMover.createRadiatedPath( ec.positionProperty.value, 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -293,6 +300,9 @@ class BeakerHeater extends EnergyUser {
    * update the temperature and color at the specified position within the beaker
    *
    * @param position - position to be sensed
+   * @param sensedTemperatureProperty
+   * @param sensedElementColorProperty
+   * @param sensedElementNameProperty
    */
   public updateTemperatureAndColorAndNameAtPosition(
     position: Vector2,
@@ -373,6 +383,7 @@ class BeakerHeater extends EnergyUser {
         mover.energyChunk.energyTypeProperty.set( EnergyType.THERMAL );
 
         // have the thermal energy move a little on the element before moving into the beaker
+        // @ts-expect-error
         this.heatingElementEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
           this.createHeaterElementEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
           HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY ) );
@@ -381,7 +392,7 @@ class BeakerHeater extends EnergyUser {
     } );
   }
 
-  public override preloadEnergyChunks( incomingEnergyRate: Energy ): void {
+  public preloadEnergyChunks( incomingEnergyRate: Energy ): void {
     this.clearEnergyChunks();
 
     if ( incomingEnergyRate.amount === 0 || incomingEnergyRate.type !== EnergyType.ELECTRICAL ) {
@@ -402,6 +413,7 @@ class BeakerHeater extends EnergyUser {
 
         // create and add a new chunk
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.ELECTRICAL,
           this.positionProperty.get().plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
@@ -410,6 +422,7 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
+        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )

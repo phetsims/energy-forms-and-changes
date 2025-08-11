@@ -1,10 +1,5 @@
 // Copyright 2021-2024, University of Colorado Boulder
 
-
-// @ts-nocheck
-
-/* eslint-disable */
-
 /* eslint-disable */
 /* @formatter:off */
 
