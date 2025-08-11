@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a scenery node that represents a fan in the view
  *
@@ -29,6 +26,7 @@ import wireBottomRightShort_png from '../../../images/wireBottomRightShort_png.j
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Fan from '../model/Fan.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 // constants
@@ -57,7 +55,7 @@ class FanNode extends MoveFadeModelElementNode {
     this.addChild( wireBottomRightNode );
 
     const fanBladeRootNode = new Node();
-    const fanBladeImageNodes = [];
+    const fanBladeImageNodes: Image[] = [];
 
     // fan blade image nodes
     for ( let i = 0; i < NUMBER_OF_FAN_IMAGES; i++ ) {

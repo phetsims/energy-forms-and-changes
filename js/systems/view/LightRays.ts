@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that represents a collection of light rays emanating from a circular or point source
  * @author Andrew Adare
@@ -47,7 +44,7 @@ class LightRays extends Node {
   /**
    * adds a light absorbing shape to this set of rays that they may or may not intersect with
    */
-  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ) {
+  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.addLightAbsorbingShape( lightAbsorbingShape );
     } );
@@ -56,7 +53,7 @@ class LightRays extends Node {
   /**
    * removes a light absorbing shape from this set of rays
    */
-  removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
+  public removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.removeLightAbsorbingShape( lightAbsorbingShape );
     } );

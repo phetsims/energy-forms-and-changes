@@ -465,9 +465,9 @@ class BeakerHeater extends EnergyUser {
     path.push( startingPoint.plus( new Vector2( travelDistance, 0 ).rotated( angle ) ) );
     return path;
   }
-}
 
-BeakerHeater.HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_2D_HEIGHT;
+  public static readonly HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_2D_HEIGHT;
+}
 
 energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
 export default BeakerHeater;

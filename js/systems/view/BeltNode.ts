@@ -1,33 +1,32 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node representing a belt that connects two circular items, like a fan belt in an automobile
  *
  * @author John Blanco
  */
 
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
+import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Belt from '../model/Belt.js';
 
+type SelfOptions = EmptySelfOptions;
+export type BeltNodeOptions = SelfOptions & PathOptions;
+
 class BeltNode extends Path {
 
-  public constructor( belt: Belt, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
+  public constructor( belt: Belt, modelViewTransform: ModelViewTransform2, providedOptions?: BeltNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<BeltNodeOptions, SelfOptions, PathOptions>()( {
       stroke: 'black',
       lineWidth: 4,
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( modelViewTransform.modelToViewShape( belt.beltShape ), options );
 

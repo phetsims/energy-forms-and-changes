@@ -1,10 +1,7 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
- * base type for a Scenery Node that moves as the associated model element moves and and fades in and out as the opacity
+ * base type for a Scenery Node that moves as the associated model element moves and fades in and out as the opacity
  * Property changes
  *
  * @author John Blanco
