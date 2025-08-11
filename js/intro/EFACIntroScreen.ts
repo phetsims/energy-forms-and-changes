@@ -38,16 +38,16 @@ class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
       tandem: tandem
     };
 
-    const blocksToCreate: Array<typeof BlockType> = [];
+    const blocksToCreate: Array<BlockType> = [];
     const beakersToCreate: Array<BeakerType> = [];
 
     // map query parameter string to element type and split by blocks vs beakers
     EFACQueryParameters.elements.forEach( elementKey => {
       if ( elementKey === EFACConstants.IRON_KEY ) {
-        blocksToCreate.push( BlockType.IRON );
+        blocksToCreate.push( 'IRON' );
       }
       else if ( elementKey === EFACConstants.BRICK_KEY ) {
-        blocksToCreate.push( BlockType.BRICK );
+        blocksToCreate.push( 'BRICK' );
       }
       else if ( elementKey === EFACConstants.WATER_KEY ) {
         beakersToCreate.push( 'WATER' );

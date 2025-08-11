@@ -14,13 +14,12 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
@@ -30,7 +29,7 @@ import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import BlockType from './BlockType.js';
+import BlockType, { BlockTypeValues } from './BlockType.js';
 
 // constants
 const NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
@@ -39,22 +38,23 @@ const BLOCK_PERSPECTIVE_EXTENSION = EFACConstants.BLOCK_SURFACE_WIDTH *
                                     EFACConstants.BLOCK_PERSPECTIVE_EDGE_PROPORTION *
                                     Math.cos( EFACConstants.BLOCK_PERSPECTIVE_ANGLE ) / 2;
 
-const BlockTypeEnumerationIO = EnumerationIO( BlockType );
+const BlockTypeIO = StringUnionIO( BlockTypeValues );
 
 // TODO: use constants from EFAConstants, https://github.com/phetsims/energy-forms-and-changes/issues/420
-const BLOCK_COMPOSITION: IntentionalAny = {};
-BLOCK_COMPOSITION[ BlockType.IRON ] = {
-  color: new Color( 150, 150, 150 ),
-  density: EFACConstants.IRON_DENSITY,
-  specificHeat: EFACConstants.IRON_SPECIFIC_HEAT,
-  energyContainerCategory: EnergyContainerCategory.IRON
-};
-BLOCK_COMPOSITION[ BlockType.BRICK ] = {
-  color: new Color( 223, 22, 12 ),
-  density: EFACConstants.BRICK_DENSITY,
-  specificHeat: EFACConstants.BRICK_SPECIFIC_HEAT,
-  energyContainerCategory: EnergyContainerCategory.BRICK
-};
+const BLOCK_COMPOSITION = {
+  IRON: {
+    color: new Color( 150, 150, 150 ),
+    density: EFACConstants.IRON_DENSITY,
+    specificHeat: EFACConstants.IRON_SPECIFIC_HEAT,
+    energyContainerCategory: EnergyContainerCategory.IRON
+  },
+  BRICK: {
+    color: new Color( 223, 22, 12 ),
+    density: EFACConstants.BRICK_DENSITY,
+    specificHeat: EFACConstants.BRICK_SPECIFIC_HEAT,
+    energyContainerCategory: EnergyContainerCategory.BRICK
+  }
+} as const;
 
 // static data
 let instanceCount = 0; // counter for creating unique IDs
@@ -69,7 +69,7 @@ class Block extends RectangularThermalMovableModelElement {
   public readonly id: string;
 
   // The type of the block (iron or brick)
-  public readonly blockType: typeof BlockType;
+  public readonly blockType: BlockType;
 
   // The z-index of this block in relation to other blocks. updated when a user interacts with any block.
   public zIndex: number;
@@ -84,7 +84,7 @@ class Block extends RectangularThermalMovableModelElement {
    */
   public constructor( initialPosition: Vector2,
                       energyChunksVisibleProperty: Property<boolean>,
-                      blockType: typeof BlockType,
+                      blockType: BlockType,
                       energyChunkGroup: PhetioGroup<EnergyChunk, [ EnergyType, Vector2, Vector2, TReadOnlyProperty<boolean> ]>,
                       providedOptions?: BlockOptions ) {
 
@@ -213,7 +213,7 @@ class Block extends RectangularThermalMovableModelElement {
     stateSchema: {
 
       // @ts-expect-error
-      blockType: BlockTypeEnumerationIO
+      blockType: BlockTypeIO
     }
   } );
 }

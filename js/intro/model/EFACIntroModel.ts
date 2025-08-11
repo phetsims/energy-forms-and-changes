@@ -104,7 +104,7 @@ class EFACIntroModel {
   private readonly burners: Burner[];
 
   // Groups for dynamic elements
-  public readonly blockGroup: PhetioGroup<Block>;
+  public readonly blockGroup: PhetioGroup<Block, [ BlockType, number ]>;
   public readonly beakerGroup: PhetioGroup<BeakerContainer>;
 
   // Tracking object for thermal contact info
@@ -123,7 +123,7 @@ class EFACIntroModel {
   // Used to notify the view that a manual step was called
   public readonly manualStepEmitter: Emitter<[ number ]>;
 
-  public constructor( blocksToCreate: typeof BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
+  public constructor( blocksToCreate: BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
     this.energyChunksVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'energyChunksVisibleProperty' ),
@@ -208,21 +208,21 @@ class EFACIntroModel {
       this.burners.push( this.rightBurner );
     }
 
-    // @ts-expect-error
-    this.blockGroup = new PhetioGroup(
+    this.blockGroup = new PhetioGroup<Block, [ BlockType, number ]>(
       ( tandem, blockType, initialXPosition ) => {
         return new Block(
           new Vector2( initialXPosition, 0 ),
           this.energyChunksVisibleProperty,
           blockType,
           this.energyChunkGroup, {
+
             // @ts-expect-error
             energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             tandem: tandem
           }
         );
       },
-      [ BlockType.IRON, 0 ],
+      [ 'IRON', 0 ],
       {
         tandem: tandem.createTandem( 'blockGroup' ),
         phetioType: PhetioGroup.PhetioGroupIO( Block.BlockIO ),

@@ -29,6 +29,7 @@ import BeakerView from '../../common/view/BeakerView.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from '../model/BeakerContainer.js';
 import Block from '../model/Block.js';
+import BlockType from '../model/BlockType.js';
 import EFACIntroModel from '../model/EFACIntroModel.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
 
@@ -130,7 +131,7 @@ class BeakerContainerView extends BeakerView {
    * @param energyChunksVisible
    * @param modelViewTransform
    */
-  private updateEnergyChunkClipArea( beaker: BeakerContainer, blocks: PhetioGroup<Block>, energyChunksVisible: boolean, modelViewTransform: ModelViewTransform2 ): void {
+  private updateEnergyChunkClipArea( beaker: BeakerContainer, blocks: PhetioGroup<Block, [ BlockType, number ]>, energyChunksVisible: boolean, modelViewTransform: ModelViewTransform2 ): void {
 
     if ( energyChunksVisible ) {
 
@@ -172,7 +173,7 @@ class BeakerContainerView extends BeakerView {
    * @param clipAreaShape
    * @param modelViewTransform
    */
-  private addProjectedBlocksToClipArea( blockGroup: PhetioGroup<Block>, clipAreaShape: Shape, modelViewTransform: ModelViewTransform2 ): void {
+  private addProjectedBlocksToClipArea( blockGroup: PhetioGroup<Block, [ BlockType, number ]>, clipAreaShape: Shape, modelViewTransform: ModelViewTransform2 ): void {
 
     // hoisted block variable
     let block;

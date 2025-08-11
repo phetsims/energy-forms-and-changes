@@ -6,17 +6,8 @@
  * @author Chris Klusendorf
  */
 
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+export const BlockTypeValues = [ 'IRON', 'BRICK' ] as const;
 
-const BlockType = EnumerationDeprecated.byKeys( [ 'IRON', 'BRICK' ], {
-  beforeFreeze: ( BlockType: IntentionalAny ) => {
-    BlockType.getTandemName = ( blockType: IntentionalAny ) => {
-      return `${blockType.toString().toLowerCase()}Block`;
-    };
-  }
-} ) as IntentionalAny;
+type BlockType = typeof BlockTypeValues[number];
 
-energyFormsAndChanges.register( 'BlockType', BlockType );
 export default BlockType;

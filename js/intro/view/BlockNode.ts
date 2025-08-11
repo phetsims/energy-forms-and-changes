@@ -38,7 +38,6 @@ import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Block from '../model/Block.js';
-import BlockType from '../model/BlockType.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';
 import ThermalElementDragHandler from './ThermalElementDragHandler.js';
 
@@ -46,23 +45,24 @@ const brickString = EnergyFormsAndChangesStrings.brick;
 const ironString = EnergyFormsAndChangesStrings.iron;
 
 // constants
-const BLOCK_IMAGES: IntentionalAny = {};
-BLOCK_IMAGES[ BlockType.BRICK ] = {
-  front: brickTextureFront_png,
-  side: brickTextureRight_png,
-  top: brickTextureTop_png
-};
-BLOCK_IMAGES[ BlockType.IRON ] = {
-  front: ironTextureFront_png,
-  side: ironTextureRight_png,
-  top: ironTextureTop_png
-};
+const BLOCK_IMAGES: IntentionalAny = {
+  BRICK: {
+    front: brickTextureFront_png,
+    side: brickTextureRight_png,
+    top: brickTextureTop_png
+  },
+  IRON: {
+    front: ironTextureFront_png,
+    side: ironTextureRight_png,
+    top: ironTextureTop_png
+  }
+} as const;
 const LABEL_FONT = new PhetFont( 26 );
 const OUTLINE_LINE_WIDTH = 3;
 const PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
 const BLOCK_ATTRIBUTES: IntentionalAny = {};
-BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: ironString };
-BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
+BLOCK_ATTRIBUTES.IRON = { label: ironString };
+BLOCK_ATTRIBUTES.BRICK = { label: brickString };
 
 type SelfOptions = {
 
