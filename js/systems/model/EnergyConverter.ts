@@ -30,7 +30,7 @@ class EnergyConverter extends EnergySystemElement {
    * @param iconImage Image to identify source on carousel menu
    * @param [options]
    */
-  public constructor( iconImage: Image, options: IntentionalAny ) {
+  public constructor( iconImage: Image, options?: IntentionalAny ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED

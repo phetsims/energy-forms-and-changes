@@ -36,7 +36,7 @@ class Energy {
    * to the right, PI/2 is up, and so forth.
    * @param [options]
    */
-  public constructor( type: EnergyType, amount: number, direction: number, options: IntentionalAny ) {
+  public constructor( type: EnergyType, amount: number, direction: number, options?: IntentionalAny ) {
 
     options = merge( {
       creationTime: null
