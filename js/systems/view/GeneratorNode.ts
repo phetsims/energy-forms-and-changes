@@ -13,6 +13,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import connector_png from '../../../images/connector_png.js';
 import generator_png from '../../../images/generator_png.js';
@@ -36,10 +37,7 @@ type GeneratorNodeOptions = {
 
   // whether the mechanical energy chunk layer is added
   addMechanicalEnergyChunkLayer?: boolean;
-
-  // eslint-disable-next-line phet/bad-sim-text
-  tandem?: Tandem;
-};
+} & Pick<PhetioObjectOptions, 'tandem'>;
 
 class GeneratorNode extends MoveFadeModelElementNode {
 

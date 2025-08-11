@@ -14,6 +14,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -53,10 +54,7 @@ let instanceCounter = 0;
 
 type SelfOptions = EmptySelfOptions;
 
-type AirOptions = SelfOptions & {
-  // eslint-disable-next-line phet/bad-sim-text
-  tandem?: Tandem;
-};
+type AirOptions = SelfOptions & Pick<PhetioObjectOptions, 'tandem'>;
 
 class Air {
 
@@ -199,7 +197,6 @@ class Air {
     energyChunk.zPositionProperty.value = 0;
     this.energyChunkList.push( energyChunk );
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
-
       // @ts-expect-error
       energyChunk,
       new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ), { valueComparisonStrategy: 'equalsFunction' } ),
@@ -218,7 +215,6 @@ class Air {
 
     // create a new chunk at the top of the air above the specified point
     return this.energyChunkGroup.createNextElement(
-
       // @ts-expect-error
       EnergyType.THERMAL,
       new Vector2( point.x, SIZE.height ),
