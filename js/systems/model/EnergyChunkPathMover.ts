@@ -10,22 +10,29 @@
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 type SelfOptions = EmptySelfOptions;
 export type EnergyChunkPathMoverOptions = SelfOptions & PhetioObjectOptions;
+
+type EnergyChunkPathMoverStateObject = {
+  path: Vector2StateObject[];
+  speed: number;
+  pathFullyTraversed: boolean;
+  nextPoint: Vector2StateObject;
+  energyChunkReference: ReferenceIOState;
+};
 
 class EnergyChunkPathMover extends PhetioObject {
 
@@ -47,8 +54,6 @@ class EnergyChunkPathMover extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: EnergyChunkPathMover.EnergyChunkPathMoverIO,
       phetioDynamicElement: true
     }, providedOptions );
@@ -68,7 +73,7 @@ class EnergyChunkPathMover extends PhetioObject {
     this.nextPoint = path[ 0 ];
   }
 
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): EnergyChunkPathMoverStateObject {
     return {
       path: ArrayIO( Vector2.Vector2IO ).toStateObject( this.path ),
       speed: this.speed,
@@ -78,7 +83,7 @@ class EnergyChunkPathMover extends PhetioObject {
     };
   }
 
-  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): [ EnergyChunk, Vector2[], number ] {
+  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkPathMoverStateObject ): [ EnergyChunk, Vector2[], number ] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
 
@@ -86,7 +91,7 @@ class EnergyChunkPathMover extends PhetioObject {
     return [ energyChunk, path, stateObject.speed ];
   }
 
-  public applyState( stateObject: IntentionalAny ): void {
+  public applyState( stateObject: EnergyChunkPathMoverStateObject ): void {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
 
     // Find the actual reference to the current nextPoint, not just a new instance of Vector2 with the same value, see https://github.com/phetsims/energy-forms-and-changes/issues/357
@@ -221,16 +226,12 @@ class EnergyChunkPathMover extends PhetioObject {
     return path;
   }
 
-  public static readonly EnergyChunkPathMoverIO = new IOType<EnergyChunkPathMover>( 'EnergyChunkPathMoverIO', {
+  public static readonly EnergyChunkPathMoverIO = new IOType<EnergyChunkPathMover, EnergyChunkPathMoverStateObject>( 'EnergyChunkPathMoverIO', {
     valueType: EnergyChunkPathMover,
-
-    // @ts-expect-error
     toStateObject: energyChunkPathMover => energyChunkPathMover.toStateObject(),
     stateObjectToCreateElementArguments: stateObject => EnergyChunkPathMover.stateObjectToCreateElementArguments( stateObject ),
-
     applyState: ( energyChunkPathMover, stateObject ) => energyChunkPathMover.applyState( stateObject ),
     stateSchema: {
-      // @ts-expect-error
       path: ArrayIO( Vector2.Vector2IO ),
       speed: NumberIO,
       pathFullyTraversed: BooleanIO,

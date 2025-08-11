@@ -105,7 +105,6 @@ class Generator extends EnergyConverter {
     } );
     this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.electricalEnergyChunks = createObservableArray( {

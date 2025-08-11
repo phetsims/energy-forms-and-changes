@@ -95,20 +95,14 @@ class LightBulb extends EnergyUser {
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.filamentEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'filamentEnergyChunkMovers' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.goRightNextTime = true;

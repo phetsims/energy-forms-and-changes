@@ -111,8 +111,6 @@ class TeaKettle extends EnergySource {
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
     this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
-
-      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.energyChunkGroup = energyChunkGroup;

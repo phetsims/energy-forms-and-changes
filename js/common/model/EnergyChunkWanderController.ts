@@ -9,8 +9,8 @@
 
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
-import Range from '../../../../dot/js/Range.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import Range, { RangeStateObject } from '../../../../dot/js/Range.js';
+import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
@@ -21,7 +21,7 @@ import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
+import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 
@@ -50,6 +50,19 @@ type SelfOptions = {
 };
 
 type EnergyChunkWanderControllerOptions = SelfOptions & PhetioObjectOptions;
+
+type EnergyChunkWanderControllerStateObject = {
+  minSpeed: number;
+  maxSpeed: number;
+  wanderAngleVariation: number;
+  translateXWithDestination: boolean;
+  countdownTimer: number;
+  wandering: boolean;
+  horizontalWanderConstraint: RangeStateObject | null;
+  energyChunkReference: ReferenceIOState;
+  destinationPropertyReference: ReferenceIOState | null;
+  destinationVector2: Vector2StateObject | null;
+};
 
 class EnergyChunkWanderController extends PhetioObject {
 
@@ -171,9 +184,9 @@ class EnergyChunkWanderController extends PhetioObject {
     };
   }
 
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): EnergyChunkWanderControllerStateObject {
 
-    const stateObject: IntentionalAny = {
+    const stateObject: EnergyChunkWanderControllerStateObject = {
       minSpeed: this.minSpeed,
       maxSpeed: this.maxSpeed,
       wanderAngleVariation: this.wanderAngleVariation,
@@ -181,7 +194,11 @@ class EnergyChunkWanderController extends PhetioObject {
       countdownTimer: this.countdownTimer,
       wandering: this.wandering,
       horizontalWanderConstraint: NullableIO( Range.RangeIO ).toStateObject( this.horizontalWanderConstraint ),
-      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
+      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk ),
+
+      // TODO: Do we need these null? see https://github.com/phetsims/energy-forms-and-changes/issues/430
+      destinationPropertyReference: null,
+      destinationVector2: null
     };
 
     // NOTE: destinationProperty does not need to be instrumented to support this, as some Properties just wrap single
@@ -197,7 +214,7 @@ class EnergyChunkWanderController extends PhetioObject {
     return stateObject;
   }
 
-  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
+  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkWanderControllerStateObject ): IntentionalAny[] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -213,7 +230,7 @@ class EnergyChunkWanderController extends PhetioObject {
     return [ energyChunk, destinationProperty, {} ];
   }
 
-  public applyState( stateObject: IntentionalAny ): void {
+  public applyState( stateObject: EnergyChunkWanderControllerStateObject ): void {
     this.minSpeed = stateObject.minSpeed;
     this.maxSpeed = stateObject.maxSpeed;
     this.wanderAngleVariation = stateObject.wanderAngleVariation;
@@ -318,7 +335,7 @@ class EnergyChunkWanderController extends PhetioObject {
     this.horizontalWanderConstraint = horizontalWanderConstraint;
   }
 
-  public static readonly EnergyChunkWanderControllerIO = new IOType<EnergyChunkWanderController, IntentionalAny>( 'EnergyChunkWanderControllerIO', {
+  public static readonly EnergyChunkWanderControllerIO = new IOType<EnergyChunkWanderController, EnergyChunkWanderControllerStateObject>( 'EnergyChunkWanderControllerIO', {
     valueType: EnergyChunkWanderController,
     toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
     stateObjectToCreateElementArguments: stateObject => EnergyChunkWanderController.stateObjectToCreateElementArguments( stateObject ),
