@@ -12,7 +12,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -72,11 +71,11 @@ class SystemsModel {
   public readonly beakerHeater: BeakerHeater;
 
   // Carousels that control the positions of the energy sources, converters, and users
-  public readonly energySourcesCarousel: EnergySystemElementCarousel;
-  public readonly energyConvertersCarousel: EnergySystemElementCarousel;
-  public readonly energyUsersCarousel: EnergySystemElementCarousel;
+  public readonly energySourcesCarousel: EnergySystemElementCarousel<'BIKER' | 'FAUCET' | 'SUN' | 'TEA_KETTLE'>;
+  public readonly energyConvertersCarousel: EnergySystemElementCarousel<'GENERATOR' | 'SOLAR_PANEL'>;
+  public readonly energyUsersCarousel: EnergySystemElementCarousel<'BEAKER_HEATER' | 'INCANDESCENT_BULB' | 'FLUORESCENT_BULB' | 'FAN'>;
 
-  private readonly carousels: EnergySystemElementCarousel[];
+  private readonly carousels: EnergySystemElementCarousel<IntentionalAny>[];
 
   // Used to notify the view that a manual step was called
   public readonly manualStepEmitter: Emitter<[ number ]>;
@@ -181,7 +180,7 @@ class SystemsModel {
     this.energySourcesCarousel = new EnergySystemElementCarousel(
       // @ts-expect-error
       [ this.biker, this.faucetAndWater, this.sun, this.teaKettle ],
-      EnumerationDeprecated.byKeys( [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ] ) as IntentionalAny,
+      [ 'BIKER', 'FAUCET', 'SUN', 'TEA_KETTLE' ],
       ENERGY_SOURCES_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energySourcesCarousel' )
@@ -189,7 +188,7 @@ class SystemsModel {
     this.energyConvertersCarousel = new EnergySystemElementCarousel(
       // @ts-expect-error
       [ this.generator, this.solarPanel ],
-      EnumerationDeprecated.byKeys( [ 'GENERATOR', 'SOLAR_PANEL' ] ) as IntentionalAny,
+      [ 'GENERATOR', 'SOLAR_PANEL' ],
       ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION,
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,
       tandem.createTandem( 'energyConvertersCarousel' )
@@ -197,7 +196,7 @@ class SystemsModel {
     this.energyUsersCarousel = new EnergySystemElementCarousel(
       // @ts-expect-error
       [ this.beakerHeater, this.incandescentBulb, this.fluorescentBulb, this.fan ],
-      EnumerationDeprecated.byKeys( [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ] ) as IntentionalAny,
+      [ 'BEAKER_HEATER', 'INCANDESCENT_BULB', 'FLUORESCENT_BULB', 'FAN' ],
 
       new Vector2( 0.09, 0 ),
       OFFSET_BETWEEN_ELEMENTS_ON_CAROUSEL,

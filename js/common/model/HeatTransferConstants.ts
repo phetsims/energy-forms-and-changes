@@ -66,7 +66,7 @@ const heatTransferConstantsMap = {
     OLIVE_OIL: OLIVE_OIL_AIR_HEAT_TRANSFER_FACTOR,
     IRON: IRON_AIR_HEAT_TRANSFER_FACTOR
   }
-};
+} as const;
 
 const HeatTransferConstants = {
 
@@ -75,12 +75,10 @@ const HeatTransferConstants = {
    * @param category1 - a value from EnergyContainerCategory
    * @param category2 - a value from EnergyContainerCategory
    */
-  getHeatTransferFactor( category1: typeof EnergyContainerCategory, category2: typeof EnergyContainerCategory ): number {
-    assert && assert( EnergyContainerCategory.includes( category1 ), `invalid category1: ${category1}` );
-    assert && assert( EnergyContainerCategory.includes( category2 ), `invalid category2: ${category2}` );
+  getHeatTransferFactor( category1: EnergyContainerCategory, category2: EnergyContainerCategory ): number {
 
     // @ts-expect-error
-    return heatTransferConstantsMap[ category1.name ][ category2.name ];
+    return heatTransferConstantsMap[ category1 ][ category2 ];
   },
 
   /**

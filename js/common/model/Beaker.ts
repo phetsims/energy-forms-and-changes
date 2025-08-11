@@ -49,7 +49,7 @@ const BEAKER_COMPOSITION = {
     fluidSpecificHeat: EFACConstants.WATER_SPECIFIC_HEAT,
     fluidDensity: EFACConstants.WATER_DENSITY,
     fluidBoilingPoint: EFACConstants.WATER_BOILING_POINT_TEMPERATURE,
-    energyContainerCategory: EnergyContainerCategory.WATER
+    energyContainerCategory: 'WATER'
   },
   OLIVE_OIL: {
     fluidColor: EFACConstants.OLIVE_OIL_COLOR_IN_BEAKER,
@@ -57,7 +57,7 @@ const BEAKER_COMPOSITION = {
     fluidSpecificHeat: EFACConstants.OLIVE_OIL_SPECIFIC_HEAT,
     fluidDensity: EFACConstants.OLIVE_OIL_DENSITY,
     fluidBoilingPoint: EFACConstants.OLIVE_OIL_BOILING_POINT_TEMPERATURE,
-    energyContainerCategory: EnergyContainerCategory.OLIVE_OIL
+    energyContainerCategory: 'OLIVE_OIL'
   }
 } as const;
 
@@ -74,7 +74,7 @@ export type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementO
 
 abstract class Beaker extends RectangularThermalMovableModelElement {
 
-  private readonly _energyContainerCategory: typeof EnergyContainerCategory;
+  private readonly _energyContainerCategory: EnergyContainerCategory;
 
   // The type of beaker (water or olive oil)
   public readonly beakerType: BeakerType;
@@ -435,7 +435,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
   /**
    * get the energy container category, which is an enum that is used to determine heat transfer rates
    */
-  public get energyContainerCategory(): typeof EnergyContainerCategory {
+  public get energyContainerCategory(): EnergyContainerCategory {
     return this._energyContainerCategory;
   }
 

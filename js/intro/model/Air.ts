@@ -161,8 +161,6 @@ class Air {
       // calculate the amount of energy to exchange based on the thermal differential
       const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
         this.energyContainerCategory,
-
-        // @ts-expect-error
         energyContainer.energyContainerCategory
       );
       const numberOfFullTimeStepExchanges = Math.floor( dt / EFACConstants.MAX_HEAT_EXCHANGE_TIME_STEP );
@@ -232,8 +230,8 @@ class Air {
     return this.energy / ( MASS * SPECIFIC_HEAT );
   }
 
-  public get energyContainerCategory(): typeof EnergyContainerCategory {
-    return EnergyContainerCategory.AIR;
+  public get energyContainerCategory(): EnergyContainerCategory {
+    return 'AIR';
   }
 
   public getEnergyBeyondMaxTemperature(): number {

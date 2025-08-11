@@ -23,7 +23,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -252,8 +251,7 @@ class BeakerHeater extends EnergyUser {
     if ( Math.abs( temperatureGradient ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
       const beakerRect = this.beaker.getUntransformedBounds();
       const thermalContactArea = ( beakerRect.width * 2 ) + ( beakerRect.height * 2 ) * this.beaker.fluidProportionProperty.value;
-      const transferFactor = HeatTransferConstants.getHeatTransferFactor(
-        EnergyContainerCategory.WATER, EnergyContainerCategory.AIR );
+      const transferFactor = HeatTransferConstants.getHeatTransferFactor( 'WATER', 'AIR' );
       const thermalEnergyLost = temperatureGradient * transferFactor * thermalContactArea * dt;
 
       this.beaker.changeEnergy( -thermalEnergyLost );

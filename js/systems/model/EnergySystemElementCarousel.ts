@@ -15,11 +15,10 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import StringUnionProperty from '../../../../axon/js/StringUnionProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -30,7 +29,7 @@ import EnergySystemElement from './EnergySystemElement.js';
 // constants
 const TRANSITION_DURATION = 0.75; // in seconds
 
-class EnergySystemElementCarousel {
+class EnergySystemElementCarousel<T extends string> {
 
   // The position in model space where the currently selected element should be
   public readonly selectedElementPosition: Vector2;
@@ -42,13 +41,13 @@ class EnergySystemElementCarousel {
   public readonly managedElements: EnergySystemElement[];
 
   // Names that correspond to each element
-  public readonly elementNames: EnumerationDeprecated;
+  public readonly elementNames: T[];
 
   // Indicates which element on the carousel is currently selected by index
   public readonly targetIndexProperty: NumberProperty;
 
   // This is for phet-io Studio so that Clients can select an element by name instead of index
-  public readonly targetElementNameProperty: EnumerationDeprecatedProperty;
+  public readonly targetElementNameProperty: StringUnionProperty<T>;
   public readonly animationInProgressProperty: BooleanProperty;
 
   // Variables needed to manage carousel transitions
@@ -63,7 +62,7 @@ class EnergySystemElementCarousel {
    * @param offsetBetweenElements - offset between elements in the carousel
    * @param tandem
    */
-  public constructor( elements: EnergySystemElement[], elementNames: EnumerationDeprecated, selectedElementPosition: Vector2, offsetBetweenElements: Vector2, tandem: Tandem ) {
+  public constructor( elements: EnergySystemElement[], elementNames: T[], selectedElementPosition: Vector2, offsetBetweenElements: Vector2, tandem: Tandem ) {
 
     this.selectedElementPosition = selectedElementPosition;
     this.offsetBetweenElements = offsetBetweenElements;
@@ -84,13 +83,14 @@ class EnergySystemElementCarousel {
       return validTargetIndices;
     };
 
-    assert && assert( this.managedElements.length === this.elementNames.VALUES.length,
+    assert && assert( this.managedElements.length === this.elementNames.length,
       'The number of managed elements must equal the number of element name enumeration values' );
 
     this.targetIndexProperty = new NumberProperty( 0, {
       validValues: getValidTargetIndices( this.managedElements.length )
     } );
-    this.targetElementNameProperty = new EnumerationDeprecatedProperty( elementNames, elementNames.VALUES[ 0 ], {
+    this.targetElementNameProperty = new StringUnionProperty<T>( elementNames[ 0 ], {
+      validValues: elementNames,
       tandem: tandem.createTandem( 'targetElementNameProperty' ),
       phetioDocumentation: 'indicates which element on the carousel is currently selected by name'
     } );
@@ -107,7 +107,7 @@ class EnergySystemElementCarousel {
     this.targetElementNameProperty.lazyLink( targetElement => {
 
       // update the target index
-      this.targetIndexProperty.set( _.findIndex( this.elementNames.VALUES, targetElement ) );
+      this.targetIndexProperty.set( this.elementNames.indexOf( targetElement ) );
 
       // set vars for the transition
       this.elapsedTransitionTime = 0;

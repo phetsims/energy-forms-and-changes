@@ -32,6 +32,7 @@ import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
 import EnergyChunkWanderControllerGroup from './EnergyChunkWanderControllerGroup.js';
+import EnergyContainerCategory from './EnergyContainerCategory.js';
 import HeatTransferConstants from './HeatTransferConstants.js';
 import ThermalContactArea from './ThermalContactArea.js';
 import UserMovableModelElement from './UserMovableModelElement.js';
@@ -780,6 +781,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   }
 
   /**
+   * @param otherEnergyContainer
    * @param dt - time of contact, in seconds
    * @returns amount of energy exchanged, in joules
    */
@@ -797,10 +799,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
 
         const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
-          // @ts-expect-error
           this.energyContainerCategory,
-
-          // @ts-expect-error
           otherEnergyContainer.energyContainerCategory
         );
 
@@ -821,8 +820,10 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     return amountOfEnergyExchanged;
   }
 
+  public abstract get energyContainerCategory(): EnergyContainerCategory;
+
   /**
-   * Get the shape as is is projected into 3D in the view.  Ideally, this wouldn't even be in the model, because it
+   * Get the shape as projected into 3D in the view.  Ideally, this wouldn't even be in the model, because it
    * would be purely handled in the view, but it proved necessary.
    */
   public getProjectedShape(): Shape {

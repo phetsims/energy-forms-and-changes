@@ -46,13 +46,13 @@ const BLOCK_COMPOSITION = {
     color: new Color( 150, 150, 150 ),
     density: EFACConstants.IRON_DENSITY,
     specificHeat: EFACConstants.IRON_SPECIFIC_HEAT,
-    energyContainerCategory: EnergyContainerCategory.IRON
+    energyContainerCategory: 'IRON'
   },
   BRICK: {
     color: new Color( 223, 22, 12 ),
     density: EFACConstants.BRICK_DENSITY,
     specificHeat: EFACConstants.BRICK_SPECIFIC_HEAT,
-    energyContainerCategory: EnergyContainerCategory.BRICK
+    energyContainerCategory: 'BRICK'
   }
 } as const;
 
@@ -162,7 +162,7 @@ class Block extends RectangularThermalMovableModelElement {
     return BLOCK_COMPOSITION[ this.blockType ].color;
   }
 
-  public get energyContainerCategory(): typeof EnergyContainerCategory {
+  public get energyContainerCategory(): EnergyContainerCategory {
     return BLOCK_COMPOSITION[ this.blockType ].energyContainerCategory;
   }
 

@@ -11,6 +11,7 @@
  */
 
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
@@ -28,7 +29,7 @@ type EnergySystemElementSelectorOptions = SelfOptions & PanelOptions;
 
 class EnergySystemElementSelector extends Panel {
 
-  public constructor( carousel: EnergySystemElementCarousel, providedOptions?: EnergySystemElementSelectorOptions ) {
+  public constructor( carousel: EnergySystemElementCarousel<IntentionalAny>, providedOptions?: EnergySystemElementSelectorOptions ) {
 
     const options = optionize<EnergySystemElementSelectorOptions, SelfOptions, PanelOptions>()( {
       fill: EFACConstants.CONTROL_PANEL_BACKGROUND_COLOR,
@@ -46,7 +47,7 @@ class EnergySystemElementSelector extends Panel {
 
     for ( let i = 0; i < carousel.managedElements.length; i++ ) {
       const element = carousel.managedElements[ i ];
-      const elementName = carousel.elementNames.VALUES[ i ];
+      const elementName = carousel.elementNames[ i ];
       const iconImage = element.iconImage;
       const width = iconImage.getBounds().getWidth();
       const height = iconImage.getBounds().getHeight();
@@ -58,7 +59,7 @@ class EnergySystemElementSelector extends Panel {
       buttonElementList.push( {
         value: elementName,
         createNode: () => iconImage,
-        tandemName: _.camelCase( `${elementName.name}RadioButton` )
+        tandemName: _.camelCase( `${elementName}RadioButton` )
       } );
     }
 
