@@ -330,9 +330,8 @@ class Burner extends ModelElement {
 
   /**
    * animate the energy chunks
-   * @param dt
    */
-  private step( dt: number ): void {
+  public step( dt: number ): void {
     const controllers = this.energyChunkWanderControllers.slice();
 
     controllers.forEach( controller => {

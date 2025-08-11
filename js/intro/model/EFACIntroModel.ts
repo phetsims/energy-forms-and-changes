@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * model for the 'Intro' screen of the Energy Forms And Changes simulation
  *
@@ -19,6 +16,7 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -617,6 +615,8 @@ class EFACIntroModel {
 
               // This is a burner, is it in a state where it is able to provide or receive an energy chunk?
               const burner = this.getThermalElementByID( otherID );
+
+              // @ts-expect-error
               const heatCoolLevel = burner.heatCoolLevelProperty.get();
               if ( energyChunkBalance > 0 && heatCoolLevel < 0 || energyChunkBalance < 0 && heatCoolLevel > 0 ) {
                 bestExchangeCandidate = burner;
@@ -639,6 +639,8 @@ class EFACIntroModel {
             energyChunkSupplier = bestExchangeCandidate;
             energyChunkConsumer = thermalContainer;
           }
+
+          // @ts-expect-error
           this.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, closestMatchExchangeRecord );
         }
       }
@@ -662,35 +664,46 @@ class EFACIntroModel {
 
     // attempt to extract an energy chunk from the supplier
     let energyChunk;
+
+    // @ts-expect-error
     if ( energyChunkSupplier !== this.air ) {
 
+      // @ts-expect-error
       if ( energyChunkConsumer !== this.air ) {
+
+        // @ts-expect-error
         energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
+          // @ts-expect-error
           energyChunkConsumer.getBounds()
         );
       }
       else {
 
         // when giving an energy chunk to the air, pull one from the top of the supplier
+        // @ts-expect-error
         energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
+          // @ts-expect-error
           energyChunkSupplier.getCenterTopPoint()
         );
       }
     }
     else {
 
-      // when getting an energy chunk from the air, just let is know roughly where it's going
+      // when getting an energy chunk from the air, just let it know roughly where it's going
+      // @ts-expect-error
       energyChunk = energyChunkSupplier.requestEnergyChunk( energyChunkConsumer.positionProperty.get() );
     }
 
     // if we got an energy chunk, pass it to the consumer
     if ( energyChunk ) {
 
+      // @ts-expect-error
       if ( energyChunkConsumer === this.air ) {
 
         // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
         // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
         // the view.
+        // @ts-expect-error
         const supplierBounds = energyChunkSupplier.getBounds();
         const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
         if ( energyChunk.positionProperty.value.x < horizontalWanderConstraint.min ) {
@@ -699,9 +712,11 @@ class EFACIntroModel {
         else if ( energyChunk.positionProperty.value.x > horizontalWanderConstraint.max ) {
           energyChunk.setPositionXY( horizontalWanderConstraint.max, energyChunk.positionProperty.value.y );
         }
+        // @ts-expect-error
         energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
       }
       else {
+        // @ts-expect-error
         energyChunkConsumer.addEnergyChunk( energyChunk );
       }
 
@@ -714,7 +729,9 @@ class EFACIntroModel {
         energyExchangeToLog = Math.min( EFACConstants.ENERGY_PER_CHUNK, energyBalanceRecord.energyBalance );
       }
       this.energyBalanceTracker.logEnergyExchange(
+        // @ts-expect-error
         energyChunkSupplier.id,
+        // @ts-expect-error
         energyChunkConsumer.id,
         energyExchangeToLog
       );
@@ -737,7 +754,7 @@ class EFACIntroModel {
       const distanceB = Math.abs( b - modelElement.positionProperty.value.x );
       return distanceA - distanceB;
     } );
-    let destinationXSpot = null;
+    let destinationXSpot: number | null = null;
     let destinationSurface = null;
 
     // check out each spot
@@ -745,7 +762,7 @@ class EFACIntroModel {
                      destinationXSpot === null &&
                      destinationSurface === null; i++
     ) {
-      const modelElementsInSpot = [];
+      const modelElementsInSpot: ModelElement[] = [];
 
       // get a list of what's currently in the spot being checked
       this.modelElementList.forEach( potentialRestingModelElement => {
@@ -776,8 +793,8 @@ class EFACIntroModel {
           // this is an additional search to see if there are any elements stacked on a found element that are
           // *above* the element being dropped, see https://github.com/phetsims/energy-forms-and-changes/issues/221
           let restingModelElement = potentialRestingModelElement;
-          while ( restingModelElement.topSurface.elementOnSurfaceProperty.value ) {
-            const stackedRestingModelElement = restingModelElement.topSurface.elementOnSurfaceProperty.value;
+          while ( restingModelElement.topSurface!.elementOnSurfaceProperty.value ) {
+            const stackedRestingModelElement = restingModelElement.topSurface!.elementOnSurfaceProperty.value;
             if ( stackedRestingModelElement.positionProperty.value.y > modelElement.positionProperty.value.y &&
                  !modelElementsInSpot.includes( stackedRestingModelElement ) ) {
               modelElementsInSpot.push( stackedRestingModelElement );
@@ -794,14 +811,14 @@ class EFACIntroModel {
         for ( let j = 0; j < modelElementsInSpot.length && !beakerFoundInSpot; j++ ) {
           beakerFoundInSpot = beakerFoundInSpot || modelElementsInSpot[ j ] instanceof Beaker;
         }
-        let currentModelElementInStack = modelElement;
+        let currentModelElementInStack: ModelElement = modelElement;
         let beakerFoundInStack = currentModelElementInStack instanceof Beaker;
 
         // iterate through the stack of model elements being held and flag if any beakers are in it
-        while ( currentModelElementInStack.topSurface.elementOnSurfaceProperty.value && !beakerFoundInStack ) {
+        while ( currentModelElementInStack.topSurface!.elementOnSurfaceProperty.value && !beakerFoundInStack ) {
           beakerFoundInStack = beakerFoundInStack ||
-                               currentModelElementInStack.topSurface.elementOnSurfaceProperty.value instanceof Beaker;
-          currentModelElementInStack = currentModelElementInStack.topSurface.elementOnSurfaceProperty.value;
+                               currentModelElementInStack.topSurface!.elementOnSurfaceProperty.value instanceof Beaker;
+          currentModelElementInStack = currentModelElementInStack.topSurface!.elementOnSurfaceProperty.value;
         }
 
         if ( !( beakerFoundInSpot && beakerFoundInStack ) ) {
@@ -809,8 +826,8 @@ class EFACIntroModel {
           // find the highest element in the stack
           let highestElement = modelElementsInSpot[ 0 ];
           for ( let j = 1; j < modelElementsInSpot.length; j++ ) {
-            if ( modelElementsInSpot[ j ].topSurface.positionProperty.value.y >
-                 highestElement.topSurface.positionProperty.value.y ) {
+            if ( modelElementsInSpot[ j ].topSurface!.positionProperty.value.y >
+                 highestElement.topSurface!.positionProperty.value.y ) {
               highestElement = modelElementsInSpot[ j ];
             }
           }
@@ -831,7 +848,7 @@ class EFACIntroModel {
       );
     }
     else {
-      modelElement.positionProperty.set( new Vector2( destinationXSpot, modelElement.positionProperty.value.y ) );
+      modelElement.positionProperty.set( new Vector2( destinationXSpot!, modelElement.positionProperty.value.y ) );
     }
 
     // calculate a proposed Y position based on gravitational falling
@@ -944,7 +961,9 @@ class EFACIntroModel {
     else {
       element = _.find( this.thermalContainers, container => container.id === id );
     }
-    assert && assert( element, `no element found for id: ${id}` );
+    affirm( element, `no element found for id: ${id}` );
+
+    // @ts-expect-error
     return element;
   }
 }

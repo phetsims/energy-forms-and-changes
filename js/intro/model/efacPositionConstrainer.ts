@@ -1,8 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A singleton that encapsulates the information and algorithms necessary to constrain the motion of model elements such
  * that they can't be dragged through one another.
@@ -264,7 +261,7 @@ const efacPositionConstrainer = {
 function determineAllowedTranslation( movingElementBounds: Bounds2, stationaryElementBounds: Bounds2, proposedTranslationX: number,
                                       proposedTranslationY: number, restrictPosY: boolean, result?: Vector2 ): Vector2 {
 
-  result = result || new Vector2();
+  result = result || new Vector2( 0, 0 );
 
   // test for case where rectangles already overlap
   if ( exclusiveIntersectsBounds( movingElementBounds, stationaryElementBounds ) && restrictPosY ) {
