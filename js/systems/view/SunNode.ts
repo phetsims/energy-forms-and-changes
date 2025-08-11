@@ -70,8 +70,7 @@ class SunNode extends MoveFadeModelElementNode {
     } );
 
     // add the sun
-    // @ts-expect-error
-    const sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
+    const sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius, 0 );
     const sunPath = new Path( sunShape, {
       fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
         .addColorStop( 0, 'white' )

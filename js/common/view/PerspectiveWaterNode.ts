@@ -112,12 +112,7 @@ class PerspectiveWaterNode extends Node {
       this.fluidBounds.minY,
       ellipseWidth / 2,
       ellipseHeight / 2,
-      0,
-
-      // @ts-expect-error
-      0,
-      Math.PI / 2,
-      false
+      0
     );
 
     const halfWidth = this.fluidBounds.width / 2;

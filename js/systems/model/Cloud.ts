@@ -44,9 +44,7 @@ class Cloud {
 
     this.parentPositionProperty.link( parentPosition => {
       const center = parentPosition.plus( this.offsetFromParent );
-
-      // @ts-expect-error
-      this.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0, 0, 0, false );
+      this.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0 );
     } );
   }
 
