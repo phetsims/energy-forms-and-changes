@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Node that represents a "beaker container" in the view.  A beaker container is a beaker that contains fluid, and in
  * which other objects can be placed, which generally displaces the fluid.
@@ -16,10 +13,12 @@
  */
 
 import Multilink from '../../../../axon/js/Multilink.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
@@ -98,12 +97,14 @@ class BeakerContainerView extends BeakerView {
     // Update the clipping area based on the motion of this beaker, the blocks, and whether the energy chunks are
     // visible.  The clipping area hides energy chunks that overlap with blocks, making it look much less visually
     // distracting, as though the energy chunks in the beaker are behind the blocks.
-    const propertiesThatInfluenceClipArea = [];
+    const propertiesThatInfluenceClipArea: TReadOnlyProperty<IntentionalAny>[] = [];
     model.blockGroup.forEach( block => {
       propertiesThatInfluenceClipArea.push( block.positionProperty );
     } );
     propertiesThatInfluenceClipArea.push( beaker.positionProperty );
     propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
+
+    // @ts-expect-error
     Multilink.multilink( propertiesThatInfluenceClipArea, () => {
       this.updateEnergyChunkClipArea( beaker, model.blockGroup, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
@@ -113,6 +114,8 @@ class BeakerContainerView extends BeakerView {
       beaker,
       this.grabNode,
       modelViewTransform,
+
+      // @ts-expect-error
       constrainPosition,
       model.isPlayingProperty,
       options.tandem.createTandem( 'dragListener' )
@@ -179,7 +182,7 @@ class BeakerContainerView extends BeakerView {
     for ( let i = 0; i < blockGroup.count; i++ ) {
       block = blockGroup.getElement( i );
       if ( this.beaker.getBounds().containsPoint( block.positionProperty.value ) ||
-           this.beaker.topSurface.elementOnSurfaceProperty.value === block ) {
+           this.beaker.topSurface!.elementOnSurfaceProperty.value === block ) {
         blocksInBeaker.push( block );
       }
     }
@@ -207,15 +210,15 @@ class BeakerContainerView extends BeakerView {
 
       if ( chipAreaShapeBounds.containsPoint( bottomBlockPositionInView ) ) {
         clipAreaShape.moveTo(
-          bottomBlockPositionInView.x - this.blockWidthInView / 2 + this.forwardProjectionVector.x,
-          bottomBlockPositionInView.y + this.forwardProjectionVector.y
+          bottomBlockPositionInView.x - this.blockWidthInView! / 2 + this.forwardProjectionVector!.x,
+          bottomBlockPositionInView.y + this.forwardProjectionVector!.y
         );
-        clipAreaShape.lineToRelative( this.blockWidthInView, 0 );
-        clipAreaShape.lineToRelative( -this.forwardProjectionVector.x * 2, -this.forwardProjectionVector.y * 2 );
-        clipAreaShape.lineToRelative( 0, -this.blockHeightInView * 2 );
-        clipAreaShape.lineToRelative( -this.blockWidthInView, 0 );
-        clipAreaShape.lineToRelative( this.forwardProjectionVector.x * 2, this.forwardProjectionVector.y * 2 );
-        clipAreaShape.lineToRelative( 0, this.blockHeightInView * 2 );
+        clipAreaShape.lineToRelative( this.blockWidthInView!, 0 );
+        clipAreaShape.lineToRelative( -this.forwardProjectionVector!.x * 2, -this.forwardProjectionVector!.y * 2 );
+        clipAreaShape.lineToRelative( 0, -this.blockHeightInView! * 2 );
+        clipAreaShape.lineToRelative( -this.blockWidthInView!, 0 );
+        clipAreaShape.lineToRelative( this.forwardProjectionVector!.x * 2, this.forwardProjectionVector!.y * 2 );
+        clipAreaShape.lineToRelative( 0, this.blockHeightInView! * 2 );
       }
     }
     else {
@@ -230,15 +233,15 @@ class BeakerContainerView extends BeakerView {
         // is rectangular and that the position of the block is the bottom center.
         if ( chipAreaShapeBounds.containsPoint( blockPositionInView ) ) {
           clipAreaShape.moveTo(
-            blockPositionInView.x - this.blockWidthInView / 2 + this.forwardProjectionVector.x,
-            blockPositionInView.y + this.forwardProjectionVector.y
+            blockPositionInView.x - this.blockWidthInView! / 2 + this.forwardProjectionVector!.x,
+            blockPositionInView.y + this.forwardProjectionVector!.y
           );
-          clipAreaShape.lineToRelative( this.blockWidthInView, 0 );
-          clipAreaShape.lineToRelative( -this.forwardProjectionVector.x * 2, -this.forwardProjectionVector.y * 2 );
-          clipAreaShape.lineToRelative( 0, -this.blockHeightInView );
-          clipAreaShape.lineToRelative( -this.blockWidthInView, 0 );
-          clipAreaShape.lineToRelative( this.forwardProjectionVector.x * 2, this.forwardProjectionVector.y * 2 );
-          clipAreaShape.lineToRelative( 0, this.blockHeightInView );
+          clipAreaShape.lineToRelative( this.blockWidthInView!, 0 );
+          clipAreaShape.lineToRelative( -this.forwardProjectionVector!.x * 2, -this.forwardProjectionVector!.y * 2 );
+          clipAreaShape.lineToRelative( 0, -this.blockHeightInView! );
+          clipAreaShape.lineToRelative( -this.blockWidthInView!, 0 );
+          clipAreaShape.lineToRelative( this.forwardProjectionVector!.x * 2, this.forwardProjectionVector!.y * 2 );
+          clipAreaShape.lineToRelative( 0, this.blockHeightInView! );
         }
       }
     }

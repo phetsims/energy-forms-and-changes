@@ -72,7 +72,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
   private readonly predistributedEnergyChunkConfigurations: IntentionalAny[];
 
   // composite bounds for this model element, maintained as position changes
-  private readonly bounds: Bounds2;
+  public readonly bounds: Bounds2;
   protected readonly energyChunkGroup: EnergyChunkGroup;
   protected readonly energyChunkWanderControllerGroup: IntentionalAny;
 

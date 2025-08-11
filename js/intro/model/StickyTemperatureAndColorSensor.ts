@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a temperature and color sensor that sticks to movable objects
  *
@@ -14,21 +11,21 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
-import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
+import TemperatureAndColorSensor, { TemperatureAndColorSensorOptions } from '../../common/model/TemperatureAndColorSensor.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACIntroModel from './EFACIntroModel.js';
 
 type SelfOptions = EmptySelfOptions;
 
 // Since TemperatureAndColorSensor doesn't export an options type, we'll use Object for parent options
-type StickyTemperatureAndColorSensorOptions = SelfOptions & Object;
+type StickyTemperatureAndColorSensorOptions = SelfOptions & TemperatureAndColorSensorOptions;
 
 class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
+  private readonly elementFollower: ElementFollower;
 
   public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, providedOptions?: StickyTemperatureAndColorSensorOptions ) {
     super( model, initialPosition, initiallyActive, providedOptions );
 
-    // @private
     this.elementFollower = new ElementFollower( this.positionProperty );
 
     // closure to test whether this is over a thermal model element and, if so, attach to it
@@ -58,7 +55,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
 
     // Monitor the state of the 'userControlled' Property in order to detect when the user drops this thermometer and
     // determine whether or not it was dropped over anything to which it should stick.
-    this.userControlledProperty.link( userControlled => {
+    this.userControlledProperty!.link( userControlled => {
 
       // if being dragged, stop following any objects
       if ( userControlled ) {
@@ -100,7 +97,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
       else {
 
         // Figure out if this should be following another element.
-        if ( this.activeProperty.value && !this.userControlledProperty.value ) {
+        if ( this.activeProperty.value && !this.userControlledProperty!.value ) {
           followElements();
         }
       }
@@ -110,7 +107,7 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
   /**
    * restore initial state
    */
-  public reset(): void {
+  public override reset(): void {
     this.elementFollower.stopFollowing();
     super.reset();
   }

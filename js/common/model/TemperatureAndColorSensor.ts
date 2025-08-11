@@ -22,7 +22,7 @@ import UserMovableModelElement, { UserMovableModelElementOptions } from './UserM
 
 type SelfOptions = EmptySelfOptions;
 
-type TemperatureAndColorSensorOptions = SelfOptions & UserMovableModelElementOptions; // Using Object since parent options are not exported
+export type TemperatureAndColorSensorOptions = SelfOptions & UserMovableModelElementOptions; // Using Object since parent options are not exported
 
 class TemperatureAndColorSensor extends UserMovableModelElement {
 
