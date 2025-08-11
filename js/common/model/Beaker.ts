@@ -71,7 +71,7 @@ type SelfOptions = {
   predistributedEnergyChunkConfigurations?: IntentionalAny[];
 };
 
-type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
+export type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
 
 abstract class Beaker extends RectangularThermalMovableModelElement {
 

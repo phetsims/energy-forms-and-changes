@@ -12,9 +12,8 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import required from '../../../../phet-core/js/required.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import Beaker from '../../common/model/Beaker.js';
+import Beaker, { BeakerOptions } from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -36,7 +35,7 @@ class BeakerContainer extends Beaker {
                       potentiallyContainedElements: Block[],
                       energyChunksVisibleProperty: BooleanProperty,
                       energyChunkGroup: EnergyChunkGroup,
-                      config: IntentionalAny ) {
+                      config: BeakerOptions ) {
 
     required( config.energyChunkWanderControllerGroup );
 
