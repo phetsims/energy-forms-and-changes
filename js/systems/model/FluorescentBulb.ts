@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a type that models a fluorescent light bulb in an energy system
  *
@@ -11,8 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import fluorescentIcon_png from '../../../images/fluorescentIcon_png.js';
@@ -20,17 +16,17 @@ import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
-import LightBulb from './LightBulb.js';
+import LightBulb, { LightBulbOptions } from './LightBulb.js';
+
+type SelfOptions = EmptySelfOptions;
+export type FluorescentBulbOptions = SelfOptions & LightBulbOptions;
 
 class FluorescentBulb extends LightBulb {
 
-  // A11y name
-  public a11yName: string;
-
-  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
-    options = merge( {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: FluorescentBulbOptions ) {
+    const options = optionize<FluorescentBulbOptions, SelfOptions, LightBulbOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( new Image( fluorescentIcon_png ), false, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
 

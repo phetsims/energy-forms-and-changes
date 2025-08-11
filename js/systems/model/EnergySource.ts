@@ -10,7 +10,7 @@
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -18,20 +18,22 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemElement.js';
 
+type SelfOptions = EmptySelfOptions;
+export type EnergySourceOptions = SelfOptions & EnergySystemElementOptions;
+
 class EnergySource extends EnergySystemElement {
 
   protected readonly outgoingEnergyChunks: ObservableArray<EnergyChunk>;
 
   /**
    * @param iconImage Image to identify source on carousel menu
-   * @param [options]
+   * @param providedOptions
    */
-  public constructor( iconImage: Image, options?: EnergySystemElementOptions ) {
+  public constructor( iconImage: Image, providedOptions?: EnergySourceOptions ) {
 
-    // eslint-disable-next-line phet/bad-typescript-text
-    options = merge( {
+    const options = optionize<EnergySourceOptions, SelfOptions, EnergySystemElementOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( iconImage, options );
     this.outgoingEnergyChunks = createObservableArray( {

@@ -1,8 +1,5 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base type for model elements that can be positioned and faded
  *
@@ -15,18 +12,17 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import PositionableModelElement from './PositionableModelElement.js';
+import PositionableModelElement, { PositionableModelElementOptions } from './PositionableModelElement.js';
 
-export type PositionableFadableModelElement = PositionableModelElementOptions;
+export type PositionableFadableModelElementOptions = PositionableModelElementOptions;
 
 class PositionableFadableModelElement extends PositionableModelElement {
 
   public readonly opacityProperty: NumberProperty;
   public readonly visibleProperty: BooleanProperty;
 
-  public constructor( initialPosition: Vector2, initialOpacity: number, options?: PositionableFadableModelElement ) {
+  public constructor( initialPosition: Vector2, initialOpacity: number, options?: PositionableFadableModelElementOptions ) {
     super( initialPosition, options );
 
     this.opacityProperty = new NumberProperty( initialOpacity, {

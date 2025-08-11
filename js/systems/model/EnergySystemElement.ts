@@ -1,8 +1,5 @@
 // Copyright 2016-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base class for energy sources, converters, and users, that can be connected together to create what is referred to
  * as an "energy system" in this simulation
@@ -15,16 +12,17 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import PositionableFadableModelElement from './PositionableFadableModelElement.js';
+import PositionableFadableModelElement, { PositionableFadableModelElementOptions } from './PositionableFadableModelElement.js';
 
-export type EnergySystemElementOptions = PositionableFadableModelElementOptions;
+type SelfOptions = EmptySelfOptions;
+export type EnergySystemElementOptions = SelfOptions & PositionableFadableModelElementOptions;
 
 class EnergySystemElement extends PositionableFadableModelElement {
 
@@ -35,18 +33,20 @@ class EnergySystemElement extends PositionableFadableModelElement {
   // A11y name of this energy system element, used by assistive technology, set by subtypes
   public a11yName: string;
 
-  public constructor( iconImage: Image, options?: EnergySystemElementOptions ) {
+  public constructor( iconImage: Image, providedOptions?: EnergySystemElementOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergySystemElementOptions, SelfOptions, PositionableFadableModelElementOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioState: false
-    }, options );
+    }, providedOptions );
 
     super( new Vector2( 0, 0 ), 1.0, options );
 
     this.iconImage = iconImage;
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
     this.activeProperty = new BooleanProperty( false, {
@@ -91,6 +91,8 @@ class EnergySystemElement extends PositionableFadableModelElement {
    * clear daughter energy chunks
    */
   protected clearEnergyChunks(): void {
+
+    // @ts-expect-error
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
   }

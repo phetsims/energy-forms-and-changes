@@ -1,8 +1,5 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base type for energy converters, i.e. model elements that take energy from a source and convert it to something else
  * (such as mechanical to electrical) and then supply it to an energy user
@@ -11,38 +8,44 @@
  * @author Andrew Adare
  */
 
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergySystemElement from './EnergySystemElement.js';
+import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemElement.js';
+
+type SelfOptions = EmptySelfOptions;
+type EnergyConverterOptions = SelfOptions & EnergySystemElementOptions;
 
 class EnergyConverter extends EnergySystemElement {
 
-  protected readonly incomingEnergyChunks: ObservableArrayDef<EnergyChunk>;
-  protected readonly outgoingEnergyChunks: ObservableArrayDef<EnergyChunk>;
+  protected readonly incomingEnergyChunks: ObservableArray<EnergyChunk>;
+  protected readonly outgoingEnergyChunks: ObservableArray<EnergyChunk>;
 
   /**
    * @param iconImage Image to identify source on carousel menu
-   * @param [options]
+   * @param providedOptions
    */
-  public constructor( iconImage: Image, options?: IntentionalAny ) {
+  public constructor( iconImage: Image, providedOptions?: EnergyConverterOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyConverterOptions, SelfOptions, EnergySystemElementOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( iconImage, options );
     this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
     this.outgoingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
   }
@@ -75,10 +78,14 @@ class EnergyConverter extends EnergySystemElement {
   /**
    * clear internal list of energy chunks and outgoing energy chunks
    */
-  public clearEnergyChunks(): void {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
+
+    // @ts-expect-error
     this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
+
+    // @ts-expect-error
     this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }

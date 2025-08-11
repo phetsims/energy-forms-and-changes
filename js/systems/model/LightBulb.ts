@@ -18,6 +18,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -57,6 +58,9 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
   RADIATE_POINT_OFFSET
 ];
 
+type SelfOptions = EmptySelfOptions;
+export type LightBulbOptions = SelfOptions & EnergyUserOptions;
+
 class LightBulb extends EnergyUser {
 
   public readonly litProportionProperty: NumberProperty;
@@ -74,7 +78,7 @@ class LightBulb extends EnergyUser {
   private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
   private goRightNextTime: boolean;
 
-  public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
+  public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: LightBulbOptions ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
