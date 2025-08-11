@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A node for water droplets falling out of the faucet. This canvas node exists because the water drops can be rendered
  * faster as canvas images than as individual nodes.
@@ -12,8 +9,8 @@
  */
 
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FaucetAndWater from '../model/FaucetAndWater.js';
@@ -44,7 +41,7 @@ class FallingWaterCanvasNode extends CanvasNode {
     const waterDropImageCanvasRadius = modelViewTransform.modelToViewDeltaX( FaucetAndWater.MAX_WATER_WIDTH / 2 );
     this.waterDropImageCanvas.width = waterDropImageCanvasWidthHeight;
     this.waterDropImageCanvas.height = waterDropImageCanvasWidthHeight;
-    const context = this.waterDropImageCanvas.getContext( '2d' );
+    const context = this.waterDropImageCanvas.getContext( '2d' )!;
 
     // draw a water drop centered in the water drop image canvas
     context.fillStyle = EFACConstants.WATER_COLOR_OPAQUE.toCSS();

@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that represents a biker in the view
  *
@@ -154,7 +151,7 @@ class BikerNode extends MoveFadeModelElementNode {
       scale: IMAGE_SCALE
     } );
     const cyclistTorsoRootNode = new Node();
-    const cyclistTorsoNodes = [];
+    const cyclistTorsoNodes: Node[] = [];
 
     // create the torso image nodes
     for ( let i = 0; i < NUMBER_OF_TORSO_IMAGES; i++ ) {
@@ -168,8 +165,8 @@ class BikerNode extends MoveFadeModelElementNode {
     }
     const cyclistBackLegRootNode = new Node();
     const cyclistFrontLegRootNode = new Node();
-    const cyclistBackLegNodes = [];
-    const cyclistFrontLegNodes = [];
+    const cyclistBackLegNodes: Node[] = [];
+    const cyclistFrontLegNodes: Node[] = [];
 
     // create the leg image nodes
     for ( let i = 0; i < NUMBER_OF_LEG_IMAGES; i++ ) {

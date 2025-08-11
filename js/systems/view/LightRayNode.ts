@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A Scenery Node that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the
  * amount of light passing through.
@@ -16,10 +13,10 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import { Color } from '../../../../scenery/js/imports.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -198,7 +195,7 @@ class LightRayNode extends Node {
    */
   private getRectangleEntryPoint( origin: Vector2, endpoint: Vector2, rect: Shape ): Vector2 | null {
     const intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
-    let closestIntersectionPoint = null;
+    let closestIntersectionPoint: Vector2 | null = null;
     intersectingPoints.forEach( point => {
       if ( closestIntersectionPoint === null ||
            closestIntersectionPoint.distance( origin ) > point.distance( origin ) ) {
@@ -221,7 +218,7 @@ class LightRayNode extends Node {
       return null;
     }
 
-    let furthestIntersectionPoint = null;
+    let furthestIntersectionPoint: Vector2 | null = null;
     intersectingPoints.forEach( point => {
       if ( furthestIntersectionPoint === null ||
            furthestIntersectionPoint.distance( origin ) < point.distance( origin ) ) {
@@ -249,7 +246,7 @@ class LightRayNode extends Node {
     lines.push( new KiteLine( p[ 2 ], p[ 3 ] ) );
     lines.push( new KiteLine( p[ 3 ], p[ 0 ] ) );
 
-    const intersectingPoints = [];
+    const intersectingPoints: Vector2[] = [];
     lines.forEach( rectLine => {
       const intersectingPoint = getLineIntersection( rectLine, line );
       if ( intersectingPoint !== null ) {

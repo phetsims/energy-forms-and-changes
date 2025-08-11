@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that represents and electrical generator in the view
  *
@@ -28,20 +25,21 @@ import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Generator from '../model/Generator.js';
-import MoveFadeModelElementNode, { MoveFadeModelElementNodeOptions } from './MoveFadeModelElementNode.js';
+import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
 // constants
 const SPOKES_AND_PADDLES_CENTER_Y_OFFSET = -65;
 
 const generatorString = EnergyFormsAndChangesStrings.generator;
 
-type SelfOptions = {
+type GeneratorNodeOptions = {
 
   // whether the mechanical energy chunk layer is added
   addMechanicalEnergyChunkLayer?: boolean;
-};
 
-type GeneratorNodeOptions = SelfOptions & MoveFadeModelElementNodeOptions;
+  // eslint-disable-next-line phet/bad-sim-text
+  tandem?: Tandem;
+};
 
 class GeneratorNode extends MoveFadeModelElementNode {
 
@@ -49,7 +47,7 @@ class GeneratorNode extends MoveFadeModelElementNode {
 
   public constructor( generator: Generator, modelViewTransform: ModelViewTransform2, providedOptions?: GeneratorNodeOptions ) {
 
-    const options = optionize<GeneratorNodeOptions, SelfOptions, MoveFadeModelElementNodeOptions>()( {
+    const options = optionize<GeneratorNodeOptions>()( {
 
       // whether the mechanical energy chunk layer is added
       addMechanicalEnergyChunkLayer: true,
@@ -141,10 +139,10 @@ class GeneratorNode extends MoveFadeModelElementNode {
    */
   public getMechanicalEnergyChunkLayer(): EnergyChunkLayer {
     assert && assert(
-      !this.hasChild( this.mechanicalEnergyChunkLayer ),
+      !this.hasChild( this.mechanicalEnergyChunkLayer! ),
       'this.mechanicalEnergyChunkLayer is already a child of GeneratorNode'
     );
-    return this.mechanicalEnergyChunkLayer;
+    return this.mechanicalEnergyChunkLayer!;
   }
 }
 

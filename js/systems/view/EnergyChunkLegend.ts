@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that represent a legend that describes the different types of energy chunks
  *
@@ -87,7 +84,7 @@ class EnergyChunkLegend extends Panel {
    * @param energyType - the type of energy for this legend entry
    * @param modelViewTransform - needs to be passed in to create an EnergyChunk
    */
-  public static createEnergyChunkSymbol( labelString: string, energyType: IntentionalAny, modelViewTransform: ModelViewTransform2 ) {
+  public static createEnergyChunkSymbol( labelString: string, energyType: IntentionalAny, modelViewTransform: ModelViewTransform2 ): HBox {
     const labelText = new Text( labelString, {
       font: LEGEND_ENTRY_FONT,
       maxWidth: 100

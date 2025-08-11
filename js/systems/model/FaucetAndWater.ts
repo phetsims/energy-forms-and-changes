@@ -431,11 +431,10 @@ export default class FaucetAndWater extends EnergySource {
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
     this.energySinceLastChunk = stateObject.energySinceLastChunk;
   }
-}
 
-// statics
-FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN = OFFSET_FROM_CENTER_TO_WATER_ORIGIN;
-FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_FAUCET_HEAD;
-FaucetAndWater.MAX_WATER_WIDTH = MAX_WATER_WIDTH;
+  public static readonly OFFSET_FROM_CENTER_TO_WATER_ORIGIN = OFFSET_FROM_CENTER_TO_WATER_ORIGIN;
+  public static readonly OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_FAUCET_HEAD;
+  public static readonly MAX_WATER_WIDTH = MAX_WATER_WIDTH;
+}
 
 energyFormsAndChanges.register( 'FaucetAndWater', FaucetAndWater );

@@ -8,11 +8,15 @@
  * @author Andrew Adare
  */
 
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableFadableModelElement from '../model/PositionableFadableModelElement.js';
+
+type SelfOptions = EmptySelfOptions;
+export type MoveFadeModelElementNodeOptions = SelfOptions & NodeOptions;
 
 class MoveFadeModelElementNode extends Node {
 

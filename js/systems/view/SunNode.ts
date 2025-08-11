@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that represents the sun, clouds, and a slider to control the level of cloudiness in the view
  *
@@ -12,11 +9,11 @@
 
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -28,8 +25,8 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Panel from '../../../../sun/js/Panel.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import VSlider from '../../../../sun/js/VSlider.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import cloud_png from '../../../images/cloud_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
@@ -73,6 +70,7 @@ class SunNode extends MoveFadeModelElementNode {
     } );
 
     // add the sun
+    // @ts-expect-error
     const sunShape = Shape.ellipse( 0, 0, sunRadius, sunRadius );
     const sunPath = new Path( sunShape, {
       fill: new RadialGradient( 0, 0, 0, 0, 0, sunRadius )
@@ -137,7 +135,7 @@ class SunNode extends MoveFadeModelElementNode {
       }
     );
 
-    const tickLabel = label => {
+    const tickLabel = ( label: string ) => {
       return new Text( label, {
         font: SLIDER_LABEL_FONT,
         maxWidth: CONTROL_PANEL_TEXT_MAX_WIDTH
@@ -177,10 +175,10 @@ class SunNode extends MoveFadeModelElementNode {
     } ) );
 
     // add/remove the light-absorbing shape for the solar panel
-    let currentLightAbsorbingShape = null;
+    let currentLightAbsorbingShape: LightAbsorbingShape | null = null;
 
     // visible absorption shape used for debugging
-    let helperAbsorptionNode = null;
+    let helperAbsorptionNode: Node | null = null;
 
     Multilink.multilink(
       [ sun.activeProperty, sun.solarPanel.activeProperty ],

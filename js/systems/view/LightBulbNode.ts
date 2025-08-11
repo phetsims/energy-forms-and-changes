@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a scenery node that represents a light bulb in the view
  *
@@ -15,7 +12,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Color from '../../../../scenery/js/util/Color.js';

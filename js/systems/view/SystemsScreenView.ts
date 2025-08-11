@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * main view for the 'Systems' screen of the Energy Forms and Changes simulation
  *
@@ -61,6 +58,11 @@ const BOTTOM_CONTROL_PANEL_HEIGHT = 49; // manually coordinated to match similar
 
 class SystemsScreenView extends ScreenView {
 
+  private readonly model: SystemsModel;
+  private readonly beakerHeaterNode: BeakerHeaterNode;
+  private readonly faucetAndWaterNode: FaucetAndWaterNode;
+  private readonly teaKettleNode: TeaKettleNode;
+
   /**
    * @param model
    * @param tandem
@@ -75,7 +77,6 @@ class SystemsScreenView extends ScreenView {
     const energyConvertersTandem = tandem.createTandem( 'energyConverters' );
     const energyUsersTandem = tandem.createTandem( 'energyUsers' );
 
-    // @private {SystemsModel}
     this.model = model;
 
     // pdom - the screen summary to be read by assistive technology
@@ -100,9 +101,9 @@ class SystemsScreenView extends ScreenView {
         model.energyUsersCarousel.targetElementNameProperty
       ],
       () => {
-        const energySource = model.energySourcesCarousel.getSelectedElement();
-        const energyConverter = model.energyConvertersCarousel.getSelectedElement();
-        const energyUser = model.energyUsersCarousel.getSelectedElement();
+        const energySource = model.energySourcesCarousel.getSelectedElement()!;
+        const energyConverter = model.energyConvertersCarousel.getSelectedElement()!;
+        const energyUser = model.energyUsersCarousel.getSelectedElement()!;
         assert && assert( energySource.a11yName, 'the selected element has no accessibility name specified' );
         energySystemConfigDescription.descriptionContent = StringUtils.fillIn(
           EnergyFormsAndChangesStrings.a11y.energySystemHelpText,
@@ -132,7 +133,6 @@ class SystemsScreenView extends ScreenView {
 
     // create the energy user nodes
 
-    // @private
     this.beakerHeaterNode = new BeakerHeaterNode(
       model.beakerHeater,
       model.energyChunksVisibleProperty,
@@ -191,7 +191,6 @@ class SystemsScreenView extends ScreenView {
     this.addChild( beltNode );
     this.addChild( solarPanelNode );
 
-    // @private
     this.faucetAndWaterNode = new FaucetAndWaterNode(
       model.faucetAndWater,
       model.energyChunksVisibleProperty,
@@ -213,7 +212,6 @@ class SystemsScreenView extends ScreenView {
       energySourcesTandem.createTandem( 'sunNode' )
     );
 
-    // @private
     this.teaKettleNode = new TeaKettleNode(
       model.teaKettle,
       model.energyChunksVisibleProperty,
@@ -356,8 +354,10 @@ class SystemsScreenView extends ScreenView {
   /**
    * step this view element, called by the framework
    * @param dt - time step, in seconds
+   *
+   * TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 should this call super.step(dt) ?
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     if ( this.model.isPlayingProperty.get() ) {
       this.stepView( dt );
     }

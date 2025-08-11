@@ -374,10 +374,9 @@ class SunEnergySource extends EnergySource {
     this.sunPosition = stateObject.sunPosition;
     this.energyChunkEmissionCountdownTimer = stateObject.energyChunkEmissionCountdownTimer;
   }
-}
 
-// statics
-SunEnergySource.OFFSET_TO_CENTER_OF_SUN = OFFSET_TO_CENTER_OF_SUN;
+  public static readonly OFFSET_TO_CENTER_OF_SUN = OFFSET_TO_CENTER_OF_SUN;
+}
 
 energyFormsAndChanges.register( 'SunEnergySource', SunEnergySource );
 export default SunEnergySource;

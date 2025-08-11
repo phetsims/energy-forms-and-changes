@@ -458,21 +458,20 @@ class SolarPanel extends EnergyConverter {
     this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
     this.simulationTime = stateObject.simulationTime;
   }
+
+  public static readonly PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
+
+  public static readonly SolarPanelIO = new IOType( 'SolarPanelIO', {
+    valueType: SolarPanel,
+    toStateObject: solarPanel => solarPanel.toStateObject(),
+    applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),
+    stateSchema: {
+      numberOfConvertedChunks: NumberIO,
+      latestChunkArrivalTime: NumberIO,
+      simulationTime: NumberIO
+    }
+  } );
 }
-
-// statics
-SolarPanel.PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
-
-SolarPanel.SolarPanelIO = new IOType( 'SolarPanelIO', {
-  valueType: SolarPanel,
-  toStateObject: solarPanel => solarPanel.toStateObject(),
-  applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),
-  stateSchema: {
-    numberOfConvertedChunks: NumberIO,
-    latestChunkArrivalTime: NumberIO,
-    simulationTime: NumberIO
-  }
-} );
 
 energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
 export default SolarPanel;
