@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * main view for the 'Intro' screen of the Energy Forms and Changes simulation
  *
@@ -48,9 +45,11 @@ import gasPipeIntro_png from '../../../images/gasPipeIntro_png.js';
 import shelf_png from '../../../images/shelf_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import Beaker from '../../common/model/Beaker.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
+import ModelElement from '../../common/model/ModelElement.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperatureAndColorSensorNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
@@ -58,9 +57,9 @@ import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
-import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
+import Block from '../model/Block.js';
 import EFACIntroModel from '../model/EFACIntroModel.js';
-import ModelElement from '../../common/model/ModelElement.js';
+import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
 import StickyTemperatureAndColorSensor from '../model/StickyTemperatureAndColorSensor.js';
 import AirNode from './AirNode.js';
 import BeakerContainerView from './BeakerContainerView.js';
@@ -175,6 +174,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // create left burner node
     const leftBurnerStand = new BurnerStandNode(
+      // @ts-expect-error
       modelViewTransform.modelToViewShape( model.leftBurner.getBounds() ),
       burnerProjectionAmount
     );
@@ -210,11 +210,15 @@ class EFACIntroScreenView extends ScreenView {
     const leftHeaterCoolerBack = new HeaterCoolerBack( model.leftBurner.heatCoolLevelProperty, {
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.leftBurner.getBounds().minY ),
+
+      // @ts-expect-error
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5
     } );
     const leftHeaterCoolerNode = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
+
+      // @ts-expect-error
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5,
       thumbSize: new Dimension2( 36, 18 ),
@@ -237,6 +241,7 @@ class EFACIntroScreenView extends ScreenView {
 
       // create right burner node
       const rightBurnerStand = new BurnerStandNode(
+        // @ts-expect-error
         modelViewTransform.modelToViewShape( model.rightBurner.getBounds() ),
         burnerProjectionAmount
       );
@@ -245,11 +250,15 @@ class EFACIntroScreenView extends ScreenView {
       const rightHeaterCoolerBack = new HeaterCoolerBack( model.rightBurner.heatCoolLevelProperty, {
         centerX: modelViewTransform.modelToViewX( model.rightBurner.getBounds().centerX ),
         bottom: modelViewTransform.modelToViewY( model.rightBurner.getBounds().minY ),
+
+        // @ts-expect-error
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5
       } );
       const rightHeaterCoolerNode = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
         leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
+
+        // @ts-expect-error
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5,
         thumbSize: new Dimension2( 36, 18 ),
@@ -304,7 +313,7 @@ class EFACIntroScreenView extends ScreenView {
         up: leftHeaterCoolerUpInputAction
       } ) );
 
-
+      // @ts-expect-error
       const leftKeyboardListener = new KeyboardListener( { keys: EnglishStringKeyUtils.RANGE_KEYS } );
       leftHeaterCoolerNode.addInputListener( leftKeyboardListener );
       leftKeyboardListener.isPressedProperty.link( pressed => {
@@ -329,6 +338,7 @@ class EFACIntroScreenView extends ScreenView {
         up: rightHeaterCoolerUpInputAction
       } ) );
 
+      // @ts-expect-error
       const rightKeyboardListener = new KeyboardListener( { keys: EnglishStringKeyUtils.RANGE_KEYS } );
       rightHeaterCoolerNode.addInputListener( rightKeyboardListener );
       rightKeyboardListener.isPressedProperty.link( pressed => {
@@ -373,6 +383,7 @@ class EFACIntroScreenView extends ScreenView {
 
       // constrain the model element to move legally within the model, which generally means not moving through things
       const viewAndModelConstrainedPosition = efacPositionConstrainer.constrainPosition(
+        // @ts-expect-error
         modelElement,
         viewConstrainedPosition,
         model.beakerGroup,
@@ -384,10 +395,12 @@ class EFACIntroScreenView extends ScreenView {
       return viewAndModelConstrainedPosition;
     };
 
-    const blockNodeGroup = new PhetioGroup( ( tandem, block ) => {
+    // @ts-expect-error
+    const blockNodeGroup = new PhetioGroup<BlockNode>( ( tandem, block ) => {
       return new BlockNode(
         block,
         modelViewTransform,
+        // @ts-expect-error
         constrainMovableElementMotion,
         model.isPlayingProperty, {
           setApproachingEnergyChunkParentNode: airLayer,
@@ -402,7 +415,8 @@ class EFACIntroScreenView extends ScreenView {
       supportsDynamicState: false
     } );
 
-    const blockListener = addedBlock => {
+    const blockListener = ( addedBlock: Block ) => {
+      // @ts-expect-error
       const blockNode = blockNodeGroup.createCorrespondingGroupElement( addedBlock.tandem.name, addedBlock );
 
       blockLayer.addChild( blockNode );
@@ -419,12 +433,14 @@ class EFACIntroScreenView extends ScreenView {
     model.blockGroup.forEach( blockListener );
     model.blockGroup.elementCreatedEmitter.addListener( blockListener );
 
+    // @ts-expect-error
     this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
       const label = beaker.beakerType === BeakerType.WATER ? waterString : oliveOilString;
       return new BeakerContainerView(
         beaker,
         model,
         modelViewTransform,
+        // @ts-expect-error
         constrainMovableElementMotion, {
           label: label,
           tandem: tandem,
@@ -435,11 +451,15 @@ class EFACIntroScreenView extends ScreenView {
     }, () => [ model.beakerGroup.archetype ], {
       tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
       phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
+
+      // @ts-expect-error
       phetioInputEnabledPropertyInstrumented: true,
       supportsDynamicState: false
     } );
 
-    const beakerListener = addedBeaker => {
+    const beakerListener = ( addedBeaker: Beaker ) => {
+
+      // @ts-expect-error
       const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker.tandem.name, addedBeaker );
 
       beakerFrontLayer.addChild( beakerProxyNode.frontNode );
@@ -463,7 +483,7 @@ class EFACIntroScreenView extends ScreenView {
     this.addChild( thermometerLayer );
 
     // create and add the temperature and color thermometer nodes, which look like a thermometer with a triangle on the side
-    const thermometerNodes = [];
+    const thermometerNodes: EFACTemperatureAndColorSensorNode[] = [];
     const nodeString = 'Node';
     let thermometerNodeWidth = 0;
     let thermometerNodeHeight = 0;
@@ -529,7 +549,7 @@ class EFACIntroScreenView extends ScreenView {
     model.thermometers.forEach( ( thermometer, index ) => {
 
       // add a listener for when the thermometer is removed from or returned to the storage area
-      thermometer.userControlledProperty.link( userControlled => {
+      thermometer.userControlledProperty!.link( userControlled => {
         if ( userControlled ) {
 
           // the user has picked up this thermometer
@@ -784,6 +804,7 @@ class EFACIntroScreenView extends ScreenView {
       const viewConstrainedPosition = proposedPosition.copy();
 
       const elementViewBounds = modelViewTransform.modelToViewBounds(
+        // @ts-expect-error
         modelElement.getCompositeBoundsForPosition( proposedPosition, reusuableBounds )
       );
 
@@ -811,9 +832,10 @@ class EFACIntroScreenView extends ScreenView {
 
   /**
    * step this view element, called by the framework
+   * TODO: Should probably call super.step, see https://github.com/phetsims/energy-forms-and-changes/issues/430
    * @param dt - time step, in seconds
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     if ( this.model.isPlayingProperty.get() ) {
       this.stepView( dt );
     }

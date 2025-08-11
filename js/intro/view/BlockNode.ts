@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Node that represents a block in the view.  The blocks in the model are 2D, and this node gives them some perspective
  * in order to make them appear to be 3D.
@@ -18,6 +15,7 @@ import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -35,6 +33,7 @@ import ironTextureRight_png from '../../../images/ironTextureRight_png.js';
 import ironTextureTop_png from '../../../images/ironTextureTop_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
@@ -47,7 +46,7 @@ const brickString = EnergyFormsAndChangesStrings.brick;
 const ironString = EnergyFormsAndChangesStrings.iron;
 
 // constants
-const BLOCK_IMAGES = {};
+const BLOCK_IMAGES: IntentionalAny = {};
 BLOCK_IMAGES[ BlockType.BRICK ] = {
   front: brickTextureFront_png,
   side: brickTextureRight_png,
@@ -61,7 +60,7 @@ BLOCK_IMAGES[ BlockType.IRON ] = {
 const LABEL_FONT = new PhetFont( 26 );
 const OUTLINE_LINE_WIDTH = 3;
 const PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
-const BLOCK_ATTRIBUTES = {};
+const BLOCK_ATTRIBUTES: IntentionalAny = {};
 BLOCK_ATTRIBUTES[ BlockType.IRON ] = { label: ironString };
 BLOCK_ATTRIBUTES[ BlockType.BRICK ] = { label: brickString };
 
@@ -249,10 +248,11 @@ class BlockNode extends Node {
       const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
 
       // if a node was specified for the approaching energy chunks, use it, otherwise make them a child of this node
+      // @ts-expect-error
       const parentNode = options.approachingEnergyChunkParentNode || this.energyChunkRootNode;
       parentNode.addChild( energyChunkNode );
 
-      const removalListener = removedEnergyChunk => {
+      const removalListener = ( removedEnergyChunk: EnergyChunk ) => {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           parentNode.removeChild( energyChunkNode );
           energyChunkNode.dispose();
@@ -291,6 +291,8 @@ class BlockNode extends Node {
       block,
       this,
       modelViewTransform,
+
+      // @ts-expect-error
       constrainPosition,
       simIsPlayingProperty,
       options.tandem.createTandem( 'dragListener' )
@@ -315,6 +317,8 @@ class BlockNode extends Node {
 
       // create the texture image
       const texture = new Image( textureImage, {
+
+        // @ts-expect-error
         minWidth: shape.bounds.width,
         minHeight: shape.bounds.height,
         left: shape.bounds.minX,
