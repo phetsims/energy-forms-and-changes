@@ -23,6 +23,8 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement from './ModelElement.js';
 
+export type UserMovableModelElementOptions = IntentionalAny;
+
 class UserMovableModelElement extends ModelElement {
 
   public constructor( initialPosition: Vector2, options?: IntentionalAny ) {

@@ -13,7 +13,6 @@ import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecate
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-// @public
 const BeakerType = EnumerationDeprecated.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
   beforeFreeze: BeakerType => {
     BeakerType.getTandemName = beakerType => {

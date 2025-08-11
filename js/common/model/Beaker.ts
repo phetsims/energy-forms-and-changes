@@ -71,7 +71,7 @@ let performanceMeasurementTaken = false;
 type SelfOptions = {
   beakerType?: typeof BeakerType;
   majorTickMarkDistance?: number;
-  predistributedEnergyChunkConfigurations?: any[];
+  predistributedEnergyChunkConfigurations?: IntentionalAny[];
 };
 
 type BeakerOptions = SelfOptions & RectangularThermalMovableModelElementOptions;
@@ -430,7 +430,7 @@ class Beaker extends RectangularThermalMovableModelElement {
   /**
    * get the energy container category, which is an enum that is used to determine heat transfer rates
    */
-  get energyContainerCategory(): EnergyContainerCategory {
+  public get energyContainerCategory(): EnergyContainerCategory {
     return this._energyContainerCategory;
   }
 

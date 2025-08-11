@@ -11,7 +11,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';

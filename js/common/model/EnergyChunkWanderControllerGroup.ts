@@ -14,6 +14,7 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioGroup, { type PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -46,7 +47,7 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup {
     super( EnergyChunkWanderControllerGroup.createEnergyChunkWanderController, defaultArguments, options );
   }
 
-  public static createEnergyChunkWanderController( tandem: Tandem, energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: any ): EnergyChunkWanderController {
+  public static createEnergyChunkWanderController( tandem: Tandem, energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: IntentionalAny ): EnergyChunkWanderController {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkWanderControllerGroup supplies its own tandem' );
     return new EnergyChunkWanderController( energyChunk, destinationProperty, merge( { tandem: tandem }, options ) );
   }

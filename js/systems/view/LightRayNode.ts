@@ -15,10 +15,11 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import { Color } from '../../../../scenery/js/imports.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -30,7 +31,7 @@ const SEARCH_ITERATIONS = 10;
 class LightRayNode extends Node {
 
   // Data that defines this ray
-  private readonly lightAbsorbingShapes: any[];
+  private readonly lightAbsorbingShapes: IntentionalAny[];
   private readonly pointAndFadeValues: PointAndFadeValue[];
   private readonly origin: Vector2;
   private readonly endpoint: Vector2;
@@ -55,12 +56,12 @@ class LightRayNode extends Node {
   /**
    * add a shape that will potentially interact with this light ray
    */
-  public addLightAbsorbingShape( lightAbsorbingShape: any ): void {
+  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
     this.lightAbsorbingShapes.push( lightAbsorbingShape );
     lightAbsorbingShape.absorptionCoefficientProperty.link( this.rayUpdater );
   }
 
-  public removeLightAbsorbingShape( lightAbsorbingShape: any ): void {
+  public removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
     lightAbsorbingShape.absorptionCoefficientProperty.unlink( this.rayUpdater );
     _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
     this.updateRay();

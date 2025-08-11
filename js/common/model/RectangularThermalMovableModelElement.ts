@@ -49,7 +49,7 @@ type SelfOptions = {
 
   // pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
   // set up the model element with reasonably distributed energy chunks.
-  predistributedEnergyChunkConfigurations?: any[];
+  predistributedEnergyChunkConfigurations?: IntentionalAny[];
 };
 
 export type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;

@@ -13,9 +13,10 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
+import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
 
@@ -43,9 +44,6 @@ const efacPositionConstrainer = {
    * @returns the original proposed position if valid, or alternative position if not
    */
   constrainPosition: ( modelElement: RectangularThermalMovableModelElement, proposedPosition: Vector2, beakerGroup: PhetioGroup<BeakerContainer>, blockGroup: PhetioGroup<Block>, burnerBlockingRect: Bounds2 ): Vector2 => {
-
-    assert && assert( beakerGroup instanceof PhetioGroup, 'invalid beakerGroup' );
-    assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
 
     const modelElementPosition = modelElement.positionProperty.get();
 
@@ -208,7 +206,7 @@ const efacPositionConstrainer = {
       else {
 
         // make sure this is a beaker before going any further
-        assert && assert( modelElement instanceof BeakerContainer, 'unrecognized model element type' );
+        affirm( modelElement instanceof BeakerContainer, 'unrecognized model element type' );
 
         // Test to see if the beaker's motion needs to be constrained due to the block's position, but *don't* do this
         // if the block is sitting inside the beaker, since it will be dragged along with the beaker's motion.
@@ -254,6 +252,10 @@ const efacPositionConstrainer = {
 /**
  * Helper function to determine the portion of a proposed translation that may occur given a moving rectangle and a
  * stationary rectangle that can block the moving one.
+ * @param movingElementBounds
+ * @param stationaryElementBounds
+ * @param proposedTranslationX
+ * @param proposedTranslationY
  * @param restrictPosY - Flag that controls whether the positive Y direction is restricted.  This
  *                       is often set false if there is another model element on top of the one
  *                       being tested.

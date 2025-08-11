@@ -22,7 +22,12 @@ import UserMovableModelElement from '../model/UserMovableModelElement.js';
 class ThermalElementDragHandler extends DragListener {
 
   /**
+   * @param modelElement
    * @param screenViewChildNode - the node that will be used to convert pointer positions to global coordinates
+   * @param modelViewTransform
+   * @param constrainPosition
+   * @param simIsPlayingProperty
+   * @param tandem
    */
   public constructor(
     modelElement: UserMovableModelElement,

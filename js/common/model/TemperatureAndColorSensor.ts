@@ -14,20 +14,20 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EFACConstants from '../EFACConstants.js';
 import EFACIntroModel from '../../intro/model/EFACIntroModel.js';
-import UserMovableModelElement from './UserMovableModelElement.js';
+import EFACConstants from '../EFACConstants.js';
+import UserMovableModelElement, { UserMovableModelElementOptions } from './UserMovableModelElement.js';
 
 // Since UserMovableModelElement doesn't export options, we use the parent's parent (PhetioObject) options
 // or a general approach with Object type for the parent options
 type SelfOptions = EmptySelfOptions;
 
-type TemperatureAndColorSensorOptions = SelfOptions & Object; // Using Object since parent options are not exported
+type TemperatureAndColorSensorOptions = SelfOptions & UserMovableModelElementOptions; // Using Object since parent options are not exported
 
 class TemperatureAndColorSensor extends UserMovableModelElement {
 

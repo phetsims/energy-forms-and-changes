@@ -16,6 +16,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -173,8 +174,7 @@ class EnergyChunkWanderController extends PhetioObject {
     };
   }
 
-  // @public (EnergyChunkWanderControllerIO)
-  public toStateObject(): any {
+  public toStateObject(): IntentionalAny {
 
     const stateObject = {
       minSpeed: this.minSpeed,
@@ -200,8 +200,7 @@ class EnergyChunkWanderController extends PhetioObject {
     return stateObject;
   }
 
-  // @public (EnergyChunkWanderControllerIO)
-  public static stateObjectToCreateElementArguments( stateObject: any ): any[] {
+  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -217,8 +216,7 @@ class EnergyChunkWanderController extends PhetioObject {
     return [ energyChunk, destinationProperty, {} ];
   }
 
-  // @public (EnergyChunkWanderControllerIO)
-  public applyState( stateObject: any ): void {
+  public applyState( stateObject: IntentionalAny ): void {
     this.minSpeed = stateObject.minSpeed;
     this.maxSpeed = stateObject.maxSpeed;
     this.wanderAngleVariation = stateObject.wanderAngleVariation;

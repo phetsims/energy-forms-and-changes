@@ -61,11 +61,11 @@ class BeakerContainerView extends BeakerView {
   private readonly clipAreaHelperNode?: Path;
 
   public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, providedOptions?: BeakerContainerViewOptions ) {
-    
+
     const options = optionize<BeakerContainerViewOptions, SelfOptions, PhetioObjectOptions>()( {
       // BeakerContainerView has no new options, using EmptySelfOptions
     }, providedOptions );
-    
+
     super( beaker, model.energyChunksVisibleProperty, modelViewTransform, options );
 
     this.beaker = beaker;
@@ -170,7 +170,6 @@ class BeakerContainerView extends BeakerView {
    * @param modelViewTransform
    */
   private addProjectedBlocksToClipArea( blockGroup: PhetioGroup<Block>, clipAreaShape: Shape, modelViewTransform: ModelViewTransform2 ): void {
-    assert && assert( blockGroup instanceof PhetioGroup, 'invalid blockGroup' );
 
     // hoisted block variable
     let block;

@@ -9,17 +9,18 @@
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import required from '../../../../phet-core/js/required.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import Block from './Block.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import Block from './Block.js';
 
 // counter used by constructor to create unique IDs
 let idCounter = 0;
@@ -32,12 +33,12 @@ class BeakerContainer extends Beaker {
   private readonly potentiallyContainedElements: Block[];
 
   public constructor( initialPosition: Vector2,
-               width: number,
-               height: number,
-               potentiallyContainedElements: Block[],
-               energyChunksVisibleProperty: BooleanProperty,
-               energyChunkGroup: EnergyChunkGroup,
-               config: Object ) {
+                      width: number,
+                      height: number,
+                      potentiallyContainedElements: Block[],
+                      energyChunksVisibleProperty: BooleanProperty,
+                      energyChunkGroup: EnergyChunkGroup,
+                      config: IntentionalAny ) {
 
     required( config.energyChunkWanderControllerGroup );
 

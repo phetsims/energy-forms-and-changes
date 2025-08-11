@@ -15,6 +15,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
@@ -77,14 +78,14 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 
   // @public (EnergyChunkPathMoverIO)
-  public static stateObjectToCreateElementArguments( stateObject: any ): [ EnergyChunk, Vector2[], number ] {
+  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): [ EnergyChunk, Vector2[], number ] {
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
     return [ energyChunk, path, stateObject.speed ];
   }
 
   // @public (EnergyChunkPathMoverIO)
-  public applyState( stateObject: any ): void {
+  public applyState( stateObject: IntentionalAny ): void {
     this.pathFullyTraversed = stateObject.pathFullyTraversed;
 
     // Find the actual reference to the current nextPoint, not just a new instance of Vector2 with the same value, see https://github.com/phetsims/energy-forms-and-changes/issues/357

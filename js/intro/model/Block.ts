@@ -11,17 +11,19 @@
  * @author Chris Klusendorf
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Property from '../../../../axon/js/Property.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
@@ -29,7 +31,6 @@ import RectangularThermalMovableModelElement from '../../common/model/Rectangula
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType from './BlockType.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 
 // constants
 const NUM_ENERGY_CHUNK_SLICES = 4; // Number of slices where energy chunks may be placed.
@@ -88,10 +89,10 @@ class Block extends RectangularThermalMovableModelElement {
    * @param providedOptions
    */
   public constructor( initialPosition: Vector2,
-               energyChunksVisibleProperty: Property<boolean>,
-               blockType: BlockType,
-               energyChunkGroup: PhetioGroup<any>,
-               providedOptions?: BlockOptions ) {
+                      energyChunksVisibleProperty: Property<boolean>,
+                      blockType: BlockType,
+                      energyChunkGroup: PhetioGroup<EnergyChunk>,
+                      providedOptions?: BlockOptions ) {
 
     const options = optionize<BlockOptions, SelfOptions, PhetioObjectOptions>()( {
       energyChunkWanderControllerGroup: required( providedOptions.energyChunkWanderControllerGroup ),

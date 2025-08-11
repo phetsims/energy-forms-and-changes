@@ -18,11 +18,12 @@
  * @author Martin Veillette
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -41,7 +42,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
   public readonly anchorPointProperty: Property<Vector2>;
 
   // 2D bounds of this slice in model space, translates with the anchor point
-  public readonly bounds: Bounds2;
+  public bounds: Bounds2;
 
   private readonly zPosition: number;
 
@@ -111,20 +112,13 @@ class EnergyChunkContainerSlice extends PhetioObject {
     };
   }
 
-  /**
-   * @public (EnergyChunkContainerSliceIO)
-   */
-  public toStateObject(): { bounds: Bounds2 } {
+  public toStateObject(): { bounds: Bounds2 } { // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 create a type for the state object
     return {
       bounds: Bounds2.Bounds2IO.toStateObject( this.bounds )
     };
   }
 
-  /**
-   * @public (EnergyChunkContainerSliceIO)
-   * @param stateObject
-   */
-  public applyState( stateObject: Object ): void {
+  public applyState( stateObject: IntentionalAny ): void {
     this.bounds = Bounds2.Bounds2IO.fromStateObject( stateObject.bounds );
   }
 

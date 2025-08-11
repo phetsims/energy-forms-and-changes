@@ -19,6 +19,7 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
@@ -109,7 +110,7 @@ class EFACIntroModel {
   public readonly beakerGroup: PhetioGroup<BeakerContainer>;
 
   // Tracking object for thermal contact info
-  private readonly inThermalContactInfo: Object;
+  private readonly inThermalContactInfo: IntentionalAny;
 
   // All model elements for easy iteration
   private readonly modelElementList: ModelElement[];
@@ -122,7 +123,7 @@ class EFACIntroModel {
   private readonly reusableBalanceArray: EnergyBalanceRecord[];
 
   // Used to notify the view that a manual step was called
-  public readonly manualStepEmitter: Emitter<[number]>;
+  public readonly manualStepEmitter: Emitter<[ number ]>;
 
   public constructor( blocksToCreate: BlockType[], beakersToCreate: BeakerType[], numberOfBurners: number, tandem: Tandem ) {
 
@@ -352,8 +353,8 @@ class EFACIntroModel {
     return color;
   }
 
-  // @private {RectangularThermalMovableModelElement[]} - put all the thermal containers in a list for easy iteration
-  get thermalContainers() {
+  // put all the thermal containers in a list for easy iteration
+  private get thermalContainers(): RectangularThermalMovableModelElement[] {
     return [ ...this.blockGroup.getArray(), ...this.beakerGroup.getArray() ];
   }
 
@@ -577,7 +578,7 @@ class EFACIntroModel {
 
           // See if there is another thermal container that is in the opposite situation from this one, i.e. one that
           // has a deficit of ECs when this one has excess, or vice versa.
-          if ( this.thermalContainers.indexOf( otherElementInRecord ) >= 0 ) {
+          if ( this.thermalContainers.includes( otherElementInRecord ) ) {
             const otherECBalance = otherElementInRecord.getEnergyChunkBalance();
             if ( energyChunkBalance > 0 && otherECBalance < 0 && thisElementTemperature > otherElementTemperature ||
                  energyChunkBalance < 0 && otherECBalance > 0 && thisElementTemperature < otherElementTemperature ) {
@@ -595,7 +596,7 @@ class EFACIntroModel {
           for ( let i = 0; i < recentlyUpdatedBalances.length && bestExchangeCandidate === null; i++ ) {
             currentRecord = recentlyUpdatedBalances[ i ];
             const otherID = currentRecord.getOtherID( thermalContainer.id );
-            if ( otherID.indexOf( 'burner' ) >= 0 ) {
+            if ( otherID.includes( 'burner' ) ) {
 
               // This is a burner, is it in a state where it is able to provide or receive an energy chunk?
               const burner = this.getThermalElementByID( otherID );
@@ -761,7 +762,7 @@ class EFACIntroModel {
           while ( restingModelElement.topSurface.elementOnSurfaceProperty.value ) {
             const stackedRestingModelElement = restingModelElement.topSurface.elementOnSurfaceProperty.value;
             if ( stackedRestingModelElement.positionProperty.value.y > modelElement.positionProperty.value.y &&
-                 modelElementsInSpot.indexOf( stackedRestingModelElement ) < 0 ) {
+                 !modelElementsInSpot.includes( stackedRestingModelElement ) ) {
               modelElementsInSpot.push( stackedRestingModelElement );
             }
             restingModelElement = stackedRestingModelElement;
@@ -912,12 +913,12 @@ class EFACIntroModel {
    * @param id
    * @returns one of the elements in the model that can provide and absorb energy
    */
-  private getThermalElementByID( id: string ): Object {
+  private getThermalElementByID( id: string ): ModelElement {
     let element = null;
     if ( id === this.air.id ) {
       element = this.air;
     }
-    else if ( id.indexOf( 'burner' ) >= 0 ) {
+    else if ( id.includes( 'burner' ) ) {
       element = _.find( this.burners, burner => burner.id === id );
     }
     else {

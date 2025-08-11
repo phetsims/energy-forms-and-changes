@@ -14,7 +14,6 @@ import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecate
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
-// @public
 const EnergyType = EnumerationDeprecated.byKeys( [ 'THERMAL', 'ELECTRICAL', 'MECHANICAL', 'LIGHT', 'CHEMICAL', 'HIDDEN' ] ) as IntentionalAny;
 
 energyFormsAndChanges.register( 'EnergyType', EnergyType );

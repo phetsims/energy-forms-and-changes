@@ -10,14 +10,14 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergyChunk, { EnergyChunkOptions } from './EnergyChunk.js';
+import EnergyChunk from './EnergyChunk.js';
 import EnergyType from './EnergyType.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -28,6 +28,7 @@ class EnergyChunkGroup extends PhetioGroup {
 
   /**
    * @param energyChunksVisibleProperty - used to create the archetype
+   * @param providedOptions
    */
   public constructor( energyChunksVisibleProperty: BooleanProperty, providedOptions?: EnergyChunkGroupOptions ) {
 

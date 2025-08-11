@@ -16,6 +16,7 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import EventType from '../../../../tandem/js/EventType.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -102,8 +103,7 @@ class EnergyChunk extends PhetioObject {
     this.zPosition = 0;
   }
 
-  // @public (EnergyChunkIO)
-  public toStateObject(): any {
+  public toStateObject(): IntentionalAny {
     return {
       id: this.id,
       velocity: Vector2.Vector2IO.toStateObject( this.velocity ),
@@ -111,8 +111,7 @@ class EnergyChunk extends PhetioObject {
     };
   }
 
-  // @public (EnergyChunkIO)
-  public static stateObjectToCreateElementArguments( stateObject: any ): any[] {
+  public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
     const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
     );
