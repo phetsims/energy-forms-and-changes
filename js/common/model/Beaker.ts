@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Model element that represents a beaker which contains a fluid. The fluid contains energy, which includes energy
  * chunks, and has a temperature.
@@ -125,6 +122,8 @@ class Beaker extends RectangularThermalMovableModelElement {
 
       // phet-io
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: Beaker.BeakerIO,
       phetioDocumentation: 'beaker that contains either water or olive oil, and may also contain blocks'
     }, providedOptions );
@@ -144,8 +143,12 @@ class Beaker extends RectangularThermalMovableModelElement {
       options
     );
 
+    // @ts-expect-error TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 probably assigned in parent
     this.width = width;
+
+    // @ts-expect-error TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 probably assigned in parent
     this.height = height;
+
     this._energyContainerCategory = BEAKER_COMPOSITION[ options.beakerType ].energyContainerCategory;
 
     this.beakerType = options.beakerType;
@@ -305,6 +308,7 @@ class Beaker extends RectangularThermalMovableModelElement {
       _.times( Utils.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
         if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
+            // @ts-expect-error
             EnergyType.THERMAL,
             sliceCenter.plusXY( smallOffset * index, smallOffset * index ),
             Vector2.ZERO,
@@ -324,6 +328,7 @@ class Beaker extends RectangularThermalMovableModelElement {
         const slice = sortedSliceArray[ sliceIndex ];
         const sliceCenter = slice.bounds.center;
         slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.THERMAL,
           sliceCenter,
           Vector2.ZERO,
@@ -345,6 +350,8 @@ class Beaker extends RectangularThermalMovableModelElement {
       const startTime = window.performance.now();
       const numberOfIterations = 10; // empirically determined to give a reasonably consistent value
       for ( let i = 0; i < numberOfIterations; i++ ) {
+
+        // @ts-expect-error
         energyChunkDistributor.updatePositions( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       }
       const averageIterationTime = ( window.performance.now() - startTime ) / numberOfIterations;
@@ -361,6 +368,8 @@ class Beaker extends RectangularThermalMovableModelElement {
 
     // distribute the initial energy chunks within the container
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
+
+      // @ts-expect-error
       const distributed = energyChunkDistributor.updatePositions( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       if ( !distributed ) {
         break;
@@ -430,7 +439,7 @@ class Beaker extends RectangularThermalMovableModelElement {
   /**
    * get the energy container category, which is an enum that is used to determine heat transfer rates
    */
-  public get energyContainerCategory(): EnergyContainerCategory {
+  public get energyContainerCategory(): typeof EnergyContainerCategory {
     return this._energyContainerCategory;
   }
 
@@ -472,7 +481,7 @@ class Beaker extends RectangularThermalMovableModelElement {
     // Point is above water surface.  Identify the slice with the highest density, since this is where we will get the
     // energy chunk.
     let maxSliceDensity = 0;
-    let densestSlice = null;
+    let densestSlice: IntentionalAny | null = null;
     this.slices.forEach( slice => {
       const sliceDensity = slice.energyChunkList.length / ( slice.bounds.width * slice.bounds.height );
       if ( sliceDensity > maxSliceDensity ) {
@@ -489,6 +498,8 @@ class Beaker extends RectangularThermalMovableModelElement {
     // find the chunk in the chosen slice with the most energy and extract that one
     let highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
     assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
+
+    // @ts-expect-error
     densestSlice.energyChunkList.forEach( energyChunk => {
       if ( energyChunk.positionProperty.value.y > highestEnergyChunk.positionProperty.value.y ) {
         highestEnergyChunk = energyChunk;
@@ -505,6 +516,16 @@ class Beaker extends RectangularThermalMovableModelElement {
     super.reset();
     this.resetInProgressProperty.set( false );
   }
+
+  public static readonly BeakerIO = new IOType<Beaker>( 'BeakerIO', {
+    // @ts-expect-error
+    supertype: UserMovableModelElement.UserMovableModelElementIO,
+    valueType: Beaker,
+    stateSchema: {
+      // @ts-expect-error
+      beakerType: BeakerTypeEnumerationIO
+    }
+  } );
 }
 
 // Preset data used for fast addition and positioning of energy chunks during reset.  The data contains information
@@ -639,14 +660,6 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
     ]
   }
 ];
-
-Beaker.BeakerIO = new IOType( 'BeakerIO', {
-  supertype: UserMovableModelElement.UserMovableModelElementIO,
-  valueType: Beaker,
-  stateSchema: {
-    beakerType: BeakerTypeEnumerationIO
-  }
-} );
 
 energyFormsAndChanges.register( 'Beaker', Beaker );
 export default Beaker;

@@ -76,7 +76,7 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
   // composite bounds for this model element, maintained as position changes
   private readonly bounds: Bounds2;
-  private readonly energyChunkGroup: EnergyChunkGroup;
+  protected readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkWanderControllerGroup: IntentionalAny;
 
   // the 2D area for this element where it can be in contact with another thermal elements and thus exchange heat, generally set by descendant classes
