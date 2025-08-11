@@ -20,7 +20,6 @@ import Property from '../../../../axon/js/Property.js';
 import Bounds2, { Bounds2StateObject } from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -117,7 +116,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
     };
   }
 
-  public applyState( stateObject: IntentionalAny ): void {
+  public applyState( stateObject: { bounds: Bounds2StateObject } ): void {
     this.bounds = Bounds2.Bounds2IO.fromStateObject( stateObject.bounds );
   }
 
