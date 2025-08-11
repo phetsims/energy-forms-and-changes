@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Base class for all model elements in the Energy Forms and Changes simulation that can be moved around by the user.
  * At the time of this writing, this includes blocks, beakers, burners, and thermometers.
@@ -10,7 +7,7 @@
  * @author John Blanco
  */
 
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -52,7 +49,7 @@ class ModelElement extends PhetioObject {
   // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
   // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the
   // element's position, which by convention in this sim is at the center bottom of the model element.
-  public readonly relativePositionTestingBoundsList: ObservableArrayDef<Bounds2>;
+  public readonly relativePositionTestingBoundsList: ObservableArray<Bounds2>;
 
   // The bounds from relativePositionTestingBoundsList translated to this element's
   // current position.  These are maintained so that they don't have to be recalculated every time we need to test if
@@ -134,7 +131,7 @@ class ModelElement extends PhetioObject {
     if ( !boundsList ) {
       boundsList = [];
       this.relativePositionTestingBoundsList.forEach( bounds => {
-        boundsList.push( bounds.copy() );
+        boundsList!.push( bounds.copy() );
       } );
     }
 

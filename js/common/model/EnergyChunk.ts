@@ -1,17 +1,14 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * type that represents a chunk of energy in the view
  *
  * @author John Blanco
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -63,13 +60,15 @@ class EnergyChunk extends PhetioObject {
   // Z position for layering (convenience property)
   public zPosition: number;
 
-  public constructor( initialEnergyType: EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, providedOptions?: EnergyChunkOptions ) {
+  public constructor( initialEnergyType: typeof EnergyType, initialPosition: Vector2, initialVelocity: Vector2, visibleProperty: BooleanProperty, providedOptions?: EnergyChunkOptions ) {
 
     const options = optionize<EnergyChunkOptions, SelfOptions, PhetioObjectOptions>()( {
       id: null,
 
       // phet-io
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: EnergyChunk.EnergyChunkIO,
       phetioDynamicElement: true
     }, providedOptions );
@@ -98,7 +97,7 @@ class EnergyChunk extends PhetioObject {
     this.id = options.id || instanceCount++;
 
     this.velocity = new Vector2( initialVelocity.x, initialVelocity.y );
-    
+
     // Initialize z position
     this.zPosition = 0;
   }
@@ -178,18 +177,22 @@ class EnergyChunk extends PhetioObject {
     this.energyTypeProperty.dispose();
     super.dispose();
   }
-}
 
-EnergyChunk.EnergyChunkIO = new IOType( 'EnergyChunkIO', {
-  valueType: EnergyChunk,
-  toStateObject: energyChunk => energyChunk.toStateObject(),
-  stateObjectToCreateElementArguments: stateObject => EnergyChunk.stateObjectToCreateElementArguments( stateObject ),
-  stateSchema: {
-    id: NumberIO,
-    velocity: Vector2.Vector2IO,
-    visiblePropertyReference: ReferenceIO( Property.PropertyIO( BooleanIO ) )
-  }
-} );
+  public static readonly EnergyChunkIO = new IOType<EnergyChunk>( 'EnergyChunkIO', {
+    valueType: EnergyChunk,
+
+    // @ts-expect-error
+    toStateObject: energyChunk => energyChunk.toStateObject(),
+    stateObjectToCreateElementArguments: stateObject => EnergyChunk.stateObjectToCreateElementArguments( stateObject ),
+    stateSchema: {
+
+      // @ts-expect-error
+      id: NumberIO,
+      velocity: Vector2.Vector2IO,
+      visiblePropertyReference: ReferenceIO( Property.PropertyIO( BooleanIO ) )
+    }
+  } );
+}
 
 energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 export default EnergyChunk;

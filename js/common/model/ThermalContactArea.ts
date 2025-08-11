@@ -1,8 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A type that represents a 2D space that can come into contact with other thermal areas, leading to the exchange of
  * thermal energy. This is basically just a shape and a flag that indicates whether or not immersion can occur.
@@ -17,6 +14,8 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 const TOUCH_DISTANCE_THRESHOLD = 0.001; // in meters
 
 class ThermalContactArea extends Bounds2 {
+
+  public readonly supportsImmersion: boolean;
 
   public constructor( bounds: Bounds2, supportsImmersion: boolean ) {
     super( bounds.minX, bounds.minY, bounds.maxX, bounds.maxY );

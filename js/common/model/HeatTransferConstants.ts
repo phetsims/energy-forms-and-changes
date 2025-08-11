@@ -1,8 +1,5 @@
 // Copyright 2015-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Static object containing the constants that control the rate of heat transfer between the various model elements that
  * can contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are
@@ -78,10 +75,11 @@ const HeatTransferConstants = {
    * @param category1 - a value from EnergyContainerCategory
    * @param category2 - a value from EnergyContainerCategory
    */
-  getHeatTransferFactor( category1: EnergyContainerCategory, category2: EnergyContainerCategory ): number {
+  getHeatTransferFactor( category1: typeof EnergyContainerCategory, category2: typeof EnergyContainerCategory ): number {
     assert && assert( EnergyContainerCategory.includes( category1 ), `invalid category1: ${category1}` );
     assert && assert( EnergyContainerCategory.includes( category2 ), `invalid category2: ${category2}` );
 
+    // @ts-expect-error
     return heatTransferConstantsMap[ category1.name ][ category2.name ];
   },
 
