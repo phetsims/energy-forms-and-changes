@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a Scenery Node that depicts a tea kettle on a burner
  *
@@ -10,6 +7,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -37,6 +35,9 @@ const HEATER_COOLER_NODE_SCALE = 0.85; // empirically determined for best look
 
 class TeaKettleNode extends MoveFadeModelElementNode {
 
+  private readonly heaterSettingProperty: NumberProperty;
+  private readonly steamCanvasNode: TeaKettleSteamCanvasNode;
+
   public constructor( teaKettle: TeaKettle, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( teaKettle, modelViewTransform, tandem );
 
@@ -49,6 +50,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     } );
     this.heaterSettingProperty.link( setting => {
       const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
+      // @ts-expect-error
       teaKettle.heatProportionProperty.set( mappedSetting );
     } );
 
@@ -58,14 +60,18 @@ class TeaKettleNode extends MoveFadeModelElementNode {
       snapToZero: false,
       coolEnabled: false,
       scale: HEATER_COOLER_NODE_SCALE,
+      // @ts-expect-error
       linkHeaterCoolerBack: heaterCoolerBack,
       tandem: tandem.createTandem( 'heaterCoolerNode' ),
       heaterCoolerBack: heaterCoolerBack
     } );
 
     // burner stand node
+    // @ts-expect-error
     const burnerSize = modelViewTransform.modelToViewShape( BURNER_MODEL_BOUNDS );
+    // @ts-expect-error
     const burnerProjection = burnerSize.width * BURNER_EDGE_TO_HEIGHT_RATIO;
+    // @ts-expect-error
     const burnerStandNode = new BurnerStandNode( burnerSize, burnerProjection );
 
     burnerStandNode.centerTop = teaKettleNode.centerBottom.plus( new Vector2( 0, -teaKettleNode.height / 4 ) );
@@ -76,7 +82,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     const gasPipeScale = 0.9;
 
     // create the left part of the gas pipe that connects to the heater cooler node. while it appears to be one pipe,
-    // it's created as two separate nodes so that once part is behind the burner stand and one part is in front of the
+    // it's created as two separate nodes so that once part is behind the burner stand and one part is in front of
     // the burner stand (to avoid splitting the burner stand into even more pieces). this is the part that's behind the
     // front of the burner stand. See https://github.com/phetsims/energy-forms-and-changes/issues/311
     const leftGasPipe = new Image( gasPipeSystemsLong_png, {
@@ -118,6 +124,7 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     const spoutExitPosition = new Vector2( teaKettleNode.bounds.maxX - 4.5, teaKettleNode.bounds.minY + 16 );
     this.steamCanvasNode = new TeaKettleSteamCanvasNode(
       spoutExitPosition,
+      // @ts-expect-error
       teaKettle.energyProductionRateProperty,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE, {
         canvasBounds: new Bounds2(

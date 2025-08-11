@@ -378,6 +378,8 @@ class TeaKettle extends EnergySource {
     this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
   }
+
+  public static readonly SPOUT_EXIT_ANGLE = SPOUT_EXIT_ANGLE;
 }
 
 const createThermalEnergyChunkPath = ( startPosition: Vector2, teaKettlePosition: Vector2 ): Vector2[] => {
@@ -387,9 +389,6 @@ const createThermalEnergyChunkPath = ( startPosition: Vector2, teaKettlePosition
 
   return path;
 };
-
-// statics
-TeaKettle.SPOUT_EXIT_ANGLE = SPOUT_EXIT_ANGLE;
 
 energyFormsAndChanges.register( 'TeaKettle', TeaKettle );
 export default TeaKettle;

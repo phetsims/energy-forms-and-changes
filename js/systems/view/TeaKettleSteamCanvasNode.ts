@@ -1,8 +1,5 @@
 // Copyright 2019-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A node for a concentrated column of steam.
  *
@@ -15,6 +12,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -38,12 +36,19 @@ type TeaKettleSteamCanvasNodeOptions = SelfOptions & CanvasNodeOptions;
 
 class TeaKettleSteamCanvasNode extends CanvasNode {
 
-  /**
-   * @param steamOrigin
-   * @param energyOutputProperty
-   * @param maxEnergyOutput
-   * @param providedOptions
-   */
+  private readonly steamOrigin: Vector2;
+  private readonly energyOutputProperty: NumberProperty;
+  private readonly maxEnergyOutput: number;
+  private readonly steamAngle: number;
+  private lastSteamAngle: number;
+  private readonly steamAngleRange: Range;
+  private preloadComplete: boolean;
+  private bubbleProductionRemainder: number;
+  private readonly steamBubbles: IntentionalAny[];
+
+  // canvas where the steam bubble image resides
+  private readonly steamBubbleImageCanvas: HTMLCanvasElement;
+
   public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, providedOptions?: TeaKettleSteamCanvasNodeOptions ) {
 
     const options = optionize<TeaKettleSteamCanvasNodeOptions, SelfOptions, CanvasNodeOptions>()( {
@@ -53,7 +58,6 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
     super( options );
 
-    // @private
     this.steamOrigin = steamOrigin;
     this.energyOutputProperty = energyOutputProperty;
     this.maxEnergyOutput = maxEnergyOutput;
@@ -62,16 +66,13 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
     this.steamAngleRange = new Range( this.steamAngle * 0.85, this.steamAngle * 1.1 ); // room for random variation
     this.preloadComplete = true;
 
-    // @private
     this.bubbleProductionRemainder = 0;
     this.steamBubbles = [];
 
-    // @private
-    // canvas where the steam bubble image resides
     this.steamBubbleImageCanvas = document.createElement( 'canvas' );
     this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
     this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
-    const context = this.steamBubbleImageCanvas.getContext( '2d' );
+    const context = this.steamBubbleImageCanvas.getContext( '2d' )!;
 
     // draw a steam bubble centered in the steam bubble image canvas
     context.fillStyle = options.steamFill;
@@ -169,7 +170,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
   /**
    * Draws a steam bubble.
    */
-  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: Object ): void {
+  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: IntentionalAny ): void {
     context.globalAlpha = steamBubble.opacity;
     context.drawImage(
       this.steamBubbleImageCanvas,
