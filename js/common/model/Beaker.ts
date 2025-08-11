@@ -113,7 +113,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
    * @param energyChunkGroup
    * @param [providedOptions]
    */
-  public constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: BeakerOptions ) {
+  protected constructor( initialPosition: Vector2, width: number, height: number, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: BeakerOptions ) {
 
     const options = optionize<BeakerOptions, SelfOptions, RectangularThermalMovableModelElementOptions>()( {
       beakerType: BeakerType.WATER,

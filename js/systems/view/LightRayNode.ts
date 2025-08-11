@@ -20,6 +20,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import { LightAbsorbingShape } from './SunNode.js';
 
 // constants
 const STROKE_THICKNESS = 2;
@@ -53,12 +54,12 @@ class LightRayNode extends Node {
   /**
    * add a shape that will potentially interact with this light ray
    */
-  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
+  public addLightAbsorbingShape( lightAbsorbingShape: LightAbsorbingShape ): void {
     this.lightAbsorbingShapes.push( lightAbsorbingShape );
     lightAbsorbingShape.absorptionCoefficientProperty.link( this.rayUpdater );
   }
 
-  public removeLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
+  public removeLightAbsorbingShape( lightAbsorbingShape: LightAbsorbingShape ): void {
     lightAbsorbingShape.absorptionCoefficientProperty.unlink( this.rayUpdater );
     _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
     this.updateRay();

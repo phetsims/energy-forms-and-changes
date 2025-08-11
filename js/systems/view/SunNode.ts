@@ -218,7 +218,7 @@ class SunNode extends MoveFadeModelElementNode {
   }
 }
 
-class LightAbsorbingShape {
+export class LightAbsorbingShape {
 
   public readonly absorptionCoefficientProperty: NumberProperty;
   public readonly shape: Shape;

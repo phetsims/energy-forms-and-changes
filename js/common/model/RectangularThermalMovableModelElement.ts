@@ -27,6 +27,7 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
+import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
 import energyChunkDistributor from './energyChunkDistributor.js';
 import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkWanderController from './EnergyChunkWanderController.js';
@@ -106,7 +107,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   private readonly minEnergy: number;
 
   // 2D "slices" of the container, used for 3D layering of energy chunks in the view
-  public readonly slices: ObservableArray<IntentionalAny>;
+  public readonly slices: ObservableArray<EnergyChunkContainerSlice>;
 
   public abstract id: string;
 
@@ -491,7 +492,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
    */
   public removeEnergyChunk( energyChunk: EnergyChunk ): boolean {
     this.slices.forEach( slice => {
-      if ( slice.energyChunkList.indexOf( energyChunk ) >= 0 ) {
+      if ( slice.energyChunkList.includes( energyChunk ) ) {
         slice.energyChunkList.remove( energyChunk );
         this.resetECDistributionCountdown();
         return true;
@@ -520,7 +521,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     // identify the closest energy chunk
     this.slices.forEach( slice => {
 
-      // @ts-expect-error
       slice.energyChunkList.forEach( energyChunk => {
 
         // compensate for the Z offset, otherwise front chunk will almost always be chosen
@@ -551,7 +551,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       return null;
     }
 
-    let chunkToExtract = null;
+    let chunkToExtract: EnergyChunk | null = null;
     const myBounds = this.getSliceBounds();
     if ( destinationBounds.containsBounds( this.thermalContactArea ) ) {
 
@@ -559,7 +559,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       let closestDistanceToVerticalEdge = Number.POSITIVE_INFINITY;
       this.slices.forEach( slice => {
 
-        // @ts-expect-error
         slice.energyChunkList.forEach( energyChunk => {
           const distanceToVerticalEdge = Math.min(
             Math.abs( myBounds.minX - energyChunk.positionProperty.value.x ),
@@ -580,7 +579,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       let closestDistanceToDestinationEdge = Number.POSITIVE_INFINITY;
       this.slices.forEach( slice => {
 
-        // @ts-expect-error
         slice.energyChunkList.forEach( energyChunk => {
           const distanceToDestinationEdge =
             Math.min( Math.abs( destinationBounds.minX - energyChunk.positionProperty.value.x ),
@@ -612,6 +610,8 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
         console.warn( 'No chunks available for extraction.' );
       }
     }
+
+    // @ts-expect-error
     this.removeEnergyChunk( chunkToExtract );
     return chunkToExtract;
   }
@@ -635,7 +635,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     // remove the current set of energy chunks, calculate total area of the slices
     this.slices.forEach( slice => {
 
-      // @ts-expect-error
       slice.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
       slice.energyChunkList.clear();
       totalSliceArea += slice.bounds.width * slice.bounds.height;
@@ -754,7 +753,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       // @ts-expect-error
       energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ] = [];
 
-      // @ts-expect-error
       slice.energyChunkList.forEach( energyChunk => {
 
         // @ts-expect-error

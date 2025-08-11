@@ -11,6 +11,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightRayNode from './LightRayNode.js';
+import { LightAbsorbingShape } from './SunNode.js';
 
 class LightRays extends Node {
 
@@ -44,7 +45,7 @@ class LightRays extends Node {
   /**
    * adds a light absorbing shape to this set of rays that they may or may not intersect with
    */
-  public addLightAbsorbingShape( lightAbsorbingShape: IntentionalAny ): void {
+  public addLightAbsorbingShape( lightAbsorbingShape: LightAbsorbingShape ): void {
     this.lightRayNodes.forEach( lightRayNode => {
       lightRayNode.addLightAbsorbingShape( lightAbsorbingShape );
     } );
