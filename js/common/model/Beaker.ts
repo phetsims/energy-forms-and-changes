@@ -516,7 +516,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     this.resetInProgressProperty.set( false );
   }
 
-  public static readonly BeakerIO = new IOType<Beaker, { beakerType: IntentionalAny }>( 'BeakerIO', {
+  public static readonly BeakerIO = new IOType<Beaker, { beakerType: typeof BeakerType }>( 'BeakerIO', {
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Beaker,
     stateSchema: {

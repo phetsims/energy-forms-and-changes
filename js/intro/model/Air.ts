@@ -193,9 +193,10 @@ class Air {
     energyChunk.zPositionProperty.value = 0;
     this.energyChunkList.push( energyChunk );
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
-      // @ts-expect-error
       energyChunk,
       new Vector2Property( new Vector2( energyChunk.positionProperty.value.x, SIZE.height ), { valueComparisonStrategy: 'equalsFunction' } ),
+
+      // @ts-expect-error
       { horizontalWanderConstraint: horizontalWanderConstraint }
     ) );
   }

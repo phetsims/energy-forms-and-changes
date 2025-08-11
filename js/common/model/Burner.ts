@@ -223,9 +223,10 @@ class Burner extends ModelElement {
       'Must provided wander controller group if creating wander controllers' );
 
     this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup!.createNextElement(
-      // @ts-expect-error
       energyChunk,
       new Vector2Property( this.getCenterPoint(), { valueComparisonStrategy: 'equalsFunction' } ),
+
+      // @ts-expect-error
       { horizontalWanderConstraint: this.incomingEnergyChunkWanderBounds, wanderAngleVariation: Math.PI * 0.15 }
     ) );
   }

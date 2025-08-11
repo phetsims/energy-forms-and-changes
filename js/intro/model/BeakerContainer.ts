@@ -10,6 +10,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import required from '../../../../phet-core/js/required.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -135,7 +136,7 @@ class BeakerContainer extends Beaker {
           return controller.energyChunk === energyChunk;
         } );
 
-        assert && assert( wanderController, 'no wander controller found for energy chunk' );
+        affirm( wanderController, 'no wander controller found for energy chunk' );
 
         // Set the horizontal motion constraint to be slightly narrower than the beaker to account for the width of
         // the energy chunk nodes.

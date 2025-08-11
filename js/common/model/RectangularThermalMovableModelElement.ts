@@ -16,6 +16,7 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -63,10 +64,10 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   public readonly energyProperty: NumberProperty;
 
   // energy chunks that are approaching this model element
-  public readonly approachingEnergyChunks: ObservableArray<IntentionalAny>;
+  public readonly approachingEnergyChunks: ObservableArray<EnergyChunk>;
 
   // motion controllers for the energy chunks that are approaching this model element
-  protected readonly energyChunkWanderControllers: ObservableArray<IntentionalAny>;
+  protected readonly energyChunkWanderControllers: ObservableArray<EnergyChunkWanderController>;
 
   // pre-distributed energy chunk configuration,used for fast initialization, see usages for format
   private readonly predistributedEnergyChunkConfigurations: IntentionalAny[];
@@ -74,7 +75,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   // composite bounds for this model element, maintained as position changes
   public readonly bounds: Bounds2;
   protected readonly energyChunkGroup: EnergyChunkGroup;
-  protected readonly energyChunkWanderControllerGroup: IntentionalAny;
+  protected readonly energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup;
 
   // the 2D area for this element where it can be in contact with another thermal elements and thus exchange heat, generally set by descendant classes
   public thermalContactArea: ThermalContactArea;
@@ -162,7 +163,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
 
     this.energyChunkGroup = energyChunkGroup;
 
-    this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup;
+    this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup!;
 
     this.thermalContactArea = new ThermalContactArea( Bounds2.NOTHING.copy(), false );
 
@@ -225,7 +226,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
           return wanderController.energyChunk === removedEC;
         } );
 
-        assert && assert( wanderController, 'there should always be a wander controller for each approaching EC' );
+        affirm( wanderController, 'there should always be a wander controller for each approaching EC' );
 
         this.energyChunkWanderControllers.remove( wanderController );
 
@@ -254,6 +255,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
    * Get the composite bounds, meaning the total rectangular bounds occupied by this model element, for the provided
    * position, which may well not be the model element's current position.  This is essentially asking, "what would
    * your 2D bounds be if you were at this position?"
+   * @param position
    * @param bounds - an optional pre-allocated bounds instance, saves memory allocations
    */
   public getCompositeBoundsForPosition( position: Vector2, bounds?: Bounds2 ): Bounds2 {
@@ -668,7 +670,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
 
           // Create the energy chunk and add it to the slice.
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
-
             // @ts-expect-error
             EnergyType.THERMAL,
             energyChunkPosition,
@@ -701,7 +702,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
         smallOffset * numberOfEnergyChunksAdded, smallOffset * numberOfEnergyChunksInSlice
       );
       slice.addEnergyChunk(
-
         // @ts-expect-error
         this.energyChunkGroup.createNextElement( EnergyType.THERMAL, center, Vector2.ZERO, this.energyChunksVisibleProperty )
       );
@@ -802,7 +802,6 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       if ( Math.abs( deltaT ) > EFACConstants.TEMPERATURES_EQUAL_THRESHOLD ) {
 
         const heatTransferConstant = HeatTransferConstants.getHeatTransferFactor(
-
           // @ts-expect-error
           this.energyContainerCategory,
 
