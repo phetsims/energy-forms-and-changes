@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements
  *
@@ -12,7 +9,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -20,6 +17,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -61,8 +59,6 @@ const ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
 export default class FaucetAndWater extends EnergySource {
 
-  // a11y name
-  public a11yName: string;
   private readonly energyChunksVisibleProperty: BooleanProperty;
 
   // a flag that is used to decide whether to pass energy chunks to the next energy system element
@@ -73,7 +69,7 @@ export default class FaucetAndWater extends EnergySource {
   public readonly waterDrops: WaterDrop[];
 
   // list of chunks that are exempt from being transferred to the next energy system element
-  private readonly exemptFromTransferEnergyChunks: ObservableArrayDef<EnergyChunk>;
+  private readonly exemptFromTransferEnergyChunks: ObservableArray<EnergyChunk>;
 
   // list of Energy to be sent after a delay has passed
   private readonly flowEnergyDelay: Energy[];
@@ -108,6 +104,8 @@ export default class FaucetAndWater extends EnergySource {
     this.waterDrops = [];
     this.exemptFromTransferEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -150,6 +148,7 @@ export default class FaucetAndWater extends EnergySource {
 
     const velocity = new Vector2( 0, -FALLING_ENERGY_CHUNK_VELOCITY );
 
+    // @ts-expect-error
     return this.energyChunkGroup.createNextElement( EnergyType.MECHANICAL, initialPosition, velocity, this.energyChunksVisibleProperty );
   }
 
@@ -190,7 +189,8 @@ export default class FaucetAndWater extends EnergySource {
       const yPosition = this.positionProperty.get().plus( OFFSET_FROM_CENTER_TO_WATER_ORIGIN ).y -
                         chunk.positionProperty.value.y;
       const chunkInRange = ENERGY_CHUNK_TRANSFER_DISTANCE_RANGE.contains( yPosition );
-      const chunkExempt = this.exemptFromTransferEnergyChunks.indexOf( chunk ) >= 0;
+
+      const chunkExempt = this.exemptFromTransferEnergyChunks.includes( chunk );
 
       if ( this.waterPowerableElementInPlaceProperty.value && chunkInRange && !chunkExempt ) {
         if ( this.transferNextAvailableChunk ) {
@@ -234,7 +234,10 @@ export default class FaucetAndWater extends EnergySource {
     );
 
     // send along saved energy values if enough time has passed
+    // @ts-expect-error
     if ( this.flowEnergyDelay[ 0 ].creationTime + FALLING_WATER_DELAY * 1000 <= new Date().getTime() ) {
+
+      // @ts-expect-error
       return this.flowEnergyDelay.shift();
     }
     else {
@@ -297,11 +300,11 @@ export default class FaucetAndWater extends EnergySource {
     } );
   }
 
-  public override preloadEnergyChunks(): void {
+  public preloadEnergyChunks(): void {
     this.clearEnergyChunks();
 
     // define translation function here to avoid creating anonymous function inside loop
-    const translateChunks = ( chunks, dt ) => {
+    const translateChunks = ( chunks: EnergyChunk[], dt: number ) => {
       chunks.forEach( chunk => {
         chunk.translateBasedOnVelocity( dt );
       } );
@@ -309,7 +312,7 @@ export default class FaucetAndWater extends EnergySource {
 
     let preloadTime = 3; // In seconds, empirically determined.
 
-    let tempEnergyChunkList = [];
+    let tempEnergyChunkList: EnergyChunk[] = [];
 
     if ( this.getEnergyOutputRate().amount > 0 ) {
 
@@ -393,7 +396,7 @@ export default class FaucetAndWater extends EnergySource {
     }
   }
 
-  public override getEnergyOutputRate(): Energy {
+  public getEnergyOutputRate(): Energy {
     const energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
     assert && assert( energyAmount >= 0, `EnergyAmount is ${energyAmount}` );
     return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
@@ -414,7 +417,7 @@ export default class FaucetAndWater extends EnergySource {
   /**
    * (EnergySystemElementIO)
    */
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return {
       waterDropsPreloaded: this.waterDropsPreloaded,
       transferNextAvailableChunk: this.transferNextAvailableChunk,
@@ -426,7 +429,8 @@ export default class FaucetAndWater extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.waterDropsPreloaded = stateObject.waterDropsPreloaded;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
     this.energySinceLastChunk = stateObject.energySinceLastChunk;

@@ -1,8 +1,5 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base class for light bulbs in the model
  *
@@ -10,7 +7,7 @@
  * @author Andrew Adare
  */
 
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -63,18 +60,18 @@ export type LightBulbOptions = SelfOptions & EnergyUserOptions;
 class LightBulb extends EnergyUser {
 
   public readonly litProportionProperty: NumberProperty;
-  private readonly hasFilament: boolean;
+  private hasFilament: boolean;
   private readonly energyChunksVisibleProperty: Property<boolean>;
   private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // Fewer thermal energy chunks are radiated for bulbs without a filament
-  private readonly proportionOfThermalChunksRadiated: number;
+  private proportionOfThermalChunksRadiated: number;
 
   // Movers and flags that control how the energy chunks move through the light bulb
-  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly filamentEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly electricalEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly filamentEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
   private goRightNextTime: boolean;
 
   public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: LightBulbOptions ) {
@@ -99,14 +96,20 @@ class LightBulb extends EnergyUser {
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.filamentEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'filamentEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.goRightNextTime = true;
@@ -132,6 +135,7 @@ class LightBulb extends EnergyUser {
             // add a "mover" that will move this energy chunk through the wire to the bulb
             this.electricalEnergyChunkMovers.push(
               this.energyChunkPathMoverGroup.createNextElement(
+                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -142,6 +146,8 @@ class LightBulb extends EnergyUser {
           else {
             assert && assert(
               false,
+
+              // @ts-expect-error
               `Encountered energy chunk with unexpected type: ${this.incomingEnergyChunk.energyTypeProperty.get()}`
             );
           }
@@ -255,6 +261,8 @@ class LightBulb extends EnergyUser {
           const path = this.createPathOnFilament( mover.energyChunk.positionProperty.value );
           const speed = getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
                         generateThermalChunkTimeOnFilament();
+
+          // @ts-expect-error
           this.filamentEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk, path, speed ) );
         }
         else {
@@ -266,10 +274,7 @@ class LightBulb extends EnergyUser {
     } );
   }
 
-  /**
-   * @param incomingEnergy
-   */
-  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
+  public preloadEnergyChunks( incomingEnergy: Energy ): void {
 
     this.clearEnergyChunks();
 
@@ -291,6 +296,7 @@ class LightBulb extends EnergyUser {
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.ELECTRICAL,
           this.positionProperty.value.plus( LEFT_SIDE_OF_WIRE_OFFSET ),
           Vector2.ZERO,
@@ -301,6 +307,7 @@ class LightBulb extends EnergyUser {
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -333,6 +340,7 @@ class LightBulb extends EnergyUser {
     }
 
     this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+      // @ts-expect-error
       energyChunk,
       EnergyChunkPathMover.createRandomStraightPath(
         this.positionProperty.value,
@@ -373,10 +381,7 @@ class LightBulb extends EnergyUser {
     this.radiatedEnergyChunkMovers.clear();
   }
 
-  /**
-   * @public (EnergySystemElementIO)
-   */
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return {
       goRightNextTime: this.goRightNextTime,
       hasFilament: this.hasFilament,
@@ -384,11 +389,8 @@ class LightBulb extends EnergyUser {
     };
   }
 
-  /**
-   * @public (EnergySystemElementIO)
-   * @param stateObject - see this.toStateObject()
-   */
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.goRightNextTime = stateObject.goRightNextTime;
     this.hasFilament = stateObject.hasFilament;
     this.proportionOfThermalChunksRadiated = stateObject.proportionOfThermalChunksRadiated;

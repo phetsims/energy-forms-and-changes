@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A class for the fan, which is an energy user
  *
@@ -10,22 +7,23 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import fanIcon_png from '../../../images/fanIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
-import EnergyChunkGroup from './EnergyChunkGroup.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import EnergyUser, { EnergyUserOptions } from './EnergyUser.js';
@@ -76,9 +74,9 @@ class Fan extends EnergyUser {
   public readonly bladePositionProperty: NumberProperty;
 
   // movers that control how the energy chunks move towards and through the fan
-  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly mechanicalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
-  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly electricalEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly mechanicalEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
   private readonly angularVelocityProperty: NumberProperty;
   private readonly energyChunksVisibleProperty: Property<boolean>;
   private readonly energyChunkGroup: EnergyChunkGroup;
@@ -109,14 +107,20 @@ class Fan extends EnergyUser {
     } );
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.mechanicalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'mechanicalEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.radiatedEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.angularVelocityProperty = new NumberProperty( 0, {
@@ -165,6 +169,7 @@ class Fan extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the motor
+        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -252,6 +257,7 @@ class Fan extends EnergyUser {
         this.electricalEnergyChunkMovers.remove( mover );
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
+        // @ts-expect-error
         this.hasEnergy = true;
 
         if ( this.internalTemperature < THERMAL_RELEASE_TEMPERATURE ) {
@@ -265,6 +271,7 @@ class Fan extends EnergyUser {
           chunk.energyTypeProperty.set( EnergyType.MECHANICAL );
 
           // release the energy chunk as mechanical to blow away
+          // @ts-expect-error
           this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createBlownEnergyChunkPath( chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -274,6 +281,7 @@ class Fan extends EnergyUser {
 
           // release the energy chunk as thermal to radiate away
           this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+            // @ts-expect-error
             chunk,
             EnergyChunkPathMover.createRadiatedPath( chunk.positionProperty.get(), 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -352,10 +360,7 @@ class Fan extends EnergyUser {
     this.mechanicalEnergyChunkMovers.clear();
   }
 
-  /**
-   * @param incomingEnergy
-   */
-  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
+  public preloadEnergyChunks( incomingEnergy: Energy ): void {
 
     this.clearEnergyChunks();
 
@@ -380,6 +385,7 @@ class Fan extends EnergyUser {
       // determine if time to add a new chunk
       if ( energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.ELECTRICAL,
           this.positionProperty.value.plus( WIRE_START_OFFSET ),
           Vector2.ZERO,
@@ -390,6 +396,7 @@ class Fan extends EnergyUser {
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -413,11 +420,12 @@ class Fan extends EnergyUser {
     }
   }
 
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return { internalTemperature: this.internalTemperature };
   }
 
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.internalTemperature = stateObject.internalTemperature;
   }
 }

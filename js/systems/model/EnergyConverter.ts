@@ -18,7 +18,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemElement.js';
 
 type SelfOptions = EmptySelfOptions;
-type EnergyConverterOptions = SelfOptions & EnergySystemElementOptions;
+export type EnergyConverterOptions = SelfOptions & EnergySystemElementOptions;
 
 class EnergyConverter extends EnergySystemElement {
 

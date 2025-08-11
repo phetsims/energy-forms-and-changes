@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A type that represents a model of a solar panel that converts light energy to electrical energy.  The panel actually
  * consists of an actual panel but also is meant to have a lower assembly through which energy chunks move.  The
@@ -23,7 +20,6 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -33,11 +29,11 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import solarPanelIcon_png from '../../../images/solarPanelIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
-import EnergyChunk from '../../common/model/EnergyChunk.js';
-import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
@@ -68,7 +64,6 @@ type SolarPanelOptions = SelfOptions & EnergyConverterOptions;
 
 class SolarPanel extends EnergyConverter {
 
-  public a11yName: string;
   private readonly electricalEnergyChunkMovers: ReturnType<typeof createObservableArray>;
   private readonly lightEnergyChunkMovers: ReturnType<typeof createObservableArray>;
   private latestChunkArrivalTime: number;
@@ -91,12 +86,14 @@ class SolarPanel extends EnergyConverter {
   // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
   // to see if they are located within this shape, so it needs a global position as well. The untranslated version of
   // this shape is needed to draw the helper shape node in SolarPanelNode.
-  private absorptionShape: Shape;
+  private absorptionShape!: Shape;
 
   public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: SolarPanelOptions ) {
 
     const options = optionize<SolarPanelOptions, SelfOptions, EnergyConverterOptions>()( {
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: SolarPanel.SolarPanelIO,
       phetioState: true
     }, providedOptions );
@@ -107,10 +104,14 @@ class SolarPanel extends EnergyConverter {
 
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.lightEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'lightEnergyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.latestChunkArrivalTime = 0;
@@ -166,6 +167,7 @@ class SolarPanel extends EnergyConverter {
 
               // add a "mover" that will move this energy chunk to the bottom of the solar panel
               this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
                 this.chooseChunkSpeedOnPanel( incomingChunk ) )
@@ -180,6 +182,7 @@ class SolarPanel extends EnergyConverter {
 
               // add a "mover" that will reflect this energy chunk up and away from the panel
               this.lightEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createStraightPath(
                   incomingChunk.positionProperty.get(),
@@ -233,7 +236,7 @@ class SolarPanel extends EnergyConverter {
     // iterate over a copy to mutate original without problems
     const movers = this.electricalEnergyChunkMovers.slice();
 
-    movers.forEach( mover => {
+    movers.forEach( ( mover: IntentionalAny ) => {
 
       mover.moveAlongPath( dt );
 
@@ -251,6 +254,7 @@ class SolarPanel extends EnergyConverter {
 
         // energy chunk has reached the bottom of the panel and now needs to move through the converter
         if ( mover.energyChunk.positionProperty.value.equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
+          // @ts-expect-error
           this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, pathThroughConverterOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -276,7 +280,7 @@ class SolarPanel extends EnergyConverter {
     // iterate over a copy to mutate original without problems
     const movers = this.lightEnergyChunkMovers.slice();
 
-    movers.forEach( mover => {
+    movers.forEach( ( mover: IntentionalAny ) => {
       mover.moveAlongPath( dt );
 
       // remove this energy chunk entirely
@@ -289,7 +293,7 @@ class SolarPanel extends EnergyConverter {
     } );
   }
 
-  public override preloadEnergyChunks( incomingEnergy: Energy ): void {
+  public preloadEnergyChunks( incomingEnergy: Energy ): void {
     this.clearEnergyChunks();
 
     if ( incomingEnergy.amount === 0 || incomingEnergy.type !== EnergyType.LIGHT ) {
@@ -332,6 +336,7 @@ class SolarPanel extends EnergyConverter {
         }
 
         const newEnergyChunk = this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.ELECTRICAL,
           initialPosition,
           Vector2.ZERO,
@@ -342,6 +347,7 @@ class SolarPanel extends EnergyConverter {
 
         // add a "mover" that will move this energy chunk to the bottom of the solar panel
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
           this.chooseChunkSpeedOnPanel( newEnergyChunk ) )
@@ -382,6 +388,8 @@ class SolarPanel extends EnergyConverter {
     let numberOfChunksOnPanel = 0;
 
     this.electricalEnergyChunkMovers.forEach( mover => {
+
+      // @ts-expect-error
       if ( mover.getFinalDestination().equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
         numberOfChunksOnPanel++;
       }
@@ -424,8 +432,12 @@ class SolarPanel extends EnergyConverter {
 
   public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
+
+    // @ts-expect-error
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
+
+    // @ts-expect-error
     this.lightEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.lightEnergyChunkMovers.clear();
     this.latestChunkArrivalTime = 0;
@@ -438,10 +450,7 @@ class SolarPanel extends EnergyConverter {
     return this.absorptionShape;
   }
 
-  /**
-   * (EnergySystemElementIO)
-   */
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return {
       numberOfConvertedChunks: this.numberOfConvertedChunks,
       latestChunkArrivalTime: this.latestChunkArrivalTime,
@@ -453,7 +462,8 @@ class SolarPanel extends EnergyConverter {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.numberOfConvertedChunks = stateObject.numberOfConvertedChunks;
     this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
     this.simulationTime = stateObject.simulationTime;
@@ -461,11 +471,14 @@ class SolarPanel extends EnergyConverter {
 
   public static readonly PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
 
-  public static readonly SolarPanelIO = new IOType( 'SolarPanelIO', {
+  public static readonly SolarPanelIO = new IOType<SolarPanel>( 'SolarPanelIO', {
     valueType: SolarPanel,
+    // @ts-expect-error
     toStateObject: solarPanel => solarPanel.toStateObject(),
     applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),
     stateSchema: {
+
+      // @ts-expect-error
       numberOfConvertedChunks: NumberIO,
       latestChunkArrivalTime: NumberIO,
       simulationTime: NumberIO

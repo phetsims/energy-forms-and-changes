@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * model of a bicycle being pedaled by a rider in order to generate energy
  *
@@ -10,8 +7,9 @@
  * @author Andrew Adare
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -60,9 +58,6 @@ type SelfOptions = EmptySelfOptions;
 type BikerOptions = SelfOptions & EnergySourceOptions;
 
 class Biker extends EnergySource {
-
-  // A11y name
-  public readonly a11yName: string;
 
   // Angle of the crank arm
   public readonly crankAngleProperty: NumberProperty;
@@ -153,6 +148,8 @@ class Biker extends EnergySource {
     this.mechanicalPoweredSystemIsNextProperty = mechanicalPoweredSystemIsNextProperty;
     this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
 
@@ -206,6 +203,7 @@ class Biker extends EnergySource {
             this.energyChunkPathMoverGroup.disposeElement( mover );
 
             this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+              // @ts-expect-error
               energyChunk,
               createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, energyChunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -286,6 +284,7 @@ class Biker extends EnergySource {
       const energyChunk = this.findNonMovingEnergyChunk();
       if ( energyChunk ) {
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+          // @ts-expect-error
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -337,6 +336,7 @@ class Biker extends EnergySource {
              !this.mechanicalPoweredSystemIsNextProperty.get() ) {
 
           // make this chunk travel to the rear hub, where it will become a chunk of thermal energy
+          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -352,6 +352,7 @@ class Biker extends EnergySource {
           ];
 
           // send this chunk to the next energy system
+          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), mechanicalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -369,6 +370,7 @@ class Biker extends EnergySource {
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
         chunk.energyTypeProperty.set( EnergyType.THERMAL );
+        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createRadiatedPath( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -397,7 +399,7 @@ class Biker extends EnergySource {
     } );
   }
 
-  public override preloadEnergyChunks(): void {
+  public preloadEnergyChunks(): void {
 
     // if we're not supposed to have any chunks, clear any existing ones out of the biker. this is needed for stateSet,
     // see https://github.com/phetsims/energy-forms-and-changes/issues/335
@@ -438,6 +440,7 @@ class Biker extends EnergySource {
         // we know the biker is not out of energy, so get one of the remaining chunks
         const energyChunk = this.findNonMovingEnergyChunk();
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
+          // @ts-expect-error
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -453,7 +456,7 @@ class Biker extends EnergySource {
     }
   }
 
-  public override getEnergyOutputRate(): Energy {
+  public getEnergyOutputRate(): Energy {
     const amount = Math.abs(
       this.crankAngularVelocityProperty.value / MAX_ANGULAR_VELOCITY_OF_CRANK * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR
     );
@@ -514,6 +517,7 @@ class Biker extends EnergySource {
     const position = this.positionProperty.value.plus( nominalInitialOffset ).plus( displacement );
 
     const newEnergyChunk = this.energyChunkGroup.createNextElement(
+      // @ts-expect-error
       EnergyType.CHEMICAL,
       position,
       Vector2.ZERO,
@@ -538,7 +542,7 @@ class Biker extends EnergySource {
    * find a non-moving CHEMICAL energy chunk, returns null if none are found
    */
   private findNonMovingEnergyChunk(): EnergyChunk {
-    const movingEnergyChunks = [];
+    const movingEnergyChunks: EnergyChunk[] = [];
     let nonMovingEnergyChunk = null;
 
     this.energyChunkMovers.forEach( mover => {
@@ -548,11 +552,11 @@ class Biker extends EnergySource {
     this.energyChunkList.forEach( chunk => {
 
       // only interested in CHEMICAL energy chunks that are not moving
-      if ( chunk.energyTypeProperty.value === EnergyType.CHEMICAL && movingEnergyChunks.indexOf( chunk ) === -1 ) {
+      if ( chunk.energyTypeProperty.value === EnergyType.CHEMICAL && !movingEnergyChunks.includes( chunk ) ) {
         nonMovingEnergyChunk = chunk;
       }
     } );
-    return nonMovingEnergyChunk;
+    return nonMovingEnergyChunk!;
   }
 
   public override toStateObject(): IntentionalAny {
@@ -562,6 +566,7 @@ class Biker extends EnergySource {
     };
   }
 
+  // @ts-expect-error
   public override applyState( stateObject: IntentionalAny ): void {
     this.energyProducedSinceLastChunkEmitted = stateObject.energyProducedSinceLastChunkEmitted;
     this.mechanicalChunksSinceLastThermal = stateObject.mechanicalChunksSinceLastThermal;

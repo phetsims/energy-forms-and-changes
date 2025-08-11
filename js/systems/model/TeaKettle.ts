@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a type representing the steam-generating tea kettle in the model.
  *
@@ -11,7 +8,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -57,6 +54,29 @@ type TeaKettleOptions = SelfOptions & EnergySourceOptions;
 
 class TeaKettle extends EnergySource {
 
+  // Proportion of heat coming from the heater
+  public readonly heatProportionProperty: NumberProperty;
+
+  public readonly energyProductionRateProperty: NumberProperty;
+
+  public readonly energyChunksVisibleProperty: Property<boolean>;
+
+  private readonly steamPowerableElementInPlaceProperty: Property<boolean>;
+
+  private heatEnergyProducedSinceLastChunk: number;
+
+  private readonly energyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+
+  private readonly energyChunkGroup: EnergyChunkGroup;
+
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // List of chunks that are not being transferred to the next energy system element.
+  private readonly exemptFromTransferEnergyChunks: ObservableArray<EnergyChunk>;
+
+  // Flag for whether next chunk should be transferred or kept, used to alternate transfer with non-transfer.
+  private transferNextAvailableChunk: boolean;
+
   public constructor( energyChunksVisibleProperty: Property<boolean>, steamPowerableElementInPlaceProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, providedOptions?: TeaKettleOptions ) {
 
     const options = optionize<TeaKettleOptions, SelfOptions, EnergySourceOptions>()( {
@@ -67,7 +87,6 @@ class TeaKettle extends EnergySource {
 
     this.a11yName = EnergyFormsAndChangesStrings.a11y.teaKettle;
 
-    // @public {NumberProperty}
     this.heatProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'heatProportionProperty' ),
@@ -76,7 +95,6 @@ class TeaKettle extends EnergySource {
       phetioDocumentation: 'proportion of heat coming from the heater'
     } );
 
-    // @public (read-only) {NumberProperty}
     this.energyProductionRateProperty = new NumberProperty( 0, {
       range: new Range( 0, EFACConstants.MAX_ENERGY_PRODUCTION_RATE ),
       tandem: options.tandem.createTandem( 'energyProductionRateProperty' ),
@@ -84,23 +102,23 @@ class TeaKettle extends EnergySource {
       phetioHighFrequency: true
     } );
 
-    // @public
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @private
     this.steamPowerableElementInPlaceProperty = steamPowerableElementInPlaceProperty;
     this.heatEnergyProducedSinceLastChunk = EFACConstants.ENERGY_PER_CHUNK / 2;
     this.energyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
-    // @private - List of chunks that are not being transferred to the next energy system
-    // element.
     this.exemptFromTransferEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -108,8 +126,6 @@ class TeaKettle extends EnergySource {
       assert && assert( !this.exemptFromTransferEnergyChunks.includes( chunk ), 'Exempt means it should not go onto outgoing list' );
     } );
 
-    // Flag for whether next chunk should be transferred or kept, used to
-    // alternate transfer with non-transfer.
     this.transferNextAvailableChunk = true;
   }
 
@@ -155,6 +171,8 @@ class TeaKettle extends EnergySource {
         const initialPosition = new Vector2( x0, y0 );
 
         const energyChunk = this.energyChunkGroup.createNextElement(
+
+          // @ts-expect-error
           EnergyType.THERMAL,
           initialPosition,
           Vector2.ZERO,
@@ -165,6 +183,7 @@ class TeaKettle extends EnergySource {
 
         this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
+        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -204,6 +223,7 @@ class TeaKettle extends EnergySource {
           const travelDistance = chunk.positionProperty.get().distance( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
           // create path mover to spout bottom
+          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
@@ -211,6 +231,8 @@ class TeaKettle extends EnergySource {
 
         // This chunk is moving out of the spout.
         else if ( chunk.positionProperty.get().equals( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
+
+          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createStraightPath( this.positionProperty.value, SPOUT_EXIT_ANGLE ),
             EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
@@ -269,7 +291,7 @@ class TeaKettle extends EnergySource {
     } );
   }
 
-  public override preloadEnergyChunks(): void {
+  public preloadEnergyChunks(): void {
     this.clearEnergyChunks();
 
     // Return if no chunks to add.
@@ -311,6 +333,7 @@ class TeaKettle extends EnergySource {
         }
 
         const energyChunk = this.energyChunkGroup.createNextElement(
+          // @ts-expect-error
           EnergyType.THERMAL,
           initialPosition,
           Vector2.ZERO,
@@ -318,6 +341,7 @@ class TeaKettle extends EnergySource {
         );
         this.energyChunkList.push( energyChunk );
 
+        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -340,7 +364,7 @@ class TeaKettle extends EnergySource {
     }
   }
 
-  public override getEnergyOutputRate(): Energy {
+  public getEnergyOutputRate(): Energy {
     return new Energy( EnergyType.MECHANICAL, this.energyProductionRateProperty.value, Math.PI / 2 );
   }
 
@@ -363,7 +387,7 @@ class TeaKettle extends EnergySource {
   /**
    * (EnergySystemElementIO)
    */
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return {
       heatEnergyProducedSinceLastChunk: this.heatEnergyProducedSinceLastChunk,
       transferNextAvailableChunk: this.transferNextAvailableChunk
@@ -374,7 +398,8 @@ class TeaKettle extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.heatEnergyProducedSinceLastChunk = stateObject.heatEnergyProducedSinceLastChunk;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
   }

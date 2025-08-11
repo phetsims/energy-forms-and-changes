@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a type representing a model of the sun as an energy source - includes the clouds that can block the sun's rays
  *
@@ -14,11 +11,13 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -56,10 +55,8 @@ type SunEnergySourceOptions = SelfOptions & EnergySourceOptions;
 
 class SunEnergySource extends EnergySource {
 
-  // a11y name
-  public a11yName: string;
   public readonly solarPanel: SolarPanel;
-  public readonly radius: number;
+  public radius: number;
 
   // clouds that can potentially block the sun's rays.  The positions are set so that they appear
   // between the sun and the solar panel, and must not overlap with one another.
@@ -69,7 +66,7 @@ class SunEnergySource extends EnergySource {
   public readonly cloudinessProportionProperty: NumberProperty;
 
   // exists only for phet-io
-  public readonly sunProportionProperty: DerivedProperty<number, [number]>;
+  public readonly sunProportionProperty: TReadOnlyProperty<number>;
 
   // internal variables used in methods
   private readonly energyChunksVisibleProperty: BooleanProperty;
@@ -113,7 +110,6 @@ class SunEnergySource extends EnergySource {
     this.sunProportionProperty = new DerivedProperty( [ this.cloudinessProportionProperty ], cloudinessProportion => {
       return 1 - cloudinessProportion;
     }, {
-      range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'sunProportionProperty' ),
       phetioDocumentation: 'proportion of sun reaching the solar panel',
       phetioValueType: NumberIO
@@ -128,6 +124,8 @@ class SunEnergySource extends EnergySource {
 
     this.energyChunksPassingThroughClouds = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -156,7 +154,7 @@ class SunEnergySource extends EnergySource {
    */
   public step( dt: number ): Energy {
     let energyProduced = 0;
-    if ( this.activeProperty.value === true ) {
+    if ( this.activeProperty.value ) {
 
       // see if it is time to emit a new energy chunk
       this.energyChunkEmissionCountdownTimer -= dt;
@@ -266,12 +264,14 @@ class SunEnergySource extends EnergySource {
     const emissionAngle = this.chooseNextEmissionAngle();
     const velocity = new Vector2( EFACConstants.ENERGY_CHUNK_VELOCITY, 0 ).rotated( emissionAngle );
     const startPoint = this.sunPosition.plus( new Vector2( RADIUS / 2, 0 ).rotated( emissionAngle ) );
+
+    // @ts-expect-error
     const chunk = this.energyChunkGroup.createNextElement( EnergyType.LIGHT, startPoint, velocity, this.energyChunksVisibleProperty );
 
     this.energyChunkList.add( chunk );
   }
 
-  public override preloadEnergyChunks(): void {
+  public preloadEnergyChunks(): void {
     this.clearEnergyChunks();
     let preloadTime = 6; // in simulated seconds, empirically determined
     const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
@@ -296,6 +296,8 @@ class SunEnergySource extends EnergySource {
    * return a structure containing type, rate, and direction of emitted energy
    */
   public getEnergyOutputRate(): Energy {
+
+    // @ts-expect-error
     return new Energy(
       EnergyType.LIGHT,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value )
@@ -353,7 +355,7 @@ class SunEnergySource extends EnergySource {
   /**
    * (EnergySystemElementIO)
    */
-  public override toStateObject(): Object {
+  public override toStateObject(): IntentionalAny {
     return {
       sectorList: this.sectorList,
       currentSectorIndex: this.currentSectorIndex,
@@ -367,7 +369,8 @@ class SunEnergySource extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: Object ): void {
+  // @ts-expect-error
+  public override applyState( stateObject: IntentionalAny ): void {
     this.sectorList = stateObject.sectorList;
     this.currentSectorIndex = stateObject.currentSectorIndex;
     this.radius = stateObject.radius;

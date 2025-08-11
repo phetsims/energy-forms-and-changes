@@ -50,7 +50,6 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     } );
     this.heaterSettingProperty.link( setting => {
       const mappedSetting = setting === 0 ? 0 : 0.25 + ( setting * 0.75 );
-      // @ts-expect-error
       teaKettle.heatProportionProperty.set( mappedSetting );
     } );
 
@@ -124,7 +123,6 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     const spoutExitPosition = new Vector2( teaKettleNode.bounds.maxX - 4.5, teaKettleNode.bounds.minY + 16 );
     this.steamCanvasNode = new TeaKettleSteamCanvasNode(
       spoutExitPosition,
-      // @ts-expect-error
       teaKettle.energyProductionRateProperty,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE, {
         canvasBounds: new Bounds2(
