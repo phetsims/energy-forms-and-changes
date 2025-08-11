@@ -13,9 +13,10 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArray, ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -23,16 +24,18 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableFadableModelElement from './PositionableFadableModelElement.js';
 
+export type EnergySystemElementOptions = PositionableFadableModelElementOptions;
+
 class EnergySystemElement extends PositionableFadableModelElement {
 
-  public readonly iconImage: HTMLImageElement;
+  public readonly iconImage: Image;
   public readonly energyChunkList: ObservableArray<EnergyChunk>;
   public readonly activeProperty: BooleanProperty;
 
-  // A11y name of this energy system element, used by assistive technology, set by sub-types
+  // A11y name of this energy system element, used by assistive technology, set by subtypes
   public a11yName: string;
 
-  public constructor( iconImage: HTMLImageElement, options?: object ) {
+  public constructor( iconImage: Image, options?: EnergySystemElementOptions ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED,

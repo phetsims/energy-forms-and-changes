@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * model of a cloud that can block energy coming from the sun
  *
@@ -11,6 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -32,7 +30,7 @@ class Cloud {
   private readonly parentPositionProperty: Property<Vector2>;
 
   // The ellipse that defines the shape of this cloud. only null until the parent position is linked
-  private cloudEllipse: Shape | null;
+  private cloudEllipse!: Shape;
 
   public constructor( offsetFromParent: Vector2, parentPositionProperty: Property<Vector2> ) {
 
@@ -44,10 +42,10 @@ class Cloud {
 
     this.parentPositionProperty = parentPositionProperty;
 
-    this.cloudEllipse = null;
-
     this.parentPositionProperty.link( parentPosition => {
       const center = parentPosition.plus( this.offsetFromParent );
+
+      // @ts-expect-error
       this.cloudEllipse = Shape.ellipse( center.x, center.y, WIDTH / 2, HEIGHT / 2, 0, 0, 0, false );
     } );
   }
@@ -67,11 +65,9 @@ class Cloud {
     return this.parentPositionProperty.get().plus( this.offsetFromParent );
   }
 
+  public static readonly WIDTH = WIDTH;
+  public static readonly HEIGHT = HEIGHT;
 }
-
-// statics
-Cloud.WIDTH = WIDTH;
-Cloud.HEIGHT = HEIGHT;
 
 energyFormsAndChanges.register( 'Cloud', Cloud );
 export default Cloud;

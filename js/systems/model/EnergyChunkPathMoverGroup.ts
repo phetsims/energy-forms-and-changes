@@ -1,8 +1,5 @@
 // Copyright 2020-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * PhetioGroup for creating EnergyChunkPathMovers. This type adds support for dynamically created and destroyed,
  * instrumented PhET-iO Elements.
@@ -20,15 +17,19 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 
-class EnergyChunkPathMoverGroup extends PhetioGroup {
+class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover> {
 
   public constructor( energyChunkGroup: EnergyChunkGroup, options?: IntentionalAny ) {
 
+    // eslint-disable-next-line phet/bad-typescript-text
     options = merge( {
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
     }, options );
 
+    // @ts-expect-error
     super( EnergyChunkPathMoverGroup.createEnergyChunkPathMover,
       () => [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
   }

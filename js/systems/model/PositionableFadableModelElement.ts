@@ -19,12 +19,14 @@ import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableModelElement from './PositionableModelElement.js';
 
+export type PositionableFadableModelElement = PositionableModelElementOptions;
+
 class PositionableFadableModelElement extends PositionableModelElement {
 
   public readonly opacityProperty: NumberProperty;
   public readonly visibleProperty: BooleanProperty;
 
-  public constructor( initialPosition: Vector2, initialOpacity: number, options?: IntentionalAny ) {
+  public constructor( initialPosition: Vector2, initialOpacity: number, options?: PositionableFadableModelElement ) {
     super( initialPosition, options );
 
     this.opacityProperty = new NumberProperty( initialOpacity, {

@@ -1,8 +1,5 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a convenience type that collects together several things often needed about a unit of energy that is being produced
  * or consumed by one of the elements in an energy system
@@ -11,14 +8,20 @@
  * @author  Andrew Adare
  */
 
-import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+
+type SelfOptions = {
+  creationTime?: number | null;
+};
+
+export type EnergyOptions = SelfOptions;
 
 class Energy {
 
   // Energy type
-  public readonly type: EnergyType;
+  public readonly type: typeof EnergyType;
 
   // Amount of energy, in joules
   public readonly amount: number;
@@ -34,13 +37,13 @@ class Energy {
    * @param amount - amount of energy, in joules
    * @param direction - direction of energy, in radians.  Not meaningful for all energy types.  Zero indicates
    * to the right, PI/2 is up, and so forth.
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( type: EnergyType, amount: number, direction: number, options?: IntentionalAny ) {
+  public constructor( type: typeof EnergyType, amount: number, direction: number, providedOptions?: EnergyOptions ) {
 
-    options = merge( {
+    const options = optionize<EnergyOptions, SelfOptions>()( {
       creationTime: null
-    }, options );
+    }, providedOptions );
 
     this.type = type;
 

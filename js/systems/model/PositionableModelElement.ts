@@ -15,15 +15,17 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+
+export type PositionableModelElementOptions = PhetioObjectOptions;
 
 class PositionableModelElement extends PhetioObject {
 
   public readonly positionProperty: Vector2Property;
 
-  public constructor( initialPosition: Vector2, options?: IntentionalAny ) {
+  public constructor( initialPosition: Vector2, options?: PositionableModelElementOptions ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED

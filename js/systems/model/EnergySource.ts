@@ -1,8 +1,5 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * base class for energy sources, i.e. model elements that produce energy and can supply it to other energy system
  * components, such as energy converters or energy users
@@ -12,26 +9,26 @@
  * @author Jesse Greenberg
  */
 
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-import EnergySystemElement from './EnergySystemElement.js';
+import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemElement.js';
 
 class EnergySource extends EnergySystemElement {
 
-  protected readonly outgoingEnergyChunks: ObservableArrayDef<EnergyChunk>;
+  protected readonly outgoingEnergyChunks: ObservableArray<EnergyChunk>;
 
   /**
    * @param iconImage Image to identify source on carousel menu
    * @param [options]
    */
-  public constructor( iconImage: Image, options?: IntentionalAny ) {
+  public constructor( iconImage: Image, options?: EnergySystemElementOptions ) {
 
+    // eslint-disable-next-line phet/bad-typescript-text
     options = merge( {
       tandem: Tandem.REQUIRED
     }, options );
@@ -39,6 +36,8 @@ class EnergySource extends EnergySystemElement {
     super( iconImage, options );
     this.outgoingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'outgoingEnergyChunks' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
@@ -68,6 +67,8 @@ class EnergySource extends EnergySystemElement {
    */
   protected override clearEnergyChunks(): void {
     super.clearEnergyChunks();
+
+    // @ts-expect-error
     this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }
