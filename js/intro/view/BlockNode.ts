@@ -15,7 +15,6 @@ import Transform3 from '../../../../dot/js/Transform3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -45,7 +44,7 @@ const brickString = EnergyFormsAndChangesStrings.brick;
 const ironString = EnergyFormsAndChangesStrings.iron;
 
 // constants
-const BLOCK_IMAGES: IntentionalAny = {
+const BLOCK_IMAGES = {
   BRICK: {
     front: brickTextureFront_png,
     side: brickTextureRight_png,
@@ -60,9 +59,10 @@ const BLOCK_IMAGES: IntentionalAny = {
 const LABEL_FONT = new PhetFont( 26 );
 const OUTLINE_LINE_WIDTH = 3;
 const PERSPECTIVE_ANGLE = EFACConstants.BLOCK_PERSPECTIVE_ANGLE;
-const BLOCK_ATTRIBUTES: IntentionalAny = {};
-BLOCK_ATTRIBUTES.IRON = { label: ironString };
-BLOCK_ATTRIBUTES.BRICK = { label: brickString };
+const BLOCK_ATTRIBUTES = {
+  BRICK: { label: brickString },
+  IRON: { label: ironString }
+} as const;
 
 type SelfOptions = {
 

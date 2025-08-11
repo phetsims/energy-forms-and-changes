@@ -11,7 +11,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -21,6 +20,7 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
@@ -83,7 +83,7 @@ class EnergyChunkLegend extends Panel {
    * @param energyType - the type of energy for this legend entry
    * @param modelViewTransform - needs to be passed in to create an EnergyChunk
    */
-  public static createEnergyChunkSymbol( labelString: string, energyType: IntentionalAny, modelViewTransform: ModelViewTransform2 ): HBox {
+  public static createEnergyChunkSymbol( labelString: string, energyType: EnergyType, modelViewTransform: ModelViewTransform2 ): HBox {
     const labelText = new Text( labelString, {
       font: LEGEND_ENTRY_FONT,
       maxWidth: 100
