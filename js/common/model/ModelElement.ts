@@ -10,7 +10,7 @@
  * @author John Blanco
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -20,8 +20,39 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
+import HorizontalSurface from './HorizontalSurface.js';
 
 class ModelElement extends PhetioObject {
+
+  public readonly positionProperty: Vector2Property;
+
+  // The tandem name
+  public readonly tandemName: string;
+
+  // The top surface of this model element, the value will be null if other
+  // elements can't rest upon the surface.  Its position is updated when the model element is moved.  Does not to be
+  // part of PhET-iO state because it's set in subclass constructor and never changed thereafter.
+  public topSurface: HorizontalSurface | null;
+
+  // The bottom surface of this model element, the value will be null if this
+  // model element can't rest on another surface.  Does not to be part of PhET-iO state because it's set in subclass
+  // constructor and never changed thereafter.
+  protected bottomSurface: HorizontalSurface | null;
+
+  // A list of bounds that are used for determining if this model
+  // element is in a valid position, i.e. whether it is within the play area and is not overlapping other model
+  // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
+  // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the
+  // element's position, which by convention in this sim is at the center bottom of the model element.
+  public readonly relativePositionTestingBoundsList: ObservableArrayDef<Bounds2>;
+
+  // The bounds from relativePositionTestingBoundsList translated to this element's
+  // current position.  These are maintained so that they don't have to be recalculated every time we need to test if
+  // model elements are overlapping one another.
+  public translatedPositionTestingBoundsList: Bounds2[];
+
+  // Compensation for evaluating positions of elements that have perspective in the view
+  public perspectiveCompensation: Vector2;
 
   public constructor( initialPosition: Vector2, options?: Object ) {
 
@@ -38,36 +69,20 @@ class ModelElement extends PhetioObject {
 
     super( options );
 
-    // @public
     this.positionProperty = new Vector2Property( initialPosition, merge( {
       valueComparisonStrategy: 'equalsFunction',
       hasListenerOrderDependencies: true, // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/421
       tandem: options.tandem.createTandem( 'positionProperty' )
     }, options.positionPropertyOptions ) );
 
-    // @public (read-only)
     this.tandemName = options.tandem.name;
 
-    // @public {HorizontalSurface|null} - The top surface of this model element, the value will be null if other
-    // elements can't rest upon the surface.  Its position is updated when the model element is moved.  Does not to be
-    // part of PhET-iO state because it's set in subclass constructor and never changed thereafter.
     this.topSurface = null;
 
-    // @protected {HorizontalSurface|null} - The bottom surface of this model element, the value will be null if this
-    // model element can't rest on another surface.  Does not to be part of PhET-iO state because it's set in subclass
-    // constructor and never changed thereafter.
     this.bottomSurface = null;
 
-    // @public (read-only) {ObservableArrayDef.<Bounds2>} - A list of bounds that are used for determining if this model
-    // element is in a valid position, i.e. whether it is within the play area and is not overlapping other model
-    // elements.  In many cases, this list will contain a single Bounds2 instance, e.g. for a block.  For more elaborate
-    // shapes, like a beaker, it may contain several Bounds2 instances.  These bounds are defined relative to the
-    // element's position, which by convention in this sim is at the center bottom of the model element.
     this.relativePositionTestingBoundsList = createObservableArray();
 
-    // @public (read-only) {Bounds2[]} - The bounds from relativePositionTestingBoundsList translated to this element's
-    // current position.  These are maintained so that they don't have to be recalculated every time we need to test if
-    // model elements are overlapping one another.
     this.translatedPositionTestingBoundsList = [];
 
     // Watch the relative position list and add translated positions and now bounds instances are added.  This listener
@@ -87,7 +102,6 @@ class ModelElement extends PhetioObject {
       );
     } );
 
-    // @public {Vector2} - compensation for evaluating positions of elements that have perspective in the view
     this.perspectiveCompensation = new Vector2( 0, 0 );
   }
 

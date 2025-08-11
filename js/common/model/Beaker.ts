@@ -19,6 +19,7 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
@@ -68,6 +69,38 @@ let performanceMeasurementTaken = false;
 
 class Beaker extends RectangularThermalMovableModelElement {
 
+  private readonly width: number;
+  private readonly height: number;
+  private readonly _energyContainerCategory: EnergyContainerCategory;
+
+  // The type of beaker (water or olive oil)
+  public readonly beakerType: BeakerType;
+
+  // The color of the fluid in the beaker
+  public readonly fluidColor: Color;
+
+  // The color of the steam that comes from the beaker
+  public readonly steamColor: Color;
+
+  // The boiling point temperature of the fluid in the beaker
+  public readonly fluidBoilingPoint: number;
+
+  // The distance between major tick marks on the side of the beaker
+  public readonly majorTickMarkDistance: number;
+
+  // Proportion of fluid in the beaker, should only be set in sub-types
+  public readonly fluidProportionProperty: NumberProperty;
+
+  // Indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
+  // steam, 1 is the max amount (full boil)
+  public steamingProportion: number;
+
+  // Indicates when a reset starts and finished
+  public readonly resetInProgressProperty: BooleanProperty;
+
+  // Max height above water where steam still affects the measured temperature
+  private readonly maxSteamHeight: number;
+
   /**
    * @param initialPosition - position where center bottom of beaker will be in model space
    * @param width
@@ -104,27 +137,20 @@ class Beaker extends RectangularThermalMovableModelElement {
       options
     );
 
-    // @private
     this.width = width;
     this.height = height;
     this._energyContainerCategory = BEAKER_COMPOSITION[ options.beakerType ].energyContainerCategory;
 
-    // @public {BeakerType} (read-only)
     this.beakerType = options.beakerType;
 
-    // @public {Color) - the color of the fluid in the beaker
     this.fluidColor = BEAKER_COMPOSITION[ options.beakerType ].fluidColor;
 
-    // @public {Color) - the color of the steam that comes from the beaker
     this.steamColor = BEAKER_COMPOSITION[ options.beakerType ].steamColor;
 
-    // @public {number} - the boiling point temperature of the fluid in the beaker
     this.fluidBoilingPoint = BEAKER_COMPOSITION[ options.beakerType ].fluidBoilingPoint;
 
-    // @public {number} - the distance between major tick marks on the side of the beaker
     this.majorTickMarkDistance = options.majorTickMarkDistance;
 
-    // @public {Property.<number>} - proportion of fluid in the beaker, should only be set in sub-types
     this.fluidProportionProperty = new NumberProperty( EFACConstants.INITIAL_FLUID_PROPORTION, {
       range: new Range( EFACConstants.INITIAL_FLUID_PROPORTION, 1 ),
       tandem: options.tandem.createTandem( 'fluidProportionProperty' ),
@@ -133,14 +159,10 @@ class Beaker extends RectangularThermalMovableModelElement {
       phetioDocumentation: 'the proportion of fluid in the beaker'
     } );
 
-    // @public (read-only) {number} - indicator of how much steam is being emitted, ranges from 0 to 1 where 0 is no
-    // steam, 1 is the max amount (full boil)
     this.steamingProportion = 0;
 
-    // @public (read-only) - indicates when a reset starts and finished
     this.resetInProgressProperty = new BooleanProperty( false );
 
-    // @private {number} - max height above water where steam still affects the measured temperature
     this.maxSteamHeight = 2 * height;
 
     // @protected {ThermalContactArea} - see base class for info

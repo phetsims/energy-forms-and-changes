@@ -10,7 +10,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -56,6 +56,24 @@ let instanceCounter = 0;
 
 class Air {
 
+  private readonly energyChunksVisibleProperty: BooleanProperty;
+
+  // List of energy chunks owned by this model element
+  public readonly energyChunkList: ObservableArrayDef<EnergyChunk>;
+
+  // Unique ID
+  public readonly id: string;
+
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup;
+
+  // Wander controllers for energy chunks that are owned by
+  // this model element but are wandering outside of it.
+  private readonly energyChunkWanderControllers: ObservableArrayDef<EnergyChunkWanderController>;
+
+  // Total energy of the air, accessible through getters/setters defined below
+  private energy: number;
+
   /**
    * @param energyChunksVisibleProperty - visibility of energy chunks, used when creating new ones
    */
@@ -65,30 +83,23 @@ class Air {
       tandem: Tandem.REQUIRED
     }, options );
 
-    // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @public (read-only) - list of energy chunks owned by this model element
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // @public (read-only) {string} - unique ID
     this.id = `air-${instanceCounter++}`;
 
-    // @private
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkWanderControllerGroup = energyChunkWanderControllerGroup;
 
-    // @private {ObservableArrayDef.<EnergyChunkWanderController>} - wander controllers for energy chunks that are owned by
-    // this model element but are wandering outside of it.
     this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
-    // @private {number} - total energy of the air, accessible through getters/setters defined below
     this.energy = INITIAL_ENERGY;
   }
 
