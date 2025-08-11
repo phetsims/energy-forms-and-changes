@@ -1,8 +1,5 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A static object that contains methods for redistributing a set of energy chunks within a shape in order to make them
  * spread out fairly evenly in a way that looks dynamic and realistic.  The basic approach is to simulate a set of
@@ -525,12 +522,18 @@ const energyChunkDistributor = {
    */
   setDistributionAlgorithm( algorithmName: string ): void {
     if ( algorithmName === 'repulsive' ) {
+
+      // @ts-expect-error
       this.updatePositions = this.updatePositionsRepulsive;
     }
     else if ( algorithmName === 'spiral' ) {
+
+      // @ts-expect-error
       this.updatePositions = this.updatePositionsSpiral;
     }
     else if ( algorithmName === 'simple' ) {
+
+      // @ts-expect-error
       this.updatePositions = this.updatePositionsSimple;
     }
     else {
@@ -544,6 +547,7 @@ const energyChunkDistributor = {
 if ( EFACQueryParameters.ecDistribution === null ) {
 
   // use the repulsive algorithm by default, which looks the best but is also the most computationally expensive
+  // @ts-expect-error
   energyChunkDistributor.updatePositions = energyChunkDistributor.updatePositionsRepulsive;
 }
 else {

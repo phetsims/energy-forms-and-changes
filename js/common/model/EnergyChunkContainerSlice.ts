@@ -44,7 +44,7 @@ class EnergyChunkContainerSlice extends PhetioObject {
   private readonly zPosition: number;
 
   // List of energy chunks owned by this slice
-  private readonly energyChunkList: ObservableArray<EnergyChunk>;
+  public readonly energyChunkList: ObservableArray<EnergyChunk>;
 
   private readonly disposeEnergyChunkContainerSlice: () => void;
 

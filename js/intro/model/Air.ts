@@ -10,7 +10,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray, ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -65,7 +65,7 @@ class Air {
   private readonly energyChunksVisibleProperty: BooleanProperty;
 
   // List of energy chunks owned by this model element
-  public readonly energyChunkList: ObservableArrayDef<EnergyChunk>;
+  public readonly energyChunkList: ObservableArray<EnergyChunk>;
 
   // Unique ID
   public readonly id: string;

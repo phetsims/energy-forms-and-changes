@@ -13,7 +13,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray, ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -26,7 +26,7 @@ import PositionableFadableModelElement from './PositionableFadableModelElement.j
 class EnergySystemElement extends PositionableFadableModelElement {
 
   public readonly iconImage: HTMLImageElement;
-  public readonly energyChunkList: ObservableArrayDef<EnergyChunk>;
+  public readonly energyChunkList: ObservableArray<EnergyChunk>;
   public readonly activeProperty: BooleanProperty;
 
   // A11y name of this energy system element, used by assistive technology, set by sub-types
