@@ -1,8 +1,5 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * enum that represents the various types of energy used in this simulation
  *

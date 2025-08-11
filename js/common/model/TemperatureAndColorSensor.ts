@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a model element that senses the temperature and color of the model at its current position, and can be moved around
  *
@@ -23,17 +20,23 @@ import EFACIntroModel from '../../intro/model/EFACIntroModel.js';
 import EFACConstants from '../EFACConstants.js';
 import UserMovableModelElement, { UserMovableModelElementOptions } from './UserMovableModelElement.js';
 
-// Since UserMovableModelElement doesn't export options, we use the parent's parent (PhetioObject) options
-// or a general approach with Object type for the parent options
 type SelfOptions = EmptySelfOptions;
 
 type TemperatureAndColorSensorOptions = SelfOptions & UserMovableModelElementOptions; // Using Object since parent options are not exported
 
 class TemperatureAndColorSensor extends UserMovableModelElement {
 
+  private readonly model: EFACIntroModel;
+  public readonly sensedTemperatureProperty: NumberProperty;
+  public readonly sensedElementColorProperty: Property<Color>;
+  public readonly sensedElementNameProperty: StringProperty;
+
+  // Used to control visibility in the view
+  public readonly activeProperty: BooleanProperty;
+
   public constructor( model: EFACIntroModel, initialPosition: Vector2, initiallyActive: boolean, providedOptions?: TemperatureAndColorSensorOptions ) {
 
-    const options = optionize<TemperatureAndColorSensorOptions, SelfOptions, Object>()( {
+    const options = optionize<TemperatureAndColorSensorOptions, SelfOptions, UserMovableModelElementOptions>()( {
       tandem: Tandem.REQUIRED,
       phetioState: false,
       positionPropertyOptions: {
@@ -44,10 +47,8 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
 
     super( initialPosition, options );
 
-    // @private
     this.model = model;
 
-    // @public (read-only) {NumberProperty}
     this.sensedTemperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
       range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
       units: 'K',
@@ -57,7 +58,6 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
       phetioDocumentation: 'the temperature of the sensed element'
     } );
 
-    // @public (read-only) {Property.<Color>}
     this.sensedElementColorProperty = new Property( EFACConstants.TEMPERATURE_SENSOR_INACTIVE_COLOR, {
       phetioValueType: Color.ColorIO,
       tandem: options.tandem.createTandem( 'sensedElementColorProperty' ),
@@ -71,7 +71,6 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
       phetioDocumentation: 'the phet-io ID of the sensed element'
     } );
 
-    // @public (read-only) {BooleanProperty} - used to control visibility in the view
     this.activeProperty = new BooleanProperty( initiallyActive, {
       tandem: options.tandem.createTandem( 'activeProperty' ),
       phetioReadOnly: true,
@@ -96,7 +95,7 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
     }
   }
 
-  public reset(): void {
+  public override reset(): void {
     this.sensedTemperatureProperty.reset();
     this.sensedElementColorProperty.reset();
     this.sensedElementNameProperty.reset();

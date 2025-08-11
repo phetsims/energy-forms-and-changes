@@ -1,8 +1,5 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * An object that makes it easy for one model element to follow another one around.  This was originally created to
  * allow the thermometer to stick to the blocks and beaker when they are dragged, though it may have other uses.
@@ -75,7 +72,7 @@ class ElementFollower {
 
   public reset(): void {
     this.followerProperty.reset();
-    this.positionBeingFollowedProperty.reset();
+    this.positionBeingFollowedProperty!.reset();
   }
 }
 

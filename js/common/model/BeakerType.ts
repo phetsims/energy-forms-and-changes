@@ -1,8 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Beaker types for EFAC
  *
@@ -14,8 +11,8 @@ import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 const BeakerType = EnumerationDeprecated.byKeys( [ 'WATER', 'OLIVE_OIL' ], {
-  beforeFreeze: BeakerType => {
-    BeakerType.getTandemName = beakerType => {
+  beforeFreeze: ( BeakerType: IntentionalAny ) => {
+    BeakerType.getTandemName = ( beakerType: IntentionalAny ) => {
       return `${_.camelCase( beakerType.toString() )}Beaker`;
     };
   }

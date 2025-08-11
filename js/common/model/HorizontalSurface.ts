@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A simple, level horizontal surface in a 2D model space.  This is represented by a range of x values and a single y
  * value.  The best way to thing of this is that it is much like a Vector2 in that it represents a small piece of
@@ -16,6 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -59,8 +57,9 @@ class HorizontalSurface extends PhetioObject {
 
     // monitor the element on the surface for legitimate settings
     assert && this.elementOnSurfaceProperty.link( ( elementOnSurface, previousElementOnSurface ) => {
-      assert( elementOnSurface === null || elementOnSurface instanceof ModelElement );
-      assert( elementOnSurface !== this, 'can\'t sit on top of ourself' );
+      affirm( elementOnSurface === null || elementOnSurface instanceof ModelElement );
+      // @ts-expect-error
+      affirm( elementOnSurface !== this, 'can\'t sit on top of ourself' );
     } );
 
     this.width = width;

@@ -1,8 +1,5 @@
 // Copyright 2020-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * PhetioGroup for creating EnergyChunks. This type adds support for dynamically created and destroyed, instrumented
  * PhET-iO Elements.
@@ -24,7 +21,7 @@ type SelfOptions = EmptySelfOptions;
 
 type EnergyChunkGroupOptions = SelfOptions & PhetioGroupOptions;
 
-class EnergyChunkGroup extends PhetioGroup {
+class EnergyChunkGroup extends PhetioGroup<EnergyChunk> {
 
   /**
    * @param energyChunksVisibleProperty - used to create the archetype
@@ -34,17 +31,20 @@ class EnergyChunkGroup extends PhetioGroup {
 
     const options = optionize<EnergyChunkGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunk.EnergyChunkIO )
     }, providedOptions );
 
     super(
+      // @ts-expect-error
       EnergyChunkGroup.createEnergyChunk,
       [ EnergyType.THERMAL, Vector2.ZERO, Vector2.ZERO, energyChunksVisibleProperty, {} ],
       options
     );
   }
 
-  public static createEnergyChunk( tandem: Tandem, energyType: EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: EnergyChunkGroupOptions ): EnergyChunk {
+  public static createEnergyChunk( tandem: Tandem, energyType: typeof EnergyType, position: Vector2, velocity: Vector2, visibleProperty: BooleanProperty, options?: EnergyChunkGroupOptions ): EnergyChunk {
     assert && options && assert( !options.hasOwnProperty( 'tandem' ), 'EnergyChunkGroup supplies its own tandem' );
     return new EnergyChunk( energyType, position, velocity, visibleProperty, merge( { tandem: tandem }, options ) );
   }

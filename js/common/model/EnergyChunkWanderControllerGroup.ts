@@ -1,8 +1,5 @@
 // Copyright 2020-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * PhetioGroup for creating EnergyChunkWanderControllers. This type adds support for dynamically created and destroyed,
  * instrumented PhET-iO Elements.
@@ -26,12 +23,14 @@ type SelfOptions = EmptySelfOptions;
 
 type EnergyChunkWanderControllerGroupOptions = SelfOptions & PhetioGroupOptions;
 
-class EnergyChunkWanderControllerGroup extends PhetioGroup {
+class EnergyChunkWanderControllerGroup extends PhetioGroup<EnergyChunkWanderController> {
 
   public constructor( energyChunkGroup: EnergyChunkGroup, providedOptions?: EnergyChunkWanderControllerGroupOptions ) {
 
     const options = optionize<EnergyChunkWanderControllerGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO )
     }, providedOptions );
 
@@ -44,6 +43,7 @@ class EnergyChunkWanderControllerGroup extends PhetioGroup {
       ];
     };
 
+    // @ts-expect-error
     super( EnergyChunkWanderControllerGroup.createEnergyChunkWanderController, defaultArguments, options );
   }
 
