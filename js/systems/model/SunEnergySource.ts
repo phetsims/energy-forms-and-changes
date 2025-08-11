@@ -10,6 +10,7 @@
  * @author  Andrew Adare (js port)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -26,12 +27,14 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import sunIcon_png from '../../../images/sunIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from './Cloud.js';
 import Energy from './Energy.js';
 import EnergySource from './EnergySource.js';
+import SolarPanel from './SolarPanel.js';
 
 // constants
 const RADIUS = 0.02; // In meters, apparent size, not (obviously) actual size.
@@ -50,14 +53,7 @@ const EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
 class SunEnergySource extends EnergySource {
 
-  /**
-   * @param {SolarPanel} solarPanel
-   * @param {BooleanProperty} isPlayingProperty
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} [options]
-   */
-  constructor( solarPanel, isPlayingProperty, energyChunksVisibleProperty, energyChunkGroup, options ) {
+  public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -137,10 +133,8 @@ class SunEnergySource extends EnergySource {
   /**
    * step in time
    * @param dt - time step, in seconds
-   * @returns {Energy}
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): Energy {
     let energyProduced = 0;
     if ( this.activeProperty.value === true ) {
 
@@ -171,10 +165,9 @@ class SunEnergySource extends EnergySource {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
-   * @private
+   * @param dt - time step, in seconds
    */
-  updateEnergyChunkPositions( dt ) {
+  private updateEnergyChunkPositions( dt: number ): void {
 
     // check for bouncing and absorption of the energy chunks
     this.energyChunkList.forEach( chunk => {
@@ -249,10 +242,7 @@ class SunEnergySource extends EnergySource {
     } );
   }
 
-  /**
-   * @private
-   */
-  emitEnergyChunk() {
+  private emitEnergyChunk(): void {
     const emissionAngle = this.chooseNextEmissionAngle();
     const velocity = new Vector2( EFACConstants.ENERGY_CHUNK_VELOCITY, 0 ).rotated( emissionAngle );
     const startPoint = this.sunPosition.plus( new Vector2( RADIUS / 2, 0 ).rotated( emissionAngle ) );
@@ -261,11 +251,7 @@ class SunEnergySource extends EnergySource {
     this.energyChunkList.add( chunk );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  preloadEnergyChunks() {
+  public override preloadEnergyChunks(): void {
     this.clearEnergyChunks();
     let preloadTime = 6; // in simulated seconds, empirically determined
     const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
@@ -288,10 +274,8 @@ class SunEnergySource extends EnergySource {
 
   /**
    * return a structure containing type, rate, and direction of emitted energy
-   * @returns {Energy}
-   * @public
    */
-  getEnergyOutputRate() {
+  public getEnergyOutputRate(): Energy {
     return new Energy(
       EnergyType.LIGHT,
       EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value )
@@ -299,10 +283,9 @@ class SunEnergySource extends EnergySource {
   }
 
   /**
-   * @returns {number} emission angle
-   * @private
+   * @returns emission angle
    */
-  chooseNextEmissionAngle() {
+  private chooseNextEmissionAngle(): number {
     const sector = this.sectorList[ this.currentSectorIndex ];
     this.currentSectorIndex++;
 
@@ -319,10 +302,8 @@ class SunEnergySource extends EnergySource {
   /**
    * Pre-populate the space around the sun with energy chunks. The number of iterations is chosen carefully such that
    * there are chunks that are close, but not quite reaching, the solar panel.
-   * @public
-   * @override
    */
-  activate() {
+  public override activate(): void {
     super.activate();
 
     // Don't move the EnergyChunks from their position if setting state.
@@ -338,29 +319,21 @@ class SunEnergySource extends EnergySource {
 
   /**
    * deactivate the sun
-   * @public
-   * @override
    */
-  deactivate() {
+  public override deactivate(): void {
     super.deactivate();
     this.cloudinessProportionProperty.reset();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.energyChunksPassingThroughClouds.clear();
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @returns {Object}
+   * (EnergySystemElementIO)
    */
-  toStateObject() {
+  public override toStateObject(): Object {
     return {
       sectorList: this.sectorList,
       currentSectorIndex: this.currentSectorIndex,
@@ -371,11 +344,10 @@ class SunEnergySource extends EnergySource {
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
+   * (EnergySystemElementIO)
+   * @param stateObject - see this.toStateObject()
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.sectorList = stateObject.sectorList;
     this.currentSectorIndex = stateObject.currentSectorIndex;
     this.radius = stateObject.radius;

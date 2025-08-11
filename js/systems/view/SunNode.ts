@@ -16,6 +16,7 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -27,6 +28,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import VSlider from '../../../../sun/js/VSlider.js';
 import cloud_png from '../../../images/cloud_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -51,12 +53,12 @@ const SLIDER_LABEL_FONT = new PhetFont( 12 );
 class SunNode extends MoveFadeModelElementNode {
 
   /**
-   * @param {SunEnergySource} sun Sun model element
-   * @param {Property} energyChunksVisibleProperty
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Tandem} tandem
+   * @param sun - Sun model element
+   * @param energyChunksVisibleProperty
+   * @param modelViewTransform
+   * @param tandem
    */
-  constructor( sun, energyChunksVisibleProperty, modelViewTransform, tandem ) {
+  public constructor( sun: SunEnergySource, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( sun, modelViewTransform, tandem );
 
     const sunCenter = modelViewTransform.modelToViewDelta( SunEnergySource.OFFSET_TO_CENTER_OF_SUN );
@@ -223,10 +225,10 @@ class LightAbsorbingShape {
 
   /**
    * inner type - a shape with observable light absorption coefficient
-   * @param {Shape} shape
-   * @param {number} initialAbsorptionCoefficient
+   * @param shape
+   * @param initialAbsorptionCoefficient
    */
-  constructor( shape, initialAbsorptionCoefficient ) {
+  public constructor( shape: Shape, initialAbsorptionCoefficient: number ) {
 
     // @public {NumberProperty}
     this.absorptionCoefficientProperty = new NumberProperty( initialAbsorptionCoefficient, {
@@ -242,10 +244,8 @@ class CloudNode extends Node {
 
   /**
    * inner type - a cloud
-   * @param cloud
-   * @param modelViewTransform
    */
-  constructor( cloud, modelViewTransform ) {
+  public constructor( cloud: Cloud, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     const cloudNode = new Image( cloud_png );

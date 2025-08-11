@@ -10,7 +10,9 @@
  */
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
@@ -30,12 +32,12 @@ const STEAM_BUBBLE_MAX_OPACITY = 0.7; // proportion, 0 to 1
 class TeaKettleSteamCanvasNode extends CanvasNode {
 
   /**
-   * @param {Vector2} steamOrigin
-   * @param {NumberProperty} energyOutputProperty
-   * @param {number} maxEnergyOutput
-   * @param {Object} [options]
+   * @param steamOrigin
+   * @param energyOutputProperty
+   * @param maxEnergyOutput
+   * @param options
    */
-  constructor( steamOrigin, energyOutputProperty, maxEnergyOutput, options ) {
+  public constructor( steamOrigin: Vector2, energyOutputProperty: NumberProperty, maxEnergyOutput: number, options?: Object ) {
 
     options = merge( {
       steamAngle: TeaKettle.SPOUT_EXIT_ANGLE, // {number}
@@ -87,10 +89,8 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
   /**
    * Updates the number of steam bubbles and the position, size, and opacity of each one.
-   * @param {number} dt
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     const steamingProportion = this.energyOutputProperty.value / this.maxEnergyOutput;
 
     // add any new steam bubbles
@@ -161,11 +161,8 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
   /**
    * Draws a steam bubble.
-   * @param {CanvasRenderingContext2D} context
-   * @param {Object} steamBubble
-   * @private
    */
-  drawSteamBubble( context, steamBubble ) {
+  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: Object ): void {
     context.globalAlpha = steamBubble.opacity;
     context.drawImage(
       this.steamBubbleImageCanvas,
@@ -178,27 +175,21 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
   /**
    * Paints the steam on the canvas node.
-   * @param {CanvasRenderingContext2D} context
-   * @public
    */
-  paintCanvas( context ) {
+  public paintCanvas( context: CanvasRenderingContext2D ): void {
     for ( let i = 0; i < this.steamBubbles.length; i++ ) {
       this.drawSteamBubble( context, this.steamBubbles[ i ] );
     }
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.steamBubbles.length = 0;
   }
 
   /**
    * Preloads the steam animation.
-   * @private
    */
-  preloadSteam() {
+  private preloadSteam(): void {
     this.preloadComplete = false;
     const dt = 1 / EFACConstants.FRAMES_PER_SECOND;
 

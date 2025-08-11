@@ -38,6 +38,7 @@ import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import SystemsModel from '../model/SystemsModel.js';
 import BeakerHeaterNode from './BeakerHeaterNode.js';
 import BeltNode from './BeltNode.js';
 import BikerNode from './BikerNode.js';
@@ -61,10 +62,10 @@ const BOTTOM_CONTROL_PANEL_HEIGHT = 49; // manually coordinated to match similar
 class SystemsScreenView extends ScreenView {
 
   /**
-   * @param {SystemsModel} model
-   * @param {Tandem} tandem
+   * @param model
+   * @param tandem
    */
-  constructor( model, tandem ) {
+  public constructor( model: SystemsModel, tandem: Tandem ) {
     super( {
       tandem: tandem
     } );
@@ -355,9 +356,8 @@ class SystemsScreenView extends ScreenView {
   /**
    * step this view element, called by the framework
    * @param dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( this.model.isPlayingProperty.get() ) {
       this.stepView( dt );
     }
@@ -366,18 +366,16 @@ class SystemsScreenView extends ScreenView {
   /**
    * step forward by one fixed nominal frame time
    * @param dt - time step, in seconds
-   * @public
    */
-  manualStep( dt ) {
+  public manualStep( dt: number ): void {
     this.stepView( dt );
   }
 
   /**
    * update the state of the non-model associated view elements for a given time amount
    * @param dt - time step, in seconds
-   * @public
    */
-  stepView( dt ) {
+  public stepView( dt: number ): void {
     this.teaKettleNode.step( dt );
     this.beakerHeaterNode.step( dt );
     this.faucetAndWaterNode.step( dt );
@@ -385,12 +383,8 @@ class SystemsScreenView extends ScreenView {
 
   /**
    * Custom layout function for this view so that it floats to the bottom of the window.
-   *
-   * @param {Bounds2} viewBounds
-   * @override
-   * @public
    */
-  layout( viewBounds ) {
+  public override layout( viewBounds: Bounds2 ): void {
     this.resetTransform();
 
     const scale = this.getLayoutScale( viewBounds );

@@ -17,6 +17,7 @@ import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
@@ -28,12 +29,7 @@ const SEARCH_ITERATIONS = 10;
 
 class LightRayNode extends Node {
 
-  /**
-   * @param {Vector2} origin
-   * @param {Vector2} endpoint
-   * @param {Color} color
-   */
-  constructor( origin, endpoint, color ) {
+  public constructor( origin: Vector2, endpoint: Vector2, color: Color ) {
     super();
 
     // @private - data that defines this ray
@@ -52,28 +48,19 @@ class LightRayNode extends Node {
 
   /**
    * add a shape that will potentially interact with this light ray
-   * @param {LightAbsorbingShape} lightAbsorbingShape
-   * @public
    */
-  addLightAbsorbingShape( lightAbsorbingShape ) {
+  public addLightAbsorbingShape( lightAbsorbingShape: any ): void {
     this.lightAbsorbingShapes.push( lightAbsorbingShape );
     lightAbsorbingShape.absorptionCoefficientProperty.link( this.rayUpdater );
   }
 
-  /**
-   * @param  {LightAbsorbingShape} lightAbsorbingShape
-   * @public
-   */
-  removeLightAbsorbingShape( lightAbsorbingShape ) {
+  public removeLightAbsorbingShape( lightAbsorbingShape: any ): void {
     lightAbsorbingShape.absorptionCoefficientProperty.unlink( this.rayUpdater );
     _.pull( this.lightAbsorbingShapes, lightAbsorbingShape );
     this.updateRay();
   }
 
-  /**
-   * @private
-   */
-  updateRay() {
+  private updateRay(): void {
     this.removeAllChildren();
     this.pointAndFadeValues.length = 0;
 
@@ -128,14 +115,8 @@ class LightRayNode extends Node {
 
   /**
    * finds the point at which this light ray enters a light absorbing shape
-   *
-   * @param {Vector2} origin
-   * @param {Vector2} endpoint
-   * @param {Shape} shape
-   * @returns {Vector2|null}
-   * @private
    */
-  getShapeEntryPoint( origin, endpoint, shape ) {
+  private getShapeEntryPoint( origin: Vector2, endpoint: Vector2, shape: Shape ): Vector2 | null {
     const b = shape.bounds;
     const shapeRect = Shape.rect( b.minX, b.minY, b.getWidth(), b.getHeight() );
     let entryPoint = null;
@@ -179,14 +160,8 @@ class LightRayNode extends Node {
 
   /**
    * finds the point at which this light ray exits a light absorbing shape
-   *
-   * @param {Vector2} origin
-   * @param {Vector2} endpoint
-   * @param {Shape} shape
-   * @returns {Vector2}
-   * @private
    */
-  getShapeExitPoint( origin, endpoint, shape ) {
+  private getShapeExitPoint( origin: Vector2, endpoint: Vector2, shape: Shape ): Vector2 | null {
     let exitPoint = null;
 
     if ( shape.bounds.containsPoint( endpoint ) ) {
@@ -213,13 +188,8 @@ class LightRayNode extends Node {
 
   /**
    * finds the point at which this light ray enters a rectangular shape
-   * @param {Vector2} origin
-   * @param {Vector2} endpoint
-   * @param {Rectangle} rect
-   * @returns {Vector2}
-   * @private
    */
-  getRectangleEntryPoint( origin, endpoint, rect ) {
+  private getRectangleEntryPoint( origin: Vector2, endpoint: Vector2, rect: Shape ): Vector2 | null {
     const intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
     let closestIntersectionPoint = null;
     intersectingPoints.forEach( point => {
@@ -234,13 +204,8 @@ class LightRayNode extends Node {
 
   /**
    * finds the point at which this light ray exits a rectangular shape
-   * @param  {Vector2} origin
-   * @param  {Vector2} endpoint
-   * @param  {Rectangle} rect
-   * @returns {Vector2}
-   * @private
    */
-  getRectangleExitPoint( origin, endpoint, rect ) {
+  private getRectangleExitPoint( origin: Vector2, endpoint: Vector2, rect: Shape ): Vector2 | null {
     const intersectingPoints = this.getRectangleLineIntersectionPoints( rect, new KiteLine( origin, endpoint ) );
 
     if ( intersectingPoints.length < 2 ) {
@@ -260,13 +225,7 @@ class LightRayNode extends Node {
     return furthestIntersectionPoint;
   }
 
-  /**
-   * @param {Rectangle} rect
-   * @param {Line} line
-   * @returns {Vector2[]}
-   * @private
-   */
-  getRectangleLineIntersectionPoints( rect, line ) {
+  private getRectangleLineIntersectionPoints( rect: Shape, line: KiteLine ): Vector2[] {
 
     // corners of rect
     const p = [
@@ -299,23 +258,16 @@ class PointAndFadeValue {
 
   /**
    * helper type that consolidates a point and a fade value
-   * @param {Vector2} point - position
-   * @param {number} fadeValue - Fade coefficient
-   * @private
+   * @param point - position
+   * @param fadeValue - Fade coefficient
    */
-  constructor( point, fadeValue ) {
+  public constructor( point: Vector2, fadeValue: number ) {
     this.point = point;
     this.fadeValue = fadeValue;
   }
 }
 
-/**
- * @param {KiteLine} line1
- * @param {KiteLine} line2
- * @returns {Vector2}
- * @private
- */
-const getLineIntersection = ( line1, line2 ) => {
+const getLineIntersection = ( line1: KiteLine, line2: KiteLine ): Vector2 | null => {
 
   const start1 = line1.start;
   const start2 = line2.start;

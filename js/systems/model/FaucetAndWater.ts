@@ -11,6 +11,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -26,6 +27,7 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import faucetIcon_png from '../../../images/faucetIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
@@ -56,13 +58,7 @@ const ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
 class FaucetAndWater extends EnergySource {
 
-  /**
-   * @param {BooleanProperty} energyChunksVisibleProperty
-   * @param {BooleanProperty} waterPowerableElementInPlaceProperty
-   * @param {EnergyChunkGroup} energyChunkGroup
-   * @param {Object} [options]
-   */
-  constructor( energyChunksVisibleProperty, waterPowerableElementInPlaceProperty, energyChunkGroup, options ) {
+  public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -137,10 +133,8 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * create a new energy chunk with the appropriate attributes for falling water
-   * @returns {EnergyChunk}
-   * @private
    */
-  createNewChunk() {
+  private createNewChunk(): EnergyChunk {
 
     // random x value within water column for "watery" appearance
     const x = ( dotRandom.nextDouble() - 0.5 ) * this.flowProportionProperty.value * MAX_WATER_WIDTH / 2;
@@ -156,10 +150,8 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * if enough energy has been produced since the last energy chunk was emitted, release another one into the system
-   *
-   * @private
    */
-  addChunkIfEnoughEnergy() {
+  private addChunkIfEnoughEnergy(): void {
     if ( this.energySinceLastChunk >= EFACConstants.ENERGY_PER_CHUNK ) {
       const chunk = this.createNewChunk();
       this.energyChunkList.push( chunk );
@@ -169,11 +161,9 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * step in time
-   * @param  {number} dt time step, in seconds
-   * @returns {Energy}
-   * @public
+   * @param dt - time step, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): Energy {
 
     if ( !this.activeProperty.value ) {
       return new Energy( EnergyType.MECHANICAL, 0, -Math.PI / 2 );
@@ -249,10 +239,8 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * steps only the water drops
-   * @param {number} dt
-   * @private
    */
-  stepWaterDrops( dt ) {
+  private stepWaterDrops( dt: number ): void {
 
     // make the existing water droplets fall
     this.waterDrops.forEach( drop => {
@@ -304,11 +292,7 @@ class FaucetAndWater extends EnergySource {
     } );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  preloadEnergyChunks() {
+  public override preloadEnergyChunks(): void {
     this.clearEnergyChunks();
 
     // define translation function here to avoid creating anonymous function inside loop
@@ -396,52 +380,36 @@ class FaucetAndWater extends EnergySource {
 
   /**
    * Preloads the falling water animation to be in
-   * @public
    */
-  preloadWaterDrops() {
+  public preloadWaterDrops(): void {
     this.waterDropsPreloaded = false;
     while ( !this.waterDropsPreloaded ) {
       this.stepWaterDrops( DT );
     }
   }
 
-  /**
-   * @returns {Energy}
-   * @public
-   * @override
-   */
-  getEnergyOutputRate() {
+  public override getEnergyOutputRate(): Energy {
     const energyAmount = EFACConstants.MAX_ENERGY_PRODUCTION_RATE * this.flowProportionProperty.value;
     assert && assert( energyAmount >= 0, `EnergyAmount is ${energyAmount}` );
     return new Energy( EnergyType.MECHANICAL, energyAmount, -Math.PI / 2 );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  deactivate() {
+  public override deactivate(): void {
     this.flowProportionProperty.reset();
     this.waterDrops.length = 0;
     this.flowEnergyDelay.length = 0;
     super.deactivate();
   }
 
-  /**
-   * @public
-   * @override
-   */
-  clearEnergyChunks() {
+  public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
     this.exemptFromTransferEnergyChunks.clear(); // Disposal is done when energyChunkList is cleared
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @returns {Object}
+   * (EnergySystemElementIO)
    */
-  toStateObject() {
+  public override toStateObject(): Object {
     return {
       waterDropsPreloaded: this.waterDropsPreloaded,
       transferNextAvailableChunk: this.transferNextAvailableChunk,
@@ -450,11 +418,10 @@ class FaucetAndWater extends EnergySource {
   }
 
   /**
-   * @override
-   * @public (EnergySystemElementIO)
-   * @param {Object} stateObject - see this.toStateObject()
+   * (EnergySystemElementIO)
+   * @param stateObject - see this.toStateObject()
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     this.waterDropsPreloaded = stateObject.waterDropsPreloaded;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
     this.energySinceLastChunk = stateObject.energySinceLastChunk;

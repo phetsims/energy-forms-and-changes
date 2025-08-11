@@ -41,10 +41,7 @@ const ENERGY_CONVERTERS_CAROUSEL_SELECTED_ELEMENT_POSITION = new Vector2( -0.025
 
 class SystemsModel {
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem ) {
+  public constructor( tandem: Tandem ) {
 
     // tandems to nest energy systems in Studio
     const energySourcesTandem = tandem.createTandem( 'energySources' );
@@ -211,9 +208,8 @@ class SystemsModel {
 
   /**
    * restore the initial state
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.energyChunksVisibleProperty.reset();
     this.isPlayingProperty.reset();
 
@@ -226,19 +222,17 @@ class SystemsModel {
 
   /**
    * step the sim forward by one fixed nominal frame time
-   * @public
    */
-  manualStep() {
+  public manualStep(): void {
     this.stepModel( EFACConstants.SIM_TIME_PER_TICK_NORMAL );
     this.manualStepEmitter.emit( EFACConstants.SIM_TIME_PER_TICK_NORMAL ); // notify the view
   }
 
   /**
    * step function or this model, automatically called by joist
-   * @param {number} dt - delta time, in seconds
-   * @public
+   * @param dt - delta time, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
 
     // elements managed by carousels need to be scrollable/selectable regardless of play/pause state
     this.carousels.forEach( carousel => {
@@ -252,10 +246,9 @@ class SystemsModel {
 
   /**
    * step the model in time
-   * @param  {number} dt - time step in seconds
-   * @public
+   * @param dt - time step in seconds
    */
-  stepModel( dt ) {
+  public stepModel( dt: number ): void {
     const source = this.energySourcesCarousel.getSelectedElement();
     const converter = this.energyConvertersCarousel.getSelectedElement();
     const user = this.energyUsersCarousel.getSelectedElement();
@@ -271,9 +264,8 @@ class SystemsModel {
   /**
    * Pre-load the currently active energy system elements with energy chunks so that the energy chunks are fully
    * propagated into the elements.
-   * @private
    */
-  preloadEnergyChunks() {
+  private preloadEnergyChunks(): void {
     const source = this.energySourcesCarousel.getSelectedElement();
     const converter = this.energyConvertersCarousel.getSelectedElement();
     const user = this.energyUsersCarousel.getSelectedElement();

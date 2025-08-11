@@ -12,18 +12,20 @@
  */
 
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FaucetAndWater from '../model/FaucetAndWater.js';
+import WaterDrop from '../model/WaterDrop.js';
 
 class FallingWaterCanvasNode extends CanvasNode {
 
   /**
-   * @param {WaterDrop[]} waterDrops - the falling water drops to be rendered
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param waterDrops - the falling water drops to be rendered
+   * @param modelViewTransform
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( waterDrops, modelViewTransform, options ) {
+  public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: Object ) {
     super( options );
 
     // @private
@@ -60,10 +62,8 @@ class FallingWaterCanvasNode extends CanvasNode {
 
   /**
    * Renders water drops on the canvas node.
-   * @param {CanvasRenderingContext2D} context
-   * @private
    */
-  renderFallingWater( context ) {
+  private renderFallingWater( context: CanvasRenderingContext2D ): void {
     const numberOfWaterDrops = this.waterDrops.length;
     for ( let i = 0; i < numberOfWaterDrops; i++ ) {
       this.drawWaterDrop( context, this.waterDrops[ i ] );
@@ -72,11 +72,8 @@ class FallingWaterCanvasNode extends CanvasNode {
 
   /*
    * Draws a water drop.
-   * @param {CanvasRenderingContext2D} context
-   * @param {WaterDrop} drop
-   * @private
    */
-  drawWaterDrop( context, drop ) {
+  private drawWaterDrop( context: CanvasRenderingContext2D, drop: WaterDrop ): void {
     context.drawImage(
       this.waterDropImageCanvas,
       this.modelViewTransform.modelToViewDeltaX( drop.position.x - drop.size.width / 2 ),
@@ -88,19 +85,15 @@ class FallingWaterCanvasNode extends CanvasNode {
 
   /**
    * Paints the water drops on the canvas node.
-   * @param {CanvasRenderingContext2D} context
-   * @override
-   * @public
    */
-  paintCanvas( context ) {
+  public override paintCanvas( context: CanvasRenderingContext2D ): void {
     this.renderFallingWater( context );
   }
 
   /**
-   * @public
-   * @param {number} dt - the change in time
+   * @param dt - the change in time
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.invalidatePaint();
   }
 }
