@@ -1,8 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This type is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
  * destination.
@@ -81,6 +78,8 @@ class EnergyChunkWanderController extends PhetioObject {
 
       // phet-io
       tandem: Tandem.REQUIRED,
+
+      // @ts-expect-error
       phetioType: EnergyChunkWanderController.EnergyChunkWanderControllerIO,
       phetioDynamicElement: true
     }, providedOptions );
@@ -107,7 +106,7 @@ class EnergyChunkWanderController extends PhetioObject {
     // changes. This was the simplest solution zepumph and samreid came up with for dealing with supporting PhET-iO
     // state when there are usages that just wrap a single value in a Property and never change it.
     assert && Tandem.VALIDATION && destinationProperty.lazyLink( () => {
-      assert( this.destinationProperty.isPhetioInstrumented(),
+      assert && assert( this.destinationProperty.isPhetioInstrumented(),
         'If the destinationProperty ever changes, then it must be instrumented to support PhET-iO state.' );
     } );
 
@@ -128,7 +127,7 @@ class EnergyChunkWanderController extends PhetioObject {
     // make sure only one speed increase happens
     let speedIncreased = false;
 
-    const handleDestinationChanged = ( newDestination, oldDestination ) => {
+    const handleDestinationChanged = ( newDestination: Vector2, oldDestination: Vector2 ) => {
 
       // Short circuit this if state is being set - otherwise approaching energy chunks that are part of the state can
       // get moved around, messing up their state.
@@ -176,7 +175,7 @@ class EnergyChunkWanderController extends PhetioObject {
 
   public toStateObject(): IntentionalAny {
 
-    const stateObject = {
+    const stateObject: IntentionalAny = {
       minSpeed: this.minSpeed,
       maxSpeed: this.maxSpeed,
       wanderAngleVariation: this.wanderAngleVariation,
@@ -184,6 +183,8 @@ class EnergyChunkWanderController extends PhetioObject {
       countdownTimer: this.countdownTimer,
       wandering: this.wandering,
       horizontalWanderConstraint: NullableIO( Range.RangeIO ).toStateObject( this.horizontalWanderConstraint ),
+
+      // @ts-expect-error
       energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ).toStateObject( this.energyChunk )
     };
 
@@ -201,6 +202,8 @@ class EnergyChunkWanderController extends PhetioObject {
   }
 
   public static stateObjectToCreateElementArguments( stateObject: IntentionalAny ): IntentionalAny[] {
+
+    // @ts-expect-error
     const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
 
     let destinationProperty = null;
@@ -226,11 +229,10 @@ class EnergyChunkWanderController extends PhetioObject {
     this.horizontalWanderConstraint = NullableIO( Range.RangeIO ).fromStateObject( stateObject.horizontalWanderConstraint );
   }
 
-
   /**
    * dispose function
    */
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeEnergyChunkWanderController();
     super.dispose();
   }
@@ -321,26 +323,31 @@ class EnergyChunkWanderController extends PhetioObject {
   public setHorizontalWanderConstraint( horizontalWanderConstraint: Range | null ): void {
     this.horizontalWanderConstraint = horizontalWanderConstraint;
   }
-}
 
-EnergyChunkWanderController.EnergyChunkWanderControllerIO = new IOType( 'EnergyChunkWanderControllerIO', {
-  valueType: EnergyChunkWanderController,
-  toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
-  stateObjectToCreateElementArguments: stateObject => EnergyChunkWanderController.stateObjectToCreateElementArguments( stateObject ),
-  applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
-  stateSchema: {
-    minSpeed: NumberIO,
-    maxSpeed: NumberIO,
-    wanderAngleVariation: NumberIO,
-    translateXWithDestination: BooleanIO,
-    countdownTimer: NumberIO,
-    wandering: BooleanIO,
-    horizontalWanderConstraint: NullableIO( Range.RangeIO ),
-    energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ),
-    destinationPropertyReference: NullableIO( ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ) ),
-    destinationVector2: NullableIO( Vector2.Vector2IO )
-  }
-} );
+  public static readonly EnergyChunkWanderControllerIO = new IOType<EnergyChunkWanderController>( 'EnergyChunkWanderControllerIO', {
+    valueType: EnergyChunkWanderController,
+
+    // @ts-expect-error
+    toStateObject: energyChunkWanderController => energyChunkWanderController.toStateObject(),
+    stateObjectToCreateElementArguments: stateObject => EnergyChunkWanderController.stateObjectToCreateElementArguments( stateObject ),
+    applyState: ( energyChunkWanderController, stateObject ) => energyChunkWanderController.applyState( stateObject ),
+    stateSchema: {
+      // @ts-expect-error
+      minSpeed: NumberIO,
+      maxSpeed: NumberIO,
+      wanderAngleVariation: NumberIO,
+      translateXWithDestination: BooleanIO,
+      countdownTimer: NumberIO,
+      wandering: BooleanIO,
+      horizontalWanderConstraint: NullableIO( Range.RangeIO ),
+
+      // @ts-expect-error
+      energyChunkReference: ReferenceIO( EnergyChunk.EnergyChunkIO ),
+      destinationPropertyReference: NullableIO( ReferenceIO( Property.PropertyIO( Vector2.Vector2IO ) ) ),
+      destinationVector2: NullableIO( Vector2.Vector2IO )
+    }
+  } );
+}
 
 energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
 export default EnergyChunkWanderController;
