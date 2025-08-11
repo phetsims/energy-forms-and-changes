@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A node for the column of steam that rises out of a beaker when the temperature of the contained liquid is high enough.
  *
@@ -35,6 +32,13 @@ type SelfOptions = EmptySelfOptions;
 
 type BeakerSteamCanvasNodeOptions = SelfOptions & CanvasNodeOptions;
 
+type SteamBubble = {
+  x: number; // center x position
+  y: number; // center y position
+  radius: number; // radius of the bubble
+  opacity: number; // opacity of the bubble, from 0 to 1
+};
+
 class BeakerSteamCanvasNode extends CanvasNode {
 
   // The outline of the container
@@ -55,7 +59,7 @@ class BeakerSteamCanvasNode extends CanvasNode {
   private preloadComplete: boolean;
   private bubbleProductionRemainder: number;
   private steamOrigin: number;
-  private steamBubbles: Object[];
+  private readonly steamBubbles: SteamBubble[];
 
   // Canvas where the steam bubble image resides
   private readonly steamBubbleImageCanvas: HTMLCanvasElement;
@@ -69,9 +73,9 @@ class BeakerSteamCanvasNode extends CanvasNode {
    * @param [providedOptions]
    */
   public constructor( containerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, steamColor: Color, providedOptions?: BeakerSteamCanvasNodeOptions ) {
-    
+
     const options = optionize<BeakerSteamCanvasNodeOptions, SelfOptions, CanvasNodeOptions>()( {}, providedOptions );
-    
+
     super( options );
 
     this.containerOutlineRect = containerOutlineRect;
@@ -88,7 +92,7 @@ class BeakerSteamCanvasNode extends CanvasNode {
     this.steamBubbleImageCanvas = document.createElement( 'canvas' );
     this.steamBubbleImageCanvas.width = STEAM_BUBBLE_DIAMETER_RANGE.max;
     this.steamBubbleImageCanvas.height = STEAM_BUBBLE_DIAMETER_RANGE.max;
-    const context = this.steamBubbleImageCanvas.getContext( '2d' );
+    const context = this.steamBubbleImageCanvas.getContext( '2d' )!;
 
     // draw a steam bubble centered in the steam bubble image canvas
     context.fillStyle = this.steamColor.toCSS();
@@ -207,10 +211,8 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * Draws a steam bubble.
-   * @param context
-   * @param steamBubble
    */
-  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: Object ): void {
+  private drawSteamBubble( context: CanvasRenderingContext2D, steamBubble: SteamBubble ): void {
     context.globalAlpha = steamBubble.opacity;
     context.drawImage(
       this.steamBubbleImageCanvas,
@@ -223,7 +225,6 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
   /**
    * Paints the steam on the canvas node.
-   * @param context
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
     for ( let i = 0; i < this.steamBubbles.length; i++ ) {

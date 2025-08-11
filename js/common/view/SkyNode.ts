@@ -1,8 +1,5 @@
 // Copyright 2019-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A scenery node that represents a floating "sky" layer that fades in and out
  *
@@ -32,11 +29,12 @@ class SkyNode extends Node {
   /**
    * @param layoutBounds - the layout bounds of the parent screen
    * @param fullOpaqueYPosition - the y position at which this node should become completely opaque, in view coordinates
+   * @param providedOptions
    */
   public constructor( layoutBounds: Bounds2, fullOpaqueYPosition: number, providedOptions?: SkyNodeOptions ) {
-    
+
     const options = optionize<SkyNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
-    
+
     super( options );
 
     const transparentToOpaque = new LinearGradient( 0, 0, 0, FADE_HEIGHT )

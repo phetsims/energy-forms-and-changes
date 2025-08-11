@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Scenery node that represents a beaker in the view. This representation is split between a front node and a back
  * node, which must be separately added to the scene graph. This is done to allow a layering effect. Hence, this cannot
@@ -35,6 +32,7 @@ import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainer
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import Beaker from '../model/Beaker.js';
+import EnergyChunk from '../model/EnergyChunk.js';
 import EnergyChunkNode from './EnergyChunkNode.js';
 import PerspectiveWaterNode from './PerspectiveWaterNode.js';
 
@@ -241,7 +239,7 @@ class BeakerView extends PhetioObject {
       const energyChunkNode = new EnergyChunkNode( addedEnergyChunk, modelViewTransform );
       this.energyChunkRootNode.addChild( energyChunkNode );
 
-      const removalListener = removedEnergyChunk => {
+      const removalListener = ( removedEnergyChunk: EnergyChunk ) => {
         if ( removedEnergyChunk === addedEnergyChunk ) {
           this.energyChunkRootNode.removeChild( energyChunkNode );
           energyChunkNode.dispose();

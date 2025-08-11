@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Scenery node that represents a chunk of energy in the view.
  *
@@ -12,6 +9,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
@@ -27,8 +25,8 @@ import energyThermal_png from '../../../images/energyThermal_png.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EFACConstants from '../EFACConstants.js';
-import EnergyChunk from '../model/EnergyChunk.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
+import EnergyChunk from '../model/EnergyChunk.js';
 import EnergyType from '../model/EnergyType.js';
 
 const energyChunkLabelString = EnergyFormsAndChangesStrings.energyChunkLabel;
@@ -36,7 +34,7 @@ const energyChunkLabelString = EnergyFormsAndChangesStrings.energyChunkLabel;
 // constants
 
 // convenience map that links energy types to their representing images
-const mapEnergyTypeToImage = {};
+const mapEnergyTypeToImage: IntentionalAny = {};
 mapEnergyTypeToImage[ EnergyType.THERMAL ] = energyThermal_png;
 mapEnergyTypeToImage[ EnergyType.ELECTRICAL ] = energyElectrical_png;
 mapEnergyTypeToImage[ EnergyType.MECHANICAL ] = energyMechanical_png;
@@ -60,19 +58,19 @@ class EnergyChunkNode extends Node {
     super();
 
     // control the overall visibility of this node
-    const handleVisibilityChanged = visible => {
+    const handleVisibilityChanged = ( visible: boolean ) => {
       !this.isDisposed && this.setVisible( visible );
     };
     energyChunk.visibleProperty.link( handleVisibilityChanged );
 
     // set up updating of transparency based on Z position
-    const handleZPositionChanged = zPosition => {
+    const handleZPositionChanged = ( zPosition: number ) => {
       this.updateTransparency( zPosition );
     };
     energyChunk.zPositionProperty.link( handleZPositionChanged );
 
     // monitor the energy type and update the image if a change occurs
-    const handleEnergyTypeChanged = energyType => {
+    const handleEnergyTypeChanged = ( energyType: typeof EnergyType ) => {
       this.removeAllChildren();
       this.addChild( getEnergyChunkNode( energyType ) );
 
@@ -83,7 +81,7 @@ class EnergyChunkNode extends Node {
     energyChunk.energyTypeProperty.link( handleEnergyTypeChanged );
 
     // set this node's position when the corresponding model element moves
-    const handlePositionChanged = position => {
+    const handlePositionChanged = ( position: Vector2 ) => {
       assert && assert( !_.isNaN( position.x ), `position.x = ${position.x}` );
       assert && assert( !_.isNaN( position.y ), `position.y = ${position.y}` );
       this.translation = modelViewTransform.modelToViewPosition( position );
@@ -110,7 +108,7 @@ class EnergyChunkNode extends Node {
     this.setOpacity( zFadeValue );
   }
 
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeEnergyChunkNode();
     super.dispose();
   }
@@ -120,7 +118,7 @@ class EnergyChunkNode extends Node {
  * Helper function that creates the image for an EnergyChunkNode.
  * @param energyType
  */
-const createEnergyChunkImageNode = ( energyType: EnergyType ): Image => {
+const createEnergyChunkImageNode = ( energyType: typeof EnergyType ): Image => {
   const background = new Image( mapEnergyTypeToImage[ energyType ] );
   const energyText = new Text( energyChunkLabelString, { font: new PhetFont( 16 ) } );
   energyText.scale( Math.min( background.width / energyText.width, background.height / energyText.height ) * 0.65 );
@@ -135,13 +133,16 @@ const createEnergyChunkImageNode = ( energyType: EnergyType ): Image => {
  * Helper function that returns the correct image for an EnergyChunkNode.
  * @param energyType
  */
-const getEnergyChunkNode = ( energyType: EnergyType ): Image => {
+const getEnergyChunkNode = ( energyType: typeof EnergyType ): Image => {
 
   // these need to be lazily created because the images are not decoded fast enough in the built version to be
   // available right away
+  // @ts-expect-error
   if ( !energyChunkImageNodes[ energyType ] ) {
+    // @ts-expect-error
     energyChunkImageNodes[ energyType ] = createEnergyChunkImageNode( energyType );
   }
+  // @ts-expect-error
   return energyChunkImageNodes[ energyType ];
 };
 

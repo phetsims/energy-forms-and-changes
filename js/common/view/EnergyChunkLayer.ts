@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This node monitors the comings and goings of energy chunks on a observable list and adds/removes nodes that
  * correspond to each.  This is intended to be used in other view nodes that represent model elements that contain
@@ -14,7 +11,7 @@
  * @author John Blanco
  */
 
-import { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
+import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -35,7 +32,7 @@ type EnergyChunkLayerOptions = SelfOptions & NodeOptions;
 
 class EnergyChunkLayer extends Node {
 
-  public constructor( energyChunkList: ObservableArrayDef<EnergyChunk>, modelViewTransform: ModelViewTransform2, providedOptions?: EnergyChunkLayerOptions ) {
+  public constructor( energyChunkList: ObservableArray<EnergyChunk>, modelViewTransform: ModelViewTransform2, providedOptions?: EnergyChunkLayerOptions ) {
     super();
 
     const options = optionize<EnergyChunkLayerOptions, SelfOptions, NodeOptions>()( {
@@ -44,14 +41,14 @@ class EnergyChunkLayer extends Node {
 
     // This function adds EnergyChunkNodes to the layer when chunks are produced in the model. It includes listeners for
     // when chunks are removed from the model.
-    const chunkAddedListener = energyChunk => {
+    const chunkAddedListener = ( energyChunk: EnergyChunk ) => {
 
       // create and add a node to represent the energy chunk
       const energyChunkNode = new EnergyChunkNode( energyChunk, modelViewTransform );
       this.addChild( energyChunkNode );
 
       // when chunk is removed from the model, remove its node from the view
-      const itemRemovedListener = removedChunk => {
+      const itemRemovedListener = ( removedChunk: EnergyChunk ) => {
         if ( removedChunk === energyChunk ) {
           this.removeChild( energyChunkNode );
           energyChunkNode.dispose();

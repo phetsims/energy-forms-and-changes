@@ -1,8 +1,5 @@
 // Copyright 2018-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a scenery node that looks like water in a cylindrical container as seen from slightly above the horizon
  * @author John Blanco
@@ -10,10 +7,10 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Rectangle from '../../../../dot/js/Rectangle.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
@@ -116,6 +113,8 @@ class PerspectiveWaterNode extends Node {
       ellipseWidth / 2,
       ellipseHeight / 2,
       0,
+
+      // @ts-expect-error
       0,
       Math.PI / 2,
       false
