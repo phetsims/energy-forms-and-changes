@@ -38,6 +38,22 @@ const GO_STRAIGHT_HOME_DISTANCE = 0.2; // in meters, distance at which, if desti
 
 class EnergyChunkWanderController extends PhetioObject {
 
+  public readonly energyChunk: EnergyChunk;
+  private minSpeed: number;
+  private maxSpeed: number;
+  private horizontalWanderConstraint: Range | null;
+  private wanderAngleVariation: number;
+  private readonly destinationProperty: Property<Vector2>;
+  private readonly velocity: Vector2;
+  private wandering: boolean;
+
+  // Store this on the instance so that it can be set by PhET-iO state
+  private translateXWithDestination: boolean;
+
+  // countdown to when the EnergyChunk will change direction
+  private countdownTimer: number;
+  private readonly disposeEnergyChunkWanderController: () => void;
+
   public constructor( energyChunk: EnergyChunk, destinationProperty: Property<Vector2>, options?: any ) {
 
     options = merge( {
@@ -86,10 +102,7 @@ class EnergyChunkWanderController extends PhetioObject {
         'If the destinationProperty ever changes, then it must be instrumented to support PhET-iO state.' );
     } );
 
-    // @public (read-only) {EnergyChunk)
     this.energyChunk = energyChunk;
-
-    // @private
     this.minSpeed = DEFAULT_MIN_SPEED;
     this.maxSpeed = DEFAULT_MAX_SPEED;
     this.horizontalWanderConstraint = options.horizontalWanderConstraint;
@@ -97,11 +110,7 @@ class EnergyChunkWanderController extends PhetioObject {
     this.destinationProperty = destinationProperty;
     this.velocity = new Vector2( 0, DEFAULT_MAX_SPEED );
     this.wandering = true;
-
-    // @private - Store this on the instance so that it can be set by PhET-iO state
     this.translateXWithDestination = options.translateXWithDestination;
-
-    // @private - countdown to when the EnergyChunk will change direction
     this.countdownTimer = 0;
     this.resetCountdownTimer();
     this.changeVelocityVector();

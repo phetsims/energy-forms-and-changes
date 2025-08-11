@@ -11,6 +11,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -28,12 +29,17 @@ const FAUCET_NODE_HORIZONTAL_LENGTH = 1400; // empirically determined to be long
 
 class FaucetAndWaterNode extends MoveFadeModelElementNode {
 
+  // create the falling water drops and set position to its model offset
+  private readonly fallingWaterCanvasNode: FallingWaterCanvasNode;
+
+  // create a mapping between the slider position and the flow proportion that prevents very small values
+  private readonly faucetSettingProperty: NumberProperty;
+
   public constructor( faucet: FaucetAndWater, energyChunksVisibleProperty: Property<boolean>, modelViewTransform: ModelViewTransform2, tandem: Tandem ) {
     super( faucet, modelViewTransform, tandem );
 
     const fallingWaterOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_WATER_ORIGIN );
 
-    // create the falling water drops and set position to its model offset
     this.fallingWaterCanvasNode = new FallingWaterCanvasNode(
       faucet.waterDrops,
       modelViewTransform,
@@ -52,7 +58,6 @@ class FaucetAndWaterNode extends MoveFadeModelElementNode {
     const faucetHeadOrigin = modelViewTransform.modelToViewDelta( FaucetAndWater.OFFSET_FROM_CENTER_TO_FAUCET_HEAD );
     const maxFlowProportion = 1.0;
 
-    // create a mapping between the slider position and the flow proportion that prevents very small values
     this.faucetSettingProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: tandem.createTandem( 'faucetSettingProperty' )

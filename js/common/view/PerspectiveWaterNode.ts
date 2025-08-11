@@ -27,21 +27,31 @@ const FLUID_LINE_WIDTH = 2;
 
 class PerspectiveWaterNode extends Node {
 
+  private readonly beakerOutlineRect: Rectangle;
+  private readonly fluidProportionProperty: Property<number>;
+  private readonly temperatureProperty: Property<number>;
+  private readonly fluidBoilingPoint: number;
+  private readonly fluidColor: Color;
+  private readonly steamColor: Color;
+
+  // A rectangle that defines the size of the fluid within the beaker
+  private readonly fluidBounds: Bounds2;
+
+  // Nodes that represent the top and body of the water
+  private readonly liquidWaterTopNode: Path;
+  private readonly liquidWaterBodyNode: Path;
+  private readonly steamCanvasNode: BeakerSteamCanvasNode;
+
   public constructor( beakerOutlineRect: Rectangle, fluidProportionProperty: Property<number>, temperatureProperty: Property<number>, fluidBoilingPoint: number, fluidColor: Color, steamColor: Color ) {
     super();
 
-    // @private
     this.beakerOutlineRect = beakerOutlineRect;
     this.fluidProportionProperty = fluidProportionProperty;
     this.temperatureProperty = temperatureProperty;
     this.fluidBoilingPoint = fluidBoilingPoint;
     this.fluidColor = fluidColor;
     this.steamColor = steamColor;
-
-    // @private - a rectangle that defines the size of the fluid within the beaker
     this.fluidBounds = Bounds2.NOTHING.copy();
-
-    // @private - nodes that represent the top and body of the water
     this.liquidWaterTopNode = new Path( null, {
       fill: this.fluidColor.colorUtilsBrighter( 0.25 ),
       lineWidth: FLUID_LINE_WIDTH,
@@ -52,8 +62,6 @@ class PerspectiveWaterNode extends Node {
       lineWidth: FLUID_LINE_WIDTH,
       stroke: this.fluidColor.colorUtilsDarker( 0.2 )
     } );
-
-    // @private
     this.steamCanvasNode = new BeakerSteamCanvasNode(
       this.beakerOutlineRect,
       this.fluidProportionProperty,

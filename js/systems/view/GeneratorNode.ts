@@ -38,6 +38,8 @@ const generatorString = EnergyFormsAndChangesStrings.generator;
 
 class GeneratorNode extends MoveFadeModelElementNode {
 
+  public readonly mechanicalEnergyChunkLayer: EnergyChunkLayer | null;
+
   public constructor( generator: Generator, modelViewTransform: ModelViewTransform2, options?: IntentionalAny ) {
 
     options = merge( {
@@ -97,7 +99,6 @@ class GeneratorNode extends MoveFadeModelElementNode {
       parentPositionProperty: generator.positionProperty
     } ) );
 
-    // @public (read-only)
     this.mechanicalEnergyChunkLayer = null;
 
     if ( options.addMechanicalEnergyChunkLayer ) {

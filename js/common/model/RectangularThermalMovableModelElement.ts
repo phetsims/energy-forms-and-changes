@@ -41,6 +41,60 @@ const MAX_ENERGY_CHUNK_REDISTRIBUTION_TIME = 2; // in seconds, empirically deter
 
 class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
+  public readonly mass: number;
+  public readonly width: number;
+  public readonly height: number;
+  public readonly specificHeat: number;
+  public readonly energyChunksVisibleProperty: BooleanProperty;
+
+  // the amount of energy in this model element, in joules
+  public readonly energyProperty: NumberProperty;
+
+  // energy chunks that are approaching this model element
+  public readonly approachingEnergyChunks: ReturnType<typeof createObservableArray>;
+
+  // motion controllers for the energy chunks that are approaching this model element
+  private readonly energyChunkWanderControllers: ReturnType<typeof createObservableArray>;
+
+  // pre-distributed energy chunk configuration,used for fast initialization, see usages for format
+  private readonly predistributedEnergyChunkConfigurations: any[];
+
+  // composite bounds for this model element, maintained as position changes
+  private readonly bounds: Bounds2;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkWanderControllerGroup: any;
+
+  // the 2D area for this element where it can be in contact with another thermal elements and thus exchange heat, generally set by descendant classes
+  protected readonly thermalContactArea: ThermalContactArea;
+  public readonly temperatureProperty: NumberProperty;
+
+  // untranslated bounds for this model element
+  private readonly untransformedBounds: Rectangle;
+
+  // composite relative bounds for this model element, cached after first calculation
+  private relativeCompositeBounds: Bounds2 | null;
+
+  // untranslated shape that accounts for 3D projection
+  private readonly untranslatedProjectedShape: Shape;
+
+  // The projected shape translated to the current position.  This is only updated when requested, so should never be accessed directly, since it could be out of date.  See the associated getter method.
+  private latestProjectedShape: Shape;
+
+  // the position when the projected shape was last updated, used to tell if update is needed
+  private latestProjectedShapePosition: Vector2;
+
+  // a reusable matrix, used to reduce allocations when updating the projected shape
+  private readonly translationMatrix: Matrix3;
+
+  // a value that is used to implement a countdown timer for energy chunk redistribution
+  private energyChunkDistributionCountdownTimer: number;
+
+  // minimum amount of energy that this is allowed to have
+  private readonly minEnergy: number;
+
+  // 2D "slices" of the container, used for 3D layering of energy chunks in the view
+  public readonly slices: ReturnType<typeof createObservableArray>;
+
   /**
    * @param mass - in kg
    * @param specificHeat - in J/kg-K
@@ -63,14 +117,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
 
     super( initialPosition, options );
 
-    // @public (read-only)
     this.mass = mass;
     this.width = width;
     this.height = height;
     this.specificHeat = specificHeat;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
 
-    // @public (read-only) {NumberProperty} - the amount of energy in this model element, in joules
     this.energyProperty = new NumberProperty( this.mass * this.specificHeat * EFACConstants.ROOM_TEMPERATURE, {
       units: 'J',
       tandem: options.tandem.createTandem( 'energyProperty' ),
@@ -82,35 +134,26 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
     assert && assert( this.mass > 0, `Invalid mass: ${this.mass}` );
     assert && assert( this.specificHeat > 0, `Invalid specific heat: ${this.specificHeat}` );
 
-    // @public (read-only) {ObservableArrayDef} - energy chunks that are approaching this model element
     this.approachingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'approachingEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // @private - motion controllers for the energy chunks that are approaching this model element
     this.energyChunkWanderControllers = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkWanderControllers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkWanderController.EnergyChunkWanderControllerIO ) )
     } );
 
-    // @private {Object[]} - pre-distributed energy chunk configuration,used for fast initialization, see usages for format
     this.predistributedEnergyChunkConfigurations = options.predistributedEnergyChunkConfigurations;
 
-    // @private {Bounds2} - composite bounds for this model element, maintained as position changes
     this.bounds = Bounds2.NOTHING.copy();
 
-    // @private - {EnergyChunkPhetioGroup}
     this.energyChunkGroup = energyChunkGroup;
 
-    // @private - {EnergyChunkWanderControllerGroup}
     this.energyChunkWanderControllerGroup = options.energyChunkWanderControllerGroup;
 
-    // @protected {ThermalContactArea} - the 2D area for this element where it can be in contact with another thermal
-    // elements and thus exchange heat, generally set by descendant classes
     this.thermalContactArea = new ThermalContactArea( Bounds2.NOTHING.copy(), false );
 
-    // @public (read-only) {NumberProperty}
     this.temperatureProperty = new NumberProperty( EFACConstants.ROOM_TEMPERATURE, {
       range: new Range( EFACConstants.WATER_FREEZING_POINT_TEMPERATURE, 700 ), // in kelvin, empirically determined max
       units: 'K',
@@ -130,13 +173,11 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       );
     } );
 
-    // @private {Dot.Rectangle} - untranslated bounds for this model element
     this.untransformedBounds = new Rectangle( -this.width / 2, 0, this.width, this.height );
 
-    // @private {Bounds2} - composite relative bounds for this model element, cached after first calculation
     this.relativeCompositeBounds = null;
 
-    // @private {Shape} - untranslated shape that accounts for 3D projection
+    // untranslated shape that accounts for 3D projection
     const forwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
     const backwardPerspectiveOffset = EFACConstants.MAP_Z_TO_XY_OFFSET( -EFACConstants.BLOCK_SURFACE_WIDTH / 2 );
     this.untranslatedProjectedShape = new Shape()
@@ -148,17 +189,12 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       .lineToPoint( new Vector2( -width / 2, height ).plus( forwardPerspectiveOffset ) )
       .close();
 
-    // @private {Shape} - The projected shape translated to the current position.  This is only updated when requested,
-    // so should never be accessed directly, since it could be out of date.  See the associated getter method.
     this.latestProjectedShape = this.untranslatedProjectedShape;
 
-    // @private {Vector2} - the position when the projected shape was last updated, used to tell if update is needed
     this.latestProjectedShapePosition = Vector2.ZERO;
 
-    // @private {Matrix3} - a reusable matrix, used to reduce allocations when updating the projected shape
     this.translationMatrix = Matrix3.translation( initialPosition.x, initialPosition.y );
 
-    // @private {number} - a value that is used to implement a countdown timer for energy chunk redistribution
     this.energyChunkDistributionCountdownTimer = 0;
 
     // perform the initial update of the projected shape
@@ -188,11 +224,8 @@ class RectangularThermalMovableModelElement extends UserMovableModelElement {
       }
     } );
 
-    // @private {number} - minimum amount of energy that this is allowed to have
     this.minEnergy = EFACConstants.WATER_FREEZING_POINT_TEMPERATURE * mass * specificHeat;
 
-    // @public (read-only) {ObservableArrayDef.<EnergyChunkContainerSlice>} 2D "slices" of the container, used for 3D layering of energy
-    // chunks in the view
     this.slices = createObservableArray( {
       tandem: options.tandem.createTandem( 'slices' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( IOType.ObjectIO ) )

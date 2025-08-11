@@ -53,6 +53,34 @@ const EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 
 class SunEnergySource extends EnergySource {
 
+  // a11y name
+  public a11yName: string;
+  public readonly solarPanel: SolarPanel;
+  public readonly radius: number;
+
+  // clouds that can potentially block the sun's rays.  The positions are set so that they appear
+  // between the sun and the solar panel, and must not overlap with one another.
+  public readonly clouds: Cloud[];
+
+  // a factor between zero and one that indicates how cloudy it is
+  public readonly cloudinessProportionProperty: NumberProperty;
+
+  // exists only for phet-io
+  public readonly sunProportionProperty: DerivedProperty<number, [number]>;
+
+  // internal variables used in methods
+  private readonly energyChunksVisibleProperty: BooleanProperty;
+  private readonly isPlayingProperty: BooleanProperty;
+  private energyChunkEmissionCountdownTimer: number;
+  private sectorList: number[];
+  private currentSectorIndex: number;
+  private sunPosition: Vector2;
+
+  // list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
+  // reflected)
+  private readonly energyChunksPassingThroughClouds: ReturnType<typeof createObservableArray>;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+
   public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
 
     options = merge( {
@@ -61,31 +89,24 @@ class SunEnergySource extends EnergySource {
 
     super( new Image( sunIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.sun;
 
-    // @public (read-only) {SolarPanel}
     this.solarPanel = solarPanel;
 
-    // @public (read-only) {number}
     this.radius = RADIUS;
 
-    // @public {Cloud[]} - clouds that can potentially block the sun's rays.  The positions are set so that they appear
-    // between the sun and the solar panel, and must not overlap with one another.
     this.clouds = [
       new Cloud( new Vector2( -0.01, 0.08 ), this.positionProperty ),
       new Cloud( new Vector2( 0.017, 0.0875 ), this.positionProperty ),
       new Cloud( new Vector2( 0.02, 0.105 ), this.positionProperty )
     ];
 
-    // @public {NumberProperty} - a factor between zero and one that indicates how cloudy it is
     this.cloudinessProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'cloudinessProportionProperty' ),
       phetioDocumentation: 'proportion of clouds blocking the sun'
     } );
 
-    // @public - exists only for phet-io
     this.sunProportionProperty = new DerivedProperty( [ this.cloudinessProportionProperty ], cloudinessProportion => {
       return 1 - cloudinessProportion;
     }, {
@@ -95,7 +116,6 @@ class SunEnergySource extends EnergySource {
       phetioValueType: NumberIO
     } );
 
-    // @private - internal variables used in methods
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.isPlayingProperty = isPlayingProperty;
     this.energyChunkEmissionCountdownTimer = ENERGY_CHUNK_EMISSION_PERIOD;
@@ -103,14 +123,11 @@ class SunEnergySource extends EnergySource {
     this.currentSectorIndex = 0;
     this.sunPosition = OFFSET_TO_CENTER_OF_SUN;
 
-    // @private - list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
-    // reflected)
     this.energyChunksPassingThroughClouds = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunksPassingThroughClouds' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
-    // @private
     this.energyChunkGroup = energyChunkGroup;
 
     // set up a listener to add/remove clouds based on the value of the cloudiness Property

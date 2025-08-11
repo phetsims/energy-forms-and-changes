@@ -13,7 +13,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -25,6 +25,13 @@ import PositionableFadableModelElement from './PositionableFadableModelElement.j
 
 class EnergySystemElement extends PositionableFadableModelElement {
 
+  public readonly iconImage: HTMLImageElement;
+  public readonly energyChunkList: ObservableArrayDef<EnergyChunk>;
+  public readonly activeProperty: BooleanProperty;
+
+  // A11y name of this energy system element, used by assistive technology, set by sub-types
+  public a11yName: string;
+
   public constructor( iconImage: HTMLImageElement, options?: object ) {
 
     options = merge( {
@@ -34,23 +41,16 @@ class EnergySystemElement extends PositionableFadableModelElement {
 
     super( new Vector2( 0, 0 ), 1.0, options );
 
-    // @public (read-only) {image}
     this.iconImage = iconImage;
-
-    // @public (read-only) {ObservableArrayDef.<EnergyChunk>}
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
-
-    // @public {BooleanProperty}
     this.activeProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'activeProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'whether the system element is active. system elements are active when visible on the screen'
     } );
-
-    // @public {string} - a11y name of this energy system element, used by assistive technology, set by sub-types
     this.a11yName = 'name not set';
 
     // at initialization, oldPosition is null, so skip that case with lazyLink

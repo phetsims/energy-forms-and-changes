@@ -62,6 +62,31 @@ const MIN_INTER_CHUNK_TIME = 0.6;
 
 class SolarPanel extends EnergyConverter {
 
+  public a11yName: string;
+  private readonly electricalEnergyChunkMovers: ReturnType<typeof createObservableArray>;
+  private readonly lightEnergyChunkMovers: ReturnType<typeof createObservableArray>;
+  private latestChunkArrivalTime: number;
+  private numberOfConvertedChunks: number;
+  private readonly energyChunksVisibleProperty: BooleanProperty;
+  public readonly energyOutputRateProperty: NumberProperty;
+
+  // counter to mimic function of IClock in original Java code
+  private simulationTime: number;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // A shape used to describe where the collection area is relative to the model position.  The collection area is at
+  // the top, and the energy chunks flow through wires and connectors below.
+  public readonly untranslatedPanelBounds: Bounds2;
+  public readonly untranslatedAbsorptionShape: Shape;
+
+  // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
+  // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
+  // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
+  // to see if they are located within this shape, so it needs a global position as well. The untranslated version of
+  // this shape is needed to draw the helper shape node in SolarPanelNode.
+  private absorptionShape: Shape;
+
   public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
@@ -72,10 +97,8 @@ class SolarPanel extends EnergyConverter {
 
     super( new Image( solarPanelIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.solarPanel;
 
-    // @private
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
@@ -93,14 +116,10 @@ class SolarPanel extends EnergyConverter {
       phetioHighFrequency: true
     } );
 
-    // @private - counter to mimic function of IClock in original Java code
     this.simulationTime = 0;
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
 
-    // A shape used to describe where the collection area is relative to the model position.  The collection area is at
-    // the top, and the energy chunks flow through wires and connectors below.
-    // @public - (read-only)
     this.untranslatedPanelBounds = new Bounds2(
       -PANEL_SIZE.width / 2,
       0,
@@ -108,7 +127,6 @@ class SolarPanel extends EnergyConverter {
       PANEL_SIZE.height
     );
 
-    // @public - (read-only)
     this.untranslatedAbsorptionShape = new Shape()
       .moveTo( 0, 0 )
       .lineToRelative( -PANEL_SIZE.width / 2, 0 )
@@ -116,13 +134,6 @@ class SolarPanel extends EnergyConverter {
       .close();
 
     this.positionProperty.link( position => {
-
-      // shape used when determining if a given chunk of light energy should be absorbed. It is created at (0,0) relative
-      // to the solar panel, so its position needs to be adjusted when the solar panel changes its position. It cannot
-      // just use a relative position to the solar panel because energy chunks that are positioned globally need to check
-      // to see if they are located within this shape, so it needs a global position as well. The untranslated version of
-      // this shape is needed to draw the helper shape node in SolarPanelNode.
-      // @private {Shape}
       this.absorptionShape = this.untranslatedAbsorptionShape.transformed( Matrix3.translation( position.x, position.y ) );
     } );
   }

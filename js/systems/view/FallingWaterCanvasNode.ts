@@ -20,6 +20,12 @@ import WaterDrop from '../model/WaterDrop.js';
 
 class FallingWaterCanvasNode extends CanvasNode {
 
+  private readonly waterDrops: WaterDrop[];
+  private readonly modelViewTransform: ModelViewTransform2;
+
+  // Canvas where the water drop image is drawn
+  private readonly waterDropImageCanvas: HTMLCanvasElement;
+
   /**
    * @param waterDrops - the falling water drops to be rendered
    * @param modelViewTransform
@@ -28,12 +34,8 @@ class FallingWaterCanvasNode extends CanvasNode {
   public constructor( waterDrops: WaterDrop[], modelViewTransform: ModelViewTransform2, options?: Object ) {
     super( options );
 
-    // @private
     this.waterDrops = waterDrops;
     this.modelViewTransform = modelViewTransform;
-
-    // @private
-    // canvas where the water drop image is drawn
     this.waterDropImageCanvas = document.createElement( 'canvas' );
 
     // initial drop image is a circle of size MAX_WATER_WIDTH for width and height

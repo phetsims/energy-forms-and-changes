@@ -11,7 +11,7 @@
  * @author Andrew Adare
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -22,6 +22,9 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
 class EnergyConverter extends EnergySystemElement {
+
+  protected readonly incomingEnergyChunks: ObservableArrayDef<EnergyChunk>;
+  protected readonly outgoingEnergyChunks: ObservableArrayDef<EnergyChunk>;
 
   /**
    * @param iconImage Image to identify source on carousel menu

@@ -21,6 +21,8 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class PositionableModelElement extends PhetioObject {
 
+  public readonly positionProperty: Vector2Property;
+
   public constructor( initialPosition: Vector2, options?: IntentionalAny ) {
 
     options = merge( {
@@ -29,7 +31,6 @@ class PositionableModelElement extends PhetioObject {
 
     super( options );
 
-    // @public {Vector2Property}
     this.positionProperty = new Vector2Property( initialPosition, {
       valueComparisonStrategy: 'equalsFunction',
       units: 'm',

@@ -24,6 +24,9 @@ import LightBulb from './LightBulb.js';
 
 class IncandescentBulb extends LightBulb {
 
+  // A11y name
+  public a11yName: string;
+
   public constructor( energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: IntentionalAny ) {
 
     options = merge( {
@@ -32,7 +35,6 @@ class IncandescentBulb extends LightBulb {
 
     super( new Image( incandescentIcon_png ), true, energyChunksVisibleProperty, energyChunkGroup, energyChunkPathMoverGroup, options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.incandescentLightBulb;
   }
 }

@@ -17,6 +17,8 @@ import LightRayNode from './LightRayNode.js';
 
 class LightRays extends Node {
 
+  private readonly lightRayNodes: LightRayNode[];
+
   /**
    * @param center - Center position of radial rays
    * @param innerRadius - Start point

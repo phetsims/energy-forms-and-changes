@@ -11,7 +11,7 @@
  * @author Andrew Adare
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -21,6 +21,8 @@ import EnergySystemElement from './EnergySystemElement.js';
 
 class EnergyUser extends EnergySystemElement {
 
+  protected readonly incomingEnergyChunks: ObservableArrayDef<EnergyChunk>;
+
   public constructor( iconImage: HTMLImageElement, options?: Object ) {
 
     options = merge( {
@@ -29,7 +31,6 @@ class EnergyUser extends EnergySystemElement {
 
     super( iconImage, options );
 
-    // @private {EnergyChunk[]}
     this.incomingEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'incomingEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )

@@ -223,6 +223,9 @@ class SunNode extends MoveFadeModelElementNode {
 
 class LightAbsorbingShape {
 
+  public readonly absorptionCoefficientProperty: NumberProperty;
+  public readonly shape: Shape;
+
   /**
    * inner type - a shape with observable light absorption coefficient
    * @param shape
@@ -230,12 +233,10 @@ class LightAbsorbingShape {
    */
   public constructor( shape: Shape, initialAbsorptionCoefficient: number ) {
 
-    // @public {NumberProperty}
     this.absorptionCoefficientProperty = new NumberProperty( initialAbsorptionCoefficient, {
       range: new Range( 0, 1 )
     } );
 
-    // @public (read-only) {Shape}
     this.shape = shape;
   }
 }

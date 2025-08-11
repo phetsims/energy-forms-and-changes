@@ -28,6 +28,12 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class EnergyChunkPathMover extends PhetioObject {
 
+  public readonly energyChunk: EnergyChunk;
+  private readonly path: Vector2[];
+  private readonly speed: number;
+  private pathFullyTraversed: boolean;
+  private nextPoint: Vector2;
+
   /**
    * @param energyChunk - energy chunk to be moved
    * @param path - points along energy chunk path
@@ -52,10 +58,7 @@ class EnergyChunkPathMover extends PhetioObject {
 
     assert && Tandem.VALIDATION && this.isPhetioInstrumented() && assert( energyChunk.isPhetioInstrumented() );
 
-    // @public (read-only) {EnergyChunk}
     this.energyChunk = energyChunk;
-
-    // @private
     this.path = path;
     this.speed = speed;
     this.pathFullyTraversed = false;

@@ -11,7 +11,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -54,6 +54,22 @@ const CENTER_OF_CONNECTOR_OFFSET = WHEEL_CENTER_OFFSET.plusXY( 0.057, -0.071 );
 
 class Generator extends EnergyConverter {
 
+  // a11y name
+  public a11yName: string;
+  private readonly energyChunksVisibleProperty: Property<boolean>;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+  public readonly wheelRotationalAngleProperty: NumberProperty;
+  public readonly directCouplingModeProperty: BooleanProperty;
+  private readonly wheelRotationalVelocityProperty: NumberProperty;
+  private readonly energyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+
+  // The electrical energy chunks are kept on a separate list to support placing them on a different layer in the view.
+  public readonly electricalEnergyChunks: ObservableArrayDef<EnergyChunk>;
+
+  // the "hidden" energy chunks are kept on a separate list mainly for code clarity
+  public readonly hiddenEnergyChunks: ObservableArrayDef<EnergyChunk>;
+
   public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
     options = merge( {
       tandem: Tandem.REQUIRED,
@@ -62,15 +78,10 @@ class Generator extends EnergyConverter {
 
     super( new Image( generatorIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.electricalGenerator;
-
-    // @private {BooleanProperty}
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
-
-    // @public (read-only) {NumberProperty}
     this.wheelRotationalAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
@@ -79,8 +90,6 @@ class Generator extends EnergyConverter {
       phetioHighFrequency: true,
       phetioDocumentation: 'the angle of the wheel'
     } );
-
-    // @public {BooleanProperty}
     this.directCouplingModeProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'directCouplingModeProperty' ),
       phetioReadOnly: true,
@@ -88,8 +97,6 @@ class Generator extends EnergyConverter {
                            'rate that is directly proportional to the incoming energy, with no rotational inertia. ' +
                            'true when the generator is paired with the biker.'
     } );
-
-    // @private
     this.wheelRotationalVelocityProperty = new NumberProperty( 0, {
       units: 'radians/s',
       tandem: options.tandem.createTandem( 'wheelRotationalVelocityProperty' ),
@@ -101,16 +108,10 @@ class Generator extends EnergyConverter {
       tandem: options.tandem.createTandem( 'energyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-
-    // @public (read-only) {ObservableArrayDef.<EnergyChunk} - The electrical energy chunks are kept on a separate list to
-    // support placing them on a different layer in the view.
     this.electricalEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
-
-    // // @public (read-only) {ObservableArrayDef.<EnergyChunk} - the "hidden" energy chunks are kept on a separate list
-    // mainly for code clarity
     this.hiddenEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'hiddenEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )

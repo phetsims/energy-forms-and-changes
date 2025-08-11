@@ -26,6 +26,18 @@ import ModelElement from './ModelElement.js';
 
 class HorizontalSurface extends PhetioObject {
 
+  public readonly positionProperty: Vector2Property;
+
+  // The model element that is currently on the surface of this one, null if nothing there, use the API below to update
+  public readonly elementOnSurfaceProperty: Property<ModelElement | null>;
+  public readonly width: number;
+
+  // The range of space in the horizontal direction occupied by this surface
+  public readonly xRange: Range;
+
+  // This should be accessed through getter/setter methods
+  public readonly owner: ModelElement;
+
   /**
    * @param initialElementOnSurface - model element that is already on this surface
    */
@@ -35,14 +47,10 @@ class HorizontalSurface extends PhetioObject {
       phetioState: false
     } );
 
-    // @public (read-write)
     this.positionProperty = new Vector2Property( initialPosition, {
       valueComparisonStrategy: 'equalsFunction',
       tandem: tandem.createTandem( 'positionProperty' )
     } );
-
-    // @public (read-only) {Property.<ModelElement>|null} - the model element that is currently on the surface of this
-    // one, null if nothing there, use the API below to update
     this.elementOnSurfaceProperty = new Property( initialElementOnSurface ? initialElementOnSurface : null, {
       valueType: [ ModelElement, null ],
       tandem: tandem.createTandem( 'elementOnSurfaceProperty' ),
@@ -55,16 +63,11 @@ class HorizontalSurface extends PhetioObject {
       assert( elementOnSurface !== this, 'can\'t sit on top of ourself' );
     } );
 
-    // @public (read-only) {number}
     this.width = width;
-
-    // @public (read-only) {Range} - the range of space in the horizontal direction occupied by this surface
     this.xRange = new Range( initialPosition.x - this.width / 2, initialPosition.x + this.width / 2 );
     this.positionProperty.link( position => {
       this.xRange.setMinMax( position.x - this.width / 2, position.x + this.width / 2 );
     } );
-
-    // @public (read-only) {ModelElement} - this should be accessed through getter/setter methods
     this.owner = owner;
   }
 }

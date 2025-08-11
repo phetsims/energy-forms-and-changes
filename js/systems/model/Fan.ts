@@ -10,7 +10,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -70,6 +70,24 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class Fan extends EnergyUser {
 
+  public readonly bladePositionProperty: NumberProperty;
+
+  // movers that control how the energy chunks move towards and through the fan
+  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly mechanicalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly angularVelocityProperty: NumberProperty;
+  private readonly energyChunksVisibleProperty: Property<boolean>;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // the internal energy of the fan, which is only used by energy chunks, not incomingEnergy. incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
+  private readonly internalEnergyFromEnergyChunksProperty: NumberProperty;
+
+  // a temperature value used to decide when to release thermal energy chunks, very roughly in degrees Celsius
+  private internalTemperature: number;
+  private readonly targetVelocityProperty: NumberProperty;
+
   public constructor( energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
@@ -78,7 +96,6 @@ class Fan extends EnergyUser {
 
     super( new Image( fanIcon_png ), options );
 
-    // @public (read-only) {NumberProperty}
     this.bladePositionProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
       units: 'radians',
@@ -87,8 +104,6 @@ class Fan extends EnergyUser {
       phetioHighFrequency: true,
       phetioDocumentation: 'the angle of the blade'
     } );
-
-    // @private - movers that control how the energy chunks move towards and through the fan
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
@@ -101,8 +116,6 @@ class Fan extends EnergyUser {
       tandem: options.tandem.createTandem( 'radiatedEnergyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )
     } );
-
-    // @private
     this.angularVelocityProperty = new NumberProperty( 0, {
       units: 'radians/s',
       tandem: options.tandem.createTandem( 'angularVelocityProperty' ),
@@ -110,23 +123,14 @@ class Fan extends EnergyUser {
       phetioHighFrequency: true,
       phetioDocumentation: 'the angular velocity of the blade'
     } );
-
-    // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
-
-    // @private {number} - the internal energy of the fan, which is only used by energy chunks, not incomingEnergy.
-    // incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.
     this.internalEnergyFromEnergyChunksProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'internalEnergyFromEnergyChunksProperty' ),
       phetioReadOnly: true
     } );
-
-    // @private {number} - a temperature value used to decide when to release thermal energy chunks, very roughly in
-    // degrees Celsius
     this.internalTemperature = ROOM_TEMPERATURE;
-
     this.targetVelocityProperty = new NumberProperty( 0, {
       units: 'radians/s',
       tandem: options.tandem.createTandem( 'targetVelocityProperty' ),

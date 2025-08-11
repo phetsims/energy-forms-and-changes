@@ -35,6 +35,30 @@ const TRANSITION_DURATION = 0.75; // in seconds
 
 class EnergySystemElementCarousel {
 
+  // The position in model space where the currently selected element should be
+  public readonly selectedElementPosition: Vector2;
+
+  // The offset between elements whose position is managed by this carousel
+  private readonly offsetBetweenElements: Vector2;
+
+  // List of the elements whose position is managed by this carousel
+  public readonly managedElements: EnergySystemElement[];
+
+  // Names that correspond to each element
+  public readonly elementNames: EnumerationDeprecated;
+
+  // Indicates which element on the carousel is currently selected by index
+  public readonly targetIndexProperty: NumberProperty;
+
+  // This is for phet-io Studio so that Clients can select an element by name instead of index
+  public readonly targetElementNameProperty: EnumerationDeprecatedProperty<EnumerationDeprecated>;
+  public readonly animationInProgressProperty: BooleanProperty;
+
+  // Variables needed to manage carousel transitions
+  private elapsedTransitionTime: number; // in seconds
+  private currentCarouselOffset: Vector2; // in meters
+  private initialCarouselOffset: Vector2; // in meters
+
   /**
    * @param elements - array of elements to add to this carousel
    * @param elementNames - the names of the elements being added
@@ -44,16 +68,9 @@ class EnergySystemElementCarousel {
    */
   public constructor( elements: EnergySystemElement[], elementNames: EnumerationDeprecated, selectedElementPosition: Vector2, offsetBetweenElements: Vector2, tandem: Tandem ) {
 
-    // @public (read-only) {Vector2} - the position in model space where the currently selected element should be
     this.selectedElementPosition = selectedElementPosition;
-
-    // @private {Vector2} - the offset between elements whose position is managed by this carousel
     this.offsetBetweenElements = offsetBetweenElements;
-
-    // @public (read-only) {EnergySystemElement[]} - list of the elements whose position is managed by this carousel
     this.managedElements = [];
-
-    // @public (read-only) {EnumerationDeprecated} - names that correspond to each element
     this.elementNames = elementNames;
 
     // add each element to the array of managed elements
@@ -76,31 +93,21 @@ class EnergySystemElementCarousel {
     assert && assert( this.managedElements.length === this.elementNames.VALUES.length,
       'The number of managed elements must equal the number of element name enumeration values' );
 
-    // @public (read-only) {NumberProperty} - indicates which element on the carousel is currently selected by index.
-    // this index is the ground truth for managing the currently selected element, but is controlled by
-    // targetElementNameProperty below.
     this.targetIndexProperty = new NumberProperty( 0, {
       validValues: getValidTargetIndices( this.managedElements.length )
     } );
-
-    // @public (read-only) {EnumerationDeprecatedProperty} - this is for phet-io Studio so that Clients can select an element
-    // by name instead of index
     this.targetElementNameProperty = new EnumerationDeprecatedProperty( elementNames, elementNames.VALUES[ 0 ], {
       tandem: tandem.createTandem( 'targetElementNameProperty' ),
       phetioDocumentation: 'indicates which element on the carousel is currently selected by name'
     } );
-
-    // @public (read-only) {BooleanProperty}
     this.animationInProgressProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'animationInProgressProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'indicates whether an animation from one carousel position to another is in progress'
     } );
-
-    // @private - variables needed to manage carousel transitions
-    this.elapsedTransitionTime = 0; // in seconds
-    this.currentCarouselOffset = new Vector2( 0, 0 ); // in meters
-    this.initialCarouselOffset = new Vector2( 0, 0 ); // in meters
+    this.elapsedTransitionTime = 0;
+    this.currentCarouselOffset = new Vector2( 0, 0 );
+    this.initialCarouselOffset = new Vector2( 0, 0 );
 
     // set the variables needed for animation each time the target changes
     this.targetElementNameProperty.lazyLink( targetElement => {

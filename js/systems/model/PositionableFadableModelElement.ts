@@ -21,15 +21,15 @@ import PositionableModelElement from './PositionableModelElement.js';
 
 class PositionableFadableModelElement extends PositionableModelElement {
 
+  public readonly opacityProperty: NumberProperty;
+  public readonly visibleProperty: BooleanProperty;
+
   public constructor( initialPosition: Vector2, initialOpacity: number, options?: IntentionalAny ) {
     super( initialPosition, options );
 
-    // @public {NumberProperty}
     this.opacityProperty = new NumberProperty( initialOpacity, {
       range: new Range( 0, 1 )
     } );
-
-    // @public {BooleanProperty}
     this.visibleProperty = new BooleanProperty( initialOpacity > 0 );
   }
 }

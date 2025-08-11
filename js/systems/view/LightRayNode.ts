@@ -18,6 +18,7 @@ import Shape from '../../../../kite/js/Shape.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
@@ -28,21 +29,27 @@ const SEARCH_ITERATIONS = 10;
 
 class LightRayNode extends Node {
 
+  // Data that defines this ray
+  private readonly lightAbsorbingShapes: any[];
+  private readonly pointAndFadeValues: PointAndFadeValue[];
+  private readonly origin: Vector2;
+  private readonly endpoint: Vector2;
+  private readonly color: Color;
+
+  // A version of the updateRay function that is bound to this instance, used for adding to and removing from light absorbing shapes
+  private readonly rayUpdater: () => void;
+
   public constructor( origin: Vector2, endpoint: Vector2, color: Color ) {
     super();
 
-    // @private - data that defines this ray
     this.lightAbsorbingShapes = [];
     this.pointAndFadeValues = [];
     this.origin = origin;
     this.endpoint = endpoint;
     this.color = color;
+    this.rayUpdater = this.updateRay.bind( this );
 
     this.updateRay();
-
-    // @private - A version of the updateRay function that is bound to this instance, used for adding to and removing
-    // from light absorbing shapes.
-    this.rayUpdater = this.updateRay.bind( this );
   }
 
   /**
@@ -254,6 +261,9 @@ class LightRayNode extends Node {
 }
 
 class PointAndFadeValue {
+
+  public readonly point: Vector2;
+  public readonly fadeValue: number;
 
   /**
    * helper type that consolidates a point and a fade value

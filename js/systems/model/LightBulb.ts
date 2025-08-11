@@ -10,7 +10,7 @@
  * @author Andrew Adare
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -58,6 +58,21 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 class LightBulb extends EnergyUser {
 
+  public readonly litProportionProperty: NumberProperty;
+  private readonly hasFilament: boolean;
+  private readonly energyChunksVisibleProperty: Property<boolean>;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+  private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
+
+  // Fewer thermal energy chunks are radiated for bulbs without a filament
+  private readonly proportionOfThermalChunksRadiated: number;
+
+  // Movers and flags that control how the energy chunks move through the light bulb
+  private readonly electricalEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly filamentEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private readonly radiatedEnergyChunkMovers: ObservableArrayDef<EnergyChunkPathMover>;
+  private goRightNextTime: boolean;
+
   public constructor( iconImage: Image, hasFilament: boolean, energyChunksVisibleProperty: Property<boolean>, energyChunkGroup: EnergyChunkGroup, energyChunkPathMoverGroup: EnergyChunkPathMoverGroup, options?: Object ) {
 
     options = merge( {
@@ -66,7 +81,6 @@ class LightBulb extends EnergyUser {
 
     super( iconImage, options );
 
-    // @public (read-only) {NumberProperty}
     this.litProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'litProportionProperty' ),
@@ -74,17 +88,11 @@ class LightBulb extends EnergyUser {
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of brightness from the bulb'
     } );
-
-    // @private
     this.hasFilament = hasFilament;
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
     this.energyChunkGroup = energyChunkGroup;
     this.energyChunkPathMoverGroup = energyChunkPathMoverGroup;
-
-    // @private {number} - fewer thermal energy chunks are radiated for bulbs without a filament
     this.proportionOfThermalChunksRadiated = hasFilament ? 0.35 : 0.2;
-
-    // @private - movers and flags that control how the energy chunks move through the light bulb
     this.electricalEnergyChunkMovers = createObservableArray( {
       tandem: options.tandem.createTandem( 'electricalEnergyChunkMovers' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunkPathMover.EnergyChunkPathMoverIO ) )

@@ -12,7 +12,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -58,6 +58,32 @@ const ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
 
 class FaucetAndWater extends EnergySource {
 
+  // a11y name
+  public a11yName: string;
+  private readonly energyChunksVisibleProperty: BooleanProperty;
+
+  // a flag that is used to decide whether to pass energy chunks to the next energy system element
+  private readonly waterPowerableElementInPlaceProperty: BooleanProperty;
+  public readonly flowProportionProperty: NumberProperty;
+
+  // water drops that comprise the stream of water
+  public readonly waterDrops: WaterDrop[];
+
+  // list of chunks that are exempt from being transferred to the next energy system element
+  private readonly exemptFromTransferEnergyChunks: ObservableArrayDef<EnergyChunk>;
+
+  // list of Energy to be sent after a delay has passed
+  private readonly flowEnergyDelay: Energy[];
+  private energySinceLastChunk: number;
+  private timeSinceLastDropCreation: number;
+
+  // flag for whether next chunk should be transferred or kept, used to alternate transfer with non-transfer
+  private transferNextAvailableChunk: boolean;
+
+  // flag for whether the water drops have been fully preloaded
+  private waterDropsPreloaded: boolean;
+  private readonly energyChunkGroup: EnergyChunkGroup;
+
   public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, options?: Object ) {
 
     options = merge( {
@@ -66,17 +92,9 @@ class FaucetAndWater extends EnergySource {
 
     super( new Image( faucetIcon_png ), options );
 
-    // @public {string} - a11y name
     this.a11yName = EnergyFormsAndChangesStrings.a11y.waterFaucet;
-
-    // @private
     this.energyChunksVisibleProperty = energyChunksVisibleProperty;
-
-    // @private {BooleanProperty} - a flag that is used to decide whether to pass energy chunks to the next energy
-    // system element
     this.waterPowerableElementInPlaceProperty = waterPowerableElementInPlaceProperty;
-
-    // @public {NumberProperty}
     this.flowProportionProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'flowProportionProperty' ),
@@ -84,11 +102,7 @@ class FaucetAndWater extends EnergySource {
       phetioHighFrequency: true,
       phetioDocumentation: 'proportion of water flowing from the faucet'
     } );
-
-    // @public {read-only) {WaterDrop[]} - water drops that comprise the stream of water
     this.waterDrops = [];
-
-    // @private {EnergyChunks[]} - list of chunks that are exempt from being transferred to the next energy system element
     this.exemptFromTransferEnergyChunks = createObservableArray( {
       tandem: options.tandem.createTandem( 'exemptFromTransferEnergyChunks' ),
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
@@ -98,23 +112,11 @@ class FaucetAndWater extends EnergySource {
       assert && assert( !this.exemptFromTransferEnergyChunks.includes( chunk ), 'Exempt means it should not go onto outgoing list' );
     } );
 
-    // @private {Energy[]} - list of Energy to be sent after a delay has passed
     this.flowEnergyDelay = [];
-
-    // @private {number}
     this.energySinceLastChunk = 0;
-
-    // @private {number}
     this.timeSinceLastDropCreation = 0;
-
-    // @private {boolean} - flag for whether next chunk should be transferred or kept, used to alternate transfer with
-    // non-transfer
     this.transferNextAvailableChunk = true;
-
-    // @private {boolean} - flag for whether the water drops have been fully preloaded
     this.waterDropsPreloaded = true;
-
-    // @private {EnergyChunkGroup}
     this.energyChunkGroup = energyChunkGroup;
 
     this.flowProportionProperty.lazyLink( ( newFlowRate, oldFlowRate ) => {

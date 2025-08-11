@@ -12,9 +12,10 @@
  * @author Jesse Greenberg
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArrayDef } from '../../../../axon/js/createObservableArray.js';
 import merge from '../../../../phet-core/js/merge.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -22,6 +23,8 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
 class EnergySource extends EnergySystemElement {
+
+  protected readonly outgoingEnergyChunks: ObservableArrayDef<EnergyChunk>;
 
   /**
    * @param iconImage Image to identify source on carousel menu
