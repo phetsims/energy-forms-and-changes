@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class represents a "slice" within a 2D container that can contain a set of energy chunks, and can be used to add
  * some limited 3D capabilities by having some z-dimension information.  The slice consists of a 2D shape and a Z value
@@ -61,6 +58,8 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
     const options = optionize<EnergyChunkContainerSliceOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED, // must instrument the energyChunkList to support state
+
+      // @ts-expect-error
       phetioType: EnergyChunkContainerSlice.EnergyChunkContainerSliceIO
     }, providedOptions );
 
@@ -77,15 +76,17 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
     this.energyChunkList = createObservableArray( {
       tandem: options.tandem.createTandem( 'energyChunkList' ),
+
+      // @ts-expect-error
       phetioType: createObservableArray.ObservableArrayIO( ReferenceIO( EnergyChunk.EnergyChunkIO ) )
     } );
 
     assert && this.isPhetioInstrumented() && this.energyChunkList.addItemAddedListener( energyChunk => {
-      assert( energyChunk.isPhetioInstrumented(), 'EnergyChunk should be instrumented if I am.' );
+      assert && assert( energyChunk.isPhetioInstrumented(), 'EnergyChunk should be instrumented if I am.' );
     } );
 
     // monitor the "anchor point" position in order to update the bounds and move contained energy chunks
-    const anchorPointListener = ( newPosition, oldPosition ) => {
+    const anchorPointListener = ( newPosition: Vector2, oldPosition: Vector2 ) => {
 
       // Don't let the PhET-iO state engine call this (as the second time) when the anchorPointProperty changes. This line of
       // code could be replaced with altering the for-loop below to be based on each EnergyChunk's position, but that
@@ -114,6 +115,8 @@ class EnergyChunkContainerSlice extends PhetioObject {
 
   public toStateObject(): { bounds: Bounds2 } { // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 create a type for the state object
     return {
+
+      // @ts-expect-error
       bounds: Bounds2.Bounds2IO.toStateObject( this.bounds )
     };
   }
@@ -139,20 +142,24 @@ class EnergyChunkContainerSlice extends PhetioObject {
     return this.energyChunkList.length;
   }
 
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeEnergyChunkContainerSlice();
     super.dispose();
   }
-}
 
-EnergyChunkContainerSlice.EnergyChunkContainerSliceIO = new IOType( 'EnergyChunkContainerSliceIO', {
-  valueType: EnergyChunkContainerSlice,
-  toStateObject: energyChunkContainerSlice => energyChunkContainerSlice.toStateObject(),
-  applyState: ( energyChunkContainerSlice, stateObject ) => energyChunkContainerSlice.applyState( stateObject ),
-  stateSchema: {
-    bounds: Bounds2.Bounds2IO
-  }
-} );
+  public static readonly EnergyChunkContainerSliceIO = new IOType<EnergyChunkContainerSlice>( 'EnergyChunkContainerSliceIO', {
+    valueType: EnergyChunkContainerSlice,
+
+    // @ts-expect-error
+    toStateObject: energyChunkContainerSlice => energyChunkContainerSlice.toStateObject(),
+    applyState: ( energyChunkContainerSlice, stateObject ) => energyChunkContainerSlice.applyState( stateObject ),
+    stateSchema: {
+
+      // @ts-expect-error
+      bounds: Bounds2.Bounds2IO
+    }
+  } );
+}
 
 energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;
