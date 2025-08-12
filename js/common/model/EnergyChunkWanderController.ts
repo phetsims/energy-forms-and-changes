@@ -12,8 +12,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range, { RangeStateObject } from '../../../../dot/js/Range.js';
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -214,8 +213,8 @@ class EnergyChunkWanderController extends PhetioObject {
     return stateObject;
   }
 
-  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkWanderControllerStateObject ): IntentionalAny[] {
-    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
+  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkWanderControllerStateObject ): [ EnergyChunk, Property<Vector2>, EmptySelfOptions ] {
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference ) as unknown as EnergyChunk;
 
     let destinationProperty = null;
     if ( stateObject.destinationPropertyReference ) {
@@ -227,6 +226,7 @@ class EnergyChunkWanderController extends PhetioObject {
         valueComparisonStrategy: 'equalsFunction'
       } );
     }
+    // @ts-expect-error
     return [ energyChunk, destinationProperty, {} ];
   }
 

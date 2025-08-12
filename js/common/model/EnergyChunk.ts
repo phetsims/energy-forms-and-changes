@@ -10,10 +10,10 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import StringUnionProperty from '../../../../axon/js/StringUnionProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import EventType from '../../../../tandem/js/EventType.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -116,10 +116,10 @@ class EnergyChunk extends PhetioObject {
     };
   }
 
-  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkStateObject ): IntentionalAny[] {
+  public static stateObjectToCreateElementArguments( stateObject: EnergyChunkStateObject ): [ 'HIDDEN', Vector2, Vector2, TReadOnlyProperty<boolean>, { id: number } ] {
     const visibleProperty = ReferenceIO( Property.PropertyIO( BooleanIO ) ).fromStateObject(
       stateObject.visiblePropertyReference
-    );
+    ) as unknown as TReadOnlyProperty<boolean>;
     return [
       'HIDDEN',
       Vector2.ZERO,
