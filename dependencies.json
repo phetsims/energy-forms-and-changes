@@ -1,7 +1,7 @@
 {
-  "comment": "# energy-forms-and-changes 1.5.0-dev.4 Sun Aug 10 2025 12:55:30 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# energy-forms-and-changes 1.5.0-dev.5 Fri Aug 15 2025 09:19:06 GMT-0600 (Mountain Daylight Time)",
   "assert": {
-    "sha": "f6d41b399ad32df2a00ab4b329981be0c574d77a",
+    "sha": "1a4637cfff70e7e8b0844dc43848a86ae89b4cf5",
     "branch": "main"
   },
   "axon": {
@@ -13,7 +13,7 @@
     "branch": "main"
   },
   "chipper": {
-    "sha": "eda4d5641d1eaf62765b1750a43b6ca5478e54c0",
+    "sha": "1eb234fb12959919c0ce5698d0fb95fe30c6df3f",
     "branch": "main"
   },
   "dot": {
@@ -21,11 +21,11 @@
     "branch": "main"
   },
   "energy-forms-and-changes": {
-    "sha": "ec9e9ebefcef992f316067dd4db10f03da86bf44",
+    "sha": "43c10b15fa0ac5c58e262b6889936b1c8785260a",
     "branch": "main"
   },
   "joist": {
-    "sha": "2ff81dff3f171e4b94bf4cf53cb1578d31826cec",
+    "sha": "285c625e17a9908db2d64f83a05037e7c79366cc",
     "branch": "main"
   },
   "kite": {
@@ -33,7 +33,7 @@
     "branch": "main"
   },
   "perennial-alias": {
-    "sha": "56d827ac895ff4423a23ecc4804e8353aa739068",
+    "sha": "5f2de27c91ace816080a450e377e35297ea5b427",
     "branch": "main"
   },
   "phet-core": {
@@ -45,7 +45,7 @@
     "branch": "main"
   },
   "phet-io-sim-specific": {
-    "sha": "1cbc5ffbaf97deda01feab0c0d23006900724a2e",
+    "sha": "a28c8b2910663870077edd7822d60e105beb8187",
     "branch": "main"
   },
   "phet-io-wrappers": {
@@ -53,7 +53,7 @@
     "branch": "main"
   },
   "phetcommon": {
-    "sha": "e111988335c8c99d523735b5a58a9933a6fb4f37",
+    "sha": "a5b28c225c0106ef83a26af79da1cec20598ca09",
     "branch": "main"
   },
   "phetmarks": {
@@ -65,11 +65,11 @@
     "branch": "main"
   },
   "scenery": {
-    "sha": "0c678a8b1030189214ac4d6c12530db5ee011247",
+    "sha": "7a01a333b3034084e0246c4c465c21cbd50c907f",
     "branch": "main"
   },
   "scenery-phet": {
-    "sha": "6486b87701891296afb4fe931e9d5dcce60a8f67",
+    "sha": "e1d3dcb11fc3329da16b9d6996970d20a85148c3",
     "branch": "main"
   },
   "sherpa": {
@@ -97,7 +97,7 @@
     "branch": "main"
   },
   "utterance-queue": {
-    "sha": "6df7c7f772010c0cb70e58a60d9d56536f6c5266",
+    "sha": "718d4e1e5ae323398a6972d18a1dd79146368185",
     "branch": "main"
   }
 }
