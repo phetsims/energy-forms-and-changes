@@ -22,7 +22,10 @@ import BeakerHeater from './BeakerHeater.js';
 import Belt from './Belt.js';
 import Biker from './Biker.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
+import EnergyConverter from './EnergyConverter.js';
+import EnergySource from './EnergySource.js';
 import EnergySystemElementCarousel from './EnergySystemElementCarousel.js';
+import EnergyUser from './EnergyUser.js';
 import Fan from './Fan.js';
 import FaucetAndWater from './FaucetAndWater.js';
 import FluorescentBulb from './FluorescentBulb.js';
@@ -101,7 +104,6 @@ class SystemsModel {
       tandem: tandem.createTandem( 'energyChunkGroup' )
     } );
 
-    // @ts-expect-error
     this.energyChunkPathMoverGroup = new EnergyChunkPathMoverGroup( this.energyChunkGroup, {
       tandem: tandem.createTandem( 'energyChunkPathMoverGroup' )
     } );
@@ -277,18 +279,16 @@ class SystemsModel {
    * @param dt - time step in seconds
    */
   public stepModel( dt: number ): void {
-    const source = this.energySourcesCarousel.getSelectedElement()!;
-    const converter = this.energyConvertersCarousel.getSelectedElement()!;
-    const user = this.energyUsersCarousel.getSelectedElement()!;
+    const source = this.energySourcesCarousel.getSelectedElement() as EnergySource;
+    const converter = this.energyConvertersCarousel.getSelectedElement() as EnergyConverter;
+    const user = this.energyUsersCarousel.getSelectedElement() as EnergyUser;
 
     // {Energy} - step the currently selected energy system elements and transfer energy chunks in between each step
     // @ts-expect-error
     const energyFromSource = source.step( dt );
-    // @ts-expect-error
     converter.injectEnergyChunks( source.extractOutgoingEnergyChunks() );
     // @ts-expect-error
     const energyFromConverter = converter.step( dt, energyFromSource );
-    // @ts-expect-error
     user.injectEnergyChunks( converter.extractOutgoingEnergyChunks() );
     // @ts-expect-error
     user.step( dt, energyFromConverter );

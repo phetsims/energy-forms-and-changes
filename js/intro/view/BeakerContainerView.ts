@@ -25,6 +25,7 @@ import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
+import ModelElement from '../../common/model/ModelElement.js';
 import BeakerView from '../../common/view/BeakerView.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from '../model/BeakerContainer.js';
@@ -60,7 +61,7 @@ class BeakerContainerView extends BeakerView {
 
   private readonly clipAreaHelperNode?: Path;
 
-  public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( position: Vector2 ) => Vector2, providedOptions?: BeakerContainerViewOptions ) {
+  public constructor( beaker: BeakerContainer, model: EFACIntroModel, modelViewTransform: ModelViewTransform2, constrainPosition: ( modelElement: ModelElement, position: Vector2 ) => Vector2, providedOptions?: BeakerContainerViewOptions ) {
 
     const options = optionize<BeakerContainerViewOptions, SelfOptions, PhetioObjectOptions>()( {
       // BeakerContainerView has no new options, using EmptySelfOptions
@@ -105,8 +106,7 @@ class BeakerContainerView extends BeakerView {
     propertiesThatInfluenceClipArea.push( beaker.positionProperty );
     propertiesThatInfluenceClipArea.push( model.energyChunksVisibleProperty );
 
-    // @ts-expect-error
-    Multilink.multilink( propertiesThatInfluenceClipArea, () => {
+    Multilink.multilinkAny( propertiesThatInfluenceClipArea, () => {
       this.updateEnergyChunkClipArea( beaker, model.blockGroup, model.energyChunksVisibleProperty.value, modelViewTransform );
     } );
 
@@ -115,8 +115,6 @@ class BeakerContainerView extends BeakerView {
       beaker,
       this.grabNode,
       modelViewTransform,
-
-      // @ts-expect-error
       constrainPosition,
       model.isPlayingProperty,
       options.tandem.createTandem( 'dragListener' )

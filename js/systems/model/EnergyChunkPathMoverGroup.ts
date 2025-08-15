@@ -10,6 +10,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
@@ -19,7 +20,7 @@ import EnergyChunkPathMover, { EnergyChunkPathMoverOptions } from './EnergyChunk
 
 type SelfOptions = EmptySelfOptions;
 
-type EnergyChunkPathMoverGroupOptions = SelfOptions & PhetioGroupOptions;
+type EnergyChunkPathMoverGroupOptions = SelfOptions & StrictOmit<PhetioGroupOptions, 'phetioType'>;
 
 class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover, [ EnergyChunk, Vector2[], number ]> {
 
@@ -27,8 +28,6 @@ class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover, [ Ener
 
     const options = optionize<EnergyChunkPathMoverGroupOptions, SelfOptions, PhetioGroupOptions>()( {
       tandem: Tandem.REQUIRED,
-
-      // @ts-expect-error
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
     }, providedOptions );
 

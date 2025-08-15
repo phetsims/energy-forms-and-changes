@@ -29,7 +29,7 @@ abstract class EnergySource extends EnergySystemElement {
    * @param iconImage Image to identify source on carousel menu
    * @param providedOptions
    */
-  public constructor( iconImage: Image, providedOptions?: EnergySourceOptions ) {
+  protected constructor( iconImage: Image, providedOptions?: EnergySourceOptions ) {
 
     const options = optionize<EnergySourceOptions, SelfOptions, EnergySystemElementOptions>()( {
       tandem: Tandem.REQUIRED

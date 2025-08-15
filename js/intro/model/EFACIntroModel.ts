@@ -655,16 +655,16 @@ class EFACIntroModel {
   /**
    * exchanges an energy chunk between the provided model elements
    */
-  private transferEnergyChunk( energyChunkSupplier: RectangularThermalMovableModelElement | Air, energyChunkConsumer: RectangularThermalMovableModelElement | Air, energyBalanceRecord: EnergyBalanceRecord ): void {
+  private transferEnergyChunk( energyChunkSupplier: RectangularThermalMovableModelElement, energyChunkConsumer: RectangularThermalMovableModelElement | Air, energyBalanceRecord: EnergyBalanceRecord ): void {
 
     // attempt to extract an energy chunk from the supplier
     let energyChunk;
 
+    // @ts-expect-error
     if ( energyChunkSupplier !== this.air ) {
 
       if ( energyChunkConsumer !== this.air ) {
 
-        // @ts-expect-error
         energyChunk = energyChunkSupplier.extractEnergyChunkClosestToBounds(
           // @ts-expect-error
           energyChunkConsumer.getBounds()
@@ -673,9 +673,7 @@ class EFACIntroModel {
       else {
 
         // when giving an energy chunk to the air, pull one from the top of the supplier
-        // @ts-expect-error
         energyChunk = energyChunkSupplier.extractEnergyChunkClosestToPoint(
-          // @ts-expect-error
           energyChunkSupplier.getCenterTopPoint()
         );
       }
@@ -695,7 +693,6 @@ class EFACIntroModel {
         // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
         // stays above the container.  The bounds are tweaked a bit to account for the width of the energy chunks in
         // the view.
-        // @ts-expect-error
         const supplierBounds = energyChunkSupplier.getBounds();
         const horizontalWanderConstraint = new Range( supplierBounds.minX + 0.01, supplierBounds.maxX - 0.01 );
         if ( energyChunk.positionProperty.value.x < horizontalWanderConstraint.min ) {

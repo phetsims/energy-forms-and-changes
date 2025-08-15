@@ -738,17 +738,15 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       numberOfSlices: this.slices.length,
       totalSliceArea: totalSliceArea,
       numberOfEnergyChunks: numberOfEnergyChunks,
-      energyChunkPositionsBySlice: []
+      energyChunkPositionsBySlice: [] as { positionX: number; positionY: number }[][]
     };
 
     this.slices.forEach( ( slice, sliceIndex ) => {
 
-      // @ts-expect-error
       energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ] = [];
 
       slice.energyChunkList.forEach( energyChunk => {
 
-        // @ts-expect-error
         energyChunkInfo.energyChunkPositionsBySlice[ sliceIndex ].push( {
           positionX: energyChunk.positionProperty.value.x,
           positionY: energyChunk.positionProperty.value.y
