@@ -80,13 +80,6 @@ const HeatTransferConstants = {
     const value = heatTransferConstantsMap[ category1 ][ category2 ];
     affirm( value !== undefined, `Heat transfer factor not found for ${category1} to ${category2}` );
     return value;
-  },
-
-  /**
-   * get the heat transfer constant for air to air
-   */
-  getAirToSurroundingAirHeatTransferFactor(): number {
-    return AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR;
   }
 };
 

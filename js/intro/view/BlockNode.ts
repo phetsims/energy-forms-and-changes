@@ -304,7 +304,7 @@ class BlockNode extends Node {
    */
   private createSurface( shape: Shape, fillColor: Color, textureImage: HTMLImageElement | null ): Node {
 
-    let surfaceNode = null;
+    let surfaceNode;
 
     if ( textureImage ) {
 
