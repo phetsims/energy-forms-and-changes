@@ -63,6 +63,8 @@ type SelfOptions = EmptySelfOptions;
 
 type BlockOptions = SelfOptions & PhetioObjectOptions;
 
+type BlockStateObject = unknown;
+
 class Block extends RectangularThermalMovableModelElement {
 
   // Unique ID for this block
@@ -99,7 +101,6 @@ class Block extends RectangularThermalMovableModelElement {
       phetioDynamicElement: true,
       phetioState: true,
 
-      // @ts-expect-error
       phetioType: Block.BlockIO,
       phetioDocumentation: 'block that can be of type iron or brick'
     }, providedOptions );
@@ -207,12 +208,10 @@ class Block extends RectangularThermalMovableModelElement {
     return Math.max( this.energyProperty.value - ( MAX_TEMPERATURE * this.mass * this.specificHeat ), 0 );
   }
 
-  public static readonly BlockIO = new IOType<Block>( 'BlockIO', {
+  public static readonly BlockIO = new IOType<Block, BlockStateObject>( 'BlockIO', {
     supertype: UserMovableModelElement.UserMovableModelElementIO,
     valueType: Block,
     stateSchema: {
-
-      // @ts-expect-error
       blockType: BlockTypeIO
     }
   } );

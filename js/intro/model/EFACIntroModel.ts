@@ -656,15 +656,13 @@ class EFACIntroModel {
   /**
    * exchanges an energy chunk between the provided model elements
    */
-  private transferEnergyChunk( energyChunkSupplier: ModelElement, energyChunkConsumer: ModelElement, energyBalanceRecord: EnergyBalanceRecord ): void {
+  private transferEnergyChunk( energyChunkSupplier: RectangularThermalMovableModelElement | Air, energyChunkConsumer: RectangularThermalMovableModelElement | Air, energyBalanceRecord: EnergyBalanceRecord ): void {
 
     // attempt to extract an energy chunk from the supplier
     let energyChunk;
 
-    // @ts-expect-error
     if ( energyChunkSupplier !== this.air ) {
 
-      // @ts-expect-error
       if ( energyChunkConsumer !== this.air ) {
 
         // @ts-expect-error
@@ -693,7 +691,6 @@ class EFACIntroModel {
     // if we got an energy chunk, pass it to the consumer
     if ( energyChunk ) {
 
-      // @ts-expect-error
       if ( energyChunkConsumer === this.air ) {
 
         // When supplying and energy chunk to the air, constrain the path that the energy chunk will take so that it
@@ -708,7 +705,6 @@ class EFACIntroModel {
         else if ( energyChunk.positionProperty.value.x > horizontalWanderConstraint.max ) {
           energyChunk.setPositionXY( horizontalWanderConstraint.max, energyChunk.positionProperty.value.y );
         }
-        // @ts-expect-error
         energyChunkConsumer.addEnergyChunk( energyChunk, horizontalWanderConstraint );
       }
       else {
@@ -725,9 +721,7 @@ class EFACIntroModel {
         energyExchangeToLog = Math.min( EFACConstants.ENERGY_PER_CHUNK, energyBalanceRecord.energyBalance );
       }
       this.energyBalanceTracker.logEnergyExchange(
-        // @ts-expect-error
         energyChunkSupplier.id,
-        // @ts-expect-error
         energyChunkConsumer.id,
         energyExchangeToLog
       );
@@ -947,7 +941,7 @@ class EFACIntroModel {
    * @returns one of the elements in the model that can provide and absorb energy
    */
   private getThermalElementByID( id: string ): RectangularThermalMovableModelElement {
-    let element = null;
+    let element;
     if ( id === this.air.id ) {
       element = this.air;
     }
