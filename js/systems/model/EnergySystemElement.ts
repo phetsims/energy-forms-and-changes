@@ -4,9 +4,9 @@
  * base class for energy sources, converters, and users, that can be connected together to create what is referred to
  * as an "energy system" in this simulation
  *
- * @author John Blanco
- * @author Andrew Adare
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

@@ -3,7 +3,7 @@
 /**
  * shared constants for the Energy Forms and Changes simulation
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import LinearFunction from '../../../dot/js/LinearFunction.js';

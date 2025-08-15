@@ -8,7 +8,7 @@
  * This was done as a separate class so that it could be used in composition rather than inheritance, because
  * composition allows better control over the layering within the parent view node.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';

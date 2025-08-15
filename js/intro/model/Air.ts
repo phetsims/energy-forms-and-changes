@@ -3,7 +3,7 @@
 /**
  * A type that represents the air in the model. Air can hold heat and exchange thermal energy with other model objects.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

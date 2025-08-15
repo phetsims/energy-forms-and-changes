@@ -3,8 +3,8 @@
 /**
  * a type that is used to move an energy chunk along a pre-defined path
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

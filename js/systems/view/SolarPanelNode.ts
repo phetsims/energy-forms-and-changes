@@ -3,8 +3,8 @@
 /**
  * a Scenery Node that depicts a solar panel in the view
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

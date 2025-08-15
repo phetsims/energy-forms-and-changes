@@ -4,7 +4,7 @@
  * String literal union that defines the types of thermal energy containers, primarily used for determining the rate at which heat is
  * transferred between different items
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

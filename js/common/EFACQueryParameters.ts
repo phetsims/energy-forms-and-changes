@@ -3,7 +3,7 @@
 /**
  * query parameters supported by this simulation
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

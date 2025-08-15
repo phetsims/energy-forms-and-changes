@@ -9,8 +9,8 @@
  * Reuse Notes: This could probably be generalized fairly easily to distribute any number items within a container of
  * arbitrary size.
  *
- * @author John Blanco
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';

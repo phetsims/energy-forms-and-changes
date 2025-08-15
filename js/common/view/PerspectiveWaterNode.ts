@@ -2,7 +2,7 @@
 
 /**
  * a scenery node that looks like water in a cylindrical container as seen from slightly above the horizon
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

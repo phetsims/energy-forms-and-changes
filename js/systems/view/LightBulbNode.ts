@@ -3,9 +3,9 @@
 /**
  * a scenery node that represents a light bulb in the view
  *
- * @author John Blanco
- * @author Andrew Adare
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

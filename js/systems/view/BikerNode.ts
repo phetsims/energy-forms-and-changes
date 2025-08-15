@@ -3,8 +3,8 @@
 /**
  * a Scenery Node that represents a biker in the view
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

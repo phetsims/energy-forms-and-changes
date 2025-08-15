@@ -4,9 +4,9 @@
  * a Scenery Node that allows the user to select the various elements contained within a carousel by presenting a set of
  * radio-style push buttons, each with an icon image of the selection that it represents
  *
- * @author John Blanco
- * @author Andrew Adare
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

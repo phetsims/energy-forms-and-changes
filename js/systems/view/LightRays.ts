@@ -2,7 +2,7 @@
 
 /**
  * a Scenery Node that represents a collection of light rays emanating from a circular or point source
- * @author Andrew Adare
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

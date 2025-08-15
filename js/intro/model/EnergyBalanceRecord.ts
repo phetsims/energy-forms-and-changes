@@ -3,7 +3,7 @@
 /**
  * an object that is used to keep a record of energy that is exchanged between two model elements
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';

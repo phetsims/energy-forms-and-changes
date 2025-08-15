@@ -3,7 +3,7 @@
 /**
  * the 'Intro' screen in the Energy Forms and Changes simulation
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Martin Veillette (Berea College)
  */
 

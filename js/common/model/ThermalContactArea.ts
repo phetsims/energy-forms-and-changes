@@ -4,7 +4,7 @@
  * A type that represents a 2D space that can come into contact with other thermal areas, leading to the exchange of
  * thermal energy. This is basically just a shape and a flag that indicates whether or not immersion can occur.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';

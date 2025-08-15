@@ -3,7 +3,7 @@
 /**
  * a Scenery Node representing a belt that connects two circular items, like a fan belt in an automobile
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';

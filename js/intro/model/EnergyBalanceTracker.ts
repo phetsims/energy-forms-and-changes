@@ -3,7 +3,7 @@
 /**
  * An object that is used to track energy that is exchanged between pairs of entities and accumulate the total balance.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';

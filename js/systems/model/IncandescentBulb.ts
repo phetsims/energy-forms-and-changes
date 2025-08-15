@@ -3,8 +3,8 @@
 /**
  * a type that models an incandescent light bulb in an energy system
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

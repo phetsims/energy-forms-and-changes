@@ -4,9 +4,9 @@
  * An object that makes it easy for one model element to follow another one around.  This was originally created to
  * allow the thermometer to stick to the blocks and beaker when they are dragged, though it may have other uses.
  *
- * @author John Blanco
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

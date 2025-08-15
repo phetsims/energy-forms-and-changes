@@ -4,8 +4,8 @@
  * A Scenery Node that represents a ray of light in the view.  Rays of light can have shapes that reduce or block the
  * amount of light passing through.
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';

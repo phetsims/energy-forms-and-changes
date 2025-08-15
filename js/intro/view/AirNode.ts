@@ -3,7 +3,7 @@
 /**
  * view representation of the air, which is basically just a parent node through which energy chunks can move
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';

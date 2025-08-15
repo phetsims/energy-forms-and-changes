@@ -3,7 +3,7 @@
 /**
  * enum that represents the various types of energy used in this simulation
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

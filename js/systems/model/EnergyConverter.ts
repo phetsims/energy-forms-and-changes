@@ -4,8 +4,8 @@
  * base type for energy converters, i.e. model elements that take energy from a source and convert it to something else
  * (such as mechanical to electrical) and then supply it to an energy user
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';

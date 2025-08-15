@@ -5,8 +5,8 @@
  * consists of an actual panel but also is meant to have a lower assembly through which energy chunks move.  The
  * appearance needs to be tightly coordinated with the images used in the view.
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

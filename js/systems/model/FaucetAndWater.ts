@@ -3,8 +3,8 @@
 /**
  * a type that represents a faucet that can be turned on to provide mechanical energy to other energy system elements
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

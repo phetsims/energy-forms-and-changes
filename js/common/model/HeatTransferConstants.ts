@@ -5,8 +5,8 @@
  * can contain heat, as well as methods for obtaining the heat transfer value for any two model elements that are
  * capable of exchanging heat with one another.
  *
- * @author John Blanco
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

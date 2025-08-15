@@ -3,7 +3,7 @@
 /**
  * a scenery node that represents a fan in the view
  *
- * @author Chris Klusendorf
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

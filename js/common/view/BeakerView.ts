@@ -5,8 +5,8 @@
  * node, which must be separately added to the scene graph. This is done to allow a layering effect. Hence, this cannot
  * be added directly to the scene graph, and the client must add each layer separately.
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

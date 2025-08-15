@@ -3,7 +3,7 @@
 /**
  * a model element that senses the temperature and color of the model at its current position, and can be moved around
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

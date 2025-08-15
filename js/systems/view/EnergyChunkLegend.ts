@@ -3,9 +3,9 @@
 /**
  * a Scenery Node that represent a legend that describes the different types of energy chunks
  *
- * @author John Blanco
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

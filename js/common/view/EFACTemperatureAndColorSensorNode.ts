@@ -5,7 +5,7 @@
  * is being sensed. The triangular indicator can be filled with a color to make it more clear what exactly is being
  * measured.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

@@ -3,7 +3,7 @@
 /**
  * type that represents a chunk of energy in the view
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

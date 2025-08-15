@@ -3,7 +3,7 @@
 /**
  * Model element that represents a beaker that can contain other thermal model elements.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

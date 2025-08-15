@@ -3,10 +3,10 @@
 /**
  * main view for the 'Systems' screen of the Energy Forms and Changes simulation
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Martin Veillette (Berea College)
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

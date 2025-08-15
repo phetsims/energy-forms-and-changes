@@ -10,8 +10,8 @@
  * the shapes were simplified to be bounds.  This is not quite as nice in doing things like distributing the energy
  * chunks in the beaker, but works well enough, and performs far better.
  *
- * @author John Blanco
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  * @author Martin Veillette
  */
 

@@ -4,9 +4,9 @@
  * base class for energy sources, i.e. model elements that produce energy and can supply it to other energy system
  * components, such as energy converters or energy users
  *
- * @author John Blanco
- * @author Andrew Adare
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';

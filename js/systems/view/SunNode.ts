@@ -3,8 +3,8 @@
 /**
  * a Scenery Node that represents the sun, clouds, and a slider to control the level of cloudiness in the view
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Multilink from '../../../../axon/js/Multilink.js';

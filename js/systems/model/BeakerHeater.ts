@@ -3,7 +3,7 @@
 /**
  * model of a heating element with a beaker on it
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

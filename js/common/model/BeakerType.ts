@@ -3,7 +3,7 @@
 /**
  * Beaker types for EFAC
  *
- * @author Chris Klusendorf
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
 export const BeakerTypeValues = [ 'WATER', 'OLIVE_OIL' ] as const;

@@ -7,9 +7,9 @@
  * See the header comments in the parent class for some important information about how this class is used on the
  * canvas.
  *
- * @author John Blanco
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Multilink from '../../../../axon/js/Multilink.js';

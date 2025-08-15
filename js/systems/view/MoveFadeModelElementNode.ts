@@ -4,8 +4,8 @@
  * base type for a Scenery Node that moves as the associated model element moves and fades in and out as the opacity
  * Property changes
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';

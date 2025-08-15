@@ -4,7 +4,7 @@
  * RectangularThermalMovableModelElement is a base class for a movable model element that contains thermal energy and
  * that, at least in the model, has an overall shape that can be represented as a rectangle.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

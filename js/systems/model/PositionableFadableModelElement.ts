@@ -3,9 +3,9 @@
 /**
  * base type for model elements that can be positioned and faded
  *
- * @author John Blanco
- * @author Andrew Adare
- * @author Jesse Greenberg
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

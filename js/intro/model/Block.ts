@@ -4,8 +4,8 @@
  * Block that contains and exchanges thermal energy.  In the model, a block is two-dimensional, so its shape is
  * represented by a rectangle.
  *
- * @author John Blanco
- * @author Chris Klusendorf
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

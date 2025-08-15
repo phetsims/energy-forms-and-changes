@@ -3,7 +3,7 @@
 /**
  * a scenery node that represents a faucet from which water flows
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 

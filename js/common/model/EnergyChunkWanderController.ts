@@ -4,7 +4,7 @@
  * This type is used to make an energy chunk wander, i.e. to perform somewhat of a random walk while moving towards a
  * destination.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

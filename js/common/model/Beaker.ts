@@ -4,7 +4,7 @@
  * Model element that represents a beaker which contains a fluid. The fluid contains energy, which includes energy
  * chunks, and has a temperature.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

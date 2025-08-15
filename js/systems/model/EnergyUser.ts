@@ -4,8 +4,8 @@
  * base type for energy users, i.e. model elements that take energy from an energy converter and do something with it,
  * such as producing light or heat
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';

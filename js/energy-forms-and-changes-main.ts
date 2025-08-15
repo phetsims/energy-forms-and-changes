@@ -3,9 +3,9 @@
 /**
  * Main entry point for the 'Energy Forms and Changes' sim.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Martin Veillette (Berea College)
- * @author Andrew Adare
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Sim from '../../joist/js/Sim.js';

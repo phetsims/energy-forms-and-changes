@@ -5,8 +5,8 @@
  * and can thus be used to create an effect of layering in order to get a bit of a 3D appearance when used in
  * conjunction with other slices. The slice is generally invisible, but can be shown using when needed for debugging.
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';

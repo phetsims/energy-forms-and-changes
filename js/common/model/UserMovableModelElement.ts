@@ -3,7 +3,7 @@
 /**
  * base class for model elements that can be moved around by the user
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

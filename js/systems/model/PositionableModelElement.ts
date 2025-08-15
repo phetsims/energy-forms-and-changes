@@ -3,9 +3,9 @@
 /**
  * a model element that has a position which can be changed
  *
- * @author John Blanco
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

@@ -3,7 +3,7 @@
 /**
  * a Scenery Node that depicts a tea kettle on a burner
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';

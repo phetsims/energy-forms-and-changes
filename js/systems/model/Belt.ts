@@ -8,8 +8,8 @@
  * testing done to make sure it handles all cases of different wheel size and positions.  If this is ever moved into
  * common code, such testing should be done and any non-general behavior remedied. -jbphet, 11/2/2018
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

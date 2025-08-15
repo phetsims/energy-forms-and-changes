@@ -3,9 +3,9 @@
 /**
  * Model element that represents a burner in the simulation.  The burner can heat and also cool other model elements.
  *
- * @author John Blanco
- * @author Jesse Greenberg
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Jesse Greenberg (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';

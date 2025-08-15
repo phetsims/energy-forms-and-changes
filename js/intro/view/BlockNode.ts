@@ -4,9 +4,9 @@
  * Node that represents a block in the view.  The blocks in the model are 2D, and this node gives them some perspective
  * in order to make them appear to be 3D.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Martin Veillette
- * @author Jesse Greenberg
+ * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

@@ -3,8 +3,8 @@
 /**
  * model of a bicycle being pedaled by a rider in order to generate energy
  *
- * @author John Blanco
- * @author Andrew Adare
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Andrew Adare (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
