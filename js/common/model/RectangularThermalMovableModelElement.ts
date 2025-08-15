@@ -610,8 +610,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
       }
     }
 
-    // @ts-expect-error
-    this.removeEnergyChunk( chunkToExtract );
+    this.removeEnergyChunk( chunkToExtract! );
     return chunkToExtract;
   }
 
@@ -709,8 +708,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     // distribute the initial energy chunks within the container using the repulsive algorithm
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
 
-      // @ts-expect-error
-      const distributed = energyChunkDistributor.updatePositions(
+      const distributed = energyChunkDistributor.updatePositions!(
         this.slices.slice(),
         EFACConstants.SIM_TIME_PER_TICK_NORMAL
       );

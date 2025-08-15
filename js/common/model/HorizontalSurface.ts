@@ -37,6 +37,10 @@ class HorizontalSurface extends PhetioObject {
   public readonly owner: ModelElement;
 
   /**
+   * @param initialPosition
+   * @param width
+   * @param owner
+   * @param tandem
    * @param initialElementOnSurface - model element that is already on this surface
    */
   public constructor( initialPosition: Vector2, width: number, owner: ModelElement, tandem: Tandem, initialElementOnSurface?: ModelElement ) {

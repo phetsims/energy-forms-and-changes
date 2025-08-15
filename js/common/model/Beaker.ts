@@ -347,8 +347,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
       const numberOfIterations = 10; // empirically determined to give a reasonably consistent value
       for ( let i = 0; i < numberOfIterations; i++ ) {
 
-        // @ts-expect-error
-        energyChunkDistributor.updatePositions( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+        energyChunkDistributor.updatePositions!( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       }
       const averageIterationTime = ( window.performance.now() - startTime ) / numberOfIterations;
       if ( averageIterationTime > SWITCH_TO_FASTER_ALGORITHM_THRESHOLD ) {
@@ -365,8 +364,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     // distribute the initial energy chunks within the container
     for ( let i = 0; i < EFACConstants.MAX_NUMBER_OF_INITIALIZATION_DISTRIBUTION_CYCLES; i++ ) {
 
-      // @ts-expect-error
-      const distributed = energyChunkDistributor.updatePositions( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
+      const distributed = energyChunkDistributor.updatePositions!( this.slices.slice(), EFACConstants.SIM_TIME_PER_TICK_NORMAL );
       if ( !distributed ) {
         break;
       }
