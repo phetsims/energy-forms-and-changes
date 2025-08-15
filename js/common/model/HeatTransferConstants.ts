@@ -29,7 +29,6 @@ const WATER_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
 const WATER_AIR_HEAT_TRANSFER_FACTOR = 30.0;
 const OLIVE_OIL_OLIVE_OIL_HEAT_TRANSFER_FACTOR = 1000.0;
 const OLIVE_OIL_AIR_HEAT_TRANSFER_FACTOR = 30.0;
-const AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
 // map of inter-object heat transfer constants
 const heatTransferConstantsMap: Record<EnergyContainerCategory, Partial<Record<EnergyContainerCategory, number>>> = {
