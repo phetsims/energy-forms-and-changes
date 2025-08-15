@@ -235,11 +235,8 @@ export default class FaucetAndWater extends EnergySource {
     );
 
     // send along saved energy values if enough time has passed
-    // @ts-expect-error
-    if ( this.flowEnergyDelay[ 0 ].creationTime + FALLING_WATER_DELAY * 1000 <= new Date().getTime() ) {
-
-      // @ts-expect-error
-      return this.flowEnergyDelay.shift();
+    if ( this.flowEnergyDelay[ 0 ].creationTime! + FALLING_WATER_DELAY * 1000 <= new Date().getTime() ) {
+      return this.flowEnergyDelay.shift()!;
     }
     else {
       return new Energy( 'MECHANICAL', 0, -Math.PI / 2 );

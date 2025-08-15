@@ -84,10 +84,8 @@ class EnergyChunkPathMover extends PhetioObject {
   }
 
   public static stateObjectToCreateElementArguments( stateObject: EnergyChunkPathMoverStateObject ): [ EnergyChunk, Vector2[], number ] {
-    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference );
+    const energyChunk = ReferenceIO( EnergyChunk.EnergyChunkIO ).fromStateObject( stateObject.energyChunkReference ) as EnergyChunk;
     const path = ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.path );
-
-    // @ts-expect-error
     return [ energyChunk, path, stateObject.speed ];
   }
 

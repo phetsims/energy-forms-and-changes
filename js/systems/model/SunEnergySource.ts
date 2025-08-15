@@ -299,10 +299,10 @@ class SunEnergySource extends EnergySource {
    */
   public getEnergyOutputRate(): Energy {
 
-    // @ts-expect-error
     return new Energy(
       'LIGHT',
-      EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value )
+      EFACConstants.MAX_ENERGY_PRODUCTION_RATE * ( 1 - this.cloudinessProportionProperty.value ),
+      0
     );
   }
 
