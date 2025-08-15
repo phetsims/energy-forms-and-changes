@@ -18,6 +18,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
+import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableFadableModelElement, { PositionableFadableModelElementOptions } from './PositionableFadableModelElement.js';
 
@@ -29,6 +30,9 @@ abstract class EnergySystemElement extends PositionableFadableModelElement {
   public readonly iconImage: Image;
   public readonly energyChunkList: ObservableArray<EnergyChunk>;
   public readonly activeProperty: BooleanProperty;
+
+  // Group for managing energy chunks (set by subclasses)
+  protected energyChunkGroup!: EnergyChunkGroup;
 
   // A11y name of this energy system element, used by assistive technology, set by subtypes
   public a11yName: string;
@@ -89,8 +93,6 @@ abstract class EnergySystemElement extends PositionableFadableModelElement {
    * clear daughter energy chunks
    */
   protected clearEnergyChunks(): void {
-
-    // @ts-expect-error
     this.energyChunkList.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.energyChunkList.clear();
   }

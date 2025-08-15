@@ -56,7 +56,6 @@ class Generator extends EnergyConverter {
 
   // a11y name
   private readonly energyChunksVisibleProperty: Property<boolean>;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
   public readonly wheelRotationalAngleProperty: NumberProperty;
   public readonly directCouplingModeProperty: BooleanProperty;

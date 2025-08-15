@@ -85,7 +85,6 @@ class SunEnergySource extends EnergySource {
   // list of energy chunks that should be allowed to pass through the clouds without bouncing (i.e. being
   // reflected)
   private readonly energyChunksPassingThroughClouds: ReturnType<typeof createObservableArray>;
-  private readonly energyChunkGroup: EnergyChunkGroup;
 
   public constructor( solarPanel: SolarPanel, isPlayingProperty: BooleanProperty, energyChunksVisibleProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: SunEnergySourceOptions ) {
 

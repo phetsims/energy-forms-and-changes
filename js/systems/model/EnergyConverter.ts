@@ -77,11 +77,9 @@ abstract class EnergyConverter extends EnergySystemElement {
   public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
 
-    // @ts-expect-error
     this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
 
-    // @ts-expect-error
     this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }

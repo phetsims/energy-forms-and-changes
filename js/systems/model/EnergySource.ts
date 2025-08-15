@@ -68,7 +68,6 @@ abstract class EnergySource extends EnergySystemElement {
   protected override clearEnergyChunks(): void {
     super.clearEnergyChunks();
 
-    // @ts-expect-error
     this.outgoingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.outgoingEnergyChunks.clear();
   }

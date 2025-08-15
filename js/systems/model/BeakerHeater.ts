@@ -67,7 +67,6 @@ type BeakerHeaterOptions = SelfOptions & EnergyUserOptions;
 class BeakerHeater extends EnergyUser {
 
   private readonly energyChunksVisibleProperty: BooleanProperty;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // Proportion of how much heat the coils have

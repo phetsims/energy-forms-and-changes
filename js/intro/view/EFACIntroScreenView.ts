@@ -209,14 +209,14 @@ class EFACIntroScreenView extends ScreenView {
       centerX: modelViewTransform.modelToViewX( model.leftBurner.getBounds().centerX ),
       bottom: modelViewTransform.modelToViewY( model.leftBurner.getBounds().minY ),
 
-      // @ts-expect-error
+      // @ts-expect-error - minWidth and maxWidth are not in the official options type but are used anyway
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5
     } );
     const leftHeaterCoolerNode = new HeaterCoolerFront( model.leftBurner.heatCoolLevelProperty, {
       leftTop: leftHeaterCoolerBack.getHeaterFrontPosition(),
 
-      // @ts-expect-error
+      // @ts-expect-error - minWidth and maxWidth are not in the official options type but are used anyway
       minWidth: leftBurnerStand.width / 1.5,
       maxWidth: leftBurnerStand.width / 1.5,
       thumbSize: new Dimension2( 36, 18 ),
@@ -249,14 +249,14 @@ class EFACIntroScreenView extends ScreenView {
         centerX: modelViewTransform.modelToViewX( model.rightBurner.getBounds().centerX ),
         bottom: modelViewTransform.modelToViewY( model.rightBurner.getBounds().minY ),
 
-        // @ts-expect-error
+        // @ts-expect-error - minWidth and maxWidth are not in the official options type but are used anyway
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5
       } );
       const rightHeaterCoolerNode = new HeaterCoolerFront( model.rightBurner.heatCoolLevelProperty, {
         leftTop: rightHeaterCoolerBack.getHeaterFrontPosition(),
 
-        // @ts-expect-error
+        // @ts-expect-error - minWidth and maxWidth are not in the official options type but are used anyway
         minWidth: rightBurnerStand.width / 1.5,
         maxWidth: rightBurnerStand.width / 1.5,
         thumbSize: new Dimension2( 36, 18 ),

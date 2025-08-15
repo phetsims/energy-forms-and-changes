@@ -42,8 +42,8 @@ const mapEnergyTypeToImage = {
   HIDDEN: energyHidden_png
 } as const;
 
-// array that holds the created energy chunk image nodes
-const energyChunkImageNodes = {};
+// object that holds the created energy chunk image nodes, indexed by energy type
+const energyChunkImageNodes: Partial<Record<EnergyType, Image>> = {};
 
 class EnergyChunkNode extends Node {
 
@@ -137,12 +137,9 @@ const getEnergyChunkNode = ( energyType: EnergyType ): Image => {
 
   // these need to be lazily created because the images are not decoded fast enough in the built version to be
   // available right away
-  // @ts-expect-error
   if ( !energyChunkImageNodes[ energyType ] ) {
-    // @ts-expect-error
     energyChunkImageNodes[ energyType ] = createEnergyChunkImageNode( energyType );
   }
-  // @ts-expect-error
   return energyChunkImageNodes[ energyType ];
 };
 

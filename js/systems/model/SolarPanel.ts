@@ -77,7 +77,6 @@ class SolarPanel extends EnergyConverter {
 
   // counter to mimic function of IClock in original Java code
   private simulationTime: number;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // A shape used to describe where the collection area is relative to the model position.  The collection area is at

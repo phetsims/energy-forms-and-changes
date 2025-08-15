@@ -83,7 +83,6 @@ class Biker extends EnergySource {
   private readonly energyChunkMovers: ObservableArray<EnergyChunkPathMover>;
   private energyProducedSinceLastChunkEmitted: number;
   private mechanicalChunksSinceLastThermal: number;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   /**

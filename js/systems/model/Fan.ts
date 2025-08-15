@@ -81,7 +81,6 @@ class Fan extends EnergyUser {
   private readonly radiatedEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
   private readonly angularVelocityProperty: NumberProperty;
   private readonly energyChunksVisibleProperty: Property<boolean>;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // the internal energy of the fan, which is only used by energy chunks, not incomingEnergy. incoming chunks add their energy values to this, which is then used to determine a target velocity for the fan.

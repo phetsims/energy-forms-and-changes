@@ -10,6 +10,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
 
@@ -31,7 +32,7 @@ const OLIVE_OIL_AIR_HEAT_TRANSFER_FACTOR = 30.0;
 const AIR_TO_SURROUNDING_AIR_HEAT_TRANSFER_FACTOR = 10000.0;
 
 // map of inter-object heat transfer constants
-const heatTransferConstantsMap = {
+const heatTransferConstantsMap: Record<EnergyContainerCategory, Partial<Record<EnergyContainerCategory, number>>> = {
   IRON: {
     IRON: IRON_IRON_HEAT_TRANSFER_FACTOR,
     BRICK: BRICK_IRON_HEAT_TRANSFER_FACTOR,
@@ -76,9 +77,9 @@ const HeatTransferConstants = {
    * @param category2 - a value from EnergyContainerCategory
    */
   getHeatTransferFactor( category1: EnergyContainerCategory, category2: EnergyContainerCategory ): number {
-
-    // @ts-expect-error
-    return heatTransferConstantsMap[ category1 ][ category2 ];
+    const value = heatTransferConstantsMap[ category1 ][ category2 ];
+    affirm( value !== undefined, `Heat transfer factor not found for ${category1} to ${category2}` );
+    return value;
   },
 
   /**

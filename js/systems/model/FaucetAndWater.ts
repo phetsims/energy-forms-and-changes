@@ -86,7 +86,6 @@ export default class FaucetAndWater extends EnergySource {
 
   // flag for whether the water drops have been fully preloaded
   private waterDropsPreloaded: boolean;
-  private readonly energyChunkGroup: EnergyChunkGroup;
 
   public constructor( energyChunksVisibleProperty: BooleanProperty, waterPowerableElementInPlaceProperty: BooleanProperty, energyChunkGroup: EnergyChunkGroup, providedOptions?: FaucetAndWaterOptions ) {
 

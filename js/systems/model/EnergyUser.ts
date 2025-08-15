@@ -26,7 +26,7 @@ abstract class EnergyUser extends EnergySystemElement {
 
   protected readonly incomingEnergyChunks: ObservableArray<EnergyChunk>;
 
-  public constructor( iconImage: Image, providedOptions?: EnergyUserOptions ) {
+  protected constructor( iconImage: Image, providedOptions?: EnergyUserOptions ) {
 
     const options = optionize<EnergyUserOptions, SelfOptions, PhetioObjectOptions>()( {
       tandem: Tandem.REQUIRED
@@ -56,7 +56,6 @@ abstract class EnergyUser extends EnergySystemElement {
   protected override clearEnergyChunks(): void {
     super.clearEnergyChunks();
 
-    // @ts-expect-error
     this.incomingEnergyChunks.forEach( chunk => this.energyChunkGroup.disposeElement( chunk ) );
     this.incomingEnergyChunks.clear();
   }

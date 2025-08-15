@@ -66,7 +66,6 @@ class LightBulb extends EnergyUser {
   public readonly litProportionProperty: NumberProperty;
   private hasFilament: boolean;
   private readonly energyChunksVisibleProperty: Property<boolean>;
-  private readonly energyChunkGroup: EnergyChunkGroup;
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // Fewer thermal energy chunks are radiated for bulbs without a filament

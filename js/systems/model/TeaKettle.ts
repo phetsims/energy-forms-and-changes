@@ -70,8 +70,6 @@ class TeaKettle extends EnergySource {
 
   private readonly energyChunkMovers: ObservableArray<EnergyChunkPathMover>;
 
-  private readonly energyChunkGroup: EnergyChunkGroup;
-
   private readonly energyChunkPathMoverGroup: EnergyChunkPathMoverGroup;
 
   // List of chunks that are not being transferred to the next energy system element.
