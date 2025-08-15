@@ -164,7 +164,6 @@ class Fan extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the motor
-        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -266,7 +265,6 @@ class Fan extends EnergyUser {
           chunk.energyTypeProperty.set( 'MECHANICAL' );
 
           // release the energy chunk as mechanical to blow away
-          // @ts-expect-error
           this.mechanicalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createBlownEnergyChunkPath( chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -276,7 +274,6 @@ class Fan extends EnergyUser {
 
           // release the energy chunk as thermal to radiate away
           this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-            // @ts-expect-error
             chunk,
             EnergyChunkPathMover.createRadiatedPath( chunk.positionProperty.get(), 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -390,7 +387,6 @@ class Fan extends EnergyUser {
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY

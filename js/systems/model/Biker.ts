@@ -203,7 +203,6 @@ class Biker extends EnergySource {
             this.energyChunkPathMoverGroup.disposeElement( mover );
 
             this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-              // @ts-expect-error
               energyChunk,
               createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, energyChunk.positionProperty.get() ),
               EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -284,7 +283,6 @@ class Biker extends EnergySource {
       const energyChunk = this.findNonMovingEnergyChunk();
       if ( energyChunk ) {
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-          // @ts-expect-error
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -336,7 +334,6 @@ class Biker extends EnergySource {
              !this.mechanicalPoweredSystemIsNextProperty.get() ) {
 
           // make this chunk travel to the rear hub, where it will become a chunk of thermal energy
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             createMechanicalToThermalEnergyChunkPath( this.positionProperty.value, chunk.positionProperty.get() ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -352,7 +349,6 @@ class Biker extends EnergySource {
           ];
 
           // send this chunk to the next energy system
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), mechanicalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -370,7 +366,6 @@ class Biker extends EnergySource {
         this.energyChunkPathMoverGroup.disposeElement( mover );
 
         chunk.energyTypeProperty.set( 'THERMAL' );
-        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createRadiatedPath( this.positionProperty.value.plus( CENTER_OF_BACK_WHEEL_OFFSET ), Math.PI * -0.1 ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -440,7 +435,6 @@ class Biker extends EnergySource {
         // we know the biker is not out of energy, so get one of the remaining chunks
         const energyChunk = this.findNonMovingEnergyChunk();
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-          // @ts-expect-error
           energyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, CHEMICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )

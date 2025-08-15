@@ -164,7 +164,6 @@ class SolarPanel extends EnergyConverter {
 
               // add a "mover" that will move this energy chunk to the bottom of the solar panel
               this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
                 this.chooseChunkSpeedOnPanel( incomingChunk ) )
@@ -179,7 +178,6 @@ class SolarPanel extends EnergyConverter {
 
               // add a "mover" that will reflect this energy chunk up and away from the panel
               this.lightEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createStraightPath(
                   incomingChunk.positionProperty.get(),
@@ -251,7 +249,6 @@ class SolarPanel extends EnergyConverter {
 
         // energy chunk has reached the bottom of the panel and now needs to move through the converter
         if ( mover.energyChunk.positionProperty.value.equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
-          // @ts-expect-error
           this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, pathThroughConverterOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -343,7 +340,6 @@ class SolarPanel extends EnergyConverter {
 
         // add a "mover" that will move this energy chunk to the bottom of the solar panel
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), [ CONVERGENCE_POINT_OFFSET ] ),
           this.chooseChunkSpeedOnPanel( newEnergyChunk ) )

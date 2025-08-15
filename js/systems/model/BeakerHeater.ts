@@ -193,7 +193,6 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( chunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -269,7 +268,6 @@ class BeakerHeater extends EnergyUser {
         this.radiatedEnergyChunkList.push( ec );
         this.radiatedEnergyChunkMovers.push(
           this.energyChunkPathMoverGroup.createNextElement(
-            // @ts-expect-error
             ec,
             EnergyChunkPathMover.createRadiatedPath( ec.positionProperty.value, 0 ),
             EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -371,7 +369,6 @@ class BeakerHeater extends EnergyUser {
         mover.energyChunk.energyTypeProperty.set( 'THERMAL' );
 
         // have the thermal energy move a little on the element before moving into the beaker
-        // @ts-expect-error
         this.heatingElementEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
           this.createHeaterElementEnergyChunkPath( mover.energyChunk.positionProperty.get() ),
           HEATING_ELEMENT_ENERGY_CHUNK_VELOCITY ) );
@@ -409,7 +406,6 @@ class BeakerHeater extends EnergyUser {
         this.energyChunkList.push( newEnergyChunk );
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
-        // @ts-expect-error
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.get(), ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )

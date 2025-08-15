@@ -178,7 +178,6 @@ class TeaKettle extends EnergySource {
 
         this.heatEnergyProducedSinceLastChunk -= EFACConstants.ENERGY_PER_CHUNK;
 
-        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY ) );
@@ -218,7 +217,6 @@ class TeaKettle extends EnergySource {
           const travelDistance = chunk.positionProperty.get().distance( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) );
 
           // create path mover to spout bottom
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ SPOUT_BOTTOM_OFFSET ] ),
             travelDistance / ENERGY_CHUNK_WATER_TO_SPOUT_TIME ) );
@@ -227,7 +225,6 @@ class TeaKettle extends EnergySource {
         // This chunk is moving out of the spout.
         else if ( chunk.positionProperty.get().equals( this.positionProperty.value.plus( SPOUT_BOTTOM_OFFSET ) ) ) {
 
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createStraightPath( this.positionProperty.value, SPOUT_EXIT_ANGLE ),
             EFACConstants.ENERGY_CHUNK_VELOCITY /* This is a speed (scalar) */ ) );
@@ -335,7 +332,6 @@ class TeaKettle extends EnergySource {
         );
         this.energyChunkList.push( energyChunk );
 
-        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( energyChunk,
           createThermalEnergyChunkPath( initialPosition, this.positionProperty.value ),
           EFACConstants.ENERGY_CHUNK_VELOCITY

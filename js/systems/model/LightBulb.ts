@@ -132,7 +132,6 @@ class LightBulb extends EnergyUser {
             // add a "mover" that will move this energy chunk through the wire to the bulb
             this.electricalEnergyChunkMovers.push(
               this.energyChunkPathMoverGroup.createNextElement(
-                // @ts-expect-error
                 incomingChunk,
                 EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
                 EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -258,8 +257,6 @@ class LightBulb extends EnergyUser {
           const path = this.createPathOnFilament( mover.energyChunk.positionProperty.value );
           const speed = getTotalPathLength( mover.energyChunk.positionProperty.value, path ) /
                         generateThermalChunkTimeOnFilament();
-
-          // @ts-expect-error
           this.filamentEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk, path, speed ) );
         }
         else {
@@ -303,7 +300,6 @@ class LightBulb extends EnergyUser {
 
         // add a "mover" that will move this energy chunk through the wire to the heating element
         this.electricalEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-          // @ts-expect-error
           newEnergyChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, ELECTRICAL_ENERGY_CHUNK_OFFSETS ),
           EFACConstants.ENERGY_CHUNK_VELOCITY
@@ -336,7 +332,6 @@ class LightBulb extends EnergyUser {
     }
 
     this.radiatedEnergyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement(
-      // @ts-expect-error
       energyChunk,
       EnergyChunkPathMover.createRandomStraightPath(
         this.positionProperty.value,

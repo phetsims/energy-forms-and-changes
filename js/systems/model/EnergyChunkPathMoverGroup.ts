@@ -21,7 +21,7 @@ type SelfOptions = EmptySelfOptions;
 
 type EnergyChunkPathMoverGroupOptions = SelfOptions & PhetioGroupOptions;
 
-class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover> {
+class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover, [ EnergyChunk, Vector2[], number ]> {
 
   public constructor( energyChunkGroup: EnergyChunkGroup, providedOptions?: EnergyChunkPathMoverGroupOptions ) {
 
@@ -32,9 +32,8 @@ class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover> {
       phetioType: PhetioGroup.PhetioGroupIO( EnergyChunkPathMover.EnergyChunkPathMoverIO )
     }, providedOptions );
 
-    // @ts-expect-error
     super( EnergyChunkPathMoverGroup.createEnergyChunkPathMover,
-      () => [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1, {} ], options );
+      () => [ energyChunkGroup.archetype, [ Vector2.ZERO ], 1 ], options );
   }
 
   public static createEnergyChunkPathMover( tandem: Tandem, energyChunk: EnergyChunk, path: Vector2[], speed: number, options?: EnergyChunkPathMoverOptions ): EnergyChunkPathMover {

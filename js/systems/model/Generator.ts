@@ -195,7 +195,6 @@ class Generator extends EnergyConverter {
           this.energyChunkList.push( chunk );
 
           // add a "mover" that will move this energy chunk to the center of the wheel
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( chunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -252,7 +251,6 @@ class Generator extends EnergyConverter {
 
           chunk.energyTypeProperty.set( 'ELECTRICAL' );
           this.electricalEnergyChunks.push( chunk );
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( mover.energyChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, electricalEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -266,7 +264,6 @@ class Generator extends EnergyConverter {
           hiddenChunk.zPositionProperty.set( -EFACConstants.Z_DISTANCE_WHERE_FULLY_FADED / 2 );
           this.hiddenEnergyChunks.push( hiddenChunk );
           const hiddenEnergyChunkOffsets = [ START_OF_WIRE_CURVE_OFFSET, WIRE_CURVE_POINT_1_OFFSET ];
-          // @ts-expect-error
           this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( hiddenChunk,
             EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, hiddenEnergyChunkOffsets ),
             EFACConstants.ENERGY_CHUNK_VELOCITY )
@@ -340,7 +337,6 @@ class Generator extends EnergyConverter {
         this.energyChunkList.push( newChunk );
 
         // add a 'mover' for this energy chunk
-        // @ts-expect-error
         this.energyChunkMovers.push( this.energyChunkPathMoverGroup.createNextElement( newChunk,
           EnergyChunkPathMover.createPathFromOffsets( this.positionProperty.value, [ WHEEL_CENTER_OFFSET ] ),
           EFACConstants.ENERGY_CHUNK_VELOCITY )
