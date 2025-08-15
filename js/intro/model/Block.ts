@@ -12,8 +12,7 @@ import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import required from '../../../../phet-core/js/required.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -21,8 +20,10 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
+import { PredistributedEnergyChunkConfiguration } from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
+import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWanderControllerGroup.js';
 import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
@@ -59,7 +60,10 @@ const BLOCK_COMPOSITION = {
 // static data
 let instanceCount = 0; // counter for creating unique IDs
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  energyChunkWanderControllerGroup: EnergyChunkWanderControllerGroup;
+  predistributedEnergyChunkConfigurations?: PredistributedEnergyChunkConfiguration[];
+};
 
 type BlockOptions = SelfOptions & PhetioObjectOptions;
 
@@ -92,8 +96,6 @@ class Block extends RectangularThermalMovableModelElement {
 
     const options = optionize<BlockOptions, SelfOptions, PhetioObjectOptions>()( {
 
-      // @ts-expect-error
-      energyChunkWanderControllerGroup: required( providedOptions.energyChunkWanderControllerGroup ),
       predistributedEnergyChunkConfigurations: ENERGY_CHUNK_PRESET_CONFIGURATIONS,
 
       // phet-io

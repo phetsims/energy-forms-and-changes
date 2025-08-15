@@ -12,12 +12,14 @@ import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import required from '../../../../phet-core/js/required.js';
+import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import Beaker, { BeakerOptions } from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Block from './Block.js';
+import BlockType from './BlockType.js';
 
 // counter used by constructor to create unique IDs
 let idCounter = 0;
@@ -27,12 +29,12 @@ class BeakerContainer extends Beaker {
   // ID of this beaker
   public readonly id: string;
 
-  private readonly potentiallyContainedElements: Block[];
+  private readonly potentiallyContainedElements: PhetioGroup<Block, [ BlockType, number ]>;
 
   public constructor( initialPosition: Vector2,
                       width: number,
                       height: number,
-                      potentiallyContainedElements: Block[],
+                      potentiallyContainedElements: PhetioGroup<Block, [ BlockType, number ]>,
                       energyChunksVisibleProperty: BooleanProperty,
                       energyChunkGroup: EnergyChunkGroup,
                       config: BeakerOptions ) {

@@ -104,7 +104,7 @@ class EFACIntroModel {
 
   // Groups for dynamic elements
   public readonly blockGroup: PhetioGroup<Block, [ BlockType, number ]>;
-  public readonly beakerGroup: PhetioGroup<BeakerContainer>;
+  public readonly beakerGroup: PhetioGroup<BeakerContainer, [ BeakerType, number ]>;
 
   // Tracking object for thermal contact info
   private readonly inThermalContactInfo: Record<string, string[]>;
@@ -215,7 +215,6 @@ class EFACIntroModel {
           blockType,
           this.energyChunkGroup, {
 
-            // @ts-expect-error
             energyChunkWanderControllerGroup: this.energyChunkWanderControllerGroup,
             tandem: tandem
           }
@@ -232,8 +231,7 @@ class EFACIntroModel {
 
     blocksToCreate.forEach( blockType => {
 
-      // @ts-expect-error
-      this.blockGroup.createNextElement( blockType, movableElementGroundSpotXPositions.shift() );
+      this.blockGroup.createNextElement( blockType, movableElementGroundSpotXPositions.shift()! );
     } );
 
     // ensure any created beakers are initialized to the right of the burner(s)
@@ -242,15 +240,13 @@ class EFACIntroModel {
                                                 EFACConstants.MAX_NUMBER_OF_INTRO_BEAKERS -
                                                 ( EFACConstants.MAX_NUMBER_OF_INTRO_BURNERS - numberOfBurners ) );
 
-    // @ts-expect-error
-    this.beakerGroup = new PhetioGroup(
+    this.beakerGroup = new PhetioGroup<BeakerContainer, [ BeakerType, number ]>(
       ( tandem, beakerType, initialXPosition ) => {
         return new BeakerContainer(
           new Vector2( initialXPosition, 0 ),
           BEAKER_WIDTH,
           BEAKER_HEIGHT,
 
-          // @ts-expect-error
           this.blockGroup,
           this.energyChunksVisibleProperty,
           this.energyChunkGroup, {
@@ -272,8 +268,7 @@ class EFACIntroModel {
     // create any specified beakers
     beakersToCreate.forEach( beakerType => {
 
-      // @ts-expect-error
-      this.beakerGroup.createNextElement( beakerType, movableElementGroundSpotXPositions.shift() );
+      this.beakerGroup.createNextElement( beakerType, movableElementGroundSpotXPositions.shift()! );
     } );
 
     this.inThermalContactInfo = {};
@@ -358,14 +353,14 @@ class EFACIntroModel {
   }
 
   // put all the thermal containers in a list for easy iteration
-  private get thermalContainers(): RectangularThermalMovableModelElement[] {
+  private get thermalContainers(): Array<Block | Beaker> {
     return [ ...this.blockGroup.getArray(), ...this.beakerGroup.getArray() ];
   }
 
   /**
    * determines if the first thermal model element is immersed in the second
    */
-  private isImmersedIn( thermalModelElement1: RectangularThermalMovableModelElement, thermalModelElement2: RectangularThermalMovableModelElement ): boolean {
+  private isImmersedIn( thermalModelElement1: Block | Beaker, thermalModelElement2: RectangularThermalMovableModelElement ): boolean {
     return thermalModelElement1 !== thermalModelElement2 &&
 
            // @ts-expect-error
@@ -555,6 +550,7 @@ class EFACIntroModel {
       }
 
       // transfer the energy chunk from the supplier to the consumer
+      // @ts-expect-error
       this.transferEnergyChunk( energyChunkSupplier, energyChunkConsumer, energyBalanceRecord );
     } );
 
@@ -589,7 +585,10 @@ class EFACIntroModel {
 
           // See if there is another thermal container that is in the opposite situation from this one, i.e. one that
           // has a deficit of ECs when this one has excess, or vice versa.
+          // @ts-expect-error
           if ( this.thermalContainers.includes( otherElementInRecord ) ) {
+
+            // @ts-expect-error
             const otherECBalance = otherElementInRecord.getEnergyChunkBalance();
             if ( energyChunkBalance > 0 && otherECBalance < 0 && thisElementTemperature > otherElementTemperature ||
                  energyChunkBalance < 0 && otherECBalance > 0 && thisElementTemperature < otherElementTemperature ) {
@@ -940,7 +939,7 @@ class EFACIntroModel {
    * @param id
    * @returns one of the elements in the model that can provide and absorb energy
    */
-  private getThermalElementByID( id: string ): RectangularThermalMovableModelElement {
+  private getThermalElementByID( id: string ): Burner | Air | Block | Beaker {
     let element;
     if ( id === this.air.id ) {
       element = this.air;
@@ -953,7 +952,6 @@ class EFACIntroModel {
     }
     affirm( element, `no element found for id: ${id}` );
 
-    // @ts-expect-error
     return element;
   }
 }
