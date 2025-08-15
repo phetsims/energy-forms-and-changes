@@ -65,6 +65,9 @@ const DRAG_MULTIPLIER = 0.5 * FLUID_DENSITY * DRAG_COEFFICIENT * ENERGY_CHUNK_CR
 const WALL_REPULSION_FACTOR = -COULOMBS_CONSTANT * ENERGY_CHUNK_CHARGE * WALL_CHARGE; // based on Coulomb's law
 const EC_REPULSION_FACTOR = -COULOMBS_CONSTANT * ENERGY_CHUNK_CHARGE * ENERGY_CHUNK_CHARGE; // based on Coulomb's law
 
+// Type definition for the update positions method signature
+type UpdatePositionsMethod = ( slices: EnergyChunkContainerSlice[], dt: number ) => boolean;
+
 //-------------------------------------------------------------------------------------------------------------------
 // reusable variables and array intended to reduce garbage collection and thus improve performance
 //-------------------------------------------------------------------------------------------------------------------
@@ -91,6 +94,9 @@ const compositeSliceBounds = Bounds2.NOTHING.copy();
 
 // the main singleton object definition
 const energyChunkDistributor = {
+
+  // Dynamic method property that gets assigned to one of the implementation methods
+  updatePositions: null as UpdatePositionsMethod | null,
 
   /**
    * Redistribute a set of energy chunks that are contained in energy chunk slices using an algorithm where the
@@ -522,18 +528,12 @@ const energyChunkDistributor = {
    */
   setDistributionAlgorithm( algorithmName: string ): void {
     if ( algorithmName === 'repulsive' ) {
-
-      // @ts-expect-error
       this.updatePositions = this.updatePositionsRepulsive;
     }
     else if ( algorithmName === 'spiral' ) {
-
-      // @ts-expect-error
       this.updatePositions = this.updatePositionsSpiral;
     }
     else if ( algorithmName === 'simple' ) {
-
-      // @ts-expect-error
       this.updatePositions = this.updatePositionsSimple;
     }
     else {
@@ -547,7 +547,6 @@ const energyChunkDistributor = {
 if ( EFACQueryParameters.ecDistribution === null ) {
 
   // use the repulsive algorithm by default, which looks the best but is also the most computationally expensive
-  // @ts-expect-error
   energyChunkDistributor.updatePositions = energyChunkDistributor.updatePositionsRepulsive;
 }
 else {

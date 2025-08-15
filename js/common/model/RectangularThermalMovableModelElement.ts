@@ -360,8 +360,7 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
     if ( this.energyChunkDistributionCountdownTimer > 0 ) {
 
       // distribute the energy chunks contained within this model element
-      // @ts-expect-error
-      const redistributed = energyChunkDistributor.updatePositions( this.slices.slice(), dt );
+      const redistributed = energyChunkDistributor.updatePositions!( this.slices.slice(), dt );
 
       if ( !redistributed ) {
 
