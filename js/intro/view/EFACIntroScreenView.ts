@@ -172,8 +172,7 @@ class EFACIntroScreenView extends ScreenView {
 
     // create left burner node
     const leftBurnerStand = new BurnerStandNode(
-      // @ts-expect-error
-      modelViewTransform.modelToViewShape( model.leftBurner.getBounds() ),
+      modelViewTransform.modelToViewBounds( model.leftBurner.getBounds() ),
       burnerProjectionAmount
     );
 
@@ -239,8 +238,7 @@ class EFACIntroScreenView extends ScreenView {
 
       // create right burner node
       const rightBurnerStand = new BurnerStandNode(
-        // @ts-expect-error
-        modelViewTransform.modelToViewShape( model.rightBurner.getBounds() ),
+        modelViewTransform.modelToViewBounds( model.rightBurner.getBounds() ),
         burnerProjectionAmount
       );
 

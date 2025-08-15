@@ -66,11 +66,8 @@ class TeaKettleNode extends MoveFadeModelElementNode {
     } );
 
     // burner stand node
-    // @ts-expect-error
-    const burnerSize = modelViewTransform.modelToViewShape( BURNER_MODEL_BOUNDS );
-    // @ts-expect-error
+    const burnerSize = modelViewTransform.modelToViewBounds( BURNER_MODEL_BOUNDS );
     const burnerProjection = burnerSize.width * BURNER_EDGE_TO_HEIGHT_RATIO;
-    // @ts-expect-error
     const burnerStandNode = new BurnerStandNode( burnerSize, burnerProjection );
 
     burnerStandNode.centerTop = teaKettleNode.centerBottom.plus( new Vector2( 0, -teaKettleNode.height / 4 ) );
