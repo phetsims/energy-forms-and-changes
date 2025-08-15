@@ -12,7 +12,7 @@ import createObservableArray, { ObservableArray } from '../../../../axon/js/crea
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -156,7 +156,7 @@ class Generator extends EnergyConverter {
       const torqueFromResistance = -this.wheelRotationalVelocityProperty.value * RESISTANCE_CONSTANT;
       const angularAcceleration = ( torqueFromIncomingEnergy + torqueFromResistance ) / WHEEL_MOMENT_OF_INERTIA;
       const newAngularVelocity = this.wheelRotationalVelocityProperty.value + ( angularAcceleration * dt );
-      this.wheelRotationalVelocityProperty.value = Utils.clamp(
+      this.wheelRotationalVelocityProperty.value = clamp(
         newAngularVelocity,
         -MAX_ROTATIONAL_VELOCITY,
         MAX_ROTATIONAL_VELOCITY

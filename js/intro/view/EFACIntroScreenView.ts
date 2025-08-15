@@ -13,7 +13,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -98,8 +98,8 @@ class EFACIntroScreenView extends ScreenView {
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2(
-        Utils.roundSymmetric( this.layoutBounds.width * 0.5 ),
-        Utils.roundSymmetric( this.layoutBounds.height * 0.85 )
+        roundSymmetric( this.layoutBounds.width * 0.5 ),
+        roundSymmetric( this.layoutBounds.height * 0.85 )
       ),
       EFACConstants.INTRO_MVT_SCALE_FACTOR
     );

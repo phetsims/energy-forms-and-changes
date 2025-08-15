@@ -7,7 +7,7 @@
  */
 
 import LinearFunction from '../../../dot/js/LinearFunction.js';
-import Utils from '../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../dot/js/Vector2.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import Color from '../../../scenery/js/util/Color.js';
@@ -104,7 +104,7 @@ const EFACConstants = {
   SIGNIFICANT_TEMPERATURE_DIFFERENCE: 1E-3, // in degrees Kelvin
 
   ENERGY_TO_NUM_CHUNKS_MAPPER: ( energy: number ): number => {
-    return Math.max( Utils.roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS.evaluate( energy ) ), 0 );
+    return Math.max( roundSymmetric( MAP_ENERGY_TO_NUM_CHUNKS.evaluate( energy ) ), 0 );
   },
 
   ENERGY_PER_CHUNK: MAP_NUM_CHUNKS_TO_ENERGY.evaluate( 2 ) - MAP_NUM_CHUNKS_TO_ENERGY.evaluate( 1 ),

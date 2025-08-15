@@ -14,7 +14,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
@@ -162,7 +162,7 @@ class EFACIntroModel {
     const leftEdgeToBeakerCenterPad = LEFT_EDGE + EDGE_PAD + ( BEAKER_WIDTH / 2 );
     for ( let i = 0; i < NUMBER_OF_GROUND_SPOTS; i++ ) {
       this.groundSpotXPositions.push(
-        Utils.roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000
+        roundSymmetric( ( this.spaceBetweenGroundSpotCenters * i + leftEdgeToBeakerCenterPad ) * 1000 ) / 1000
       );
     }
 

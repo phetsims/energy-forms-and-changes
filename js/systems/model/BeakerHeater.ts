@@ -13,6 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -178,13 +179,13 @@ class BeakerHeater extends EnergyUser {
     }
 
     // this isn't designed to take in anything other than electrical energy, so make sure that's what we've got
-    assert && assert( incomingEnergy.type === 'ELECTRICAL', `unexpected energy type: ${incomingEnergy.type}` );
+    affirm( incomingEnergy.type === 'ELECTRICAL', `unexpected energy type: ${incomingEnergy.type}` );
 
     // handle any incoming energy chunks
     if ( this.incomingEnergyChunks.length > 0 ) {
       this.incomingEnergyChunks.forEach( chunk => {
 
-        assert && assert(
+        affirm(
           chunk.energyTypeProperty.value === 'ELECTRICAL',
           `Energy chunk type should be ELECTRICAL but is ${chunk.energyTypeProperty.value}`
         );
@@ -298,11 +299,11 @@ class BeakerHeater extends EnergyUser {
   ): void {
 
     // validate that the specified position is inside the beaker, since that's the only supported position
-    assert && assert(
+    affirm(
     position.x >= BEAKER_OFFSET.x - BEAKER_WIDTH / 2 && position.x <= BEAKER_OFFSET.x + BEAKER_WIDTH / 2,
       'position is not inside of beaker'
     );
-    assert && assert(
+    affirm(
     position.y >= BEAKER_OFFSET.y - BEAKER_HEIGHT / 2 && position.y <= BEAKER_OFFSET.y + BEAKER_HEIGHT / 2,
       'position is not inside of beaker'
     );

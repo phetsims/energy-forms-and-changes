@@ -14,7 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -140,7 +140,7 @@ class SunEnergySource extends EnergySource {
       for ( let i = 0; i < nClouds; i++ ) {
 
         // stagger the existence strength of the clouds
-        const value = Utils.clamp( cloudiness * nClouds - i, 0, 1 );
+        const value = clamp( cloudiness * nClouds - i, 0, 1 );
         this.clouds[ i ].existenceStrengthProperty.set( value );
       }
     } );

@@ -11,7 +11,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -132,7 +132,7 @@ class BeakerSteamCanvasNode extends CanvasNode {
 
       // the water is emitting some amount of steam - set the proportionate amount
       steamingProportion = 1 - ( ( this.fluidBoilingPoint - this.temperatureProperty.value ) / STEAMING_RANGE );
-      steamingProportion = Utils.clamp( steamingProportion, 0, 1 );
+      steamingProportion = clamp( steamingProportion, 0, 1 );
 
       const bubblesToProduceCalc =
         ( STEAM_BUBBLE_RATE_RANGE.min + STEAM_BUBBLE_RATE_RANGE.getLength() * steamingProportion ) * dt;
@@ -188,14 +188,14 @@ class BeakerSteamCanvasNode extends CanvasNode {
         steamBubblesCopy[ i ].x += distanceFromCenterX * 0.2 * dt;
 
         // fade the bubble as it reaches the end of its range
-        const heightFraction = Utils.clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
+        const heightFraction = clamp( ( this.containerOutlineRect.minY - steamBubblesCopy[ i ].y ) / MAX_STEAM_BUBBLE_HEIGHT, 0, 1 );
         steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * MAX_STEAM_BUBBLE_OPACITY;
       }
 
       // fade new bubble in
       else {
         const distanceFromWater = this.steamOrigin - steamBubblesCopy[ i ].y;
-        const opacityFraction = Utils.clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
+        const opacityFraction = clamp( distanceFromWater / ( unfilledBeakerHeight / 4 ), 0, 1 );
         steamBubblesCopy[ i ].opacity = opacityFraction * MAX_STEAM_BUBBLE_OPACITY;
       }
 

@@ -17,7 +17,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import StringUnionProperty from '../../../../axon/js/StringUnionProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
@@ -209,7 +209,7 @@ class EnergySystemElementCarousel<T extends string> {
       this.elapsedTransitionTime += dt;
       const targetCarouselOffset = this.offsetBetweenElements.times( -this.targetIndexProperty.get() );
       const totalTravelVector = targetCarouselOffset.minus( this.initialCarouselOffset );
-      const transitionProportion = Utils.clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
+      const transitionProportion = clamp( this.elapsedTransitionTime / TRANSITION_DURATION, 0, 1 );
       this.currentCarouselOffset =
         this.initialCarouselOffset.plus( totalTravelVector.times( Easing.CUBIC_IN_OUT.value( transitionProportion ) ) );
 
@@ -241,7 +241,7 @@ class EnergySystemElementCarousel<T extends string> {
   private updateManagedElementOpacities(): void {
     this.managedElements.forEach( managedElement => {
       const distanceToSelection = managedElement.positionProperty.value.distance( this.selectedElementPosition );
-      const opacity = Utils.clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
+      const opacity = clamp( 1 - ( distanceToSelection / this.offsetBetweenElements.magnitude ), 0, 1 );
       managedElement.opacityProperty.set( opacity );
     } );
   }

@@ -13,6 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -162,7 +163,7 @@ class Biker extends EnergySource {
     // monitor target rotation rate for validity
     if ( assert ) {
       this.targetCrankAngularVelocityProperty.link( omega => {
-        assert && assert( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
+        affirm( omega >= 0 && omega <= MAX_ANGULAR_VELOCITY_OF_CRANK,
           `Angular velocity out of range: ${omega}` );
       } );
     }
@@ -298,7 +299,7 @@ class Biker extends EnergySource {
 
     const energyAmount = Math.abs( fractionalVelocity * MAX_ENERGY_OUTPUT_WHEN_CONNECTED_TO_GENERATOR * dt );
 
-    assert && assert( energyAmount >= 0, `energyAmount is ${energyAmount}` );
+    affirm( energyAmount >= 0, `energyAmount is ${energyAmount}` );
 
     return new Energy( 'MECHANICAL', energyAmount, -Math.PI / 2 );
   }
@@ -465,7 +466,7 @@ class Biker extends EnergySource {
     const currentIndex = this.mapAngleToImageIndex( this.crankAngleProperty.value );
     const radiansPerImage = 2 * Math.PI / NUMBER_OF_LEG_IMAGES;
     this.crankAngleProperty.set( ( currentIndex % NUMBER_OF_LEG_IMAGES * radiansPerImage + ( radiansPerImage - 1E-7 ) ) );
-    assert && assert( this.crankAngleProperty.value >= 0 && this.crankAngleProperty.value <= 2 * Math.PI );
+    affirm( this.crankAngleProperty.value >= 0 && this.crankAngleProperty.value <= 2 * Math.PI );
   }
 
   /**
@@ -527,7 +528,7 @@ class Biker extends EnergySource {
    */
   public mapAngleToImageIndex( angle: number ): number {
     const i = Math.floor( ( angle % ( 2 * Math.PI ) ) / ( 2 * Math.PI / NUMBER_OF_LEG_IMAGES ) );
-    assert && assert( i >= 0 && i < NUMBER_OF_LEG_IMAGES );
+    affirm( i >= 0 && i < NUMBER_OF_LEG_IMAGES );
     return i;
   }
 

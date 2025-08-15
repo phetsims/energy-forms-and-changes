@@ -9,7 +9,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
@@ -123,7 +123,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
       // allow for a small variation from the previous angle, as long as it's within the valid angle range
       let bubbleAngle = this.lastSteamAngle * ( dotRandom.nextDouble() * ( 1.015 - 0.985 ) + 0.985 );
-      bubbleAngle = Utils.clamp( bubbleAngle, this.steamAngleRange.min, this.steamAngleRange.max );
+      bubbleAngle = clamp( bubbleAngle, this.steamAngleRange.min, this.steamAngleRange.max );
       this.lastSteamAngle = bubbleAngle;
 
       // add new bubbles
@@ -161,7 +161,7 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
 
       // fade out the bubble as it reaches the end of its range
       const steamBubbleMaxHeight = STEAM_BUBBLE_HEIGHT_RANGE.min + steamingProportion * STEAM_BUBBLE_HEIGHT_RANGE.getLength();
-      const heightFraction = Utils.clamp( ( this.steamOrigin.y - steamBubblesCopy[ i ].y ) / steamBubbleMaxHeight, 0, 1 );
+      const heightFraction = clamp( ( this.steamOrigin.y - steamBubblesCopy[ i ].y ) / steamBubbleMaxHeight, 0, 1 );
       steamBubblesCopy[ i ].opacity = ( 1 - heightFraction ) * STEAM_BUBBLE_MAX_OPACITY;
 
       // remove bubbles that are out of the current height range

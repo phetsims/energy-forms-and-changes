@@ -17,7 +17,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -215,7 +215,7 @@ class SolarPanel extends EnergyConverter {
       // panel (this way, the fan moves at the same speed when chunks are on or off).
       energyProduced = incomingEnergy.amount * 0.68;
     }
-    this.energyOutputRateProperty.value = Utils.toFixedNumber( energyProduced / dt, 11 );
+    this.energyOutputRateProperty.value = toFixedNumber( energyProduced / dt, 11 );
 
     this.simulationTime += dt;
 

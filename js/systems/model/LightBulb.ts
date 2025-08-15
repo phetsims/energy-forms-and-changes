@@ -12,7 +12,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -185,7 +185,7 @@ class LightBulb extends EnergyUser {
       // energy chunks not currently visible
       else {
         if ( this.activeProperty.value && incomingEnergy.type === 'ELECTRICAL' ) {
-          this.litProportionProperty.set( Utils.clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
+          this.litProportionProperty.set( clamp( incomingEnergy.amount / ( ENERGY_TO_FULLY_LIGHT * dt ), 0, 1 ) );
         }
         else {
           this.litProportionProperty.set( 0.0 );

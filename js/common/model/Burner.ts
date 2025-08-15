@@ -17,6 +17,7 @@ import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -221,10 +222,10 @@ class Burner extends ModelElement {
     // add the chunk and its motion strategy to this model
     this.energyChunkList.add( energyChunk );
 
-    assert && assert( this.energyChunkWanderControllerGroup,
+    affirm( this.energyChunkWanderControllerGroup,
       'Must provided wander controller group if creating wander controllers' );
 
-    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup!.createNextElement(
+    this.energyChunkWanderControllers.push( this.energyChunkWanderControllerGroup.createNextElement(
       energyChunk,
       new Vector2Property( this.getCenterPoint(), { valueComparisonStrategy: 'equalsFunction' } ),
 
@@ -292,8 +293,8 @@ class Burner extends ModelElement {
 
     // verify that the bounds where the energy chunk is going are above this burner
     const burnerBounds = this.getBounds();
-    assert && assert(
-    bounds.minY > burnerBounds.centerY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
+    affirm(
+      bounds.minY > burnerBounds.centerY && bounds.centerX > burnerBounds.minX && bounds.centerX < burnerBounds.maxX,
       'items should only be on top of burner when getting ECs'
     );
     return this.extractEnergyChunkClosestToPoint( new Vector2( bounds.centerX, bounds.minY ) );

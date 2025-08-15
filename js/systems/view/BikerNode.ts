@@ -11,6 +11,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -118,7 +119,7 @@ const cyclistTorsoImages = [
   cyclistTorsoTired2_png,
   cyclistTorsoTired3_png
 ];
-assert && assert( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
+affirm( Biker.NUMBER_OF_LEG_IMAGES === cyclistFrontLegImages.length,
   'NUMBER_OF_LEG_IMAGES in Biker.js must match the number of images used for the legs in BikerNode.js'
 );
 const NUMBER_OF_LEG_IMAGES = cyclistFrontLegImages.length;
@@ -196,7 +197,7 @@ class BikerNode extends MoveFadeModelElementNode {
     let visibleFrontLeg = cyclistFrontLegNodes[ 0 ];
     const gearRotationPoint = bicycleGearNode.bounds.center;
     biker.crankAngleProperty.link( angle => {
-      assert && assert( angle >= 0 && angle <= 2 * Math.PI, `Angle out of range: ${angle}` );
+      affirm( angle >= 0 && angle <= 2 * Math.PI, `Angle out of range: ${angle}` );
       const i = biker.mapAngleToImageIndex( angle );
       visibleFrontLeg.setVisible( false );
       visibleBackLeg.setVisible( false );
@@ -260,7 +261,7 @@ class BikerNode extends MoveFadeModelElementNode {
     // add a listener that will turn the back wheel
     const wheelRotationPoint = bicycleSpokesNode.bounds.center;
     biker.rearWheelAngleProperty.link( angle => {
-      assert && assert( angle < 2 * Math.PI, 'Angle is out of bounds' );
+      affirm( angle < 2 * Math.PI, 'Angle is out of bounds' );
 
       // Scenery doesn't use the convention in physics where a positive rotation is counter-clockwise, so we have to
       // invert the angle in the following calculation.

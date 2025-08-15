@@ -12,6 +12,7 @@ import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
@@ -170,7 +171,7 @@ class Block extends RectangularThermalMovableModelElement {
   }
 
   public override addEnergyChunkSlices(): void {
-    assert && assert( this.slices.length === 0 ); // make sure this method isn't being misused
+    affirm( this.slices.length === 0 ); // make sure this method isn't being misused
 
     // the slices for the block are intended to match the projection used in the view
     const projectionToFront = EFACConstants.MAP_Z_TO_XY_OFFSET( EFACConstants.BLOCK_SURFACE_WIDTH / 2 );

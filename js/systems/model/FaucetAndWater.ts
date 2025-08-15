@@ -14,7 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -361,7 +361,7 @@ export default class FaucetAndWater extends EnergySource {
       // was empirically determined so that the number of energy chunks roughly matches what there are when the faucet
       // is running at full output.
       const waterColumnDistanceSpan = topWaterDrop.position.y - bottomWaterDrop.position.y;
-      const numberOfChunksToAdd = Utils.roundSymmetric( waterColumnDistanceSpan / 0.05 );
+      const numberOfChunksToAdd = roundSymmetric( waterColumnDistanceSpan / 0.05 );
       const distanceBetweenChunks = waterColumnDistanceSpan / numberOfChunksToAdd;
 
       // add the energy chunks and position them along the stream of water droplets

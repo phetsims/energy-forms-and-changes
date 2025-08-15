@@ -13,8 +13,10 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Range from '../../../../dot/js/Range.js';
 import Rectangle from '../../../../dot/js/Rectangle.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -274,7 +276,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     if ( temperature > this.fluidBoilingPoint - STEAMING_RANGE ) {
 
       // the fluid is emitting some amount of steam - set the proportionate amount
-      this.steamingProportion = Utils.clamp( 1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE, 0, 1 );
+      this.steamingProportion = clamp( 1 - ( this.fluidBoilingPoint - temperature ) / STEAMING_RANGE, 0, 1 );
     }
     else {
       this.steamingProportion = 0;
@@ -303,7 +305,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
     sortedSliceArray.forEach( slice => {
       const sliceArea = slice.bounds.width * slice.bounds.height;
       const sliceCenter = slice.bounds.center;
-      _.times( Utils.roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
+      _.times( roundSymmetric( ( sliceArea / totalSliceArea ) * targetNumberOfEnergyChunks ), index => {
         if ( numberOfEnergyChunksAdded < targetNumberOfEnergyChunks ) {
           slice.addEnergyChunk( this.energyChunkGroup.createNextElement(
             'THERMAL',
@@ -403,7 +405,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
    * add the initial energy chunk slices, called in super constructor
    */
   protected override addEnergyChunkSlices(): void {
-    assert && assert( this.slices.length === 0 ); // Check that his has not been already called.
+    affirm( this.slices.length === 0 ); // Check that his has not been already called.
 
     const fluidRect = new Rectangle(
       this.positionProperty.value.x - this.width / 2,
@@ -492,7 +494,7 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
 
     // find the chunk in the chosen slice with the most energy and extract that one
     let highestEnergyChunk = densestSlice.energyChunkList.get( 0 );
-    assert && assert( highestEnergyChunk, 'highestEnergyChunk does not exist' );
+    affirm( highestEnergyChunk, 'highestEnergyChunk does not exist' );
 
     densestSlice.energyChunkList.forEach( energyChunk => {
       if ( energyChunk.positionProperty.value.y > highestEnergyChunk.positionProperty.value.y ) {

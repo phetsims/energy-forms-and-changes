@@ -8,7 +8,7 @@
  * @author Andrew Adare
  */
 
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line as KiteLine } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -101,7 +101,7 @@ class LightRayNode extends Node {
       const distanceFromPreviousPoint = sortedPointAndFadeValues[ i ].point.distance( sortedPointAndFadeValues[ i + 1 ].point );
 
       let intensityAtEndPoint = prevIntensity * Math.pow( Math.E, -sortedPointAndFadeValues[ i ].fadeValue * distanceFromPreviousPoint );
-      intensityAtEndPoint = Utils.roundSymmetric( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
+      intensityAtEndPoint = roundSymmetric( intensityAtEndPoint * 100 ) / 100; // round to nearest tenth
 
       const endPointColor = this.color.copy().setAlpha( intensityAtEndPoint );
       rayGradient.addColorStop( distanceFromOrigin / rayLength, endPointColor );

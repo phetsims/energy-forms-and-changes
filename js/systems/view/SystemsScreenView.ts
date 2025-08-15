@@ -13,7 +13,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -122,8 +122,8 @@ class SystemsScreenView extends ScreenView {
     // The multipliers for the 2nd parameter can be used to adjust where the point (0, 0) in the model, which is on the
     // middle of the screen above the counter as located in the view. Final arg is zoom factor from original Java sim -
     // smaller zooms out, larger zooms in.
-    const mvtOriginX = Utils.roundSymmetric( layoutBounds.width * 0.5 );
-    const mvtOriginY = Utils.roundSymmetric( layoutBounds.height * 0.475 );
+    const mvtOriginX = roundSymmetric( layoutBounds.width * 0.5 );
+    const mvtOriginY = roundSymmetric( layoutBounds.height * 0.475 );
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( mvtOriginX, mvtOriginY ),
