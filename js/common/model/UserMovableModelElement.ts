@@ -156,14 +156,13 @@ class UserMovableModelElement extends ModelElement {
     applyState: ( userMovableModelElement, stateObject: UserMovableModelElementStateObject ) => {
       const supportingSurface = NullableIO( ReferenceIO( IOType.ObjectIO ) ).fromStateObject(
         stateObject.supportingSurface
-      );
+      ) as HorizontalSurface | null;
       if ( supportingSurface ) {
 
         if ( userMovableModelElement.supportingSurface ) {
           userMovableModelElement.clearSupportingSurface();
         }
 
-        // @ts-expect-error
         userMovableModelElement.setSupportingSurface( supportingSurface );
       }
       else {

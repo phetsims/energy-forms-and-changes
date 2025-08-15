@@ -32,6 +32,8 @@ type SelfOptions = EmptySelfOptions;
 
 type EnergyChunkContainerSliceOptions = SelfOptions & PhetioObjectOptions;
 
+type EnergyChunkContainerSliceStateObject = { bounds: Bounds2StateObject };
+
 class EnergyChunkContainerSlice extends PhetioObject {
 
   // Position of this slice in model space
@@ -108,10 +110,8 @@ class EnergyChunkContainerSlice extends PhetioObject {
     };
   }
 
-  public toStateObject(): { bounds: Bounds2 } { // TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 create a type for the state object
+  public toStateObject(): EnergyChunkContainerSliceStateObject {
     return {
-
-      // @ts-expect-error
       bounds: Bounds2.Bounds2IO.toStateObject( this.bounds )
     };
   }
