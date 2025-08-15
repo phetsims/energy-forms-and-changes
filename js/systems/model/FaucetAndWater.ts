@@ -17,7 +17,6 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -55,6 +54,13 @@ const OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_WATER_ORIGIN.plu
 // The following acceleration constant defines the rate at which the water flows from the faucet.  The value used is
 // not the actual value in Earth's gravitational field - it has been tweaked for optimal visual effect.
 const ACCELERATION_DUE_TO_GRAVITY = new Vector2( 0, -0.15 );
+
+type FaucetAndWaterStateObject = {
+  waterDropsPreloaded: boolean; // whether the water drops have been preloaded
+  transferNextAvailableChunk: boolean; // whether the next available chunk should be transferred to the
+  // next energy system element
+  energySinceLastChunk: number; // the amount of energy produced since the last chunk was
+};
 
 export default class FaucetAndWater extends EnergySource {
 
@@ -413,7 +419,7 @@ export default class FaucetAndWater extends EnergySource {
   /**
    * (EnergySystemElementIO)
    */
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): FaucetAndWaterStateObject {
     return {
       waterDropsPreloaded: this.waterDropsPreloaded,
       transferNextAvailableChunk: this.transferNextAvailableChunk,
@@ -425,7 +431,7 @@ export default class FaucetAndWater extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: FaucetAndWaterStateObject ): void {
     this.waterDropsPreloaded = stateObject.waterDropsPreloaded;
     this.transferNextAvailableChunk = stateObject.transferNextAvailableChunk;
     this.energySinceLastChunk = stateObject.energySinceLastChunk;

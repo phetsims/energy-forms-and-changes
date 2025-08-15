@@ -17,7 +17,6 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -51,6 +50,14 @@ const EMISSION_SECTOR_OFFSET = EMISSION_SECTOR_SPAN * 0.71;
 type SelfOptions = EmptySelfOptions;
 
 type SunEnergySourceOptions = SelfOptions & EnergySourceOptions;
+
+type SunEnergySourceStateObject = {
+  sectorList: number[];
+  currentSectorIndex: number;
+  radius: number;
+  sunPosition: Vector2;
+  energyChunkEmissionCountdownTimer: number;
+};
 
 class SunEnergySource extends EnergySource {
 
@@ -351,7 +358,7 @@ class SunEnergySource extends EnergySource {
   /**
    * (EnergySystemElementIO)
    */
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): SunEnergySourceStateObject {
     return {
       sectorList: this.sectorList,
       currentSectorIndex: this.currentSectorIndex,
@@ -365,7 +372,7 @@ class SunEnergySource extends EnergySource {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: SunEnergySourceStateObject ): void {
     this.sectorList = stateObject.sectorList;
     this.currentSectorIndex = stateObject.currentSectorIndex;
     this.radius = stateObject.radius;

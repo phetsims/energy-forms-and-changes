@@ -14,7 +14,6 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -67,6 +66,10 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 type SelfOptions = EmptySelfOptions;
 
 type FanOptions = SelfOptions & EnergyUserOptions;
+
+type EnergyUserStateObject = {
+  internalTemperature: number; // the temperature of the fan, used to determine when to release
+};
 
 class Fan extends EnergyUser {
 
@@ -412,11 +415,11 @@ class Fan extends EnergyUser {
     }
   }
 
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): EnergyUserStateObject {
     return { internalTemperature: this.internalTemperature };
   }
 
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: EnergyUserStateObject ): void {
     this.internalTemperature = stateObject.internalTemperature;
   }
 }

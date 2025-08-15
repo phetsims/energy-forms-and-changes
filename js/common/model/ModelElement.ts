@@ -10,10 +10,9 @@
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import Vector2Property, { Vector2PropertyOptions } from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -22,7 +21,7 @@ import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
 
 type SelfOptions = {
-  positionPropertyOptions?: IntentionalAny;
+  positionPropertyOptions?: Vector2PropertyOptions;
 };
 
 export type ModelElementOptions = SelfOptions & PhetioObjectOptions;

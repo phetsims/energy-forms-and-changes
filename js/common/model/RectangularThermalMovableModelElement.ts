@@ -18,7 +18,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -49,7 +48,7 @@ type SelfOptions = {
 
   // pre-distributed energy chunk arrangement, used during initialization and reset to more rapidly
   // set up the model element with reasonably distributed energy chunks.
-  predistributedEnergyChunkConfigurations?: IntentionalAny[];
+  predistributedEnergyChunkConfigurations?: PredistributedEnergyChunkConfiguration[];
 };
 
 export type RectangularThermalMovableModelElementOptions = SelfOptions & PhetioObjectOptions;

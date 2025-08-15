@@ -11,7 +11,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -21,7 +21,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
@@ -61,10 +60,16 @@ type SelfOptions = EmptySelfOptions;
 
 type SolarPanelOptions = SelfOptions & EnergyConverterOptions;
 
+type SolarPanelStateObject = {
+  numberOfConvertedChunks: number;
+  latestChunkArrivalTime: number;
+  simulationTime: number;
+};
+
 class SolarPanel extends EnergyConverter {
 
-  private readonly electricalEnergyChunkMovers: ReturnType<typeof createObservableArray>;
-  private readonly lightEnergyChunkMovers: ReturnType<typeof createObservableArray>;
+  private readonly electricalEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
+  private readonly lightEnergyChunkMovers: ObservableArray<EnergyChunkPathMover>;
   private latestChunkArrivalTime: number;
   private numberOfConvertedChunks: number;
   private readonly energyChunksVisibleProperty: BooleanProperty;
@@ -229,7 +234,7 @@ class SolarPanel extends EnergyConverter {
     // iterate over a copy to mutate original without problems
     const movers = this.electricalEnergyChunkMovers.slice();
 
-    movers.forEach( ( mover: IntentionalAny ) => {
+    movers.forEach( ( mover: EnergyChunkPathMover ) => {
 
       mover.moveAlongPath( dt );
 
@@ -273,7 +278,7 @@ class SolarPanel extends EnergyConverter {
     // iterate over a copy to mutate original without problems
     const movers = this.lightEnergyChunkMovers.slice();
 
-    movers.forEach( ( mover: IntentionalAny ) => {
+    movers.forEach( mover => {
       mover.moveAlongPath( dt );
 
       // remove this energy chunk entirely
@@ -381,7 +386,6 @@ class SolarPanel extends EnergyConverter {
 
     this.electricalEnergyChunkMovers.forEach( mover => {
 
-      // @ts-expect-error
       if ( mover.getFinalDestination().equals( this.positionProperty.value.plus( CONVERGENCE_POINT_OFFSET ) ) ) {
         numberOfChunksOnPanel++;
       }
@@ -425,11 +429,9 @@ class SolarPanel extends EnergyConverter {
   public override clearEnergyChunks(): void {
     super.clearEnergyChunks();
 
-    // @ts-expect-error
     this.electricalEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.electricalEnergyChunkMovers.clear();
 
-    // @ts-expect-error
     this.lightEnergyChunkMovers.forEach( mover => this.energyChunkPathMoverGroup.disposeElement( mover ) );
     this.lightEnergyChunkMovers.clear();
     this.latestChunkArrivalTime = 0;
@@ -442,7 +444,7 @@ class SolarPanel extends EnergyConverter {
     return this.absorptionShape;
   }
 
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): SolarPanelStateObject {
     return {
       numberOfConvertedChunks: this.numberOfConvertedChunks,
       latestChunkArrivalTime: this.latestChunkArrivalTime,
@@ -454,7 +456,7 @@ class SolarPanel extends EnergyConverter {
    * (EnergySystemElementIO)
    * @param stateObject - see this.toStateObject()
    */
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: SolarPanelStateObject ): void {
     this.numberOfConvertedChunks = stateObject.numberOfConvertedChunks;
     this.latestChunkArrivalTime = stateObject.latestChunkArrivalTime;
     this.simulationTime = stateObject.simulationTime;
@@ -462,11 +464,7 @@ class SolarPanel extends EnergyConverter {
 
   public static readonly PANEL_CONNECTOR_OFFSET = PANEL_CONNECTOR_OFFSET;
 
-  public static readonly SolarPanelIO = new IOType<SolarPanel, {
-    numberOfConvertedChunks: number;
-    latestChunkArrivalTime: number;
-    simulationTime: number;
-  }>( 'SolarPanelIO', {
+  public static readonly SolarPanelIO = new IOType<SolarPanel, SolarPanelStateObject>( 'SolarPanelIO', {
     valueType: SolarPanel,
     toStateObject: solarPanel => solarPanel.toStateObject(),
     applyState: ( solarPanel, stateObject ) => solarPanel.applyState( stateObject ),

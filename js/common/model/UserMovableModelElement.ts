@@ -11,7 +11,6 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
@@ -25,6 +24,10 @@ type SelfOptions = {
 };
 
 export type UserMovableModelElementOptions = SelfOptions & ModelElementOptions;
+
+type UserMovableModelElementStateObject = {
+  supportingSurface: null | ReferenceIOState; // the surface that this
+};
 
 class UserMovableModelElement extends ModelElement {
 
@@ -145,14 +148,12 @@ class UserMovableModelElement extends ModelElement {
     return ( surface !== null ) && ( surface.owner === element || surface.owner.isStackedUpon( element ) );
   }
 
-  public static readonly UserMovableModelElementIO = new IOType<UserMovableModelElement, null | ReferenceIOState>( 'UserMovableModelElementIO', {
+  public static readonly UserMovableModelElementIO = new IOType<UserMovableModelElement, UserMovableModelElementStateObject>( 'UserMovableModelElementIO', {
     valueType: UserMovableModelElement,
     stateSchema: {
-
-      // @ts-expect-error
       supportingSurface: NullableIO( ReferenceIO( IOType.ObjectIO ) )
     },
-    applyState: ( userMovableModelElement, stateObject: IntentionalAny ) => {
+    applyState: ( userMovableModelElement, stateObject: UserMovableModelElementStateObject ) => {
       const supportingSurface = NullableIO( ReferenceIO( IOType.ObjectIO ) ).fromStateObject(
         stateObject.supportingSurface
       );

@@ -15,7 +15,6 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
@@ -55,6 +54,12 @@ const ELECTRICAL_ENERGY_CHUNK_OFFSETS = [
 
 type SelfOptions = EmptySelfOptions;
 export type LightBulbOptions = SelfOptions & EnergyUserOptions;
+
+type LightBulbStateObject = {
+  goRightNextTime: boolean; // whether the next energy chunk will go right or left
+  hasFilament: boolean; // whether the light bulb has a filament
+  proportionOfThermalChunksRadiated: number; // proportion of thermal energy chunks radiated
+};
 
 class LightBulb extends EnergyUser {
 
@@ -373,7 +378,7 @@ class LightBulb extends EnergyUser {
     this.radiatedEnergyChunkMovers.clear();
   }
 
-  public override toStateObject(): IntentionalAny {
+  public override toStateObject(): LightBulbStateObject {
     return {
       goRightNextTime: this.goRightNextTime,
       hasFilament: this.hasFilament,
@@ -381,7 +386,7 @@ class LightBulb extends EnergyUser {
     };
   }
 
-  public override applyState( stateObject: IntentionalAny ): void {
+  public override applyState( stateObject: LightBulbStateObject ): void {
     this.goRightNextTime = stateObject.goRightNextTime;
     this.hasFilament = stateObject.hasFilament;
     this.proportionOfThermalChunksRadiated = stateObject.proportionOfThermalChunksRadiated;

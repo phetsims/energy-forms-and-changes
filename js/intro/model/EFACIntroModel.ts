@@ -17,7 +17,6 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
@@ -108,7 +107,7 @@ class EFACIntroModel {
   public readonly beakerGroup: PhetioGroup<BeakerContainer>;
 
   // Tracking object for thermal contact info
-  private readonly inThermalContactInfo: IntentionalAny;
+  private readonly inThermalContactInfo: Record<string, string[]>;
 
   // All model elements for easy iteration
   private readonly modelElementList: ModelElement[];
