@@ -147,12 +147,6 @@ abstract class Beaker extends RectangularThermalMovableModelElement {
       options
     );
 
-    // @ts-expect-error TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 probably assigned in parent
-    this.width = width;
-
-    // @ts-expect-error TODO: https://github.com/phetsims/energy-forms-and-changes/issues/430 probably assigned in parent
-    this.height = height;
-
     this._energyContainerCategory = BEAKER_COMPOSITION[ options.beakerType ].energyContainerCategory;
 
     this.beakerType = options.beakerType;
