@@ -45,9 +45,9 @@ import gasPipeIntro_png from '../../../images/gasPipeIntro_png.js';
 import shelf_png from '../../../images/shelf_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
-import Beaker from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import ModelElement from '../../common/model/ModelElement.js';
+import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperatureAndColorSensorNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
@@ -55,6 +55,7 @@ import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
+import BeakerContainer from '../model/BeakerContainer.js';
 import Block from '../model/Block.js';
 import EFACIntroModel from '../model/EFACIntroModel.js';
 import efacPositionConstrainer from '../model/efacPositionConstrainer.js';
@@ -82,7 +83,7 @@ class EFACIntroScreenView extends ScreenView {
   private readonly burnerBlockingRect: Bounds2;
 
   // Group for managing beaker proxy nodes
-  private readonly beakerProxyNodeGroup: PhetioGroup<BeakerContainerView>;
+  private readonly beakerProxyNodeGroup: PhetioGroup<BeakerContainerView, [ BeakerContainer ]>;
 
   public constructor( model: EFACIntroModel, tandem: Tandem ) {
     super( {
@@ -366,7 +367,7 @@ class EFACIntroScreenView extends ScreenView {
     /**
      * limits the model element motion based on both view and model constraints
      */
-    const constrainMovableElementMotion = ( modelElement: ModelElement, proposedPosition: Vector2 ): Vector2 => {
+    const constrainMovableElementMotion = ( modelElement: RectangularThermalMovableModelElement, proposedPosition: Vector2 ): Vector2 => {
 
       // constrain the model element to stay within the play area
       const viewConstrainedPosition = constrainToPlayArea(
@@ -379,7 +380,6 @@ class EFACIntroScreenView extends ScreenView {
 
       // constrain the model element to move legally within the model, which generally means not moving through things
       const viewAndModelConstrainedPosition = efacPositionConstrainer.constrainPosition(
-        // @ts-expect-error
         modelElement,
         viewConstrainedPosition,
         model.beakerGroup,
@@ -429,13 +429,13 @@ class EFACIntroScreenView extends ScreenView {
     model.blockGroup.forEach( blockListener );
     model.blockGroup.elementCreatedEmitter.addListener( blockListener );
 
-    // @ts-expect-error
-    this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beaker ) => {
-      const label = beaker.beakerType === 'WATER' ? waterString : oliveOilString;
+    this.beakerProxyNodeGroup = new PhetioGroup( ( tandem, beakerContainer: BeakerContainer ) => {
+      const label = beakerContainer.beakerType === 'WATER' ? waterString : oliveOilString;
       return new BeakerContainerView(
-        beaker,
+        beakerContainer,
         model,
         modelViewTransform,
+
         // @ts-expect-error
         constrainMovableElementMotion, {
           label: label,
@@ -444,6 +444,7 @@ class EFACIntroScreenView extends ScreenView {
           phetioInputEnabledPropertyInstrumented: true
         }
       );
+
     }, () => [ model.beakerGroup.archetype ], {
       tandem: tandem.createTandem( 'beakerProxyNodeGroup' ),
       phetioType: PhetioGroup.PhetioGroupIO( ReferenceIO( IOType.ObjectIO ) ),
@@ -453,9 +454,8 @@ class EFACIntroScreenView extends ScreenView {
       supportsDynamicState: false
     } );
 
-    const beakerListener = ( addedBeaker: Beaker ) => {
+    const beakerListener = ( addedBeaker: BeakerContainer ) => {
 
-      // @ts-expect-error
       const beakerProxyNode = this.beakerProxyNodeGroup.createCorrespondingGroupElement( addedBeaker.tandem.name, addedBeaker );
 
       beakerFrontLayer.addChild( beakerProxyNode.frontNode );

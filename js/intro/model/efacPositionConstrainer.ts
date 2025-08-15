@@ -12,10 +12,12 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
+import BeakerType from '../../common/model/BeakerType.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
+import BlockType from './BlockType.js';
 
 // constants
 
@@ -40,7 +42,7 @@ const efacPositionConstrainer = {
    * @param burnerBlockingRect - the space occupied by the burners in the model
    * @returns the original proposed position if valid, or alternative position if not
    */
-  constrainPosition: ( modelElement: RectangularThermalMovableModelElement, proposedPosition: Vector2, beakerGroup: PhetioGroup<BeakerContainer>, blockGroup: PhetioGroup<Block>, burnerBlockingRect: Bounds2 ): Vector2 => {
+  constrainPosition: ( modelElement: RectangularThermalMovableModelElement, proposedPosition: Vector2, beakerGroup: PhetioGroup<BeakerContainer, [ BeakerType, number ]>, blockGroup: PhetioGroup<Block, [ BlockType, number ]>, burnerBlockingRect: Bounds2 ): Vector2 => {
 
     const modelElementPosition = modelElement.positionProperty.get();
 
