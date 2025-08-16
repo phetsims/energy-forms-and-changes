@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2025, University of Colorado Boulder
 
 /**
  * An object that is used to track energy that is exchanged between pairs of entities and accumulate the total balance.

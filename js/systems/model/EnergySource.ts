@@ -1,4 +1,4 @@
-// Copyright 2016-2021, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * base class for energy sources, i.e. model elements that produce energy and can supply it to other energy system

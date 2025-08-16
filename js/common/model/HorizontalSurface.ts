@@ -1,4 +1,4 @@
-// Copyright 2014-2023, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * A simple, level horizontal surface in a 2D model space.  This is represented by a range of x values and a single y

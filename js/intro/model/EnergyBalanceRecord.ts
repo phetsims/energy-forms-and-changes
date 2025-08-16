@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2025, University of Colorado Boulder
 
 /**
  * an object that is used to keep a record of energy that is exchanged between two model elements

@@ -1,4 +1,4 @@
-// Copyright 2016-2020, University of Colorado Boulder
+// Copyright 2016-2025, University of Colorado Boulder
 
 /**
  * base type for model elements that can be positioned and faded

@@ -1,4 +1,4 @@
-// Copyright 2014-2023, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * Base class for all model elements in the Energy Forms and Changes simulation that can be moved around by the user.

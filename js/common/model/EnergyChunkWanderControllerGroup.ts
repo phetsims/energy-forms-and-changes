@@ -1,4 +1,4 @@
-// Copyright 2020-2023, University of Colorado Boulder
+// Copyright 2020-2025, University of Colorado Boulder
 
 /**
  * PhetioGroup for creating EnergyChunkWanderControllers. This type adds support for dynamically created and destroyed,
