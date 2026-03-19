@@ -22,7 +22,6 @@ import generatorIcon_png from '../../../images/generatorIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -420,5 +419,4 @@ const calculateWheelAngle = ( wheelRotationalAngle: number, wheelRotationalVeloc
   return newAngle < 0 ? twoPi + newAngle : newAngle;
 };
 
-energyFormsAndChanges.register( 'Generator', Generator );
 export default Generator;

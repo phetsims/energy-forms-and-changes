@@ -26,7 +26,6 @@ import EnergyContainerCategory from '../../common/model/EnergyContainerCategory.
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import ThermalContactArea from '../../common/model/ThermalContactArea.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants
 
@@ -241,5 +240,4 @@ class Air {
   }
 }
 
-energyFormsAndChanges.register( 'Air', Air );
 export default Air;

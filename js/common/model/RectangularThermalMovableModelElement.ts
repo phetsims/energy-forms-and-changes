@@ -23,7 +23,6 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import { PredistributedEnergyChunkConfiguration } from './Beaker.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -867,5 +866,4 @@ abstract class RectangularThermalMovableModelElement extends UserMovableModelEle
   }
 }
 
-energyFormsAndChanges.register( 'RectangularThermalMovableModelElement', RectangularThermalMovableModelElement );
 export default RectangularThermalMovableModelElement;

@@ -16,7 +16,6 @@ import introScreenIcon_png from '../../images/introScreenIcon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
 import EFACQueryParameters from '../common/EFACQueryParameters.js';
 import BeakerType from '../common/model/BeakerType.js';
-import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import BlockType from './model/BlockType.js';
 import EFACIntroModel from './model/EFACIntroModel.js';
@@ -70,5 +69,4 @@ class EFACIntroScreen extends Screen<EFACIntroModel, EFACIntroScreenView> {
   }
 }
 
-energyFormsAndChanges.register( 'EFACIntroScreen', EFACIntroScreen );
 export default EFACIntroScreen;

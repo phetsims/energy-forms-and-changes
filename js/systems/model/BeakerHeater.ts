@@ -26,7 +26,6 @@ import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
 import HeatTransferConstants from '../../common/model/HeatTransferConstants.js';
 import TemperatureAndColorSensor from '../../common/model/TemperatureAndColorSensor.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -478,5 +477,4 @@ class BeakerHeater extends EnergyUser {
   public static readonly HEATER_ELEMENT_2D_HEIGHT = HEATER_ELEMENT_2D_HEIGHT;
 }
 
-energyFormsAndChanges.register( 'BeakerHeater', BeakerHeater );
 export default BeakerHeater;

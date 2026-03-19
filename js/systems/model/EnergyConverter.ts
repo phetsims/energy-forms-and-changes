@@ -14,7 +14,6 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement, { EnergySystemElementOptions } from './EnergySystemElement.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -85,5 +84,4 @@ abstract class EnergyConverter extends EnergySystemElement {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyConverter', EnergyConverter );
 export default EnergyConverter;

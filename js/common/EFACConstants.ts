@@ -11,7 +11,6 @@ import { roundSymmetric } from '../../../dot/js/util/roundSymmetric.js';
 import Vector2 from '../../../dot/js/Vector2.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import Color from '../../../scenery/js/util/Color.js';
-import energyFormsAndChanges from '../energyFormsAndChanges.js';
 
 // constants used for creating projections that have a 3D-ish look.
 const Z_TO_X_OFFSET_MULTIPLIER = -0.25;
@@ -202,5 +201,4 @@ const EFACConstants = {
   // before that was noticed. See https://github.com/phetsims/energy-forms-and-changes/issues/249 for discussion.
 };
 
-energyFormsAndChanges.register( 'EFACConstants', EFACConstants );
 export default EFACConstants;

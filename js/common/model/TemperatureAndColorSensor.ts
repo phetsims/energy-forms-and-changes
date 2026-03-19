@@ -15,7 +15,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACIntroModel from '../../intro/model/EFACIntroModel.js';
 import EFACConstants from '../EFACConstants.js';
 import UserMovableModelElement, { UserMovableModelElementOptions } from './UserMovableModelElement.js';
@@ -103,5 +102,4 @@ class TemperatureAndColorSensor extends UserMovableModelElement {
   }
 }
 
-energyFormsAndChanges.register( 'TemperatureAndColorSensor', TemperatureAndColorSensor );
 export default TemperatureAndColorSensor;

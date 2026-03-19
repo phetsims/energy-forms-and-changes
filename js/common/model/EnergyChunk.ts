@@ -22,7 +22,6 @@ import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyType, { EnergyTypeValues } from './EnergyType.js';
 
 // static data
@@ -196,5 +195,4 @@ class EnergyChunk extends PhetioObject {
   } );
 }
 
-energyFormsAndChanges.register( 'EnergyChunk', EnergyChunk );
 export default EnergyChunk;

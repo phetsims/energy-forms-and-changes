@@ -16,7 +16,6 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyChunkContainerSlice from './EnergyChunkContainerSlice.js';
@@ -599,5 +598,4 @@ const getCenterToEdgeDistance = ( bounds: Bounds2, angle: number ): number => {
   return Math.sqrt( opposite * opposite + adjacent * adjacent );
 };
 
-energyFormsAndChanges.register( 'energyChunkDistributor', energyChunkDistributor );
 export default energyChunkDistributor;

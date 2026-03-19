@@ -11,7 +11,6 @@
  */
 
 import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyContainerCategory from './EnergyContainerCategory.js';
 
 // constants
@@ -82,5 +81,4 @@ const HeatTransferConstants = {
   }
 };
 
-energyFormsAndChanges.register( 'HeatTransferConstants', HeatTransferConstants );
 export default HeatTransferConstants;

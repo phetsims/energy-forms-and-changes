@@ -30,7 +30,6 @@ import solarPanelIcon_png from '../../../images/solarPanelIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -471,5 +470,4 @@ class SolarPanel extends EnergyConverter {
   } );
 }
 
-energyFormsAndChanges.register( 'SolarPanel', SolarPanel );
 export default SolarPanel;

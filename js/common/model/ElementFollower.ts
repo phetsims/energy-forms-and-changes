@@ -11,7 +11,6 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ElementFollower {
 
@@ -76,5 +75,4 @@ class ElementFollower {
   }
 }
 
-energyFormsAndChanges.register( 'ElementFollower', ElementFollower );
 export default ElementFollower;

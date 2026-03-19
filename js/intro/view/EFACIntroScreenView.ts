@@ -53,7 +53,6 @@ import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperature
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import BeakerContainer from '../model/BeakerContainer.js';
 import Block from '../model/Block.js';
@@ -885,5 +884,4 @@ class EFACIntroScreenView extends ScreenView {
   }
 }
 
-energyFormsAndChanges.register( 'EFACIntroScreenView', EFACIntroScreenView );
 export default EFACIntroScreenView;

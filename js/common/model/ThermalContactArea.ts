@@ -8,7 +8,6 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // threshold of distance for determining whether two areas are in contact
 const TOUCH_DISTANCE_THRESHOLD = 0.001; // in meters
@@ -101,5 +100,4 @@ const getVerticalOverlap = ( rectangle1: Bounds2, rectangle2: Bounds2 ): number 
   return Math.max( lowestMax - highestMin, 0 );
 };
 
-energyFormsAndChanges.register( 'ThermalContactArea', ThermalContactArea );
 export default ThermalContactArea;

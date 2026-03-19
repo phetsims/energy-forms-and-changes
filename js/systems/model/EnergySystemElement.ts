@@ -19,7 +19,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableFadableModelElement, { PositionableFadableModelElementOptions } from './PositionableFadableModelElement.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -106,5 +105,4 @@ abstract class EnergySystemElement extends PositionableFadableModelElement {
   public abstract applyState( state: unknown ): void;
 }
 
-energyFormsAndChanges.register( 'EnergySystemElement', EnergySystemElement );
 export default EnergySystemElement;

@@ -26,7 +26,6 @@ import sunIcon_png from '../../../images/sunIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from './Cloud.js';
 import Energy from './Energy.js';
@@ -382,5 +381,4 @@ class SunEnergySource extends EnergySource {
   public static readonly OFFSET_TO_CENTER_OF_SUN = OFFSET_TO_CENTER_OF_SUN;
 }
 
-energyFormsAndChanges.register( 'SunEnergySource', SunEnergySource );
 export default SunEnergySource;

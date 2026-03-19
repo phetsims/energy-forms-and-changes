@@ -22,7 +22,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyType from '../../common/model/EnergyType.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 
 const chemicalString = EnergyFormsAndChangesStrings.chemical;
@@ -103,5 +102,4 @@ class EnergyChunkLegend extends Panel {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyChunkLegend', EnergyChunkLegend );
 export default EnergyChunkLegend;

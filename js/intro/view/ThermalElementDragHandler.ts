@@ -14,7 +14,6 @@ import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class ThermalElementDragHandler extends DragListener {
 
@@ -70,5 +69,4 @@ class ThermalElementDragHandler extends DragListener {
   }
 }
 
-energyFormsAndChanges.register( 'ThermalElementDragHandler', ThermalElementDragHandler );
 export default ThermalElementDragHandler;

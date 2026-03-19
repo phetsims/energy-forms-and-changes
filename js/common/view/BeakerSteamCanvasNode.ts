@@ -16,7 +16,6 @@ import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optio
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 
 // constants
@@ -250,5 +249,4 @@ class BeakerSteamCanvasNode extends CanvasNode {
   }
 }
 
-energyFormsAndChanges.register( 'BeakerSteamCanvasNode', BeakerSteamCanvasNode );
 export default BeakerSteamCanvasNode;

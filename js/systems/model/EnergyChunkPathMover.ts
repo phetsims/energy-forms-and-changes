@@ -21,7 +21,6 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 type SelfOptions = EmptySelfOptions;
 export type EnergyChunkPathMoverOptions = SelfOptions & PhetioObjectOptions;
@@ -239,5 +238,4 @@ class EnergyChunkPathMover extends PhetioObject {
   } );
 }
 
-energyFormsAndChanges.register( 'EnergyChunkPathMover', EnergyChunkPathMover );
 export default EnergyChunkPathMover;

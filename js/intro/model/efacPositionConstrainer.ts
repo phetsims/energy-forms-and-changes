@@ -14,7 +14,6 @@ import affirm from '../../../../perennial-alias/js/browser-and-node/affirm.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import BeakerType from '../../common/model/BeakerType.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
 import BlockType from './BlockType.js';
@@ -394,5 +393,4 @@ function exclusiveIntersectsBounds( bounds1: Bounds2, bounds2: Bounds2 ): boolea
   return ( maxX - minX ) > 0 && ( maxY - minY > 0 );
 }
 
-energyFormsAndChanges.register( 'efacPositionConstrainer', efacPositionConstrainer );
 export default efacPositionConstrainer;

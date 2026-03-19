@@ -34,7 +34,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Block from '../model/Block.js';
 import EnergyChunkContainerSliceNode from './EnergyChunkContainerSliceNode.js';
@@ -345,5 +344,4 @@ class BlockNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'BlockNode', BlockNode );
 export default BlockNode;

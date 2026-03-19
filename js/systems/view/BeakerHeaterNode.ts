@@ -23,7 +23,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import BeakerView from '../../common/view/BeakerView.js';
 import EFACTemperatureAndColorSensorNode from '../../common/view/EFACTemperatureAndColorSensorNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerHeater from '../model/BeakerHeater.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
@@ -146,5 +145,4 @@ class BeakerHeaterNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'BeakerHeaterNode', BeakerHeaterNode );
 export default BeakerHeaterNode;

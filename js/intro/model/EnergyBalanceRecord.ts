@@ -6,8 +6,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
-
 class EnergyBalanceRecord {
 
   // ID of the entity from which the energy was transferred
@@ -55,5 +53,4 @@ class EnergyBalanceRecord {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyBalanceRecord', EnergyBalanceRecord );
 export default EnergyBalanceRecord;

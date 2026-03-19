@@ -23,7 +23,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
 // constants
@@ -255,5 +254,4 @@ class EnergySystemElementCarousel<T extends string> {
   }
 }
 
-energyFormsAndChanges.register( 'EnergySystemElementCarousel', EnergySystemElementCarousel );
 export default EnergySystemElementCarousel;

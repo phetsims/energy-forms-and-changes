@@ -22,7 +22,6 @@ import teaKettleIcon_png from '../../../images/teaKettleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -401,5 +400,4 @@ const createThermalEnergyChunkPath = ( startPosition: Vector2, teaKettlePosition
   return path;
 };
 
-energyFormsAndChanges.register( 'TeaKettle', TeaKettle );
 export default TeaKettle;

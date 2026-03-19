@@ -15,7 +15,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class Belt {
 
@@ -66,5 +65,4 @@ class Belt {
   }
 }
 
-energyFormsAndChanges.register( 'Belt', Belt );
 export default Belt;

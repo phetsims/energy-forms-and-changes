@@ -6,7 +6,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyBalanceRecord from './EnergyBalanceRecord.js';
 
 class EnergyBalanceTracker {
@@ -128,5 +127,4 @@ class EnergyBalanceTracker {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyBalanceTracker', EnergyBalanceTracker );
 export default EnergyBalanceTracker;

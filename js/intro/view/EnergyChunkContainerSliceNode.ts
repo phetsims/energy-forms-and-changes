@@ -16,7 +16,6 @@ import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkContainerSlice from '../../common/model/EnergyChunkContainerSlice.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 class EnergyChunkContainerSliceNode extends Node {
 
@@ -67,5 +66,4 @@ class EnergyChunkContainerSliceNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyChunkContainerSliceNode', EnergyChunkContainerSliceNode );
 export default EnergyChunkContainerSliceNode;

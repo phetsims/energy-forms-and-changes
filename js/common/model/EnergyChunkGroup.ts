@@ -15,7 +15,6 @@ import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optio
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 import EnergyType from './EnergyType.js';
 
@@ -52,5 +51,4 @@ class EnergyChunkGroup extends PhetioGroup<EnergyChunk, [ EnergyType, Vector2, V
   }
 }
 
-energyFormsAndChanges.register( 'EnergyChunkGroup', EnergyChunkGroup );
 export default EnergyChunkGroup;

@@ -16,7 +16,6 @@ import FaucetNode from '../../../../scenery-phet/js/FaucetNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FaucetAndWater from '../model/FaucetAndWater.js';
 import FallingWaterCanvasNode from './FallingWaterCanvasNode.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
@@ -104,5 +103,4 @@ class FaucetAndWaterNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'FaucetAndWaterNode', FaucetAndWaterNode );
 export default FaucetAndWaterNode;

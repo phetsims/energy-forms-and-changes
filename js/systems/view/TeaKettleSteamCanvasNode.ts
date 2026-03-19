@@ -15,7 +15,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import phetioStateSetEmitter from '../../../../tandem/js/phetioStateSetEmitter.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import TeaKettle from '../model/TeaKettle.js';
 
 // constants
@@ -214,5 +213,4 @@ class TeaKettleSteamCanvasNode extends CanvasNode {
   }
 }
 
-energyFormsAndChanges.register( 'TeaKettleSteamCanvasNode', TeaKettleSteamCanvasNode );
 export default TeaKettleSteamCanvasNode;

@@ -10,7 +10,6 @@
 
 import optionize from '../../../../phet-core/js/optionize.js';
 import EnergyType from '../../common/model/EnergyType.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 type SelfOptions = {
   creationTime?: number | null;
@@ -55,5 +54,4 @@ class Energy {
   }
 }
 
-energyFormsAndChanges.register( 'Energy', Energy );
 export default Energy;

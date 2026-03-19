@@ -17,7 +17,6 @@ import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularR
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElementCarousel from '../model/EnergySystemElementCarousel.js';
 
 // constants
@@ -83,5 +82,4 @@ class EnergySystemElementSelector extends Panel {
   }
 }
 
-energyFormsAndChanges.register( 'EnergySystemElementSelector', EnergySystemElementSelector );
 export default EnergySystemElementSelector;

@@ -22,7 +22,6 @@ import wireBottomLeft_png from '../../../images/wireBottomLeft_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import SolarPanel from '../model/SolarPanel.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
@@ -108,5 +107,4 @@ class SolarPanelNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'SolarPanelNode', SolarPanelNode );
 export default SolarPanelNode;

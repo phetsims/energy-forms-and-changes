@@ -15,7 +15,6 @@ import PhetioGroup, { PhetioGroupOptions } from '../../../../tandem/js/PhetioGro
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunkPathMover, { EnergyChunkPathMoverOptions } from './EnergyChunkPathMover.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -41,5 +40,4 @@ class EnergyChunkPathMoverGroup extends PhetioGroup<EnergyChunkPathMover, [ Ener
   }
 }
 
-energyFormsAndChanges.register( 'EnergyChunkPathMoverGroup', EnergyChunkPathMoverGroup );
 export default EnergyChunkPathMoverGroup;

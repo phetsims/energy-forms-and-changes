@@ -12,7 +12,6 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import PositionableModelElement, { PositionableModelElementOptions } from './PositionableModelElement.js';
 
 export type PositionableFadableModelElementOptions = PositionableModelElementOptions;
@@ -32,5 +31,4 @@ class PositionableFadableModelElement extends PositionableModelElement {
   }
 }
 
-energyFormsAndChanges.register( 'PositionableFadableModelElement', PositionableFadableModelElement );
 export default PositionableFadableModelElement;

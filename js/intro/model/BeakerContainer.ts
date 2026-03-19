@@ -17,7 +17,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import Beaker, { BeakerOptions } from '../../common/model/Beaker.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Block from './Block.js';
 import BlockType from './BlockType.js';
 
@@ -150,5 +149,4 @@ class BeakerContainer extends Beaker {
   }
 }
 
-energyFormsAndChanges.register( 'BeakerContainer', BeakerContainer );
 export default BeakerContainer;

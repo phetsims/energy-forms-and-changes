@@ -92,6 +92,4 @@ type StringsType = {
 
 const EnergyFormsAndChangesStrings = getStringModule( 'ENERGY_FORMS_AND_CHANGES' ) as StringsType;
 
-energyFormsAndChanges.register( 'EnergyFormsAndChangesStrings', EnergyFormsAndChangesStrings );
-
 export default EnergyFormsAndChangesStrings;

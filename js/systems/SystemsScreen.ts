@@ -16,7 +16,6 @@ import Image from '../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import systemsScreenIcon_png from '../../images/systemsScreenIcon_png.js';
 import EFACConstants from '../common/EFACConstants.js';
-import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../EnergyFormsAndChangesStrings.js';
 import SystemsModel from './model/SystemsModel.js';
 import SystemsScreenView from './view/SystemsScreenView.js';
@@ -45,5 +44,4 @@ class SystemsScreen extends Screen<SystemsModel, SystemsScreenView> {
   }
 }
 
-energyFormsAndChanges.register( 'SystemsScreen', SystemsScreen );
 export default SystemsScreen;

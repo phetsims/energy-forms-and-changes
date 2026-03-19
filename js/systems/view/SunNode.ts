@@ -31,7 +31,6 @@ import cloud_png from '../../../images/cloud_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Cloud from '../model/Cloud.js';
 import SunEnergySource from '../model/SunEnergySource.js';
@@ -261,5 +260,4 @@ class CloudNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'SunNode', SunNode );
 export default SunNode;

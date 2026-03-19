@@ -12,7 +12,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from '../model/Air.js';
 
 class AirNode extends Node {
@@ -47,5 +46,4 @@ class AirNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'AirNode', AirNode );
 export default AirNode;

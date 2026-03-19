@@ -13,7 +13,6 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import incandescentIcon_png from '../../../images/incandescentIcon_png.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
 import LightBulb, { LightBulbOptions } from './LightBulb.js';
@@ -35,5 +34,4 @@ class IncandescentBulb extends LightBulb {
   }
 }
 
-energyFormsAndChanges.register( 'IncandescentBulb', IncandescentBulb );
 export default IncandescentBulb;

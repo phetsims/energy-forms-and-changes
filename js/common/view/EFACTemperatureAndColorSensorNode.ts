@@ -17,7 +17,6 @@ import TemperatureAndColorSensorNode from '../../../../scenery-phet/js/Temperatu
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import TemperatureAndColorSensor from '../model/TemperatureAndColorSensor.js';
 
@@ -85,5 +84,4 @@ class EFACTemperatureAndColorSensorNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'EFACTemperatureAndColorSensorNode', EFACTemperatureAndColorSensorNode );
 export default EFACTemperatureAndColorSensorNode;

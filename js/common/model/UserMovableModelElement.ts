@@ -15,7 +15,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
 import ModelElement, { ModelElementOptions } from './ModelElement.js';
 
@@ -172,5 +171,4 @@ class UserMovableModelElement extends ModelElement {
   } );
 }
 
-energyFormsAndChanges.register( 'UserMovableModelElement', UserMovableModelElement );
 export default UserMovableModelElement;

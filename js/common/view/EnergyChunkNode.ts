@@ -21,7 +21,6 @@ import energyHidden_png from '../../../images/energyHidden_png.js';
 import energyLight_png from '../../../images/energyLight_png.js';
 import energyMechanical_png from '../../../images/energyMechanical_png.js';
 import energyThermal_png from '../../../images/energyThermal_png.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
@@ -143,5 +142,4 @@ const getEnergyChunkNode = ( energyType: EnergyType ): Image => {
   return energyChunkImageNodes[ energyType ];
 };
 
-energyFormsAndChanges.register( 'EnergyChunkNode', EnergyChunkNode );
 export default EnergyChunkNode;

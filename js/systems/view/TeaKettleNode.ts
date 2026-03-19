@@ -23,7 +23,6 @@ import teaKettle_png from '../../../images/teaKettle_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import BurnerStandNode from '../../common/view/BurnerStandNode.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import TeaKettle from '../model/TeaKettle.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 import TeaKettleSteamCanvasNode from './TeaKettleSteamCanvasNode.js';
@@ -171,5 +170,4 @@ class TeaKettleNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'TeaKettleNode', TeaKettleNode );
 export default TeaKettleNode;

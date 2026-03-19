@@ -28,7 +28,6 @@ import wireBottomRight_png from '../../../images/wireBottomRight_png.js';
 import wireStraight_png from '../../../images/wireStraight_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FluorescentBulb from '../model/FluorescentBulb.js';
 import LightRays from './LightRays.js';
 import MoveFadeModelElementNode, { MoveFadeModelElementNodeOptions } from './MoveFadeModelElementNode.js';
@@ -166,5 +165,4 @@ class LightBulbNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'LightBulbNode', LightBulbNode );
 export default LightBulbNode;

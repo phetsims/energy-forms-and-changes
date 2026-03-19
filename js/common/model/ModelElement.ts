@@ -17,7 +17,6 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import HorizontalSurface from './HorizontalSurface.js';
 
 type SelfOptions = {
@@ -164,5 +163,4 @@ class ModelElement extends PhetioObject {
   }
 }
 
-energyFormsAndChanges.register( 'ModelElement', ModelElement );
 export default ModelElement;

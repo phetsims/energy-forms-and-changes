@@ -32,7 +32,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkNode from '../../common/view/EnergyChunkNode.js';
 import SkyNode from '../../common/view/SkyNode.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import SystemsModel from '../model/SystemsModel.js';
 import BeakerHeaterNode from './BeakerHeaterNode.js';
@@ -411,5 +410,4 @@ class SystemsScreenView extends ScreenView {
   }
 }
 
-energyFormsAndChanges.register( 'SystemsScreenView', SystemsScreenView );
 export default SystemsScreenView;

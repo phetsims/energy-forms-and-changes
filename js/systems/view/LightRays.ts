@@ -8,7 +8,6 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import LightRayNode from './LightRayNode.js';
 import { LightAbsorbingShape } from './SunNode.js';
 
@@ -60,5 +59,4 @@ class LightRays extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'LightRays', LightRays );
 export default LightRays;

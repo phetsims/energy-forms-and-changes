@@ -26,7 +26,6 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import EnergyChunkContainerSliceNode from '../../intro/view/EnergyChunkContainerSliceNode.js';
 import EFACConstants from '../EFACConstants.js';
@@ -330,5 +329,4 @@ class BeakerView extends PhetioObject {
   }
 }
 
-energyFormsAndChanges.register( 'BeakerView', BeakerView );
 export default BeakerView;

@@ -27,7 +27,6 @@ import EFACConstants from '../../common/EFACConstants.js';
 import EFACQueryParameters from '../../common/EFACQueryParameters.js';
 import ModelElement from '../../common/model/ModelElement.js';
 import BeakerView from '../../common/view/BeakerView.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerContainer from '../model/BeakerContainer.js';
 import Block from '../model/Block.js';
 import BlockType from '../model/BlockType.js';
@@ -247,6 +246,5 @@ class BeakerContainerView extends BeakerView {
   }
 }
 
-energyFormsAndChanges.register( 'BeakerContainerView', BeakerContainerView );
 export default BeakerContainerView;
 export { type BeakerContainerViewOptions };

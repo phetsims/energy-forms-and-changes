@@ -21,7 +21,6 @@ import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ReferenceIO, { ReferenceIOState } from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 
 // constants
@@ -355,5 +354,4 @@ class EnergyChunkWanderController extends PhetioObject {
   } );
 }
 
-energyFormsAndChanges.register( 'EnergyChunkWanderController', EnergyChunkWanderController );
 export default EnergyChunkWanderController;

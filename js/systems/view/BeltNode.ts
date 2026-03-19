@@ -10,7 +10,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Belt from '../model/Belt.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -37,5 +36,4 @@ class BeltNode extends Path {
   }
 }
 
-energyFormsAndChanges.register( 'BeltNode', BeltNode );
 export default BeltNode;

@@ -11,7 +11,6 @@
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // the following constant is used to adjust the way in which the drop elongates as its velocity increases
 const WIDTH_CHANGE_TWEAK_FACTOR = 0.05;
@@ -46,5 +45,4 @@ class WaterDrop {
   }
 }
 
-energyFormsAndChanges.register( 'WaterDrop', WaterDrop );
 export default WaterDrop;

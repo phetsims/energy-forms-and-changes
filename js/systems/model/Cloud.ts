@@ -12,7 +12,6 @@ import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants
 const WIDTH = 0.035; // In meters, though obviously not to scale.  Empirically determined.
@@ -67,5 +66,4 @@ class Cloud {
   public static readonly HEIGHT = HEIGHT;
 }
 
-energyFormsAndChanges.register( 'Cloud', Cloud );
 export default Cloud;

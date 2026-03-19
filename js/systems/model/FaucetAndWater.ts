@@ -25,7 +25,6 @@ import faucetIcon_png from '../../../images/faucetIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergySource, { EnergySourceOptions } from './EnergySource.js';
@@ -437,5 +436,3 @@ export default class FaucetAndWater extends EnergySource {
   public static readonly OFFSET_FROM_CENTER_TO_FAUCET_HEAD = OFFSET_FROM_CENTER_TO_FAUCET_HEAD;
   public static readonly MAX_WATER_WIDTH = MAX_WATER_WIDTH;
 }
-
-energyFormsAndChanges.register( 'FaucetAndWater', FaucetAndWater );

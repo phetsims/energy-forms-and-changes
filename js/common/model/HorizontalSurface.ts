@@ -19,7 +19,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import ModelElement from './ModelElement.js';
 
 class HorizontalSurface extends PhetioObject {
@@ -75,5 +74,4 @@ class HorizontalSurface extends PhetioObject {
   }
 }
 
-energyFormsAndChanges.register( 'HorizontalSurface', HorizontalSurface );
 export default HorizontalSurface;

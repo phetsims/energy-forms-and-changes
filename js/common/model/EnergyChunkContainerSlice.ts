@@ -25,7 +25,6 @@ import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/js/Ph
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from './EnergyChunk.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -152,5 +151,4 @@ class EnergyChunkContainerSlice extends PhetioObject {
   } );
 }
 
-energyFormsAndChanges.register( 'EnergyChunkContainerSlice', EnergyChunkContainerSlice );
 export default EnergyChunkContainerSlice;

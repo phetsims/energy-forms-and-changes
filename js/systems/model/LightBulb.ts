@@ -21,7 +21,6 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
@@ -412,5 +411,4 @@ const getTotalPathLength = ( startingPosition: Vector2, pathPoints: Vector2[] ):
   return pathLength;
 };
 
-energyFormsAndChanges.register( 'LightBulb', LightBulb );
 export default LightBulb;

@@ -13,7 +13,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import LineStyles from '../../../../kite/js/util/LineStyles.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants
 const BURNER_STAND_STROKE_LINE_WIDTH = 2;
@@ -109,5 +108,4 @@ class BurnerStandNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'BurnerStandNode', BurnerStandNode );
 export default BurnerStandNode;

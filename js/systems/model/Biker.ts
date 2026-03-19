@@ -23,7 +23,6 @@ import bicycleIcon_png from '../../../images/bicycleIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
@@ -588,5 +587,4 @@ const createMechanicalToThermalEnergyChunkPath = ( centerPosition: Vector2, curr
   return path;
 };
 
-energyFormsAndChanges.register( 'Biker', Biker );
 export default Biker;

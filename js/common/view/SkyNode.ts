@@ -11,7 +11,6 @@ import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optio
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 
 // constants
 const FADE_HEIGHT = 200; // height of the gradient regions of this node, in view coordinates
@@ -75,5 +74,4 @@ class SkyNode extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'SkyNode', SkyNode );
 export default SkyNode;

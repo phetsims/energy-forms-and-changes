@@ -25,7 +25,6 @@ import fan10_png from '../../../images/fan10_png.js';
 import wireBottomRightShort_png from '../../../images/wireBottomRightShort_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Fan from '../model/Fan.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
 
@@ -96,5 +95,4 @@ const mapAngleToImageIndex = ( angle: number ): number => {
   return i;
 };
 
-energyFormsAndChanges.register( 'FanNode', FanNode );
 export default FanNode;

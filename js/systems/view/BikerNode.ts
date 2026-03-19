@@ -66,7 +66,6 @@ import cyclistTorsoTired2_png from '../../../images/cyclistTorsoTired2_png.js';
 import cyclistTorsoTired3_png from '../../../images/cyclistTorsoTired3_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Biker from '../model/Biker.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
@@ -310,5 +309,4 @@ class BikerNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'BikerNode', BikerNode );
 export default BikerNode;

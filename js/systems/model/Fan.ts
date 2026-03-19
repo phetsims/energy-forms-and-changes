@@ -20,7 +20,6 @@ import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import fanIcon_png from '../../../images/fanIcon_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Energy from './Energy.js';
 import EnergyChunkPathMover from './EnergyChunkPathMover.js';
 import EnergyChunkPathMoverGroup from './EnergyChunkPathMoverGroup.js';
@@ -443,5 +442,4 @@ const createBlownEnergyChunkPath = ( startingPoint: Vector2 ): Vector2[] => {
   return path;
 };
 
-energyFormsAndChanges.register( 'Fan', Fan );
 export default Fan;

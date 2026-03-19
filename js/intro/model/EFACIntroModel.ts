@@ -30,7 +30,6 @@ import EnergyChunkWanderControllerGroup from '../../common/model/EnergyChunkWand
 import ModelElement from '../../common/model/ModelElement.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from './Air.js';
 import BeakerContainer from './BeakerContainer.js';
 import Block from './Block.js';
@@ -953,5 +952,4 @@ class EFACIntroModel {
   }
 }
 
-energyFormsAndChanges.register( 'EFACIntroModel', EFACIntroModel );
 export default EFACIntroModel;

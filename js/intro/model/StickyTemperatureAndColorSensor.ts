@@ -12,7 +12,6 @@ import { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import ElementFollower from '../../common/model/ElementFollower.js';
 import TemperatureAndColorSensor, { TemperatureAndColorSensorOptions } from '../../common/model/TemperatureAndColorSensor.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACIntroModel from './EFACIntroModel.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -113,5 +112,4 @@ class StickyTemperatureAndColorSensor extends TemperatureAndColorSensor {
   }
 }
 
-energyFormsAndChanges.register( 'StickyTemperatureAndColorSensor', StickyTemperatureAndColorSensor );
 export default StickyTemperatureAndColorSensor;

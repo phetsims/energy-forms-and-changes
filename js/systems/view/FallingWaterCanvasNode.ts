@@ -11,7 +11,6 @@
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import CanvasNode, { CanvasNodeOptions } from '../../../../scenery/js/nodes/CanvasNode.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import FaucetAndWater from '../model/FaucetAndWater.js';
 import WaterDrop from '../model/WaterDrop.js';
 
@@ -97,5 +96,4 @@ class FallingWaterCanvasNode extends CanvasNode {
   }
 }
 
-energyFormsAndChanges.register( 'FallingWaterCanvasNode', FallingWaterCanvasNode );
 export default FallingWaterCanvasNode;

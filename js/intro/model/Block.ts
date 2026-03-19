@@ -30,7 +30,6 @@ import EnergyType from '../../common/model/EnergyType.js';
 import HorizontalSurface from '../../common/model/HorizontalSurface.js';
 import RectangularThermalMovableModelElement from '../../common/model/RectangularThermalMovableModelElement.js';
 import UserMovableModelElement from '../../common/model/UserMovableModelElement.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BlockType, { BlockTypeValues } from './BlockType.js';
 
 // constants
@@ -268,5 +267,4 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
   }
 ];
 
-energyFormsAndChanges.register( 'Block', Block );
 export default Block;

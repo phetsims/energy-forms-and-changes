@@ -18,7 +18,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import EFACConstants from '../../common/EFACConstants.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import { LightAbsorbingShape } from './SunNode.js';
 
 // constants
@@ -308,5 +307,4 @@ const getLineIntersection = ( line1: KiteLine, line2: KiteLine ): Vector2 | null
   );
 };
 
-energyFormsAndChanges.register( 'LightRayNode', LightRayNode );
 export default LightRayNode;

@@ -23,7 +23,6 @@ import generatorWheelSpokes_png from '../../../images/generatorWheelSpokes_png.j
 import wireBottomLeft_png from '../../../images/wireBottomLeft_png.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkLayer from '../../common/view/EnergyChunkLayer.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyFormsAndChangesStrings from '../../EnergyFormsAndChangesStrings.js';
 import Generator from '../model/Generator.js';
 import MoveFadeModelElementNode from './MoveFadeModelElementNode.js';
@@ -144,5 +143,4 @@ class GeneratorNode extends MoveFadeModelElementNode {
   }
 }
 
-energyFormsAndChanges.register( 'GeneratorNode', GeneratorNode );
 export default GeneratorNode;

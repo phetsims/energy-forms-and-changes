@@ -17,7 +17,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EFACConstants from '../../common/EFACConstants.js';
 import EnergyChunkGroup from '../../common/model/EnergyChunkGroup.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import BeakerHeater from './BeakerHeater.js';
 import Belt from './Belt.js';
 import Biker from './Biker.js';
@@ -312,5 +311,4 @@ class SystemsModel {
   }
 }
 
-energyFormsAndChanges.register( 'SystemsModel', SystemsModel );
 export default SystemsModel;

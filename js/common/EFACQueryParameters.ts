@@ -7,7 +7,6 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import energyFormsAndChanges from '../energyFormsAndChanges.js';
 import EFACConstants from './EFACConstants.js';
 
 // constants
@@ -81,5 +80,4 @@ const EFACQueryParameters = QueryStringMachine.getAll( {
 
 } );
 
-energyFormsAndChanges.register( 'EFACQueryParameters', EFACQueryParameters );
 export default EFACQueryParameters;

@@ -15,7 +15,6 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
 import EnergyChunk from '../../common/model/EnergyChunk.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergySystemElement from './EnergySystemElement.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -61,5 +60,4 @@ abstract class EnergyUser extends EnergySystemElement {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyUser', EnergyUser );
 export default EnergyUser;

@@ -17,7 +17,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EnergyChunk from '../model/EnergyChunk.js';
 import EnergyChunkNode from './EnergyChunkNode.js';
 
@@ -78,5 +77,4 @@ class EnergyChunkLayer extends Node {
   }
 }
 
-energyFormsAndChanges.register( 'EnergyChunkLayer', EnergyChunkLayer );
 export default EnergyChunkLayer;

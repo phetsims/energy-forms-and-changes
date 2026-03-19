@@ -22,7 +22,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import PhetioGroup from '../../../../tandem/js/PhetioGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ReferenceIO from '../../../../tandem/js/types/ReferenceIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import Air from '../../intro/model/Air.js';
 import EFACConstants from '../EFACConstants.js';
 import EnergyChunk from './EnergyChunk.js';
@@ -367,5 +366,4 @@ class Burner extends ModelElement {
   }
 }
 
-energyFormsAndChanges.register( 'Burner', Burner );
 export default Burner;

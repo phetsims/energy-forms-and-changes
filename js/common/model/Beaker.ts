@@ -23,7 +23,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import energyFormsAndChanges from '../../energyFormsAndChanges.js';
 import EFACConstants from '../EFACConstants.js';
 import EFACQueryParameters from '../EFACQueryParameters.js';
 import BeakerType, { BeakerTypeValues } from './BeakerType.js';
@@ -655,5 +654,4 @@ const ENERGY_CHUNK_PRESET_CONFIGURATIONS = [
   }
 ];
 
-energyFormsAndChanges.register( 'Beaker', Beaker );
 export default Beaker;
